@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 
 namespace FocLauncher
 {
-    /// <summary>
-    /// Interaktionslogik für "App.xaml"
-    /// </summary>
-    public partial class App : Application
+    public partial class App
     {
+        private void OnStartUp(object sender, StartupEventArgs e)
+        {
+            var mainWindow = new MainWindow();
+            var viewModel = new MainWindowViewModel(new LauncherDataModel());
+
+            mainWindow.DataContext = viewModel;
+            mainWindow.Show();
+        }
     }
 }
