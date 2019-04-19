@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.202
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FocLauncher", "src\FocLauncher.csproj", "{511EA4F6-7C7A-4242-9986-16F28F126D11}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{8F2264D6-12F2-47DA-8C17-25D430DA43B2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{511EA4F6-7C7A-4242-9986-16F28F126D11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{511EA4F6-7C7A-4242-9986-16F28F126D11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{511EA4F6-7C7A-4242-9986-16F28F126D11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{511EA4F6-7C7A-4242-9986-16F28F126D11}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{511EA4F6-7C7A-4242-9986-16F28F126D11} = {8F2264D6-12F2-47DA-8C17-25D430DA43B2}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {031206AD-43AB-4EF2-B59D-2DFCD7ACA476}
+	EndGlobalSection
+EndGlobal
