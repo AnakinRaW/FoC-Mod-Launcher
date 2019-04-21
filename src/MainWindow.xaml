@@ -3,10 +3,38 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:focLauncher="clr-namespace:FocLauncher"
+        xmlns:converters="clr-namespace:FocLauncher.Converters"
+        xmlns:mods="clr-namespace:FocLauncher.Mods"
         mc:Ignorable="d"
-        Title="FoC Launcher by Anakin" Width="400" SizeToContent="Height" ResizeMode="NoResize"
-        MinHeight="500">
+        Title="FoC Launcher by Anakin" Width="400" ResizeMode="NoResize" Height="600">
+    <Window.Resources>
+        <converters:GameTypeToStringConverter x:Key="GameTypeToStringConverter"/>
+        <converters:ModNameConverter x:Key="ModNameConverter"/>
+        <converters:SteamToVisibilityConverter x:Key="SteamToVisibilityConverter"/>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+
+        <DataTemplate x:Key="ModDataTemplate" DataType="{x:Type mods:IMod}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="12"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Image Grid.Column="0" Source="{Binding IconFile}" Width="32" Height="32"/>
+                <TextBlock Grid.Column="2" VerticalAlignment="Center">
+                    <TextBlock.Text>
+                        <MultiBinding Converter="{StaticResource ModNameConverter}">
+                            <Binding Path="Name"/>
+                            <Binding/>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+                <TextBlock Grid.Column="3" VerticalAlignment="Center" Text="{Binding Version}"/>
+            </Grid>
+        </DataTemplate>
+
+    </Window.Resources>
     <Grid Background="#9E9E9E">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -25,19 +53,35 @@
             <TextBlock Grid.Row="2" Text="Choose the mod you want to play:"/>
         </Grid>
 
-        <ListBox x:Name="ListBox" Grid.Row="1" Margin="6,0" Background="#AAADAF"
-                 FocusVisualStyle="{x:Null}">
-            <ListBoxItem Content="123"/>
-            <ListBoxItem Content="456"/>
-        </ListBox>
-        <StackPanel Grid.Row="2" Margin="0,12,0,3">
+        <ListView x:Name="ListBox" Grid.Row="1" Margin="6,0" Background="#AAADAF"
+                 FocusVisualStyle="{x:Null}"
+                 ItemsSource="{Binding DataModel.Mods}"
+                 ItemTemplate="{StaticResource ModDataTemplate}"
+                 SelectedItem="{Binding DataModel.SelectedMod, Mode=TwoWay}"
+                 HorizontalContentAlignment="Stretch">
+        </ListView>
+        <TextBlock Grid.Row="2" Margin="3,0" Text="*  Steam Workshops"></TextBlock>
+        <StackPanel Grid.Row="3" Margin="0,12,0,3">
             <Button HorizontalAlignment="Center" Padding="6,3,6,3" Width="100" Height="30" IsDefault="True"
                     Content="Play"
                     Command="{Binding LaunchCommand}"/>
+            <StackPanel>
+                <CheckBox x:Name="DebugCheckBox" Content="Use DebugBuild" HorizontalAlignment="Center"
+                          IsChecked="{Binding DataModel.UseDebugBuild, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          Visibility="{Binding DataModel.FoC, Converter={StaticResource SteamToVisibilityConverter}}"/>
+                <DockPanel HorizontalAlignment="Center" 
+                           Visibility="{Binding ElementName=DebugCheckBox, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}">
+                    <CheckBox Content="IgnoreAsserts" Margin="0,0,24,0" IsChecked="{Binding DataModel.IgnoreAsserts, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                    <CheckBox Content="No art process" IsChecked="{Binding DataModel.NoArtProcess, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                </DockPanel>
+            </StackPanel>
         </StackPanel>
-        <StatusBar Grid.Row="3">
+        <StatusBar Grid.Row="4">
             <StatusBarItem Content="Game:"/>
-            <StatusBarItem Content="Steam Version"/>
+            <StatusBarItem Content="{Binding DataModel.FocGameType, Converter={StaticResource GameTypeToStringConverter}}"/>
+            <StatusBarItem>
+                
+            </StatusBarItem>
             <StatusBarItem HorizontalAlignment="Right">
                 <Button Background="Transparent" BorderBrush="Transparent" FocusVisualStyle="{x:Null}"
                         Click="OpenAboutWindow">

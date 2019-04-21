@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Windows;
 using System.Windows.Input;
 using FocLauncher.Annotations;
+using FocLauncher.Game;
 using FocLauncher.Input;
 
 namespace FocLauncher
@@ -22,7 +22,8 @@ namespace FocLauncher
 
         private void ExecutedLaunch()
         {
-            MessageBox.Show("Custom Command Executed");
+            var debugOptions = new DebugOptions(DataModel.UseDebugBuild, DataModel.IgnoreAsserts, DataModel.NoArtProcess);
+            DataModel.FoC.PlayGame(DataModel.SelectedMod, debugOptions);
         }
 
         [NotifyPropertyChangedInvocator]
