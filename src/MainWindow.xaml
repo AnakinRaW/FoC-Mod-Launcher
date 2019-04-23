@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:converters="clr-namespace:FocLauncher.Converters"
         xmlns:mods="clr-namespace:FocLauncher.Mods"
+        xmlns:theming="clr-namespace:FocLauncher.Theming;assembly=FocLauncher.Theming"
         mc:Ignorable="d"
         Title="FoC Launcher by Anakin" Width="400" ResizeMode="NoResize" Height="600">
     <Window.Resources>
@@ -35,7 +36,7 @@
         </DataTemplate>
 
     </Window.Resources>
-    <Grid Background="#9E9E9E">
+    <Grid Background="{DynamicResource {x:Static theming:EnvironmentColors.BackgroundColor}}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
