@@ -7,6 +7,7 @@ namespace FocLauncher.AssemblyHelper
         internal static void LoadAssemblies()
         {
             EmbeddedAssembly.Load("FocLauncher.Resources.HtmlAgilityPack.dll", "HtmlAgilityPack.dll");
+            EmbeddedAssembly.Load("FocLauncher.Resources.Newtonsoft.Json.dll", "Newtonsoft.Json.dll");
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
         }
 

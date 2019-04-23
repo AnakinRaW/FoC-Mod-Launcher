@@ -34,7 +34,7 @@ namespace FocLauncher.Game
             link.SetWorkingDirectory(wd);
             link.SetArguments(arguments);
 
-            if (iconPath == null)
+            if (iconPath == null || !File.Exists(iconPath))
                 iconPath = LauncherDataModel.IconPath;
 
             link.SetIconLocation(iconPath, 0);

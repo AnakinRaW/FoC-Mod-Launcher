@@ -9,6 +9,7 @@ namespace FocLauncher.Mods
     {
         public string FolderName => string.Empty;
         public string ModDirectory => string.Empty;
+        public string Description => "This is the unmodified version of Forces of Corruption";
         public string Name => "Forces of Corruption (unmodified)";
         public ModVersion Version { get; } = null;
         public bool WorkshopMod { get; } = false;

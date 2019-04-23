@@ -1,11 +1,11 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using FocLauncher.Annotations;
 using FocLauncher.Game;
+using FocLauncher.ModInfo;
 using FocLauncher.Utilities;
 using FocLauncher.Versioning;
 
@@ -16,6 +16,8 @@ namespace FocLauncher.Mods
         private string _name;
         public string FolderName { get; }
         public string ModDirectory { get; }
+
+        public string Description { get; }
 
         public string Name
         {
@@ -28,22 +30,7 @@ namespace FocLauncher.Mods
             }
         }
 
-        public ModVersion Version
-        {
-            get
-            {
-                try
-                {
-                    var node = XmlTools.GetNodeValue(ModDirectory + @"\Data\XML\Gameobjectfiles.xml",
-                        "/Game_Object_Files/Version");
-                    return string.IsNullOrEmpty(node) ? null : ModVersion.Parse(node);
-                }
-                catch (Exception)
-                {
-                    return null;
-                }
-            }
-        }
+        public ModVersion Version { get; }
         public bool WorkshopMod { get; }
         public string IconFile { get; }
 
@@ -53,11 +40,19 @@ namespace FocLauncher.Mods
             WorkshopMod = workshopMod;
             FolderName = new DirectoryInfo(ModDirectory).Name;
 
-            Task.Run(() => GetName(FolderName, workshopMod)).ContinueWith(t => Name = t.Result);
-
-            //Name = GetName(FolderName, workshopMod).Result;
-            var icon = Directory.EnumerateFiles(ModDirectory, "*.ico");
-            IconFile = icon.FirstOrDefault();
+            if (ModInfoFile.TryParse(Path.Combine(ModDirectory, "modinfo.json"), out var modInfo))
+            {
+                Name = modInfo.Name;
+                Version = modInfo.Version;
+                IconFile = Path.Combine(ModDirectory, modInfo.Icon);
+                Description = modInfo.Description;
+            }
+            else
+            {
+                Task.Run(() => GetName(FolderName, workshopMod)).ContinueWith(t => Name = t.Result);
+                var icon = Directory.EnumerateFiles(ModDirectory, "*.ico");
+                IconFile = icon.FirstOrDefault();
+            }
         }
 
         private async Task<string> GetName(string folderName, bool workshop)

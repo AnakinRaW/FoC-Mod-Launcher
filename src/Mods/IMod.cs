@@ -16,6 +16,11 @@ namespace FocLauncher.Mods
         string ModDirectory { get; }
 
         /// <summary>
+        /// Returns the description text of the mod
+        /// </summary>
+        string Description { get; }
+
+        /// <summary>
         /// Returns the name of the Mod
         /// </summary>
         string Name { get; }
