@@ -35,7 +35,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>3xhumed-Mega-Games-Pack-22-Star-Wars-Empire-at-War-addon2-2.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\3xhumed-Mega-Games-Pack-22-Star-Wars-Empire-at-War-addon2-2.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="HtmlAgilityPack">
@@ -167,7 +167,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="3xhumed-Mega-Games-Pack-22-Star-Wars-Empire-at-War-addon2-2.ico" />
+    <Resource Include="Resources\3xhumed-Mega-Games-Pack-22-Star-Wars-Empire-at-War-addon2-2.ico" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\foc.ico" />
