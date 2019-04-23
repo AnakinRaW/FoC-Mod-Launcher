@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28803.202
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FocLauncher", "src\FocLauncher.csproj", "{511EA4F6-7C7A-4242-9986-16F28F126D11}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FocLauncher", "src\FocLauncher\FocLauncher.csproj", "{511EA4F6-7C7A-4242-9986-16F28F126D11}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{8F2264D6-12F2-47DA-8C17-25D430DA43B2}"
 EndProject
