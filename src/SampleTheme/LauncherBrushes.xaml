@@ -2,9 +2,9 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:themes="clr-namespace:FocLauncher.Theming;assembly=FocLauncher.Theming">
 
+
+    <!-- TODO: Add the colors and images you want to change here-->
+
     <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type themes:EnvironmentColors},
                      ResourceId=BackgroundColor}" Color="Blue"/>
-
-    <ImageBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type themes:EnvironmentColors},
-                     ResourceId=BackgroundImage}" ImageSource="rawia2_promo.jpg"/>
 </ResourceDictionary>

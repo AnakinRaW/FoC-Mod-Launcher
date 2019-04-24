@@ -2,7 +2,7 @@
 
 namespace FocLauncher.Theming
 {
-    public interface ITheme
+    public interface ITheme : IEquatable<ITheme>
     {
         string Name { get; }
 

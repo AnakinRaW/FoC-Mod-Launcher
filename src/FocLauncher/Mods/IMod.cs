@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using FocLauncher.ModInfo;
 using FocLauncher.Versioning;
 
 namespace FocLauncher.Mods
@@ -40,5 +41,10 @@ namespace FocLauncher.Mods
         /// The path of the icon file of the mod
         /// </summary>
         string IconFile { get; }
+
+        /// <summary>
+        /// If a modinfo.json file is available its data gets stored here; otherwise this returns <see langword="null"/>
+        /// </summary>
+        ModInfoFile? ModInfoFile { get; }
     }
 }

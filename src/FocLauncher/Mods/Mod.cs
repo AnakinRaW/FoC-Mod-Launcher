@@ -14,6 +14,10 @@ namespace FocLauncher.Mods
     public class Mod : IMod
     {
         private string _name;
+        private ModInfoFile? _modInfoFile;
+
+        private bool _modfileWasLookedUp;
+
         public string FolderName { get; }
         public string ModDirectory { get; }
 
@@ -34,18 +38,35 @@ namespace FocLauncher.Mods
         public bool WorkshopMod { get; }
         public string IconFile { get; }
 
+        public ModInfoFile? ModInfoFile
+        {
+            get
+            {
+                if (_modInfoFile == null && !_modfileWasLookedUp)
+                {
+                    if (ModInfo.ModInfoFile.TryParse(Path.Combine(ModDirectory, "modinfo.json"), out var modInfo))
+                        _modInfoFile = modInfo;
+                    else
+                        _modInfoFile = null;
+                    _modfileWasLookedUp = true;
+                }
+
+                return _modInfoFile;
+            }
+        }
+
         public Mod(string modDirectory, bool workshopMod = false)
         {
             ModDirectory = modDirectory;
             WorkshopMod = workshopMod;
             FolderName = new DirectoryInfo(ModDirectory).Name;
 
-            if (ModInfoFile.TryParse(Path.Combine(ModDirectory, "modinfo.json"), out var modInfo))
+            if (ModInfoFile.HasValue)
             {
-                Name = modInfo.Name;
-                Version = modInfo.Version;
-                IconFile = Path.Combine(ModDirectory, modInfo.Icon);
-                Description = modInfo.Description;
+                Name = ModInfoFile.Value.Name;
+                Version = ModInfoFile.Value.Version;
+                IconFile = Path.Combine(ModDirectory, ModInfoFile.Value.Icon);
+                Description = ModInfoFile.Value.Description;
             }
             else
             {

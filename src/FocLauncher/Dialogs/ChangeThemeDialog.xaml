@@ -1,0 +1,51 @@
+﻿<Window x:Class="FocLauncher.Dialogs.ChangeThemeDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:theming="clr-namespace:FocLauncher.Theming"
+        xmlns:theming1="clr-namespace:FocLauncher.Theming;assembly=FocLauncher.Theming"
+        xmlns:converters="clr-namespace:FocLauncher.Converters"
+        mc:Ignorable="d"
+        Title="Choose a Theme" Height="300" Width="300" DataContext="{Binding RelativeSource={RelativeSource Self}}"
+        ResizeMode="NoResize">
+    <FrameworkElement.Resources>
+        <converters:ThemeSelectedConverter x:Key="ThemeSelectedConverter"/>
+        <Style x:Key="ThemeItemStyle" TargetType="{x:Type ListBoxItem}">
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        </Style>
+        <DataTemplate x:Key="ThemeItemDataTemplate" DataType="{x:Type theming1:ITheme}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="{Binding Name}"/>
+                <CheckBox Grid.Column="1" IsHitTestVisible="False" BorderBrush="Transparent" Background="Transparent">
+                    <CheckBox.IsChecked>
+                        <MultiBinding Converter="{StaticResource ThemeSelectedConverter}">
+                            <Binding Source="{x:Static theming:ThemeManager.Instance}" Path="Theme"/>
+                            <Binding Path="."/>
+                        </MultiBinding>
+                    </CheckBox.IsChecked>
+                </CheckBox>
+            </Grid>
+        </DataTemplate>
+    </FrameworkElement.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Label Target="{Binding ElementName=ListBox}" Content="Double _click item to select a theme:"></Label>
+        <ListBox x:Name="ListBox" Grid.Row="1" ItemsSource="{Binding Source={x:Static theming:ThemeManager.Instance}, Path=Themes}"
+                 ItemTemplate="{StaticResource ThemeItemDataTemplate}"
+                 HorizontalContentAlignment="Stretch" SelectedItem="{Binding SelectedTheme, Mode=TwoWay}"
+                 ItemContainerStyle="{StaticResource ThemeItemStyle}">
+        </ListBox>
+        <StackPanel Grid.Row="2" HorizontalAlignment="Right" Margin="0,12,6,6">
+            <Button Content="OK" IsDefault="True" MinWidth="75" Padding="6,3" Command="{Binding SubmitCommand}"/>
+        </StackPanel>
+    </Grid>
+</Window>

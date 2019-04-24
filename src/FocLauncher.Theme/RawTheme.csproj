@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{E02C6065-C7A8-43F4-A757-CFAC1A3371F9}</ProjectGuid>
     <OutputType>library</OutputType>
-    <RootNamespace>FocLauncher.Theme</RootNamespace>
-    <AssemblyName>FocLauncher.Theme</AssemblyName>
+    <RootNamespace>RawTheme</RootNamespace>
+    <AssemblyName>RawTheme</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -52,11 +52,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="LauncherTheme.xaml">
+    <Page Include="Theme.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="LauncherTheme.cs" />
+    <Compile Include="Theme.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -77,6 +77,9 @@
       <Project>{B952DCAA-749D-476C-BBC3-2074ADFB1CC4}</Project>
       <Name>FocLauncher.Theming</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="rawia2_promo.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

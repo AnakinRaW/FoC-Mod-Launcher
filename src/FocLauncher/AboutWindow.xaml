@@ -21,7 +21,7 @@
                 License
             </Hyperlink>
         </TextBlock>
-        <Button Grid.Row="3" Content="ok" HorizontalAlignment="Right" MinWidth="75" Padding="6,3"
+        <Button Grid.Row="3" Content="OK" HorizontalAlignment="Right" MinWidth="75" Padding="6,3"
                 IsCancel="True" IsDefault="True"/>
     </Grid>
 </Window>

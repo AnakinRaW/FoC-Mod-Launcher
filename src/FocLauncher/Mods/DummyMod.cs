@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using FocLauncher.Annotations;
+using FocLauncher.ModInfo;
 using FocLauncher.Versioning;
 
 namespace FocLauncher.Mods
@@ -14,6 +15,8 @@ namespace FocLauncher.Mods
         public ModVersion Version { get; } = null;
         public bool WorkshopMod { get; } = false;
         public string IconFile { get; } = LauncherDataModel.IconPath;
+        public ModInfoFile? ModInfoFile => null;
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]

@@ -9,6 +9,7 @@ using FocLauncher.Annotations;
 using FocLauncher.Game;
 using FocLauncher.Mods;
 using FocLauncher.Properties;
+using FocLauncher.Theming;
 
 namespace FocLauncher
 {
@@ -38,6 +39,7 @@ namespace FocLauncher
             }
 
             SearchMods();
+            RegisterThemes();
         }
 
         public IGame EaW
@@ -169,6 +171,30 @@ namespace FocLauncher
         {
             Mods = ModHelper.FindMods(FoC);
             SelectedMod = Mods.FirstOrDefault();
+        }
+
+        private void RegisterThemes()
+        {
+            foreach (var mod in Mods)
+                RegisterTheme(mod);
+        }
+
+        private static void RegisterTheme(IMod mod)
+        {
+            var custom = mod.ModInfoFile?.Custom;
+            if (custom == null || !custom.ContainsKey("launcherTheme"))
+                return;
+            var relativeThemePath = custom.Value<string>("launcherTheme");
+            var themePath = Path.Combine(mod.ModDirectory, relativeThemePath);
+            if (!File.Exists(themePath))
+                return;
+
+            var theme = ThemeManager.GetThemeFromFile(themePath);
+            if (theme == null)
+                return;
+
+            ThemeManager.Instance.RegisterTheme(theme);
+            ThemeManager.Instance.AssociateThemeToMod(mod, theme);
         }
 
         private void InitAppDataDirectory()

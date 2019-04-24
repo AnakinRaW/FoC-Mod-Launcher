@@ -70,6 +70,10 @@
     <Compile Include="Converters\GameTypeToStringConverter.cs" />
     <Compile Include="Converters\ModNameConverter.cs" />
     <Compile Include="Converters\SteamToVisibilityConverter.cs" />
+    <Compile Include="Converters\ThemeSelectedConverter.cs" />
+    <Compile Include="Dialogs\ChangeThemeDialog.xaml.cs">
+      <DependentUpon>ChangeThemeDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Game\DebugOptions.cs" />
     <Compile Include="Game\AbstractFocGame.cs" />
     <Compile Include="Game\Eaw.cs" />
@@ -101,6 +105,10 @@
     <Compile Include="Versioning\VersionComparison.cs" />
     <Compile Include="Versioning\VersionFormatter.cs" />
     <Page Include="AboutWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\ChangeThemeDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
