@@ -3,6 +3,7 @@ using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using FocLauncher.Annotations;
 using FocLauncher.Input;
+using FocLauncher.Properties;
 using FocLauncher.Theming;
 
 namespace FocLauncher.Dialogs
@@ -30,6 +31,7 @@ namespace FocLauncher.Dialogs
         {
             if (!SelectedTheme.Equals(_themeManager.Theme))
                 _themeManager.Theme = SelectedTheme;  
+            Settings.Default.Save();
             Close();
         }
 

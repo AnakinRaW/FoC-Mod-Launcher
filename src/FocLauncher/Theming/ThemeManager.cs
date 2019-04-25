@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Windows;
 using FocLauncher.Mods;
+using FocLauncher.Properties;
 
 namespace FocLauncher.Theming
 {
@@ -33,14 +34,14 @@ namespace FocLauncher.Theming
                 RegisterTheme(value);
                 var theme = _theme;
                 _theme = value;
-                ChangeTheme(theme, _theme);
+                ChangeTheme(theme, _theme, true);
             }
         }
 
         private ThemeManager()
         {
             Themes = new ObservableCollection<ITheme> {new DefaultTheme()};
-            Theme = new DefaultTheme();
+            ChangeTheme(null, new DefaultTheme(), false);
         }
 
         public void RegisterTheme(ITheme theme)
@@ -62,10 +63,10 @@ namespace FocLauncher.Theming
 
             try
             {
-                var fileName = Path.GetFileNameWithoutExtension(filePath);        
+                var fileName = Path.GetFileNameWithoutExtension(filePath);
                 var assembly = Assembly.LoadFrom(filePath);
                 var type = assembly.GetType($"{fileName}.Theme");
-                var theme = (ITheme)Activator.CreateInstance(type);
+                var theme = (ITheme) Activator.CreateInstance(type);
                 return theme;
             }
             catch
@@ -74,23 +75,35 @@ namespace FocLauncher.Theming
             }
         }
 
-        private void ChangeTheme(ITheme oldTheme, ITheme theme)
+        public void ApplySavedDefaultTheme()
+        {
+            var defaultTheme = Settings.Default.DefaultTheme;
+            var theme = Themes.FirstOrDefault(x => x.Name == defaultTheme);
+            if (theme != null)
+                Theme = theme;
+        }
+
+        private void ChangeTheme(ITheme oldTheme, ITheme theme, bool changeSettings)
         {
             var resources = Application.Current.Resources;
             resources.Clear();
             resources.MergedDictionaries.Clear();
             if (oldTheme != null)
             {
-                var resourceDictionary = resources.MergedDictionaries.FirstOrDefault(r => r.Source == oldTheme.GetResourceUri());
+                var resourceDictionary =
+                    resources.MergedDictionaries.FirstOrDefault(r => r.Source == oldTheme.GetResourceUri());
                 if (resourceDictionary != null)
                     resources.MergedDictionaries.Remove(resourceDictionary);
             }
+
             if (theme == null)
                 return;
             resources.MergedDictionaries.Add(new ResourceDictionary()
             {
                 Source = theme.GetResourceUri()
             });
+            if (changeSettings && Settings.Default.SaveDefaultTheme)
+                Settings.Default.DefaultTheme = theme.Name;
         }
 
         public void AssociateThemeToMod(IMod mod, ITheme theme)
@@ -99,6 +112,11 @@ namespace FocLauncher.Theming
                 _modThemeMapping[mod] = theme;
             else
                 _modThemeMapping.Add(mod, theme);
+        }
+
+        public bool TryGetThemeByMod(IMod mod, out ITheme theme)
+        {
+            return _modThemeMapping.TryGetValue(mod, out theme);
         }
     }
 }

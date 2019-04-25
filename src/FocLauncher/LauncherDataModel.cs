@@ -15,8 +15,12 @@ namespace FocLauncher
 {
     public class LauncherDataModel : IDataModel
     {
+
         public static string AppDataPath => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"FoC Launcher\");
         public static string IconPath = Path.Combine(AppDataPath, "foc.ico");
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public event EventHandler Initialized;
 
         private IGame _eaW;
         private IGame _foC;
@@ -26,21 +30,7 @@ namespace FocLauncher
         private bool _useDebugBuild;
         private bool _ignoreAsserts = true;
         private bool _noArtProcess = true;
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public LauncherDataModel()
-        {
-            InitAppDataDirectory();
-            if (!InitGames(out _))
-            {
-                MessageBox.Show("Could not find Forces of Corruption", "FoC Launcher", MessageBoxButton.OK,
-                    MessageBoxImage.Error);
-                return;
-            }
-
-            SearchMods();
-            RegisterThemes();
-        }
+        
 
         public IGame EaW
         {
@@ -134,6 +124,21 @@ namespace FocLauncher
             }
         }
 
+        public void Initialize()
+        {
+            InitAppDataDirectory();
+            if (!InitGames(out _))
+            {
+                MessageBox.Show("Could not find Forces of Corruption", "FoC Launcher", MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+                return;
+            }
+
+            SearchMods();
+            RegisterThemes();
+            OnInitialized();
+        }
+
         private bool InitGames(out GameDetectionResult result)
         {
             result = GameHelper.GetGameInstallations();
@@ -213,6 +218,11 @@ namespace FocLauncher
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        protected virtual void OnInitialized()
+        {
+            Initialized?.Invoke(this, EventArgs.Empty);
         }
     }
 }

@@ -7,7 +7,7 @@
         xmlns:mods="clr-namespace:FocLauncher.Mods"
         xmlns:theming="clr-namespace:FocLauncher.Theming;assembly=FocLauncher.Theming"
         mc:Ignorable="d"
-        Title="FoC Launcher by Anakin" Width="400" ResizeMode="NoResize" Height="600"
+        Title="FoC Launcher by Anakin" Width="400" ResizeMode="CanMinimize" Height="600" 
         Background="{DynamicResource {x:Static theming:EnvironmentColors.BackgroundImage}}">
     <Window.Resources>
         <converters:GameTypeToStringConverter x:Key="GameTypeToStringConverter"/>
@@ -22,17 +22,22 @@
                     <ColumnDefinition Width="12"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <Image Grid.Column="0" Source="{Binding IconFile}" Width="32" Height="32"/>
-                <TextBlock Grid.Column="2" VerticalAlignment="Center">
-                    <TextBlock.Text>
+                <TextBlock Grid.Column="2" VerticalAlignment="Center" Text="{Binding Name}">
+                    <!--<TextBlock.Text>
                         <MultiBinding Converter="{StaticResource ModNameConverter}">
                             <Binding Path="Name"/>
                             <Binding/>
                         </MultiBinding>
-                    </TextBlock.Text>
+                    </TextBlock.Text>-->
                 </TextBlock>
-                <TextBlock Grid.Column="3" VerticalAlignment="Center" Text="{Binding Version}"/>
+                <TextBlock Grid.Column="3" Margin="12,0" VerticalAlignment="Center" HorizontalAlignment="Right" Text="{Binding Version}"/>
+                <Image Grid.Column="4" Height="16" Width="16" Source="Resources/steam.png" 
+                       RenderOptions.BitmapScalingMode="Fant"
+                       RenderOptions.EdgeMode="Aliased"
+                       Visibility="{Binding WorkshopMod, Converter={StaticResource BooleanToVisibilityConverter}}"/>
             </Grid>
         </DataTemplate>
 
@@ -63,7 +68,16 @@
                  HorizontalContentAlignment="Stretch"
                  MouseDoubleClick="ListBox_OnMouseDoubleClick">
         </ListView>
-        <TextBlock Grid.Row="2" Margin="3,0" Text="*  Steam Workshops"></TextBlock>
+        <Grid Grid.Row="2" Margin="6,3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Image Grid.Column="0" Height="16" Width="16" Source="Resources/steam.png" 
+                   RenderOptions.BitmapScalingMode="Fant"
+                   RenderOptions.EdgeMode="Aliased"/>
+            <TextBlock Grid.Column="1" Margin="6,0" Text="Steam Workshops"></TextBlock>
+        </Grid>
         <StackPanel Grid.Row="3" Margin="0,12,0,3">
             <Button HorizontalAlignment="Center" Padding="6,3,6,3" Width="100" Height="30" IsDefault="True"
                     Content="Play"

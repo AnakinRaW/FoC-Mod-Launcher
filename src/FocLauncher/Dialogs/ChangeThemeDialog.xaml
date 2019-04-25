@@ -6,8 +6,9 @@
         xmlns:theming="clr-namespace:FocLauncher.Theming"
         xmlns:theming1="clr-namespace:FocLauncher.Theming;assembly=FocLauncher.Theming"
         xmlns:converters="clr-namespace:FocLauncher.Converters"
+        xmlns:properties="clr-namespace:FocLauncher.Properties"
         mc:Ignorable="d"
-        Title="Choose a Theme" Height="300" Width="300" DataContext="{Binding RelativeSource={RelativeSource Self}}"
+        Title="Choose a Theme" Height="300" Width="350" DataContext="{Binding RelativeSource={RelativeSource Self}}"
         ResizeMode="NoResize">
     <FrameworkElement.Resources>
         <converters:ThemeSelectedConverter x:Key="ThemeSelectedConverter"/>
@@ -44,8 +45,20 @@
                  HorizontalContentAlignment="Stretch" SelectedItem="{Binding SelectedTheme, Mode=TwoWay}"
                  ItemContainerStyle="{StaticResource ThemeItemStyle}">
         </ListBox>
-        <StackPanel Grid.Row="2" HorizontalAlignment="Right" Margin="0,12,6,6">
-            <Button Content="OK" IsDefault="True" MinWidth="75" Padding="6,3" Command="{Binding SubmitCommand}"/>
-        </StackPanel>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Margin="3,6,0,0">
+                <CheckBox Content="Change _theme on mod launch" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=AutoSwitchTheme, Mode=TwoWay}"/>
+                <CheckBox Content="_Save active theme as default" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=SaveDefaultTheme, Mode=TwoWay}"/>
+            </StackPanel>
+            <StackPanel Grid.Column="2" HorizontalAlignment="Right" Margin="0,12,6,6">
+                <Button Content="OK" IsDefault="True" MinWidth="75" Padding="6,3" Command="{Binding SubmitCommand}"/>
+            </StackPanel>
+        </Grid>
+        
     </Grid>
 </Window>

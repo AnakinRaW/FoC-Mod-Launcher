@@ -1,10 +1,11 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Windows;
 using System.Windows.Input;
 using FocLauncher.Annotations;
 using FocLauncher.Game;
 using FocLauncher.Input;
+using FocLauncher.Properties;
+using FocLauncher.Theming;
 
 namespace FocLauncher
 {
@@ -25,6 +26,9 @@ namespace FocLauncher
         {
             var debugOptions = new DebugOptions(DataModel.UseDebugBuild, DataModel.IgnoreAsserts, DataModel.NoArtProcess);
             DataModel.FoC.PlayGame(DataModel.SelectedMod, debugOptions);
+            if (Settings.Default.AutoSwitchTheme &&
+                ThemeManager.Instance.TryGetThemeByMod(DataModel.SelectedMod, out var theme))
+                ThemeManager.Instance.Theme = theme;
         }
 
         [NotifyPropertyChangedInvocator]
