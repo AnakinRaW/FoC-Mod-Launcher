@@ -4,7 +4,7 @@
              Width="300"
              Height="Auto" MinHeight="72" Background="#252526" Foreground="#FFF1F1F1"
              ResizeMode="NoResize" ShowActivated="False" ShowInTaskbar="False" SizeToContent="Height" TextOptions.TextFormattingMode="Display"
-             Topmost="True" WindowStyle="None">
+             Topmost="True" WindowStyle="None" WindowStartupLocation="CenterOwner">
     <Window.Title>
         <Binding Path="Caption" />
     </Window.Title>

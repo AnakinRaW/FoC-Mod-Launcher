@@ -23,26 +23,26 @@ namespace FocLauncherApp
                 AppDomain.Unload(splashDomain);
             }
 
-            var launcher = AppDomain.CreateDomain("LauncherDomain");
-            try
-            {
-                launcher.DoCallBack(() =>
-                {
-                    var app = new BootstrapperApp();
-                    var w = new Window();
-                    app.Run(w);
-                });
-            }
-            finally
-            {
-                AppDomain.Unload(launcher);
-            }
+            //var launcher = AppDomain.CreateDomain("LauncherDomain");
+            //try
+            //{
+            //    launcher.DoCallBack(() =>
+            //    {
+            //        var app = new BootstrapperApp();
+            //        var w = new Window();
+            //        app.Run(w);
+            //    });
+            //}
+            //finally
+            //{
+            //    AppDomain.Unload(launcher);
+            //}
         }
 
         private static void StartBootstrapperApp()
         {
             var app = new BootstrapperApp();
-            var w = new Window();
+            var w = new SplashScreen();
             app.Run(w);
             app.Shutdown(0);
         }

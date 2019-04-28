@@ -37,6 +37,9 @@
   <PropertyGroup>
     <StartupObject />
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Resources\icon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
@@ -51,6 +54,7 @@
     <Compile Include="Updater\StreamExtensions.cs" />
     <Compile Include="Updater\UpdateServer.cs" />
     <Compile Include="Updater\VersionUtilities.cs" />
+    <Compile Include="WaitDialog\BackgroundDispatcher.cs" />
     <Compile Include="WaitDialog\DialogShowArguments.cs" />
     <Compile Include="WaitDialog\DialogUpdateArguments.cs" />
     <Compile Include="WaitDialog\DisposableObject.cs" />
@@ -63,11 +67,18 @@
     <Compile Include="WaitDialog\WaitWindowDialog.xaml.cs">
       <DependentUpon>WaitWindowDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SplashScreen.xaml.cs">
+      <DependentUpon>SplashScreen.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Include="WaitDialog\WaitWindowDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SplashScreen.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -82,6 +93,12 @@
       <Project>{511EA4F6-7C7A-4242-9986-16F28F126D11}</Project>
       <Name>FocLauncher</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\splash.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

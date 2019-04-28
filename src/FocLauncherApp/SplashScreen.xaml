@@ -1,0 +1,10 @@
+﻿<Window x:Class="FocLauncherApp.SplashScreen"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             ResizeMode="NoResize" ShowInTaskbar="True" SizeToContent="WidthAndHeight" TextOptions.TextFormattingMode="Display"
+             WindowStartupLocation="CenterScreen" WindowStyle="None" AllowsTransparency="True" Background="Transparent">
+    <Grid>
+        <Image Source="Resources/splash.png" Height="256" Width="256" RenderOptions.EdgeMode="Aliased" 
+               RenderOptions.BitmapScalingMode="Fant"/>
+    </Grid>
+</Window>

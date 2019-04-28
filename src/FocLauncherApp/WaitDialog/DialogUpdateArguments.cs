@@ -12,6 +12,8 @@
 
         public int TotalStepCount { get; set; }
 
+        public bool ShowMarqueeProgress { get; set; }
+
         public DialogUpdateArguments()
         {
         }
@@ -28,6 +30,7 @@
             IsCancellable = isCancellable;
             CurrentStepCount = currentStepCount;
             TotalStepCount = totalStepCount;
+            ShowMarqueeProgress = totalStepCount <= 0;
         }
 
         public void Merge(DialogUpdateArguments argsToMerge)

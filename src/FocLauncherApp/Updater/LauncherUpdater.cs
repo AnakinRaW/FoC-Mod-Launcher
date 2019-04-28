@@ -7,7 +7,7 @@ namespace FocLauncherApp.Updater
 {
     internal class LauncherUpdater : AssemblyUpdater
     {
-        public override string FilePath { get; }
+        public override string FilePath => Path.Combine(BootstrapperApp.AppDataPath, "");
         public override string VersionsServerPath { get; }
         protected override void Update()
         {

@@ -1,10 +1,14 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.Net.NetworkInformation;
+using System.Windows.Input;
 
 namespace FocLauncherApp.WaitDialog
 {
     public partial class WaitWindowDialog
     {
-        public WaitWindowDialog()
+        public event EventHandler Cancelled;
+
+        public WaitWindowDialog(IntPtr hostMainWindowHandle, int hostProcessId)
         {
             InitializeComponent();
         }
