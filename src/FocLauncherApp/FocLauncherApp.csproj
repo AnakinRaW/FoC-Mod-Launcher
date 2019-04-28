@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{91330941-11BE-41AA-BD4C-8D3A70399395}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>FocLauncherApp</RootNamespace>
+    <AssemblyName>FocLauncherApp</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Bootstrapper.cs" />
+    <Compile Include="BootstrapperApp.cs" />
+    <Compile Include="NativeMethods\NativeMethods.cs" />
+    <Compile Include="Threading\GenericThreadHelper.cs" />
+    <Compile Include="Threading\TaskExtensions.cs" />
+    <Compile Include="Threading\ThreadHelper.cs" />
+    <Compile Include="Updater\LauncherUpdater.cs" />
+    <Compile Include="Updater\StreamExtensions.cs" />
+    <Compile Include="Updater\UpdateServer.cs" />
+    <Compile Include="Updater\VersionUtilities.cs" />
+    <Compile Include="WaitDialog\DialogShowArguments.cs" />
+    <Compile Include="WaitDialog\DialogUpdateArguments.cs" />
+    <Compile Include="WaitDialog\DisposableObject.cs" />
+    <Compile Include="WaitDialog\IWaitDialog.cs" />
+    <Compile Include="WaitDialog\IWaitDialogCallback.cs" />
+    <Compile Include="Utilities\UnsafeHelpers.cs" />
+    <Compile Include="WaitDialog\WaitDialog.cs" />
+    <Compile Include="WaitDialog\WaitDialogFactory.cs" />
+    <Compile Include="WaitDialog\WaitDialogServiceWrapper.cs" />
+    <Compile Include="WaitDialog\WaitWindowDialog.xaml.cs">
+      <DependentUpon>WaitWindowDialog.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="WaitDialog\WaitWindowDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FocLauncher\FocLauncher.csproj">
+      <Project>{511EA4F6-7C7A-4242-9986-16F28F126D11}</Project>
+      <Name>FocLauncher</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
