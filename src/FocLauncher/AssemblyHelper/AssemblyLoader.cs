@@ -1,13 +1,13 @@
 ﻿using System;
 
-namespace FocLauncher.AssemblyHelper
+namespace FocLauncher.Core.AssemblyHelper
 {
-    class AssemblyLoader
+    internal class AssemblyLoader
     {
-        internal static void LoadAssemblies()
+        internal static void LoadEmbeddedAssemblies()
         {
-            EmbeddedAssembly.Load("FocLauncher.Resources.HtmlAgilityPack.dll", "HtmlAgilityPack.dll");
-            EmbeddedAssembly.Load("FocLauncher.Resources.Newtonsoft.Json.dll", "Newtonsoft.Json.dll");
+            EmbeddedAssembly.Load("FocLauncher.Core.Resources.HtmlAgilityPack.dll", "HtmlAgilityPack.dll");
+            EmbeddedAssembly.Load("FocLauncher.Core.Resources.Newtonsoft.Json.dll", "Newtonsoft.Json.dll");
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
         }
 

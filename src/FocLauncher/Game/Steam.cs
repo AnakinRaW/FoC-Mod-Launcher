@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using Microsoft.Win32;
 
-namespace FocLauncher.Game
+namespace FocLauncher.Core.Game
 {
     public static class Steam
     {

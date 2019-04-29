@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using FocLauncherApp.Utilities;
 
 namespace FocLauncherApp.Updater
 {
@@ -22,7 +23,7 @@ namespace FocLauncherApp.Updater
             {
                 var webClient = new WebClient();
 
-                var url = ServerRootAddress + resource;
+                var url = UrlCombine.Combine(ServerRootAddress, resource);
 
                 result = webClient.DownloadString(url);
             }

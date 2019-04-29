@@ -1,13 +1,12 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
-using FocLauncher.Annotations;
-using FocLauncher.Game;
-using FocLauncher.Input;
-using FocLauncher.Properties;
-using FocLauncher.Theming;
+using FocLauncher.Core.Game;
+using FocLauncher.Core.Input;
+using FocLauncher.Core.Properties;
+using FocLauncher.Core.Theming;
 
-namespace FocLauncher
+namespace FocLauncher.Core
 {
     public class MainWindowViewModel : INotifyPropertyChanged
     {

@@ -6,10 +6,11 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
-using FocLauncher.Mods;
-using FocLauncher.Properties;
+using FocLauncher.Core.Mods;
+using FocLauncher.Core.Properties;
+using FocLauncher.Theming;
 
-namespace FocLauncher.Theming
+namespace FocLauncher.Core.Theming
 {
     public class ThemeManager
     {

@@ -7,7 +7,7 @@
     <ProjectGuid>{91330941-11BE-41AA-BD4C-8D3A70399395}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>FocLauncherApp</RootNamespace>
-    <AssemblyName>FocLauncherApp</AssemblyName>
+    <AssemblyName>FoC Launcher</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -42,11 +42,13 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <Resource Include="Resources\Fonts\EaW-bold.ttf" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="BootstrapperApp.cs" />
     <Compile Include="NativeMethods\NativeMethods.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Threading\GenericThreadHelper.cs" />
     <Compile Include="Threading\TaskExtensions.cs" />
     <Compile Include="Threading\ThreadHelper.cs" />
@@ -54,6 +56,8 @@
     <Compile Include="Updater\StreamExtensions.cs" />
     <Compile Include="Updater\UpdateServer.cs" />
     <Compile Include="Updater\VersionUtilities.cs" />
+    <Compile Include="Utilities\ResourceExtractor.cs" />
+    <Compile Include="Utilities\UrlCombine.cs" />
     <Compile Include="WaitDialog\BackgroundDispatcher.cs" />
     <Compile Include="WaitDialog\DialogShowArguments.cs" />
     <Compile Include="WaitDialog\DialogUpdateArguments.cs" />
@@ -63,6 +67,7 @@
     <Compile Include="Utilities\UnsafeHelpers.cs" />
     <Compile Include="WaitDialog\WaitDialog.cs" />
     <Compile Include="WaitDialog\WaitDialogFactory.cs" />
+    <Compile Include="WaitDialog\WaitDialoghelper.cs" />
     <Compile Include="WaitDialog\WaitDialogServiceWrapper.cs" />
     <Compile Include="WaitDialog\WaitWindowDialog.xaml.cs">
       <DependentUpon>WaitWindowDialog.xaml</DependentUpon>
@@ -99,6 +104,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\splash.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Library\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

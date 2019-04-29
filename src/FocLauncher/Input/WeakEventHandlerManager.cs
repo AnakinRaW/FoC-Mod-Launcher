@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 
-namespace FocLauncher.Input
+namespace FocLauncher.Core.Input
 {
     internal static class WeakEventHandlerManager
     {

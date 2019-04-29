@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Reflection;
 using System.Windows;
+using FocLauncher.Core;
 using Microsoft.Win32;
 
 namespace FocLauncherApp
@@ -23,20 +25,24 @@ namespace FocLauncherApp
                 AppDomain.Unload(splashDomain);
             }
 
-            //var launcher = AppDomain.CreateDomain("LauncherDomain");
-            //try
-            //{
-            //    launcher.DoCallBack(() =>
-            //    {
-            //        var app = new BootstrapperApp();
-            //        var w = new Window();
-            //        app.Run(w);
-            //    });
-            //}
-            //finally
-            //{
-            //    AppDomain.Unload(launcher);
-            //}
+            var launcher = AppDomain.CreateDomain("LauncherDomain");
+            try
+            {
+                launcher.DoCallBack(() =>
+                {
+                    var app = new LauncherApp();
+                    app.Run();
+                });
+            }
+            catch (Exception e)
+            {
+                //TODO: Make this fancy :)
+                MessageBox.Show(e.Message);
+            }
+            finally
+            {
+                AppDomain.Unload(launcher);
+            }
         }
 
         private static void StartBootstrapperApp()

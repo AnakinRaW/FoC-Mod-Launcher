@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
-using FocLauncher.Utilities;
+using FocLauncher.Core.Utilities;
 
-namespace FocLauncher.Versioning
+namespace FocLauncher.Core.Versioning
 {
     public sealed class VersionComparer : IVersionComparer
     {

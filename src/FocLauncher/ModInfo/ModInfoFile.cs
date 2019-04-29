@@ -1,9 +1,9 @@
 ﻿using System.IO;
-using FocLauncher.Versioning;
+using FocLauncher.Core.Versioning;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace FocLauncher.ModInfo
+namespace FocLauncher.Core.ModInfo
 {
     [JsonObject(MemberSerialization.OptIn)]
     public struct ModInfoFile

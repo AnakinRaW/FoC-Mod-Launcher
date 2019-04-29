@@ -1,4 +1,4 @@
-﻿namespace FocLauncher.Utilities
+﻿namespace FocLauncher.Core.Utilities
 {
     public abstract class ReusableResourceStore<TResource, TConstructorParameter> : ReusableResourceStoreBase<TResource>
         where TResource : class

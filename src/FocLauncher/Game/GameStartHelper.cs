@@ -3,7 +3,7 @@ using System.IO;
 using System.Runtime.InteropServices.ComTypes;
 using System.Threading;
 
-namespace FocLauncher.Game
+namespace FocLauncher.Core.Game
 {
     public static class GameStartHelper
     {

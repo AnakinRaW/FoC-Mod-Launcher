@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 
-namespace FocLauncher.Utilities
+namespace FocLauncher.Core.Utilities
 {
     public abstract class ReusableResourceStoreBase<TResource> where TResource : class
     {

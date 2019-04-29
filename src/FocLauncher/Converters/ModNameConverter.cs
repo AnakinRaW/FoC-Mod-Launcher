@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Data;
-using FocLauncher.Mods;
+using FocLauncher.Core.Mods;
 
-namespace FocLauncher.Converters
+namespace FocLauncher.Core.Converters
 {
     public class ModNameConverter : IMultiValueConverter
     {

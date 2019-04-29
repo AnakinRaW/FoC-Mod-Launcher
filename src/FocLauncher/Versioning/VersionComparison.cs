@@ -1,4 +1,4 @@
-﻿namespace FocLauncher.Versioning
+﻿namespace FocLauncher.Core.Versioning
 {
     public enum VersionComparison
     {

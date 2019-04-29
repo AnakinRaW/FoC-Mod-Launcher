@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FocLauncher.Utilities
+namespace FocLauncher.Core.Utilities
 {
     public struct ReusableResourceHolder<TResource> : IDisposable where TResource : class
     {

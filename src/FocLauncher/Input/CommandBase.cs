@@ -5,7 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace FocLauncher.Input
+namespace FocLauncher.Core.Input
 {
     /// <inheritdoc />
     /// <summary>

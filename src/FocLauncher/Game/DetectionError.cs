@@ -1,4 +1,4 @@
-﻿namespace FocLauncher.Game
+﻿namespace FocLauncher.Core.Game
 {
     internal enum DetectionError
     {

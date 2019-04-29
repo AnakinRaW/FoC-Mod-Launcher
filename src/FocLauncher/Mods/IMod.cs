@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel;
-using FocLauncher.ModInfo;
-using FocLauncher.Versioning;
+using FocLauncher.Core.ModInfo;
+using FocLauncher.Core.Versioning;
 
-namespace FocLauncher.Mods
+namespace FocLauncher.Core.Mods
 {
     public interface IMod : INotifyPropertyChanged
     {

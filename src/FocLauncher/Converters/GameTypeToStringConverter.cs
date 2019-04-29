@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Data;
-using FocLauncher.Game;
+using FocLauncher.Core.Game;
 
-namespace FocLauncher.Converters
+namespace FocLauncher.Core.Converters
 {
     internal class GameTypeToStringConverter : IValueConverter
     {

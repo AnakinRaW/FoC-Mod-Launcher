@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace FocLauncher.Input
+namespace FocLauncher.Core.Input
 {
     /// <inheritdoc />
     /// <summary>

@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Threading;
-using FocLauncher.Annotations;
 using FocLauncherApp.Threading;
 
 namespace FocLauncherApp.WaitDialog
@@ -349,7 +348,6 @@ namespace FocLauncherApp.WaitDialog
             }
         }
 
-        [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

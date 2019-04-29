@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using FocLauncher.Mods;
+using FocLauncher.Core.Mods;
 
-namespace FocLauncher.Game
+namespace FocLauncher.Core.Game
 {
     public abstract class AbstractFocGame : IGame
     {

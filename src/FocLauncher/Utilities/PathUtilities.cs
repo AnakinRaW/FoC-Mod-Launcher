@@ -2,7 +2,7 @@
 using System.IO;
 using System.Text;
 
-namespace FocLauncher.Utilities
+namespace FocLauncher.Core.Utilities
 {
     public static class PathUtilities
     {

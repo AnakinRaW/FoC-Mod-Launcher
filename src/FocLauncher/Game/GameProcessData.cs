@@ -1,12 +1,10 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.IO;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices.ComTypes;
-using FocLauncher.Annotations;
+using FocLauncher.Core.Properties;
 
-namespace FocLauncher.Game
+namespace FocLauncher.Core.Game
 {
     public class GameProcessData : INotifyPropertyChanged
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
-namespace FocLauncher.Utilities
+namespace FocLauncher.Core.Utilities
 {
     internal struct HashCodeCombiner
     {

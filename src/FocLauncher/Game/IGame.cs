@@ -1,6 +1,6 @@
-﻿using FocLauncher.Mods;
+﻿using FocLauncher.Core.Mods;
 
-namespace FocLauncher.Game
+namespace FocLauncher.Core.Game
 {
     public interface IGame
     {

@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 
-namespace FocLauncher.Versioning
+namespace FocLauncher.Core.Versioning
 {
     public class ModVersion : SemanticVersion
     {

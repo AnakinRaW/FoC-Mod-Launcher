@@ -1,9 +1,9 @@
 ﻿using System.Windows;
 using System.Windows.Input;
-using FocLauncher.Dialogs;
-using FocLauncher.Mods;
+using FocLauncher.Core.Dialogs;
+using FocLauncher.Core.Mods;
 
-namespace FocLauncher
+namespace FocLauncher.Core
 {
     public partial class MainWindow
     {

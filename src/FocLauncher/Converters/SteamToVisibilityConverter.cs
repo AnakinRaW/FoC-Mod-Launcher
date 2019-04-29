@@ -2,9 +2,9 @@
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
-using FocLauncher.Game;
+using FocLauncher.Core.Game;
 
-namespace FocLauncher.Converters
+namespace FocLauncher.Core.Converters
 {
     internal class SteamToVisibilityConverter : IValueConverter
     {

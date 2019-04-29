@@ -2,7 +2,7 @@
 using System.IO;
 using System.Security.Cryptography;
 
-namespace FocLauncher.Utilities
+namespace FocLauncher.Core.Utilities
 {
     public class HashProvider
     {

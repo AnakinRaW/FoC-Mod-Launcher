@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Text;
 
-namespace FocLauncher.Versioning
+namespace FocLauncher.Core.Versioning
 {
     public class VersionFormatter : IFormatProvider, ICustomFormatter
     {

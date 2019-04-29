@@ -1,15 +1,15 @@
 ﻿using System.Windows;
-using FocLauncher.AssemblyHelper;
-using FocLauncher.Properties;
-using FocLauncher.Theming;
+using FocLauncher.Core.AssemblyHelper;
+using FocLauncher.Core.Properties;
+using FocLauncher.Core.Theming;
 
-namespace FocLauncher
+namespace FocLauncher.Core
 {
-    public partial class App
+    public class LauncherApp : Application
     {
-        static App()
+        static LauncherApp()
         {
-            AssemblyLoader.LoadAssemblies();
+            AssemblyLoader.LoadEmbeddedAssemblies();
         }
 
         protected override void OnExit(ExitEventArgs e)
@@ -18,8 +18,10 @@ namespace FocLauncher
             base.OnExit(e);
         }
 
-        private void OnStartUp(object sender, StartupEventArgs e)
+        protected override void OnStartup(StartupEventArgs e)
         {
+            base.OnStartup(e);
+
             ThemeManager.Initialize();
             var mainWindow = new MainWindow();
 

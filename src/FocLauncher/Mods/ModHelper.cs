@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using FocLauncher.Game;
+using FocLauncher.Core.Game;
 
-namespace FocLauncher.Mods
+namespace FocLauncher.Core.Mods
 {
     public static class ModHelper
     {

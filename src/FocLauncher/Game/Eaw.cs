@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
-using FocLauncher.Mods;
-using FocLauncher.Utilities;
+using FocLauncher.Core.Mods;
+using FocLauncher.Core.Utilities;
 
-namespace FocLauncher.Game
+namespace FocLauncher.Core.Game
 {
     public class Eaw : IGame
     {

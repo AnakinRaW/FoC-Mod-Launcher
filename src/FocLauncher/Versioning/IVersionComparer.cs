@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace FocLauncher.Versioning
+namespace FocLauncher.Core.Versioning
 {
     public interface IVersionComparer : IEqualityComparer<SemanticVersion>, IComparer<SemanticVersion>
     {

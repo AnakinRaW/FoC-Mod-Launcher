@@ -1,7 +1,6 @@
-﻿using System.Xml;
-using HtmlAgilityPack;
+﻿using HtmlAgilityPack;
 
-namespace FocLauncher.Game
+namespace FocLauncher.Core.Game
 {
     internal class WorkshopNameResolver
     {
