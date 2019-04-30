@@ -41,8 +41,10 @@ namespace FocLauncher.Core.Theming
 
         private ThemeManager()
         {
-            Themes = new ObservableCollection<ITheme> {new DefaultTheme()};
-            ChangeTheme(null, new DefaultTheme(), false);
+            var defaultTheme = new DefaultTheme();
+            Themes = new ObservableCollection<ITheme> { defaultTheme };
+            ChangeTheme(null, defaultTheme, false);
+            _theme = defaultTheme;
         }
 
         public void RegisterTheme(ITheme theme)

@@ -4,12 +4,12 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows;
 
-[assembly: AssemblyTitle("FocLauncher.Theme")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("RaW Launcher Theme")]
+[assembly: AssemblyDescription("Contains the RaW theme for the FoC Launcher")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("FocLauncher.Theme")]
-[assembly: AssemblyCopyright("Copyright ©  2019")]
+[assembly: AssemblyCompany("Republic at War Modding Team")]
+[assembly: AssemblyProduct("Republic at War")]
+[assembly: AssemblyCopyright("Copyright © 2019 Anakin Sklavenwalker")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]

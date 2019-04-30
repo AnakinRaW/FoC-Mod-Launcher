@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Windows;
 using FocLauncher.Core;
@@ -26,13 +28,10 @@ namespace FocLauncherApp
             }
 
             var launcher = AppDomain.CreateDomain("LauncherDomain");
+            launcher.AssemblyResolve += LauncherAppDomainResolveAssembly;
             try
             {
-                launcher.DoCallBack(() =>
-                {
-                    var app = new LauncherApp();
-                    app.Run();
-                });
+                launcher.DoCallBack(StartLauncher);
             }
             catch (Exception e)
             {
@@ -43,6 +42,26 @@ namespace FocLauncherApp
             {
                 AppDomain.Unload(launcher);
             }
+        }
+
+        private static Assembly LauncherAppDomainResolveAssembly(object sender, ResolveEventArgs args)
+        {
+            var fields = args.Name.Split(',');
+            var name = fields[0];
+            var culture = fields[2];
+
+            if (name.EndsWith(".resources") && !culture.EndsWith("neutral"))
+                return null;
+
+            var files = Directory.EnumerateFiles(BootstrapperApp.AppDataPath, "*.dll", SearchOption.TopDirectoryOnly);
+            var dll = files.FirstOrDefault(x => $"{name}.dll".Equals(Path.GetFileName(x)));
+            return dll == null ? null : Assembly.LoadFile(dll);
+        }
+
+        private static void StartLauncher()
+        {
+            var app = new LauncherApp();
+            app.Run();
         }
 
         private static void StartBootstrapperApp()

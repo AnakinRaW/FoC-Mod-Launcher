@@ -187,6 +187,7 @@
     <ProjectReference Include="..\FocLauncher.Theming\FocLauncher.Theming.csproj">
       <Project>{b952dcaa-749d-476c-bbc3-2074adfb1cc4}</Project>
       <Name>FocLauncher.Theming</Name>
+      <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
