@@ -21,7 +21,6 @@ namespace FocLauncher.Core
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-
             ThemeManager.Initialize();
             var mainWindow = new MainWindow();
 

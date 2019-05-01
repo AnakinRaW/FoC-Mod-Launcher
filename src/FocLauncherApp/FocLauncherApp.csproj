@@ -61,6 +61,12 @@
   <ItemGroup>
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="BootstrapperApp.cs" />
+    <Compile Include="ExceptionHandling\ExceptionToTextConverter.cs" />
+    <Compile Include="ExceptionHandling\ExceptionWindow.xaml.cs">
+      <DependentUpon>ExceptionWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Utilities\NullToVisibilityConverter.cs" />
+    <Compile Include="ExceptionHandling\StackTraceToShortMessageConverter.cs" />
     <Compile Include="NativeMethods\NativeMethods.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -92,6 +98,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="ExceptionHandling\ExceptionWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="WaitDialog\WaitWindowDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -134,6 +144,9 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\sadTrooper.jpeg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

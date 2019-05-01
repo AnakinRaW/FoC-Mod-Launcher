@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Windows;
 using FocLauncher.Core;
+using FocLauncherApp.ExceptionHandling;
 using Microsoft.Win32;
 
 namespace FocLauncherApp
@@ -31,12 +32,12 @@ namespace FocLauncherApp
             launcher.AssemblyResolve += LauncherAppDomainResolveAssembly;
             try
             {
-                launcher.DoCallBack(StartLauncher);
+                //launcher.DoCallBack(StartLauncher);
+                throw new NullReferenceException("Message");
             }
             catch (Exception e)
             {
-                //TODO: Make this fancy :)
-                MessageBox.Show(e.Message);
+                new ExceptionWindow(e).ShowDialog();
             }
             finally
             {

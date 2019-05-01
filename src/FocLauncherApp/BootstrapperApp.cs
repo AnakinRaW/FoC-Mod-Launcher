@@ -32,8 +32,8 @@ namespace FocLauncherApp
                     LoadAssemblies();
                     break;
                 case CheckUpdateResult.Update:
-                    await WaitDialogHelper.RunWithWaitDialog(AsyncMethod3, "FoC Launcher",
-                        "Please wait while the launcher is loading an update.", "Updating....", 2, true);
+                    //await WaitDialogHelper.RunWithWaitDialog(AsyncMethod3, "FoC Launcher",
+                    //    "Please wait while the launcher is loading an update.", "Updating....", 2, true);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -92,8 +92,6 @@ namespace FocLauncherApp
             {
             }
         }
-
-
 
         private enum CheckUpdateResult
         {
