@@ -32,7 +32,7 @@ namespace FocLauncherApp
             launcher.AssemblyResolve += LauncherAppDomainResolveAssembly;
             try
             {
-                throw new NullReferenceException("Message");
+                //throw new NullReferenceException("Message");
                 launcher.DoCallBack(StartLauncher);
             }
             catch (Exception e)
