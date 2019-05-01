@@ -32,8 +32,8 @@ namespace FocLauncherApp
             launcher.AssemblyResolve += LauncherAppDomainResolveAssembly;
             try
             {
-                //launcher.DoCallBack(StartLauncher);
                 throw new NullReferenceException("Message");
+                launcher.DoCallBack(StartLauncher);
             }
             catch (Exception e)
             {
@@ -75,15 +75,17 @@ namespace FocLauncherApp
 
         private static bool Get46FromRegistry()
         {
-            using (var ndpKey = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32).OpenSubKey("SOFTWARE\\Microsoft\\NET Framework Setup\\NDP\\v4\\Full\\"))
+            using (var ndpKey = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32)
+                .OpenSubKey("SOFTWARE\\Microsoft\\NET Framework Setup\\NDP\\v4\\Full\\"))
             {
                 if (ndpKey?.GetValue("Release") != null)
                 {
-                    if (CheckFor46DotVersion((int)ndpKey.GetValue("Release")))
+                    if (CheckFor46DotVersion((int) ndpKey.GetValue("Release")))
                         return true;
                     MessageBox.Show("Required .NetFramework Version 4.6 was not found");
                     return false;
                 }
+
                 MessageBox.Show("Required .NetFramework Version 4.6 was not found");
                 return false;
             }

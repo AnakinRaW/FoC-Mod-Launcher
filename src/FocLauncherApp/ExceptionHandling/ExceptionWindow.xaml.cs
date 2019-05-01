@@ -32,14 +32,6 @@ namespace FocLauncherApp.ExceptionHandling
             Exception = exception;
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
         private void OnSaveStackTrace(object sender, RoutedEventArgs e)
         {
             if (Exception?.StackTrace == null)
@@ -48,5 +40,13 @@ namespace FocLauncherApp.ExceptionHandling
             var saveFileDialog = new SaveFileDialog();
             saveFileDialog.ShowDialog();
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }       
     }
 }

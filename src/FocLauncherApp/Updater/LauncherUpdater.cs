@@ -7,8 +7,8 @@ namespace FocLauncherApp.Updater
 {
     internal class LauncherUpdater : AssemblyUpdater
     {
-        public override string FilePath => Path.Combine(BootstrapperApp.AppDataPath, "");
-        public override string VersionsServerPath => "master/Releases/AvailableLauncherVersions.txt";
+        public override string FilePath => Path.Combine(BootstrapperApp.AppDataPath, "FocLauncher.Core.dll");
+        public override string VersionsServerPath => "master/Releases/AvailableUpdates.txt";
         protected override void Update()
         {
             throw new NotImplementedException();
