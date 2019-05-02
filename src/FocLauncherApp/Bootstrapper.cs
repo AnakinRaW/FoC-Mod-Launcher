@@ -19,15 +19,13 @@ namespace FocLauncherApp
                 Environment.Exit(0);
 
             var splashDomain = AppDomain.CreateDomain("BootstrapDomain");
+
+            // Gotta catch 'em all.
+            AppDomain.CurrentDomain.UnhandledException += OnUnhandledExceptionReceived;
+
             try
             {
-                //throw new NullReferenceException("Message");
                 splashDomain.DoCallBack(StartBootstrapperApp);
-            }
-            catch(Exception e)
-            {
-                new ExceptionWindow(e).ShowDialog();
-                Environment.Exit(e.HResult);
             }
             finally
             {
@@ -38,17 +36,22 @@ namespace FocLauncherApp
             launcher.AssemblyResolve += LauncherAppDomainResolveAssembly;
             try
             {
-                //throw new NullReferenceException("Message");
                 launcher.DoCallBack(StartLauncher);
-            }
-            catch (Exception e)
-            {
-                new ExceptionWindow(e).ShowDialog();
             }
             finally
             {
                 AppDomain.Unload(launcher);
             }
+        }
+
+        private static void OnUnhandledExceptionReceived(object sender, UnhandledExceptionEventArgs e)
+        {
+            if (e.ExceptionObject is Exception exception)
+            {
+                new ExceptionWindow(exception).ShowDialog();
+                if (e.IsTerminating)
+                    Environment.Exit(exception.HResult);
+            }       
         }
 
         private static Assembly LauncherAppDomainResolveAssembly(object sender, ResolveEventArgs args)
@@ -65,18 +68,19 @@ namespace FocLauncherApp
             return dll == null ? null : Assembly.LoadFile(dll);
         }
 
-        private static void StartLauncher()
-        {
-            var app = new LauncherApp();
-            app.Run();
-        }
 
         private static void StartBootstrapperApp()
         {
             var app = new BootstrapperApp();
-            var w = new SplashScreen();
-            app.Run(w);
+            app.Run(new SplashScreen());
             app.Shutdown(0);
+        }
+
+        private static void StartLauncher()
+        {
+            // Make sure we reference to FocLauncher.Core.dll here the first time. Otherwise the update code might break because the assembly could not be resolved.
+            var app = new LauncherApp();
+            app.Run();
         }
 
         private static bool Get46FromRegistry()

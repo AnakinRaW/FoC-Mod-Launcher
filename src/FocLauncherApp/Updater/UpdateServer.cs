@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Threading.Tasks;
 using FocLauncherApp.Utilities;
 
 namespace FocLauncherApp.Updater
@@ -14,7 +15,7 @@ namespace FocLauncherApp.Updater
             ServerRootAddress = baseAddress;
         }
 
-        public bool IsRunning() => UrlExists(string.Empty);
+        public async Task<bool> IsRunning() => await UrlExists(string.Empty);
 
         public string DownloadString(string resource)
         {
@@ -34,14 +35,14 @@ namespace FocLauncherApp.Updater
             return result;
         }
 
-        public bool UrlExists(string resource)
+        public async Task<bool> UrlExists(string resource)
         {
             var request = (HttpWebRequest)WebRequest.Create(ServerRootAddress + resource);
             request.Method = "HEAD";
             request.Timeout = 5000;
             try
             {
-                request.GetResponse();
+                await request.GetResponseAsync();
                 request.Abort();
             }
             catch (WebException ex)
@@ -53,18 +54,19 @@ namespace FocLauncherApp.Updater
             return true;
         }
 
-        public void DownloadFile(string resource, string storagePath)
+        public async Task DownloadFile(string resource, string storagePath)
         {
             if (resource == null || storagePath == null)
                 return;
             try
             {
                 var webClient = new WebClient();
+                webClient.CachePolicy = new System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.NoCacheNoStore);
                 var s = ServerRootAddress + resource;
                 if (!Directory.Exists(Path.GetDirectoryName(storagePath)))
                     Directory.CreateDirectory(Path.GetDirectoryName(storagePath));
                 var uri = new Uri(s);
-                webClient.DownloadFile(uri, storagePath);
+                await webClient.DownloadFileTaskAsync(uri, storagePath);
             }
             catch (Exception)
             {

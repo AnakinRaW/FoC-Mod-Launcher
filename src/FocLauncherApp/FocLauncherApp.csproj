@@ -65,6 +65,8 @@
     <Compile Include="ExceptionHandling\ExceptionWindow.xaml.cs">
       <DependentUpon>ExceptionWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Updater\AssemblyUpdater.cs" />
+    <Compile Include="Updater\ThemeUpdater.cs" />
     <Compile Include="Utilities\NullToVisibilityConverter.cs" />
     <Compile Include="ExceptionHandling\StackTraceToShortMessageConverter.cs" />
     <Compile Include="NativeMethods\NativeMethods.cs" />
