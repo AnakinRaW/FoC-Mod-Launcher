@@ -4,8 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="About" SizeToContent="Height" Width="250" MinHeight="150"
-        ResizeMode="NoResize">
+        Title="About" SizeToContent="Height" Width="300" MinHeight="150"
+        ResizeMode="NoResize" DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <Grid Margin="6,12">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -21,7 +21,19 @@
                 License
             </Hyperlink>
         </TextBlock>
-        <Button Grid.Row="3" Content="OK" HorizontalAlignment="Right" MinWidth="75" Padding="6,3"
-                IsCancel="True" IsDefault="True"/>
+        <Grid Grid.Row="3">
+            <StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Launcher Version: "/>
+                    <TextBlock Text="{Binding LauncherVersion}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Theme Version: "/>
+                    <TextBlock Text="{Binding ThemeVersion}"/>
+                </StackPanel>
+            </StackPanel>
+            <Button Content="OK" HorizontalAlignment="Right" VerticalAlignment="Bottom" MinWidth="75" MinHeight="23" IsCancel="True" IsDefault="True"/>
+        </Grid>
+        
     </Grid>
 </Window>
