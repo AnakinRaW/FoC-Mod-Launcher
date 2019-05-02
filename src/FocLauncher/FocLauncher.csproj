@@ -64,6 +64,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IDebugPrinter.cs" />
     <Compile Include="LauncherApp.cs" />
     <Compile Include="AssemblyHelper\AssemblyLoader.cs" />
     <Compile Include="AssemblyHelper\EmbeddedAssembly.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="Game\GameStartHelper.cs" />
     <Compile Include="Game\SteamGame.cs" />
     <Compile Include="Game\WorkshopNameResolver.cs" />
+    <Compile Include="LauncherException.cs" />
     <Compile Include="ModInfo\SteamData.cs" />
     <Compile Include="Mods\DummyMod.cs" />
     <Compile Include="ModInfo\ModInfoFile.cs" />
@@ -104,7 +106,7 @@
     <Compile Include="Versioning\VersionComparer.cs" />
     <Compile Include="Versioning\VersionComparison.cs" />
     <Compile Include="Versioning\VersionFormatter.cs" />
-    <Page Include="AboutWindow.xaml">
+    <Page Include="Dialogs\AboutWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -116,7 +118,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="AboutWindow.xaml.cs">
+    <Compile Include="Dialogs\AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Game\DetectionError.cs" />
@@ -134,7 +136,7 @@
     <Compile Include="Input\CommandBase.cs" />
     <Compile Include="Input\UICommand.cs" />
     <Compile Include="Input\WeakEventHandlerManager.cs" />
-    <Compile Include="KnownModIds.cs" />
+    <Compile Include="Mods\KnownModIds.cs" />
     <Compile Include="LauncherDataModel.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

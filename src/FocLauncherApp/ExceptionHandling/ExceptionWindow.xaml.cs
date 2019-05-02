@@ -1,6 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
+using System.IO;
+using System.Media;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Windows;
 using FocLauncherApp.Properties;
 using Microsoft.Win32;
@@ -9,6 +12,7 @@ namespace FocLauncherApp.ExceptionHandling
 {
     public partial class ExceptionWindow : INotifyPropertyChanged
     {
+        private readonly Window _hostWindow;
         private Exception _exception;
 
         public Exception Exception
@@ -30,6 +34,19 @@ namespace FocLauncherApp.ExceptionHandling
         {
             InitializeComponent();
             Exception = exception;
+            _hostWindow = new Window
+            {
+                Title = "FoC Launcher",
+                SizeToContent = SizeToContent.WidthAndHeight,
+                ResizeMode = ResizeMode.NoResize
+            };
+        }
+
+        public void ShowDialog()
+        {
+            SystemSounds.Exclamation.Play();
+            _hostWindow.Content = this;
+            _hostWindow.ShowDialog();
         }
 
         private void OnSaveStackTrace(object sender, RoutedEventArgs e)
@@ -37,8 +54,18 @@ namespace FocLauncherApp.ExceptionHandling
             if (Exception?.StackTrace == null)
                 return;
 
-            var saveFileDialog = new SaveFileDialog();
-            saveFileDialog.ShowDialog();
+            var saveFileDialog = new SaveFileDialog {Title = "Save error log", Filter = "Text file (*.txt)|*.txt"};
+
+            if (saveFileDialog.ShowDialog() != true)
+                return;
+
+            var sb = new StringBuilder();
+            sb.AppendLine("FoC Launcher error log");
+            sb.AppendLine();
+            sb.AppendLine(Exception.ToString());
+
+            File.WriteAllText(saveFileDialog.FileName, sb.ToString());
+            _hostWindow.Close();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

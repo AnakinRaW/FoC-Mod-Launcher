@@ -20,6 +20,8 @@ namespace FocLauncher.Core
 
         protected override void OnStartup(StartupEventArgs e)
         {
+            DispatcherUnhandledException += WrapException;
+
             base.OnStartup(e);
             ThemeManager.Initialize();
             var mainWindow = new MainWindow();
@@ -28,10 +30,25 @@ namespace FocLauncher.Core
             dataModel.Initialized += OnDataModelInitialized;
 
             dataModel.Initialize();
+
+            object i = null;
+            i.ToString();
+
             var viewModel = new MainWindowViewModel(dataModel);
 
             mainWindow.DataContext = viewModel;
             mainWindow.Show();
+        }
+
+        private static void WrapException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        {
+            if (e.Exception is LauncherException)
+                return;
+
+            var message = $"{e.Exception.Message} ({e.Exception.GetType().Name})";
+            var wrappedException = new LauncherException(message, e.Exception);
+            wrappedException.Data.Add(LauncherException.LauncherDataModelKey, LauncherDataModel.Instance.GetDebugInfo());
+            throw wrappedException;
         }
 
         private static void OnDataModelInitialized(object sender, System.EventArgs e)

@@ -22,5 +22,6 @@ namespace FocLauncher.Core
          bool IgnoreAsserts { get; set; }
 
          bool NoArtProcess { get; set; }
+         
     }
 }

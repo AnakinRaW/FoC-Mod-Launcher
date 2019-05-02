@@ -7,7 +7,7 @@ namespace FocLauncherApp.Updater
 {
     internal class LauncherUpdater : AssemblyUpdater
     {
-        public override string FilePath => Path.Combine(BootstrapperApp.AppDataPath, "FocLauncher.Core.dll");
+        public override string AssemblyName => "FocLauncher.Core.dll";
 
         protected override VersionType VersionType => VersionType.Launcher;
 
@@ -19,7 +19,7 @@ namespace FocLauncherApp.Updater
 
     internal class ThemeUpdater : AssemblyUpdater
     {
-        public override string FilePath => Path.Combine(BootstrapperApp.AppDataPath, "FocLauncher.Theming.dll");
+        public override string AssemblyName => "FocLauncher.Theming.dll";
 
         protected override VersionType VersionType => VersionType.Theme;
 
@@ -33,7 +33,9 @@ namespace FocLauncherApp.Updater
     {
         private Version _latestVersion;
 
-        public abstract string FilePath { get; }
+        public abstract string AssemblyName { get; }
+
+        public virtual string FilePath => Path.Combine(BootstrapperApp.AppDataPath, AssemblyName);
 
         public virtual string VersionsServerPath => "master/Releases/AvailableUpdates.txt";
 

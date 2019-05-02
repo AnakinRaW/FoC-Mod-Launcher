@@ -34,6 +34,24 @@ namespace FocLauncherApp.Updater
                 if (entry == null)
                     continue;
                 var items = entry.Split(':');
+                if (items.Length != 2)
+                    return;
+                var type = (VersionType) Enum.Parse(typeof(VersionType), items[0], true);
+                var version = Version.Parse(items[1]);
+                SetCache(type, version);
+            }
+        }
+
+        private static void SetCache(VersionType versionType, Version version)
+        {
+            switch (versionType)
+            {
+                case VersionType.Launcher:
+                    _latestLauncherVersionCache = version;
+                    break;
+                case VersionType.Theme:
+                    _latestThemeVersionCache = version;
+                    break;
             }
         }
 

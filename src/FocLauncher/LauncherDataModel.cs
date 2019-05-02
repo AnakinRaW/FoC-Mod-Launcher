@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Windows;
 using FocLauncher.Core.Game;
 using FocLauncher.Core.Mods;
@@ -12,9 +13,8 @@ using FocLauncher.Core.Theming;
 
 namespace FocLauncher.Core
 {
-    public class LauncherDataModel : IDataModel
+    public class LauncherDataModel : IDataModel, IDebugPrinter
     {
-
         public static string AppDataPath => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"FoC Launcher\");
         public static string IconPath = Path.Combine(AppDataPath, "foc.ico");
 
@@ -29,7 +29,9 @@ namespace FocLauncher.Core
         private bool _useDebugBuild;
         private bool _ignoreAsserts = true;
         private bool _noArtProcess = true;
-        
+
+        internal static LauncherDataModel Instance { get; private set; }
+
 
         public IGame EaW
         {
@@ -125,6 +127,9 @@ namespace FocLauncher.Core
 
         public void Initialize()
         {
+            if (Instance != null)
+                throw new InvalidOperationException("The Launcher already was initialized");
+            Instance = this;
             InitAppDataDirectory();
             if (!InitGames(out _))
             {
@@ -136,6 +141,15 @@ namespace FocLauncher.Core
             SearchMods();
             RegisterThemes();
             OnInitialized();
+        }
+
+        public string GetDebugInfo()
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("----------DEBUG Information----------");
+            sb.AppendLine(EaW == null ? "EaW is null" : $"EaW found at: {EaW.GameDirectory};");
+            sb.AppendLine(FoC == null ? "FoC is null" : $"FoC found at: {FoC.GameDirectory}; FoC Version: {FocGameType}");
+            return sb.ToString();
         }
 
         private bool InitGames(out GameDetectionResult result)

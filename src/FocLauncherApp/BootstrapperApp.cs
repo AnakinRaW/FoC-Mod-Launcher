@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using FocLauncherApp.Updater;
+using FocLauncherApp.Utilities;
 using FocLauncherApp.WaitDialog;
-using ResourceExtractor = FocLauncherApp.Utilities.ResourceExtractor;
-using ResourceExtractorException = FocLauncherApp.Utilities.ResourceExtractorException;
 
 namespace FocLauncherApp
 {
@@ -18,86 +18,56 @@ namespace FocLauncherApp
         {
             base.OnStartup(e);
 
+            var actionQueue = new Queue<Func<Task>>();
+
             var launcherUpdater = new LauncherUpdater();
+            CheckForUpdate(launcherUpdater, in actionQueue);
+            var themeUpdater = new ThemeUpdater();
+            CheckForUpdate(themeUpdater, in actionQueue);
 
-            var result = CheckForUpdate(launcherUpdater);
-
-            switch (result)
+            await WaitDialogHelper.RunWithWaitDialog(async () =>
             {
-                case CheckUpdateResult.Load:
-                    LoadAssemblies();
-                    break;
-                case CheckUpdateResult.ExtractAndLoad:
-                    ExtractAssemblies();
-                    LoadAssemblies();
-                    break;
-                case CheckUpdateResult.Update:
-                    //await WaitDialogHelper.RunWithWaitDialog(AsyncMethod3, "FoC Launcher",
-                    //    "Please wait while the launcher is loading an update.", "Updating....", 2, true);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+                foreach (var action in actionQueue)
+                    await action();
+            }, "FoC Launcher", "Please wait while the launcher is loading an update.", "Updating....", 2, true);
+
             Shutdown(0);
         }
 
-        private CheckUpdateResult CheckForUpdate(AssemblyUpdater updater)
+        private void CheckForUpdate(AssemblyUpdater updater, in Queue<Func<Task>> actionQueue)
         {
             var hasConnection = NativeMethods.NativeMethods.InternetGetConnectedState(out _, 0);
             var currentVersion = updater.CurrentVersion;
 
-            if (!hasConnection)
+            if (!hasConnection && currentVersion == null)
             {
-                if (currentVersion == null)
-                    return CheckUpdateResult.ExtractAndLoad;
-                if (currentVersion > Version.Parse("1.0.0.0"))
-                    return CheckUpdateResult.ExtractAndLoad;
-                return CheckUpdateResult.Load;
+                actionQueue.Enqueue(async () => await Task.Run(() => ExtractAssembly(updater.AssemblyName)));
+                return;
             }
-
             var latestVersion = updater.LatestVersion;
-            if (currentVersion == null || latestVersion > currentVersion)
-                return CheckUpdateResult.Update;
-            return CheckUpdateResult.Load;
+            // TODO: change >=  to >
+            if (currentVersion == null || latestVersion >= currentVersion)
+                actionQueue.Enqueue(() => AsyncMethod3("1213"));
         }
 
-        private void ExtractAssemblies()
+        private static void ExtractAssembly(string assemblyName)
         {
             var extractor = new ResourceExtractor("Library");
-            try
-            {
-                extractor.ExtractFilesIfRequired(AppDataPath, new[] {""});
-            }
-            catch (ResourceExtractorException e)
-            {
-                MessageBox.Show("Error while extracting necessary .dll files:\r\n\r\n" + e.Message);
-                Environment.Exit(0);
-            }
+            extractor.ExtractFilesIfRequired(AppDataPath, new[] { assemblyName });
         }
 
-        private void LoadAssemblies()
-        {
-
-        }
-
-        private static async Task AsyncMethod3()
+        private static async Task AsyncMethod3(string t)
         {
             try
             {
-                await Task.Delay(1000);
-                await Task.Delay(1000);
-                await Task.Delay(1000);
+                //await Task.Delay(1000);
+                //await Task.Delay(1000);
+                //await Task.Delay(1000);
+                //MessageBox.Show(t);
             }
             catch (TaskCanceledException)
             {
             }
-        }
-
-        private enum CheckUpdateResult
-        {
-            Load,
-            ExtractAndLoad,
-            Update
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace FocLauncher.Core
+namespace FocLauncher.Core.Mods
 {
     public static class KnownModIds
     {

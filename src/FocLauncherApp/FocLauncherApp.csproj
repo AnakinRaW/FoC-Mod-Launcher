@@ -78,6 +78,7 @@
     <Compile Include="Updater\UpdateServer.cs" />
     <Compile Include="Updater\VersionUtilities.cs" />
     <Compile Include="Utilities\ResourceExtractor.cs" />
+    <Compile Include="Utilities\ResourceExtractorException.cs" />
     <Compile Include="Utilities\UrlCombine.cs" />
     <Compile Include="WaitDialog\BackgroundDispatcher.cs" />
     <Compile Include="WaitDialog\DialogShowArguments.cs" />
@@ -131,7 +132,7 @@
     <Resource Include="Resources\splash.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Library\" />
+    <EmbeddedResource Include="Library\FocLauncher.Theming.dll" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
@@ -147,6 +148,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\sadTrooper.jpeg" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Library\FocLauncher.Core.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

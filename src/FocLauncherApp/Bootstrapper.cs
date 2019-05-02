@@ -21,7 +21,13 @@ namespace FocLauncherApp
             var splashDomain = AppDomain.CreateDomain("BootstrapDomain");
             try
             {
+                //throw new NullReferenceException("Message");
                 splashDomain.DoCallBack(StartBootstrapperApp);
+            }
+            catch(Exception e)
+            {
+                new ExceptionWindow(e).ShowDialog();
+                Environment.Exit(e.HResult);
             }
             finally
             {

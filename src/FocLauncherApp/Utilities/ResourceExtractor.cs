@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Windows;
 
 namespace FocLauncherApp.Utilities
 {
@@ -14,7 +12,7 @@ namespace FocLauncherApp.Utilities
 
         public ResourceExtractor()
         {
-            Assembly = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name;
+            Assembly = typeof(Bootstrapper).Namespace;
             ResourcePath = "";
         }
 
@@ -24,7 +22,7 @@ namespace FocLauncherApp.Utilities
         /// <param name="resourcePath">Do not enter a "." at last character</param>
         public ResourceExtractor(string resourcePath)
         {
-            Assembly = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name;
+            Assembly = typeof(Bootstrapper).Namespace;
             ResourcePath = resourcePath.TrimEnd('.') + @".";
         }
 
@@ -42,10 +40,7 @@ namespace FocLauncherApp.Utilities
                 throw new ResourceExtractorException("Assembly not set: '" + Assembly + "'");
 
             if (!Directory.Exists(directory))
-            {
                 Directory.CreateDirectory(directory);
-                MessageBox.Show("File extraction error. Please call the developers");
-            }
 
             foreach (var file in files.Where(file => !File.Exists(Path.Combine(directory, file)) || overrideFile))
                 InternalExtractFile(directory, file);
@@ -53,32 +48,17 @@ namespace FocLauncherApp.Utilities
 
         private void InternalExtractFile(string directory, string file)
         {
-            using (var stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream(Assembly + @"." + ResourcePath + file))
+            var resource = Assembly + @"." + ResourcePath + file;
+            using (var stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream(resource))
             {
                 if (stream == null || stream == Stream.Null)
-                    throw new ResourceExtractorException("ExceptionResourceExtractorNotFound");
+                    throw new ResourceExtractorException($"Unable to find the resource: {resource}");
 
                 using (var fileStream = new FileStream(Path.Combine(directory, file), FileMode.OpenOrCreate, FileAccess.Write))
                 {
                     stream.CopyTo(fileStream);
                 }
             }
-        }
-    }
-
-    public class ResourceExtractorException : Exception
-    {
-        public ResourceExtractorException()
-        {
-        }
-
-        public ResourceExtractorException(string message) : base(message)
-        {
-        }
-
-        public ResourceExtractorException(string message, Exception inner) : base(message, inner)
-        {
-
         }
     }
 }
