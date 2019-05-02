@@ -197,7 +197,7 @@ namespace FocLauncherApp.WaitDialog
                         _dataSource.CurrentStep = args.CurrentStepCount;
                         _dataSource.TotalSteps = args.TotalStepCount;
                     }
-                    _window.ShowDialog();
+                    _window.TryShowDialog(args.AppMainWindowHandle, args.ActiveWindowHandle, args.RootWindowCaption);
                 });
             }
 
@@ -208,7 +208,7 @@ namespace FocLauncherApp.WaitDialog
                 {
                     if (!_isDialogAcquired)
                         return;
-                    _window.Hide();
+                    _window.HideDialog();
                     _isDialogAcquired = false;
                 });
             }

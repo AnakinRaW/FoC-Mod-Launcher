@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using FocLauncherApp.Threading;
 using FocLauncherApp.Updater;
 using FocLauncherApp.Utilities;
 using FocLauncherApp.WaitDialog;
@@ -29,14 +30,13 @@ namespace FocLauncherApp
 
             if (actionQueue.Any())
             {
-                // As this dispatches the UI thread and shows the splash screen we want to make sure the spalsh is
+                ThreadHelper.Generic.Invoke(() => MainWindow?.Show());
                 await WaitDialogHelper.RunWithWaitDialog(async () =>
                 {
                     foreach (var action in actionQueue)
                         await action();
                 }, "FoC Launcher", "Please wait while the launcher is loading an update.", "Updating....", 2, true);
             }
-
             Shutdown(0);
         }
 

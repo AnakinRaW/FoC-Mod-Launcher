@@ -65,8 +65,14 @@
     <Compile Include="ExceptionHandling\ExceptionWindow.xaml.cs">
       <DependentUpon>ExceptionWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="NativeMethods\GuiThreadInfo.cs" />
+    <Compile Include="NativeMethods\Gwl.cs" />
+    <Compile Include="NativeMethods\RECT.cs" />
     <Compile Include="Updater\AssemblyUpdater.cs" />
     <Compile Include="Updater\ThemeUpdater.cs" />
+    <Compile Include="Utilities\DpiHelper.cs" />
+    <Compile Include="Utilities\DpiHelperImpl.cs" />
+    <Compile Include="Utilities\ImageScalingMode.cs" />
     <Compile Include="Utilities\NullToVisibilityConverter.cs" />
     <Compile Include="ExceptionHandling\StackTraceToShortMessageConverter.cs" />
     <Compile Include="NativeMethods\NativeMethods.cs" />
@@ -91,7 +97,7 @@
     <Compile Include="Utilities\UnsafeHelpers.cs" />
     <Compile Include="WaitDialog\WaitDialog.cs" />
     <Compile Include="WaitDialog\WaitDialogFactory.cs" />
-    <Compile Include="WaitDialog\WaitDialoghelper.cs" />
+    <Compile Include="WaitDialog\WaitDialogHelper.cs" />
     <Compile Include="WaitDialog\WaitDialogServiceWrapper.cs" />
     <Compile Include="WaitDialog\WaitWindowDialog.xaml.cs">
       <DependentUpon>WaitWindowDialog.xaml</DependentUpon>
@@ -118,6 +124,7 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xaml" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
