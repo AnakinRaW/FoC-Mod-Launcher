@@ -31,9 +31,6 @@ namespace FocLauncher.Core
 
             dataModel.Initialize();
 
-            object i = null;
-            i.ToString();
-
             var viewModel = new MainWindowViewModel(dataModel);
 
             mainWindow.DataContext = viewModel;
