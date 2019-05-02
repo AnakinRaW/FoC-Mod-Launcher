@@ -65,14 +65,14 @@ namespace FocLauncher.Core.Game
         public static void WaitUserChanged(int ticks)
         {
             IsUserLoggedIn(out var lastUserId);
-            if (lastUserId == -1)
+            if (lastUserId > 0)
                 return;
 
             var tick = 0;
             while (tick++ < tick)
             {
-                IsUserLoggedIn(out var curretnUser);
-                if (curretnUser == lastUserId)
+                IsUserLoggedIn(out var currentUser);
+                if (currentUser == 0 || currentUser == lastUserId)
                     continue;
                 return;
             }

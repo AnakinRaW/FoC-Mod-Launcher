@@ -21,11 +21,12 @@ namespace FocLauncher.Core.Converters
                         return "Steam Version";
                     case GameType.GoG:
                         return "GoG Version";
+                    case GameType.Origin:
+                        return "Origin Version";
                     default:
                         return "FoC was not found";
                 }
             }
-
             return "FoC was not found";
         }
 

@@ -26,6 +26,8 @@ namespace FocLauncher.Core.Game
             if (result.IsError)
                 return result;
 
+            result.FocType = GetGameType(ref result);
+
             FindGamesFromExecutingPath(ref result);
 
             if (string.IsNullOrEmpty(result.FocPath) || !File.Exists(Path.Combine(result.FocPath + "\\swfoc.exe")))
@@ -34,16 +36,18 @@ namespace FocLauncher.Core.Game
                 result.Error = DetectionError.NotInstalled;
                 return result;
             }
-            result.FocType = GetGameType(in result);
+            result.FocType = GetGameType(ref result);
             return result;
         }
 
-        private static GameType GetGameType(in GameDetectionResult result)
+        private static GameType GetGameType(ref GameDetectionResult result)
         {
             if (CheckSteam(result.FocPath))
                 return GameType.SteamGold;
             if (CheckGoG(result.FocPath))
                 return GameType.GoG;
+            if (CheckOrigin(ref result))
+                return GameType.Origin;
             return GameType.Disk;
         }
 
@@ -66,7 +70,7 @@ namespace FocLauncher.Core.Game
             }
             if (eawResult == DetectionError.NotSettedUp || focResult == DetectionError.NotSettedUp)
             {
-                if (Steam.IsSteamGoldPackInstalled() && PrompGameSetupDialog() && SetupSteamGames())
+                if (Steam.IsSteamGoldPackInstalled() && PromptGameSetupDialog() && SetupSteamGames())
                 {
                     result.EawPath = GetGamePathFromRegistry(EawRegistryPath + EawRegistryVersion);
                     result.FocPath = GetGamePathFromRegistry(FocRegistryPath + FocRegistryVersion);
@@ -90,12 +94,15 @@ namespace FocLauncher.Core.Game
             var newResult = default(GameDetectionResult);
             newResult.FocPath = currentPath;
 
-            var gameType = GetGameType(in newResult);
+            var gameType = GetGameType(ref newResult);
             newResult.FocType = gameType;
             if (!Eaw.FindInstallationRelativeToFoc(newResult.FocPath, gameType, out var eawPath))
+            {
+                newResult.EawPath = result.EawPath;
+                result = newResult;
                 return;
+            }
             newResult.EawPath = eawPath;
-
             result = newResult;
         }
 
@@ -144,7 +151,7 @@ namespace FocLauncher.Core.Game
             return false;
         }
 
-        private static bool PrompGameSetupDialog()
+        private static bool PromptGameSetupDialog()
         {
             var mbResult = MessageBox.Show(SetupMessage, "FoC Launcher", MessageBoxButton.YesNo, MessageBoxImage.Information, MessageBoxResult.Yes);
             return mbResult == MessageBoxResult.Yes;
@@ -173,6 +180,34 @@ namespace FocLauncher.Core.Game
             if (!File.Exists(Directory.GetParent(path) + "\\GameData\\goggame-1421404887.dll"))
                 return false;
             return true;
+        }
+
+        private static bool CheckOrigin(ref GameDetectionResult result)
+        {
+            FixPossibleOriginBug(ref result);
+            if (new DirectoryInfo(result.FocPath).Name != "EAWX")
+                return false;
+            if (!Directory.Exists(Path.Combine(Directory.GetParent(result.FocPath).FullName, "Manuals")))
+                return false;
+            if (!Directory.Exists(Path.Combine(Directory.GetParent(result.FocPath).FullName, "__Installer")))
+                return false;
+            return true;
+        }
+
+
+        private static void FixPossibleOriginBug(ref GameDetectionResult result)
+        {
+            var exeDir = new DirectoryInfo(result.FocPath);
+            if (exeDir.Name == "corruption")
+            {
+                var parentPath = exeDir.Parent?.FullName;
+                if (parentPath == null)
+                    return;
+
+                var correctedPath = Path.Combine(parentPath, "EAWX");
+                if (Directory.Exists(correctedPath))
+                    result.FocPath = correctedPath;
+            }
         }
     }
 }

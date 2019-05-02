@@ -6,6 +6,7 @@
         Disk,
         DiskGold,
         SteamGold,
-        GoG
+        GoG,
+        Origin
     }
 }

@@ -170,12 +170,11 @@ namespace FocLauncher.Core
 
             switch (result.FocType)
             {
-                case GameType.Disk:
-                    FoC = new Foc(result.FocPath);
-                    break;
                 case GameType.SteamGold:
                     FoC = new SteamGame(result.FocPath);
                     break;
+                case GameType.Disk:
+                case GameType.Origin:
                 case GameType.GoG:
                     FoC = new Foc(result.FocPath);
                     break;
