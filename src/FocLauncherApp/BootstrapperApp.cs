@@ -37,6 +37,9 @@ namespace FocLauncherApp
                         await action();
                 }, "FoC Launcher", "Please wait while the launcher is loading an update.", "Updating....", 2, true);
             }
+
+            Dispatcher.InvokeShutdown();
+            MainWindow?.Dispatcher.InvokeShutdown();
             Shutdown(0);
         }
 
