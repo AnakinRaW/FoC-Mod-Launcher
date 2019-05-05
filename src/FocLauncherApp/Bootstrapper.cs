@@ -40,6 +40,7 @@ namespace FocLauncherApp
             }
             finally
             {
+                AppDomain.CurrentDomain.UnhandledException -= OnUnhandledExceptionReceived;
                 AppDomain.Unload(launcher);
             }
         }
