@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.ComponentModel;
+using System.Windows;
 using System.Windows.Input;
 using FocLauncher.Core.Dialogs;
 using FocLauncher.Core.Mods;
@@ -31,6 +32,11 @@ namespace FocLauncher.Core
                 var model = DataContext as MainWindowViewModel;
                 model?.LaunchCommand.Execute(null);
             }
+        }
+
+        private void MainWindow_OnClosing(object sender, CancelEventArgs e)
+        {
+            SteamModNamePersister.Instance.Save();
         }
     }
 }

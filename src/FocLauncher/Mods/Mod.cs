@@ -81,11 +81,13 @@ namespace FocLauncher.Core.Mods
             if (!workshop)
                 return folderName.Replace('_', ' ');
 
-            if (KnownModIds.TryFind(folderName, out var modName))
+            if (SteamModNamePersister.Instance.TryFind(folderName, out var modName))
                 return modName;
             
             var doc = await HtmlDownloader.GetSteamModPageDocument(FolderName);
-            return new WorkshopNameResolver().GetName(doc, FolderName);            
+            var name = new WorkshopNameResolver().GetName(doc, FolderName);
+            SteamModNamePersister.Instance.AddModName(folderName, name);
+            return name;            
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

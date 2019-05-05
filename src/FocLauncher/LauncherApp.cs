@@ -20,6 +20,7 @@ namespace FocLauncher.Core
 
         protected override void OnStartup(StartupEventArgs e)
         {
+            Exit += LauncherApp_Exit;
             DispatcherUnhandledException += WrapException;
 
             base.OnStartup(e);
@@ -35,6 +36,12 @@ namespace FocLauncher.Core
 
             mainWindow.DataContext = viewModel;
             mainWindow.Show();
+        }
+
+        private void LauncherApp_Exit(object sender, ExitEventArgs e)
+        {
+            MainWindow?.Dispatcher.InvokeShutdown();
+            Dispatcher.InvokeShutdown();       
         }
 
         private static void WrapException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)

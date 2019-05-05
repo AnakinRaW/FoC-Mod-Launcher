@@ -8,7 +8,8 @@
         xmlns:mods="clr-namespace:FocLauncher.Core.Mods"
         mc:Ignorable="d"
         Title="FoC Launcher by Anakin" Width="400" ResizeMode="CanMinimize" Height="600" 
-        Background="{DynamicResource {x:Static theming:EnvironmentColors.BackgroundImage}}">
+        Background="{DynamicResource {x:Static theming:EnvironmentColors.BackgroundImage}}"
+        Closing="MainWindow_OnClosing">
     <Window.Resources>
         <converters:GameTypeToStringConverter x:Key="GameTypeToStringConverter"/>
         <converters:ModNameConverter x:Key="ModNameConverter"/>

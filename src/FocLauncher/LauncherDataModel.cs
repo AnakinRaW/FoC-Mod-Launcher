@@ -172,6 +172,7 @@ namespace FocLauncher.Core
             {
                 case GameType.SteamGold:
                     FoC = new SteamGame(result.FocPath);
+                    SteamModNamePersister.CreateInstance();
                     break;
                 case GameType.Disk:
                 case GameType.Origin:
@@ -218,8 +219,9 @@ namespace FocLauncher.Core
         {
             if (!Directory.Exists(AppDataPath))
                 Directory.CreateDirectory(AppDataPath);
-
-            using (var fs = new FileStream(IconPath, FileMode.Create, FileAccess.Write))
+            if (File.Exists(IconPath))
+                return;
+            using (var fs = new FileStream(IconPath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
             {
                 Resources.foc.Save(fs);
             }
