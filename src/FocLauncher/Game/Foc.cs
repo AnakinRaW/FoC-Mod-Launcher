@@ -43,7 +43,7 @@ namespace FocLauncher.Core.Game
 
         public override void PlayGame(IMod mod, DebugOptions debugOptions)
         {
-            if (!mod.ModDirectory.StartsWith(GameDirectory))
+            if (!(mod is DummyMod) && !mod.ModDirectory.StartsWith(GameDirectory))
                 throw new Exception("Mod is not compatible");
 
             string args;
