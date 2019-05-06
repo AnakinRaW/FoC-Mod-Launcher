@@ -1,6 +1,6 @@
 ﻿namespace FocLauncher.Core.Game
 {
-    internal struct GameDetectionResult
+    public struct GameDetectionResult
     {
         public GameType FocType { get; set; }
 

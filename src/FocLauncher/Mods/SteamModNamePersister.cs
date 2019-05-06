@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using FocLauncher.Core.Game;
 using Newtonsoft.Json;
 
 namespace FocLauncher.Core.Mods
@@ -19,7 +20,7 @@ namespace FocLauncher.Core.Mods
 
         private SteamModNamePersister()
         {
-            FilePath = Path.Combine(LauncherDataModel.AppDataPath, FileName);
+            FilePath = Path.Combine(PetroglyphGameManager.Instance.ApplicationPath, FileName);
 
             if (!File.Exists(FilePath))
             {

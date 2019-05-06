@@ -10,6 +10,8 @@ namespace FocLauncher.Core.Game
         public const string GameconstantsUpdateHash = "b0818f73031b7150a839bb83e7aa6187";
         public const string GraphicdetailsUpdateHash = "4d7e140887fc1dd52f47790a6e20b5c5";
 
+        public override GameType Type { get; }
+
         protected override string GameExeFileName => "swfoc.exe";
 
         protected override string? DebugGameExeFileName => null;
@@ -18,8 +20,9 @@ namespace FocLauncher.Core.Game
 
         public override string Name => "Forces of Corruption";
 
-        public Foc(string gameDirectory) : base(gameDirectory)
+        public Foc(string gameDirectory, GameType type) : base(gameDirectory)
         {
+            Type = type;
         }
 
         public override bool IsPatched()

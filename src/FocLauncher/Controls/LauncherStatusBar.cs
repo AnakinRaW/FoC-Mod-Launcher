@@ -1,9 +1,9 @@
 ﻿using System.Windows;
-using System.Windows.Controls.Primitives;
+using System.Windows.Controls;
 
 namespace FocLauncher.Core.Controls
 {
-    public class LauncherStatusBar : StatusBar
+    public class LauncherStatusBar : Grid
     {
         static LauncherStatusBar()
         {

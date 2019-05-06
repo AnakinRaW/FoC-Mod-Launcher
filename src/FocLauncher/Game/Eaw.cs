@@ -12,6 +12,7 @@ namespace FocLauncher.Core.Game
         {
         }
 
+        public override GameType Type => GameType.Undefined;
         public override string Name => "Star Wars: Empire at War";
         protected override int DefaultXmlFileCount => 1;
         protected override string GameExeFileName => "sweaw.exe";

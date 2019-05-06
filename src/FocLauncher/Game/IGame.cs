@@ -12,6 +12,8 @@ namespace FocLauncher.Core.Game
 
         event EventHandler GameClosed;
 
+        GameType Type { get; }
+
         /// <summary>
         /// Returns the full Path of the Games Root Directory
         /// </summary>

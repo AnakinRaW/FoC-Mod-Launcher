@@ -68,6 +68,7 @@
     <Compile Include="Controls\LauncherStatusBar.cs" />
     <Compile Include="Game\GameRunArguments.cs" />
     <Compile Include="Game\PetroglyphGame.cs" />
+    <Compile Include="Game\PetroglyphGameManager.cs" />
     <Compile Include="IDebugPrinter.cs" />
     <Compile Include="LauncherApp.cs" />
     <Compile Include="AssemblyHelper\AssemblyLoader.cs" />
@@ -93,6 +94,7 @@
     <Compile Include="Mods\ModHelper.cs" />
     <Compile Include="ModInfo\ModInfoFileException.cs" />
     <Compile Include="ModInfo\SteamWorkshopVisibility.cs" />
+    <Compile Include="Properties\Annotations1.cs" />
     <Compile Include="Theming\ThemeManager.cs" />
     <Compile Include="Utilities\HashCodeCombiner.cs" />
     <Compile Include="Utilities\HtmlDownloader.cs" />
@@ -139,7 +141,7 @@
     <Compile Include="Input\CommandBase.cs" />
     <Compile Include="Input\UICommand.cs" />
     <Compile Include="Input\WeakEventHandlerManager.cs" />
-    <Compile Include="Mods\KnownModIds.cs" />
+    <Compile Include="Mods\SteamModNamePersister.cs" />
     <Compile Include="LauncherDataModel.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

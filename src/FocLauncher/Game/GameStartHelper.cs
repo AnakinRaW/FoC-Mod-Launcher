@@ -5,7 +5,7 @@ using System.Runtime.InteropServices.ComTypes;
 
 namespace FocLauncher.Core.Game
 {
-    public static class GameStartHelper
+    internal static class GameStartHelper
     {
         public static Process StartGameProcess(ProcessStartInfo startInfo, string iconPath)
         {
@@ -15,7 +15,7 @@ namespace FocLauncher.Core.Game
             var fileName = startInfo.FileName;
             var a = startInfo.Arguments;
 
-            var linkPath = Path.Combine(LauncherDataModel.AppDataPath, "tmp.lnk");
+            var linkPath = Path.Combine(PetroglyphGameManager.Instance.ApplicationPath, "tmp.lnk");
 
             CreateShortcut(fileName, linkPath, a, startInfo.WorkingDirectory, iconPath);
 

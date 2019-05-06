@@ -15,6 +15,7 @@ namespace FocLauncher.Core.Game
 
         public event EventHandler GameClosed;
 
+        public abstract GameType Type { get; }
         public string GameDirectory { get; protected set; }
 
         public abstract string Name { get; }

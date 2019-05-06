@@ -29,6 +29,7 @@ namespace FocLauncher.Core
         private bool _useDebugBuild;
         private bool _ignoreAsserts = true;
         private bool _noArtProcess = true;
+        private PetroglyphGameManager _gameManager;
 
         internal static LauncherDataModel Instance { get; private set; }
 
@@ -41,6 +42,18 @@ namespace FocLauncher.Core
                 if (Equals(value, _eaW))
                     return;
                 _eaW = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public PetroglyphGameManager GameManager
+        {
+            get => _gameManager;
+            private set
+            {
+                if (value == _gameManager)
+                    return;
+                _gameManager = value;
                 OnPropertyChanged();
             }
         }
@@ -131,11 +144,21 @@ namespace FocLauncher.Core
                 throw new InvalidOperationException("The Launcher already was initialized");
             Instance = this;
             InitAppDataDirectory();
-            if (!InitGames(out _))
+
+            GameManager = PetroglyphGameManager.Instance;
+            GameManager.Initialize(AppDataPath); ;
+
+            if (!InitGames(out var result))
             {
-                MessageBox.Show("Could not find Forces of Corruption", "FoC Launcher", MessageBoxButton.OK,
+                string message = string.Empty;
+                if (string.IsNullOrEmpty(result.EawPath))
+                    message = "Could not find Empire at War!\r\n";
+                else if (string.IsNullOrEmpty(result.FocPath))
+                    message += "Could not find Forces of Corruption\r\n";
+
+                MessageBox.Show(message + "\r\nThe launcher will now be closed", "FoC Launcher", MessageBoxButton.OK,
                     MessageBoxImage.Error);
-                return;
+                Application.Current.Shutdown();
             }
 
             SearchMods();
@@ -177,7 +200,8 @@ namespace FocLauncher.Core
                 case GameType.Disk:
                 case GameType.Origin:
                 case GameType.GoG:
-                    FoC = new Foc(result.FocPath);
+                case GameType.DiskGold:
+                    FoC = new Foc(result.FocPath, result.FocType);
                     break;
             }
 

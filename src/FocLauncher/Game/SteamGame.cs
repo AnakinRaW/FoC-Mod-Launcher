@@ -13,6 +13,8 @@ namespace FocLauncher.Core.Game
 
         protected override int DefaultXmlFileCount => 1;
 
+        public override GameType Type => GameType.SteamGold;
+
         public override string Name => "Forces of Corruption (Steam)";
 
         public SteamGame(string gameDirectory) : base(gameDirectory)
