@@ -1,36 +1,23 @@
 ﻿using System;
 using System.IO;
-using FocLauncher.Core.Mods;
 using FocLauncher.Core.Utilities;
 
 namespace FocLauncher.Core.Game
 {
-    public class Eaw : IGame
+    public class Eaw : AbstractFocGame
     {
         public const string GameconstantsUpdateHashEaW = "1d44b0797c8becbe240adc0098c2302a";
 
-        public string GameDirectory { get; protected set; }
-        public string Name => "Empire at War";
-        public GameProcessData GameProcessData => new GameProcessData();
-
-        public Eaw(string gameDirectory)
-        {
-            GameDirectory = gameDirectory;
-            if (!Exists())
-                throw new Exception("EaW does not exists");
-        }
-
-        public bool Exists() => Directory.Exists(GameDirectory) && File.Exists(Path.Combine(GameDirectory, "sweaw.exe"));
-
-        public void PlayGame()
+        public Eaw(string gameDirectory) : base(gameDirectory)
         {
         }
 
-        public void PlayGame(IMod mod, DebugOptions debugOptions)
-        {
-        }
+        public override string Name => "Star Wars: Empire at War";
+        protected override int DefaultXmlFileCount => 1;
+        protected override string GameExeFileName => "sweaw.exe";
+        protected override string? DebugGameExeFileName => null;
 
-        public bool IsPatched()
+        public override bool IsPatched()
         {
             if (!File.Exists(Path.Combine(GameDirectory, @"Data\XML\GAMECONSTANTS.xml")))
                 return false;
@@ -42,9 +29,14 @@ namespace FocLauncher.Core.Game
             return true;
         }
 
-        public bool IsGameAiClear()
+        public override bool IsGameAiClear()
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
+        }
+
+        public override bool IsLanguageInstalled(string language)
+        {
+            return false;
         }
 
         public static bool FindInstallationRelativeToFoc(string focPath, GameType type, out string eawPath)

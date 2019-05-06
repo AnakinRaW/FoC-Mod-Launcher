@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using System.IO;
+﻿using System.IO;
 using FocLauncher.Core.Mods;
 using FocLauncher.Core.Utilities;
 
@@ -11,7 +9,7 @@ namespace FocLauncher.Core.Game
         public const string GameconstantsUpdateHash = "b0818f73031b7150a839bb83e7aa6187";
 
         protected override string GameExeFileName => "StarwarsG.exe";
-        protected string DebugGameExeFileName => "StarwarsI.exe";
+        protected override string DebugGameExeFileName => "StarwarsI.exe";
 
         protected override int DefaultXmlFileCount => 1;
 
@@ -31,61 +29,21 @@ namespace FocLauncher.Core.Game
             return true;
         }
 
-        public override void PlayGame()
+        protected override void OnGameStarting(IMod mod, ref GameRunArguments args)
         {
-            PlayGame(null, default);
-        }
-
-        public override void PlayGame(IMod mod, DebugOptions debugOptions)
-        {
-            if (!Exists())
-                throw new Exception("FoC was not found");
-
             if (!Steam.IsSteamRunning())
                 Steam.StartSteam();
-
-            string arguments;
-            if (mod is DummyMod)
-                arguments = string.Empty;
-            else
+            if (mod != null)
             {
-                if (!mod.WorkshopMod)
-                    arguments = "MODPATH=" + "Mods/" + mod.FolderName;
+                args.IsWorkshopMod = mod.WorkshopMod;
+                if (!args.IsWorkshopMod)
+                    args.ModPath = "MODPATH=" + "Mods/" + mod.FolderName;
                 else
-                    arguments = "STEAMMOD=" + mod.FolderName;
-            }
-
-            if (debugOptions.UseDebug)
-            {
-                if (debugOptions.IgnoreAsserts)
-                    arguments += arguments + " IGNOREASSERTS";
-                if (debugOptions.NoArtProcess)
-                    arguments += arguments + " NOARTPROCESS";
-            }
-
-            var exePath = Path.Combine(GameDirectory, debugOptions.UseDebug ? DebugGameExeFileName : GameExeFileName);
-
-            var process = new Process
-            {
-                StartInfo =
-                {
-                    FileName = exePath,
-                    Arguments = arguments,
-                    WorkingDirectory = GameDirectory,
-                    UseShellExecute = false
-                }
-            };
-            try
-            {
-                GameStartHelper.StartGameProcess(process, mod.IconFile);
-            }
-            catch (Exception)
-            {
-                //ignored
+                    args.SteamMod = mod.FolderName;
             }
         }
 
-        public bool HasDebugBuild()
+        public override bool HasDebugBuild()
         {
             return File.Exists(Path.Combine(GameDirectory, DebugGameExeFileName));
         }

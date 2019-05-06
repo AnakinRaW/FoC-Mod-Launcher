@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using FocLauncher.Core.Mods;
 using FocLauncher.Core.Utilities;
@@ -13,11 +12,11 @@ namespace FocLauncher.Core.Game
 
         protected override string GameExeFileName => "swfoc.exe";
 
+        protected override string? DebugGameExeFileName => null;
+
         protected override int DefaultXmlFileCount => 2;
 
         public override string Name => "Forces of Corruption";
-
-        public Foc() { }
 
         public Foc(string gameDirectory) : base(gameDirectory)
         {
@@ -36,40 +35,14 @@ namespace FocLauncher.Core.Game
             return true;
         }
 
-        public override void PlayGame()
-        {
-            PlayGame(null, default);
-        }
-
-        public override void PlayGame(IMod mod, DebugOptions debugOptions)
+        protected override void OnGameStarting(IMod mod, ref GameRunArguments args)
         {
             if (!(mod is DummyMod) && !mod.ModDirectory.StartsWith(GameDirectory))
                 throw new Exception("Mod is not compatible");
 
-            string args;
             if (mod is Mod)
-                args = "MODPATH=" + "Mods/" + mod.FolderName;
-            else
-                args = string.Empty;
+                args.ModPath = "Mods/" + mod.FolderName;
 
-            var process = new Process
-            {
-                StartInfo =
-                {
-                    FileName = GameDirectory + @"\swfoc.exe",
-                    Arguments = args,
-                    WorkingDirectory = GameDirectory,
-                    UseShellExecute = false
-                }
-            };
-            try
-            {
-                GameStartHelper.StartGameProcess(process, mod.IconFile);
-            }
-            catch (Exception)
-            {
-                //ignored
-            }
         }
     }
 }

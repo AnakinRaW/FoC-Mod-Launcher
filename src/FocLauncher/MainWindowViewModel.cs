@@ -23,8 +23,13 @@ namespace FocLauncher.Core
 
         private void ExecutedLaunch()
         {
-            var debugOptions = new DebugOptions(DataModel.UseDebugBuild, DataModel.IgnoreAsserts, DataModel.NoArtProcess);
-            DataModel.FoC.PlayGame(DataModel.SelectedMod, debugOptions);
+            var args = new GameRunArguments
+            {
+                UseDebug = DataModel.UseDebugBuild,
+                IgnoreAsserts = DataModel.IgnoreAsserts,
+                NoArtProcess = DataModel.NoArtProcess
+            };
+            DataModel.FoC.PlayGame(DataModel.SelectedMod, args);
             if (Settings.Default.AutoSwitchTheme &&
                 ThemeManager.Instance.TryGetThemeByMod(DataModel.SelectedMod, out var theme))
                 ThemeManager.Instance.Theme = theme;

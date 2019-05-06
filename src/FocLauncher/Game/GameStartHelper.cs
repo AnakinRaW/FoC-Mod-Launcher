@@ -1,30 +1,30 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices.ComTypes;
-using System.Threading;
 
 namespace FocLauncher.Core.Game
 {
     public static class GameStartHelper
     {
-        public static void StartGameProcess(Process process, string iconPath)
+        public static Process StartGameProcess(ProcessStartInfo startInfo, string iconPath)
         {
-            if (process == null)
-                return;
+            if (startInfo == null)
+                throw new ArgumentNullException(nameof(startInfo), "Game startup info must not be null");
 
-            var fileName = process.StartInfo.FileName;
-            var a = process.StartInfo.Arguments;
+            var fileName = startInfo.FileName;
+            var a = startInfo.Arguments;
 
             var linkPath = Path.Combine(LauncherDataModel.AppDataPath, "tmp.lnk");
 
-            CreateShortcut(fileName, linkPath, a, process.StartInfo.WorkingDirectory, iconPath);
+            CreateShortcut(fileName, linkPath, a, startInfo.WorkingDirectory, iconPath);
 
             var startingProcess = new Process
             {
                 StartInfo = { FileName = linkPath }
             };
             startingProcess.Start();
-            Thread.Sleep(2000);
+            return startingProcess;
         }
 
         private static void CreateShortcut(string filePath, string linkPath, string arguments, string wd, string iconPath)

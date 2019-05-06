@@ -24,6 +24,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -64,6 +65,8 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Game\GameRunArguments.cs" />
+    <Compile Include="Game\PetroglyphGame.cs" />
     <Compile Include="IDebugPrinter.cs" />
     <Compile Include="LauncherApp.cs" />
     <Compile Include="AssemblyHelper\AssemblyLoader.cs" />
@@ -75,7 +78,6 @@
     <Compile Include="Dialogs\ChangeThemeDialog.xaml.cs">
       <DependentUpon>ChangeThemeDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Game\DebugOptions.cs" />
     <Compile Include="Game\AbstractFocGame.cs" />
     <Compile Include="Game\Eaw.cs" />
     <Compile Include="Game\Foc.cs" />
@@ -124,7 +126,7 @@
     <Compile Include="Game\DetectionError.cs" />
     <Compile Include="Game\GameDetectionResult.cs" />
     <Compile Include="Game\GameHelper.cs" />
-    <Compile Include="Game\GameProcessData.cs" />
+    <Compile Include="Game\GameProcessWatcher.cs" />
     <Compile Include="Game\GameType.cs" />
     <Compile Include="Game\ProcessHelper.cs" />
     <Compile Include="Game\Steam.cs" />
