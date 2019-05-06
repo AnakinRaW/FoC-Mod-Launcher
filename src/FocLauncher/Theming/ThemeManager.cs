@@ -6,6 +6,8 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
 using FocLauncher.Core.Mods;
 using FocLauncher.Core.Properties;
 using FocLauncher.Theming;
@@ -14,14 +16,19 @@ namespace FocLauncher.Core.Theming
 {
     public class ThemeManager
     {
-        private static ThemeManager _instance;
         private ITheme _theme;
 
-        public static ThemeManager Instance => _instance ?? (_instance = new ThemeManager());
+        private readonly ContentControl _mainWindow;
+
+        public static ThemeManager Instance
+        {
+            get => _instance ?? throw new InvalidOperationException("Theme Manager is not initialized");
+        }
 
         public ObservableCollection<ITheme> Themes { get; }
 
         private readonly Dictionary<IMod, ITheme> _modThemeMapping = new Dictionary<IMod, ITheme>();
+        private static ThemeManager _instance;
 
         public ITheme Theme
         {
@@ -39,8 +46,9 @@ namespace FocLauncher.Core.Theming
             }
         }
 
-        private ThemeManager()
+        private ThemeManager(ContentControl mainWindow)
         {
+            _mainWindow = mainWindow;
             var defaultTheme = new DefaultTheme();
             Themes = new ObservableCollection<ITheme> { defaultTheme };
             ChangeTheme(null, defaultTheme, false);
@@ -54,9 +62,9 @@ namespace FocLauncher.Core.Theming
             Themes.Add(theme);
         }
 
-        public static void Initialize()
+        public static void Initialize(ContentControl mainWindow)
         {
-            var _ = Instance;
+            _instance = new ThemeManager(mainWindow);
         }
 
         public static ITheme GetThemeFromFile(string filePath)
@@ -89,22 +97,19 @@ namespace FocLauncher.Core.Theming
         private void ChangeTheme(ITheme oldTheme, ITheme theme, bool changeSettings)
         {
             var resources = Application.Current.Resources;
-            resources.Clear();
-            resources.MergedDictionaries.Clear();
             if (oldTheme != null)
             {
-                var resourceDictionary =
-                    resources.MergedDictionaries.FirstOrDefault(r => r.Source == oldTheme.GetResourceUri());
-                if (resourceDictionary != null)
-                    resources.MergedDictionaries.Remove(resourceDictionary);
+                var oldResourceDict = Application.LoadComponent(oldTheme.GetResourceUri()) as ResourceDictionary;
+                Application.Current.Resources.MergedDictionaries.Remove(oldResourceDict);
+                _mainWindow?.Resources.MergedDictionaries.Remove(oldResourceDict);
             }
 
             if (theme == null)
                 return;
-            resources.MergedDictionaries.Add(new ResourceDictionary()
-            {
-                Source = theme.GetResourceUri()
-            });
+
+            var newResourceDict = Application.LoadComponent(theme.GetResourceUri()) as ResourceDictionary;
+            resources.MergedDictionaries.Add(newResourceDict);
+            _mainWindow?.Resources.MergedDictionaries.Add(newResourceDict);
             if (changeSettings && Settings.Default.SaveDefaultTheme)
                 Settings.Default.DefaultTheme = theme.Name;
         }

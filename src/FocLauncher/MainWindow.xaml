@@ -9,6 +9,7 @@
         mc:Ignorable="d"
         Title="FoC Launcher by Anakin" Width="400" ResizeMode="CanMinimize" Height="600" 
         Background="{DynamicResource {x:Static theming:EnvironmentColors.BackgroundImage}}"
+        Foreground="White"
         Closing="MainWindow_OnClosing">
     <Window.Resources>
         <converters:GameTypeToStringConverter x:Key="GameTypeToStringConverter"/>
@@ -94,17 +95,20 @@
                 </DockPanel>
             </StackPanel>
         </StackPanel>
-        <DockPanel Grid.Row="4" HorizontalAlignment="Stretch" Background="WhiteSmoke">
-            <Label Content="Game:"/>
+
+
+        <DockPanel Grid.Row="4" MinHeight="22" Background="{DynamicResource {x:Static theming:EnvironmentColors.StatusBarDefaultBackground}}"
+                   TextElement.Foreground="{DynamicResource {x:Static theming:EnvironmentColors.StatusBarDefaultText}}">
+            <TextBlock Margin="3,0" VerticalAlignment="Center" Text="Game: "/>
             <TextBlock VerticalAlignment="Center" Text="{Binding DataModel.FocGameType, Converter={StaticResource GameTypeToStringConverter}}"/>
             <DockPanel HorizontalAlignment="Right">
                 <Button Margin="0,0,12,0" Background="Transparent" BorderBrush="Transparent" FocusVisualStyle="{x:Null}"
                         Click="OpenChangeThemeDialog">
-                    <AccessText Text="Change _Theme" TextDecorations="Underline"/>
+                    <AccessText Text="Change _Theme" TextDecorations="Underline" Foreground="{DynamicResource {x:Static theming:EnvironmentColors.StatusBarDefaultText}}"/>
                 </Button>
                 <Button Margin="0,0,3,0" Background="Transparent" BorderBrush="Transparent" FocusVisualStyle="{x:Null}"
                         Click="OpenAboutWindow">
-                    <AccessText Text="Abo_ut" TextDecorations="Underline"/>
+                    <AccessText Text="Abo_ut" TextDecorations="Underline" Foreground="{DynamicResource {x:Static theming:EnvironmentColors.StatusBarDefaultText}}"/>
                 </Button>
             </DockPanel>
         </DockPanel>

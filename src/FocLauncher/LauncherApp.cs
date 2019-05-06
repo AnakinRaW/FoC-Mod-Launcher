@@ -24,8 +24,10 @@ namespace FocLauncher.Core
             DispatcherUnhandledException += WrapException;
 
             base.OnStartup(e);
-            ThemeManager.Initialize();
             var mainWindow = new MainWindow();
+
+            ThemeManager.Initialize(mainWindow);
+
 
             var dataModel = new LauncherDataModel();
             dataModel.Initialized += OnDataModelInitialized;

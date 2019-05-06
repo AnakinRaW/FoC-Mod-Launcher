@@ -1,8 +1,7 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:themes="clr-namespace:FocLauncher.Theming">
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
 
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type themes:EnvironmentColors},
-                     ResourceId=BackgroundColor}" Color="Green"/>
-
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="LauncherBrushes.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+    
 </ResourceDictionary>
