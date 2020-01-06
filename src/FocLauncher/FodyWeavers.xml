@@ -1,8 +1,6 @@
 ﻿<Weavers xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="FodyWeavers.xsd">
-  <Costura DisableCompression='true' DisableCleanup='true'>
-    <!-- Exclude them, because they are handled separately, so we can load them from a different location-->
+  <Costura>
     <ExcludeAssemblies>
-      FocLauncher.Core
       FocLauncher.Theming
     </ExcludeAssemblies>
   </Costura>
