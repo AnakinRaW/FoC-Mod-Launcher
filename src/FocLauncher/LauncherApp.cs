@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using FocLauncher.Core.AssemblyHelper;
 using FocLauncher.Core.Properties;
 using FocLauncher.Core.Theming;
 
