@@ -1,5 +1,8 @@
-﻿namespace FocLauncherApp.WaitDialog
+﻿using System;
+
+namespace FocLauncherApp.WaitDialog
 {
+    [Serializable]
     public class DialogUpdateArguments
     {
         public string WaitMessage { get; set; }

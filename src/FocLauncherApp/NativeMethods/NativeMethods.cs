@@ -1,13 +1,21 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Text;
+using FocLauncherApp.ScreenUtilities;
+using FocLauncherApp.Utilities;
 
 namespace FocLauncherApp.NativeMethods
 {
     internal static class NativeMethods
     {
+        [return: MarshalAs(UnmanagedType.Bool)]
+        internal delegate bool EnumMonitorsDelegate(IntPtr hMonitor, IntPtr hdcMonitor, ref RECT lprcMonitor, IntPtr dwData);
+
         [DllImport("wininet.dll", SetLastError = true)]
         internal static extern bool InternetGetConnectedState(out ConnectionStates lpdwFlags, int dwReserved);
+
+        [DllImport("kernel32.dll")]
+        public static extern uint GetCurrentProcessId();
 
         [DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
         internal static extern IntPtr GetActiveWindow();
@@ -21,13 +29,33 @@ namespace FocLauncherApp.NativeMethods
         [DllImport("user32.dll")]
         internal static extern IntPtr GetWindow(IntPtr hwnd, int nCmd);
 
+        [DllImport("user32.dll", ExactSpelling = true, CharSet = CharSet.Auto)]
+        internal static extern IntPtr GetParent(IntPtr hWnd);
+
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         internal static extern bool IsWindowVisible(IntPtr hwnd);
 
+        [DllImport("shcore.dll")]
+        internal static extern uint GetProcessDpiAwareness(IntPtr process, out DpiAwareness.ProcessDpiAwareness awareness);
+
+        [DllImport("shcore.dll")]
+        internal static extern int GetDpiForMonitor(
+            IntPtr hmonitor,
+            DpiAwareness.MonitorDpiType dpiType,
+            out uint dpiX,
+            out uint dpiY);
+
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         internal static extern bool GetWindowRect(IntPtr hwnd, out RECT lpRect);
+
+        [DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        internal static extern IntPtr SendMessage(IntPtr hWnd, int nMsg, IntPtr wParam, IntPtr lParam);
+
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        internal static extern bool EnumDisplayMonitors(IntPtr hdc, IntPtr lprcClip, EnumMonitorsDelegate lpfnEnum, IntPtr dwData);
 
         [DllImport("user32.dll")]
         public static extern IntPtr GetForegroundWindow();
@@ -68,10 +96,18 @@ namespace FocLauncherApp.NativeMethods
 
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
+        internal static extern bool GetMonitorInfo(IntPtr hMonitor, ref MonitorInfo monitorInfo);
+
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool SetProp(IntPtr hwnd, string propName, IntPtr value);
 
         [DllImport("user32.dll")]
         internal static extern int GetWindowLong(IntPtr hWnd, int nIndex);
+
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        internal static extern bool IntersectRect(out RECT lprcDst, [In] ref RECT lprcSrc1, [In] ref RECT lprcSrc2);
 
         public static string GetWindowText(IntPtr hwnd)
         {

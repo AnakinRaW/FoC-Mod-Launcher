@@ -1,35 +1,34 @@
 ﻿using System;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
+using FocLauncherApp.Threading;
+using Microsoft;
+using Microsoft.VisualStudio.Threading;
 
 namespace FocLauncherApp.WaitDialog
 {
     internal static class WaitDialogHelper
     {
-        internal static async Task RunWithWaitDialog(Func<CancellationToken, Task> action, string caption, string waitMessage,
-            string progressText, int delayToShowWindow, bool isCancelable, bool showMarqueeProgress)
-        {
-            await Application.Current.Dispatcher.Invoke(async () =>
-            {
-                var wd = WaitDialogFactory.CreateInstance();
-                var cancellationTokenSource = new CancellationTokenSource();
-                try
-                {
-                    wd.StartWaitDialog(caption, waitMessage, progressText, delayToShowWindow, isCancelable, showMarqueeProgress);
-                    await Task.Run(() => action(cancellationTokenSource.Token), cancellationTokenSource.Token);
-                }
-                finally
-                {
-                    wd.EndWaitDialog(out _);
-                }
-            });
-        }
+        private static readonly TimeSpan DefaultWaitDialogDelay = TimeSpan.FromSeconds(2.0);
 
-        internal static async Task RunWithWaitDialog(Func<Task> action, string caption, string waitMessage,
-            string progressText, int delayToShowWindow, bool showMarqueeProgress)
+
+        public static void Run(this JoinableTaskFactory joinableTaskFactory, string waitCaption, string waitMessage, string progressText, Func<Task> asyncMethod, int waitSeconds)
         {
-            await RunWithWaitDialog(token => action(), caption, waitMessage, progressText, delayToShowWindow, false, showMarqueeProgress);
+            //Validate.IsNotNull(joinableTaskFactory, nameof(joinableTaskFactory));
+            //Validate.IsNotNullAndNotEmpty(waitCaption, nameof(waitCaption));
+            //Validate.IsNotNull(asyncMethod, nameof(asyncMethod));
+            ThreadHelper.ThrowIfNotOnUIThread(nameof(Run));
+
+            var twd = WaitDialogFactory.CreateInstance();
+            Assumes.Present(twd);
+            twd.StartWaitDialog(waitCaption, waitMessage, progressText, waitSeconds, false, true);
+            try
+            {
+                joinableTaskFactory.Run(asyncMethod);
+            }
+            finally
+            {
+                twd?.EndWaitDialog(out _);
+            }
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Windows;
 using FocLauncher.Core;
 using FocLauncherApp.ExceptionHandling;
@@ -73,6 +74,7 @@ namespace FocLauncherApp
         private static void StartBootstrapperApp()
         {
             var app = new BootstrapperApp();
+            app.ShutdownMode = ShutdownMode.OnExplicitShutdown;
             app.Run(new SplashScreen());
             app.Shutdown(0);
         }

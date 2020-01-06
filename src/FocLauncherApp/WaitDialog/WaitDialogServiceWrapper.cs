@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using System.Threading;
 using System.Windows;
 using System.Windows.Interop;
 using FocLauncherApp.Threading;
@@ -12,10 +11,8 @@ namespace FocLauncherApp.WaitDialog
     {
         private readonly object _syncObject = new object();
         private WaitDialog _instance;
-        private bool _resetStatusBarOnClose;
         private bool _isUiSuppressed;
         private bool _isDialogStarted;
-        private CancellationTokenSource _statusUpdateTaskCancellation;
 
         public void EndWaitDialog(out bool canceled)
         {

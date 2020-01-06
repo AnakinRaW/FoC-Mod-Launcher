@@ -2,6 +2,7 @@
 
 namespace FocLauncherApp.WaitDialog
 {
+    [Serializable]
     internal class DialogShowArguments : DialogUpdateArguments
     {
         public string Caption { get; set; }

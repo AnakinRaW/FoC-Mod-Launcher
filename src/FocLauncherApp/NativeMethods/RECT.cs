@@ -56,5 +56,15 @@ namespace FocLauncherApp.NativeMethods
         {
             return new Int32Rect(Left, Top, Width, Height);
         }
+
+        public Rect ToRect()
+        {
+            return new Rect(Left, Top, Width, Height);
+        }
+
+        public static RECT FromInt32Rect(Int32Rect rect)
+        {
+            return new RECT(rect.X, rect.Y, rect.X + rect.Width, rect.Y + rect.Height);
+        }
     }
 }
