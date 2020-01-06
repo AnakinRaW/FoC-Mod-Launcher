@@ -63,8 +63,6 @@
     <Compile Include="Game\PetroglyphGameManager.cs" />
     <Compile Include="IDebugPrinter.cs" />
     <Compile Include="LauncherApp.cs" />
-    <Compile Include="AssemblyHelper\AssemblyLoader.cs" />
-    <Compile Include="AssemblyHelper\EmbeddedAssembly.cs" />
     <Compile Include="Converters\GameTypeToStringConverter.cs" />
     <Compile Include="Converters\ModNameConverter.cs" />
     <Compile Include="Converters\SteamToVisibilityConverter.cs" />

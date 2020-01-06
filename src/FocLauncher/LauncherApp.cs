@@ -7,11 +7,6 @@ namespace FocLauncher.Core
 {
     public class LauncherApp : Application
     {
-        static LauncherApp()
-        {
-            AssemblyLoader.LoadEmbeddedAssemblies();
-        }
-
         protected override void OnExit(ExitEventArgs e)
         {
             Settings.Default.Save();
