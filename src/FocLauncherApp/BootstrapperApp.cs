@@ -28,14 +28,14 @@ namespace FocLauncherApp
             var themeUpdater = new ThemeUpdater();
             CheckForUpdate(themeUpdater, in actionQueue);
 
-            if (!actionQueue.Any())
+            if (actionQueue.Any())
             {
                 ThreadHelper.Generic.Invoke(() => MainWindow?.Show());
                 await WaitDialogHelper.RunWithWaitDialog(async () =>
                 {
                     await Task.Delay(5000);
-                    //foreach (var action in actionQueue)
-                    //    await action();
+                    foreach (var action in actionQueue)
+                        await action();
                 }, "FoC Launcher", "Please wait while the launcher is loading an update.", "Updating....", 2, true);
             }
 
