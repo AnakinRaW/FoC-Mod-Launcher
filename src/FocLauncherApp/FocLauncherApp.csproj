@@ -83,10 +83,6 @@
     <Compile Include="ScreenUtilities\Win32DpiAwarenessException.cs" />
     <Compile Include="Updater\AssemblyUpdater.cs" />
     <Compile Include="Updater\ThemeUpdater.cs" />
-    <Compile Include="Utilities\DpiHelper.cs" />
-    <Compile Include="Utilities\DpiHelperImpl.cs" />
-    <Compile Include="Utilities\ImageScalingMode.cs" />
-    <Compile Include="Utilities\NullToVisibilityConverter.cs" />
     <Compile Include="ExceptionHandling\StackTraceToShortMessageConverter.cs" />
     <Compile Include="NativeMethods\NativeMethods.cs" />
     <Compile Include="Properties\Annotations.cs" />
@@ -98,6 +94,8 @@
     <Compile Include="Updater\StreamExtensions.cs" />
     <Compile Include="Updater\UpdateServer.cs" />
     <Compile Include="Updater\VersionUtilities.cs" />
+    <Compile Include="ScreenUtilities\MainWindowManager.cs" />
+    <Compile Include="Utilities\NullToVisibilityConverter.cs" />
     <Compile Include="Utilities\ResourceExtractor.cs" />
     <Compile Include="Utilities\ResourceExtractorException.cs" />
     <Compile Include="Utilities\UrlCombine.cs" />

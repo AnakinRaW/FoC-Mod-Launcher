@@ -1,4 +1,4 @@
-﻿using FocLauncherApp.Utilities;
+﻿using FocLauncherApp.ScreenUtilities;
 
 namespace FocLauncherApp
 {
