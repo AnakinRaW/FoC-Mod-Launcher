@@ -2,7 +2,6 @@
 using System.Runtime.InteropServices;
 using System.Text;
 using FocLauncherApp.ScreenUtilities;
-using FocLauncherApp.Utilities;
 
 namespace FocLauncherApp.NativeMethods
 {
