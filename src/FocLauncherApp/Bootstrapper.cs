@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Threading;
 using System.Windows;
 using FocLauncher.Core;
 using FocLauncherApp.ExceptionHandling;
@@ -33,7 +32,15 @@ namespace FocLauncherApp
                 AppDomain.Unload(splashDomain);
             }
 
-            var launcher = AppDomain.CreateDomain("LauncherDomain");
+            var s = new AppDomainSetup
+            {
+                ApplicationName = "FoC Launcher",
+                LoaderOptimization = LoaderOptimization.MultiDomainHost
+            };
+
+
+            var launcher = AppDomain.CreateDomain("LauncherDomain", null, s);
+
             launcher.AssemblyResolve += LauncherAppDomainResolveAssembly;
             try
             {
