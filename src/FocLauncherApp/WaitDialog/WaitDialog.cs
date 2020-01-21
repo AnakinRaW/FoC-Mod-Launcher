@@ -13,7 +13,6 @@ namespace FocLauncherApp.WaitDialog
         private static bool _isInstanceAcquired;
         private IWaitDialogCallback _cancellationCallback;
         private bool _isDialogActive;
-        private DialogShowArguments _dialogArguments;
         private DialogInitializationArguments _initializationArguments;
         private static int _currentInstanceId;
         private readonly CancelHandler _cancelHandler;
@@ -70,15 +69,6 @@ namespace FocLauncherApp.WaitDialog
             ShowInternalAsync(delayToShowDialog, showArguments).Forget();
         }
 
-        public void UpdateDialog(DialogUpdateArguments updateArguments)
-        {
-            if (_disposed)
-                return;
-            if (!_isDialogActive)
-                _dialogArguments?.Merge(updateArguments);
-            _provider.Update(updateArguments);
-        }
-
         public void CloseDialog()
         {
             if (_disposed)
@@ -113,7 +103,6 @@ namespace FocLauncherApp.WaitDialog
         private async Task ShowInternalAsync(TimeSpan delayToShowDialog, DialogShowArguments showArguments)
         {
             var localInstanceId = _currentInstanceId;
-            _dialogArguments = showArguments;
             await Task.Delay(delayToShowDialog).ConfigureAwait(false);
             if (localInstanceId != _currentInstanceId || !_isInstanceAcquired)
                 return;

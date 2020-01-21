@@ -10,7 +10,6 @@ using System.Windows.Interop;
 using System.Windows.Threading;
 using FocLauncherApp.NativeMethods;
 using FocLauncherApp.ScreenUtilities;
-using FocLauncherApp.Utilities;
 
 namespace FocLauncherApp.WaitDialog
 {
@@ -27,16 +26,14 @@ namespace FocLauncherApp.WaitDialog
         private IntPtr _hostMainWindowHandle;
         private IntPtr _hostActiveWindowHandle;
         private readonly int _hostProcessId;
-        private readonly TraceSource _logger;
         private readonly DispatcherTimer _dispatcherTimer;
         private string _hostRootWindowCaption;
 
-        public WaitWindowDialog(IntPtr hostMainWindowHandle, int hostProcessId, TraceSource logger)
+        public WaitWindowDialog(IntPtr hostMainWindowHandle, int hostProcessId)
         {
             InitializeComponent();
             _hostMainWindowHandle = hostMainWindowHandle;
             _hostProcessId = hostProcessId;
-            _logger = logger;
             _dispatcherTimer = new DispatcherTimer();
             _dispatcherTimer.Tick += DispatcherTimer_Tick;
             _interopHelper = new WindowInteropHelper(this);
@@ -48,7 +45,6 @@ namespace FocLauncherApp.WaitDialog
             _hostMainWindowHandle = hostMainWindowHandle;
             _hostActiveWindowHandle = hostActiveWindowHandle;
             _hostRootWindowCaption = rootWindowCaption;
-            LogInfo("Enter", nameof(TryShowDialog));
             if (CanShowDialog())
                 PositionAndShowDialog();
             if (_hostActiveWindowHandle != IntPtr.Zero)
@@ -62,7 +58,6 @@ namespace FocLauncherApp.WaitDialog
 
         public void HideDialog()
         {
-            LogInfo("Enter", nameof(HideDialog));
             _dispatcherTimer.Stop();
             Hide();
         }
@@ -80,9 +75,8 @@ namespace FocLauncherApp.WaitDialog
             {
                 DragMove();
             }
-            catch (InvalidOperationException ex)
+            catch (InvalidOperationException)
             {
-                Log(TraceEventType.Error, ex.Message, nameof(CaptionArea_MouseLeftButtonDown));
             }
         }
 
@@ -94,18 +88,11 @@ namespace FocLauncherApp.WaitDialog
         private void DispatcherTimer_Tick(object sender, EventArgs e)
         {
             if (!IsVisible)
-            {
-                LogInfo("Not visible, try show dialog", nameof(DispatcherTimer_Tick));
                 TryShowDialog(_hostMainWindowHandle, _hostActiveWindowHandle, _hostRootWindowCaption);
-            }
             else if (CanShowDialog())
-            {
-                LogInfo("Visible, can show, handle ghost window", nameof(DispatcherTimer_Tick));
                 NativeMethods.NativeMethods.SetWindowPos(_dialogWindowHandle, TopMost, 0, 0, 0, 0, 19);
-            }
             else
             {
-                LogInfo("Visible, cannot show, set to top most window", nameof(DispatcherTimer_Tick));
                 var window = NativeMethods.NativeMethods.GetWindow(_hostActiveWindowHandle, 3);
                 if (NativeMethods.NativeMethods.SetWindowPos(_dialogWindowHandle, window != IntPtr.Zero ? window : Bottom, 0, 0, 0, 0, 19))
                     return;
@@ -116,33 +103,19 @@ namespace FocLauncherApp.WaitDialog
         private bool CanShowDialog()
         {
             if (_hostMainWindowHandle == IntPtr.Zero || !NativeMethods.NativeMethods.IsWindowVisible(_hostActiveWindowHandle))
-            {
-                LogInfo("Main not exists or hidden", nameof(CanShowDialog));
                 return true;
-            }
 
             if (!IsHostProcessForeground())
-            {
-                LogInfo("Host process background", nameof(CanShowDialog));
                 return false;
-            }
 
             var hostCurrentActiveWindow = GetMainThreadActiveWindow(_hostActiveWindowHandle);
-            LogInfo(() => $"Current active HWND = {hostCurrentActiveWindow}", nameof(CanShowDialog));
             return hostCurrentActiveWindow == _hostActiveWindowHandle;
         }
 
         private void PositionAndShowDialog()
         {
-            LogInfo(() =>
-            {
-                if (DataContext is WaitDialogDataSource dataContext)
-                    return "Caption = " + dataContext.Caption + ", WaitMsg = " + dataContext.WaitMessage;
-                return "Enter";
-            }, nameof(PositionAndShowDialog));
             Topmost = true;
-            var hostWindowRect = new RECT();
-            if (_hostActiveWindowHandle == IntPtr.Zero || !NativeMethods.NativeMethods.GetWindowRect(_hostActiveWindowHandle, out hostWindowRect) ||
+            if (_hostActiveWindowHandle == IntPtr.Zero || !NativeMethods.NativeMethods.GetWindowRect(_hostActiveWindowHandle, out var hostWindowRect) ||
                 (hostWindowRect.Width == 0 || hostWindowRect.Height == 0))
                 NativeMethods.NativeMethods.GetWindowRect(NativeMethods.NativeMethods.GetDesktopWindow(), out hostWindowRect);
             var rect = hostWindowRect.ToRect();
@@ -152,11 +125,6 @@ namespace FocLauncherApp.WaitDialog
             var twdDeviceTop = (int)(rect.Top + (rect.Height - twdDeviceHeight) / 2.0);
             var twdDeviceLeft = (int)(rect.Left + (rect.Width - twdDeviceWidth) / 2.0);
             Screen.SetInitialWindowRect(_dialogWindowHandle, this, new Int32Rect(twdDeviceLeft, twdDeviceTop, twdDeviceWidth, twdDeviceHeight));
-            LogInfo(() =>
-                $"Host window rect = L{hostWindowRect.Left}, T{hostWindowRect.Top}, W{hostWindowRect.Width}, H{hostWindowRect.Height}", nameof(PositionAndShowDialog));
-            LogInfo(() => $"Display = {display}", nameof(PositionAndShowDialog));
-            LogInfo(() =>
-                $"Initial window rect = L{twdDeviceLeft}, T{twdDeviceTop}, W{twdDeviceWidth}, H{twdDeviceHeight}", nameof(PositionAndShowDialog));
             Show();
         }
 
@@ -177,42 +145,14 @@ namespace FocLauncherApp.WaitDialog
             if (NativeMethods.NativeMethods.GetClassName(candidateHandle, lpString, 6) != 5 || lpString.ToString() != "Ghost")
                 return false;
             candidateHandle = GetRootOwnerWindow(candidateHandle);
-            IntPtr rootOwnerWindow = GetRootOwnerWindow(_hostActiveWindowHandle);
+            var rootOwnerWindow = GetRootOwnerWindow(_hostActiveWindowHandle);
             NativeMethods.NativeMethods.GetWindowRect(candidateHandle, out var lpRect1);
             NativeMethods.NativeMethods.GetWindowRect(rootOwnerWindow, out var lpRect2);
             if (lpRect1.Size != lpRect2.Size)
                 return false;
             return NativeMethods.NativeMethods.GetWindowText(candidateHandle).StartsWith(_hostRootWindowCaption);
         }
-
-        private void LogInfo(string message = "Enter", [CallerMemberName] string callerName = null)
-        {
-            Log(TraceEventType.Information, message, callerName);
-        }
-
-        private void LogInfo(Func<string> getMessage, [CallerMemberName] string callerName = null)
-        {
-            if (getMessage == null || _logger == null)
-                return;
-            if (!_logger.Switch.ShouldTrace(TraceEventType.Information))
-                return;
-            string message;
-            try
-            {
-                message = getMessage();
-            }
-            catch (Exception ex)
-            {
-                message = ex.Message;
-            }
-            Log(TraceEventType.Information, message, callerName);
-        }
-
-        private void Log(TraceEventType traceEventType, string message, [CallerMemberName] string callerName = null)
-        {
-            _logger?.TraceEvent(traceEventType, 0, $"TWDWindow (Main HWND {_hostMainWindowHandle}, Active HWND {_hostActiveWindowHandle}) - {callerName}: {message}");
-        }
-
+        
         private static IntPtr GetRootOwnerWindow(IntPtr handle)
         {
             while (true)

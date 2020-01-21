@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows;
 using System.Windows.Interop;
 using FocLauncherApp.Threading;
-using FocLauncherApp.Utilities;
 
 namespace FocLauncherApp.WaitDialog
 {
@@ -19,44 +19,11 @@ namespace FocLauncherApp.WaitDialog
             canceled = CloseDialogHelper();
         }
 
-        public void HasCanceled(out bool canceled)
+        public void StartWaitDialog(string caption, string waitMessage, string progressText, bool isCancelable, int delayToShowDialog,
+            bool showProgress, CancellationTokenSource cts)
         {
-            var instance = _instance;
-            canceled = instance != null && instance.IsCancelled;
-        }
-
-        public bool StartWaitDialog(string caption, string waitMessage, string progressText, int delayToShowDialog,
-            bool isCancelable, bool showMarqueeProgress)
-        {
-            var isDialogStarted = _isDialogStarted;
-            StartWaitDialogHelper(caption, waitMessage, progressText, delayToShowDialog, null, isCancelable,
-                showMarqueeProgress);
-            return !isDialogStarted && _isDialogStarted;
-        }
-
-        public void StartWaitDialogWithCallback(string caption, string waitMessage, string progressText,
-            bool isCancelable, int delayToShowDialog, bool showProgress, int totalSteps, int currentStep,
-            IWaitDialogCallback callback)
-        {
-            StartWaitDialogHelper(caption, waitMessage, progressText, delayToShowDialog, null, isCancelable,
-                showProgress, currentStep, totalSteps, callback);
-        }
-
-        public void StartWaitDialogWithPercentageProgress(string caption, string waitMessage, string progressText,
-            int delayToShowDialog, bool isCancelable, int totalSteps, int currentStep)
-        {
-            StartWaitDialogHelper(caption, waitMessage, progressText, delayToShowDialog, null, isCancelable,
-                isCancelable, currentStep, totalSteps);
-        }
-
-        public void UpdateProgress(string waitMessage, string progressText, int currentStep, int totalSteps,
-            bool disableCancel, out bool canceled)
-        {
-            var flag = UpdateDialogHelper(waitMessage, progressText, !disableCancel, currentStep, totalSteps);
-            if (UnsafeHelpers.IsOptionalOutParamSet(out canceled))
-                return;
-
-            canceled = flag;
+            StartWaitDialogHelper(caption, waitMessage, progressText, delayToShowDialog, isCancelable,
+                showProgress, 0, 0, new CancellationCallback(cts));
         }
 
         protected override void DisposeNativeResources()
@@ -110,14 +77,14 @@ namespace FocLauncherApp.WaitDialog
         }
 
         private void StartWaitDialogHelper(string caption, string waitMessage, string progressText,
-            int delayToShowDialog, object varStatusBmpAnim, bool isCancellable, bool isProgressVisible,
+            int delayToShowDialog, bool isCancellable, bool isProgressVisible,
             int currentStepCount = 0, int totalStepCount = -1, IWaitDialogCallback callback = null)
         {
             if (!ThreadHelper.CheckAccess())
             {
                 ThreadHelper.Generic.Invoke(() =>
                     {
-                        StartWaitDialogHelper(caption, waitMessage, progressText, delayToShowDialog, varStatusBmpAnim,
+                        StartWaitDialogHelper(caption, waitMessage, progressText, delayToShowDialog, 
                             isCancellable, isProgressVisible, currentStepCount, totalStepCount, callback);
                     });
             }
@@ -161,9 +128,7 @@ namespace FocLauncherApp.WaitDialog
 
         private static IntPtr GetPrimaryWindowHandle()
         {
-            if (Application.Current == null)
-                return IntPtr.Zero;
-            return new WindowInteropHelper(Application.Current.MainWindow).Handle;
+            return Application.Current == null ? IntPtr.Zero : new WindowInteropHelper(Application.Current.MainWindow).Handle;
         }
 
         private bool IsUiSuppressed()
@@ -172,22 +137,19 @@ namespace FocLauncherApp.WaitDialog
             return false;
         }
 
-        private bool UpdateDialogHelper(string waitMessage, string progressText, bool isCancellable,
-            int currentStepCount = 0, int totalStepCount = 0)
+        private class CancellationCallback : IWaitDialogCallback
         {
-            lock (_syncObject)
-            {
-                if (_instance == null)
-                    return false;
-                if (_instance != null && _instance.IsCancelled)
-                    return true;
+            private readonly CancellationTokenSource _cancellationSource;
 
-                if (!_isUiSuppressed)
-                    _instance.UpdateDialog(new DialogUpdateArguments(waitMessage, progressText, isCancellable,
-                        currentStepCount, totalStepCount));
-                return false;
+            internal CancellationCallback(CancellationTokenSource cancellationSource)
+            {
+                _cancellationSource = cancellationSource;
+            }
+
+            public void OnCanceled()
+            {
+                _cancellationSource.Cancel();
             }
         }
-
     }
 }

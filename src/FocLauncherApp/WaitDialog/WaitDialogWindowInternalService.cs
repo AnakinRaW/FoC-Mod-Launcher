@@ -85,33 +85,15 @@ namespace FocLauncherApp.WaitDialog
             }
         }
 
-        internal void Update(DialogUpdateArguments args)
-        {
-            if (_disposed)
-                throw new ObjectDisposedException(nameof(Close));
-            if (!_isDialogAcquired || _dataSource == null)
-                return;
-            if (!string.IsNullOrEmpty(args.WaitMessage))
-                _dataSource.WaitMessage = args.WaitMessage;
-            _dataSource.ProgressMessage = args.ProgressMessage;
-            _dataSource.IsCancellable = args.IsCancellable;
-            _dataSource.ShowMarqueeProgress = args.ShowMarqueeProgress;
-            if (!_dataSource.IsProgressVisible || _dataSource.ShowMarqueeProgress)
-                return;
-            _dataSource.CurrentStep = args.CurrentStepCount;
-            _dataSource.TotalSteps = args.TotalStepCount;
-        }
-
         private void InitializeTask(DialogInitializationArguments args)
         {
             _hostAppName = args.AppName;
             _dataSource = new WaitDialogDataSource();
-            _window = new WaitWindowDialog(args.AppMainWindowHandle, args.AppProcessId, null)
+            _window = new WaitWindowDialog(args.AppMainWindowHandle, args.AppProcessId)
             {
                 DataContext = _dataSource
             };
             _window.Cancelled += OnDialogCancelled;
-            UpdateDialogStyle(args);
             StartApplication();
         }
 
@@ -132,21 +114,7 @@ namespace FocLauncherApp.WaitDialog
         {
             _application?.Dispatcher?.Invoke(() => _onCancelAction?.Invoke());
         }
-
-        private void UpdateDialogStyle(DialogInitializationArguments args)
-        {
-            if (_disposed)
-                throw new ObjectDisposedException(nameof(UpdateDialogStyle));
-            if (_dataSource == null)
-                return;
-            //_dataSource.ForegroundColorBrush = new SolidColorBrush(args.TextColor.ToColorFromRgba());
-            //_dataSource.BackgroundColorBrush = new SolidColorBrush(args.BackgroundColor.ToColorFromRgba());
-            //_dataSource.BorderColorBrush = new SolidColorBrush(args.BorderColor.ToColorFromRgba());
-            //_dataSource.CaptionBackgroundColorBrush = new SolidColorBrush(args.CaptionBackgroundColor.ToColorFromRgba());
-            //_dataSource.CaptionForegroundColorBrush = new SolidColorBrush(args.CaptionTextColor.ToColorFromRgba());
-            //_dataSource.CancelText = args.CancelText;
-        }
-
+        
         private void Dispose(bool disposing)
         {
             if (_disposed)

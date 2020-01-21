@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
@@ -17,6 +18,8 @@ namespace FocLauncherApp
 
         public static string AppDataPath => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"FoC Launcher\");
 
+        private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+
         protected override async void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
@@ -31,31 +34,41 @@ namespace FocLauncherApp
             if (actionQueue.Any())
             {
                 await WaitForMainWindow();
-                await Current.Dispatcher.Invoke(async () =>
-                {
-                    var twd = WaitDialogFactory.CreateInstance();
-                    twd.StartWaitDialog("FoC Launcher", "Please wait while the launcher is loading an update.", "Updating....", 2, false, true);
-                    try
-                    {
-                        await Task.Delay(5000);
-                        //foreach (var func in actionQueue) 
-                        //    await func();
-                    }
-                    finally
-                    {
-                        twd?.EndWaitDialog(out _);
-                    }
-                }, DispatcherPriority.Background);
-
-                //await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                //ThreadHelper.JoinableTaskFactory.Run("FoC Launcher",
-                //    "Please wait while the launcher is loading an update.", "Updating....",
-                //    async () => { await Task.Delay(5000); }, 2);
+                await Current.Dispatcher.Invoke(() => UpdateAsync(actionQueue), DispatcherPriority.Background);
             }
 
             //MainWindow?.Dispatcher.InvokeShutdown();
             //Dispatcher.InvokeShutdown();
             Shutdown();
+        }
+
+        private async Task UpdateAsync(IEnumerable<Func<Task>> actions)
+        {
+            var twd = WaitDialogFactory.CreateInstance();
+            bool cancelled;
+            twd.StartWaitDialog("FoC Launcher", "Please wait while the launcher is loading an update.", "Updating....",
+                true, 2, true, _cancellationTokenSource);
+            try
+            {
+                await Task.Delay(5000, _cancellationTokenSource.Token);
+                if (_cancellationTokenSource.IsCancellationRequested)
+                {
+                }
+
+                //foreach (var func in actionQueue) 
+                //    await func();
+            }
+            catch (TaskCanceledException)
+            {
+            }
+            finally
+            {
+                twd.EndWaitDialog(out cancelled);
+            }
+
+            if (cancelled)
+                return;
+
         }
 
         private void CheckForUpdate(AssemblyUpdater updater, in Queue<Func<Task>> actionQueue)
