@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Media;
 using FocLauncher.NativeMethods;
 using Microsoft.VisualStudio.Utilities;
+using Microsoft.Win32;
 
 namespace FocLauncher.ScreenUtilities
 {
@@ -18,7 +19,7 @@ namespace FocLauncher.ScreenUtilities
 
         static Screen()
         {
-            BroadcastMessageMonitor.Instance.DisplayChange += OnDisplayChange;
+            SystemEvents.DisplaySettingsChanged += OnDisplayChanged;
             UpdateDisplays();
         }
 
@@ -166,6 +167,11 @@ namespace FocLauncher.ScreenUtilities
             {
                 Marshal.FreeCoTaskMem(num);
             }
+        }
+
+        private static void OnDisplayChanged(object sender, EventArgs e)
+        {
+            UpdateDisplays();
         }
 
         private static void GetMonitorDpi(int display, out double dpiX, out double dpiY)

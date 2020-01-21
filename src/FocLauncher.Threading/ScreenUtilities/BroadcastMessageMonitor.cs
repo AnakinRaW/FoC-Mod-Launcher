@@ -5,7 +5,6 @@ namespace FocLauncher.ScreenUtilities
 {
     public class BroadcastMessageMonitor
     {
-        public event EventHandler DisplayChange;
         public event EventHandler Activated;
         public event EventHandler Deactivated;
 
@@ -17,10 +16,7 @@ namespace FocLauncher.ScreenUtilities
 
         public bool IsActive
         {
-            get
-            {
-                return HwndSource == null ? IsApplicationActive() : _isActive;
-            }
+            get => HwndSource == null ? IsApplicationActive() : _isActive;
             private set
             {
                 if (_isActive == value)
@@ -56,9 +52,6 @@ namespace FocLauncher.ScreenUtilities
                 case 28:
                     IsActive = wParam != IntPtr.Zero;
                     break;
-                case 126:
-                    OnDisplayChange();
-                    break;
             }
             return IntPtr.Zero;
         }
@@ -81,11 +74,6 @@ namespace FocLauncher.ScreenUtilities
         private void OnDeactivated()
         {
             Deactivated?.Invoke(this, EventArgs.Empty);
-        }
-
-        private void OnDisplayChange()
-        {
-            DisplayChange?.Invoke(this, EventArgs.Empty);
         }
     }
 }
