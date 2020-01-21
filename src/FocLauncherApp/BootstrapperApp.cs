@@ -44,7 +44,7 @@ namespace FocLauncherApp
 
         private async Task UpdateAsync(IEnumerable<Func<Task>> actions)
         {
-            var twd = WaitDialogFactory.CreateInstance();
+            var twd = WaitDialogServiceWrapper.CreateInstance();
             bool cancelled;
             twd.StartWaitDialog("FoC Launcher", "Please wait while the launcher is loading an update.", "Updating....",
                 true, 2, true, _cancellationTokenSource);

@@ -14,6 +14,11 @@ namespace FocLauncherApp.WaitDialog
         private bool _isUiSuppressed;
         private bool _isDialogStarted;
 
+        public static IWaitDialog CreateInstance()
+        {
+            return new WaitDialogServiceWrapper();
+        }
+
         public void EndWaitDialog(out bool canceled)
         {
             canceled = CloseDialogHelper();

@@ -132,7 +132,7 @@ namespace FocLauncherApp.ScreenUtilities
         private static double GetDpiScale(Visual visual, bool getDpiScaleX)
         {
             double num;
-            if (DpiAwareness.IsPerMonitorAwarenessEnabled)
+            if (IsPerMonitorAwarenessEnabled)
             {
                 var dpiScale = VisualTreeHelper.GetDpi(visual);
                 num = getDpiScaleX ? dpiScale.DpiScaleX : dpiScale.DpiScaleY;
@@ -178,7 +178,7 @@ namespace FocLauncherApp.ScreenUtilities
             };
             NativeMethods.NativeMethods.GetMonitorInfo(monitor, ref m);
 
-            if (DpiAwareness.IsPerMonitorAwarenessEnabled)
+            if (IsPerMonitorAwarenessEnabled)
             {
                 var dpi = (Dpi) GetDpiForMonitorFunc(monitor);
                 dpiX = dpi.X;

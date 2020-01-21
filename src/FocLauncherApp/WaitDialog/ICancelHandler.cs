@@ -1,6 +1,6 @@
 ﻿namespace FocLauncherApp.WaitDialog
 {
-    public interface ICancelHandler
+    internal interface ICancelHandler
     {
         void OnCancel();
     }

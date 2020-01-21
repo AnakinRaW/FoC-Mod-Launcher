@@ -132,26 +132,12 @@ namespace FocLauncherApp.WaitDialog
                 _initializationArguments.AppMainWindowHandle = new WindowInteropHelper(Application.Current.MainWindow).Handle;
                 _initializationArguments.AppProcessId = Process.GetCurrentProcess().Id;
                 _initializationArguments.AppName = "FoC Launcher";
-                InitializeFontAndColorInformation();
             }
             if (_provider != null)
                 return;
             CreateAndStartAppDomain();
         }
-
-        private void InitializeFontAndColorInformation()
-        {
-            //_initializationArguments.BackgroundColor =
-            //    _themeManager.GetThemedColorRgba(EnvironmentColors.ToolWindowBackground);
-            //_initializationArguments.TextColor = _themeManager.GetThemedColorRgba(EnvironmentColors.ToolWindowText);
-            //_initializationArguments.CaptionBackgroundColor =
-            //    _themeManager.GetThemedColorRgba(EnvironmentColors.MainWindowTitleBarBackground);
-            //_initializationArguments.CaptionTextColor =
-            //    _themeManager.GetThemedColorRgba(EnvironmentColors.MainWindowTitleBarForeground);
-            //_initializationArguments.BorderColor =
-            //    _themeManager.GetThemedColorRgba(EnvironmentColors.MainWindowActiveShadowAndBorderColor);
-        }
-
+        
         private void CreateAndStartAppDomain()
         {
             var currentDomainSetup = AppDomain.CurrentDomain.SetupInformation;
