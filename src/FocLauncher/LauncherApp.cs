@@ -1,8 +1,8 @@
 ﻿using System.Windows;
-using FocLauncher.Core.Properties;
-using FocLauncher.Core.Theming;
+using FocLauncher.Properties;
+using FocLauncher.Theming;
 
-namespace FocLauncher.Core
+namespace FocLauncher
 {
     public class LauncherApp : Application
     {

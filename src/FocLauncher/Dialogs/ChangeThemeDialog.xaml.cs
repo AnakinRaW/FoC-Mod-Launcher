@@ -1,12 +1,11 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
-using FocLauncher.Core.Input;
-using FocLauncher.Core.Properties;
-using FocLauncher.Core.Theming;
+using FocLauncher.Input;
+using FocLauncher.Properties;
 using FocLauncher.Theming;
 
-namespace FocLauncher.Core.Dialogs
+namespace FocLauncher.Dialogs
 {
     public partial class ChangeThemeDialog : INotifyPropertyChanged
     {

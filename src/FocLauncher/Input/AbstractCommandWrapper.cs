@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Windows.Input;
 
-namespace FocLauncher.Core.Input
+namespace FocLauncher.Input
 {
     /*This class is doing some magic since the CanExecuteChanged in the base Command was not fired correctly*/
 

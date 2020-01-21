@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace FocLauncher.Core.Converters
+namespace FocLauncher.Converters
 {
     public class ThemeSelectedConverter : IMultiValueConverter
     {

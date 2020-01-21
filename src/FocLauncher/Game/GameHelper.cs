@@ -1,10 +1,10 @@
 ﻿using System.Diagnostics;
 using System.IO;
 using System.Windows;
-using FocLauncher.Core.Utilities;
+using FocLauncher.Utilities;
 using Microsoft.Win32;
 
-namespace FocLauncher.Core.Game
+namespace FocLauncher.Game
 {
     public static class GameHelper
     {

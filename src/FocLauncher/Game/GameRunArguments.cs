@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace FocLauncher.Core.Game
+namespace FocLauncher.Game
 {
     public struct GameRunArguments
     {

@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace FocLauncher.Core.Utilities
+namespace FocLauncher.Utilities
 {
     public sealed class ReusableStringBuilder : ReusableResourceStore<StringBuilder, int>
     {

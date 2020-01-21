@@ -2,9 +2,9 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using FocLauncher.Core.Properties;
+using FocLauncher.Properties;
 
-namespace FocLauncher.Core.Game
+namespace FocLauncher.Game
 {
     public sealed class GameProcessWatcher : INotifyPropertyChanged
     {

@@ -1,6 +1,6 @@
 ﻿using System.Xml;
 
-namespace FocLauncher.Core.Utilities
+namespace FocLauncher.Utilities
 {
     public static class XmlTools
     {

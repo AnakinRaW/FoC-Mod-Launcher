@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 
-namespace FocLauncher.Core.Game
+namespace FocLauncher.Game
 {
     public static class ProcessHelper
     {

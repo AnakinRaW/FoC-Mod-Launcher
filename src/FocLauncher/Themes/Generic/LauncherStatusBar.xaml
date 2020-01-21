@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:controls="clr-namespace:FocLauncher.Core.Controls"
-                    xmlns:theming="clr-namespace:FocLauncher.Theming;assembly=FocLauncher.Theming">
+                    xmlns:theming="clr-namespace:FocLauncher.Theming;assembly=FocLauncher.Theming"
+                    xmlns:controls="clr-namespace:FocLauncher.Controls">
 
     <Style TargetType="{x:Type controls:LauncherStatusBar}">
         <Setter Property="MinHeight" Value="22"/>

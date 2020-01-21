@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
-using FocLauncher.Core.Game;
-using FocLauncher.Core.Mods;
+using FocLauncher.Game;
+using FocLauncher.Mods;
 
-namespace FocLauncher.Core
+namespace FocLauncher
 {
     public interface IDataModel : INotifyPropertyChanged
     {

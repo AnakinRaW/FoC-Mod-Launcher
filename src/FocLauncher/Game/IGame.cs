@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
-using FocLauncher.Core.Mods;
+using FocLauncher.Mods;
 
-namespace FocLauncher.Core.Game
+namespace FocLauncher.Game
 {
     public interface IGame
     {

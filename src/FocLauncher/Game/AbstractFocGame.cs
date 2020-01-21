@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Linq;
 
-namespace FocLauncher.Core.Game
+namespace FocLauncher.Game
 {
     public abstract class AbstractFocGame : PetroglyphGame
     {

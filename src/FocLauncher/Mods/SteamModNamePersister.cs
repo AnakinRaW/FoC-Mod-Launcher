@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using FocLauncher.Core.Game;
+using FocLauncher.Game;
 using Newtonsoft.Json;
 
-namespace FocLauncher.Core.Mods
+namespace FocLauncher.Mods
 {
     public class SteamModNamePersister
     {

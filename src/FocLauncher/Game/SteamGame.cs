@@ -1,8 +1,8 @@
 ﻿using System.IO;
-using FocLauncher.Core.Mods;
-using FocLauncher.Core.Utilities;
+using FocLauncher.Mods;
+using FocLauncher.Utilities;
 
-namespace FocLauncher.Core.Game
+namespace FocLauncher.Game
 {
     public sealed class SteamGame : AbstractFocGame
     {

@@ -1,4 +1,4 @@
-﻿namespace FocLauncher.Core.ModInfo
+﻿namespace FocLauncher.ModInfo
 {
     public enum SteamWorkshopVisibility
     {

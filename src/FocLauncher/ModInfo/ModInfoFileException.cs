@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FocLauncher.Core.ModInfo
+namespace FocLauncher.ModInfo
 {
     public class ModInfoFileException : Exception
     {

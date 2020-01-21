@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using FocLauncher.Core.Mods;
+using FocLauncher.Mods;
 
-namespace FocLauncher.Core.Game
+namespace FocLauncher.Game
 {
     public abstract class PetroglyphGame : IGame
     {

@@ -3,10 +3,10 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows.Navigation;
-using FocLauncher.Core.Properties;
+using FocLauncher.Properties;
 using FocLauncher.Theming;
 
-namespace FocLauncher.Core.Dialogs
+namespace FocLauncher.Dialogs
 {
     public partial class AboutWindow : INotifyPropertyChanged
     {

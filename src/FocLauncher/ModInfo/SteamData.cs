@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace FocLauncher.Core.ModInfo
+namespace FocLauncher.ModInfo
 {
     public struct SteamData
     {

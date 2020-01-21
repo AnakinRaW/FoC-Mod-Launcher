@@ -22,6 +22,8 @@ SOFTWARE. */
 
 using System;
 
+// ReSharper disable InheritdocConsiderUsage
+
 #pragma warning disable 1591
 // ReSharper disable UnusedMember.Global
 // ReSharper disable MemberCanBePrivate.Global
@@ -30,11 +32,11 @@ using System;
 // ReSharper disable MemberCanBeProtected.Global
 // ReSharper disable InconsistentNaming
 
-namespace FocLauncher.Core.Properties
+namespace FocLauncher.Properties
 {
   /// <summary>
   /// Indicates that the value of the marked element could be <c>null</c> sometimes,
-  /// so the check for <c>null</c> is necessary before its usage.
+  /// so checking for <c>null</c> is required before its usage.
   /// </summary>
   /// <example><code>
   /// [CanBeNull] object Test() => null;
@@ -51,7 +53,7 @@ namespace FocLauncher.Core.Properties
   public sealed class CanBeNullAttribute : Attribute { }
 
   /// <summary>
-  /// Indicates that the value of the marked element could never be <c>null</c>.
+  /// Indicates that the value of the marked element can never be <c>null</c>.
   /// </summary>
   /// <example><code>
   /// [NotNull] object Foo() {
@@ -65,28 +67,47 @@ namespace FocLauncher.Core.Properties
   public sealed class NotNullAttribute : Attribute { }
 
   /// <summary>
-  /// Can be appplied to symbols of types derived from IEnumerable as well as to symbols of Task
+  /// Can be applied to symbols of types derived from IEnumerable as well as to symbols of Task
   /// and Lazy classes to indicate that the value of a collection item, of the Task.Result property
   /// or of the Lazy.Value property can never be null.
   /// </summary>
+  /// <example><code>
+  /// public void Foo([ItemNotNull]List&lt;string&gt; books)
+  /// {
+  ///   foreach (var book in books) {
+  ///     if (book != null) // Warning: Expression is always true
+  ///      Console.WriteLine(book.ToUpper());
+  ///   }
+  /// }
+  /// </code></example>
   [AttributeUsage(
     AttributeTargets.Method | AttributeTargets.Parameter | AttributeTargets.Property |
     AttributeTargets.Delegate | AttributeTargets.Field)]
   public sealed class ItemNotNullAttribute : Attribute { }
 
   /// <summary>
-  /// Can be appplied to symbols of types derived from IEnumerable as well as to symbols of Task
+  /// Can be applied to symbols of types derived from IEnumerable as well as to symbols of Task
   /// and Lazy classes to indicate that the value of a collection item, of the Task.Result property
   /// or of the Lazy.Value property can be null.
   /// </summary>
+  /// <example><code>
+  /// public void Foo([ItemCanBeNull]List&lt;string&gt; books)
+  /// {
+  ///   foreach (var book in books)
+  ///   {
+  ///     // Warning: Possible 'System.NullReferenceException'
+  ///     Console.WriteLine(book.ToUpper());
+  ///   }
+  /// }
+  /// </code></example>
   [AttributeUsage(
     AttributeTargets.Method | AttributeTargets.Parameter | AttributeTargets.Property |
     AttributeTargets.Delegate | AttributeTargets.Field)]
   public sealed class ItemCanBeNullAttribute : Attribute { }
 
   /// <summary>
-  /// Indicates that the marked method builds string by format pattern and (optional) arguments.
-  /// Parameter, which contains format string, should be given in constructor. The format string
+  /// Indicates that the marked method builds string by the format pattern and (optional) arguments.
+  /// The parameter, which contains the format string, should be given in constructor. The format string
   /// should be in <see cref="string.Format(IFormatProvider,string,object[])"/>-like form.
   /// </summary>
   /// <example><code>
@@ -103,20 +124,43 @@ namespace FocLauncher.Core.Properties
   public sealed class StringFormatMethodAttribute : Attribute
   {
     /// <param name="formatParameterName">
-    /// Specifies which parameter of an annotated method should be treated as format-string
+    /// Specifies which parameter of an annotated method should be treated as the format string
     /// </param>
     public StringFormatMethodAttribute([NotNull] string formatParameterName)
     {
       FormatParameterName = formatParameterName;
     }
 
-    [NotNull] public string FormatParameterName { get; private set; }
+    [NotNull] public string FormatParameterName { get; }
   }
 
   /// <summary>
-  /// For a parameter that is expected to be one of the limited set of values.
-  /// Specify fields of which type should be used as values for this parameter.
+  /// Use this annotation to specify a type that contains static or const fields
+  /// with values for the annotated property/field/parameter.
+  /// The specified type will be used to improve completion suggestions.
   /// </summary>
+  /// <example><code>
+  /// namespace TestNamespace
+  /// {
+  ///   public class Constants
+  ///   {
+  ///     public static int INT_CONST = 1;
+  ///     public const string STRING_CONST = "1";
+  ///   }
+  ///
+  ///   public class Class1
+  ///   {
+  ///     [ValueProvider("TestNamespace.Constants")] public int myField;
+  ///     public void Foo([ValueProvider("TestNamespace.Constants")] string str) { }
+  ///
+  ///     public void Test()
+  ///     {
+  ///       Foo(/*try completion here*/);//
+  ///       myField = /*try completion here*/
+  ///     }
+  ///   }
+  /// }
+  /// </code></example>
   [AttributeUsage(
     AttributeTargets.Parameter | AttributeTargets.Property | AttributeTargets.Field,
     AllowMultiple = true)]
@@ -127,11 +171,11 @@ namespace FocLauncher.Core.Properties
       Name = name;
     }
 
-    [NotNull] public string Name { get; private set; }
+    [NotNull] public string Name { get; }
   }
 
   /// <summary>
-  /// Indicates that the function argument should be string literal and match one
+  /// Indicates that the function argument should be a string literal and match one
   /// of the parameters of the caller function. For example, ReSharper annotates
   /// the parameter of <see cref="System.ArgumentNullException"/>.
   /// </summary>
@@ -191,7 +235,7 @@ namespace FocLauncher.Core.Properties
       ParameterName = parameterName;
     }
 
-    [CanBeNull] public string ParameterName { get; private set; }
+    [CanBeNull] public string ParameterName { get; }
   }
 
   /// <summary>
@@ -206,13 +250,13 @@ namespace FocLauncher.Core.Properties
   /// <item>Output   ::= [ParameterName: Value]* {halt|stop|void|nothing|Value}</item>
   /// <item>Value    ::= true | false | null | notnull | canbenull</item>
   /// </list>
-  /// If method has single input parameter, it's name could be omitted.<br/>
-  /// Using <c>halt</c> (or <c>void</c>/<c>nothing</c>, which is the same) for method output
-  /// means that the methos doesn't return normally (throws or terminates the process).<br/>
+  /// If the method has a single input parameter, its name could be omitted.<br/>
+  /// Using <c>halt</c> (or <c>void</c>/<c>nothing</c>, which is the same) for the method output
+  /// means that the method doesn't return normally (throws or terminates the process).<br/>
   /// Value <c>canbenull</c> is only applicable for output parameters.<br/>
   /// You can use multiple <c>[ContractAnnotation]</c> for each FDT row, or use single attribute
   /// with rows separated by semicolon. There is no notion of order rows, all rows are checked
-  /// for applicability and applied per each program state tracked by R# analysis.<br/>
+  /// for applicability and applied per each program state tracked by the analysis engine.<br/>
   /// </syntax>
   /// <examples><list>
   /// <item><code>
@@ -220,8 +264,8 @@ namespace FocLauncher.Core.Properties
   /// public void TerminationMethod()
   /// </code></item>
   /// <item><code>
-  /// [ContractAnnotation("halt &lt;= condition: false")]
-  /// public void Assert(bool condition, string text) // regular assertion method
+  /// [ContractAnnotation("null &lt;= param:null")] // reverse condition syntax
+  /// public string GetName(string surname)
   /// </code></item>
   /// <item><code>
   /// [ContractAnnotation("s:null =&gt; true")]
@@ -231,7 +275,7 @@ namespace FocLauncher.Core.Properties
   /// // A method that returns null if the parameter is null,
   /// // and not null if the parameter is not null
   /// [ContractAnnotation("null =&gt; null; notnull =&gt; notnull")]
-  /// public object Transform(object data) 
+  /// public object Transform(object data)
   /// </code></item>
   /// <item><code>
   /// [ContractAnnotation("=&gt; true, result: notnull; =&gt; false, result: null")]
@@ -250,13 +294,13 @@ namespace FocLauncher.Core.Properties
       ForceFullStates = forceFullStates;
     }
 
-    [NotNull] public string Contract { get; private set; }
+    [NotNull] public string Contract { get; }
 
-    public bool ForceFullStates { get; private set; }
+    public bool ForceFullStates { get; }
   }
 
   /// <summary>
-  /// Indicates that marked element should be localized or not.
+  /// Indicates whether the marked element should be localized.
   /// </summary>
   /// <example><code>
   /// [LocalizationRequiredAttribute(true)]
@@ -274,7 +318,7 @@ namespace FocLauncher.Core.Properties
       Required = required;
     }
 
-    public bool Required { get; private set; }
+    public bool Required { get; }
   }
 
   /// <summary>
@@ -320,12 +364,12 @@ namespace FocLauncher.Core.Properties
       BaseType = baseType;
     }
 
-    [NotNull] public Type BaseType { get; private set; }
+    [NotNull] public Type BaseType { get; }
   }
 
   /// <summary>
   /// Indicates that the marked symbol is used implicitly (e.g. via reflection, in external library),
-  /// so this symbol will not be marked as unused (as well as by other usage inspections).
+  /// so this symbol will not be reported as unused (as well as by other usage inspections).
   /// </summary>
   [AttributeUsage(AttributeTargets.All)]
   public sealed class UsedImplicitlyAttribute : Attribute
@@ -345,16 +389,18 @@ namespace FocLauncher.Core.Properties
       TargetFlags = targetFlags;
     }
 
-    public ImplicitUseKindFlags UseKindFlags { get; private set; }
+    public ImplicitUseKindFlags UseKindFlags { get; }
 
-    public ImplicitUseTargetFlags TargetFlags { get; private set; }
+    public ImplicitUseTargetFlags TargetFlags { get; }
   }
 
   /// <summary>
-  /// Should be used on attributes and causes ReSharper to not mark symbols marked with such attributes
-  /// as unused (as well as by other usage inspections)
+  /// Can be applied to attributes, type parameters, and parameters of a type assignable from <see cref="System.Type"/> .
+  /// When applied to an attribute, the decorated attribute behaves the same as <see cref="FocLauncher.Properties.UsedImplicitlyAttribute"/>.
+  /// When applied to a type parameter or to a parameter of type <see cref="System.Type"/>,  indicates that the corresponding type
+  /// is used implicitly.
   /// </summary>
-  [AttributeUsage(AttributeTargets.Class | AttributeTargets.GenericParameter)]
+  [AttributeUsage(AttributeTargets.Class | AttributeTargets.GenericParameter | AttributeTargets.Parameter)]
   public sealed class MeansImplicitUseAttribute : Attribute
   {
     public MeansImplicitUseAttribute()
@@ -372,11 +418,15 @@ namespace FocLauncher.Core.Properties
       TargetFlags = targetFlags;
     }
 
-    [UsedImplicitly] public ImplicitUseKindFlags UseKindFlags { get; private set; }
+    [UsedImplicitly] public ImplicitUseKindFlags UseKindFlags { get; }
 
-    [UsedImplicitly] public ImplicitUseTargetFlags TargetFlags { get; private set; }
+    [UsedImplicitly] public ImplicitUseTargetFlags TargetFlags { get; }
   }
 
+  /// <summary>
+  /// Specify the details of implicitly used symbol when it is marked
+  /// with <see cref="FocLauncher.Properties.MeansImplicitUseAttribute"/> or <see cref="FocLauncher.Properties.UsedImplicitlyAttribute"/>.
+  /// </summary>
   [Flags]
   public enum ImplicitUseKindFlags
   {
@@ -395,8 +445,8 @@ namespace FocLauncher.Core.Properties
   }
 
   /// <summary>
-  /// Specify what is considered used implicitly when marked
-  /// with <see cref="MeansImplicitUseAttribute"/> or <see cref="UsedImplicitlyAttribute"/>.
+  /// Specify what is considered to be used implicitly when marked
+  /// with <see cref="FocLauncher.Properties.MeansImplicitUseAttribute"/> or <see cref="FocLauncher.Properties.UsedImplicitlyAttribute"/>.
   /// </summary>
   [Flags]
   public enum ImplicitUseTargetFlags
@@ -423,7 +473,7 @@ namespace FocLauncher.Core.Properties
       Comment = comment;
     }
 
-    [CanBeNull] public string Comment { get; private set; }
+    [CanBeNull] public string Comment { get; }
   }
 
   /// <summary>
@@ -449,8 +499,16 @@ namespace FocLauncher.Core.Properties
   public sealed class PureAttribute : Attribute { }
 
   /// <summary>
-  /// Indicates that the return value of method invocation must be used.
+  /// Indicates that the return value of the method invocation must be used.
   /// </summary>
+  /// <remarks>
+  /// Methods decorated with this attribute (in contrast to pure methods) might change state,
+  /// but make no sense without using their return value. <br/>
+  /// Similarly to <see cref="FocLauncher.Properties.PureAttribute"/>, this attribute
+  /// will help detecting usages of the method when the return value in not used.
+  /// Additionally, you can optionally specify a custom message, which will be used when showing warnings, e.g.
+  /// <code>[MustUseReturnValue("Use the return value to...")]</code>.
+  /// </remarks>
   [AttributeUsage(AttributeTargets.Method)]
   public sealed class MustUseReturnValueAttribute : Attribute
   {
@@ -461,12 +519,12 @@ namespace FocLauncher.Core.Properties
       Justification = justification;
     }
 
-    [CanBeNull] public string Justification { get; private set; }
+    [CanBeNull] public string Justification { get; }
   }
 
   /// <summary>
   /// Indicates the type member or parameter of some type, that should be used instead of all other ways
-  /// to get the value that type. This annotation is useful when you have some "context" value evaluated
+  /// to get the value of that type. This annotation is useful when you have some "context" value evaluated
   /// and stored somewhere, meaning that all other ways to get this value must be consolidated with existing one.
   /// </summary>
   /// <example><code>
@@ -498,19 +556,19 @@ namespace FocLauncher.Core.Properties
       BasePath = basePath;
     }
 
-    [CanBeNull] public string BasePath { get; private set; }
+    [CanBeNull] public string BasePath { get; }
   }
 
   /// <summary>
-  /// An extension method marked with this attribute is processed by ReSharper code completion
-  /// as a 'Source Template'. When extension method is completed over some expression, it's source code
+  /// An extension method marked with this attribute is processed by code completion
+  /// as a 'Source Template'. When the extension method is completed over some expression, its source code
   /// is automatically expanded like a template at call site.
   /// </summary>
   /// <remarks>
   /// Template method body can contain valid source code and/or special comments starting with '$'.
   /// Text inside these comments is added as source code when the template is applied. Template parameters
   /// can be used either as additional method parameters or as identifiers wrapped in two '$' signs.
-  /// Use the <see cref="MacroAttribute"/> attribute to specify macros for parameters.
+  /// Use the <see cref="FocLauncher.Properties.MacroAttribute"/> attribute to specify macros for parameters.
   /// </remarks>
   /// <example>
   /// In this example, the 'forEach' method is a source template available over all values
@@ -528,13 +586,13 @@ namespace FocLauncher.Core.Properties
   public sealed class SourceTemplateAttribute : Attribute { }
 
   /// <summary>
-  /// Allows specifying a macro for a parameter of a <see cref="SourceTemplateAttribute">source template</see>.
+  /// Allows specifying a macro for a parameter of a <see cref="FocLauncher.Properties.SourceTemplateAttribute">source template</see>.
   /// </summary>
   /// <remarks>
   /// You can apply the attribute on the whole method or on any of its additional parameters. The macro expression
-  /// is defined in the <see cref="MacroAttribute.Expression"/> property. When applied on a method, the target
-  /// template parameter is defined in the <see cref="MacroAttribute.Target"/> property. To apply the macro silently
-  /// for the parameter, set the <see cref="MacroAttribute.Editable"/> property value = -1.
+  /// is defined in the <see cref="Expression"/> property. When applied on a method, the target
+  /// template parameter is defined in the <see cref="Target"/> property. To apply the macro silently
+  /// for the parameter, set the <see cref="Editable"/> property value = -1.
   /// </remarks>
   /// <example>
   /// Applying the attribute on a source template method:
@@ -559,7 +617,7 @@ namespace FocLauncher.Core.Properties
   public sealed class MacroAttribute : Attribute
   {
     /// <summary>
-    /// Allows specifying a macro that will be executed for a <see cref="SourceTemplateAttribute">source template</see>
+    /// Allows specifying a macro that will be executed for a <see cref="FocLauncher.Properties.SourceTemplateAttribute">source template</see>
     /// parameter when the template is expanded.
     /// </summary>
     [CanBeNull] public string Expression { get; set; }
@@ -571,12 +629,12 @@ namespace FocLauncher.Core.Properties
     /// If the target parameter is used several times in the template, only one occurrence becomes editable;
     /// other occurrences are changed synchronously. To specify the zero-based index of the editable occurrence,
     /// use values >= 0. To make the parameter non-editable when the template is expanded, use -1.
-    /// </remarks>>
+    /// </remarks>
     public int Editable { get; set; }
 
     /// <summary>
-    /// Identifies the target parameter of a <see cref="SourceTemplateAttribute">source template</see> if the
-    /// <see cref="MacroAttribute"/> is applied on a template method.
+    /// Identifies the target parameter of a <see cref="FocLauncher.Properties.SourceTemplateAttribute">source template</see> if the
+    /// <see cref="FocLauncher.Properties.MacroAttribute"/> is applied on a template method.
     /// </summary>
     [CanBeNull] public string Target { get; set; }
   }
@@ -589,7 +647,7 @@ namespace FocLauncher.Core.Properties
       Format = format;
     }
 
-    [NotNull] public string Format { get; private set; }
+    [NotNull] public string Format { get; }
   }
 
   [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = true)]
@@ -600,7 +658,7 @@ namespace FocLauncher.Core.Properties
       Format = format;
     }
 
-    [NotNull] public string Format { get; private set; }
+    [NotNull] public string Format { get; }
   }
 
   [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = true)]
@@ -611,7 +669,7 @@ namespace FocLauncher.Core.Properties
       Format = format;
     }
 
-    [NotNull] public string Format { get; private set; }
+    [NotNull] public string Format { get; }
   }
 
   [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = true)]
@@ -622,7 +680,7 @@ namespace FocLauncher.Core.Properties
       Format = format;
     }
 
-    [NotNull] public string Format { get; private set; }
+    [NotNull] public string Format { get; }
   }
 
   [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = true)]
@@ -633,7 +691,7 @@ namespace FocLauncher.Core.Properties
       Format = format;
     }
 
-    [NotNull] public string Format { get; private set; }
+    [NotNull] public string Format { get; }
   }
 
   [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = true)]
@@ -644,7 +702,7 @@ namespace FocLauncher.Core.Properties
       Format = format;
     }
 
-    [NotNull] public string Format { get; private set; }
+    [NotNull] public string Format { get; }
   }
 
   /// <summary>
@@ -653,7 +711,7 @@ namespace FocLauncher.Core.Properties
   /// implicitly from the context. Use this attribute for custom wrappers similar to
   /// <c>System.Web.Mvc.Html.ChildActionExtensions.RenderAction(HtmlHelper, String)</c>.
   /// </summary>
-  [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Method)]
+  [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Method | AttributeTargets.Field | AttributeTargets.Property)]
   public sealed class AspMvcActionAttribute : Attribute
   {
     public AspMvcActionAttribute() { }
@@ -663,15 +721,15 @@ namespace FocLauncher.Core.Properties
       AnonymousProperty = anonymousProperty;
     }
 
-    [CanBeNull] public string AnonymousProperty { get; private set; }
+    [CanBeNull] public string AnonymousProperty { get; }
   }
 
   /// <summary>
-  /// ASP.NET MVC attribute. Indicates that a parameter is an MVC area.
+  /// ASP.NET MVC attribute. Indicates that the marked parameter is an MVC area.
   /// Use this attribute for custom wrappers similar to
   /// <c>System.Web.Mvc.Html.ChildActionExtensions.RenderAction(HtmlHelper, String)</c>.
   /// </summary>
-  [AttributeUsage(AttributeTargets.Parameter)]
+  [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Field | AttributeTargets.Property)]
   public sealed class AspMvcAreaAttribute : Attribute
   {
     public AspMvcAreaAttribute() { }
@@ -681,7 +739,7 @@ namespace FocLauncher.Core.Properties
       AnonymousProperty = anonymousProperty;
     }
 
-    [CanBeNull] public string AnonymousProperty { get; private set; }
+    [CanBeNull] public string AnonymousProperty { get; }
   }
 
   /// <summary>
@@ -690,7 +748,7 @@ namespace FocLauncher.Core.Properties
   /// implicitly from the context. Use this attribute for custom wrappers similar to
   /// <c>System.Web.Mvc.Html.ChildActionExtensions.RenderAction(HtmlHelper, String, String)</c>.
   /// </summary>
-  [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Method)]
+  [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Method | AttributeTargets.Field | AttributeTargets.Property)]
   public sealed class AspMvcControllerAttribute : Attribute
   {
     public AspMvcControllerAttribute() { }
@@ -700,18 +758,18 @@ namespace FocLauncher.Core.Properties
       AnonymousProperty = anonymousProperty;
     }
 
-    [CanBeNull] public string AnonymousProperty { get; private set; }
+    [CanBeNull] public string AnonymousProperty { get; }
   }
 
   /// <summary>
-  /// ASP.NET MVC attribute. Indicates that a parameter is an MVC Master. Use this attribute
+  /// ASP.NET MVC attribute. Indicates that the marked parameter is an MVC Master. Use this attribute
   /// for custom wrappers similar to <c>System.Web.Mvc.Controller.View(String, String)</c>.
   /// </summary>
-  [AttributeUsage(AttributeTargets.Parameter)]
+  [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Field | AttributeTargets.Property)]
   public sealed class AspMvcMasterAttribute : Attribute { }
 
   /// <summary>
-  /// ASP.NET MVC attribute. Indicates that a parameter is an MVC model type. Use this attribute
+  /// ASP.NET MVC attribute. Indicates that the marked parameter is an MVC model type. Use this attribute
   /// for custom wrappers similar to <c>System.Web.Mvc.Controller.View(String, Object)</c>.
   /// </summary>
   [AttributeUsage(AttributeTargets.Parameter)]
@@ -723,7 +781,7 @@ namespace FocLauncher.Core.Properties
   /// from the context. Use this attribute for custom wrappers similar to
   /// <c>System.Web.Mvc.Html.RenderPartialExtensions.RenderPartial(HtmlHelper, String)</c>.
   /// </summary>
-  [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Method)]
+  [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Method | AttributeTargets.Field | AttributeTargets.Property)]
   public sealed class AspMvcPartialViewAttribute : Attribute { }
 
   /// <summary>
@@ -734,26 +792,26 @@ namespace FocLauncher.Core.Properties
 
   /// <summary>
   /// ASP.NET MVC attribute. Indicates that a parameter is an MVC display template.
-  /// Use this attribute for custom wrappers similar to 
+  /// Use this attribute for custom wrappers similar to
   /// <c>System.Web.Mvc.Html.DisplayExtensions.DisplayForModel(HtmlHelper, String)</c>.
   /// </summary>
-  [AttributeUsage(AttributeTargets.Parameter)]
+  [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Field | AttributeTargets.Property)]
   public sealed class AspMvcDisplayTemplateAttribute : Attribute { }
 
   /// <summary>
-  /// ASP.NET MVC attribute. Indicates that a parameter is an MVC editor template.
+  /// ASP.NET MVC attribute. Indicates that the marked parameter is an MVC editor template.
   /// Use this attribute for custom wrappers similar to
   /// <c>System.Web.Mvc.Html.EditorExtensions.EditorForModel(HtmlHelper, String)</c>.
   /// </summary>
-  [AttributeUsage(AttributeTargets.Parameter)]
+  [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Field | AttributeTargets.Property)]
   public sealed class AspMvcEditorTemplateAttribute : Attribute { }
 
   /// <summary>
-  /// ASP.NET MVC attribute. Indicates that a parameter is an MVC template.
+  /// ASP.NET MVC attribute. Indicates that the marked parameter is an MVC template.
   /// Use this attribute for custom wrappers similar to
   /// <c>System.ComponentModel.DataAnnotations.UIHintAttribute(System.String)</c>.
   /// </summary>
-  [AttributeUsage(AttributeTargets.Parameter)]
+  [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Field | AttributeTargets.Property)]
   public sealed class AspMvcTemplateAttribute : Attribute { }
 
   /// <summary>
@@ -762,21 +820,21 @@ namespace FocLauncher.Core.Properties
   /// from the context. Use this attribute for custom wrappers similar to
   /// <c>System.Web.Mvc.Controller.View(Object)</c>.
   /// </summary>
-  [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Method)]
+  [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Method | AttributeTargets.Field | AttributeTargets.Property)]
   public sealed class AspMvcViewAttribute : Attribute { }
 
   /// <summary>
   /// ASP.NET MVC attribute. If applied to a parameter, indicates that the parameter
   /// is an MVC view component name.
   /// </summary>
-  [AttributeUsage(AttributeTargets.Parameter)]
+  [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Field | AttributeTargets.Property)]
   public sealed class AspMvcViewComponentAttribute : Attribute { }
 
   /// <summary>
   /// ASP.NET MVC attribute. If applied to a parameter, indicates that the parameter
   /// is an MVC view component view. If applied to a method, the MVC view component view name is default.
   /// </summary>
-  [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Method)]
+  [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Method | AttributeTargets.Field | AttributeTargets.Property)]
   public sealed class AspMvcViewComponentViewAttribute : Attribute { }
 
   /// <summary>
@@ -803,7 +861,7 @@ namespace FocLauncher.Core.Properties
       Name = name;
     }
 
-    [CanBeNull] public string Name { get; private set; }
+    [CanBeNull] public string Name { get; }
   }
 
   [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Field | AttributeTargets.Property)]
@@ -814,21 +872,44 @@ namespace FocLauncher.Core.Properties
       Name = name;
     }
 
-    [NotNull] public string Name { get; private set; }
+    [NotNull] public string Name { get; }
   }
 
   /// <summary>
-  /// Razor attribute. Indicates that a parameter or a method is a Razor section.
-  /// Use this attribute for custom wrappers similar to 
+  /// Razor attribute. Indicates that the marked parameter or method is a Razor section.
+  /// Use this attribute for custom wrappers similar to
   /// <c>System.Web.WebPages.WebPageBase.RenderSection(String)</c>.
   /// </summary>
   [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Method)]
   public sealed class RazorSectionAttribute : Attribute { }
 
   /// <summary>
-  /// Indicates how method, constructor invocation or property access
-  /// over collection type affects content of the collection.
+  /// Indicates how method, constructor invocation, or property access
+  /// over collection type affects the contents of the collection.
+  /// Use <see cref="CollectionAccessType"/> to specify the access type.
   /// </summary>
+  /// <remarks>
+  /// Using this attribute only makes sense if all collection methods are marked with this attribute.
+  /// </remarks>
+  /// <example><code>
+  /// public class MyStringCollection : List&lt;string&gt;
+  /// {
+  ///   [CollectionAccess(CollectionAccessType.Read)]
+  ///   public string GetFirstString()
+  ///   {
+  ///     return this.ElementAt(0);
+  ///   }
+  /// }
+  /// class Test
+  /// {
+  ///   public void Foo()
+  ///   {
+  ///     // Warning: Contents of the collection is never updated
+  ///     var col = new MyStringCollection();
+  ///     string x = col.GetFirstString();
+  ///   }
+  /// }
+  /// </code></example>
   [AttributeUsage(AttributeTargets.Method | AttributeTargets.Constructor | AttributeTargets.Property)]
   public sealed class CollectionAccessAttribute : Attribute
   {
@@ -837,9 +918,13 @@ namespace FocLauncher.Core.Properties
       CollectionAccessType = collectionAccessType;
     }
 
-    public CollectionAccessType CollectionAccessType { get; private set; }
+    public CollectionAccessType CollectionAccessType { get; }
   }
 
+  /// <summary>
+  /// Provides a value for the <see cref="FocLauncher.Properties.CollectionAccessAttribute"/> to define
+  /// how the collection method invocation affects the contents of the collection.
+  /// </summary>
   [Flags]
   public enum CollectionAccessType
   {
@@ -854,16 +939,16 @@ namespace FocLauncher.Core.Properties
   }
 
   /// <summary>
-  /// Indicates that the marked method is assertion method, i.e. it halts control flow if
-  /// one of the conditions is satisfied. To set the condition, mark one of the parameters with 
-  /// <see cref="AssertionConditionAttribute"/> attribute.
+  /// Indicates that the marked method is assertion method, i.e. it halts the control flow if
+  /// one of the conditions is satisfied. To set the condition, mark one of the parameters with
+  /// <see cref="FocLauncher.Properties.AssertionConditionAttribute"/> attribute.
   /// </summary>
   [AttributeUsage(AttributeTargets.Method)]
   public sealed class AssertionMethodAttribute : Attribute { }
 
   /// <summary>
   /// Indicates the condition parameter of the assertion method. The method itself should be
-  /// marked by <see cref="AssertionMethodAttribute"/> attribute. The mandatory argument of
+  /// marked by <see cref="FocLauncher.Properties.AssertionMethodAttribute"/> attribute. The mandatory argument of
   /// the attribute is the assertion type.
   /// </summary>
   [AttributeUsage(AttributeTargets.Parameter)]
@@ -874,7 +959,7 @@ namespace FocLauncher.Core.Properties
       ConditionType = conditionType;
     }
 
-    public AssertionConditionType ConditionType { get; private set; }
+    public AssertionConditionType ConditionType { get; }
   }
 
   /// <summary>
@@ -910,13 +995,26 @@ namespace FocLauncher.Core.Properties
   public sealed class LinqTunnelAttribute : Attribute { }
 
   /// <summary>
-  /// Indicates that IEnumerable, passed as parameter, is not enumerated.
+  /// Indicates that IEnumerable passed as a parameter is not enumerated.
+  /// Use this annotation to suppress the 'Possible multiple enumeration of IEnumerable' inspection.
   /// </summary>
+  /// <example><code>
+  /// static void ThrowIfNull&lt;T&gt;([NoEnumeration] T v, string n) where T : class
+  /// {
+  ///   // custom check for null but no enumeration
+  /// }
+  /// 
+  /// void Foo(IEnumerable&lt;string&gt; values)
+  /// {
+  ///   ThrowIfNull(values, nameof(values));
+  ///   var x = values.ToList(); // No warnings about multiple enumeration
+  /// }
+  /// </code></example>
   [AttributeUsage(AttributeTargets.Parameter)]
   public sealed class NoEnumerationAttribute : Attribute { }
 
   /// <summary>
-  /// Indicates that parameter is regular expression pattern.
+  /// Indicates that the marked parameter is a regular expression pattern.
   /// </summary>
   [AttributeUsage(AttributeTargets.Parameter)]
   public sealed class RegexPatternAttribute : Attribute { }
@@ -925,7 +1023,7 @@ namespace FocLauncher.Core.Properties
   /// Prevents the Member Reordering feature from tossing members of the marked class.
   /// </summary>
   /// <remarks>
-  /// The attribute must be mentioned in your member reordering patterns
+  /// The attribute must be mentioned in your member reordering patterns.
   /// </remarks>
   [AttributeUsage(
     AttributeTargets.Class | AttributeTargets.Interface | AttributeTargets.Struct | AttributeTargets.Enum)]
@@ -945,7 +1043,7 @@ namespace FocLauncher.Core.Properties
   /// </summary>
   /// <remarks>
   /// Property should have the tree ancestor of the <c>ItemsControl</c> type or
-  /// marked with the <see cref="XamlItemsControlAttribute"/> attribute.
+  /// marked with the <see cref="FocLauncher.Properties.XamlItemsControlAttribute"/> attribute.
   /// </remarks>
   [AttributeUsage(AttributeTargets.Property)]
   public sealed class XamlItemBindingOfItemsControlAttribute : Attribute { }
@@ -959,9 +1057,9 @@ namespace FocLauncher.Core.Properties
       ControlType = controlType;
     }
 
-    [NotNull] public string TagName { get; private set; }
+    [NotNull] public string TagName { get; }
 
-    [NotNull] public Type ControlType { get; private set; }
+    [NotNull] public Type ControlType { get; }
   }
 
   [AttributeUsage(AttributeTargets.Property | AttributeTargets.Method)]
@@ -981,13 +1079,13 @@ namespace FocLauncher.Core.Properties
       Attribute = attribute;
     }
 
-    [NotNull] public string Attribute { get; private set; }
+    [NotNull] public string Attribute { get; }
   }
 
   [AttributeUsage(AttributeTargets.Property)]
   public sealed class AspTypePropertyAttribute : Attribute
   {
-    public bool CreateConstructorReferences { get; private set; }
+    public bool CreateConstructorReferences { get; }
 
     public AspTypePropertyAttribute(bool createConstructorReferences)
     {
@@ -1003,7 +1101,7 @@ namespace FocLauncher.Core.Properties
       Name = name;
     }
 
-    [NotNull] public string Name { get; private set; }
+    [NotNull] public string Name { get; }
   }
 
   [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
@@ -1015,9 +1113,9 @@ namespace FocLauncher.Core.Properties
       FieldName = fieldName;
     }
 
-    [NotNull] public string Type { get; private set; }
+    [NotNull] public string Type { get; }
 
-    [NotNull] public string FieldName { get; private set; }
+    [NotNull] public string FieldName { get; }
   }
 
   [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
@@ -1028,7 +1126,7 @@ namespace FocLauncher.Core.Properties
       Directive = directive;
     }
 
-    [NotNull] public string Directive { get; private set; }
+    [NotNull] public string Directive { get; }
   }
 
   [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
@@ -1044,10 +1142,10 @@ namespace FocLauncher.Core.Properties
           PageName = pageName;
       }
 
-      [NotNull] public string BaseType { get; private set; }
-      [CanBeNull] public string PageName { get; private set; }
+      [NotNull] public string BaseType { get; }
+      [CanBeNull] public string PageName { get; }
   }
-    
+
   [AttributeUsage(AttributeTargets.Method)]
   public sealed class RazorHelperCommonAttribute : Attribute { }
 

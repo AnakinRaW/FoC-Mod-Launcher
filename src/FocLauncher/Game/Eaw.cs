@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
-using FocLauncher.Core.Utilities;
+using FocLauncher.Utilities;
 
-namespace FocLauncher.Core.Game
+namespace FocLauncher.Game
 {
     public class Eaw : AbstractFocGame
     {

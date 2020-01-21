@@ -1,12 +1,12 @@
-﻿<Window x:Class="FocLauncher.Core.Dialogs.ChangeThemeDialog"
+﻿<Window x:Class="FocLauncher.Dialogs.ChangeThemeDialog"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:theming1="clr-namespace:FocLauncher.Theming;assembly=FocLauncher.Theming"
-        xmlns:converters="clr-namespace:FocLauncher.Core.Converters"
-        xmlns:theming2="clr-namespace:FocLauncher.Core.Theming"
-        xmlns:properties="clr-namespace:FocLauncher.Core.Properties"
+        xmlns:properties1="clr-namespace:FocLauncher.Properties"
+        xmlns:converters="clr-namespace:FocLauncher.Converters"
+        xmlns:theming2="clr-namespace:FocLauncher.Theming"
         mc:Ignorable="d"
         Title="Choose a Theme" Height="300" Width="350" DataContext="{Binding RelativeSource={RelativeSource Self}}"
         ResizeMode="NoResize">
@@ -52,8 +52,8 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <StackPanel Margin="3,6,0,0">
-                <CheckBox Content="Change _theme on mod launch" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=AutoSwitchTheme, Mode=TwoWay}"/>
-                <CheckBox Content="_Save active theme as default" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=SaveDefaultTheme, Mode=TwoWay}"/>
+                <CheckBox Content="Change _theme on mod launch" IsChecked="{Binding Source={x:Static properties1:Settings.Default}, Path=AutoSwitchTheme, Mode=TwoWay}"/>
+                <CheckBox Content="_Save active theme as default" IsChecked="{Binding Source={x:Static properties1:Settings.Default}, Path=SaveDefaultTheme, Mode=TwoWay}"/>
             </StackPanel>
             <StackPanel Grid.Column="2" HorizontalAlignment="Right" Margin="0,12,6,6">
                 <Button Content="OK" IsDefault="True" MinWidth="75" Padding="6,3" Command="{Binding SubmitCommand}"/>

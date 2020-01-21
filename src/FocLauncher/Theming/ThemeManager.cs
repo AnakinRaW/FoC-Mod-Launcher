@@ -7,12 +7,10 @@ using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
-using FocLauncher.Core.Mods;
-using FocLauncher.Core.Properties;
-using FocLauncher.Theming;
+using FocLauncher.Mods;
+using FocLauncher.Properties;
 
-namespace FocLauncher.Core.Theming
+namespace FocLauncher.Theming
 {
     public class ThemeManager
     {

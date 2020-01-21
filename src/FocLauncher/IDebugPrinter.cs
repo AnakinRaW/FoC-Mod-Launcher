@@ -1,4 +1,4 @@
-﻿namespace FocLauncher.Core
+﻿namespace FocLauncher
 {
     internal interface IDebugPrinter
     {

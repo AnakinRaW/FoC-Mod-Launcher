@@ -6,12 +6,12 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows;
-using FocLauncher.Core.Game;
-using FocLauncher.Core.Mods;
-using FocLauncher.Core.Properties;
-using FocLauncher.Core.Theming;
+using FocLauncher.Game;
+using FocLauncher.Mods;
+using FocLauncher.Properties;
+using FocLauncher.Theming;
 
-namespace FocLauncher.Core
+namespace FocLauncher
 {
     public class LauncherDataModel : IDataModel, IDebugPrinter
     {

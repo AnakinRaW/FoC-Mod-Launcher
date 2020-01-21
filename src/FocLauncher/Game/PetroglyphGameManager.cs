@@ -2,9 +2,9 @@
 using System.ComponentModel;
 using System.IO;
 using System.Runtime.CompilerServices;
-using FocLauncher.Core.Annotations;
+using FocLauncher.Properties;
 
-namespace FocLauncher.Core.Game
+namespace FocLauncher.Game
 {
     public sealed class PetroglyphGameManager : INotifyPropertyChanged
     {

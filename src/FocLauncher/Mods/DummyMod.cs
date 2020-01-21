@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using FocLauncher.Core.ModInfo;
-using FocLauncher.Core.Properties;
-using FocLauncher.Core.Versioning;
+using FocLauncher.ModInfo;
+using FocLauncher.Properties;
+using FocLauncher.Versioning;
 
-namespace FocLauncher.Core.Mods
+namespace FocLauncher.Mods
 {
     public class DummyMod : IMod
     {

@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using HtmlAgilityPack;
 
-namespace FocLauncher.Core.Utilities
+namespace FocLauncher.Utilities
 {
     internal class HtmlDownloader
     {

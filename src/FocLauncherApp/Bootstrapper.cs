@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
-using FocLauncher.Core;
+using FocLauncher;
 using FocLauncherApp.ExceptionHandling;
 using Microsoft.Win32;
 

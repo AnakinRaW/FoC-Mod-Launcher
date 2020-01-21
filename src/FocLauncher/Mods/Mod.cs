@@ -3,13 +3,13 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using FocLauncher.Core.Game;
-using FocLauncher.Core.ModInfo;
-using FocLauncher.Core.Properties;
-using FocLauncher.Core.Utilities;
-using FocLauncher.Core.Versioning;
+using FocLauncher.Game;
+using FocLauncher.ModInfo;
+using FocLauncher.Properties;
+using FocLauncher.Utilities;
+using FocLauncher.Versioning;
 
-namespace FocLauncher.Core.Mods
+namespace FocLauncher.Mods
 {
     public class Mod : IMod
     {

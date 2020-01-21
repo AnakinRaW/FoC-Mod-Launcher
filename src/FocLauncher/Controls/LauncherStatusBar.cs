@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace FocLauncher.Core.Controls
+namespace FocLauncher.Controls
 {
     public class LauncherStatusBar : Grid
     {

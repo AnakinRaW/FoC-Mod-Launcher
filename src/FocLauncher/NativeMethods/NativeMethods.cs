@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace FocLauncher.Core.NativeMethods
+namespace FocLauncher.NativeMethods
 {
     internal class NativeMethods
     {

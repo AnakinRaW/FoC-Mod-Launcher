@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 using System.Security.Permissions;
 using System.Text;
 
-namespace FocLauncher.Core
+namespace FocLauncher
 {
     [Serializable]
     public class LauncherException : Exception

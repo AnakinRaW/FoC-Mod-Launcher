@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace FocLauncher.Core.Input
+namespace FocLauncher.Input
 {
     public class UICommand : AbstractCommandWrapper
     {
