@@ -11,8 +11,6 @@ namespace FocLauncherApp.WaitDialog
         private bool _isProgressVisible;
         private bool _showMarqueeProgress;
         private bool _isCancellable;
-        private int _currentStep;
-        private int _totalSteps;
         public event PropertyChangedEventHandler PropertyChanged;
 
         public string Caption
@@ -58,18 +56,7 @@ namespace FocLauncherApp.WaitDialog
                 OnPropertyChanged();
             }
         }
-
-        public bool ShowMarqueeProgress
-        {
-            get => _showMarqueeProgress;
-            set
-            {
-                if (value == _showMarqueeProgress) return;
-                _showMarqueeProgress = value;
-                OnPropertyChanged();
-            }
-        }
-
+        
         public bool IsCancellable
         {
             get => _isCancellable;
@@ -77,28 +64,6 @@ namespace FocLauncherApp.WaitDialog
             {
                 if (value == _isCancellable) return;
                 _isCancellable = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public int CurrentStep
-        {
-            get => _currentStep;
-            set
-            {
-                if (value == _currentStep) return;
-                _currentStep = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public int TotalSteps
-        {
-            get => _totalSteps;
-            set
-            {
-                if (value == _totalSteps) return;
-                _totalSteps = value;
                 OnPropertyChanged();
             }
         }

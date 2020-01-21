@@ -1,15 +1,14 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
+using System.Windows.Media;
 using System.Windows.Threading;
 using FocLauncherApp.NativeMethods;
 using FocLauncherApp.ScreenUtilities;
+
 
 namespace FocLauncherApp.WaitDialog
 {
@@ -112,16 +111,35 @@ namespace FocLauncherApp.WaitDialog
             return hostCurrentActiveWindow == _hostActiveWindowHandle;
         }
 
+
+        private static void TransformToPixels(Visual visual, double unitX, double unitY, out int pixelX, out int pixelY)
+        {
+            Matrix matrix;
+            var source = PresentationSource.FromVisual(visual);
+            if (source != null)
+            {
+                matrix = source.CompositionTarget.TransformToDevice;
+            }
+            else
+            {
+                using var src = new HwndSource(new HwndSourceParameters());
+                matrix = src.CompositionTarget.TransformToDevice;
+            }
+
+            pixelX = (int)(matrix.M11 * unitX);
+            pixelY = (int)(matrix.M22 * unitY);
+        }
+
         private void PositionAndShowDialog()
         {
             Topmost = true;
-            if (_hostActiveWindowHandle == IntPtr.Zero || !NativeMethods.NativeMethods.GetWindowRect(_hostActiveWindowHandle, out var hostWindowRect) ||
-                (hostWindowRect.Width == 0 || hostWindowRect.Height == 0))
+            if (_hostActiveWindowHandle == IntPtr.Zero || !NativeMethods.NativeMethods.GetWindowRect(_hostActiveWindowHandle, out var hostWindowRect) || 
+                hostWindowRect.Width == 0 || hostWindowRect.Height == 0)
                 NativeMethods.NativeMethods.GetWindowRect(NativeMethods.NativeMethods.GetDesktopWindow(), out hostWindowRect);
             var rect = hostWindowRect.ToRect();
-            var display = Screen.FindDisplayForWindowRect(rect);
-            var twdDeviceWidth = (int)Screen.LogicalToDeviceUnitsX(display, 468);
-            var twdDeviceHeight = (int)Screen.LogicalToDeviceUnitsY(display, 124);
+
+            var twdDeviceWidth = (int)Screen.LogicalToDeviceUnitsX(_hostActiveWindowHandle, 468);
+            var twdDeviceHeight = (int)Screen.LogicalToDeviceUnitsY(_hostActiveWindowHandle, 124);
             var twdDeviceTop = (int)(rect.Top + (rect.Height - twdDeviceHeight) / 2.0);
             var twdDeviceLeft = (int)(rect.Left + (rect.Width - twdDeviceWidth) / 2.0);
             Screen.SetInitialWindowRect(_dialogWindowHandle, this, new Int32Rect(twdDeviceLeft, twdDeviceTop, twdDeviceWidth, twdDeviceHeight));

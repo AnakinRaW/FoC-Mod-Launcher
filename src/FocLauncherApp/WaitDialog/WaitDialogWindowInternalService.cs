@@ -48,14 +48,6 @@ namespace FocLauncherApp.WaitDialog
                 _dataSource.ProgressMessage = args.ProgressMessage;
                 _dataSource.IsCancellable = args.IsCancellable;
                 _dataSource.IsProgressVisible = args.IsProgressVisible;
-                _dataSource.ShowMarqueeProgress = args.ShowMarqueeProgress;
-
-                if (_dataSource.IsProgressVisible && !_dataSource.ShowMarqueeProgress)
-                {
-                    _dataSource.CurrentStep = args.CurrentStepCount;
-                    _dataSource.TotalSteps = args.TotalStepCount;
-                }
-
                 _application.Dispatcher?.Invoke(() => ShowDialogTask(args));
             }
             catch (Exception e)

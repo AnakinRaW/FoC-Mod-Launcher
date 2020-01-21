@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Media;
@@ -9,27 +9,81 @@ namespace FocLauncherApp.ScreenUtilities
 {
     internal static class Screen
     {
-        public static event EventHandler DisplayConfigChanged;
+        private static bool? _isPerMonitorAwarenessEnabled;
+        private static DpiAwarenessContext? _processDpiAwarenessContext;
 
-        private static readonly List<DisplayInfo> Displays = new List<DisplayInfo>();
+        private static readonly Lazy<double> LazySystemDpiX = new Lazy<double>(() => GetSystemDpi(true));
+        private static readonly Lazy<double> LazySystemDpiY = new Lazy<double>(() => GetSystemDpi(false));
+        private static readonly Lazy<double> LazySystemDpiScaleX = new Lazy<double>(() => LazySystemDpiX.Value / 96.0);
+        private static readonly Lazy<double> LazySystemDpiScaleY = new Lazy<double>(() => LazySystemDpiY.Value / 96.0);
+        private static readonly Func<IntPtr, object> GetDpiForMonitorFunc = GetDpiForMonitor;
 
-        public static int DisplayCount => Displays.Count;
-
-        static Screen()
+        public static bool IsPerMonitorAwarenessEnabled
         {
-            BroadcastMessageMonitor.Instance.DisplayChange += OnDisplayChange;
-            UpdateDisplays();
+            get
+            {
+                if (!_isPerMonitorAwarenessEnabled.HasValue)
+                    _isPerMonitorAwarenessEnabled = ProcessDpiAwarenessContext == DpiAwarenessContext.PerMonitorAwareV2;
+                return _isPerMonitorAwarenessEnabled.Value;
+            }
         }
 
-        public static double LogicalToDeviceUnitsX(int display, double value)
+        public static DpiAwarenessContext ProcessDpiAwarenessContext
         {
-            GetMonitorDpi(display, out var dpiX, out var dpiY);
+            get
+            {
+                if (!_processDpiAwarenessContext.HasValue)
+                {
+                    var awarenessContext1 = DpiAwarenessContext.Unaware;
+                    try
+                    {
+                        NativeMethods.NativeMethods.GetProcessDpiAwareness(Process.GetCurrentProcess().Handle, out var awareness);
+                        switch (awareness)
+                        {
+                            case ProcessDpiAwareness.ProcessSystemDpiAware:
+                                awarenessContext1 = DpiAwarenessContext.SystemAware;
+                                break;
+                            case ProcessDpiAwareness.ProcessPerMonitorDpiAware:
+                                try
+                                {
+                                    var awarenessContext2 = NativeMethods.NativeMethods.GetThreadDpiAwarenessContext();
+                                    if (NativeMethods.NativeMethods.AreDpiAwarenessContextsEqual(awarenessContext2, new IntPtr(-4)))
+                                    {
+                                        awarenessContext1 = DpiAwarenessContext.PerMonitorAwareV2;
+                                        break;
+                                    }
+                                    if (NativeMethods.NativeMethods.AreDpiAwarenessContextsEqual(awarenessContext2, new IntPtr(-3)))
+                                        awarenessContext1 = DpiAwarenessContext.PerMonitorAware;
+                                    break;
+                                }
+                                catch
+                                {
+                                    awarenessContext1 = DpiAwarenessContext.PerMonitorAware;
+                                    break;
+                                }
+                        }
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        _processDpiAwarenessContext = awarenessContext1;
+                    }
+                }
+                return _processDpiAwarenessContext.Value;
+            }
+        }
+
+        public static double LogicalToDeviceUnitsX(IntPtr windowHandle, double value)
+        {
+            GetMonitorDpi(windowHandle, out _, out var dpiY);
             return ScaleLogicalToDevice(dpiY, value);
         }
 
-        public static double LogicalToDeviceUnitsY(int display, double value)
+        public static double LogicalToDeviceUnitsY(IntPtr windowHandle, double value)
         {
-            GetMonitorDpi(display, out var dpiX, out var dpiY);
+            GetMonitorDpi(windowHandle, out _, out var dpiY);
             return ScaleLogicalToDevice(dpiY, value);
         }
 
@@ -37,8 +91,6 @@ namespace FocLauncherApp.ScreenUtilities
         {
             if (hwnd == IntPtr.Zero)
                 throw new ArgumentException(nameof(hwnd));
-            if (window == null)
-                throw new ArgumentNullException(nameof(window));
             SetWindowDpi(hwnd, window, windowBounds);
             window.Top = window.DeviceToLogicalUnitsY(windowBounds.Y);
             window.Left = window.DeviceToLogicalUnitsX(windowBounds.X);
@@ -46,63 +98,30 @@ namespace FocLauncherApp.ScreenUtilities
             window.Height = window.DeviceToLogicalUnitsY(windowBounds.Height);
         }
 
-        public static int FindDisplayForWindowRect(Rect windowRect)
+        public static int DeviceToLogicalUnitsX(this Visual visual, int value)
         {
-            var num1 = -1;
-            var lprcSrc2 = new RECT(windowRect);
-            long num2 = 0;
-            for (var index = 0; index < Displays.Count; ++index)
-            {
-                var rcWork = Displays[index].MonitorInfo.RcWork;
-                NativeMethods.NativeMethods.IntersectRect(out var lprcDst, ref rcWork, ref lprcSrc2);
-                long num3 = lprcDst.Width * lprcDst.Height;
-                if (num3 > num2)
-                {
-                    num1 = index;
-                    num2 = num3;
-                }
-            }
-            if (-1 == num1)
-            {
-                var num3 = double.MaxValue;
-                for (var index = 0; index < Displays.Count; ++index)
-                {
-                    var num4 = Distance(Displays[index].MonitorInfo.RcMonitor, lprcSrc2);
-                    if (num4 < num3)
-                    {
-                        num1 = index;
-                        num3 = num4;
-                    }
-                }
-            }
-            return num1;
+            return visual.DeviceToLogicalUnitsX<int>(value);
         }
 
-        public static int FindDisplayForAbsolutePosition(Point absolutePosition)
+        private static T DeviceToLogicalUnitsX<T>(this Visual visual, T value) where T : IConvertible
         {
-            for (var index = 0; index < Displays.Count; ++index)
-            {
-                var rcMonitor = Displays[index].MonitorInfo.RcMonitor;
-                if (rcMonitor.Left <= absolutePosition.X && rcMonitor.Right >= absolutePosition.X && (rcMonitor.Top <= absolutePosition.Y && rcMonitor.Bottom >= absolutePosition.Y))
-                    return index;
-            }
-            var num1 = -1;
-            var num2 = double.MaxValue;
-            for (var index = 0; index < Displays.Count; ++index)
-            {
-                var num3 = Distance(absolutePosition, Displays[index].MonitorInfo.RcMonitor);
-                if (num3 < num2)
-                {
-                    num1 = index;
-                    num2 = num3;
-                }
-            }
-            return num1;
+            return visual.DeviceToLogicalUnits<T>(value, true);
         }
 
-        private static void OnDisplayChange(object sender, EventArgs e)
+        public static int DeviceToLogicalUnitsY(this Visual visual, int value)
         {
-            UpdateDisplays();
+            return visual.DeviceToLogicalUnitsY<int>(value);
+        }
+
+        private static T DeviceToLogicalUnitsY<T>(this Visual visual, T value) where T : IConvertible
+        {
+            return visual.DeviceToLogicalUnits<T>(value, false);
+        }
+
+        private static T DeviceToLogicalUnits<T>(this Visual visual, T value, bool getDpiScaleX) where T : IConvertible
+        {
+            var dpiScale = GetDpiScale(visual, getDpiScaleX);
+            return (T)Convert.ChangeType((value.ToDouble(null) / dpiScale), typeof(T));
         }
 
         private static double ScaleLogicalToDevice(double dpi, double value)
@@ -110,54 +129,31 @@ namespace FocLauncherApp.ScreenUtilities
             return value * dpi / 96.0;
         }
 
-        private static double Distance(Point point, RECT rect)
+        private static double GetDpiScale(Visual visual, bool getDpiScaleX)
         {
-            return Distance(point, GetRectCenter(rect));
-        }
-
-        private static double Distance(RECT rect1, RECT rect2)
-        {
-            return Distance(GetRectCenter(rect1), GetRectCenter(rect2));
-        }
-
-        private static double Distance(Point point1, Point point2)
-        {
-            return Math.Sqrt(Math.Pow(point1.X - point2.X, 2.0) + Math.Pow(point1.Y - point2.Y, 2.0));
-        }
-
-        private static Point GetRectCenter(RECT rect)
-        {
-            return new Point(rect.Left + rect.Width / 2, rect.Top + rect.Height / 2);
-        }
-
-        private static void UpdateDisplays()
-        {
-            Displays.Clear();
-            NativeMethods.NativeMethods.EnumDisplayMonitors(IntPtr.Zero, IntPtr.Zero, (IntPtr hMonitor, IntPtr hdcMonitor, ref RECT rect, IntPtr lpData) =>
+            double num;
+            if (DpiAwareness.IsPerMonitorAwarenessEnabled)
             {
-                var monitorInfo = new MonitorInfo { CbSize = (uint)Marshal.SizeOf(typeof(MonitorInfo)) };
-                if (NativeMethods.NativeMethods.GetMonitorInfo(hMonitor, ref monitorInfo))
-                    Displays.Add(new DisplayInfo(hMonitor, monitorInfo));
-                return true;
-            }, IntPtr.Zero);
-            DisplayConfigChanged?.Invoke(null, EventArgs.Empty);
-        }
+                var dpiScale = VisualTreeHelper.GetDpi(visual);
+                num = getDpiScaleX ? dpiScale.DpiScaleX : dpiScale.DpiScaleY;
+            }
+            else
+                num = getDpiScaleX ? LazySystemDpiScaleX.Value : LazySystemDpiScaleY.Value;
 
-        private static DpiScale GetMonitorDpiScale(double x, double y)
-        {
-            var absolutePosition = FindDisplayForAbsolutePosition(new Point(x, y));
-            return new DpiScale(LogicalToDeviceUnitsX(absolutePosition, 1.0), LogicalToDeviceUnitsY(absolutePosition, 1.0));
+            if (!IsValidDpi(num))
+                throw new InvalidOperationException();
+            return num;
         }
 
         private static void SetWindowDpi(IntPtr hwnd, Window window, Int32Rect windowBounds)
         {
-            var structure = RECT.FromInt32Rect(windowBounds);
-            var monitorDpiScale = GetMonitorDpiScale(windowBounds.X, windowBounds.Y);
+            var rect = RECT.FromInt32Rect(windowBounds);
+            var monitorDpiScale = GetMonitorDpiScale(hwnd);
             var wParam = new IntPtr((int)monitorDpiScale.PixelsPerInchX | (int)monitorDpiScale.PixelsPerInchY << 16);
-            var num = Marshal.AllocCoTaskMem(Marshal.SizeOf(structure));
+            var num = Marshal.AllocCoTaskMem(Marshal.SizeOf(rect));
             try
             {
-                Marshal.StructureToPtr(structure, num, false);
+                Marshal.StructureToPtr(rect, num, false);
                 NativeMethods.NativeMethods.SendMessage(hwnd, 736, wParam, num);
                 VisualTreeHelper.SetRootDpi(window, monitorDpiScale);
             }
@@ -167,30 +163,83 @@ namespace FocLauncherApp.ScreenUtilities
             }
         }
 
-        private static void GetMonitorDpi(int display, out double dpiX, out double dpiY)
+        private static DpiScale GetMonitorDpiScale(IntPtr windowHandle)
         {
-            try
-            {
-                Displays[display].MonitorHandle.GetMonitorDpi(out dpiX, out dpiY);
-            }
-            catch (MonitorDpiAwarenessException)
-            {
-                dpiX = 96.0;
-                dpiY = 96.0;
-            }
+            return new DpiScale(LogicalToDeviceUnitsX(windowHandle, 1.0), LogicalToDeviceUnitsY(windowHandle, 1.0));
         }
 
-        private class DisplayInfo
+        private static void GetMonitorDpi(IntPtr windowHandle, out double dpiX, out double dpiY)
         {
-            public IntPtr MonitorHandle { get; }
+            var monitor = NativeMethods.NativeMethods.MonitorFromWindow(windowHandle, MonitorOpts.DefaultToNearest);
 
-            public MonitorInfo MonitorInfo { get; }
-
-            public DisplayInfo(IntPtr hMonitor, MonitorInfo monitorInfo)
+            var m = new MonitorInfo
             {
-                MonitorHandle = hMonitor;
-                MonitorInfo = monitorInfo;
+                CbSize = (uint) Marshal.SizeOf(typeof(MonitorInfo))
+            };
+            NativeMethods.NativeMethods.GetMonitorInfo(monitor, ref m);
+
+            if (DpiAwareness.IsPerMonitorAwarenessEnabled)
+            {
+                var dpi = (Dpi) GetDpiForMonitorFunc(monitor);
+                dpiX = dpi.X;
+                dpiY = dpi.Y;
             }
+            else
+            {
+                dpiX = LazySystemDpiX.Value;
+                dpiY = LazySystemDpiY.Value;
+            }
+            if (!IsValidDpi(dpiX))
+                throw new InvalidOperationException();
+            if (!IsValidDpi(dpiY))
+                throw new InvalidOperationException();
+        }
+
+        private static object GetDpiForMonitor(IntPtr hmonitor)
+        {
+            var dpi = new Dpi
+            {
+                HResult = NativeMethods.NativeMethods.GetDpiForMonitor(hmonitor, MonitorDpiType.MdtEffectiveDpi, out var dpiX, out var dpiY)
+            };
+            if (dpi.HResult == 0)
+            {
+                dpi.X = dpiX;
+                dpi.Y = dpiY;
+            }
+            return dpi;
+        }
+
+
+        private static double GetSystemDpi(bool getDpiX)
+        {
+            var dc = NativeMethods.NativeMethods.GetDC(IntPtr.Zero);
+            var num = 96.0;
+            if (dc != IntPtr.Zero)
+            {
+                try
+                {
+                    var index = getDpiX ? DeviceCaps.LogPixlelsX : DeviceCaps.LogPixelsY;
+                    num = NativeMethods.NativeMethods.GetDeviceCaps(dc, index);
+                }
+                finally
+                {
+                    NativeMethods.NativeMethods.ReleaseDC(IntPtr.Zero, dc);
+                }
+            }
+            return num;
+        }
+        
+
+        private static bool IsValidDpi(double dpi)
+        {
+            return !double.IsInfinity(dpi) && !double.IsNaN(dpi) && dpi > 0.0;
+        }
+
+        private struct Dpi
+        {
+            public double X;
+            public double Y;
+            public int HResult;
         }
     }
 }

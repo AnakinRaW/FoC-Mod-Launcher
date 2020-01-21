@@ -37,9 +37,8 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <ProgressBar x:Name="ProgressBar" Grid.Column="0" Height="16" Margin="8" VerticalAlignment="Bottom" HorizontalContentAlignment="Stretch"
-                             Value="{Binding CurrentStep}" Maximum="{Binding TotalSteps}" 
                              Visibility="{Binding IsProgressVisible, Converter={StaticResource VisibilityConverter}}"
-                             IsIndeterminate="{Binding ShowMarqueeProgress}"/>
+                             IsIndeterminate="True"/>
                 <Button Grid.Column="1" MinWidth="80" Margin="8" Padding="3" HorizontalAlignment="Right" VerticalAlignment="Center"
                         IsDefault="True" Click="OnCancelClick" Content="Cancel" Visibility="{Binding IsCancellable, Converter={StaticResource VisibilityConverter}}"/>
             </Grid>

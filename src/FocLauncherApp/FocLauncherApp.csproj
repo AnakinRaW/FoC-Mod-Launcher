@@ -70,17 +70,15 @@
     <Compile Include="ExceptionHandling\ExceptionWindow.xaml.cs">
       <DependentUpon>ExceptionWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="NativeMethods\DeviceCaps.cs" />
     <Compile Include="NativeMethods\GuiThreadInfo.cs" />
     <Compile Include="NativeMethods\Gwl.cs" />
+    <Compile Include="NativeMethods\MonitorDpiType.cs" />
     <Compile Include="NativeMethods\MonitorInfo.cs" />
+    <Compile Include="NativeMethods\MonitorOpts.cs" />
+    <Compile Include="NativeMethods\ProcessDpiAwareness.cs" />
     <Compile Include="NativeMethods\RECT.cs" />
-    <Compile Include="ScreenUtilities\BroadcastMessageMonitor.cs" />
-    <Compile Include="ScreenUtilities\DpiAwareness.cs" />
     <Compile Include="ScreenUtilities\DpiAwarenessContext.cs" />
-    <Compile Include="ScreenUtilities\InvalidDpiException.cs" />
-    <Compile Include="ScreenUtilities\MonitorDpiAwarenessException.cs" />
-    <Compile Include="ScreenUtilities\VisualDpiAwarenessException.cs" />
-    <Compile Include="ScreenUtilities\Win32DpiAwarenessException.cs" />
     <Compile Include="Updater\AssemblyUpdater.cs" />
     <Compile Include="Updater\ThemeUpdater.cs" />
     <Compile Include="ExceptionHandling\StackTraceToShortMessageConverter.cs" />
@@ -94,7 +92,6 @@
     <Compile Include="Updater\StreamExtensions.cs" />
     <Compile Include="Updater\UpdateServer.cs" />
     <Compile Include="Updater\VersionUtilities.cs" />
-    <Compile Include="ScreenUtilities\MainWindowManager.cs" />
     <Compile Include="Utilities\NullToVisibilityConverter.cs" />
     <Compile Include="Utilities\ResourceExtractor.cs" />
     <Compile Include="Utilities\ResourceExtractorException.cs" />
