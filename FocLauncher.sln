@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleTheme", "src\SampleTh
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FocLauncherApp", "src\FocLauncherApp\FocLauncherApp.csproj", "{91330941-11BE-41AA-BD4C-8D3A70399395}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FocLauncher.Threading", "src\FocLauncher.Threading\FocLauncher.Threading.csproj", "{162A7F9A-D855-44CF-B204-B10469F695BC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,10 @@ Global
 		{91330941-11BE-41AA-BD4C-8D3A70399395}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{91330941-11BE-41AA-BD4C-8D3A70399395}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{91330941-11BE-41AA-BD4C-8D3A70399395}.Release|Any CPU.Build.0 = Release|Any CPU
+		{162A7F9A-D855-44CF-B204-B10469F695BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{162A7F9A-D855-44CF-B204-B10469F695BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{162A7F9A-D855-44CF-B204-B10469F695BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{162A7F9A-D855-44CF-B204-B10469F695BC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -51,6 +57,7 @@ Global
 		{B952DCAA-749D-476C-BBC3-2074ADFB1CC4} = {8F2264D6-12F2-47DA-8C17-25D430DA43B2}
 		{A2693EF1-ABAE-4713-91BC-7D2BEA3D50DF} = {8F2264D6-12F2-47DA-8C17-25D430DA43B2}
 		{91330941-11BE-41AA-BD4C-8D3A70399395} = {8F2264D6-12F2-47DA-8C17-25D430DA43B2}
+		{162A7F9A-D855-44CF-B204-B10469F695BC} = {8F2264D6-12F2-47DA-8C17-25D430DA43B2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {031206AD-43AB-4EF2-B59D-2DFCD7ACA476}
