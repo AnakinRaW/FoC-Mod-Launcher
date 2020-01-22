@@ -34,7 +34,7 @@ namespace FocLauncherApp
             if (actionQueue.Any())
             {
                 await WaitForMainWindow();
-                await Current.Dispatcher.Invoke(() => UpdateAsync(actionQueue), DispatcherPriority.Background);
+                await Current.Dispatcher.Invoke(async () => await UpdateAsync(actionQueue), DispatcherPriority.Background);
             }
 
             //MainWindow?.Dispatcher.InvokeShutdown();
@@ -50,7 +50,7 @@ namespace FocLauncherApp
                 true, 2, true, _cancellationTokenSource);
             try
             {
-                //await Task.Delay(5000, _cancellationTokenSource.Token);
+                await Task.Delay(5000, _cancellationTokenSource.Token);
                 if (_cancellationTokenSource.IsCancellationRequested)
                 {
                 }
@@ -93,7 +93,7 @@ namespace FocLauncherApp
             extractor.ExtractFilesIfRequired(AppDataPath, new[] { assemblyName });
         }
 
-        private async Task WaitForMainWindow()
+        private static async Task WaitForMainWindow()
         {
             if (Current.MainWindow != null && Current.MainWindow.IsVisible)
                 return;
