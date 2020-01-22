@@ -128,6 +128,11 @@
       <Version>4.5.3</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\FocLauncher.Core\FocLauncher.Core.csproj">
+      <Project>{93cdc38a-d74a-4cd5-a5aa-9ce8d953519a}</Project>
+      <Name>FocLauncher.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
+using FocLauncher;
 using FocLauncherApp.Properties;
 
 namespace FocLauncherApp.Updater
@@ -12,7 +13,7 @@ namespace FocLauncherApp.Updater
 
         public abstract string AssemblyName { get; }
 
-        public virtual string FilePath => Path.Combine(Bootstrapper.ApplicationBasePath, AssemblyName);
+        public virtual string FilePath => Path.Combine(LauncherConstants.ApplicationBasePath, AssemblyName);
 
         public virtual string VersionsServerPath => "master/Releases/AvailableUpdates.txt";
 

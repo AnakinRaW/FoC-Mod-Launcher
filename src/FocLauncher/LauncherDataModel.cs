@@ -15,8 +15,7 @@ namespace FocLauncher
 {
     public class LauncherDataModel : IDataModel, IDebugPrinter
     {
-        public static string AppDataPath => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"FoC Launcher\");
-        public static string IconPath = Path.Combine(AppDataPath, "foc.ico");
+        public static string IconPath = Path.Combine(LauncherConstants.ApplicationBasePath, "foc.ico");
 
         public event PropertyChangedEventHandler PropertyChanged;
         public event EventHandler Initialized;
@@ -146,7 +145,7 @@ namespace FocLauncher
             InitAppDataDirectory();
 
             GameManager = PetroglyphGameManager.Instance;
-            GameManager.Initialize(AppDataPath); ;
+            GameManager.Initialize(LauncherConstants.ApplicationBasePath);
 
             if (!InitGames(out var result))
             {
@@ -241,14 +240,12 @@ namespace FocLauncher
 
         private void InitAppDataDirectory()
         {
-            if (!Directory.Exists(AppDataPath))
-                Directory.CreateDirectory(AppDataPath);
+            if (!Directory.Exists(LauncherConstants.ApplicationBasePath))
+                Directory.CreateDirectory(LauncherConstants.ApplicationBasePath);
             if (File.Exists(IconPath))
                 return;
-            using (var fs = new FileStream(IconPath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
-            {
-                Resources.foc.Save(fs);
-            }
+            using var fs = new FileStream(IconPath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
+            Resources.foc.Save(fs);
         }
 
 

@@ -11,13 +11,7 @@ namespace FocLauncherApp
 {
     public static class Bootstrapper
     {
-        public const string ApplicationBaseVariable = "APPLICATIONBASE";
-
-        private static readonly string _applicationBasePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "FoC Launcher");
-
-        private static readonly Lazy<string> ApplicationBasePathLazy = new Lazy<string>(() => Environment.GetEnvironmentVariable(ApplicationBaseVariable));
-
-        public static string ApplicationBasePath => ApplicationBasePathLazy.Value;
+        private static readonly string ApplicationBasePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "FoC Launcher");
 
         [STAThread]
         [LoaderOptimization(LoaderOptimization.MultiDomainHost)]
@@ -26,7 +20,7 @@ namespace FocLauncherApp
             if (!Get48FromRegistry())
                 Environment.Exit(0);
 
-            SetApplicationBasePath();
+            SetAndInitApplicationBasePath();
 
             var splashDomain = AppDomain.CreateDomain("BootstrapDomain");
 
@@ -63,9 +57,13 @@ namespace FocLauncherApp
             }
         }
 
-        private static void SetApplicationBasePath()
+        private static void SetAndInitApplicationBasePath()
         {
-            Environment.SetEnvironmentVariable(ApplicationBaseVariable, _applicationBasePath, EnvironmentVariableTarget.Process);
+            Environment.SetEnvironmentVariable(LauncherConstants.ApplicationBaseVariable, ApplicationBasePath, EnvironmentVariableTarget.Process);
+
+            if (!Directory.Exists(LauncherConstants.ApplicationBasePath))
+                Directory.CreateDirectory(LauncherConstants.ApplicationBasePath);
+            // TODO: Write access
         }
 
         private static void StartBootstrapperApp()
@@ -123,7 +121,7 @@ namespace FocLauncherApp
             if (name.EndsWith(".resources") && !culture.EndsWith("neutral"))
                 return null;
 
-            var files = Directory.EnumerateFiles(ApplicationBasePath, "*.dll", SearchOption.TopDirectoryOnly);
+            var files = Directory.EnumerateFiles(LauncherConstants.ApplicationBasePath, "*.dll", SearchOption.TopDirectoryOnly);
             var dll = files.FirstOrDefault(x => $"{name}.dll".Equals(Path.GetFileName(x)));
             return dll == null ? null : Assembly.LoadFile(dll);
         }

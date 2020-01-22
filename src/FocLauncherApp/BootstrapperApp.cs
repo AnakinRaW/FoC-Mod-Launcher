@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
+using FocLauncher;
 using FocLauncherApp.Updater;
 using FocLauncherApp.Utilities;
 using FocLauncherApp.WaitDialog;
@@ -48,7 +49,7 @@ namespace FocLauncherApp
 
             if (!hasConnection && currentVersion == null)
             {
-                actionQueue.Enqueue(async () => await Task.Run(() => ResourceExtractor.ExtractAssembly(Bootstrapper.ApplicationBasePath, updater.AssemblyName)));
+                actionQueue.Enqueue(async () => await Task.Run(() => ResourceExtractor.ExtractAssembly(LauncherConstants.ApplicationBasePath, updater.AssemblyName)));
                 return;
             }
 

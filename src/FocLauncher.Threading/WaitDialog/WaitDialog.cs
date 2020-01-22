@@ -166,7 +166,7 @@ namespace FocLauncher.WaitDialog
             var currentDomainSetup = AppDomain.CurrentDomain.SetupInformation;
             var info = new AppDomainSetup
             {
-                ApplicationBase = @"C:\Users\Anakin\AppData\Roaming\FoC Launcher",
+                ApplicationBase = LauncherConstants.ApplicationBasePath,
                 //ApplicationBase = currentDomainSetup.ApplicationBase,
                 //ConfigurationFile = currentDomainSetup.ConfigurationFile ?? string.Empty,
                 
