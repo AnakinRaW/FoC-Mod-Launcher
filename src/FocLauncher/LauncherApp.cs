@@ -68,8 +68,7 @@ namespace FocLauncher
 
         private void LauncherApp_Exit(object sender, ExitEventArgs e)
         {
-            MainWindow?.Dispatcher.InvokeShutdown();
-            Dispatcher.InvokeShutdown();       
+            Shutdown();
         }
 
         private static void WrapException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
