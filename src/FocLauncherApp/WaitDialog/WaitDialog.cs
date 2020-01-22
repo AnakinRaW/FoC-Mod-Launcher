@@ -18,6 +18,7 @@ namespace FocLauncherApp.WaitDialog
         private readonly CancelHandler _cancelHandler;
         private bool _disposed;
         private WaitDialogWindowInternalService _provider;
+        private AppDomain _appDomain;
 
         public bool IsCancelled { get; private set; }
 
@@ -96,6 +97,7 @@ namespace FocLauncherApp.WaitDialog
 
                 if (Application.Current?.MainWindow != null)
                     Application.Current.MainWindow.Closed -= OnApplicationExit;
+                AppDomain.Unload(_appDomain);
             }
             _disposed = true;
         }
@@ -119,8 +121,7 @@ namespace FocLauncherApp.WaitDialog
         private void OnApplicationExit(object sender, EventArgs e)
         {
             ReleaseInstance(this);
-            _provider?.Dispose();
-            _provider = null;
+            Dispose(true);
         }
 
         private void EnsureInitialized()
@@ -148,9 +149,9 @@ namespace FocLauncherApp.WaitDialog
                 LoaderOptimization = LoaderOptimization.MultiDomain
             };
 
-            var appDomain = AppDomain.CreateDomain("BootstrapWaitDialog", null, info);
+            _appDomain = AppDomain.CreateDomain("BootstrapWaitDialog", null, info);
 
-            var provider = (WaitDialogWindowInternalService)appDomain.CreateInstanceFromAndUnwrap(
+            var provider = (WaitDialogWindowInternalService)_appDomain.CreateInstanceFromAndUnwrap(
                 typeof(WaitDialogWindowInternalService).Assembly.Location, typeof(WaitDialogWindowInternalService).FullName);
             _provider = provider;
             if (_provider == null)
