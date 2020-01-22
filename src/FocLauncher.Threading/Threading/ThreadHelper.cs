@@ -150,7 +150,11 @@ namespace FocLauncher.Threading
 
         public int Invoke(IInvokablePrivate invokable)
         {
-            return Application.Current.Dispatcher.Invoke(invokable.Invoke);
+            return ThreadHelper.JoinableTaskFactory.Run(async () =>
+            {
+                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                return invokable.Invoke();
+            });
         }
     }
 

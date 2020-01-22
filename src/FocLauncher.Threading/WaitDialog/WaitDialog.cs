@@ -17,7 +17,7 @@ namespace FocLauncher.WaitDialog
         private DialogShowArguments _dialogArguments;
         private DialogInitializationArguments _initializationArguments;
         private static int _currentInstanceId;
-        private readonly CancelHandler _cancelHandler;
+        private readonly ICancelHandler _cancelHandler;
         private bool _disposed;
         private WaitDialogWindowInternalService _provider;
 
@@ -169,13 +169,14 @@ namespace FocLauncher.WaitDialog
             var currentDomainSetup = AppDomain.CurrentDomain.SetupInformation;
             var info = new AppDomainSetup
             {
-                ApplicationBase = currentDomainSetup.ApplicationBase,
-                ConfigurationFile = currentDomainSetup.ConfigurationFile ?? string.Empty,
-                LoaderOptimization = LoaderOptimization.MultiDomain
+                ApplicationBase = @"C:\Users\Anakin\AppData\Roaming\FoC Launcher",
+                //ApplicationBase = currentDomainSetup.ApplicationBase,
+                //ConfigurationFile = currentDomainSetup.ConfigurationFile ?? string.Empty,
+                
+                LoaderOptimization = LoaderOptimization.MultiDomainHost
             };
 
             var appDomain = AppDomain.CreateDomain("InternalWaitDialog", null, info);
-
             var provider = (WaitDialogWindowInternalService)appDomain.CreateInstanceFromAndUnwrap(
                 typeof(WaitDialogWindowInternalService).Assembly.Location, typeof(WaitDialogWindowInternalService).FullName);
             _provider = provider;
@@ -197,7 +198,8 @@ namespace FocLauncher.WaitDialog
             return handle;
         }
 
-        private class CancelHandler : MarshalByRefObject, ICancelHandler
+        [Serializable]
+        internal class CancelHandler : ICancelHandler
         {
             private readonly WaitDialog _owner;
 

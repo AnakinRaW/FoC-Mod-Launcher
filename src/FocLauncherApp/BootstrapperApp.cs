@@ -50,7 +50,7 @@ namespace FocLauncherApp
                 true, 2, true, _cancellationTokenSource);
             try
             {
-                await Task.Delay(5000, _cancellationTokenSource.Token);
+                //await Task.Delay(5000, _cancellationTokenSource.Token);
                 if (_cancellationTokenSource.IsCancellationRequested)
                 {
                 }

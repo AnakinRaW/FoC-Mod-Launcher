@@ -30,7 +30,7 @@ namespace FocLauncherApp.Updater
         }
 
         public Version LatestVersion =>
-            _latestVersion ?? (_latestVersion = VersionUtilities.GetLatestVersion(VersionsServerPath, VersionType));
+            _latestVersion ??= VersionUtilities.GetLatestVersion(VersionsServerPath, VersionType);
 
         public async Task Update()
         {

@@ -101,12 +101,7 @@ namespace FocLauncher.ScreenUtilities
             }
             return num1;
         }
-
-        private static void OnDisplayChange(object sender, EventArgs e)
-        {
-            UpdateDisplays();
-        }
-
+        
         private static double ScaleLogicalToDevice(double dpi, double value)
         {
             return value * dpi / 96.0;

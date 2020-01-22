@@ -119,6 +119,7 @@ namespace FocLauncher.WaitDialog
 
         private void StartApplication()
         {
+            var t = AppDomain.CurrentDomain.FriendlyName;
             if (_application != null)
                 return;
             _application = new Application();

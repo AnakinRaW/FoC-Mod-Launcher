@@ -2,8 +2,7 @@
 
 namespace FocLauncher.WaitDialog
 {
-    [Serializable]
-    public class DialogInitializationArguments
+    public class DialogInitializationArguments : MarshalByRefObject
     {
         public string AppName { get; set; }
 

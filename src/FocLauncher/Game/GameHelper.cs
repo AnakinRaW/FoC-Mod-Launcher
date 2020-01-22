@@ -2,6 +2,7 @@
 using System.IO;
 using System.Windows;
 using FocLauncher.Utilities;
+using Microsoft.VisualStudio.PlatformUI;
 using Microsoft.Win32;
 
 namespace FocLauncher.Game

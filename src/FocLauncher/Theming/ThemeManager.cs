@@ -18,10 +18,7 @@ namespace FocLauncher.Theming
 
         private readonly ContentControl _mainWindow;
 
-        public static ThemeManager Instance
-        {
-            get => _instance ?? throw new InvalidOperationException("Theme Manager is not initialized");
-        }
+        public static ThemeManager Instance => _instance ?? throw new InvalidOperationException("Theme Manager is not initialized");
 
         public ObservableCollection<ITheme> Themes { get; }
 
