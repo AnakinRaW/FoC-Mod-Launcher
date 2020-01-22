@@ -11,12 +11,22 @@ namespace FocLauncherApp
 {
     public static class Bootstrapper
     {
+        public const string ApplicationBaseVariable = "APPLICATIONBASE";
+
+        private static readonly string _applicationBasePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "FoC Launcher");
+
+        private static readonly Lazy<string> ApplicationBasePathLazy = new Lazy<string>(() => Environment.GetEnvironmentVariable(ApplicationBaseVariable));
+
+        public static string ApplicationBasePath => ApplicationBasePathLazy.Value;
+
         [STAThread]
         [LoaderOptimization(LoaderOptimization.MultiDomainHost)]
         public static void Main()
         {
-            if (!Get46FromRegistry())
+            if (!Get48FromRegistry())
                 Environment.Exit(0);
+
+            SetApplicationBasePath();
 
             var splashDomain = AppDomain.CreateDomain("BootstrapDomain");
 
@@ -53,30 +63,10 @@ namespace FocLauncherApp
             }
         }
 
-        private static void OnUnhandledExceptionReceived(object sender, UnhandledExceptionEventArgs e)
+        private static void SetApplicationBasePath()
         {
-            if (e.ExceptionObject is Exception exception)
-            {
-                new ExceptionWindow(exception).ShowDialog();
-                if (e.IsTerminating)
-                    Environment.Exit(exception.HResult);
-            }       
+            Environment.SetEnvironmentVariable(ApplicationBaseVariable, _applicationBasePath, EnvironmentVariableTarget.Process);
         }
-
-        private static Assembly LauncherAppDomainResolveAssembly(object sender, ResolveEventArgs args)
-        {
-            var fields = args.Name.Split(',');
-            var name = fields[0];
-            var culture = fields[2];
-
-            if (name.EndsWith(".resources") && !culture.EndsWith("neutral"))
-                return null;
-
-            var files = Directory.EnumerateFiles(BootstrapperApp.AppDataPath, "*.dll", SearchOption.TopDirectoryOnly);
-            var dll = files.FirstOrDefault(x => $"{name}.dll".Equals(Path.GetFileName(x)));
-            return dll == null ? null : Assembly.LoadFile(dll);
-        }
-
 
         private static void StartBootstrapperApp()
         {
@@ -88,32 +78,54 @@ namespace FocLauncherApp
 
         private static void StartLauncher()
         {
-            // Make sure we reference to FocLauncher.Core.dll here the first time. Otherwise the update code might break because the assembly could not be resolved.
+            // Make sure we reference to FocLauncher.dll here the first time. Otherwise the update code might break because the assembly could not be resolved.
             var app = new LauncherApp();
             app.Run();
         }
 
-        private static bool Get46FromRegistry()
+        private static bool Get48FromRegistry()
         {
-            using (var ndpKey = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32)
-                .OpenSubKey("SOFTWARE\\Microsoft\\NET Framework Setup\\NDP\\v4\\Full\\"))
+            using var ndpKey = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32)
+                .OpenSubKey("SOFTWARE\\Microsoft\\NET Framework Setup\\NDP\\v4\\Full\\");
+            if (ndpKey?.GetValue("Release") != null)
             {
-                if (ndpKey?.GetValue("Release") != null)
-                {
-                    if (CheckFor46DotVersion((int) ndpKey.GetValue("Release")))
-                        return true;
-                    MessageBox.Show("Required .NetFramework Version 4.6 was not found");
-                    return false;
-                }
-
-                MessageBox.Show("Required .NetFramework Version 4.6 was not found");
+                if (CheckFor48DotVersion((int) ndpKey.GetValue("Release")))
+                    return true;
+                MessageBox.Show("Required .NetFramework Version 4.8 was not found");
                 return false;
+            }
+
+            MessageBox.Show("Required .NetFramework Version 4.8 was not found");
+            return false;
+        }
+
+        private static bool CheckFor48DotVersion(int releaseKey)
+        {
+            return releaseKey >= 528040;
+        }
+
+        private static void OnUnhandledExceptionReceived(object sender, UnhandledExceptionEventArgs e)
+        {
+            if (e.ExceptionObject is Exception exception)
+            {
+                new ExceptionWindow(exception).ShowDialog();
+                if (e.IsTerminating)
+                    Environment.Exit(exception.HResult);
             }
         }
 
-        private static bool CheckFor46DotVersion(int releaseKey)
+        private static Assembly LauncherAppDomainResolveAssembly(object sender, ResolveEventArgs args)
         {
-            return releaseKey >= 393295;
+            var fields = args.Name.Split(',');
+            var name = fields[0];
+            var culture = fields[2];
+
+            if (name.EndsWith(".resources") && !culture.EndsWith("neutral"))
+                return null;
+
+            var files = Directory.EnumerateFiles(ApplicationBasePath, "*.dll", SearchOption.TopDirectoryOnly);
+            var dll = files.FirstOrDefault(x => $"{name}.dll".Equals(Path.GetFileName(x)));
+            return dll == null ? null : Assembly.LoadFile(dll);
         }
     }
 }

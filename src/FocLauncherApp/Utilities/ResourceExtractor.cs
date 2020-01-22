@@ -4,6 +4,7 @@ using System.Linq;
 
 namespace FocLauncherApp.Utilities
 {
+    // TODO: Unify with Launcher Assembly Extractor
     public class ResourceExtractor
     {
         private string Assembly { get; }
@@ -24,6 +25,12 @@ namespace FocLauncherApp.Utilities
         {
             Assembly = typeof(Bootstrapper).Namespace;
             ResourcePath = resourcePath.TrimEnd('.') + @".";
+        }
+
+        public static void ExtractAssembly(string extractDirectory, string assemblyName)
+        {
+            var extractor = new ResourceExtractor("Library");
+            extractor.ExtractFilesIfRequired(extractDirectory, new[] { assemblyName });
         }
 
 
@@ -49,16 +56,13 @@ namespace FocLauncherApp.Utilities
         private void InternalExtractFile(string directory, string file)
         {
             var resource = Assembly + @"." + ResourcePath + file;
-            using (var stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream(resource))
-            {
-                if (stream == null || stream == Stream.Null)
-                    throw new ResourceExtractorException($"Unable to find the resource: {resource}");
+            using var stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream(resource);
+            
+            if (stream == null || stream == Stream.Null)
+                throw new ResourceExtractorException($"Unable to find the resource: {resource}");
 
-                using (var fileStream = new FileStream(Path.Combine(directory, file), FileMode.OpenOrCreate, FileAccess.Write))
-                {
-                    stream.CopyTo(fileStream);
-                }
-            }
+            using var fileStream = new FileStream(Path.Combine(directory, file), FileMode.OpenOrCreate, FileAccess.Write, FileShare.None);
+            stream.CopyTo(fileStream);
         }
     }
 }

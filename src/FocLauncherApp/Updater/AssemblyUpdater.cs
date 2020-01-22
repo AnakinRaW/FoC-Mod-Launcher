@@ -12,7 +12,7 @@ namespace FocLauncherApp.Updater
 
         public abstract string AssemblyName { get; }
 
-        public virtual string FilePath => Path.Combine(BootstrapperApp.AppDataPath, AssemblyName);
+        public virtual string FilePath => Path.Combine(Bootstrapper.ApplicationBasePath, AssemblyName);
 
         public virtual string VersionsServerPath => "master/Releases/AvailableUpdates.txt";
 

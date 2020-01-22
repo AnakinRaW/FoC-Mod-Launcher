@@ -176,7 +176,7 @@ namespace FocLauncher.WaitDialog
                 LoaderOptimization = LoaderOptimization.MultiDomainHost
             };
 
-            var appDomain = AppDomain.CreateDomain("InternalWaitDialog", null, info);
+            var appDomain = AppDomain.CreateDomain("LauncherWaitDialog", null, info);
             var provider = (WaitDialogWindowInternalService)appDomain.CreateInstanceFromAndUnwrap(
                 typeof(WaitDialogWindowInternalService).Assembly.Location, typeof(WaitDialogWindowInternalService).FullName);
             _provider = provider;

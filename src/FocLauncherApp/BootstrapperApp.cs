@@ -15,9 +15,7 @@ namespace FocLauncherApp
     public class BootstrapperApp : Application
     {
         public const string ServerUrl = "https://raw.githubusercontent.com/AnakinSklavenwalker/FoC-Mod-Launcher/";
-
-        public static string AppDataPath => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"FoC Launcher\");
-
+        
         private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
 
         protected override async void OnStartup(StartupEventArgs e)
@@ -42,6 +40,23 @@ namespace FocLauncherApp
             Shutdown();
         }
 
+        private void CheckForUpdate(AssemblyUpdater updater, in Queue<Func<Task>> actionQueue)
+        {
+            // TODO:
+            var hasConnection = NativeMethods.NativeMethods.InternetGetConnectedState(out _, 0);
+            var currentVersion = updater.CurrentVersion;
+
+            if (!hasConnection && currentVersion == null)
+            {
+                actionQueue.Enqueue(async () => await Task.Run(() => ResourceExtractor.ExtractAssembly(Bootstrapper.ApplicationBasePath, updater.AssemblyName)));
+                return;
+            }
+
+            var latestVersion = updater.LatestVersion;
+            if (currentVersion == null || latestVersion > currentVersion)
+                actionQueue.Enqueue(updater.Update);
+        }
+
         private async Task UpdateAsync(IEnumerable<Func<Task>> actions)
         {
             var twd = WaitDialogServiceWrapper.CreateInstance();
@@ -50,7 +65,7 @@ namespace FocLauncherApp
                 true, 2, true, _cancellationTokenSource);
             try
             {
-                await Task.Delay(5000, _cancellationTokenSource.Token);
+                //await Task.Delay(5000, _cancellationTokenSource.Token);
                 if (_cancellationTokenSource.IsCancellationRequested)
                 {
                 }
@@ -69,28 +84,6 @@ namespace FocLauncherApp
             if (cancelled)
                 return;
 
-        }
-
-        private void CheckForUpdate(AssemblyUpdater updater, in Queue<Func<Task>> actionQueue)
-        {
-            var hasConnection = NativeMethods.NativeMethods.InternetGetConnectedState(out _, 0);
-            var currentVersion = updater.CurrentVersion;
-
-            if (!hasConnection && currentVersion == null)
-            {
-                actionQueue.Enqueue(async () => await Task.Run(() => ExtractAssembly(updater.AssemblyName)));
-                return;
-            }
-
-            var latestVersion = updater.LatestVersion;
-            if (currentVersion == null || latestVersion > currentVersion)
-                actionQueue.Enqueue(updater.Update);
-        }
-
-        private static void ExtractAssembly(string assemblyName)
-        {
-            var extractor = new ResourceExtractor("Library");
-            extractor.ExtractFilesIfRequired(AppDataPath, new[] { assemblyName });
         }
 
         private static async Task WaitForMainWindow()
