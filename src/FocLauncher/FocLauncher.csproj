@@ -37,7 +37,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Resources\3xhumed-Mega-Games-Pack-22-Star-Wars-Empire-at-War-addon2-2.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\launcherIcon.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
@@ -184,16 +184,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\3xhumed-Mega-Games-Pack-22-Star-Wars-Empire-at-War-addon2-2.ico" />
+    <Resource Include="Resources\launcherIcon.ico" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\foc.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\HtmlAgilityPack.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\Newtonsoft.Json.dll" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FocLauncher.Core\FocLauncher.Core.csproj">
