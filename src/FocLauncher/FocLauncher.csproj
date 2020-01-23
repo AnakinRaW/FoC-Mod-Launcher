@@ -102,7 +102,6 @@
     <Compile Include="Versioning\ModVersion.cs" />
     <Compile Include="Versioning\SemanticVersion.cs" />
     <Compile Include="Utilities\HashProvider.cs" />
-    <Compile Include="Utilities\PathUtilities.cs" />
     <Compile Include="Utilities\ReusableResourceHolder.cs" />
     <Compile Include="Utilities\ReusableResourceStore.cs" />
     <Compile Include="Utilities\ReusableResourceStoreBase.cs" />

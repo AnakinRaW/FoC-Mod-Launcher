@@ -9,9 +9,6 @@ namespace FocLauncherApp.NativeMethods
         [return: MarshalAs(UnmanagedType.Bool)]
         internal delegate bool EnumMonitorsDelegate(IntPtr hMonitor, IntPtr hdcMonitor, ref RECT lprcMonitor, IntPtr dwData);
 
-        [DllImport("wininet.dll", SetLastError = true)]
-        internal static extern bool InternetGetConnectedState(out ConnectionStates lpdwFlags, int dwReserved);
-
         [DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
         internal static extern IntPtr GetActiveWindow();
 
@@ -98,17 +95,6 @@ namespace FocLauncherApp.NativeMethods
             var lpString = new StringBuilder(GetWindowTextLength(hwnd) + 1);
             GetWindowText(hwnd, lpString, lpString.Capacity);
             return lpString.ToString();
-        }
-
-        [Flags]
-        internal enum ConnectionStates
-        {
-            Modem = 0x1,
-            LAN = 0x2,
-            Proxy = 0x4,
-            RasInstalled = 0x10,
-            Offline = 0x20,
-            Configured = 0x40,
         }
     }
 }

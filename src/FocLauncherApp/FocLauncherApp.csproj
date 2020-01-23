@@ -64,8 +64,17 @@
     <Resource Include="Resources\Fonts\EaW-bold.ttf" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\FocLauncher.Core\ConnectionManager.cs">
+      <Link>Utilities\ConnectionManager.cs</Link>
+    </Compile>
     <Compile Include="..\FocLauncher.Core\LauncherConstants.cs">
       <Link>LauncherConstants.cs</Link>
+    </Compile>
+    <Compile Include="..\FocLauncher.Core\PathUtilities.cs">
+      <Link>Utilities\PathUtilities.cs</Link>
+    </Compile>
+    <Compile Include="..\FocLauncher.Core\WiniNet.cs">
+      <Link>NativeMethods\WiniNet.cs</Link>
     </Compile>
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="BootstrapperApp.cs" />

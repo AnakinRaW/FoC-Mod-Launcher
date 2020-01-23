@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,9 +14,16 @@ namespace FocLauncherApp
 {
     public class BootstrapperApp : Application
     {
+        // TODO: This should be a flexible server, not the final
         public const string ServerUrl = "https://raw.githubusercontent.com/AnakinSklavenwalker/FoC-Mod-Launcher/";
         
         private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+        private readonly ConnectionManager _connectionManager;
+
+        public BootstrapperApp()
+        {
+            _connectionManager = ConnectionManager.Instance;
+        }
 
         protected override async void OnStartup(StartupEventArgs e)
         {
@@ -26,9 +32,9 @@ namespace FocLauncherApp
             var actionQueue = new Queue<Func<Task>>();
 
             var launcherUpdater = new LauncherUpdater();
-            CheckForUpdate(launcherUpdater, in actionQueue);
+            CheckForUpdate(launcherUpdater, actionQueue);
             var themeUpdater = new ThemeUpdater();
-            CheckForUpdate(themeUpdater, in actionQueue);
+            CheckForUpdate(themeUpdater,  actionQueue);
             
             if (actionQueue.Any())
             {
@@ -41,10 +47,10 @@ namespace FocLauncherApp
             Shutdown();
         }
 
-        private void CheckForUpdate(AssemblyUpdater updater, in Queue<Func<Task>> actionQueue)
+        private async void CheckForUpdate(AssemblyUpdater updater, Queue<Func<Task>> actionQueue)
         {
-            // TODO:
-            var hasConnection = NativeMethods.NativeMethods.InternetGetConnectedState(out _, 0);
+            var hasConnection = await _connectionManager.CheckConnectionAsync();
+
             var currentVersion = updater.CurrentVersion;
 
             if (!hasConnection && currentVersion == null)
@@ -53,11 +59,12 @@ namespace FocLauncherApp
                 return;
             }
 
+            // TODO: Async
             var latestVersion = updater.LatestVersion;
             if (currentVersion == null || latestVersion > currentVersion)
                 actionQueue.Enqueue(updater.Update);
         }
-
+        
         private async Task UpdateAsync(IEnumerable<Func<Task>> actions)
         {
             var twd = WaitDialogServiceWrapper.CreateInstance();

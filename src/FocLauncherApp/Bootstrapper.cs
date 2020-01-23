@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security.AccessControl;
 using System.Windows;
 using FocLauncher;
 using FocLauncherApp.ExceptionHandling;
@@ -23,7 +24,6 @@ namespace FocLauncherApp
             SetAndInitApplicationBasePath();
 
             var splashDomain = AppDomain.CreateDomain("BootstrapDomain");
-
             // Gotta catch 'em all.
             AppDomain.CurrentDomain.UnhandledException += OnUnhandledExceptionReceived;
 
@@ -59,11 +59,17 @@ namespace FocLauncherApp
 
         private static void SetAndInitApplicationBasePath()
         {
+            var appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            if (!PathUtilities.UserHasDirectoryAccessRights(appDataPath, FileSystemRights.CreateDirectories))
+            {
+                var exception = new IOException($"Permission on '{appDataPath}' denied: Creating a new directory");
+                ShowExceptionDialogAndExit(exception);
+            }
+
             Environment.SetEnvironmentVariable(LauncherConstants.ApplicationBaseVariable, ApplicationBasePath, EnvironmentVariableTarget.Process);
 
             if (!Directory.Exists(LauncherConstants.ApplicationBasePath))
                 Directory.CreateDirectory(LauncherConstants.ApplicationBasePath);
-            // TODO: Write access
         }
 
         private static void StartBootstrapperApp()
@@ -79,6 +85,13 @@ namespace FocLauncherApp
             // Make sure we reference to FocLauncher.dll here the first time. Otherwise the update code might break because the assembly could not be resolved.
             var app = new LauncherApp();
             app.Run();
+        }
+
+        private static void ShowExceptionDialogAndExit(Exception exception, bool exit = true)
+        {
+            new ExceptionWindow(exception).ShowDialog();
+            if (exit)
+                Environment.Exit(exception.HResult);
         }
 
         private static bool Get48FromRegistry()
@@ -104,12 +117,8 @@ namespace FocLauncherApp
 
         private static void OnUnhandledExceptionReceived(object sender, UnhandledExceptionEventArgs e)
         {
-            if (e.ExceptionObject is Exception exception)
-            {
-                new ExceptionWindow(exception).ShowDialog();
-                if (e.IsTerminating)
-                    Environment.Exit(exception.HResult);
-            }
+            if (e.ExceptionObject is Exception exception) 
+                ShowExceptionDialogAndExit(exception, e.IsTerminating);
         }
 
         private static Assembly LauncherAppDomainResolveAssembly(object sender, ResolveEventArgs args)
