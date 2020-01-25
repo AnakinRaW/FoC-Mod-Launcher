@@ -101,6 +101,7 @@
     <Compile Include="Threading\ThreadHelper.cs" />
     <Compile Include="Updater\LauncherUpdater.cs" />
     <Compile Include="Updater\StreamExtensions.cs" />
+    <Compile Include="Updater\UpdateManager.cs" />
     <Compile Include="Updater\UpdateServer.cs" />
     <Compile Include="Updater\VersionUtilities.cs" />
     <Compile Include="Utilities\NullToVisibilityConverter.cs" />

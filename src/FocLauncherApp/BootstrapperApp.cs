@@ -29,6 +29,8 @@ namespace FocLauncherApp
         {
             base.OnStartup(e);
 
+            await new UpdateManager().CheckAndPerformUpdateAsync();
+
             var actionQueue = new Queue<Func<Task>>();
 
             var launcherUpdater = new LauncherUpdater();
