@@ -26,6 +26,7 @@ namespace FocLauncherApp
             var splashDomain = AppDomain.CreateDomain("BootstrapDomain");
             // Gotta catch 'em all.
             AppDomain.CurrentDomain.UnhandledException += OnUnhandledExceptionReceived;
+            splashDomain.AssemblyResolve += LauncherAppDomainResolveAssembly;
 
             try
             {

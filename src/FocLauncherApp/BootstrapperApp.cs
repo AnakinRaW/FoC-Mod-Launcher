@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using FocLauncher;
+using FocLauncher.Threading;
+using FocLauncher.WaitDialog;
 using FocLauncherApp.Updater;
 using FocLauncherApp.Utilities;
-using FocLauncherApp.WaitDialog;
 
 namespace FocLauncherApp
 {
@@ -69,30 +70,53 @@ namespace FocLauncherApp
         
         private async Task UpdateAsync(IEnumerable<Func<Task>> actions)
         {
-            var twd = WaitDialogServiceWrapper.CreateInstance();
-            bool cancelled;
-            twd.StartWaitDialog("FoC Launcher", "Please wait while the launcher is loading an update.", "Updating....",
-                true, 2, true, _cancellationTokenSource);
-            try
+            await ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
             {
-                //await Task.Delay(5000, _cancellationTokenSource.Token);
-                if (_cancellationTokenSource.IsCancellationRequested)
+                var data = new WaitDialogProgressData("Please wait while the launcher is loading an update.", "Updating....", null, true);
+
+
+                var s = WaitDialogFactory.Instance.StartWaitDialog("123", data, TimeSpan.FromSeconds(2));
+                try
+                {
+                    await Task.Delay(50000, s.UserCancellationToken);
+
+                    //foreach (var func in actionQueue) 
+                    //    await func();
+                }
+                catch (TaskCanceledException)
                 {
                 }
+                finally
+                {
+                    s.Dispose();
+                }
+            });
 
-                //foreach (var func in actionQueue) 
-                //    await func();
-            }
-            catch (TaskCanceledException)
-            {
-            }
-            finally
-            {
-                twd.EndWaitDialog(out cancelled);
-            }
 
-            if (cancelled)
-                return;
+            //var twd = WaitDialogServiceWrapper.CreateInstance();
+            //bool cancelled;
+            //twd.StartWaitDialog("FoC Launcher", "Please wait while the launcher is loading an update.", "Updating....",
+            //    true, 2, true, _cancellationTokenSource);
+            //try
+            //{
+            //    //await Task.Delay(5000, _cancellationTokenSource.Token);
+            //    if (_cancellationTokenSource.IsCancellationRequested)
+            //    {
+            //    }
+
+            //    //foreach (var func in actionQueue) 
+            //    //    await func();
+            //}
+            //catch (TaskCanceledException)
+            //{
+            //}
+            //finally
+            //{
+            //    twd.EndWaitDialog(out cancelled);
+            //}
+
+            //if (cancelled)
+            //    return;
 
         }
 
