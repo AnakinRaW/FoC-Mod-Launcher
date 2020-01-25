@@ -89,6 +89,7 @@
     <Compile Include="Updater\UpdateManager.cs" />
     <Compile Include="Updater\UpdateServer.cs" />
     <Compile Include="Updater\VersionUtilities.cs" />
+    <Compile Include="Utilities\AssemblyExtractor.cs" />
     <Compile Include="Utilities\NullToVisibilityConverter.cs" />
     <Compile Include="Utilities\ResourceExtractor.cs" />
     <Compile Include="Utilities\ResourceExtractorException.cs" />
@@ -122,7 +123,7 @@
     <ProjectReference Include="..\FocLauncher.Threading\FocLauncher.Threading.csproj">
       <Project>{162a7f9a-d855-44cf-b204-b10469f695bc}</Project>
       <Name>FocLauncher.Threading</Name>
-      <Private>False</Private>
+      <Private>True</Private>
     </ProjectReference>
     <ProjectReference Include="..\FocLauncher\FocLauncher.csproj">
       <Project>{511EA4F6-7C7A-4242-9986-16F28F126D11}</Project>

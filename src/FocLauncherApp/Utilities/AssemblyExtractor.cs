@@ -4,13 +4,15 @@ using System.IO;
 using System.Reflection;
 using System.Security.AccessControl;
 using System.Threading.Tasks;
+using FocLauncher;
 
-namespace FocLauncher
+namespace FocLauncherApp.Utilities
 {
     internal static class AssemblyExtractor
     {
         public static void WriteNecessaryAssembliesToDisk(string fileDirectory, params string[] assemblyFiles)
         {
+            var names = Assembly.GetExecutingAssembly().GetManifestResourceNames();
             foreach (var assemblyFile in assemblyFiles)
             {
                 foreach (var resourceName in Assembly.GetExecutingAssembly().GetManifestResourceNames())
@@ -48,8 +50,8 @@ namespace FocLauncher
                 }
 
 #endif
-                Task.Run(async () => await WriteToFileAsync(rs, filePath)).Wait();
-                // WriteToFile(rs, filePath);
+                //Task.Run(async () => await WriteToFileAsync(rs, filePath)).Wait();
+                WriteToFile(rs, filePath);
             }
             catch (Exception ex)
             {
