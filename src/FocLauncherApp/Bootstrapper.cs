@@ -40,16 +40,19 @@ namespace FocLauncherApp
             var s = new AppDomainSetup
             {
                 ApplicationName = "FoC Launcher",
+                ApplicationBase = LauncherConstants.ApplicationBasePath,
                 LoaderOptimization = LoaderOptimization.MultiDomainHost
             };
-
-
             var launcher = AppDomain.CreateDomain("LauncherDomain", null, s);
+            var location = Path.Combine(LauncherConstants.ApplicationBasePath, "FocLauncher.dll");
+            var t = (IsolatingLauncherBootstrapper) launcher.CreateInstanceFromAndUnwrap(location, 
+                typeof(IsolatingLauncherBootstrapper).FullName);
 
-            launcher.AssemblyResolve += LauncherAppDomainResolveAssembly;
+            //launcher.AssemblyResolve += LauncherAppDomainResolveAssembly;
             try
             {
-                launcher.DoCallBack(StartLauncher);
+                t.StartLauncherApplication();
+                //launcher.DoCallBack(StartLauncher);
             }
             finally
             {

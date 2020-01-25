@@ -19,7 +19,8 @@ namespace FocLauncherApp
         {
             // Since FocLauncher.Threading.dll and Microsoft.VisualStudio.Utilities.dll are used by the WaitWindow AppDomain we need to have them on disk
             // Make sure not to use async file writing as we need to block the app until necessary assembly are written to disk
-            AssemblyExtractor.WriteNecessaryAssembliesToDisk(LauncherConstants.ApplicationBasePath, "FocLauncher.Threading.dll", "Microsoft.VisualStudio.Utilities.dll");
+            AssemblyExtractor.WriteNecessaryAssembliesToDisk(LauncherConstants.ApplicationBasePath, 
+                "FocLauncher.Threading.dll", "Microsoft.VisualStudio.Utilities.dll", "FocLauncher.dll");
         }
 
         // TODO: This should be a flexible server, not the final
@@ -85,7 +86,7 @@ namespace FocLauncherApp
                 var s = WaitDialogFactory.Instance.StartWaitDialog("123", data, TimeSpan.FromSeconds(2));
                 try
                 {
-                    await Task.Delay(50000, s.UserCancellationToken);
+                    // await Task.Delay(50000, s.UserCancellationToken);
 
                     //foreach (var func in actionQueue) 
                     //    await func();

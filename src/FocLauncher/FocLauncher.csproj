@@ -64,6 +64,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IsolatingLauncherBootstrapper.cs" />
     <Compile Include="Controls\LauncherStatusBar.cs" />
     <Compile Include="Game\GameRunArguments.cs" />
     <Compile Include="Game\PetroglyphGame.cs" />

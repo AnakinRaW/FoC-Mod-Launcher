@@ -1,5 +1,5 @@
 ﻿<Weavers xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="FodyWeavers.xsd">
-  <Costura DisableCompression="true" >
+  <Costura DisableCompression="true">
     <!-- We don't want these assemblies as an embedded resource, as the shall be loaded by the CLR from a different location than this assembly-->
     <ExcludeAssemblies>
       FocLauncher
