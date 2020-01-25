@@ -3,8 +3,7 @@ using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Security.AccessControl;
-using FocLauncher.Utilities;
-using Microsoft.VisualStudio.PlatformUI;
+using System.Threading.Tasks;
 
 namespace FocLauncher
 {
@@ -25,7 +24,6 @@ namespace FocLauncher
 
         private static void WriteToFile(string resourceName, string matching, string fileDirectory)
         {
-            fileDirectory = fileDirectory.NormalizePath();
             if (!Directory.Exists(fileDirectory) || !PathUtilities.UserHasDirectoryAccessRights(fileDirectory, FileSystemRights.Modify))
                 throw new IOException("The Launcher's base directory does not exists");
             var filePath = Path.Combine(fileDirectory, matching);
@@ -48,13 +46,21 @@ namespace FocLauncher
                             return;
                     }
                 }
+
 #endif
-                WriteToFile(rs, filePath);
+                Task.Run(async () => await WriteToFileAsync(rs, filePath)).Wait();
+                // WriteToFile(rs, filePath);
             }
             catch (Exception ex)
             {
                 throw new IOException("Error writing necessary launcher files to disk!", ex);
             }
+        }
+
+        private static async Task WriteToFileAsync(Stream assemblyStream, string filePath)
+        {
+            using var fs = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None);
+            await assemblyStream.CopyToAsync(fs);
         }
 
         private static void WriteToFile(Stream assemblyStream, string filePath)
