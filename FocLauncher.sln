@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FocLauncher.Theming", "src\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleTheme", "src\SampleTheme\SampleTheme.csproj", "{A2693EF1-ABAE-4713-91BC-7D2BEA3D50DF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FocLauncherApp", "src\FocLauncherApp\FocLauncherApp.csproj", "{91330941-11BE-41AA-BD4C-8D3A70399395}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FocLauncherHost", "src\FocLauncherHost\FocLauncherHost.csproj", "{91330941-11BE-41AA-BD4C-8D3A70399395}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FocLauncher.Threading", "src\FocLauncher.Threading\FocLauncher.Threading.csproj", "{162A7F9A-D855-44CF-B204-B10469F695BC}"
 EndProject
