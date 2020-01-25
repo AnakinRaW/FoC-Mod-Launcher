@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
@@ -174,8 +175,14 @@ namespace FocLauncher.WaitDialog
             };
 
             _appDomain = AppDomain.CreateDomain("LauncherWaitDialog", null, info);
-            var provider = (WaitDialogWindowInternalService) _appDomain.CreateInstanceFromAndUnwrap(
-                typeof(WaitDialogWindowInternalService).Assembly.Location, typeof(WaitDialogWindowInternalService).FullName);
+
+            // Since we may execute this code from an embedded assembly typeof().Assembly.Location might return "". 
+            // Thus we need to tell the AppDomain where to look at on disk.
+            var location = Path.Combine(LauncherConstants.ApplicationBasePath, GetType().Assembly.GetName().Name) + ".dll";
+            if (!File.Exists(location))
+                throw new FileNotFoundException("Required assembly not found!", location);
+
+            var provider = (WaitDialogWindowInternalService) _appDomain.CreateInstanceFromAndUnwrap(location, typeof(WaitDialogWindowInternalService).FullName);
             _provider = provider;
             if (_provider == null)
                 throw new InvalidOperationException("Could not create WaitDialogWindowInternal");
