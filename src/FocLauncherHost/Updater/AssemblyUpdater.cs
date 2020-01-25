@@ -35,7 +35,7 @@ namespace FocLauncherHost.Updater
 
         public async Task Update()
         {
-            var server = new UpdateServer(BootstrapperApp.ServerUrl);
+            var server = new UpdateServer(HostApplication.ServerUrl);
             if (await server.IsRunning() == false)
                 return;
             var tempFilePath = FilePath + ".new";

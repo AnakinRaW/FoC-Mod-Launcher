@@ -10,7 +10,7 @@ using Microsoft.Win32;
 
 namespace FocLauncherHost
 {
-    public static class Bootstrapper
+    public static class Program
     {
         private static readonly string ApplicationBasePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "FoC Launcher");
 
@@ -30,7 +30,7 @@ namespace FocLauncherHost
 
             try
             {
-                splashDomain.DoCallBack(StartBootstrapperApp);
+                splashDomain.DoCallBack(RunHostApplication);
             }
             finally
             {
@@ -76,9 +76,9 @@ namespace FocLauncherHost
                 Directory.CreateDirectory(LauncherConstants.ApplicationBasePath);
         }
 
-        private static void StartBootstrapperApp()
+        private static void RunHostApplication()
         {
-            var app = new BootstrapperApp();
+            var app = new HostApplication();
             app.ShutdownMode = ShutdownMode.OnExplicitShutdown;
             app.Run(new SplashScreen());
             app.Shutdown(0);

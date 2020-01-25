@@ -41,6 +41,7 @@
     <None Include="Readme.md" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppDomainHelper.cs" />
     <Compile Include="ConnectionManager.cs" />
     <Compile Include="LauncherConstants.cs" />
     <Compile Include="PathUtilities.cs" />

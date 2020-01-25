@@ -55,7 +55,7 @@
     <LangVersion>8</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>FocLauncherHost.Bootstrapper</StartupObject>
+    <StartupObject>FocLauncherHost.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Resources\icon.ico</ApplicationIcon>
@@ -64,8 +64,8 @@
     <Resource Include="Resources\Fonts\EaW-bold.ttf" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Bootstrapper.cs" />
-    <Compile Include="BootstrapperApp.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="HostApplication.cs" />
     <Compile Include="ExceptionHandling\ExceptionToTextConverter.cs" />
     <Compile Include="ExceptionHandling\ExceptionWindow.xaml.cs">
       <DependentUpon>ExceptionWindow.xaml</DependentUpon>
@@ -137,9 +137,6 @@
     <Resource Include="Resources\splash.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Library\FocLauncher.Theming.dll" />
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
       <Visible>False</Visible>
       <ProductName>Microsoft .NET Framework 4.7.2 %28x86 and x64%29</ProductName>
@@ -153,9 +150,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\sadTrooper.jpeg" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Library\FocLauncher.Core.dll" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

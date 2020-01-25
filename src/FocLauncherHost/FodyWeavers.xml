@@ -2,8 +2,6 @@
   <Costura DisableCompression="true">
     <!-- We don't want these assemblies as an embedded resource, as the shall be loaded by the CLR from a different location than this assembly-->
     <ExcludeAssemblies>
-      FocLauncher
-      FocLauncher.Theming
     </ExcludeAssemblies>
   </Costura>
 </Weavers>

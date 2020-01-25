@@ -19,7 +19,7 @@ namespace FocLauncherHost.Updater
 
         private static void GetVersionsOnline(string versionsRelativePath)
         {
-            var server = new UpdateServer(BootstrapperApp.ServerUrl);
+            var server = new UpdateServer(HostApplication.ServerUrl);
             var data = server.DownloadString(versionsRelativePath).ToStream();
             _downloadAttempted = true;
             SerializeVersions(data);

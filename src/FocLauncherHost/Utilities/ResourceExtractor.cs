@@ -13,7 +13,7 @@ namespace FocLauncherHost.Utilities
 
         public ResourceExtractor()
         {
-            Assembly = typeof(Bootstrapper).Namespace;
+            Assembly = typeof(Program).Namespace;
             ResourcePath = "";
         }
 
@@ -23,7 +23,7 @@ namespace FocLauncherHost.Utilities
         /// <param name="resourcePath">Do not enter a "." at last character</param>
         public ResourceExtractor(string resourcePath)
         {
-            Assembly = typeof(Bootstrapper).Namespace;
+            Assembly = typeof(Program).Namespace;
             ResourcePath = resourcePath.TrimEnd('.') + @".";
         }
 
