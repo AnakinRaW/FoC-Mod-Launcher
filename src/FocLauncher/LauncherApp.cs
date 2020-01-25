@@ -25,8 +25,6 @@ namespace FocLauncher
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            throw new NullReferenceException();
-
             Exit += LauncherApp_Exit;
             DispatcherUnhandledException += WrapException;
 
