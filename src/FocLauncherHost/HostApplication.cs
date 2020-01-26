@@ -43,11 +43,12 @@ namespace FocLauncherHost
             var actionQueue = new Queue<Func<Task>>();
 
             var launcherUpdater = new LauncherUpdater();
-            CheckForUpdate(launcherUpdater, actionQueue);
+            await CheckForUpdate(launcherUpdater, actionQueue);
             var themeUpdater = new ThemeUpdater();
-            CheckForUpdate(themeUpdater,  actionQueue);
+            await CheckForUpdate(themeUpdater,  actionQueue);
             
-            if (actionQueue.Any())
+            // TODO: Invert
+            if (!actionQueue.Any())
             {
                 await WaitForMainWindow();
                 await Current.Dispatcher.Invoke(async () => await UpdateAsync(actionQueue), DispatcherPriority.Background);
@@ -58,7 +59,7 @@ namespace FocLauncherHost
             Shutdown();
         }
 
-        private async void CheckForUpdate(AssemblyUpdater updater, Queue<Func<Task>> actionQueue)
+        private async Task CheckForUpdate(AssemblyUpdater updater, Queue<Func<Task>> actionQueue)
         {
             var hasConnection = await _connectionManager.CheckConnectionAsync();
 
