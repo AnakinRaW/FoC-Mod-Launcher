@@ -19,6 +19,7 @@ namespace FocLauncherHost
         {
             // Since FocLauncher.Threading.dll and Microsoft.VisualStudio.Utilities.dll are used by the WaitWindow AppDomain we need to have them on disk
             // Make sure not to use async file writing as we need to block the app until necessary assembly are written to disk
+            // TODO: Do not extract Launcher and Theming here
             AssemblyExtractor.WriteNecessaryAssembliesToDisk(LauncherConstants.ApplicationBasePath, 
                 "FocLauncher.Threading.dll", "Microsoft.VisualStudio.Utilities.dll", "FocLauncher.dll", "FocLauncher.Theming.dll");
         }
@@ -65,6 +66,7 @@ namespace FocLauncherHost
 
             var currentVersion = updater.CurrentVersion;
 
+            //TODO: Extract always when the embedded version is higher
             if (!hasConnection && currentVersion == null)
             {
                 actionQueue.Enqueue(async () => await Task.Run(() => ResourceExtractor.ExtractAssembly(LauncherConstants.ApplicationBasePath, updater.AssemblyName)));

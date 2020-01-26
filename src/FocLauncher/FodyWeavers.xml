@@ -1,6 +1,5 @@
 ﻿<Weavers xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="FodyWeavers.xsd">
-  <!--DisableCleanup='true'-->
-  <Costura IncludeDebugSymbols='false' DisableCompression='true'>
+  <Costura IncludeDebugSymbols='false' IgnoreSatelliteAssemblies='true'>
     <ExcludeAssemblies>
       FocLauncher.Theming
     </ExcludeAssemblies>

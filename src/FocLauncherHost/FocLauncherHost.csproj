@@ -70,18 +70,9 @@
     <Compile Include="ExceptionHandling\ExceptionWindow.xaml.cs">
       <DependentUpon>ExceptionWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="NativeMethods\DeviceCaps.cs" />
-    <Compile Include="NativeMethods\GuiThreadInfo.cs" />
-    <Compile Include="NativeMethods\Gwl.cs" />
-    <Compile Include="NativeMethods\MonitorDpiType.cs" />
-    <Compile Include="NativeMethods\MonitorInfo.cs" />
-    <Compile Include="NativeMethods\MonitorOpts.cs" />
-    <Compile Include="NativeMethods\ProcessDpiAwareness.cs" />
-    <Compile Include="NativeMethods\RECT.cs" />
     <Compile Include="Updater\AssemblyUpdater.cs" />
     <Compile Include="Updater\ThemeUpdater.cs" />
     <Compile Include="ExceptionHandling\StackTraceToShortMessageConverter.cs" />
-    <Compile Include="NativeMethods\NativeMethods.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Updater\LauncherUpdater.cs" />

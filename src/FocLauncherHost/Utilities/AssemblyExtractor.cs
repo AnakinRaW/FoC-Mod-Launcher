@@ -6,15 +6,13 @@ using System.Reflection;
 using System.Security.AccessControl;
 using System.Threading.Tasks;
 using FocLauncher;
-using Microsoft.VisualStudio.PlatformUI;
 
 namespace FocLauncherHost.Utilities
 {
     internal static class AssemblyExtractor
     {
-        public static void WriteNecessaryAssembliesToDisk(string fileDirectory, params string[] assemblyFiles)
+        public static async Task WriteNecessaryAssembliesToDiskAsync(string fileDirectory, params string[] assemblyFiles)
         {
-            var names = Assembly.GetExecutingAssembly().GetManifestResourceNames();
             foreach (var assemblyFile in assemblyFiles)
             {
                 foreach (var resourceName in Assembly.GetExecutingAssembly().GetManifestResourceNames())
@@ -23,12 +21,17 @@ namespace FocLauncherHost.Utilities
                             CompareOptions.IgnoreCase) < 0)
                         continue;
                     var compressed = resourceName.EndsWith(".compressed");
-                    WriteToFile(resourceName, assemblyFile, fileDirectory, compressed);
+                    await WriteToFileAsync(resourceName, assemblyFile, fileDirectory, compressed);
                 }
             }
         }
 
-        private static void WriteToFile(string resourceName, string matching, string fileDirectory, bool compressed)
+        public static void WriteNecessaryAssembliesToDisk(string fileDirectory, params string[] assemblyFiles)
+        {
+            Task.Run(async () => await WriteNecessaryAssembliesToDiskAsync(fileDirectory, assemblyFiles)).Wait();
+        }
+
+        private static async Task WriteToFileAsync(string resourceName, string matching, string fileDirectory, bool compressed)
         {
             if (!Directory.Exists(fileDirectory) || !PathUtilities.UserHasDirectoryAccessRights(fileDirectory, FileSystemRights.Modify))
                 throw new IOException("The Launcher's base directory does not exists");
@@ -42,6 +45,7 @@ namespace FocLauncherHost.Utilities
                 if (File.Exists(filePath))
                 {
                     var resourceAssemblyBytes = rs.ToByteArray(Encoding.UTF8, true, true);
+                    // TODO: Try avoid loading the assembly
                     var tmpAssembly = Assembly.ReflectionOnlyLoad(resourceAssemblyBytes);
                     var tmpVersion = tmpAssembly.GetName().Version;
 
@@ -52,10 +56,8 @@ namespace FocLauncherHost.Utilities
                             return;
                     }
                 }
-
 #endif
-                //Task.Run(async () => await WriteToFileAsync(rs, filePath)).Wait();
-                //WriteToFile(rs, filePath, compressed);
+                await WriteToFileAsync(rs, filePath, compressed);
             }
             catch (Exception ex)
             {
@@ -75,20 +77,6 @@ namespace FocLauncherHost.Utilities
                 assemblyStream.Position = 0;
             }
             await assemblyStream.CopyToAsync(fs);
-        }
-
-        private static void WriteToFile(Stream assemblyStream, string filePath, bool decompress)
-        {
-            using var fs = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None);
-            if (decompress)
-            {
-                using var decompressionStream = new DeflateStream(assemblyStream, CompressionMode.Decompress);
-                var memoryStream = new MemoryStream();
-                decompressionStream.CopyTo(memoryStream);
-                assemblyStream = memoryStream;
-                assemblyStream.Position = 0;
-            }
-            assemblyStream.CopyTo(fs);
         }
     }
 }
