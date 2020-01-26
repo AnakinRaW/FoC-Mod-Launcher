@@ -23,19 +23,21 @@ namespace FocLauncherHost
 
             SetAndInitApplicationBasePath();
 
-            var splashDomain = AppDomain.CreateDomain("BootstrapDomain");
-            // Gotta catch 'em all.
-            AppDomain.CurrentDomain.UnhandledException += OnUnhandledExceptionReceived;
-            splashDomain.AssemblyResolve += LauncherAppDomainResolveAssembly;
+            RunHostApplication();
 
-            try
-            {
-                splashDomain.DoCallBack(RunHostApplication);
-            }
-            finally
-            {
-                AppDomain.Unload(splashDomain);
-            }
+            //var splashDomain = AppDomain.CreateDomain("BootstrapDomain");
+            //// Gotta catch 'em all.
+            //AppDomain.CurrentDomain.UnhandledException += OnUnhandledExceptionReceived;
+            //splashDomain.AssemblyResolve += LauncherAppDomainResolveAssembly;
+
+            //try
+            //{
+            //    splashDomain.DoCallBack(RunHostApplication);
+            //}
+            //finally
+            //{
+            //    AppDomain.Unload(splashDomain);
+            //}
 
             var s = new AppDomainSetup
             {
