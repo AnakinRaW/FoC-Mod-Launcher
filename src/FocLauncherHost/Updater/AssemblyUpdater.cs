@@ -19,6 +19,7 @@ namespace FocLauncherHost.Updater
 
         protected abstract VersionType VersionType { get;  }
 
+        // TODO: Use assembly Version
         [CanBeNull]
         public Version CurrentVersion
         {

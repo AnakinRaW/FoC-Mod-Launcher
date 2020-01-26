@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
+using System.IO.Compression;
 using System.Reflection;
 using System.Security.AccessControl;
 using System.Threading.Tasks;
 using FocLauncher;
+using Microsoft.VisualStudio.PlatformUI;
 
 namespace FocLauncherHost.Utilities
 {
@@ -17,14 +19,16 @@ namespace FocLauncherHost.Utilities
             {
                 foreach (var resourceName in Assembly.GetExecutingAssembly().GetManifestResourceNames())
                 {
-                    if (CultureInfo.InvariantCulture.CompareInfo.IndexOf(resourceName, assemblyFile, CompareOptions.IgnoreCase) < 0)
+                    if (CultureInfo.InvariantCulture.CompareInfo.IndexOf(resourceName, assemblyFile,
+                            CompareOptions.IgnoreCase) < 0)
                         continue;
-                    WriteToFile(resourceName, assemblyFile, fileDirectory);
+                    var compressed = resourceName.EndsWith(".compressed");
+                    WriteToFile(resourceName, assemblyFile, fileDirectory, compressed);
                 }
             }
         }
 
-        private static void WriteToFile(string resourceName, string matching, string fileDirectory)
+        private static void WriteToFile(string resourceName, string matching, string fileDirectory, bool compressed)
         {
             if (!Directory.Exists(fileDirectory) || !PathUtilities.UserHasDirectoryAccessRights(fileDirectory, FileSystemRights.Modify))
                 throw new IOException("The Launcher's base directory does not exists");
@@ -51,7 +55,7 @@ namespace FocLauncherHost.Utilities
 
 #endif
                 //Task.Run(async () => await WriteToFileAsync(rs, filePath)).Wait();
-                WriteToFile(rs, filePath);
+                //WriteToFile(rs, filePath, compressed);
             }
             catch (Exception ex)
             {
@@ -59,15 +63,31 @@ namespace FocLauncherHost.Utilities
             }
         }
 
-        private static async Task WriteToFileAsync(Stream assemblyStream, string filePath)
+        private static async Task WriteToFileAsync(Stream assemblyStream, string filePath, bool decompress)
         {
             using var fs = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None);
+            if (decompress)
+            {
+                using var decompressionStream = new DeflateStream(assemblyStream, CompressionMode.Decompress);
+                var memoryStream = new MemoryStream();
+                await decompressionStream.CopyToAsync(memoryStream);
+                assemblyStream = memoryStream;
+                assemblyStream.Position = 0;
+            }
             await assemblyStream.CopyToAsync(fs);
         }
 
-        private static void WriteToFile(Stream assemblyStream, string filePath)
+        private static void WriteToFile(Stream assemblyStream, string filePath, bool decompress)
         {
             using var fs = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None);
+            if (decompress)
+            {
+                using var decompressionStream = new DeflateStream(assemblyStream, CompressionMode.Decompress);
+                var memoryStream = new MemoryStream();
+                decompressionStream.CopyTo(memoryStream);
+                assemblyStream = memoryStream;
+                assemblyStream.Position = 0;
+            }
             assemblyStream.CopyTo(fs);
         }
     }
