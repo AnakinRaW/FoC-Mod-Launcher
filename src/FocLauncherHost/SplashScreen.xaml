@@ -5,6 +5,17 @@
              WindowStartupLocation="CenterScreen" WindowStyle="None" AllowsTransparency="True" Background="Transparent">
     <FrameworkElement.Resources>
         <FontFamily x:Key="EaWFont">pack://application:,,,./Resources/Fonts/EaW-bold.ttf#Empire At War</FontFamily>
+
+        <Storyboard x:Key="HideAnimation">
+            <DoubleAnimation Storyboard.TargetProperty="Opacity" Duration="0:0:0.5" To="0.0">
+                <DoubleAnimation.EasingFunction>
+                    <ExponentialEase EasingMode="EaseOut"/>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility">
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.5" Value="{x:Static Visibility.Hidden}"/>
+            </ObjectAnimationUsingKeyFrames>
+        </Storyboard>
     </FrameworkElement.Resources>
     <Grid>
         <Grid.RowDefinitions>

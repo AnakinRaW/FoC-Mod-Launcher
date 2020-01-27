@@ -76,7 +76,7 @@ namespace FocLauncherHost
         {
             var app = new HostApplication();
             app.ShutdownMode = ShutdownMode.OnExplicitShutdown;
-            app.Run(new SplashScreen());
+            app.Run();
             app.Shutdown(0);
         }
 

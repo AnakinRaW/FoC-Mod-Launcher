@@ -6,6 +6,10 @@ using System.Reflection;
 using System.Security.AccessControl;
 using System.Threading.Tasks;
 using FocLauncher;
+#if !DEBUG
+    using Mono.Cecil;
+#endif
+
 
 namespace FocLauncherHost.Utilities
 {
@@ -41,23 +45,28 @@ namespace FocLauncherHost.Utilities
                 using var rs = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName);
                 if (rs == null)
                     throw new NullReferenceException(nameof(rs));
+
+                var assemblyStream = new MemoryStream();
+                await rs.CopyToAsync(assemblyStream);
+                if (compressed)
+                    assemblyStream = await rs.DecompressAsync();
+                assemblyStream.Position = 0;
 #if !DEBUG
                 if (File.Exists(filePath))
                 {
-                    var resourceAssemblyBytes = rs.ToByteArray(Encoding.UTF8, true, true);
-                    // TODO: Try avoid loading the assembly
-                    var tmpAssembly = Assembly.ReflectionOnlyLoad(resourceAssemblyBytes);
-                    var tmpVersion = tmpAssembly.GetName().Version;
+                    var embeddedAssembly = AssemblyDefinition.ReadAssembly(assemblyStream);
+                    var embeddedAssemblyVersion = embeddedAssembly.Name.Version;
 
                     if (File.ReadAllBytes(filePath).Length > 0)
                     {
                         var existingVersion = AssemblyName.GetAssemblyName(filePath).Version;
-                        if (tmpVersion <= existingVersion)
+                        if (embeddedAssemblyVersion <= existingVersion)
                             return;
                     }
+                    assemblyStream.Position = 0;
                 }
 #endif
-                await WriteToFileAsync(rs, filePath, compressed);
+                await WriteToFileAsync(assemblyStream, filePath);
             }
             catch (Exception ex)
             {
@@ -65,18 +74,19 @@ namespace FocLauncherHost.Utilities
             }
         }
 
-        private static async Task WriteToFileAsync(Stream assemblyStream, string filePath, bool decompress)
+        private static async Task WriteToFileAsync(Stream assemblyStream, string filePath)
         {
             using var fs = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None);
-            if (decompress)
-            {
-                using var decompressionStream = new DeflateStream(assemblyStream, CompressionMode.Decompress);
-                var memoryStream = new MemoryStream();
-                await decompressionStream.CopyToAsync(memoryStream);
-                assemblyStream = memoryStream;
-                assemblyStream.Position = 0;
-            }
             await assemblyStream.CopyToAsync(fs);
+        }
+
+        private static async Task<MemoryStream> DecompressAsync(this Stream stream)
+        {
+            stream.Position = 0;
+            using var decompressionStream = new DeflateStream(stream, CompressionMode.Decompress);
+            var memoryStream = new MemoryStream();
+            await decompressionStream.CopyToAsync(memoryStream);
+            return memoryStream;
         }
     }
 }

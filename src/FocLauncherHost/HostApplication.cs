@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -11,6 +12,7 @@ using FocLauncher.Threading;
 using FocLauncher.WaitDialog;
 using FocLauncherHost.Updater;
 using FocLauncherHost.Utilities;
+using Microsoft.VisualStudio.Threading;
 
 namespace FocLauncherHost
 {
@@ -22,12 +24,14 @@ namespace FocLauncherHost
             // Make sure not to use async file writing as we need to block the app until necessary assembly are written to disk
             // TODO: Do not extract Launcher and Theming here
             AssemblyExtractor.WriteNecessaryAssembliesToDisk(LauncherConstants.ApplicationBasePath, 
-                "FocLauncher.Threading.dll", "Microsoft.VisualStudio.Utilities.dll", "FocLauncher.dll", "FocLauncher.Theming.dll");
+                "FocLauncher.Threading.dll", "Microsoft.VisualStudio.Utilities.dll");
         }
 
         // TODO: This should be a flexible server, not the final
         public const string ServerUrl = "https://raw.githubusercontent.com/AnakinSklavenwalker/FoC-Mod-Launcher/";
-        
+
+
+
         private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
         private readonly ConnectionManager _connectionManager;
 
@@ -36,30 +40,80 @@ namespace FocLauncherHost
             _connectionManager = ConnectionManager.Instance;
         }
 
-        protected override async void OnStartup(StartupEventArgs e)
+        protected override /*async*/ void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
 
-            await new UpdateManager().CheckAndPerformUpdateAsync();
+            MainWindow = new SplashScreen();
+            PrepareAndUpdateLauncherAsync().Forget();
 
-            var actionQueue = new Queue<Func<Task>>();
+            //await AssemblyExtractor.WriteNecessaryAssembliesToDiskAsync(LauncherConstants.ApplicationBasePath, "FocLauncher.dll", "FocLauncher.Theming.dll");
 
-            var launcherUpdater = new LauncherUpdater();
-            await CheckForUpdate(launcherUpdater, actionQueue);
-            var themeUpdater = new ThemeUpdater();
-            await CheckForUpdate(themeUpdater,  actionQueue);
+            //await new UpdateManager().CheckAndPerformUpdateAsync();
+
+            //var actionQueue = new Queue<Func<Task>>();
+
+            //var launcherUpdater = new LauncherUpdater();
+            //await CheckForUpdate(launcherUpdater, actionQueue);
+            //var themeUpdater = new ThemeUpdater();
+            //await CheckForUpdate(themeUpdater,  actionQueue);
             
-            // TODO: Invert
-            if (!actionQueue.Any())
-            {
-                await WaitForMainWindow();
-                await Current.Dispatcher.Invoke(async () => await UpdateAsync(actionQueue), DispatcherPriority.Background);
-            }
+            //if (!actionQueue.Any())
+            //{
+            //    await WaitForMainWindow();
+            //    await Current.Dispatcher.Invoke(async () => await UpdateAsync(actionQueue), DispatcherPriority.Background);
+            //}
 
             //MainWindow?.Dispatcher.InvokeShutdown();
             //Dispatcher.InvokeShutdown();
-            Shutdown();
+            //Shutdown();
         }
+
+        internal async Task PrepareAndUpdateLauncherAsync()
+        {
+            var t = AssemblyExtractor.WriteNecessaryAssembliesToDiskAsync(LauncherConstants.ApplicationBasePath, "FocLauncher.dll", "FocLauncher.Theming.dll");
+            
+            await ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
+            {
+                var data = new WaitDialogProgressData("Please wait while the launcher is loading an update.", "Updating....", null, true);
+
+                var s = WaitDialogFactory.Instance.StartWaitDialog("FoC Launcher", data, TimeSpan.FromSeconds(2));
+                try
+                {
+                    Task.WhenAll(t, Task.Delay(200)).ContinueWith(async task => await ShowMainWindowAsync(), s.UserCancellationToken,
+                        TaskContinuationOptions.OnlyOnRanToCompletion, TaskScheduler.FromCurrentSynchronizationContext()).Forget();
+                    await new UpdateManager().CheckAndPerformUpdateAsync();
+                    await Task.Delay(5000, s.UserCancellationToken);
+                }
+                catch (TaskCanceledException)
+                {
+                }
+                finally
+                {
+                    s.Dispose();
+                    // TODO: Event of the update manager
+                    await HideSplashScreenAnimatedAsync();
+                    Shutdown();
+                }
+            });
+        }
+
+        private async Task ShowMainWindowAsync()
+        {
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+            MainWindow?.Show();
+        }
+
+        private async Task HideSplashScreenAnimatedAsync()
+        {
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+            if (MainWindow is SplashScreen splashScreen)
+            {
+                await Task.Delay(500);
+                await splashScreen.HideAnimationAsync();
+            }
+        }
+
 
         private async Task CheckForUpdate(AssemblyUpdater updater, Queue<Func<Task>> actionQueue)
         {
@@ -70,7 +124,8 @@ namespace FocLauncherHost
             //TODO: Extract always when the embedded version is higher
             if (!hasConnection && currentVersion == null)
             {
-                actionQueue.Enqueue(async () => await Task.Run(() => ResourceExtractor.ExtractAssembly(LauncherConstants.ApplicationBasePath, updater.AssemblyName)));
+                actionQueue.Enqueue(async () => await AssemblyExtractor.WriteNecessaryAssembliesToDiskAsync(LauncherConstants.ApplicationBasePath, updater.AssemblyName));
+                //actionQueue.Enqueue(async () => await Task.Run(() => ResourceExtractor.ExtractAssembly(LauncherConstants.ApplicationBasePath, updater.AssemblyName)));
                 return;
             }
 
@@ -90,10 +145,10 @@ namespace FocLauncherHost
                 var s = WaitDialogFactory.Instance.StartWaitDialog("123", data, TimeSpan.FromSeconds(2));
                 try
                 {
-                    await Task.Delay(50000, s.UserCancellationToken);
+                    foreach (var func in actions)
+                        await func();
 
-                    //foreach (var func in actionQueue) 
-                    //    await func();
+                    await Task.Delay(50000, s.UserCancellationToken);
                 }
                 catch (TaskCanceledException)
                 {
