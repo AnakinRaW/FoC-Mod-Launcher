@@ -70,16 +70,12 @@
     <Compile Include="ExceptionHandling\ExceptionWindow.xaml.cs">
       <DependentUpon>ExceptionWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Updater\AssemblyUpdater.cs" />
-    <Compile Include="Updater\ThemeUpdater.cs" />
     <Compile Include="ExceptionHandling\StackTraceToShortMessageConverter.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Updater\LauncherUpdater.cs" />
     <Compile Include="Updater\StreamExtensions.cs" />
     <Compile Include="Updater\UpdateManager.cs" />
     <Compile Include="Updater\UpdateServer.cs" />
-    <Compile Include="Updater\VersionUtilities.cs" />
     <Compile Include="Utilities\AssemblyExtractor.cs" />
     <Compile Include="Utilities\NullToVisibilityConverter.cs" />
     <Compile Include="Utilities\UrlCombine.cs" />
