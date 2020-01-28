@@ -15,8 +15,6 @@ namespace FocLauncherHost.Updater
             ServerRootAddress = baseAddress;
         }
 
-        public async Task<bool> IsRunning() => await UrlExists(string.Empty);
-
         public string DownloadString(string resource)
         {
             string result;
@@ -35,7 +33,7 @@ namespace FocLauncherHost.Updater
             return result;
         }
 
-        public async Task<bool> UrlExists(string resource)
+        public async Task<bool> UrlExistsAsync(string resource)
         {
             var request = (HttpWebRequest)WebRequest.Create(ServerRootAddress + resource);
             request.Method = "HEAD";
@@ -54,7 +52,7 @@ namespace FocLauncherHost.Updater
             return true;
         }
 
-        public async Task DownloadFile(string resource, string storagePath)
+        public async Task DownloadFileAsync(string resource, string storagePath)
         {
             if (resource == null || storagePath == null)
                 return;
