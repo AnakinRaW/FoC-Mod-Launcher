@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="UpdateValidator" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  
+  <xs:element name="Product" type="ProductType"/>
+  <xs:complexType name="DependencyType">
+    <xs:all>
+      <xs:element type="InstallLocationEnum" name="InstallLocation" maxOccurs="1"/>
+      <xs:element type="xs:boolean" name="RequiresRestart" minOccurs="0" maxOccurs="1"/>
+      <xs:element type="xs:anyURI" name="SourceLocation" maxOccurs="1"/>
+      <xs:element type="SHA2" name="SHA2" minOccurs="0" maxOccurs="1"/>
+    </xs:all>
+    <xs:attribute type="xs:string" name="Name" use="required"/>
+    <xs:attribute type="xs:string" name="Version" use="optional"/>
+  
+</xs:complexType>
+  <xs:complexType name="DependencyListType">
+    <xs:sequence>
+      <xs:element type="DependencyType" name="Dependency" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ProductType">
+    <xs:sequence>
+      <xs:element type="DependencyListType" name="Dependencies" minOccurs="1" maxOccurs="1"/>
+      <xs:element type="DependencyListType" name="PreviewDependencies" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="Name"/>
+    <xs:attribute type="xs:string" name="Author"/>
+  </xs:complexType>
+
+  <xs:simpleType name="SHA2" final="restriction" >
+    <xs:restriction base="xs:hexBinary">
+      <xs:minLength value="32"/>
+      <xs:maxLength value="32"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="InstallLocationEnum" final="restriction" >
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="AppData"/>
+      <xs:enumeration value="Current"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+</xs:schema>

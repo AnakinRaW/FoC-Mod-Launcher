@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using FocLauncher;
@@ -14,14 +12,12 @@ namespace FocLauncherHost
 {
     public class HostApplication : Application
     {
-        // TODO: This should be a flexible server, not the final
         public const string ServerUrl = "https://raw.githubusercontent.com/AnakinSklavenwalker/FoC-Mod-Launcher/";
 
         static HostApplication()
         {
             // Since FocLauncher.Threading.dll and Microsoft.VisualStudio.Utilities.dll are used by the WaitWindow AppDomain we need to have them on disk
             // Make sure not to use async file writing as we need to block the app until necessary assembly are written to disk
-            // TODO: Do not extract Launcher and Theming here
             AssemblyExtractor.WriteNecessaryAssembliesToDisk(LauncherConstants.ApplicationBasePath, 
                 "FocLauncher.Threading.dll", "Microsoft.VisualStudio.Utilities.dll");
         }
@@ -35,26 +31,27 @@ namespace FocLauncherHost
 
         internal async Task PrepareAndUpdateLauncherAsync()
         {
-            var t = AssemblyExtractor.WriteNecessaryAssembliesToDiskAsync(LauncherConstants.ApplicationBasePath, "FocLauncher.dll", "FocLauncher.Theming.dll");
+            var extractTask = AssemblyExtractor.WriteNecessaryAssembliesToDiskAsync(LauncherConstants.ApplicationBasePath, "FocLauncher.dll", "FocLauncher.Theming.dll");
             
             await ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
             {
-                var data = new WaitDialogProgressData("Please wait while the launcher is loading an update.", "Updating....", null, true);
+                var data = new WaitDialogProgressData("Please wait while the launcher is downloading an update.", isCancelable: true);
 
-                var s = WaitDialogFactory.Instance.StartWaitDialog("FoC Launcher", data, TimeSpan.FromSeconds(2));
+                var session = WaitDialogFactory.Instance.StartWaitDialog("FoC Launcher", data, TimeSpan.FromSeconds(2));
                 try
                 {
-                    Task.WhenAll(t, Task.Delay(200)).ContinueWith(async task => await ShowMainWindowAsync(), s.UserCancellationToken,
+                    Task.WhenAll(extractTask, Task.Delay(200)).ContinueWith(async task => await ShowMainWindowAsync(), s.UserCancellationToken,
                         TaskContinuationOptions.OnlyOnRanToCompletion, TaskScheduler.FromCurrentSynchronizationContext()).Forget();
                     await new UpdateManager().CheckAndPerformUpdateAsync();
-                    await Task.Delay(5000, s.UserCancellationToken);
+                    await Task.Delay(5000, session.UserCancellationToken);
                 }
                 catch (TaskCanceledException)
                 {
                 }
                 finally
                 {
-                    s.Dispose();
+                    session.Dispose();
+
                     // TODO: Event of the update manager
                     await HideSplashScreenAnimatedAsync();
                     Shutdown();
