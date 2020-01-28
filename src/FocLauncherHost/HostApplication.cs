@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Threading;
 using FocLauncher;
 using FocLauncher.Threading;
 using FocLauncher.WaitDialog;
@@ -107,7 +103,7 @@ namespace FocLauncherHost
         private async Task HideSplashScreenAnimatedAsync()
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-            if (MainWindow is SplashScreen splashScreen)
+            if (MainWindow is SplashScreen splashScreen && splashScreen.IsVisible)
             {
                 await Task.Delay(500);
                 await splashScreen.HideAnimationAsync();
