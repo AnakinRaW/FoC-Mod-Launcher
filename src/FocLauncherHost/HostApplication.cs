@@ -40,7 +40,7 @@ namespace FocLauncherHost
                 var session = WaitDialogFactory.Instance.StartWaitDialog("FoC Launcher", data, TimeSpan.FromSeconds(2));
                 try
                 {
-                    Task.WhenAll(extractTask, Task.Delay(200)).ContinueWith(async task => await ShowMainWindowAsync(), s.UserCancellationToken,
+                    Task.WhenAll(extractTask, Task.Delay(200)).ContinueWith(async task => await ShowMainWindowAsync(), session.UserCancellationToken,
                         TaskContinuationOptions.OnlyOnRanToCompletion, TaskScheduler.FromCurrentSynchronizationContext()).Forget();
                     await new UpdateManager().CheckAndPerformUpdateAsync();
                     await Task.Delay(5000, session.UserCancellationToken);
