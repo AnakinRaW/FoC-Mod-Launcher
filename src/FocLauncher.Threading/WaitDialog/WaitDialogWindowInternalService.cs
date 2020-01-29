@@ -58,7 +58,7 @@ namespace FocLauncher.WaitDialog
                     _dataSource.TotalSteps = args.TotalStepCount;
                 }
 
-                _application.Dispatcher?.Invoke(() => ShowDialogTask(args));
+                _application?.Dispatcher?.Invoke(() => ShowDialogTask(args));
             }
             catch (Exception e)
             {
