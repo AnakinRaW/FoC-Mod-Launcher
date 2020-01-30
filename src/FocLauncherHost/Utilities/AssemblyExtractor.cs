@@ -52,7 +52,7 @@ namespace FocLauncherHost.Utilities
                 if (compressed)
                     assemblyStream = await rs.DecompressAsync();
                 assemblyStream.Position = 0;
-#if DEBUG
+#if !DEBUG
                 if (File.Exists(filePath))
                 {
                     var embeddedAssembly = AssemblyDef.Load(assemblyStream, new ModuleContext(new AssemblyResolver(), null));
