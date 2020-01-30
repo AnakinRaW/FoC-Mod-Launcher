@@ -52,10 +52,10 @@ namespace FocLauncherHost
                         TaskContinuationOptions.OnlyOnRanToCompletion,
                         TaskScheduler.FromCurrentSynchronizationContext()).Forget();
 
-                    var updateManager = new UpdateManager(@"C:\Users\Anakin\Desktop\launcherUpdate.xml");
+                    var updateManager = new UpdateManager(FocLauncherProduct.Instance, @"C:\Users\Anakin\Desktop\launcherUpdate.xml");
                     updateInformation = await updateManager.CheckAndPerformUpdateAsync(session.UserCancellationToken);
 
-                    await Task.Delay(5000, session.UserCancellationToken);
+                    //await Task.Delay(5000, session.UserCancellationToken);
                 }
                 catch (OperationCanceledException)
                 {
@@ -84,12 +84,19 @@ namespace FocLauncherHost
 
         private static void ReportUpdateResult(UpdateInformation updateInformation)
         {
-            if (updateInformation != null && updateInformation.RequiresUserNotification)
+
+            if (updateInformation != null)
             {
+                if (updateInformation.RequiresUserNotification ||
 #if DEBUG
-                MessageBox.Show($"Updating finished with result: {updateInformation.Result}\r\n" +
-                                $"Message: {updateInformation.Message}", "FoC Launcher");
+                    true
 #endif
+                    )
+                {
+                    MessageBox.Show($"Updating finished with result: {updateInformation.Result}\r\n" +
+                                    $"Message: {updateInformation.Message}", "FoC Launcher");
+                }
+                
             }
         }
 

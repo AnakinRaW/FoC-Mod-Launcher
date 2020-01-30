@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema id="UpdateValidator" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  
-  <xs:element name="Product" type="ProductType"/>
+
+  <xs:element name="Products" type="ProductsMetadata"/>
+
   <xs:complexType name="DependencyType">
     <xs:all>
       <xs:element type="InstallLocationEnum" name="InstallLocation" maxOccurs="1"/>
@@ -11,20 +12,12 @@
     </xs:all>
     <xs:attribute type="xs:string" name="Name" use="required"/>
     <xs:attribute type="xs:string" name="Version" use="optional"/>
-  
-</xs:complexType>
+
+  </xs:complexType>
   <xs:complexType name="DependencyListType">
     <xs:sequence>
       <xs:element type="DependencyType" name="Dependency" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="ProductType">
-    <xs:sequence>
-      <xs:element type="DependencyListType" name="Dependencies" minOccurs="1" maxOccurs="1"/>
-      <xs:element type="DependencyListType" name="PreviewDependencies" minOccurs="0" maxOccurs="1"/>
-    </xs:sequence>
-    <xs:attribute type="xs:string" name="Name"/>
-    <xs:attribute type="xs:string" name="Author"/>
   </xs:complexType>
 
   <xs:simpleType name="SHA2" final="restriction" >
@@ -40,5 +33,19 @@
       <xs:enumeration value="Current"/>
     </xs:restriction>
   </xs:simpleType>
+
+  <xs:complexType name="ProductMetadata">
+    <xs:sequence>
+      <xs:element type="DependencyListType" name="Dependencies" minOccurs="1" maxOccurs="1"/>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="Name" use="optional"/>
+    <xs:attribute type="xs:string" name="Author" use="optional"/>
+  </xs:complexType>
+
+  <xs:complexType name="ProductsMetadata">
+    <xs:sequence>
+      <xs:element type="ProductMetadata" name="Product" maxOccurs="unbounded" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
 
 </xs:schema>

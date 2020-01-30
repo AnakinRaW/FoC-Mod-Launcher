@@ -71,6 +71,7 @@
     <Compile Include="ScreenUtilities\BroadcastMessageMonitor.cs" />
     <Compile Include="ScreenUtilities\MainWindowManager.cs" />
     <Compile Include="ScreenUtilities\Screen.cs" />
+    <Compile Include="Threading\Extensions.cs" />
     <Compile Include="Threading\GenericThreadHelper.cs" />
     <Compile Include="Threading\JoinableTaskFactoryExtensions.cs" />
     <Compile Include="Threading\ThreadHelper.cs" />

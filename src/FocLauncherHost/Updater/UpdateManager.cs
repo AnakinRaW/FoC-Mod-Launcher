@@ -1,8 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using FocLauncher.Threading;
+using FocLauncherHost.Updater.MetadataModel;
 using FocLauncherHost.Utilities;
+using Microsoft.VisualStudio.Threading;
 
 namespace FocLauncherHost.Updater
 {
@@ -10,11 +15,14 @@ namespace FocLauncherHost.Updater
     {
         public Uri UpdateMetadataLocation { get; }
 
-        public UpdateManager(string versionMetadataPath)
+        public IProductInfo Product { get; }
+
+        public UpdateManager(IProductInfo productInfo, string versionMetadataPath)
         {
             if (!Uri.TryCreate(versionMetadataPath, UriKind.Absolute, out var metadataUri))
                 throw new UriFormatException();
             UpdateMetadataLocation = metadataUri;
+            Product = productInfo;
         }
 
         public async Task<UpdateInformation> CheckAndPerformUpdateAsync(CancellationToken cancellation)
@@ -25,34 +33,129 @@ namespace FocLauncherHost.Updater
             var updateInformation = new UpdateInformation();
 
             var stream = await GetMetadataStreamAsync(cts.Token);
-
+            if (cts.IsCancellationRequested)
+                return CancelledInformation(updateInformation);
             if (stream == null || stream.Length == 0)
-            {
-                updateInformation.Result = UpdateResult.Error;
-                updateInformation.Message = "Unable to get the update metadata stream";
-                return updateInformation;
-            }
+                return ErrorInformation(updateInformation, "Unable to get the update metadata stream");
 
+            var products =  await GetProductFromStreamAsync(stream);
+            if (products == null)
+                return ErrorInformation(updateInformation, "Failed to deserialize the update metadata");
+
+            var results = await TryGetUpdateTasksAsync(products, cts.Token);
+            if (cts.IsCancellationRequested)
+                return CancelledInformation(updateInformation);
 
             return updateInformation;
         }
-
-
-        public async Task<Stream> GetMetadataStreamAsync(CancellationToken cancellation)
+        
+        public async Task<IEnumerable<DependencyCheckResult>> GetUpdateTasksAsync(ProductMetadata product, CancellationToken cancellation = default)
         {
-            cancellation.ThrowIfCancellationRequested();
-            Stream metadataStream = new MemoryStream();
-            if (UpdateMetadataLocation.Scheme == Uri.UriSchemeFile)
-                await StreamUtilities.CopyFileToStreamAsync(UpdateMetadataLocation.LocalPath, metadataStream, cancellation);
+            if (product == null)
+                throw new NullReferenceException();
+            if (!product.Name.Equals(Product.Name, StringComparison.InvariantCultureIgnoreCase)) 
+                throw new NotSupportedException("The product to download does not match with the product initialized");
 
-            if (UpdateMetadataLocation.Scheme == Uri.UriSchemeHttp ||
-                UpdateMetadataLocation.Scheme == Uri.UriSchemeHttps)
-            {
-                throw new NotImplementedException();
-            }
+            return await product.Dependencies.ForeachAsync(dependency => CheckDependencyAsync(dependency, cancellation));
+        }
+
+        private async Task<DependencyCheckResult> CheckDependencyAsync(Dependency dependency, CancellationToken cancellation)
+        {
+            // TODO
+            await Task.Delay(5000, cancellation);
             return null;
         }
+
+
+        public async Task<IEnumerable<DependencyCheckResult>> GetUpdateTasksAsync(ProductsMetadata productsMetadata, CancellationToken cancellation = default)
+        {
+            if (productsMetadata == null)
+                throw new NullReferenceException(nameof(productsMetadata));
+            if (productsMetadata.Products == null || !productsMetadata.Products.Any())
+                throw new NotSupportedException("No products to update are found");
+
+            var product = productsMetadata.Products.FirstOrDefault(x =>
+                x.Name.Equals(Product.Name, StringComparison.InvariantCultureIgnoreCase));
+            if (product == null)
+                throw new NotSupportedException("No products to update are found");
+            return await GetUpdateTasksAsync(product, cancellation);
+        }
+
+        private async Task<IEnumerable<DependencyCheckResult>?> TryGetUpdateTasksAsync(ProductsMetadata productsMetadata, CancellationToken cancellation = default)
+        {
+            try
+            {
+                return await GetUpdateTasksAsync(productsMetadata, cancellation);
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+
+        public async Task<Stream?> GetMetadataStreamAsync(CancellationToken cancellation)
+        {
+            cancellation.ThrowIfCancellationRequested();
+            try
+            {
+                Stream metadataStream = new MemoryStream();
+                if (UpdateMetadataLocation.Scheme == Uri.UriSchemeFile)
+                    await StreamUtilities.CopyFileToStreamAsync(UpdateMetadataLocation.LocalPath, metadataStream, cancellation);
+
+                if (UpdateMetadataLocation.Scheme == Uri.UriSchemeHttp ||
+                    UpdateMetadataLocation.Scheme == Uri.UriSchemeHttps)
+                {
+                    throw new NotImplementedException();
+                }
+                return metadataStream;
+            }
+            catch (TaskCanceledException)
+            {
+                return null;
+            }
+        }
+
+        private static Task<ProductsMetadata> GetProductFromStreamAsync(Stream stream)
+        {
+            try
+            {
+                return ProductsMetadata.DeserializeAsync(stream);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        private static UpdateInformation ErrorInformation(UpdateInformation updateInformation, string errorMessage)
+        {
+            updateInformation.Result = UpdateResult.Error;
+            updateInformation.Message = errorMessage;
+            return updateInformation;
+        }
+
+        private static UpdateInformation CancelledInformation(UpdateInformation updateInformation)
+        {
+            updateInformation.Result = UpdateResult.UserCancelled;
+            updateInformation.Message = "Operation cancelled by user request";
+            return updateInformation;
+        }
     }
+
+    public class DependencyCheckResult
+    {
+        public  Dependency Dependency { get; }
+
+        public DependencyAction RequiredAction { get; }
+    }
+
+    public enum DependencyAction
+    {
+        Keep,
+        Update,
+        Remove
+    }
+
 
     public class UpdateInformation
     {
@@ -66,7 +169,9 @@ namespace FocLauncherHost.Updater
     public enum UpdateResult
     {
         Success,
+        SuccessRequiresRestart,
         Error,
-        HashMismatch
+        HashMismatch,
+        UserCancelled
     }
 }
