@@ -6,7 +6,6 @@ using System.Reflection;
 using System.Security.AccessControl;
 using System.Threading.Tasks;
 using FocLauncher;
-using dnlib.DotNet;
 #if !DEBUG
     using dnlib.DotNet;
 #endif
