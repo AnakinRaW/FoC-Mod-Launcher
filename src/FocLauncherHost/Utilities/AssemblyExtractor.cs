@@ -6,8 +6,9 @@ using System.Reflection;
 using System.Security.AccessControl;
 using System.Threading.Tasks;
 using FocLauncher;
+using dnlib.DotNet;
 #if !DEBUG
-    using Mono.Cecil;
+    using dnlib.DotNet;
 #endif
 
 
@@ -51,11 +52,11 @@ namespace FocLauncherHost.Utilities
                 if (compressed)
                     assemblyStream = await rs.DecompressAsync();
                 assemblyStream.Position = 0;
-#if !DEBUG
+#if DEBUG
                 if (File.Exists(filePath))
                 {
-                    var embeddedAssembly = AssemblyDefinition.ReadAssembly(assemblyStream);
-                    var embeddedAssemblyVersion = embeddedAssembly.Name.Version;
+                    var embeddedAssembly = AssemblyDef.Load(assemblyStream, new ModuleContext(new AssemblyResolver(), null));
+                    var embeddedAssemblyVersion = embeddedAssembly.Version;
 
                     if (File.ReadAllBytes(filePath).Length > 0)
                     {
