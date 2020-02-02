@@ -9,9 +9,9 @@ using System.Windows;
 [assembly: AssemblyTitle("FoC Launcher")]
 [assembly: AssemblyDescription("Mod and game launcher for Star Wars Empire at War: Forces of Corruption")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Republic at War Modding Team")]
 [assembly: AssemblyProduct("FoC Launcher")]
-[assembly: AssemblyCopyright("Copyright © 2019 Anakin Sklavenwalker")]
+[assembly: AssemblyCopyright("Copyright © 2020 Anakin Sklavenwalker")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

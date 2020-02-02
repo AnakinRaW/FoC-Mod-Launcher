@@ -52,7 +52,7 @@ namespace FocLauncherHost
                         TaskContinuationOptions.OnlyOnRanToCompletion,
                         TaskScheduler.FromCurrentSynchronizationContext()).Forget();
 
-                    var updateManager = new UpdateManager(FocLauncherProduct.Instance, @"C:\Users\Anakin\Desktop\launcherUpdate.xml");
+                    var updateManager = new UpdateManager(FocLauncherProduct.Instance, @"C:\Users\Anakin\OneDrive\launcherUpdate.xml");
                     updateInformation = await updateManager.CheckAndPerformUpdateAsync(session.UserCancellationToken);
 
                     //await Task.Delay(5000, session.UserCancellationToken);

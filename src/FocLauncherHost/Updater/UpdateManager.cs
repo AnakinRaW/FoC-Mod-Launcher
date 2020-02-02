@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using FocLauncher.Threading;
 using FocLauncherHost.Updater.MetadataModel;
 using FocLauncherHost.Utilities;
-using Microsoft.VisualStudio.Threading;
 
 namespace FocLauncherHost.Updater
 {
@@ -56,16 +55,15 @@ namespace FocLauncherHost.Updater
             if (!product.Name.Equals(Product.Name, StringComparison.InvariantCultureIgnoreCase)) 
                 throw new NotSupportedException("The product to download does not match with the product initialized");
 
-            return await product.Dependencies.ForeachAsync(dependency => CheckDependencyAsync(dependency, cancellation));
+#if DEBUG // For better debugging
+            var result = new List<DependencyCheckResult>();
+            foreach (var dependency in product.Dependencies)
+                result.Add(await CheckDependencyAsync(dependency, cancellation));
+            return result;
+#else
+             return await product.Dependencies.ForeachAsync(dependency => CheckDependencyAsync(dependency, cancellation));
+#endif
         }
-
-        private async Task<DependencyCheckResult> CheckDependencyAsync(Dependency dependency, CancellationToken cancellation)
-        {
-            // TODO
-            await Task.Delay(5000, cancellation);
-            return null;
-        }
-
 
         public async Task<IEnumerable<DependencyCheckResult>> GetUpdateTasksAsync(ProductsMetadata productsMetadata, CancellationToken cancellation = default)
         {
@@ -79,18 +77,6 @@ namespace FocLauncherHost.Updater
             if (product == null)
                 throw new NotSupportedException("No products to update are found");
             return await GetUpdateTasksAsync(product, cancellation);
-        }
-
-        private async Task<IEnumerable<DependencyCheckResult>?> TryGetUpdateTasksAsync(ProductsMetadata productsMetadata, CancellationToken cancellation = default)
-        {
-            try
-            {
-                return await GetUpdateTasksAsync(productsMetadata, cancellation);
-            }
-            catch (Exception e)
-            {
-                return null;
-            }
         }
 
         public async Task<Stream?> GetMetadataStreamAsync(CancellationToken cancellation)
@@ -107,9 +93,30 @@ namespace FocLauncherHost.Updater
                 {
                     throw new NotImplementedException();
                 }
+
+
+
                 return metadataStream;
             }
             catch (TaskCanceledException)
+            {
+                return null;
+            }
+        }
+
+        private async Task<DependencyCheckResult> CheckDependencyAsync(Dependency dependency, CancellationToken cancellation)
+        {
+            string basePath;
+            return null;
+        }
+
+        private async Task<IEnumerable<DependencyCheckResult>?> TryGetUpdateTasksAsync(ProductsMetadata productsMetadata, CancellationToken cancellation = default)
+        {
+            try
+            {
+                return await GetUpdateTasksAsync(productsMetadata, cancellation);
+            }
+            catch (Exception e)
             {
                 return null;
             }

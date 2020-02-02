@@ -30,6 +30,7 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+	<Nullable>enable</Nullable>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -75,8 +76,8 @@
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Updater\IProduct.cs" />
-    <Compile Include="Updater\MetadataModel\DependencyType.cs" />
-    <Compile Include="Updater\MetadataModel\InstallLocationEnum.cs" />
+    <Compile Include="Updater\MetadataModel\Dependency.cs" />
+    <Compile Include="Updater\MetadataModel\InstallLocation.cs" />
     <Compile Include="Updater\MetadataModel\ProductMetadata.cs" />
     <Compile Include="Updater\MetadataModel\ProductsMetadata.cs" />
     <Compile Include="Updater\StreamExtensions.cs" />

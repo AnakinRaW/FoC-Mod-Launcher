@@ -41,7 +41,7 @@ namespace FocLauncherHost.Updater.MetadataModel
         }
 
         [XmlElement(DataType = "hexBinary")]
-        public byte[] Sha2
+        public byte[]? Sha2
         {
             get => _sha2Field;
             set => _sha2Field = value;
