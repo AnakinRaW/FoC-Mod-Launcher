@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FocLauncher.Threading;
+using FocLauncherHost.Properties;
 using FocLauncherHost.Updater.MetadataModel;
 using FocLauncherHost.Utilities;
 
@@ -36,6 +37,8 @@ namespace FocLauncherHost.Updater
                 return CancelledInformation(updateInformation);
             if (stream == null || stream.Length == 0)
                 return ErrorInformation(updateInformation, "Unable to get the update metadata stream");
+            if (!await ValidateStreamAsync(stream))
+                return ErrorInformation(updateInformation, "Update metadata information is invalid");
 
             var products =  await GetProductFromStreamAsync(stream);
             if (products == null)
@@ -94,8 +97,6 @@ namespace FocLauncherHost.Updater
                     throw new NotImplementedException();
                 }
 
-
-
                 return metadataStream;
             }
             catch (TaskCanceledException)
@@ -132,6 +133,13 @@ namespace FocLauncherHost.Updater
             {
                 return null;
             }
+        }
+
+        private static async Task<bool> ValidateStreamAsync(Stream inputStream)
+        {
+            var schemeStream = Resources.UpdateValidator.ToStream();
+            var validator = new XmlValidator(schemeStream);
+            return await Task.FromResult(validator.Validate(inputStream));
         }
 
         private static UpdateInformation ErrorInformation(UpdateInformation updateInformation, string errorMessage)
