@@ -5,12 +5,15 @@ using System.Windows;
 using FocLauncher;
 using FocLauncherHost.ExceptionHandling;
 using Microsoft.Win32;
+using NLog;
 
 namespace FocLauncherHost
 {
     public static class Program
     {
         private static readonly string ApplicationBasePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "FoC Launcher");
+
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         [STAThread]
         [LoaderOptimization(LoaderOptimization.MultiDomainHost)]
@@ -23,8 +26,11 @@ namespace FocLauncherHost
             AppDomain.CurrentDomain.UnhandledException += OnUnhandledExceptionReceived;
 
             SetAndInitApplicationBasePath();
+            NLogUtils.DeleteOldLogFile();
+            NLogUtils.SetLoggingForAppDomain();
             ShowSplashScreen();
             StartLauncher();
+            LogManager.Shutdown();
         }
 
         private static void SetAndInitApplicationBasePath()
@@ -52,6 +58,7 @@ namespace FocLauncherHost
             }
             finally
             {
+                Logger.Info("Unloading Splash Screen AppDomain");
                 AppDomain.Unload(splashDomain);
             }
         }
@@ -62,10 +69,12 @@ namespace FocLauncherHost
             var launcherBootstrapper = CreateLauncherBootstrapper(launcherDomain);
             try
             {
+                Logger.Info("Starting launcher bootstrapper in new AppDomain");
                 launcherBootstrapper.StartLauncherApplication();
             }
             finally
             {
+                Logger.Info("Unloading launcher appdomain");
                 launcherBootstrapper.Dispose();
                 AppDomain.CurrentDomain.UnhandledException -= OnUnhandledExceptionReceived;
                 AppDomain.Unload(launcherDomain);
@@ -74,6 +83,8 @@ namespace FocLauncherHost
 
         private static void RunHostApplication()
         {
+            NLogUtils.SetLoggingForAppDomain();
+            Logger.Info("Starting Splash Screen on new AppDomain");
             var app = new HostApplication();
             app.ShutdownMode = ShutdownMode.OnExplicitShutdown;
             app.Run();
@@ -84,7 +95,11 @@ namespace FocLauncherHost
         {
             new ExceptionWindow(exception).ShowDialog();
             if (exit)
+            {
+                Logger.Fatal(exception, "Application terminated with error.");
                 Environment.Exit(exception.HResult);
+            }
+            Logger.Error(exception);
         }
 
         private static bool Get48FromRegistry()
@@ -133,6 +148,7 @@ namespace FocLauncherHost
 
         private static IsolatingLauncherBootstrapper CreateLauncherBootstrapper(AppDomain appDomain)
         {
+            Logger.Info("Creating launcher bootstrapper");
             var location = Path.Combine(LauncherConstants.ApplicationBasePath, "FocLauncher.dll");
             ThrowIFileNotFound(location);
             return (IsolatingLauncherBootstrapper)appDomain.CreateInstanceFromAndUnwrap(location,

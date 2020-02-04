@@ -8,6 +8,7 @@ using FocLauncherHost.ExceptionHandling;
 using FocLauncherHost.Updater;
 using FocLauncherHost.Utilities;
 using Microsoft.VisualStudio.Threading;
+using NLog;
 
 namespace FocLauncherHost
 {
@@ -15,7 +16,9 @@ namespace FocLauncherHost
     {
         public const string ServerUrl = "https://raw.githubusercontent.com/AnakinSklavenwalker/FoC-Mod-Launcher/";
 
-        private AsyncManualResetEvent _canCloseApplicationEvent = new AsyncManualResetEvent(false, true);
+        private readonly AsyncManualResetEvent _canCloseApplicationEvent = new AsyncManualResetEvent(false, true);
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
 
         static HostApplication()
         {
@@ -54,6 +57,7 @@ namespace FocLauncherHost
 
                     var updateManager = new UpdateManager(FocLauncherProduct.Instance, @"C:\Users\Anakin\OneDrive\launcherUpdate.xml");
                     updateInformation = await updateManager.CheckAndPerformUpdateAsync(session.UserCancellationToken);
+                    Logger.Info($"Finished automatic update with result {updateInformation}");
 
                     //await Task.Delay(5000, session.UserCancellationToken);
                 }
