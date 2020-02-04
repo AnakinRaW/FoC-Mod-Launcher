@@ -12,7 +12,11 @@ namespace FocLauncher
             var config = new NLog.Config.LoggingConfiguration();
             var logFilePath = Path.Combine(LauncherConstants.ApplicationBasePath, "log.txt");
             var logfile = new NLog.Targets.FileTarget("logfile") { FileName = logFilePath };
+#if DEBUG
             config.AddRule(LogLevel.Trace, LogLevel.Fatal, logfile);
+#else
+            config.AddRule(LogLevel.Info, LogLevel.Fatal, logfile);
+#endif
             LogManager.Configuration = config;
         }
 

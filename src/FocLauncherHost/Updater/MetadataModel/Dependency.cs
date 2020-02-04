@@ -8,7 +8,6 @@ namespace FocLauncherHost.Updater.MetadataModel
     {
         private InstallLocation _installLocationField;
         private bool _requiresRestartField;
-        private bool _requiresRestartFieldSpecified;
         private string _sourceLocationField;
         private byte[] _sha2Field;
         private string _nameField;
@@ -24,13 +23,6 @@ namespace FocLauncherHost.Updater.MetadataModel
         {
             get => _requiresRestartField;
             set => _requiresRestartField = value;
-        }
-
-        [XmlIgnore]
-        public bool RequiresRestartSpecified
-        {
-            get => _requiresRestartFieldSpecified;
-            set => _requiresRestartFieldSpecified = value;
         }
 
         [XmlElement(DataType = "anyURI")]
@@ -60,5 +52,11 @@ namespace FocLauncherHost.Updater.MetadataModel
             get => _versionField;
             set => _versionField = value;
         }
+
+        public override string ToString()
+        {
+            return $"{nameof(Name)}: {Name}, {nameof(Version)}: {Version}, {nameof(InstallLocation)}: {InstallLocation}, {nameof(SourceLocation)}: {SourceLocation}";
+        }
+
     }
 }

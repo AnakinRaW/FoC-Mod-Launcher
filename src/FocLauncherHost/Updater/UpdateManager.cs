@@ -41,18 +41,26 @@ namespace FocLauncherHost.Updater
             var stream = await GetMetadataStreamAsync(cts.Token);
             if (cts.IsCancellationRequested)
                 return CancelledInformation(updateInformation);
-            if (stream == null || stream.Length == 0)
-                return ErrorInformation(updateInformation, "Unable to get the update metadata stream");
+            if (stream is null || stream.Length == 0)
+                return ErrorInformation(updateInformation,
+                    $"Unable to get the update metadata from: {UpdateMetadataLocation}");
+
             if (!await ValidateStreamAsync(stream))
-                return ErrorInformation(updateInformation, "Update metadata information is invalid");
+                return ErrorInformation(updateInformation,
+                    "Stream validation for metadata failed. Download corrupted?");
 
-            var products =  await GetProductFromStreamAsync(stream);
-            if (products == null)
-                return ErrorInformation(updateInformation, "Failed to deserialize the update metadata");
+            var products =  await TryGetProductFromStreamAsync(stream);
+            if (products is null)
+                return ErrorInformation(updateInformation,
+                    "Failed to deserialize metadata stream. Incompatible version?");
 
-            var results = await TryGetUpdateTasksAsync(products, cts.Token);
+            var results = (await TryGetUpdateTasksAsync(products, cts.Token))?.ToList();
             if (cts.IsCancellationRequested)
                 return CancelledInformation(updateInformation);
+            if (results is null || results.Any(x => x is null))
+                return ErrorInformation(updateInformation, "Unable to check dependencies if update is available");
+            if (!results.Any())
+                return SuccessInformation(updateInformation, "No updates available");
 
             return updateInformation;
         }
@@ -60,7 +68,8 @@ namespace FocLauncherHost.Updater
         public async Task<IEnumerable<DependencyCheckResult>> GetUpdateTasksAsync(ProductMetadata product, CancellationToken cancellation = default)
         {
             if (product == null)
-                throw new NullReferenceException();
+                throw new NullReferenceException(nameof(product));
+            Logger.Trace($"Try getting update tasks from {product}");
             if (!product.Name.Equals(Product.Name, StringComparison.InvariantCultureIgnoreCase)) 
                 throw new NotSupportedException("The product to download does not match with the product initialized");
 
@@ -96,18 +105,24 @@ namespace FocLauncherHost.Updater
             {
                 Stream metadataStream = new MemoryStream();
                 if (UpdateMetadataLocation.Scheme == Uri.UriSchemeFile)
+                {
+                    Logger.Trace($"Try getting update metadata stream from local file: {UpdateMetadataLocation.LocalPath}");
                     await StreamUtilities.CopyFileToStreamAsync(UpdateMetadataLocation.LocalPath, metadataStream, cancellation);
+                }
 
                 if (UpdateMetadataLocation.Scheme == Uri.UriSchemeHttp ||
                     UpdateMetadataLocation.Scheme == Uri.UriSchemeHttps)
                 {
+                    Logger.Trace($"Try getting update metadata stream from online file: {UpdateMetadataLocation.AbsolutePath}");
                     throw new NotImplementedException();
                 }
 
+                Logger.Info($"Retrieved metadata stream from {UpdateMetadataLocation}");
                 return metadataStream;
             }
             catch (TaskCanceledException)
             {
+                Logger.Trace($"Getting metadata stream was cancelled");
                 return null;
             }
         }
@@ -115,6 +130,7 @@ namespace FocLauncherHost.Updater
         private Task<DependencyCheckResult?> CheckDependencyAsync(Dependency dependency, CancellationToken cancellation)
         {
             var basePath = string.Empty;
+            Logger.Trace($"Check dependency if update required: {dependency}");
             switch (dependency.InstallLocation)
             {
                 case InstallLocation.AppData:
@@ -124,39 +140,45 @@ namespace FocLauncherHost.Updater
                 {
                     var processPath = Process.GetCurrentProcess().MainModule?.FileName;
                     if (processPath == null)
-                        return null;
+                        return Task.FromResult<DependencyCheckResult>(null);
                     basePath = new DirectoryInfo(processPath).Parent?.FullName;
                     break;
                 }
             }
+
+            Logger.Trace($"Dependency base path: {basePath}");
             if (basePath == null)
-                return null;
+                return Task.FromResult<DependencyCheckResult>(null);
 
             var filePath = Path.Combine(basePath, dependency.Name);
 
-            return null;
+            return Task.FromResult<DependencyCheckResult>(null);
         }
 
         private async Task<IEnumerable<DependencyCheckResult>?> TryGetUpdateTasksAsync(ProductsMetadata productsMetadata, CancellationToken cancellation = default)
         {
             try
             {
+                Logger.Trace("Try getting update tasks");
                 return await GetUpdateTasksAsync(productsMetadata, cancellation);
             }
             catch (Exception e)
             {
+                Logger.Debug(e, "Getting update tasks failed with exception. Returning null instead.");
                 return null;
             }
         }
 
-        private static Task<ProductsMetadata> GetProductFromStreamAsync(Stream stream)
+        private static Task<ProductsMetadata> TryGetProductFromStreamAsync(Stream stream)
         {
             try
             {
+                Logger.Trace("Try deserializing stream to ProductsMetadata");
                 return ProductsMetadata.DeserializeAsync(stream);
             }
-            catch
+            catch (Exception e)
             {
+                Logger.Debug(e, "Getting products from stream failed with exception. Returning null instead.");
                 return null;
             }
         }
@@ -168,8 +190,18 @@ namespace FocLauncherHost.Updater
             return await Task.FromResult(validator.Validate(inputStream));
         }
 
+        private static UpdateInformation SuccessInformation(UpdateInformation updateInformation, string message, bool requiresRestart = false, bool userNotification = false)
+        {
+            Logger.Debug("Operation was completed sucessfully");
+            updateInformation.Result = requiresRestart ? UpdateResult.SuccessRequiresRestart : UpdateResult.Success;
+            updateInformation.Message = message;
+            updateInformation.RequiresUserNotification = userNotification;
+            return updateInformation;
+        }
+
         private static UpdateInformation ErrorInformation(UpdateInformation updateInformation, string errorMessage, bool userNotification = false)
         {
+            Logger.Debug($"Operation failed with message: {errorMessage}");
             updateInformation.Result = UpdateResult.Error;
             updateInformation.Message = errorMessage;
             updateInformation.RequiresUserNotification = userNotification;
@@ -178,6 +210,7 @@ namespace FocLauncherHost.Updater
 
         private static UpdateInformation CancelledInformation(UpdateInformation updateInformation, bool userNotification = false)
         {
+            Logger.Debug("Operation was cancelled by user request");
             updateInformation.Result = UpdateResult.UserCancelled;
             updateInformation.Message = "Operation cancelled by user request";
             updateInformation.RequiresUserNotification = userNotification;

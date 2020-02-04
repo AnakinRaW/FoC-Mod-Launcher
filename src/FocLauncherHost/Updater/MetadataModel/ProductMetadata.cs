@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Xml.Serialization;
 
 namespace FocLauncherHost.Updater.MetadataModel
@@ -30,6 +32,25 @@ namespace FocLauncherHost.Updater.MetadataModel
         {
             get => _author;
             set => _author = value;
+        }
+
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+            sb.Append("Product: ");
+            sb.Append($"Name: {Name}, ");
+            sb.Append($"Author: {Author}");
+
+            if (!Dependencies.Any())
+                return sb.ToString();
+
+            var dependencySb = new StringBuilder();
+            foreach (var dependency in Dependencies) 
+                dependencySb.AppendLine("\t" + dependency.ToString());
+
+            sb.AppendLine($"Dependencies ({Dependencies.Count}):");
+            sb.Append(dependencySb.ToString());
+            return sb.ToString();
         }
     }
 }
