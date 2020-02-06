@@ -88,6 +88,7 @@
     <Compile Include="Updater\StreamExtensions.cs" />
     <Compile Include="Updater\UpdateManager.cs" />
     <Compile Include="Updater\UpdateServer.cs" />
+    <Compile Include="Updater\UpdaterUtilities.cs" />
     <Compile Include="Utilities\AssemblyExtractor.cs" />
     <Compile Include="Utilities\NullToVisibilityConverter.cs" />
     <Compile Include="Utilities\StreamUtilities.cs" />

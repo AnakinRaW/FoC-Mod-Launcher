@@ -6,7 +6,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FocLauncher;
-using FocLauncher.Threading;
 using FocLauncherHost.Properties;
 using FocLauncherHost.Updater.MetadataModel;
 using FocLauncherHost.Utilities;
@@ -18,9 +17,19 @@ namespace FocLauncherHost.Updater
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
+        private readonly object _syncObject = new object();
+
         public Uri UpdateMetadataLocation { get; }
 
         public IProductInfo Product { get; }
+        
+        protected virtual IEnumerable<string> FileDeleteIgnoreFilter => new List<string>{".Theme.dll"};
+
+        protected virtual IEnumerable<string> FileDeleteExtensionFilter => new List<string>{".dll", ".exe"};
+
+        private List<DependencyUpdateResult> UpdateResults { get; } = new List<DependencyUpdateResult>();
+
+
 
         public UpdateManager(IProductInfo productInfo, string versionMetadataPath)
         {
@@ -30,6 +39,7 @@ namespace FocLauncherHost.Updater
             Product = productInfo;
         }
 
+        // TODO: Do not allow reentracne
         public async Task<UpdateInformation> CheckAndPerformUpdateAsync(CancellationToken cancellation)
         {
             cancellation.ThrowIfCancellationRequested();
@@ -54,15 +64,87 @@ namespace FocLauncherHost.Updater
                 return ErrorInformation(updateInformation,
                     "Failed to deserialize metadata stream. Incompatible version?");
 
-            var results = (await TryGetUpdateTasksAsync(products, cts.Token))?.ToList();
+            var updateTasks = (await TryGetUpdateTasksAsync(products, cts.Token)).ToList();
+            var deleteTasks = await GetRemovableAssembliesAsync(products);
+            var tasks = updateTasks.Union(deleteTasks).ToList();
+
+            var actionOnlyTasks = tasks.Where(x => x.RequiredAction != DependencyAction.Keep).ToList();
+
             if (cts.IsCancellationRequested)
                 return CancelledInformation(updateInformation);
-            if (results is null || results.Any(x => x is null))
+            if (actionOnlyTasks.Any(x => x is null))
                 return ErrorInformation(updateInformation, "Unable to check dependencies if update is available");
-            if (!results.Any())
+            if (!actionOnlyTasks.Any())
                 return SuccessInformation(updateInformation, "No updates available");
 
-            return updateInformation;
+            var updateResult =  await TryUpdateAsync(actionOnlyTasks, cts.Token);
+
+            if (updateResult == UpdateActionResult.Cancelled || updateResult == UpdateActionResult.Failed)
+            {
+                // TODO: Clean up
+            }
+
+
+            return SuccessInformation(updateInformation, "Success");
+        }
+
+        // TODO: Do not allow reentracne
+        public async Task<UpdateActionResult> UpdateAsync(IReadOnlyCollection<DependencyCheckResult> updateTasks, CancellationToken cancellation)
+        {
+            cancellation.ThrowIfCancellationRequested();
+            if (updateTasks == null || !updateTasks.Any())
+                return UpdateActionResult.Success;
+
+            var actionOnlyTasks = updateTasks.Where(x => x.RequiredAction != DependencyAction.Keep).ToList();
+            if (!actionOnlyTasks.Any())
+                return UpdateActionResult.Success;
+
+            Logger.Trace("Performing update...");
+
+            var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellation);
+
+            var pendingFlag = false;
+            foreach (var task in updateTasks)
+            {
+                if (cts.IsCancellationRequested)
+                    break;
+
+                DependencyUpdateResult updateResult;
+
+                if (task.RequiredAction == DependencyAction.Keep)
+                    updateResult = new DependencyKeepResult(task.Dependency);
+
+                if (task.RequiredAction == DependencyAction.Remove)
+                {
+                    updateResult = UpdaterUtilities.TryRemoveDependency(task, cts);
+                }
+                else
+                {
+                    // TODO
+                    updateResult = new DependencyDownloadResult(task.Dependency, UpdateActionResult.Success);
+                }
+
+                Logger.Trace(
+                    $"Performed update task {updateResult.PerformedAction} on dependency '{updateResult.Dependency.Name}' " +
+                    $"with result: {updateResult.UpdateResult}");
+
+                if (updateResult.UpdateResult == UpdateActionResult.Pending)
+                    pendingFlag = true;
+                AddResult(updateResult);
+            }
+
+            // Something went wrong but the user did NOT request cancellation
+            if (cts.IsCancellationRequested)
+                return UpdateActionResult.Failed;
+            return pendingFlag ? UpdateActionResult.Pending : UpdateActionResult.Success;
+        }
+
+        private void AddResult(DependencyUpdateResult result)
+        {
+            lock (_syncObject)
+            {
+                UpdateResults.Add(result);
+            }
         }
         
         public async Task<IEnumerable<DependencyCheckResult>> GetUpdateTasksAsync(ProductMetadata product, CancellationToken cancellation = default)
@@ -75,9 +157,9 @@ namespace FocLauncherHost.Updater
 
             // TODO: If any result null we cancel since we cannot promise a stable performance in this case
 #if DEBUG // For better debugging
-            var result = new List<DependencyCheckResult>();
+            var result = new HashSet<DependencyCheckResult>();
             foreach (var dependency in product.Dependencies)
-                result.Add(await CheckDependencyAsync(dependency, cancellation));
+                result.Add(await CheckDependencyAsync(dependency));
             return result;
 #else
              return await product.Dependencies.ForeachAsync(dependency => CheckDependencyAsync(dependency, cancellation));
@@ -86,13 +168,7 @@ namespace FocLauncherHost.Updater
 
         public async Task<IEnumerable<DependencyCheckResult>> GetUpdateTasksAsync(ProductsMetadata productsMetadata, CancellationToken cancellation = default)
         {
-            if (productsMetadata == null)
-                throw new NullReferenceException(nameof(productsMetadata));
-            if (productsMetadata.Products == null || !productsMetadata.Products.Any())
-                throw new NotSupportedException("No products to update are found");
-
-            var product = productsMetadata.Products.FirstOrDefault(x =>
-                x.Name.Equals(Product.Name, StringComparison.InvariantCultureIgnoreCase));
+            var product = GetMatchingProduct(productsMetadata);
             if (product == null)
                 throw new NotSupportedException("No products to update are found");
             return await GetUpdateTasksAsync(product, cancellation);
@@ -127,7 +203,47 @@ namespace FocLauncherHost.Updater
             }
         }
 
-        private Task<DependencyCheckResult?> CheckDependencyAsync(Dependency dependency, CancellationToken cancellation)
+        public async Task<IEnumerable<DependencyCheckResult>> GetRemovableAssembliesAsync(ProductsMetadata products)
+        {
+            var product = GetMatchingProduct(products);
+            if (product == null)
+                throw new NotSupportedException("No products to update are found");
+            return await GetRemovableAssembliesAsync(product);
+        }
+
+        public async Task<IEnumerable<DependencyCheckResult>> GetRemovableAssembliesAsync(ProductMetadata product)
+        {
+            if (product == null)
+                throw new NullReferenceException(nameof(product));
+            Logger.Trace($"Try getting removable files tasks");
+            if (!product.Name.Equals(Product.Name, StringComparison.InvariantCultureIgnoreCase))
+                throw new NotSupportedException("The product to download does not match with the product initialized");
+            return await GetRemovableAssembliesAsync(Product.AppDataPath, product.Dependencies);
+        }
+
+        internal Task<IEnumerable<DependencyCheckResult>> GetRemovableAssembliesAsync(string basePath, IReadOnlyCollection<Dependency> dependencies)
+        {
+            if (basePath == null || !Directory.Exists(basePath))
+                return Task.FromResult(Enumerable.Empty<DependencyCheckResult>());
+            var localFiles = new DirectoryInfo(basePath).GetFilesByExtensions(FileDeleteExtensionFilter.ToArray());
+
+            var result = new List<DependencyCheckResult>();
+            foreach (var file in localFiles)
+            {
+                if (FileDeleteIgnoreFilter.Any(x => file.Name.EndsWith(x)))
+                    continue;
+                if (dependencies.Any(x => file.Name.Equals(x.Name) && x.InstallLocation == InstallLocation.AppData))
+                    continue;
+
+                Logger.Info($"File marked to get deleted: {file.FullName}");
+                var dependency = new Dependency {Name = file.Name, InstallLocation = InstallLocation.AppData};
+                result.Add(new DependencyCheckResult(dependency, DependencyAction.Remove));
+            }
+
+            return Task.FromResult<IEnumerable<DependencyCheckResult>>(result); ;
+        }
+
+        internal Task<DependencyCheckResult?> CheckDependencyAsync(Dependency dependency)
         {
             var basePath = string.Empty;
             Logger.Trace($"Check dependency if update required: {dependency}");
@@ -151,11 +267,39 @@ namespace FocLauncherHost.Updater
                 return Task.FromResult<DependencyCheckResult>(null);
 
             var filePath = Path.Combine(basePath, dependency.Name);
+            if (File.Exists(filePath))
+            {
+                var newVersion = dependency.GetVersion();
+                var currentVersion = UpdaterUtilities.GetAssemblyVersion(filePath);
 
-            return Task.FromResult<DependencyCheckResult>(null);
+                if (currentVersion == null || newVersion > currentVersion)
+                {
+                    Logger.Info($"Dependency marked to get updated: {dependency}");
+                    return Task.FromResult(new DependencyCheckResult(dependency, DependencyAction.Update));
+                }
+
+                if (newVersion == null || newVersion < currentVersion || dependency.Sha2 == null)
+                {
+                    Logger.Info($"Dependency marked to keep: {dependency}");
+                    return Task.FromResult(new DependencyCheckResult(dependency, DependencyAction.Keep));
+                }
+
+                var fileHash = UpdaterUtilities.GetSha2(filePath);
+                if (fileHash == null || !fileHash.SequenceEqual(dependency.Sha2))
+                {
+                    Logger.Info($"Dependency marked to get updated: {dependency}");
+                    return Task.FromResult(new DependencyCheckResult(dependency, DependencyAction.Update));
+                }
+
+                Logger.Info($"Dependency marked to keep: {dependency}");
+                return Task.FromResult(new DependencyCheckResult(dependency, DependencyAction.Keep));
+            }
+
+            Logger.Info($"Dependency marked to get updated: {dependency}");
+            return Task.FromResult(new DependencyCheckResult(dependency, DependencyAction.Update));
         }
 
-        private async Task<IEnumerable<DependencyCheckResult>?> TryGetUpdateTasksAsync(ProductsMetadata productsMetadata, CancellationToken cancellation = default)
+        private async Task<IEnumerable<DependencyCheckResult>> TryGetUpdateTasksAsync(ProductsMetadata productsMetadata, CancellationToken cancellation = default)
         {
             try
             {
@@ -165,7 +309,7 @@ namespace FocLauncherHost.Updater
             catch (Exception e)
             {
                 Logger.Debug(e, "Getting update tasks failed with exception. Returning null instead.");
-                return null;
+                return Enumerable.Empty<DependencyCheckResult>();
             }
         }
 
@@ -179,7 +323,24 @@ namespace FocLauncherHost.Updater
             catch (Exception e)
             {
                 Logger.Debug(e, "Getting products from stream failed with exception. Returning null instead.");
-                return null;
+                return Task.FromResult<ProductsMetadata>(null);
+            }
+        }
+
+        private async Task<UpdateActionResult> TryUpdateAsync(IReadOnlyCollection<DependencyCheckResult> updateTasks, CancellationToken token = default)
+        {
+            try
+            {
+                Logger.Trace("Try updating");
+                return await UpdateAsync(updateTasks, token);
+            }
+            catch (TaskCanceledException)
+            {
+                return UpdateActionResult.Cancelled;
+            }
+            catch (Exception)
+            {
+                return UpdateActionResult.Failed;
             }
         }
 
@@ -193,7 +354,7 @@ namespace FocLauncherHost.Updater
         private static UpdateInformation SuccessInformation(UpdateInformation updateInformation, string message, bool requiresRestart = false, bool userNotification = false)
         {
             Logger.Debug("Operation was completed sucessfully");
-            updateInformation.Result = requiresRestart ? UpdateResult.SuccessRequiresRestart : UpdateResult.Success;
+            updateInformation.Result = requiresRestart ? UpdateInformationResult.SuccessRequiresRestart : UpdateInformationResult.Success;
             updateInformation.Message = message;
             updateInformation.RequiresUserNotification = userNotification;
             return updateInformation;
@@ -202,7 +363,7 @@ namespace FocLauncherHost.Updater
         private static UpdateInformation ErrorInformation(UpdateInformation updateInformation, string errorMessage, bool userNotification = false)
         {
             Logger.Debug($"Operation failed with message: {errorMessage}");
-            updateInformation.Result = UpdateResult.Error;
+            updateInformation.Result = UpdateInformationResult.Error;
             updateInformation.Message = errorMessage;
             updateInformation.RequiresUserNotification = userNotification;
             return updateInformation;
@@ -211,10 +372,20 @@ namespace FocLauncherHost.Updater
         private static UpdateInformation CancelledInformation(UpdateInformation updateInformation, bool userNotification = false)
         {
             Logger.Debug("Operation was cancelled by user request");
-            updateInformation.Result = UpdateResult.UserCancelled;
+            updateInformation.Result = UpdateInformationResult.UserCancelled;
             updateInformation.Message = "Operation cancelled by user request";
             updateInformation.RequiresUserNotification = userNotification;
             return updateInformation;
+        }
+
+        private ProductMetadata? GetMatchingProduct(ProductsMetadata products)
+        {
+            if(products == null)
+            throw new NullReferenceException(nameof(products));
+            if (products.Products == null || !products.Products.Any())
+                throw new NotSupportedException("No products to update are found");
+
+            return products.Products.FirstOrDefault(x => x.Name.Equals(Product.Name, StringComparison.InvariantCultureIgnoreCase));
         }
     }
 
@@ -229,7 +400,68 @@ namespace FocLauncherHost.Updater
             Dependency = dependency;
             RequiredAction = requiredAction;
         }
+
+        protected bool Equals(DependencyCheckResult other)
+        {
+            return Dependency.Equals(other.Dependency);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (ReferenceEquals(null, obj)) 
+                return false;
+            if (ReferenceEquals(this, obj)) 
+                return true;
+            return obj.GetType() == GetType() && Equals((DependencyCheckResult)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return Dependency.GetHashCode();
+        }
     }
+
+    public abstract class DependencyUpdateResult
+    {
+        public Dependency Dependency { get; }
+
+        public UpdateActionResult UpdateResult { get; }
+
+        public DependencyAction PerformedAction { get; }
+
+        public DependencyUpdateResult(Dependency dependency, DependencyAction performedAction, UpdateActionResult updateResult)
+        {
+            Dependency = dependency;
+            PerformedAction = performedAction;
+            UpdateResult = updateResult;
+        }
+    }
+
+    public sealed class DependencyKeepResult : DependencyUpdateResult
+    {
+        public DependencyKeepResult(Dependency dependency) : base(dependency, DependencyAction.Keep, UpdateActionResult.Success)
+        {
+        }
+    }
+
+    public sealed class DependencyRemoveResult : DependencyUpdateResult
+    {
+        public string RecoveryFile { get; }
+
+        public DependencyRemoveResult(Dependency dependency, UpdateActionResult result) : base(dependency, DependencyAction.Remove, result)
+        {
+        }
+    }
+
+    public sealed class DependencyDownloadResult : DependencyUpdateResult
+    {
+        public string DownloadedFile { get; }
+
+        public DependencyDownloadResult(Dependency dependency, UpdateActionResult result) : base(dependency, DependencyAction.Update, result)
+        {
+        }
+    }
+
 
     public enum DependencyAction
     {
@@ -241,7 +473,7 @@ namespace FocLauncherHost.Updater
 
     public class UpdateInformation
     {
-        public UpdateResult Result { get; set; }
+        public UpdateInformationResult Result { get; set; }
 
         public bool RequiresUserNotification { get; set; }
 
@@ -253,12 +485,19 @@ namespace FocLauncherHost.Updater
         }
     }
 
-    public enum UpdateResult
+    public enum UpdateActionResult
+    {
+        Failed,
+        Success,
+        Pending,
+        Cancelled
+    }
+
+    public enum UpdateInformationResult
     {
         Success,
         SuccessRequiresRestart,
         Error,
-        HashMismatch,
         UserCancelled
     }
 }
