@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
-using System.Threading;
 
 namespace FocLauncherHost.Updater
 {
@@ -47,12 +46,6 @@ namespace FocLauncherHost.Updater
                 extensions = new[] {".*"};
             var files = dir.EnumerateFiles();
             return files.Where(f => extensions.Contains(f.Extension));
-        }
-
-        internal static DependencyRemoveResult TryRemoveDependency(DependencyCheckResult task, CancellationTokenSource cts)
-        {
-            //cts.Cancel();
-            return new DependencyRemoveResult(task.Dependency, UpdateActionResult.Success);
         }
 
         private static int GetHexVal(char hex)

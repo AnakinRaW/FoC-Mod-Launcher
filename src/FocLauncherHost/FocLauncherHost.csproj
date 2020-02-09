@@ -80,7 +80,15 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Updater\FileSystem\FileSystemExtensions.cs" />
+    <Compile Include="Updater\Tasks\RemoveFileTask.cs" />
+    <Compile Include="Updater\Tasks\DependencyDownloadTask.cs" />
+    <Compile Include="Updater\IDependencyUpdateTask.cs" />
+    <Compile Include="Updater\Tasks\SynchronizedUpdateTask.cs" />
+    <Compile Include="Updater\Tasks\DummyTask.cs" />
+    <Compile Include="Updater\Extensions.cs" />
     <Compile Include="Updater\IProduct.cs" />
+    <Compile Include="Updater\Tasks\KeepTask.cs" />
     <Compile Include="Updater\MetadataModel\Dependency.cs" />
     <Compile Include="Updater\MetadataModel\InstallLocation.cs" />
     <Compile Include="Updater\MetadataModel\ProductMetadata.cs" />
@@ -89,6 +97,7 @@
     <Compile Include="Updater\UpdateManager.cs" />
     <Compile Include="Updater\UpdateServer.cs" />
     <Compile Include="Updater\UpdaterUtilities.cs" />
+    <Compile Include="Updater\Tasks\UpdateTask.cs" />
     <Compile Include="Utilities\AssemblyExtractor.cs" />
     <Compile Include="Utilities\NullToVisibilityConverter.cs" />
     <Compile Include="Utilities\StreamUtilities.cs" />
@@ -180,5 +189,6 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

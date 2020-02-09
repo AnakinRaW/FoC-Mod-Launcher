@@ -63,7 +63,7 @@ namespace FocLauncherHost
                 }
                 catch (OperationCanceledException)
                 {
-                    Logger.Info("Update Operation cancelled");
+                    Logger.Info("Download Operation cancelled");
                 }
                 // Save the exception for later use. Reason: We want to be sure that the wait dialog is closed when showing possible error messages.
                 catch (Exception exception)
