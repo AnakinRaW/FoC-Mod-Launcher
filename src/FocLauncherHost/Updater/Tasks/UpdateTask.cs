@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Linq;
 using System.Threading;
+using FocLauncherHost.Updater.MetadataModel;
 using NLog;
 
 namespace FocLauncherHost.Updater.Tasks
 {
-    internal abstract class UpdateTask : IDependencyUpdateTask
+    internal abstract class UpdateTask : IUpdateTask
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
@@ -14,6 +15,8 @@ namespace FocLauncherHost.Updater.Tasks
         protected internal ILogger Logger { get; private set; }
 
         public Exception Error { get; internal set; }
+
+        public Dependency Dependency { get; internal set; }
 
         ~UpdateTask()
         {

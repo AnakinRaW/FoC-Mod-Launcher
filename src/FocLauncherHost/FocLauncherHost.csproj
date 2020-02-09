@@ -81,9 +81,10 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Updater\FileSystem\FileSystemExtensions.cs" />
+    <Compile Include="Updater\IUpdaterOperation.cs" />
     <Compile Include="Updater\Tasks\RemoveFileTask.cs" />
     <Compile Include="Updater\Tasks\DependencyDownloadTask.cs" />
-    <Compile Include="Updater\IDependencyUpdateTask.cs" />
+    <Compile Include="Updater\IUpdateTask.cs" />
     <Compile Include="Updater\Tasks\SynchronizedUpdateTask.cs" />
     <Compile Include="Updater\Tasks\DummyTask.cs" />
     <Compile Include="Updater\Extensions.cs" />
@@ -95,6 +96,7 @@
     <Compile Include="Updater\MetadataModel\ProductsMetadata.cs" />
     <Compile Include="Updater\StreamExtensions.cs" />
     <Compile Include="Updater\UpdateManager.cs" />
+    <Compile Include="Updater\UpdateOperation.cs" />
     <Compile Include="Updater\UpdateServer.cs" />
     <Compile Include="Updater\UpdaterUtilities.cs" />
     <Compile Include="Updater\Tasks\UpdateTask.cs" />

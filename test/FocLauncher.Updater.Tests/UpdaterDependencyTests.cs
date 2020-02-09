@@ -28,10 +28,10 @@ namespace FocLauncher.Updater.Tests
             dependency.Version = "1.0.0.0";
             dependency.InstallLocation = InstallLocation.AppData;
 
-            const UpdateTaskType expected = UpdateTaskType.Download;
-            var result = await _updateManager.CheckDependencyAsync(dependency);
+            const DependencyAction expected = DependencyAction.Update;
+            await _updateManager.CheckDependencyAsync(dependency);
 
-            Assert.AreEqual(expected, result.Action);
+            Assert.AreEqual(expected, dependency.RequiredAction);
         }
 
         [TestMethod]
@@ -42,10 +42,10 @@ namespace FocLauncher.Updater.Tests
             dependency.Version = "1.0.0.0";
             dependency.InstallLocation = InstallLocation.Current;
 
-            const UpdateTaskType expected = UpdateTaskType.Download;
-            var result = await _updateManager.CheckDependencyAsync(dependency);
+            const DependencyAction expected = DependencyAction.Update;
+            await _updateManager.CheckDependencyAsync(dependency);
 
-            Assert.AreEqual(expected, result.Action);
+            Assert.AreEqual(expected, dependency.RequiredAction);
         }
 
         [TestMethod]
@@ -56,10 +56,10 @@ namespace FocLauncher.Updater.Tests
             dependency.Version = "0.0.0.9";
             dependency.InstallLocation = InstallLocation.AppData;
 
-            const UpdateTaskType expected = UpdateTaskType.Keep;
-            var result = await _updateManager.CheckDependencyAsync(dependency);
+            const DependencyAction expected = DependencyAction.Update;
+            await _updateManager.CheckDependencyAsync(dependency);
 
-            Assert.AreEqual(expected, result.Action);
+            Assert.AreEqual(expected, dependency.RequiredAction);
         }
 
         [TestMethod]
@@ -70,10 +70,10 @@ namespace FocLauncher.Updater.Tests
             dependency.Version = "2.0.0.0";
             dependency.InstallLocation = InstallLocation.AppData;
 
-            const UpdateTaskType expected = UpdateTaskType.Download;
-            var result = await _updateManager.CheckDependencyAsync(dependency);
+            const DependencyAction expected = DependencyAction.Update;
+            await _updateManager.CheckDependencyAsync(dependency);
 
-            Assert.AreEqual(expected, result.Action);
+            Assert.AreEqual(expected, dependency.RequiredAction);
         }
 
         [TestMethod]
@@ -84,10 +84,10 @@ namespace FocLauncher.Updater.Tests
             dependency.Version = "1.0.0.0";
             dependency.InstallLocation = InstallLocation.AppData;
 
-            const UpdateTaskType expected = UpdateTaskType.Keep;
-            var result = await _updateManager.CheckDependencyAsync(dependency);
+            const DependencyAction expected = DependencyAction.Keep;
+            await _updateManager.CheckDependencyAsync(dependency);
 
-            Assert.AreEqual(expected, result.Action);
+            Assert.AreEqual(expected, dependency.RequiredAction);
         }
 
         [TestMethod]
@@ -99,10 +99,10 @@ namespace FocLauncher.Updater.Tests
             dependency.InstallLocation = InstallLocation.AppData;
             dependency.Sha2 = UpdaterUtilities.GetSha2(Path.Combine(ApplicationBasePath, dependency.Name));
 
-            const UpdateTaskType expected = UpdateTaskType.Keep;
-            var result = await _updateManager.CheckDependencyAsync(dependency);
+            const DependencyAction expected = DependencyAction.Keep;
+            await _updateManager.CheckDependencyAsync(dependency);
 
-            Assert.AreEqual(expected, result.Action);
+            Assert.AreEqual(expected, dependency.RequiredAction);
         }
 
         [TestMethod]
@@ -114,10 +114,10 @@ namespace FocLauncher.Updater.Tests
             dependency.Sha2 = null;
             dependency.InstallLocation = InstallLocation.AppData;
 
-            const UpdateTaskType expected = UpdateTaskType.Keep;
-            var result = await _updateManager.CheckDependencyAsync(dependency);
+            const DependencyAction expected = DependencyAction.Keep;
+            await _updateManager.CheckDependencyAsync(dependency);
 
-            Assert.AreEqual(expected, result.Action);
+            Assert.AreEqual(expected, dependency.RequiredAction);
         }
 
         [TestMethod]
@@ -129,10 +129,10 @@ namespace FocLauncher.Updater.Tests
             dependency.InstallLocation = InstallLocation.AppData;
             dependency.Sha2 = UpdaterUtilities.HexToArray("d32b568cd1b96d459e7291ebf4b25d007f275c9f13149beeb782fac0716613f8");
 
-            const UpdateTaskType expected = UpdateTaskType.Download;
-            var result = await _updateManager.CheckDependencyAsync(dependency);
+            const DependencyAction expected = DependencyAction.Update;
+            await _updateManager.CheckDependencyAsync(dependency);
 
-            Assert.AreEqual(expected, result.Action);
+            Assert.AreEqual(expected, dependency.RequiredAction);
         }
 
         internal class Product : IProductInfo

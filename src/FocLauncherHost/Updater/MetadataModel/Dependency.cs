@@ -53,6 +53,12 @@ namespace FocLauncherHost.Updater.MetadataModel
             set => _version = value;
         }
 
+        [XmlIgnore]
+        public DependencyAction RequiredAction { get; set; }
+
+        [XmlIgnore]
+        public CurrentDependencyState CurrentState { get; set; }
+
         public Version? GetVersion()
         {
             try
@@ -89,5 +95,20 @@ namespace FocLauncherHost.Updater.MetadataModel
             return _name == other._name;
         }
 
+    }
+
+    public enum DependencyAction
+    {
+        Keep,
+        Update,
+        Delete
+    }
+
+    public enum CurrentDependencyState
+    {
+        None,
+        Downloaded,
+        Installed,
+        Removed,
     }
 }
