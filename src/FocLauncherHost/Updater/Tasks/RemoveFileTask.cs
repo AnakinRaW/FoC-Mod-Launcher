@@ -5,7 +5,7 @@ using FocLauncherHost.Updater.FileSystem;
 
 namespace FocLauncherHost.Updater.Tasks
 {
-    internal sealed class RemoveFileTask : SynchronizedUpdateTask
+    internal sealed class RemoveFileTask : SynchronizedUpdaterTask
     {
         public FileInfo File { get; }
 

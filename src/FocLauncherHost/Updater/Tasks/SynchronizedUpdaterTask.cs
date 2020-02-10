@@ -3,18 +3,18 @@ using System.Threading;
 
 namespace FocLauncherHost.Updater.Tasks
 {
-    internal abstract class SynchronizedUpdateTask : UpdateTask
+    internal abstract class SynchronizedUpdaterTask : UpdaterTask
     {
         public event EventHandler<EventArgs> Canceled;
 
         private readonly ManualResetEvent _handle;
 
-        protected SynchronizedUpdateTask()
+        protected SynchronizedUpdaterTask()
         {
             _handle = new ManualResetEvent(false);
         }
 
-        ~SynchronizedUpdateTask()
+        ~SynchronizedUpdaterTask()
         {
             Dispose(false);
         }

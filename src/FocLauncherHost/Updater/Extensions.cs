@@ -17,5 +17,15 @@ namespace FocLauncherHost.Updater
                     return false;
             }
         }
+
+        public static bool IsSuccess(this InstallResult result)
+        {
+            return result == InstallResult.Success || result == InstallResult.SuccessRestartRequired;
+        }
+
+        public static bool IsFailure(this InstallResult result)
+        {
+            return result == InstallResult.Failure || result == InstallResult.FailureException;
+        }
     }
 }

@@ -80,12 +80,23 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Updater\TaskRunner\StopTaskRunnerException.cs" />
+    <Compile Include="Updater\Tasks\AcquireMutexTask.cs" />
+    <Compile Include="Updater\InstallResult.cs" />
+    <Compile Include="Updater\TaskRunner\AsyncTaskRunner.cs" />
+    <Compile Include="Updater\TaskRunner\TaskEventArgs.cs" />
+    <Compile Include="Updater\DownloadManager.cs" />
+    <Compile Include="Updater\InstallAction.cs" />
+    <Compile Include="Updater\Tasks\DependencyInstallTask.cs" />
     <Compile Include="Updater\FileSystem\FileSystemExtensions.cs" />
     <Compile Include="Updater\IUpdaterOperation.cs" />
+    <Compile Include="Updater\IDependency.cs" />
+    <Compile Include="Updater\CurrentDependencyState.cs" />
+    <Compile Include="Updater\DependencyAction.cs" />
     <Compile Include="Updater\Tasks\RemoveFileTask.cs" />
     <Compile Include="Updater\Tasks\DependencyDownloadTask.cs" />
-    <Compile Include="Updater\IUpdateTask.cs" />
-    <Compile Include="Updater\Tasks\SynchronizedUpdateTask.cs" />
+    <Compile Include="Updater\IUpdaterTask.cs" />
+    <Compile Include="Updater\Tasks\SynchronizedUpdaterTask.cs" />
     <Compile Include="Updater\Tasks\DummyTask.cs" />
     <Compile Include="Updater\Extensions.cs" />
     <Compile Include="Updater\IProduct.cs" />
@@ -95,11 +106,15 @@
     <Compile Include="Updater\MetadataModel\ProductMetadata.cs" />
     <Compile Include="Updater\MetadataModel\ProductsMetadata.cs" />
     <Compile Include="Updater\StreamExtensions.cs" />
+    <Compile Include="Updater\TaskRunner\TaskRunner.cs" />
     <Compile Include="Updater\UpdateManager.cs" />
+    <Compile Include="Updater\Tasks\UpdaterOnCancelTask.cs" />
     <Compile Include="Updater\UpdateOperation.cs" />
+    <Compile Include="Updater\UpdaterException.cs" />
     <Compile Include="Updater\UpdateServer.cs" />
     <Compile Include="Updater\UpdaterUtilities.cs" />
-    <Compile Include="Updater\Tasks\UpdateTask.cs" />
+    <Compile Include="Updater\Tasks\UpdaterTask.cs" />
+    <Compile Include="Updater\WaitTask.cs" />
     <Compile Include="Utilities\AssemblyExtractor.cs" />
     <Compile Include="Utilities\NullToVisibilityConverter.cs" />
     <Compile Include="Utilities\StreamUtilities.cs" />

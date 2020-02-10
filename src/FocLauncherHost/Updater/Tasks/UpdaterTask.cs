@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Linq;
 using System.Threading;
-using FocLauncherHost.Updater.MetadataModel;
+using FocLauncherHost.Updater.TaskRunner;
 using NLog;
 
 namespace FocLauncherHost.Updater.Tasks
 {
-    internal abstract class UpdateTask : IUpdateTask
+    internal abstract class UpdaterTask : IUpdaterTask
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
@@ -16,9 +16,9 @@ namespace FocLauncherHost.Updater.Tasks
 
         public Exception Error { get; internal set; }
 
-        public Dependency Dependency { get; internal set; }
+        public IDependency Dependency { get; internal set; }
 
-        ~UpdateTask()
+        ~UpdaterTask()
         {
             Dispose(false);
         }
@@ -44,12 +44,21 @@ namespace FocLauncherHost.Updater.Tasks
                 Error = ex.InnerException;
                 throw;
             }
+            catch (StopTaskRunnerException)
+            {
+                throw;
+            }
+            catch (UpdaterException ex)
+            {
+                Error = ex;
+                throw;
+            }
             catch (AggregateException ex)
             {
                 if (!ex.IsExceptionType<OperationCanceledException>())
                     LogFaultException(ex);
                 else
-                    Error = ex.InnerExceptions.FirstOrDefault(p => Extensions.IsExceptionType<OperationCanceledException>(p))?.InnerException;
+                    Error = ex.InnerExceptions.FirstOrDefault(p => p.IsExceptionType<OperationCanceledException>())?.InnerException;
                 throw;
             }
             catch (Exception e)

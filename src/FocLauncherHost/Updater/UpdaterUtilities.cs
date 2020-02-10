@@ -1,14 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security.AccessControl;
 using System.Security.Cryptography;
+using System.Security.Principal;
+using System.Threading;
 
 namespace FocLauncherHost.Updater
 {
     internal static class UpdaterUtilities
     {
+        internal static readonly string UpdaterMutex = $"Global\\{Process.GetCurrentProcess().ProcessName}";
+
         internal static Version? GetAssemblyVersion(string file)
         {
             if (!File.Exists(file))
@@ -52,6 +58,49 @@ namespace FocLauncherHost.Updater
         {
             var val = (int)hex;
             return val - (val < 58 ? 48 : 87);
+        }
+
+        internal static Mutex CheckAndSetGlobalMutex(string name = null)
+        {
+            var mutex = EnsureMutex(name);
+
+            if (mutex == null)
+                throw new InvalidOperationException("Setup can not run");
+            return mutex;
+        }
+
+        internal static Mutex? EnsureMutex(string name = null)
+        {
+            return EnsureMutex(name, TimeSpan.Zero);
+        }
+
+        internal static Mutex? EnsureMutex(string name, TimeSpan timeout)
+        {
+            name ??= UpdaterMutex;
+            Mutex mutex;
+            try
+            {
+                mutex = Mutex.OpenExisting(name);
+            }
+            catch (WaitHandleCannotBeOpenedException)
+            {
+                var securityIdentifier = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
+                var mutexSecurity = new MutexSecurity();
+                var rule = new MutexAccessRule(securityIdentifier, MutexRights.FullControl, AccessControlType.Allow);
+                mutexSecurity.AddAccessRule(rule);
+                mutex = new Mutex(false, name, out _, mutexSecurity);
+            }
+
+            bool mutexAbandoned;
+            try
+            {
+                mutexAbandoned = mutex.WaitOne(timeout);
+            }
+            catch (AbandonedMutexException)
+            {
+                mutexAbandoned = true;
+            }
+            return mutexAbandoned ? mutex : null;
         }
     }
 }

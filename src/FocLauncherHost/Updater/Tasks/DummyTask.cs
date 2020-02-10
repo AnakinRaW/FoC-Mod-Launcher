@@ -2,7 +2,7 @@
 
 namespace FocLauncherHost.Updater.Tasks
 {
-    internal sealed class DummyTask : UpdateTask
+    internal sealed class DummyTask : UpdaterTask
     {
         protected override void ExecuteTask(CancellationToken token)
         {

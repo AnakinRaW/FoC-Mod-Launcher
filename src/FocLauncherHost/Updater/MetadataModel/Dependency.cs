@@ -4,7 +4,7 @@ using System.Xml.Serialization;
 namespace FocLauncherHost.Updater.MetadataModel
 {
     [Serializable]
-    public class Dependency
+    public class Dependency : IDependency
     {
         private InstallLocation _installLocation;
         private bool _requiresRestart;
@@ -95,20 +95,5 @@ namespace FocLauncherHost.Updater.MetadataModel
             return _name == other._name;
         }
 
-    }
-
-    public enum DependencyAction
-    {
-        Keep,
-        Update,
-        Delete
-    }
-
-    public enum CurrentDependencyState
-    {
-        None,
-        Downloaded,
-        Installed,
-        Removed,
     }
 }

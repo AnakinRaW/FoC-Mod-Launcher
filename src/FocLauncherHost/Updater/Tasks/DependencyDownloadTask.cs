@@ -1,19 +1,12 @@
 ﻿using System.Threading;
-using FocLauncherHost.Updater.MetadataModel;
 
 namespace FocLauncherHost.Updater.Tasks
 {
-    internal sealed class DependencyDownloadTask : UpdateTask
+    internal sealed class DependencyDownloadTask : SynchronizedUpdaterTask
     {
-        public Dependency Dependency { get; }
-
-        public DependencyDownloadTask(Dependency dependency)
+        protected override void SynchronizedInvoke(CancellationToken token)
         {
-            Dependency = dependency;
-        }
-
-        protected override void ExecuteTask(CancellationToken token)
-        {
+            throw new System.NotImplementedException();
         }
     }
 }

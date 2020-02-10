@@ -10,6 +10,7 @@ namespace FocLauncherHost.Updater.MetadataModel
     public class ProductMetadata
     {
         private List<Dependency> _dependencies = new List<Dependency>();
+
         private string _name;
         private string _author;
 
@@ -46,10 +47,10 @@ namespace FocLauncherHost.Updater.MetadataModel
 
             var dependencySb = new StringBuilder();
             foreach (var dependency in Dependencies) 
-                dependencySb.AppendLine("\t" + dependency.ToString());
+                dependencySb.AppendLine("\t" + dependency);
 
             sb.AppendLine($"Dependencies ({Dependencies.Count}):");
-            sb.Append(dependencySb.ToString());
+            sb.Append(dependencySb);
             return sb.ToString();
         }
     }
