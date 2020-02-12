@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using FocLauncherHost.UpdateCatalog;
 using FocLauncherHost.Updater;
-using FocLauncherHost.Updater.MetadataModel;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace FocLauncher.Updater.Tests
@@ -26,7 +26,7 @@ namespace FocLauncher.Updater.Tests
             var dependency = new Dependency();
             dependency.Name = "NotExisting.dll";
             dependency.Version = "1.0.0.0";
-            dependency.InstallLocation = InstallLocation.AppData;
+            dependency.Destination = InstallLocation.AppData;
 
             const DependencyAction expected = DependencyAction.Update;
             await _updateManager.CheckDependencyAsync(dependency);
@@ -40,7 +40,7 @@ namespace FocLauncher.Updater.Tests
             var dependency = new Dependency();
             dependency.Name = "NotExisting.dll";
             dependency.Version = "1.0.0.0";
-            dependency.InstallLocation = InstallLocation.Current;
+            dependency.Destination = InstallLocation.Current;
 
             const DependencyAction expected = DependencyAction.Update;
             await _updateManager.CheckDependencyAsync(dependency);
@@ -54,7 +54,7 @@ namespace FocLauncher.Updater.Tests
             var dependency = new Dependency();
             dependency.Name = "FocLauncher.dll";
             dependency.Version = "0.0.0.9";
-            dependency.InstallLocation = InstallLocation.AppData;
+            dependency.Destination = InstallLocation.AppData;
 
             const DependencyAction expected = DependencyAction.Update;
             await _updateManager.CheckDependencyAsync(dependency);
@@ -68,7 +68,7 @@ namespace FocLauncher.Updater.Tests
             var dependency = new Dependency();
             dependency.Name = "FocLauncher.dll";
             dependency.Version = "2.0.0.0";
-            dependency.InstallLocation = InstallLocation.AppData;
+            dependency.Destination = InstallLocation.AppData;
 
             const DependencyAction expected = DependencyAction.Update;
             await _updateManager.CheckDependencyAsync(dependency);
@@ -82,7 +82,7 @@ namespace FocLauncher.Updater.Tests
             var dependency = new Dependency();
             dependency.Name = "FocLauncher.dll";
             dependency.Version = "1.0.0.0";
-            dependency.InstallLocation = InstallLocation.AppData;
+            dependency.Destination = InstallLocation.AppData;
 
             const DependencyAction expected = DependencyAction.Keep;
             await _updateManager.CheckDependencyAsync(dependency);
@@ -96,7 +96,7 @@ namespace FocLauncher.Updater.Tests
             var dependency = new Dependency();
             dependency.Name = "FocLauncher.dll";
             dependency.Version = "1.0.0.0";
-            dependency.InstallLocation = InstallLocation.AppData;
+            dependency.Destination = InstallLocation.AppData;
             dependency.Sha2 = UpdaterUtilities.GetSha2(Path.Combine(ApplicationBasePath, dependency.Name));
 
             const DependencyAction expected = DependencyAction.Keep;
@@ -112,7 +112,7 @@ namespace FocLauncher.Updater.Tests
             dependency.Name = "FocLauncher.dll";
             dependency.Version = "1.0.0.0";
             dependency.Sha2 = null;
-            dependency.InstallLocation = InstallLocation.AppData;
+            dependency.Destination = InstallLocation.AppData;
 
             const DependencyAction expected = DependencyAction.Keep;
             await _updateManager.CheckDependencyAsync(dependency);
@@ -126,7 +126,7 @@ namespace FocLauncher.Updater.Tests
             var dependency = new Dependency();
             dependency.Name = "FocLauncher.dll";
             dependency.Version = "1.0.0.0";
-            dependency.InstallLocation = InstallLocation.AppData;
+            dependency.Destination = InstallLocation.AppData;
             dependency.Sha2 = UpdaterUtilities.HexToArray("d32b568cd1b96d459e7291ebf4b25d007f275c9f13149beeb782fac0716613f8");
 
             const DependencyAction expected = DependencyAction.Update;

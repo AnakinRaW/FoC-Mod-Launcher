@@ -5,9 +5,8 @@
 
   <xs:complexType name="DependencyType">
     <xs:all>
-      <xs:element type="InstallLocationEnum" name="InstallLocation" maxOccurs="1"/>
-      <xs:element type="xs:boolean" name="RequiresRestart" minOccurs="0" maxOccurs="1"/>
-      <xs:element type="xs:anyURI" name="SourceLocation" maxOccurs="1"/>
+      <xs:element type="xs:string" name="Destination" minOccurs="1" maxOccurs="1"/>
+      <xs:element type="xs:anyURI" name="Origin" minOccurs="1" maxOccurs="1"/>
       <xs:element type="SHA2" name="SHA2" minOccurs="0" maxOccurs="1"/>
     </xs:all>
     <xs:attribute type="xs:string" name="Name" use="required"/>
@@ -24,13 +23,6 @@
     <xs:restriction base="xs:hexBinary">
       <xs:minLength value="32"/>
       <xs:maxLength value="32"/>
-    </xs:restriction>
-  </xs:simpleType>
-
-  <xs:simpleType name="InstallLocationEnum" final="restriction" >
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="AppData"/>
-      <xs:enumeration value="Current"/>
     </xs:restriction>
   </xs:simpleType>
 

@@ -16,7 +16,7 @@ namespace FocLauncherHost.Updater.Tasks
 
         public Exception Error { get; internal set; }
 
-        public IDependency Dependency { get; internal set; }
+        public IComponent Component { get; internal set; }
 
         ~UpdaterTask()
         {

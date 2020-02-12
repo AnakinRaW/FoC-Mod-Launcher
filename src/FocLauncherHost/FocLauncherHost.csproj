@@ -80,6 +80,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="FocLauncherUpdaterManager.cs" />
+    <Compile Include="Updater\Component.cs" />
     <Compile Include="Updater\TaskRunner\StopTaskRunnerException.cs" />
     <Compile Include="Updater\Tasks\AcquireMutexTask.cs" />
     <Compile Include="Updater\InstallResult.cs" />
@@ -101,10 +103,10 @@
     <Compile Include="Updater\Extensions.cs" />
     <Compile Include="Updater\IProduct.cs" />
     <Compile Include="Updater\Tasks\KeepTask.cs" />
-    <Compile Include="Updater\MetadataModel\Dependency.cs" />
-    <Compile Include="Updater\MetadataModel\InstallLocation.cs" />
-    <Compile Include="Updater\MetadataModel\ProductMetadata.cs" />
-    <Compile Include="Updater\MetadataModel\ProductsMetadata.cs" />
+    <Compile Include="UpdateCatalog\Dependency.cs" />
+    <Compile Include="UpdateCatalog\InstallLocation.cs" />
+    <Compile Include="UpdateCatalog\ProductCatalog.cs" />
+    <Compile Include="UpdateCatalog\Catalogs.cs" />
     <Compile Include="Updater\StreamExtensions.cs" />
     <Compile Include="Updater\TaskRunner\TaskRunner.cs" />
     <Compile Include="Updater\UpdateManager.cs" />

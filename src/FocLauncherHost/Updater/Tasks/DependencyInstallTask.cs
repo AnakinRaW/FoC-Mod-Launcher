@@ -9,9 +9,9 @@ namespace FocLauncherHost.Updater.Tasks
 
         internal InstallResult Result { get; set; }
 
-        public DependencyInstallTask(IDependency dependency)
+        public DependencyInstallTask(IComponent component)
         {
-            Dependency = dependency;
+            Component = component;
         }
 
         protected override void SynchronizedInvoke(CancellationToken token)

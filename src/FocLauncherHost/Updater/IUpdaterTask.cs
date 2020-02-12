@@ -7,7 +7,7 @@ namespace FocLauncherHost.Updater
     {
         Exception Error { get; }
 
-        IDependency Dependency { get; }
+        IComponent Component { get; }
 
         void Run(CancellationToken token);
     }

@@ -55,7 +55,7 @@ namespace FocLauncherHost
                         TaskContinuationOptions.OnlyOnRanToCompletion,
                         TaskScheduler.FromCurrentSynchronizationContext()).Forget();
 
-                    var updateManager = new UpdateManager(FocLauncherProduct.Instance, @"C:\Users\Anakin\OneDrive\launcherUpdate.xml");
+                    var updateManager = new FocLauncherUpdaterManager(@"C:\Users\Anakin\OneDrive\launcherUpdate.xml");
                     updateInformation = await updateManager.CheckAndPerformUpdateAsync(session.UserCancellationToken);
                     Logger.Info($"Finished automatic update with result {updateInformation}");
 

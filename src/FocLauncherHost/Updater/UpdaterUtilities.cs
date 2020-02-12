@@ -23,15 +23,39 @@ namespace FocLauncherHost.Updater
             return assemblyName.Version;
         }
 
-        internal static byte[]? GetSha2(string file)
+
+        internal static byte[] GetFileHash(string file, HashType hashType)
+        {
+            if (!File.Exists(file))
+                throw new FileNotFoundException(nameof(file));
+
+            switch (hashType)
+            {
+                case HashType.MD5:
+                    return GetFileHash(file, HashAlgorithmName.MD5);
+                case HashType.Sha1:
+                    return GetFileHash(file, HashAlgorithmName.SHA1);
+                case HashType.Sha2:
+                    return GetFileHash(file, HashAlgorithmName.SHA256);
+                case HashType.Sha3:
+                    return GetFileHash(file, HashAlgorithmName.SHA512);
+                default:
+                    throw new InvalidOperationException("Unable to find a hashing algorithm");
+            }
+        }
+
+
+        private static byte[] GetFileHash(string file, HashAlgorithmName algorithm)
         {
             if (!File.Exists(file))
                 return null;
-            using var sha2 = SHA256.Create();
+            using var hash = HashAlgorithm.Create(algorithm.Name);
+            if (hash == null)
+                throw new CryptographicException($"Could not find hashing provider of name: {algorithm}");
             var fileInfo = new FileInfo(file);
             using var fs = fileInfo.OpenRead();
             fs.Position = 0;
-            return sha2.ComputeHash(fs);
+            return hash.ComputeHash(fs);
         }
 
         // https://stackoverflow.com/a/9995303

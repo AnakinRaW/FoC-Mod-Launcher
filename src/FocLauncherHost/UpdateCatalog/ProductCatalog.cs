@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace FocLauncherHost.Updater.MetadataModel
+namespace FocLauncherHost.UpdateCatalog
 {
     [Serializable]
-    public class ProductMetadata
+    public class ProductCatalog
     {
         private List<Dependency> _dependencies = new List<Dependency>();
 

@@ -43,6 +43,7 @@ namespace FocLauncherHost
             }
 
             Environment.SetEnvironmentVariable(LauncherConstants.ApplicationBaseVariable, ApplicationBasePath, EnvironmentVariableTarget.Process);
+            Environment.SetEnvironmentVariable(LauncherConstants.ExecutablePathVariable, Directory.GetCurrentDirectory(), EnvironmentVariableTarget.Process);
 
             if (!Directory.Exists(LauncherConstants.ApplicationBasePath))
                 Directory.CreateDirectory(LauncherConstants.ApplicationBasePath);

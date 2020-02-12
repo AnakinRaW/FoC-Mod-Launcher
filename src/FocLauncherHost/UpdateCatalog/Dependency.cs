@@ -1,22 +1,22 @@
 ﻿using System;
 using System.Xml.Serialization;
 
-namespace FocLauncherHost.Updater.MetadataModel
+namespace FocLauncherHost.UpdateCatalog
 {
     [Serializable]
-    public class Dependency : IDependency
+    public class Dependency
     {
-        private InstallLocation _installLocation;
+        private string _destination;
         private bool _requiresRestart;
-        private string _sourceLocation;
+        private string _origin;
         private byte[] _sha2;
         private string _name;
         private string _version;
 
-        public InstallLocation InstallLocation
+        public string Destination
         {
-            get => _installLocation;
-            set => _installLocation = value;
+            get => _destination;
+            set => _destination = value;
         }
 
         public bool RequiresRestart
@@ -26,10 +26,10 @@ namespace FocLauncherHost.Updater.MetadataModel
         }
 
         [XmlElement(DataType = "anyURI")]
-        public string SourceLocation
+        public string Origin
         {
-            get => _sourceLocation;
-            set => _sourceLocation = value;
+            get => _origin;
+            set => _origin = value;
         }
 
         [XmlElement(DataType = "hexBinary")]
@@ -53,27 +53,9 @@ namespace FocLauncherHost.Updater.MetadataModel
             set => _version = value;
         }
 
-        [XmlIgnore]
-        public DependencyAction RequiredAction { get; set; }
-
-        [XmlIgnore]
-        public CurrentDependencyState CurrentState { get; set; }
-
-        public Version? GetVersion()
-        {
-            try
-            {
-                return System.Version.TryParse(_version, out var version) ? version : null;
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
         public override string ToString()
         {
-            return $"{nameof(Name)}: {Name}, {nameof(Version)}: {Version}, {nameof(InstallLocation)}: {InstallLocation}, {nameof(SourceLocation)}: {SourceLocation}";
+            return $"{nameof(Name)}: {Name}, {nameof(Version)}: {Version}, {nameof(Destination)}: {Destination}, {nameof(Origin)}: {Origin}";
         }
 
         public override bool Equals(object? obj)
@@ -83,6 +65,13 @@ namespace FocLauncherHost.Updater.MetadataModel
             if (ReferenceEquals(this, obj))
                 return true;
             return obj.GetType() == GetType() && Equals((Dependency)obj);
+        }
+
+        internal Version? GetVersion()
+        {
+            if (string.IsNullOrEmpty(Version))
+                return null;
+            return !System.Version.TryParse(Version, out var version) ? null : version;
         }
 
         public override int GetHashCode()

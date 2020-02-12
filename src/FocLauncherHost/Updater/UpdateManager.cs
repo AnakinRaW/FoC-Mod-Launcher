@@ -1,23 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using FocLauncher;
 using FocLauncherHost.Properties;
-using FocLauncherHost.Updater.MetadataModel;
+using FocLauncherHost.UpdateCatalog;
 using FocLauncherHost.Utilities;
 using NLog;
 
 namespace FocLauncherHost.Updater
 {
-    internal class UpdateManager
+    public abstract class UpdateManager
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-
-        private readonly object _syncObject = new object();
+        protected static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private readonly List<IComponent> _components = new List<IComponent>();
+        private readonly List<IComponent> _removableComponents = new List<IComponent>();
+        private ReadOnlyCollection<IComponent> _componentsReadOnly;
+        private ReadOnlyCollection<IComponent> _removableComponentsReadOnly;
 
         public Uri UpdateMetadataLocation { get; }
 
@@ -27,17 +28,32 @@ namespace FocLauncherHost.Updater
 
         protected virtual IEnumerable<string> FileDeleteExtensionFilter => new List<string>{".dll", ".exe"};
 
+        public IReadOnlyCollection<IComponent> Components => _componentsReadOnly ??= new ReadOnlyCollection<IComponent>(_components);
 
-        public UpdateManager(IProductInfo productInfo, string versionMetadataPath)
+        public IReadOnlyCollection<IComponent> RemovableComponents => _removableComponentsReadOnly ??= new ReadOnlyCollection<IComponent>(_removableComponents);
+
+        protected UpdateManager(IProductInfo productInfo)
+        {
+            Product = productInfo;
+        }
+
+        protected UpdateManager(IProductInfo productInfo, string versionMetadataPath) : this(productInfo)
         {
             if (!Uri.TryCreate(versionMetadataPath, UriKind.Absolute, out var metadataUri))
                 throw new UriFormatException();
             UpdateMetadataLocation = metadataUri;
-            Product = productInfo;
+        }
+
+        private string GetRealDependencyDestination(Dependency dependency)
+        {
+            var destination = Environment.ExpandEnvironmentVariables(dependency.Destination);
+            if (!Uri.TryCreate(destination, UriKind.Absolute, out var uri))
+                throw new InvalidOperationException($"No absolute dependency destination: {destination}");
+            return uri.LocalPath;
         }
 
         // TODO: Do not allow reentracne
-        public async Task<UpdateInformation> CheckAndPerformUpdateAsync(CancellationToken cancellation)
+        public virtual async Task<UpdateInformation> CheckAndPerformUpdateAsync(CancellationToken cancellation)
         {
             cancellation.ThrowIfCancellationRequested();
             Logger.Info("Start automatic check and update...");
@@ -61,18 +77,52 @@ namespace FocLauncherHost.Updater
                 return ErrorInformation(updateInformation,
                     "Failed to deserialize metadata stream. Incompatible version?");
 
-            var dependencies = (await TryGetUpdateDependenciesAsync(products, cts.Token)).ToList();
-            var removableDependencies = await GetRemovableAssembliesAsync(products);
-            var allDependencies = dependencies.Union(removableDependencies).ToList();
+            var product = GetMatchingProduct(products);
+            if (product is null)
+                return ErrorInformation(updateInformation, "No products to update are found");
+
+
+
+
+
+
+            // TODO: Everything up here is FocLauncher specific code that should be put into a custom operation
+            var result = new HashSet<IComponent>(ComponentIdentityComparer.Default);
+            foreach (var dependency in product.Dependencies)
+            {
+                if (string.IsNullOrEmpty(dependency.Name) || string.IsNullOrEmpty(dependency.Destination))
+                    continue;
+                var component = new Component
+                {
+                    Name = dependency.Name, Destination = GetRealDependencyDestination(dependency)
+                };
+
+                if (!string.IsNullOrEmpty(dependency.Origin))
+                {
+                    var newVersion = dependency.GetVersion();
+                    var hash = dependency.Sha2;
+
+                    ValidationContext validationContext = null;
+                    if (hash != null)
+                        validationContext = new ValidationContext{Hash = hash, HashType = HashType.Sha2};
+                    var originInfo =  new OriginInfo(new Uri(dependency.Origin, UriKind.Absolute), newVersion, validationContext);
+                    component.OriginInfo = originInfo;
+                }
+
+                result.Add(component);
+            }
+
+            _components.AddRange(result);
+            
+            await CalculateComponentStatusAsync(cts.Token);
+            await CalculateRemovableComponentsAsync();
 
             if (cts.IsCancellationRequested)
                 return CancelledInformation(updateInformation);
-            if (allDependencies.Any(x => x is null))
+            if (!Components.Any() && !RemovableComponents.Any())
                 return ErrorInformation(updateInformation, "Unable to check dependencies if update is available");
-            //if (!tasks.Any())
-            //    return SuccessInformation(updateInformation, "No updates available");
 
-            var updateResult =  await UpdateAsync(allDependencies, cts.Token);
+            var updateResult =  await UpdateAsync(cts.Token);
 
 
             if (updateResult == UpdateResult.Cancelled || updateResult == UpdateResult.Failed)
@@ -93,7 +143,7 @@ namespace FocLauncherHost.Updater
         }
 
         // TODO: Do not allow reentracne
-        public async Task<UpdateResult> UpdateAsync(IReadOnlyCollection<IDependency> updateTasks, CancellationToken cancellation)
+        public async Task<UpdateResult> UpdateAsync(CancellationToken cancellation)
         {
             cancellation.ThrowIfCancellationRequested();
             //if (updateTasks == null || !updateTasks.Any())
@@ -106,10 +156,11 @@ namespace FocLauncherHost.Updater
 
             var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellation);
 
+            var allComponents = Components.Concat(RemovableComponents);
 
             await Task.Run(() =>
             {
-                var operation = new UpdateOperation(Product, updateTasks);
+                var operation = new UpdateOperation(Product, allComponents);
                 operation.Schedule();
                 try
                 {
@@ -140,31 +191,16 @@ namespace FocLauncherHost.Updater
             return UpdateResult.Success;
         }
 
-        public async Task<ICollection<IDependency>> GetUpdateDependenciesAsync(ProductMetadata product, CancellationToken cancellation = default)
+        public async Task CalculateComponentStatusAsync(CancellationToken cancellation = default)
         {
-            if (product == null)
-                throw new NullReferenceException(nameof(product));
-            Logger.Trace($"Try getting update tasks from {product}");
-            if (!product.Name.Equals(Product.Name, StringComparison.InvariantCultureIgnoreCase)) 
-                throw new NotSupportedException("The product to download does not match with the product initialized");
-
-            var result = new HashSet<IDependency>();
-            foreach (var dependency in product.Dependencies)
+            Logger.Trace("Calculating current component state");
+            
+            foreach (var component in Components)
             {
                 cancellation.ThrowIfCancellationRequested();
                 await Task.Yield();
-                await CheckDependencyAsync(dependency);
-                result.Add(dependency);
+                await CheckDependencyAsync(component);
             }
-            return result;
-        }
-
-        public async Task<ICollection<IDependency>> GetUpdateDependenciesAsync(ProductsMetadata productsMetadata, CancellationToken cancellation = default)
-        {
-            var product = GetMatchingProduct(productsMetadata);
-            if (product == null)
-                throw new NotSupportedException("No products to update are found");
-            return await GetUpdateDependenciesAsync(product, cancellation);
         }
 
         public async Task<Stream?> GetMetadataStreamAsync(CancellationToken cancellation)
@@ -191,180 +227,134 @@ namespace FocLauncherHost.Updater
             }
             catch (TaskCanceledException)
             {
-                Logger.Trace($"Getting metadata stream was cancelled");
+                Logger.Trace("Getting metadata stream was cancelled");
                 return null;
             }
         }
 
-        public async Task<ICollection<IDependency>> GetRemovableAssembliesAsync(ProductsMetadata products)
+        public async Task CalculateRemovableComponentsAsync()
         {
-            var product = GetMatchingProduct(products);
-            if (product == null)
-                throw new NotSupportedException("No products to update are found");
-            return await GetRemovableAssembliesAsync(product);
+            await CalculateRemovableComponentsAsync(Product.AppDataPath);
         }
 
-        public async Task<ICollection<IDependency>> GetRemovableAssembliesAsync(ProductMetadata product)
-        {
-            if (product == null)
-                throw new NullReferenceException(nameof(product));
-            Logger.Trace($"Try getting removable files tasks");
-            if (!product.Name.Equals(Product.Name, StringComparison.InvariantCultureIgnoreCase))
-                throw new NotSupportedException("The product to download does not match with the product initialized");
-            return await GetRemovableAssembliesAsync(Product.AppDataPath, product.Dependencies);
-        }
-
-        internal Task<ICollection<IDependency>> GetRemovableAssembliesAsync(string basePath, IReadOnlyCollection<IDependency> dependencies)
+        internal Task CalculateRemovableComponentsAsync(string basePath)
         {
             if (basePath == null || !Directory.Exists(basePath))
-                return Task.FromResult<ICollection<IDependency>>(new List<IDependency>());
+                return Task.FromException(new DirectoryNotFoundException(nameof(basePath)));
+
+
             var localFiles = new DirectoryInfo(basePath).GetFilesByExtensions(FileDeleteExtensionFilter.ToArray());
 
-            var result = new List<IDependency>();
             foreach (var file in localFiles)
             {
                 if (FileDeleteIgnoreFilter.Any(x => file.Name.EndsWith(x)))
                     continue;
-                if (dependencies.Any(x => file.Name.Equals(x.Name) && x.InstallLocation == InstallLocation.AppData))
-                    continue;
 
+                if (!FileCanBeDeleted(file))
+                    continue;
+                
                 Logger.Info($"File marked to get deleted: {file.FullName}");
 
-                var dependency = new Dependency
+                var component = new Component
                 {
                     Name = file.Name,
-                    Version = UpdaterUtilities.GetAssemblyVersion(file.FullName).ToString(),
-                    CurrentState = CurrentDependencyState.Installed,
-                    RequiredAction = DependencyAction.Delete,
-                    InstallLocation = InstallLocation.AppData
+                    CurrentState = CurrentState.Installed,
+                    RequiredAction = ComponentAction.Delete,
+                    Destination = file.DirectoryName
                 };
-                
-                result.Add(dependency);
+
+                _removableComponents.Add(component);
             }
 
-            return Task.FromResult<ICollection<IDependency>>(result);
+            return Task.CompletedTask;
         }
-
-        internal Task CheckDependencyAsync(IDependency dependency)
+        
+        internal Task CheckDependencyAsync(IComponent component)
         {
-            var basePath = string.Empty;
-            Logger.Trace($"Check dependency if update required: {dependency}");
-            switch (dependency.InstallLocation)
-            {
-                case InstallLocation.AppData:
-                    basePath = LauncherConstants.ApplicationBasePath;
-                    break;
-                case InstallLocation.Current:
-                {
-                    var processPath = Process.GetCurrentProcess().MainModule?.FileName;
-                    if (processPath == null)
-                        return Task.FromException(new InvalidOperationException());
-                    basePath = new DirectoryInfo(processPath).Parent?.FullName;
-                    break;
-                }
-            }
-
-            Logger.Trace($"Dependency base path: {basePath}");
-            if (basePath == null)
+            Logger.Trace($"Check dependency if update required: {component}");
+            
+            var destination = component.Destination;
+            Logger.Trace($"Dependency base path: {destination}");
+            if (string.IsNullOrEmpty(destination))
                 return Task.FromException(new InvalidOperationException());
 
-            var filePath = Path.Combine(basePath, dependency.Name);
+            var filePath = Path.Combine(destination, component.Name);
             if (File.Exists(filePath))
             {
-                var newVersion = dependency.GetVersion();
+                if (component.OriginInfo is null)
+                    return Task.CompletedTask;
+
+                var newVersion = component.OriginInfo.Version;
                 var currentVersion = UpdaterUtilities.GetAssemblyVersion(filePath);
 
                 if (newVersion == null)
                 {
-                    Logger.Info($"Dependency marked to keep: {dependency}");
-                    dependency.CurrentState = currentVersion == null ? CurrentDependencyState.None : CurrentDependencyState.Installed;
+                    Logger.Info($"Dependency marked to keep: {component}");
+                    component.CurrentState = currentVersion == null ? CurrentState.None : CurrentState.Installed;
                     return Task.CompletedTask;
                 }
 
-                if (currentVersion == null || newVersion != currentVersion)
+                if (currentVersion == null)
                 {
-                    Logger.Info($"Dependency marked to get updated: {dependency}");
-                    dependency.CurrentState = currentVersion == null
-                        ? CurrentDependencyState.None
-                        : CurrentDependencyState.Installed;
-                    dependency.RequiredAction = DependencyAction.Update;
+                    Logger.Info($"Dependency marked to get updated: {component}");
+                    component.CurrentState = CurrentState.None;
+                    component.RequiredAction = ComponentAction.Update;
                     return Task.CompletedTask;
                 }
 
-                if (dependency.Sha2 == null)
+                component.CurrentVersion = currentVersion;
+
+                if (newVersion != currentVersion)
                 {
-                    Logger.Info($"Dependency marked to keep: {dependency}");
+                    Logger.Info($"Dependency marked to get updated: {component}");
+                    component.CurrentState = CurrentState.Installed;
+                    component.RequiredAction = ComponentAction.Update;
                     return Task.CompletedTask;
                 }
 
-                var fileHash = UpdaterUtilities.GetSha2(filePath);
-                if (fileHash == null || !fileHash.SequenceEqual(dependency.Sha2))
+                if (component.OriginInfo.ValidationContext is null)
                 {
-                    Logger.Info($"Dependency marked to get updated: {dependency}");
-                    dependency.CurrentState = CurrentDependencyState.Installed;
-                    dependency.RequiredAction = DependencyAction.Update;
+                    Logger.Info($"Dependency marked to keep: {component}");
                     return Task.CompletedTask;
                 }
 
-                Logger.Info($"Dependency marked to keep: {dependency}");
+                var fileHash = UpdaterUtilities.GetFileHash(filePath, component.OriginInfo.ValidationContext.HashType);
+                if (fileHash == null || !fileHash.SequenceEqual(component.OriginInfo.ValidationContext.Hash))
+                {
+                    Logger.Info($"Dependency marked to get updated: {component}");
+                    component.CurrentState = CurrentState.Installed;
+                    component.RequiredAction = ComponentAction.Update;
+                    return Task.CompletedTask;
+                }
+
+                Logger.Info($"Dependency marked to keep: {component}");
                 return Task.CompletedTask;
             }
 
-            Logger.Info($"Dependency marked to get updated: {dependency}");
-            dependency.RequiredAction = DependencyAction.Update;
+            Logger.Info($"Dependency marked to get updated: {component}");
+            component.RequiredAction = ComponentAction.Update;
             return Task.CompletedTask;
         }
+        
+        protected virtual bool FileCanBeDeleted(FileInfo file)
+        {
+            return false;
+        }
 
-        private async Task<ICollection<IDependency>> TryGetUpdateDependenciesAsync(ProductsMetadata productsMetadata, CancellationToken cancellation = default)
+        private static Task<Catalogs> TryGetProductFromStreamAsync(Stream stream)
         {
             try
             {
-                Logger.Trace("Try getting update tasks");
-                return await GetUpdateDependenciesAsync(productsMetadata, cancellation);
-            }
-            catch (OperationCanceledException e)
-            {
-                Logger.Trace(e, "Getting dependencies was cancelled. Returning empty instead.");
-                return new List<IDependency>();
+                Logger.Trace("Try deserializing stream to Catalogs");
+                return Catalogs.DeserializeAsync(stream);
             }
             catch (Exception e)
             {
-                Logger.Error(e, "Getting dependencies failed with exception. Returning empty instead.");
-                return new List<IDependency>();
+                Logger.Debug(e, "Getting catalogs from stream failed with exception. Returning null instead.");
+                return Task.FromResult<Catalogs>(null);
             }
         }
-
-        private static Task<ProductsMetadata> TryGetProductFromStreamAsync(Stream stream)
-        {
-            try
-            {
-                Logger.Trace("Try deserializing stream to ProductsMetadata");
-                return ProductsMetadata.DeserializeAsync(stream);
-            }
-            catch (Exception e)
-            {
-                Logger.Debug(e, "Getting products from stream failed with exception. Returning null instead.");
-                return Task.FromResult<ProductsMetadata>(null);
-            }
-        }
-
-        private async Task<UpdateResult> TryUpdateAsync(IReadOnlyCollection<Dependency> dependencies, CancellationToken token = default)
-        {
-            try
-            {
-                Logger.Trace("Try updating");
-                return await UpdateAsync(dependencies, token);
-            }
-            catch (TaskCanceledException)
-            {
-                return UpdateResult.Cancelled;
-            }
-            catch (Exception)
-            {
-                return UpdateResult.Failed;
-            }
-        }
-
+        
         private static async Task<bool> ValidateStreamAsync(Stream inputStream)
         {
             var schemeStream = Resources.UpdateValidator.ToStream();
@@ -399,10 +389,10 @@ namespace FocLauncherHost.Updater
             return updateInformation;
         }
 
-        private ProductMetadata? GetMatchingProduct(ProductsMetadata products)
+        private ProductCatalog? GetMatchingProduct(Catalogs products)
         {
-            if(products == null)
-            throw new NullReferenceException(nameof(products));
+            if (products == null)
+                throw new NullReferenceException(nameof(products));
             if (products.Products == null || !products.Products.Any())
                 throw new NotSupportedException("No products to update are found");
 
