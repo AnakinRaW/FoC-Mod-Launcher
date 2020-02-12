@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using FocLauncherHost.Updater.Component;
 
 namespace FocLauncherHost.Updater
 {

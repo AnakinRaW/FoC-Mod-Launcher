@@ -1,8 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using FocLauncherHost;
 using FocLauncherHost.UpdateCatalog;
 using FocLauncherHost.Updater;
+using FocLauncherHost.Updater.Component;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace FocLauncher.Updater.Tests
@@ -17,7 +22,7 @@ namespace FocLauncher.Updater.Tests
         public void SetUpdateManager()
         {
             Environment.SetEnvironmentVariable(LauncherConstants.ApplicationBaseVariable, ApplicationBasePath, EnvironmentVariableTarget.Process);
-            _updateManager = new UpdateManager(new Product(), @"C:\Users\Anakin\OneDrive\launcherUpdate.xml");
+            _updateManager = new TestUpdateManager(new Product(), @"C:\Users\Anakin\OneDrive\launcherUpdate.xml");
         }
 
         [TestMethod]
@@ -26,12 +31,15 @@ namespace FocLauncher.Updater.Tests
             var dependency = new Dependency();
             dependency.Name = "NotExisting.dll";
             dependency.Version = "1.0.0.0";
-            dependency.Destination = InstallLocation.AppData;
+            dependency.Destination = ApplicationBasePath;
+            dependency.Origin = "https://example.com";
 
-            const DependencyAction expected = DependencyAction.Update;
-            await _updateManager.CheckDependencyAsync(dependency);
+            var component = FocLauncherUpdaterManager.DependencyToComponent(dependency);
 
-            Assert.AreEqual(expected, dependency.RequiredAction);
+            const ComponentAction expected = ComponentAction.Update;
+            await _updateManager.CalculateComponentStatusAsync(component);
+
+            Assert.AreEqual(expected, component.RequiredAction);
         }
 
         [TestMethod]
@@ -40,12 +48,15 @@ namespace FocLauncher.Updater.Tests
             var dependency = new Dependency();
             dependency.Name = "NotExisting.dll";
             dependency.Version = "1.0.0.0";
-            dependency.Destination = InstallLocation.Current;
+            dependency.Destination = ApplicationBasePath;
+            dependency.Origin = "https://example.com";
 
-            const DependencyAction expected = DependencyAction.Update;
-            await _updateManager.CheckDependencyAsync(dependency);
+            var component = FocLauncherUpdaterManager.DependencyToComponent(dependency);
 
-            Assert.AreEqual(expected, dependency.RequiredAction);
+            const ComponentAction expected = ComponentAction.Update;
+            await _updateManager.CalculateComponentStatusAsync(component);
+
+            Assert.AreEqual(expected, component.RequiredAction);
         }
 
         [TestMethod]
@@ -54,12 +65,15 @@ namespace FocLauncher.Updater.Tests
             var dependency = new Dependency();
             dependency.Name = "FocLauncher.dll";
             dependency.Version = "0.0.0.9";
-            dependency.Destination = InstallLocation.AppData;
+            dependency.Destination = ApplicationBasePath;
+            dependency.Origin = "https://example.com";
 
-            const DependencyAction expected = DependencyAction.Update;
-            await _updateManager.CheckDependencyAsync(dependency);
+            var component = FocLauncherUpdaterManager.DependencyToComponent(dependency);
 
-            Assert.AreEqual(expected, dependency.RequiredAction);
+            const ComponentAction expected = ComponentAction.Update;
+            await _updateManager.CalculateComponentStatusAsync(component);
+
+            Assert.AreEqual(expected, component.RequiredAction);
         }
 
         [TestMethod]
@@ -68,12 +82,15 @@ namespace FocLauncher.Updater.Tests
             var dependency = new Dependency();
             dependency.Name = "FocLauncher.dll";
             dependency.Version = "2.0.0.0";
-            dependency.Destination = InstallLocation.AppData;
+            dependency.Destination = ApplicationBasePath;
+            dependency.Origin = "https://example.com";
 
-            const DependencyAction expected = DependencyAction.Update;
-            await _updateManager.CheckDependencyAsync(dependency);
+            var component = FocLauncherUpdaterManager.DependencyToComponent(dependency);
 
-            Assert.AreEqual(expected, dependency.RequiredAction);
+            const ComponentAction expected = ComponentAction.Update;
+            await _updateManager.CalculateComponentStatusAsync(component);
+
+            Assert.AreEqual(expected, component.RequiredAction);
         }
 
         [TestMethod]
@@ -82,12 +99,15 @@ namespace FocLauncher.Updater.Tests
             var dependency = new Dependency();
             dependency.Name = "FocLauncher.dll";
             dependency.Version = "1.0.0.0";
-            dependency.Destination = InstallLocation.AppData;
+            dependency.Destination = ApplicationBasePath;
+            dependency.Origin = "https://example.com";
 
-            const DependencyAction expected = DependencyAction.Keep;
-            await _updateManager.CheckDependencyAsync(dependency);
+            var component = FocLauncherUpdaterManager.DependencyToComponent(dependency);
 
-            Assert.AreEqual(expected, dependency.RequiredAction);
+            const ComponentAction expected = ComponentAction.Keep;
+            await _updateManager.CalculateComponentStatusAsync(component);
+
+            Assert.AreEqual(expected, component.RequiredAction);
         }
 
         [TestMethod]
@@ -96,13 +116,16 @@ namespace FocLauncher.Updater.Tests
             var dependency = new Dependency();
             dependency.Name = "FocLauncher.dll";
             dependency.Version = "1.0.0.0";
-            dependency.Destination = InstallLocation.AppData;
-            dependency.Sha2 = UpdaterUtilities.GetSha2(Path.Combine(ApplicationBasePath, dependency.Name));
+            dependency.Destination = ApplicationBasePath;
+            dependency.Sha2 = UpdaterUtilities.GetFileHash(Path.Combine(ApplicationBasePath, dependency.Name), HashType.Sha2);
+            dependency.Origin = "https://example.com";
 
-            const DependencyAction expected = DependencyAction.Keep;
-            await _updateManager.CheckDependencyAsync(dependency);
+            var component = FocLauncherUpdaterManager.DependencyToComponent(dependency);
 
-            Assert.AreEqual(expected, dependency.RequiredAction);
+            const ComponentAction expected = ComponentAction.Keep;
+            await _updateManager.CalculateComponentStatusAsync(component);
+
+            Assert.AreEqual(expected, component.RequiredAction);
         }
 
         [TestMethod]
@@ -112,12 +135,15 @@ namespace FocLauncher.Updater.Tests
             dependency.Name = "FocLauncher.dll";
             dependency.Version = "1.0.0.0";
             dependency.Sha2 = null;
-            dependency.Destination = InstallLocation.AppData;
+            dependency.Destination = ApplicationBasePath;
+            dependency.Origin = "https://example.com";
 
-            const DependencyAction expected = DependencyAction.Keep;
-            await _updateManager.CheckDependencyAsync(dependency);
+            var component = FocLauncherUpdaterManager.DependencyToComponent(dependency);
 
-            Assert.AreEqual(expected, dependency.RequiredAction);
+            const ComponentAction expected = ComponentAction.Keep;
+            await _updateManager.CalculateComponentStatusAsync(component);
+
+            Assert.AreEqual(expected, component.RequiredAction);
         }
 
         [TestMethod]
@@ -126,13 +152,33 @@ namespace FocLauncher.Updater.Tests
             var dependency = new Dependency();
             dependency.Name = "FocLauncher.dll";
             dependency.Version = "1.0.0.0";
-            dependency.Destination = InstallLocation.AppData;
+            dependency.Destination = ApplicationBasePath;
             dependency.Sha2 = UpdaterUtilities.HexToArray("d32b568cd1b96d459e7291ebf4b25d007f275c9f13149beeb782fac0716613f8");
+            dependency.Origin = "https://example.com";
 
-            const DependencyAction expected = DependencyAction.Update;
-            await _updateManager.CheckDependencyAsync(dependency);
+            var component = FocLauncherUpdaterManager.DependencyToComponent(dependency);
 
-            Assert.AreEqual(expected, dependency.RequiredAction);
+            const ComponentAction expected = ComponentAction.Update;
+            await _updateManager.CalculateComponentStatusAsync(component);
+
+            Assert.AreEqual(expected, component.RequiredAction);
+        }
+
+        internal class TestUpdateManager : UpdateManager
+        {
+            public TestUpdateManager(IProductInfo productInfo, string versionMetadataPath) : base(productInfo, versionMetadataPath)
+            {
+            }
+
+            protected override Task<IEnumerable<IComponent>> GetCatalogComponentsAsync(Stream catalogStream, CancellationToken token)
+            {
+                return Task.FromResult(Enumerable.Empty<IComponent>());
+            }
+
+            protected override Task<bool> ValidateCatalogStreamAsync(Stream inputStream)
+            {
+                return Task.FromResult(true);
+            }
         }
 
         internal class Product : IProductInfo

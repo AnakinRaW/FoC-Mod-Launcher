@@ -1,23 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace FocLauncherHost.Updater
+namespace FocLauncherHost.Updater.Component
 {
-    public interface IComponent : IEquatable<IComponent>
-    {
-        string Destination { get; set; }
-
-        string Name { get; set; }
-        
-        ComponentAction RequiredAction { get; set; }
-
-        CurrentState CurrentState { get; set; }
-
-        Version? CurrentVersion { get; set; }
-
-        OriginInfo? OriginInfo { get; set; }
-    }
-
     public class ComponentIdentityComparer : IEqualityComparer<IComponent>, IComparer<IComponent>
     {
         public static readonly ComponentIdentityComparer Default = new ComponentIdentityComparer();
@@ -84,78 +69,5 @@ namespace FocLauncherHost.Updater
             }
             return num;
         }
-    }
-
-
-    public class Component : IComponent
-    {
-        public string Destination { get; set; }
-
-        public string Name { get; set; }
-
-        public ComponentAction RequiredAction { get; set; }
-
-        public CurrentState CurrentState { get; set; }
-
-        public Version? CurrentVersion { get; set; }
-
-        public OriginInfo? OriginInfo { get; set; }
-        
-        public override string ToString()
-        {
-            return !string.IsNullOrEmpty(Name) ? $"{Name},destination='{Destination}'" : base.ToString();
-        }
-
-        public bool Equals(IComponent other)
-        {
-            return ComponentIdentityComparer.Default.Equals(this, other);
-        }
-    }
-
-    public enum ComponentAction
-    {
-        Keep,
-        Update,
-        Delete
-    }
-
-    public enum CurrentState
-    {
-        None,
-        Downloaded,
-        Installed,
-        Removed,
-    }
-
-    public class OriginInfo
-    {
-        public Uri Origin { get; }
-
-        public Version? Version { get; }
-
-        public ValidationContext? ValidationContext { get; }
-
-        public OriginInfo(Uri origin, Version version = null, ValidationContext validationContext = null)
-        {
-            Origin = origin ?? throw new ArgumentNullException(nameof(origin));
-            Version = version;
-            ValidationContext = validationContext;
-        }
-    }
-
-    public class ValidationContext
-    {
-        public byte[] Hash { get; set; }
-
-        public HashType HashType { get; set; }
-    }
-
-    public enum HashType
-    {
-        None,
-        MD5,
-        Sha1,
-        Sha2,
-        Sha3
     }
 }

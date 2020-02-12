@@ -1,5 +1,5 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
+using FocLauncherHost.Updater.Component;
 
 namespace FocLauncherHost.Updater.Tasks
 {
@@ -16,7 +16,6 @@ namespace FocLauncherHost.Updater.Tasks
 
         protected override void SynchronizedInvoke(CancellationToken token)
         {
-
         }
     }
 }

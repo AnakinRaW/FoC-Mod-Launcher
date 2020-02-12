@@ -5,9 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using FocLauncherHost.Properties;
-using FocLauncherHost.UpdateCatalog;
-using FocLauncherHost.Utilities;
+using FocLauncherHost.Updater.Component;
 using NLog;
 
 namespace FocLauncherHost.Updater
@@ -20,11 +18,11 @@ namespace FocLauncherHost.Updater
         private ReadOnlyCollection<IComponent> _componentsReadOnly;
         private ReadOnlyCollection<IComponent> _removableComponentsReadOnly;
 
-        public Uri UpdateMetadataLocation { get; }
+        public Uri UpdateCatalogLocation { get; }
 
         public IProductInfo Product { get; }
         
-        protected virtual IEnumerable<string> FileDeleteIgnoreFilter => new List<string>{".Theme.dll"};
+        protected virtual IEnumerable<string> FileDeleteIgnoreFilter => new List<string>();
 
         protected virtual IEnumerable<string> FileDeleteExtensionFilter => new List<string>{".dll", ".exe"};
 
@@ -32,25 +30,19 @@ namespace FocLauncherHost.Updater
 
         public IReadOnlyCollection<IComponent> RemovableComponents => _removableComponentsReadOnly ??= new ReadOnlyCollection<IComponent>(_removableComponents);
 
-        protected UpdateManager(IProductInfo productInfo)
-        {
-            Product = productInfo;
-        }
+        //protected UpdateManager(IProductInfo productInfo)
+        //{
+        //    Product = productInfo;
+        //}
 
-        protected UpdateManager(IProductInfo productInfo, string versionMetadataPath) : this(productInfo)
+        protected UpdateManager(IProductInfo productInfo, string versionMetadataPath) // : this(productInfo)
         {
             if (!Uri.TryCreate(versionMetadataPath, UriKind.Absolute, out var metadataUri))
                 throw new UriFormatException();
-            UpdateMetadataLocation = metadataUri;
+            UpdateCatalogLocation = metadataUri;
+            Product = productInfo;
         }
 
-        private string GetRealDependencyDestination(Dependency dependency)
-        {
-            var destination = Environment.ExpandEnvironmentVariables(dependency.Destination);
-            if (!Uri.TryCreate(destination, UriKind.Absolute, out var uri))
-                throw new InvalidOperationException($"No absolute dependency destination: {destination}");
-            return uri.LocalPath;
-        }
 
         // TODO: Do not allow reentracne
         public virtual async Task<UpdateInformation> CheckAndPerformUpdateAsync(CancellationToken cancellation)
@@ -66,54 +58,33 @@ namespace FocLauncherHost.Updater
                 return CancelledInformation(updateInformation);
             if (stream is null || stream.Length == 0)
                 return ErrorInformation(updateInformation,
-                    $"Unable to get the update metadata from: {UpdateMetadataLocation}");
+                    $"Unable to get the update metadata from: {UpdateCatalogLocation}");
 
-            if (!await ValidateStreamAsync(stream))
+            
+            if (!await ValidateCatalogStreamAsync(stream))
                 return ErrorInformation(updateInformation,
                     "Stream validation for metadata failed. Download corrupted?");
 
-            var products =  await TryGetProductFromStreamAsync(stream);
-            if (products is null)
-                return ErrorInformation(updateInformation,
-                    "Failed to deserialize metadata stream. Incompatible version?");
-
-            var product = GetMatchingProduct(products);
-            if (product is null)
-                return ErrorInformation(updateInformation, "No products to update are found");
-
-
-
-
-
-
-            // TODO: Everything up here is FocLauncher specific code that should be put into a custom operation
-            var result = new HashSet<IComponent>(ComponentIdentityComparer.Default);
-            foreach (var dependency in product.Dependencies)
+            try
             {
-                if (string.IsNullOrEmpty(dependency.Name) || string.IsNullOrEmpty(dependency.Destination))
-                    continue;
-                var component = new Component
-                {
-                    Name = dependency.Name, Destination = GetRealDependencyDestination(dependency)
-                };
-
-                if (!string.IsNullOrEmpty(dependency.Origin))
-                {
-                    var newVersion = dependency.GetVersion();
-                    var hash = dependency.Sha2;
-
-                    ValidationContext validationContext = null;
-                    if (hash != null)
-                        validationContext = new ValidationContext{Hash = hash, HashType = HashType.Sha2};
-                    var originInfo =  new OriginInfo(new Uri(dependency.Origin, UriKind.Absolute), newVersion, validationContext);
-                    component.OriginInfo = originInfo;
-                }
-
-                result.Add(component);
+                var components = await GetCatalogComponentsAsync(stream, cts.Token);
+                _components.AddRange(components);
+            }
+            catch (OperationCanceledException)
+            {
+                return CancelledInformation(updateInformation);
+            }
+            catch (UpdaterException e)
+            {
+                return ErrorInformation(updateInformation, e.Message);
+            }
+            catch (Exception e)
+            {
+                Logger.Error($"Failed processing catalog: {e.Message}");
+                throw;
             }
 
-            _components.AddRange(result);
-            
+
             await CalculateComponentStatusAsync(cts.Token);
             await CalculateRemovableComponentsAsync();
 
@@ -122,23 +93,19 @@ namespace FocLauncherHost.Updater
             if (!Components.Any() && !RemovableComponents.Any())
                 return ErrorInformation(updateInformation, "Unable to check dependencies if update is available");
 
-            var updateResult =  await UpdateAsync(cts.Token);
 
+            var updateResult =  await UpdateAsync(cts.Token);
 
             if (updateResult == UpdateResult.Cancelled || updateResult == UpdateResult.Failed)
             {
-                // TODO: Restore and return
-
                 return ErrorInformation(updateInformation, "TODO");
             }
 
             if (updateResult != UpdateResult.Success)
             {
-                // TODO: Cleanup
                 return SuccessInformation(updateInformation, "Successfully updated");
             }
 
-            // TODO Start external updater, do clean up or restore there
             return SuccessInformation(updateInformation, "Success");
         }
 
@@ -146,11 +113,6 @@ namespace FocLauncherHost.Updater
         public async Task<UpdateResult> UpdateAsync(CancellationToken cancellation)
         {
             cancellation.ThrowIfCancellationRequested();
-            //if (updateTasks == null || !updateTasks.Any())
-            //    return UpdateResult.Success;
-
-            //if (!updateTasks.Any(x => !(x is DummyTask) && !(x is KeepTask)))
-            //    return UpdateResult.Success;
 
             Logger.Trace("Performing update...");
 
@@ -158,6 +120,8 @@ namespace FocLauncherHost.Updater
 
             var allComponents = Components.Concat(RemovableComponents);
 
+
+            // TODO: Return ?!....
             await Task.Run(() =>
             {
                 var operation = new UpdateOperation(Product, allComponents);
@@ -178,13 +142,6 @@ namespace FocLauncherHost.Updater
                 }
             }, cts.Token);
 
-
-            //var updateCoordinator = new UpdateCoordinator();
-            //updateCoordinator.Run(cts.Token);
-
-
-
-            // Something went wrong but the user did NOT request cancellation
             if (cts.IsCancellationRequested)
                 return UpdateResult.Failed;
 
@@ -199,7 +156,7 @@ namespace FocLauncherHost.Updater
             {
                 cancellation.ThrowIfCancellationRequested();
                 await Task.Yield();
-                await CheckDependencyAsync(component);
+                await CalculateComponentStatusAsync(component);
             }
         }
 
@@ -209,20 +166,20 @@ namespace FocLauncherHost.Updater
             try
             {
                 Stream metadataStream = new MemoryStream();
-                if (UpdateMetadataLocation.Scheme == Uri.UriSchemeFile)
+                if (UpdateCatalogLocation.Scheme == Uri.UriSchemeFile)
                 {
-                    Logger.Trace($"Try getting update metadata stream from local file: {UpdateMetadataLocation.LocalPath}");
-                    await StreamUtilities.CopyFileToStreamAsync(UpdateMetadataLocation.LocalPath, metadataStream, cancellation);
+                    Logger.Trace($"Try getting update metadata stream from local file: {UpdateCatalogLocation.LocalPath}");
+                    await UpdaterUtilities.CopyFileToStreamAsync(UpdateCatalogLocation.LocalPath, metadataStream, cancellation);
                 }
 
-                if (UpdateMetadataLocation.Scheme == Uri.UriSchemeHttp ||
-                    UpdateMetadataLocation.Scheme == Uri.UriSchemeHttps)
+                if (UpdateCatalogLocation.Scheme == Uri.UriSchemeHttp ||
+                    UpdateCatalogLocation.Scheme == Uri.UriSchemeHttps)
                 {
-                    Logger.Trace($"Try getting update metadata stream from online file: {UpdateMetadataLocation.AbsolutePath}");
+                    Logger.Trace($"Try getting update metadata stream from online file: {UpdateCatalogLocation.AbsolutePath}");
                     throw new NotImplementedException();
                 }
 
-                Logger.Info($"Retrieved metadata stream from {UpdateMetadataLocation}");
+                Logger.Info($"Retrieved metadata stream from {UpdateCatalogLocation}");
                 return metadataStream;
             }
             catch (TaskCanceledException)
@@ -255,7 +212,7 @@ namespace FocLauncherHost.Updater
                 
                 Logger.Info($"File marked to get deleted: {file.FullName}");
 
-                var component = new Component
+                var component = new Component.Component
                 {
                     Name = file.Name,
                     CurrentState = CurrentState.Installed,
@@ -269,7 +226,7 @@ namespace FocLauncherHost.Updater
             return Task.CompletedTask;
         }
         
-        internal Task CheckDependencyAsync(IComponent component)
+        internal Task CalculateComponentStatusAsync(IComponent component)
         {
             Logger.Trace($"Check dependency if update required: {component}");
             
@@ -335,34 +292,17 @@ namespace FocLauncherHost.Updater
             component.RequiredAction = ComponentAction.Update;
             return Task.CompletedTask;
         }
-        
+
+        protected abstract Task<IEnumerable<IComponent>> GetCatalogComponentsAsync(Stream catalogStream, CancellationToken token);
+
+        protected abstract Task<bool> ValidateCatalogStreamAsync(Stream inputStream);
+
         protected virtual bool FileCanBeDeleted(FileInfo file)
         {
             return false;
         }
 
-        private static Task<Catalogs> TryGetProductFromStreamAsync(Stream stream)
-        {
-            try
-            {
-                Logger.Trace("Try deserializing stream to Catalogs");
-                return Catalogs.DeserializeAsync(stream);
-            }
-            catch (Exception e)
-            {
-                Logger.Debug(e, "Getting catalogs from stream failed with exception. Returning null instead.");
-                return Task.FromResult<Catalogs>(null);
-            }
-        }
-        
-        private static async Task<bool> ValidateStreamAsync(Stream inputStream)
-        {
-            var schemeStream = Resources.UpdateValidator.ToStream();
-            var validator = new XmlValidator(schemeStream);
-            return await Task.FromResult(validator.Validate(inputStream));
-        }
-
-        private static UpdateInformation SuccessInformation(UpdateInformation updateInformation, string message, bool requiresRestart = false, bool userNotification = false)
+        protected static UpdateInformation SuccessInformation(UpdateInformation updateInformation, string message, bool requiresRestart = false, bool userNotification = false)
         {
             Logger.Debug("Operation was completed sucessfully");
             updateInformation.Result = requiresRestart ? UpdateInformationResult.SuccessRequiresRestart : UpdateInformationResult.Success;
@@ -371,7 +311,7 @@ namespace FocLauncherHost.Updater
             return updateInformation;
         }
 
-        private static UpdateInformation ErrorInformation(UpdateInformation updateInformation, string errorMessage, bool userNotification = false)
+        protected static UpdateInformation ErrorInformation(UpdateInformation updateInformation, string errorMessage, bool userNotification = false)
         {
             Logger.Debug($"Operation failed with message: {errorMessage}");
             updateInformation.Result = UpdateInformationResult.Error;
@@ -380,7 +320,7 @@ namespace FocLauncherHost.Updater
             return updateInformation;
         }
 
-        private static UpdateInformation CancelledInformation(UpdateInformation updateInformation, bool userNotification = false)
+        protected static UpdateInformation CancelledInformation(UpdateInformation updateInformation, bool userNotification = false)
         {
             Logger.Debug("Operation was cancelled by user request");
             updateInformation.Result = UpdateInformationResult.UserCancelled;
@@ -388,26 +328,8 @@ namespace FocLauncherHost.Updater
             updateInformation.RequiresUserNotification = userNotification;
             return updateInformation;
         }
-
-        private ProductCatalog? GetMatchingProduct(Catalogs products)
-        {
-            if (products == null)
-                throw new NullReferenceException(nameof(products));
-            if (products.Products == null || !products.Products.Any())
-                throw new NotSupportedException("No products to update are found");
-
-            return products.Products.FirstOrDefault(x => x.Name.Equals(Product.Name, StringComparison.InvariantCultureIgnoreCase));
-        }
     }
-
-
-    public enum UpdateTaskStatus
-    {
-        NotStarted,
-        CompletedSuccess
-    }
-
-
+    
     public class UpdateInformation
     {
         public UpdateInformationResult Result { get; set; }

@@ -81,7 +81,14 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="FocLauncherUpdaterManager.cs" />
-    <Compile Include="Updater\Component.cs" />
+    <Compile Include="Updater\Component\Component.cs" />
+    <Compile Include="Updater\Component\ComponentAction.cs" />
+    <Compile Include="Updater\Component\ComponentIdentityComparer.cs" />
+    <Compile Include="Updater\Component\CurrentState.cs" />
+    <Compile Include="Updater\Component\HashType.cs" />
+    <Compile Include="Updater\Component\IComponent.cs" />
+    <Compile Include="Updater\Component\OriginInfo.cs" />
+    <Compile Include="Updater\Component\ValidationContext.cs" />
     <Compile Include="Updater\TaskRunner\StopTaskRunnerException.cs" />
     <Compile Include="Updater\Tasks\AcquireMutexTask.cs" />
     <Compile Include="Updater\InstallResult.cs" />
@@ -92,7 +99,6 @@
     <Compile Include="Updater\Tasks\DependencyInstallTask.cs" />
     <Compile Include="Updater\FileSystem\FileSystemExtensions.cs" />
     <Compile Include="Updater\IUpdaterOperation.cs" />
-    <Compile Include="Updater\IDependency.cs" />
     <Compile Include="Updater\CurrentDependencyState.cs" />
     <Compile Include="Updater\DependencyAction.cs" />
     <Compile Include="Updater\Tasks\RemoveFileTask.cs" />
@@ -119,7 +125,6 @@
     <Compile Include="Updater\WaitTask.cs" />
     <Compile Include="Utilities\AssemblyExtractor.cs" />
     <Compile Include="Utilities\NullToVisibilityConverter.cs" />
-    <Compile Include="Utilities\StreamUtilities.cs" />
     <Compile Include="Utilities\UrlCombine.cs" />
     <Compile Include="SplashScreen.xaml.cs">
       <DependentUpon>SplashScreen.xaml</DependentUpon>

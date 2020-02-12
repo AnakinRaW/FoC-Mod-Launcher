@@ -8,6 +8,8 @@ using System.Security.AccessControl;
 using System.Security.Cryptography;
 using System.Security.Principal;
 using System.Threading;
+using System.Threading.Tasks;
+using FocLauncherHost.Updater.Component;
 
 namespace FocLauncherHost.Updater
 {
@@ -125,6 +127,14 @@ namespace FocLauncherHost.Updater
                 mutexAbandoned = true;
             }
             return mutexAbandoned ? mutex : null;
+        }
+
+        public static async Task CopyFileToStreamAsync(string filePath, Stream stream, CancellationToken cancellation = default)
+        {
+            if (!File.Exists(filePath))
+                throw new FileNotFoundException(nameof(filePath));
+            using var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+            await fileStream.CopyToAsync(stream, 81920, cancellation);
         }
     }
 }

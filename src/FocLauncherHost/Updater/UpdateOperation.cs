@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
+using FocLauncherHost.Updater.Component;
 using FocLauncherHost.Updater.TaskRunner;
 using FocLauncherHost.Updater.Tasks;
 using NLog;
