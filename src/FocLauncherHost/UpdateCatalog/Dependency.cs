@@ -66,14 +66,7 @@ namespace FocLauncherHost.UpdateCatalog
                 return true;
             return obj.GetType() == GetType() && Equals((Dependency)obj);
         }
-
-        internal Version? GetVersion()
-        {
-            if (string.IsNullOrEmpty(Version))
-                return null;
-            return !System.Version.TryParse(Version, out var version) ? null : version;
-        }
-
+        
         public override int GetHashCode()
         {
             return _name.GetHashCode();

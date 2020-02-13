@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using FocLauncherHost.Updater;
 using FocLauncherHost.Utilities;
 
 namespace FocLauncherHost.UpdateCatalog
@@ -29,6 +31,14 @@ namespace FocLauncherHost.UpdateCatalog
 
             var parser = new XmlObjectParser<Catalogs>(stream);
             return await Task.FromResult(parser.Parse());
+        }
+
+        internal ProductCatalog? GetMatchingProduct(IProductInfo product)
+        {
+            if (_products == null || !_products.Any())
+                throw new NotSupportedException("No products to update are found");
+
+            return _products.FirstOrDefault(x => x.Name.Equals(product.Name, StringComparison.InvariantCultureIgnoreCase));
         }
     }
 }

@@ -81,6 +81,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="FocLauncherUpdaterManager.cs" />
+    <Compile Include="UpdateCatalog\DependencyHelper.cs" />
     <Compile Include="Updater\Component\Component.cs" />
     <Compile Include="Updater\Component\ComponentAction.cs" />
     <Compile Include="Updater\Component\ComponentIdentityComparer.cs" />
