@@ -28,21 +28,21 @@ namespace FocLauncherHost.Updater.Tasks
                 return;
             if (!FileSystemExtensions.FileExists(File))
                 return;
-            try
-            {
-                if (FileSystemExtensions.DeleteFileWithRetry(File, out bool rebootRequired, RebootOk))
-                    Logger.Debug($"{File} file deleted successfully.");
-                else if (rebootRequired)
-                {
-                    // TODO
-                }
-                else
-                    Logger.Warn($"{File} file could not be deleted nor was it scheduled for deleteion after reboot.");
-            }
-            catch (Exception e)
-            {
-                Logger.Error(e, $"Failed to delete file '{File}': {e.Message}");
-            }
+            //try
+            //{
+            //    if (FileSystemExtensions.DeleteFileWithRetry(File, out bool rebootRequired, RebootOk))
+            //        Logger.Debug($"{File} file deleted successfully.");
+            //    else if (rebootRequired)
+            //    {
+            //        // TODO
+            //    }
+            //    else
+            //        Logger.Warn($"{File} file could not be deleted nor was it scheduled for deleteion after reboot.");
+            //}
+            //catch (Exception e)
+            //{
+            //    Logger.Error(e, $"Failed to delete file '{File}': {e.Message}");
+            //}
         }
     }
 }

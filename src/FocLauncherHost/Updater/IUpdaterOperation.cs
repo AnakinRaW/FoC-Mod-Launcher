@@ -6,7 +6,7 @@ namespace FocLauncherHost.Updater
 {
     internal interface IUpdaterOperation
     {
-        IReadOnlyCollection<DependencyDownloadTask> DependenciesToDownload { get; }
+        IReadOnlyCollection<ComponentDownloadTask> DependenciesToDownload { get; }
 
         IReadOnlyCollection<UpdaterTask> DependenciesToInstall { get; }
 

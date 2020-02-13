@@ -20,9 +20,9 @@ namespace FocLauncherHost.Updater
         private bool? _planSuccessful;
         private readonly List<UpdaterTask> _componentsToInstall = new List<UpdaterTask>();
         private readonly List<UpdaterTask> _componentsToRemove = new List<UpdaterTask>();
-        private readonly List<DependencyDownloadTask> _componentsToDownload = new List<DependencyDownloadTask>();
+        private readonly List<ComponentDownloadTask> _componentsToDownload = new List<ComponentDownloadTask>();
 
-        private IReadOnlyCollection<DependencyDownloadTask> _componentsToDownloadReadOnly;
+        private IReadOnlyCollection<ComponentDownloadTask> _componentsToDownloadReadOnly;
         private IReadOnlyCollection<UpdaterTask> _componentsToInstallReadOnly;
         private IReadOnlyCollection<UpdaterTask> _componentsToRemoveReadOnly;
 
@@ -37,8 +37,8 @@ namespace FocLauncherHost.Updater
         private CancellationTokenSource _linkedCancellationTokenSource;
 
 
-        public IReadOnlyCollection<DependencyDownloadTask> DependenciesToDownload =>
-            _componentsToDownloadReadOnly ??= new ReadOnlyCollection<DependencyDownloadTask>(_componentsToDownload);
+        public IReadOnlyCollection<ComponentDownloadTask> DependenciesToDownload =>
+            _componentsToDownloadReadOnly ??= new ReadOnlyCollection<ComponentDownloadTask>(_componentsToDownload);
 
         public IReadOnlyCollection<UpdaterTask> DependenciesToInstall => _componentsToInstallReadOnly ??=
             new ReadOnlyCollection<UpdaterTask>(_componentsToInstall);
@@ -69,11 +69,10 @@ namespace FocLauncherHost.Updater
                 return _planSuccessful.Value;
             }
 
-            var downloadLookup = new Dictionary<IComponent, DependencyDownloadTask>();
+            var downloadLookup = new Dictionary<IComponent, ComponentDownloadTask>();
             foreach (var dependency in _allComponents)
             {
                 var packageActivities = PlanInstallable(dependency, downloadLookup);
-                ScheduleReplaceActivities(dependency, downloadLookup);
                 if (dependency.RequiredAction == ComponentAction.Delete && packageActivities?.Install != null)
                     _componentsToRemove.Add(packageActivities.Install);
             }
@@ -83,8 +82,8 @@ namespace FocLauncherHost.Updater
 
             foreach (var installsOrUninstall in _installsOrUninstalls)
             {
-                if (installsOrUninstall is DependencyInstallTask install && downloadLookup.ContainsKey(install.Component) && 
-                    (install.InstallAction != InstallAction.Remove|| install.Component.RequiredAction != ComponentAction.Keep))
+                if (installsOrUninstall is ComponentInstallTask install && downloadLookup.ContainsKey(install.Component) && 
+                    (install.Action != ComponentAction.Delete|| install.Component.RequiredAction != ComponentAction.Keep))
                     _componentsToDownload.Add(downloadLookup[install.Component]);
             }
 
@@ -95,7 +94,7 @@ namespace FocLauncherHost.Updater
         public void Run(CancellationToken token = default)
         {
             Schedule();
-            var installsOrUninstalls = _installsOrUninstalls?.OfType<DependencyInstallTask>() ?? Enumerable.Empty<DependencyInstallTask>();
+            var installsOrUninstalls = _installsOrUninstalls?.OfType<ComponentInstallTask>() ?? Enumerable.Empty<ComponentInstallTask>();
             
             using var mutex = UpdaterUtilities.CheckAndSetGlobalMutex();
             try
@@ -234,19 +233,16 @@ namespace FocLauncherHost.Updater
         }
 
 
-        private PackageActivities PlanInstallable(IComponent component, Dictionary<IComponent, DependencyDownloadTask> downloadLookup)
+        private PackageActivities PlanInstallable(IComponent component, Dictionary<IComponent, ComponentDownloadTask> downloadLookup)
         {
             PackageActivities packageActivities = null;
             if (component != null)
             {
                 var isPresent = component.CurrentState == CurrentState.Installed;
 
-                if (component.RequiredAction == ComponentAction.Update ||
-                    component.RequiredAction == ComponentAction.Keep)
+                if (component.RequiredAction == ComponentAction.Update || component.RequiredAction == ComponentAction.Keep)
                 {
                     // TODO: Debug this and check if everything is correct!!!!
-                    isPresent = false;
-
                     packageActivities = CreateDownloadInstallActivities(component, component.RequiredAction, isPresent);
                     if (packageActivities.Install != null)
                         _componentsToInstall.Add(packageActivities.Install);
@@ -266,33 +262,21 @@ namespace FocLauncherHost.Updater
             return packageActivities;
         }
 
-        private void ScheduleReplaceActivities(IComponent component, Dictionary<IComponent, DependencyDownloadTask> downloadLookup)
+        private static PackageActivities CreateDownloadInstallActivities(IComponent component, ComponentAction action, bool isPresent)
         {
-            var isPresent = component.CurrentState == CurrentState.Installed;
-             if (!isPresent || component.RequiredAction != ComponentAction.Keep)
-                return;
-
-            var packageActivities = CreateDownloadInstallActivities(component, ComponentAction.Delete, true);
-            if (packageActivities.Download != null)
-                downloadLookup[component] = packageActivities.Download;
-            if (packageActivities.Install != null)
-                _componentsToRemove.Add(packageActivities.Install);
-        }
-
-        private PackageActivities CreateDownloadInstallActivities(IComponent component, ComponentAction action, bool isPresent)
-        {
-            DependencyDownloadTask downloadPackage;
-            DependencyInstallTask install;
+            // TODO: Not complete....
+            ComponentDownloadTask downloadPackage;
+            ComponentInstallTask install;
 
             if (action == ComponentAction.Update)
             {
-                downloadPackage = new DependencyDownloadTask();
-                install = new DependencyInstallTask(component);
+                downloadPackage = new ComponentDownloadTask();
+                install = new ComponentInstallTask(component, action);
             }
             else
             {
                 downloadPackage = null;
-                install = new DependencyInstallTask(component);
+                install = new ComponentInstallTask(component, action);
             }
             
             return new PackageActivities
@@ -312,11 +296,18 @@ namespace FocLauncherHost.Updater
                 if (e.Cancel || e.Task.Component == null)
                     return;
 
-                if (e.Task is DependencyInstallTask installTask)
+                if (e.Task is ComponentInstallTask installTask)
                 {
-                    // TODO
+                    if (installTask.Result.IsFailure())
+                    {
+
+                    }
+                    else
+                    {
+                        
+                    }
                 }
-                else if (e.Task is DependencyDownloadTask downloadTask)
+                else if (e.Task is ComponentDownloadTask downloadTask)
                 {
                     // TODO
                 }
@@ -329,9 +320,9 @@ namespace FocLauncherHost.Updater
 
         private class PackageActivities
         {
-            internal DependencyDownloadTask Download { get; set; }
+            internal ComponentDownloadTask Download { get; set; }
 
-            internal DependencyInstallTask Install { get; set; }
+            internal ComponentInstallTask Install { get; set; }
         }
     }
 }

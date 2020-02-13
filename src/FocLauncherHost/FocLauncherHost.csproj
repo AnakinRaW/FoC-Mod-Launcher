@@ -82,6 +82,8 @@
     </Compile>
     <Compile Include="FocLauncherUpdaterManager.cs" />
     <Compile Include="UpdateCatalog\DependencyHelper.cs" />
+    <Compile Include="Updater\BackupManager.cs" />
+    <Compile Include="Updater\BackupPolicy.cs" />
     <Compile Include="Updater\Component\Component.cs" />
     <Compile Include="Updater\Component\ComponentAction.cs" />
     <Compile Include="Updater\Component\ComponentIdentityComparer.cs" />
@@ -90,6 +92,7 @@
     <Compile Include="Updater\Component\IComponent.cs" />
     <Compile Include="Updater\Component\OriginInfo.cs" />
     <Compile Include="Updater\Component\ValidationContext.cs" />
+    <Compile Include="Updater\OutOfDiskspaceException.cs" />
     <Compile Include="Updater\TaskRunner\StopTaskRunnerException.cs" />
     <Compile Include="Updater\Tasks\AcquireMutexTask.cs" />
     <Compile Include="Updater\InstallResult.cs" />
@@ -97,13 +100,13 @@
     <Compile Include="Updater\TaskRunner\TaskEventArgs.cs" />
     <Compile Include="Updater\DownloadManager.cs" />
     <Compile Include="Updater\InstallAction.cs" />
-    <Compile Include="Updater\Tasks\DependencyInstallTask.cs" />
+    <Compile Include="Updater\Tasks\ComponentInstallTask.cs" />
     <Compile Include="Updater\FileSystem\FileSystemExtensions.cs" />
     <Compile Include="Updater\IUpdaterOperation.cs" />
     <Compile Include="Updater\CurrentDependencyState.cs" />
     <Compile Include="Updater\DependencyAction.cs" />
     <Compile Include="Updater\Tasks\RemoveFileTask.cs" />
-    <Compile Include="Updater\Tasks\DependencyDownloadTask.cs" />
+    <Compile Include="Updater\Tasks\ComponentDownloadTask.cs" />
     <Compile Include="Updater\IUpdaterTask.cs" />
     <Compile Include="Updater\Tasks\SynchronizedUpdaterTask.cs" />
     <Compile Include="Updater\Tasks\DummyTask.cs" />
@@ -116,6 +119,7 @@
     <Compile Include="UpdateCatalog\Catalogs.cs" />
     <Compile Include="Updater\StreamExtensions.cs" />
     <Compile Include="Updater\TaskRunner\TaskRunner.cs" />
+    <Compile Include="Updater\UpdateConfiguration.cs" />
     <Compile Include="Updater\UpdateManager.cs" />
     <Compile Include="Updater\Tasks\UpdaterOnCancelTask.cs" />
     <Compile Include="Updater\UpdateOperation.cs" />

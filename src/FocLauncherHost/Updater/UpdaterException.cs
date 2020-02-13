@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace FocLauncherHost.Updater
 {
     [Serializable]
-    internal class UpdaterException : Exception
+    public class UpdaterException : Exception
     {
         public UpdaterException()
         {

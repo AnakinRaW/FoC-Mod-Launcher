@@ -19,12 +19,19 @@ namespace FocLauncherHost
 
         public FocLauncherUpdaterManager(string versionMetadataPath) : base(FocLauncherProduct.Instance, versionMetadataPath)
         {
+            SetUpdateConfiguration();
         }
 
         //public FocLauncherUpdaterManager(IProductInfo product) : base(product)
         //{
             
         //}
+
+        private static void SetUpdateConfiguration()
+        {
+            UpdateConfiguration.Instance.BackupPolicy = BackupPolicy.Required;
+            UpdateConfiguration.Instance.BackupPath = LauncherConstants.ApplicationBasePath;
+        }
 
         protected override bool FileCanBeDeleted(FileInfo file)
         {

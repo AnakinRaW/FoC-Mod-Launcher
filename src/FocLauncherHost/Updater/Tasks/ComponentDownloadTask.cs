@@ -2,7 +2,7 @@
 
 namespace FocLauncherHost.Updater.Tasks
 {
-    internal sealed class DependencyDownloadTask : SynchronizedUpdaterTask
+    internal sealed class ComponentDownloadTask : SynchronizedUpdaterTask
     {
         protected override void SynchronizedInvoke(CancellationToken token)
         {
