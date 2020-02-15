@@ -1,11 +1,12 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
+using System.Security.AccessControl;
+using System.Security.Principal;
 using System.Threading.Tasks;
 
 namespace FocLauncherHost.Updater.FileSystem
 {
-    public static class FileSystemExtensions
+    internal static class FileSystemExtensions
     {
         public static bool FileExists(FileInfo fileInfo)
         {
@@ -19,6 +20,15 @@ namespace FocLauncherHost.Updater.FileSystem
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException(nameof(path));
             File.Delete(path);
+        }
+
+        public static void CopyFileWithRetry(string source, string destination, int retryCount = 2, int retryDelay = 500)
+        {
+            if (string.IsNullOrEmpty(source))
+                throw new ArgumentNullException(nameof(source));
+            if (string.IsNullOrEmpty(destination))
+                throw new ArgumentNullException(nameof(destination));
+            ExecuteFileActionWithRetry(retryCount, retryDelay, () => File.Copy(source, destination, true));
         }
 
         public static bool DeleteFileWithRetry(FileInfo file, out bool rebootRequired, 
@@ -54,8 +64,6 @@ namespace FocLauncherHost.Updater.FileSystem
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException(nameof(path));
 
-            path = Process.GetCurrentProcess().MainModule.FileName;
-
             rebootRequired = false;
             if (!File.Exists(path))
                 return true;
@@ -86,6 +94,56 @@ namespace FocLauncherHost.Updater.FileSystem
             return false;
         }
 
+        // Based on: https://stackoverflow.com/questions/1410127/c-sharp-test-if-user-has-write-access-to-a-folder
+        public static bool UserHasDirectoryAccessRights(string path, FileSystemRights accessRights, bool create = false)
+        {
+            var isInRoleWithAccess = false;
+            try
+            {
+                var di = new DirectoryInfo(path);
+
+                if (!di.Exists && create)
+                    di.Create();
+
+                var acl = di.GetAccessControl();
+
+                var rules = acl.GetAccessRules(true, true,
+                    // If Windows 7
+                    Environment.OSVersion.VersionString.StartsWith("6.1")
+                        ? typeof(SecurityIdentifier)
+                        : typeof(NTAccount));
+
+                var currentUser = WindowsIdentity.GetCurrent();
+                var principal = new WindowsPrincipal(currentUser);
+                foreach (AuthorizationRule rule in rules)
+                {
+                    var fsAccessRule = rule as FileSystemAccessRule;
+                    if (fsAccessRule == null)
+                        continue;
+
+                    if ((fsAccessRule.FileSystemRights & accessRights) > 0)
+                    {
+                        var ntAccount = rule.IdentityReference as NTAccount;
+                        if (ntAccount == null)
+                            continue;
+
+                        if (principal.IsInRole(ntAccount.Value))
+                        {
+                            if (fsAccessRule.AccessControlType == AccessControlType.Deny)
+                                return false;
+                            isInRoleWithAccess = true;
+                        }
+                    }
+                }
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return false;
+            }
+            return isInRoleWithAccess;
+        }
+
+
         private static bool ExecuteFileActionWithRetry(int retryCount, int retryDelay, Action fileAction,
             bool throwOnFailure = true, Func<Exception, int, bool> errorAction = null)
         {
@@ -99,7 +157,7 @@ namespace FocLauncherHost.Updater.FileSystem
                 }
                 catch (Exception ex) when (ex is UnauthorizedAccessException || ex is IOException)
                 {
-                    if (throwOnFailure || index + 1 < num)
+                    if (!throwOnFailure || index + 1 < num)
                     {
                         if (errorAction != null)
                         {

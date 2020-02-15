@@ -63,7 +63,12 @@ namespace FocLauncherHost
             var validator = new XmlValidator(schemeStream);
             return await Task.FromResult(validator.Validate(inputStream));
         }
-        
+
+        protected override Version? GetComponentVersion(IComponent component, string filePath)
+        {
+            return UpdaterUtilities.GetAssemblyFileVersion(filePath);
+        }
+
         private static Task<Catalogs> TryGetProductFromStreamAsync(Stream stream)
         {
             try

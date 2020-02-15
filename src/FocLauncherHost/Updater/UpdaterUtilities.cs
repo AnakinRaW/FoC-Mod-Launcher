@@ -17,12 +17,16 @@ namespace FocLauncherHost.Updater
     {
         internal static readonly string UpdaterMutex = $"Global\\{Process.GetCurrentProcess().ProcessName}";
 
-        internal static Version? GetAssemblyVersion(string file)
+        internal static Version GetAssemblyVersion(string file)
         {
-            if (!File.Exists(file))
-                return null;
-            var assemblyName = AssemblyName.GetAssemblyName(file);
-            return assemblyName.Version;
+            var assembly = AssemblyName.GetAssemblyName(file);
+            return assembly.Version;
+        }
+
+        internal static Version GetAssemblyFileVersion(string file)
+        {
+            var version = FileVersionInfo.GetVersionInfo(file).FileVersion;
+            return Version.Parse(version);
         }
 
 

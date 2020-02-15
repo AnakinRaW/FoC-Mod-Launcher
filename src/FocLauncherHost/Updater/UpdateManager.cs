@@ -242,7 +242,7 @@ namespace FocLauncherHost.Updater
                     return Task.CompletedTask;
 
                 var newVersion = component.OriginInfo.Version;
-                var currentVersion = UpdaterUtilities.GetAssemblyVersion(filePath);
+                var currentVersion = GetComponentVersion(component, filePath);
 
                 if (newVersion == null)
                 {
@@ -296,6 +296,11 @@ namespace FocLauncherHost.Updater
         protected abstract Task<IEnumerable<IComponent>> GetCatalogComponentsAsync(Stream catalogStream, CancellationToken token);
 
         protected abstract Task<bool> ValidateCatalogStreamAsync(Stream inputStream);
+
+        protected virtual Version? GetComponentVersion(IComponent component, string filePath)
+        {
+            return UpdaterUtilities.GetAssemblyVersion(filePath);
+        }
 
         protected virtual bool FileCanBeDeleted(FileInfo file)
         {

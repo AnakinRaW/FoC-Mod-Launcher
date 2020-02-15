@@ -7,7 +7,8 @@ using System.Security.AccessControl;
 using System.Threading.Tasks;
 using FocLauncher;
 #if !DEBUG
-    using dnlib.DotNet;
+using System.Diagnostics;
+using dnlib.DotNet;
 #endif
 
 
@@ -55,12 +56,19 @@ namespace FocLauncherHost.Utilities
                 if (File.Exists(filePath))
                 {
                     var embeddedAssembly = AssemblyDef.Load(assemblyStream, new ModuleContext(new AssemblyResolver(), null));
-                    var embeddedAssemblyVersion = embeddedAssembly.Version;
+                    var embeddedFileVersionString = embeddedAssembly.CustomAttributes
+                        .Find(typeof(AssemblyFileVersionAttribute).FullName)?.ConstructorArguments[0].Value.ToString();
 
                     if (File.ReadAllBytes(filePath).Length > 0)
                     {
-                        var existingVersion = AssemblyName.GetAssemblyName(filePath).Version;
-                        if (embeddedAssemblyVersion <= existingVersion)
+                        var existingVersionString = FileVersionInfo.GetVersionInfo(filePath).FileVersion;
+                        var existingVersion = Version.Parse(existingVersionString);
+
+                        if (string.IsNullOrEmpty(embeddedFileVersionString))
+                            return;
+                        var embeddedAssemblyFileVersion = Version.Parse(embeddedFileVersionString);
+
+                        if (embeddedAssemblyFileVersion <= existingVersion)
                             return;
                     }
                     assemblyStream.Position = 0;

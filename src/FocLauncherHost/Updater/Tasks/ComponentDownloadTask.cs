@@ -6,7 +6,7 @@ namespace FocLauncherHost.Updater.Tasks
     {
         protected override void SynchronizedInvoke(CancellationToken token)
         {
-            throw new System.NotImplementedException();
+            //throw new System.NotImplementedException();
         }
     }
 }

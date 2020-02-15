@@ -105,6 +105,7 @@
     <Compile Include="Updater\IUpdaterOperation.cs" />
     <Compile Include="Updater\CurrentDependencyState.cs" />
     <Compile Include="Updater\DependencyAction.cs" />
+    <Compile Include="Updater\Tasks\FileInstaller.cs" />
     <Compile Include="Updater\Tasks\RemoveFileTask.cs" />
     <Compile Include="Updater\Tasks\ComponentDownloadTask.cs" />
     <Compile Include="Updater\IUpdaterTask.cs" />
