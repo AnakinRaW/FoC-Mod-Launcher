@@ -27,7 +27,7 @@ namespace FocLauncherHost.Updater
             if (_backupLookup.ContainsKey(component))
                 return;
             var backupFilePath = CreateBackupFilePath(component, backupPath);
-            var componentFilePath = Path.Combine(component.Destination, component.Name);
+            var componentFilePath = component.GetFilePath();
             FileSystemExtensions.CopyFileWithRetry(componentFilePath, backupFilePath);
             _backupLookup.Add(component, backupFilePath);
         }

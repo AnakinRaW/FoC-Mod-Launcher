@@ -7,11 +7,11 @@ namespace FocLauncherHost.UpdateCatalog
     public class Dependency
     {
         private string _destination;
-        private bool _requiresRestart;
         private string _origin;
         private byte[] _sha2;
         private string _name;
         private string _version;
+        private long? _size;
 
         public string Destination
         {
@@ -19,10 +19,11 @@ namespace FocLauncherHost.UpdateCatalog
             set => _destination = value;
         }
 
-        public bool RequiresRestart
+        [XmlElement(DataType="long")]
+        public long? Size
         {
-            get => _requiresRestart;
-            set => _requiresRestart = value;
+            get => _size;
+            set => _size = value;
         }
 
         [XmlElement(DataType = "anyURI")]

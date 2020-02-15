@@ -19,11 +19,12 @@ namespace FocLauncherHost.UpdateCatalog
             {
                 var newVersion = dependency.GetVersion();
                 var hash = dependency.Sha2;
+                var size = dependency.Size;
 
                 ValidationContext validationContext = null;
                 if (hash != null)
                     validationContext = new ValidationContext { Hash = hash, HashType = HashType.Sha2 };
-                var originInfo = new OriginInfo(new Uri(dependency.Origin, UriKind.Absolute), newVersion, validationContext);
+                var originInfo = new OriginInfo(new Uri(dependency.Origin, UriKind.Absolute), newVersion, size, validationContext);
                 component.OriginInfo = originInfo;
             }
 

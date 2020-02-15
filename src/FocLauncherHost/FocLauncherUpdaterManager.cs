@@ -64,9 +64,16 @@ namespace FocLauncherHost
             return await Task.FromResult(validator.Validate(inputStream));
         }
 
-        protected override Version? GetComponentVersion(IComponent component, string filePath)
+        protected override Version? GetComponentVersion(IComponent component)
         {
-            return UpdaterUtilities.GetAssemblyFileVersion(filePath);
+            try
+            {
+                return UpdaterUtilities.GetAssemblyFileVersion(component.GetFilePath());
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         private static Task<Catalogs> TryGetProductFromStreamAsync(Stream stream)

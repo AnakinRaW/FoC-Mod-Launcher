@@ -8,6 +8,7 @@
       <xs:element type="xs:string" name="Destination" minOccurs="1" maxOccurs="1"/>
       <xs:element type="xs:anyURI" name="Origin" minOccurs="1" maxOccurs="1"/>
       <xs:element type="SHA2" name="SHA2" minOccurs="0" maxOccurs="1"/>
+      <xs:element type="xs:long" name="Size" minOccurs="0" maxOccurs="1"/>
     </xs:all>
     <xs:attribute type="xs:string" name="Name" use="required"/>
     <xs:attribute type="xs:string" name="Version" use="optional"/>

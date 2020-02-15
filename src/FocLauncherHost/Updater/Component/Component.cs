@@ -15,6 +15,8 @@ namespace FocLauncherHost.Updater.Component
         public Version? CurrentVersion { get; set; }
 
         public OriginInfo? OriginInfo { get; set; }
+
+        public long? DiskSize { get; set; }
         
         public override string ToString()
         {

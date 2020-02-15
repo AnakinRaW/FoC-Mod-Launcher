@@ -30,6 +30,15 @@ namespace FocLauncherHost.Updater
         }
 
 
+        internal static string GetFilePath(this IComponent component)
+        {
+            if (string.IsNullOrEmpty(component.Name))
+                throw new InvalidOperationException();
+            if (string.IsNullOrEmpty(component.Destination))
+                throw new InvalidOperationException();
+            return Path.Combine(component.Destination, component.Name);
+        }
+
         internal static byte[] GetFileHash(string file, HashType hashType)
         {
             if (!File.Exists(file))

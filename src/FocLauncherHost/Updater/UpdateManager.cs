@@ -215,6 +215,7 @@ namespace FocLauncherHost.Updater
                 var component = new Component.Component
                 {
                     Name = file.Name,
+                    DiskSize = file.Length,
                     CurrentState = CurrentState.Installed,
                     RequiredAction = ComponentAction.Delete,
                     Destination = file.DirectoryName
@@ -226,7 +227,7 @@ namespace FocLauncherHost.Updater
             return Task.CompletedTask;
         }
         
-        internal Task CalculateComponentStatusAsync(IComponent component)
+        protected internal Task CalculateComponentStatusAsync(IComponent component)
         {
             Logger.Trace($"Check dependency if update required: {component}");
             
@@ -235,22 +236,10 @@ namespace FocLauncherHost.Updater
             if (string.IsNullOrEmpty(destination))
                 return Task.FromException(new InvalidOperationException());
 
-            var filePath = Path.Combine(destination, component.Name);
+            var filePath = component.GetFilePath();
             if (File.Exists(filePath))
             {
-                if (component.OriginInfo is null)
-                    return Task.CompletedTask;
-
-                var newVersion = component.OriginInfo.Version;
-                var currentVersion = GetComponentVersion(component, filePath);
-
-                if (newVersion == null)
-                {
-                    Logger.Info($"Dependency marked to keep: {component}");
-                    component.CurrentState = currentVersion == null ? CurrentState.None : CurrentState.Installed;
-                    return Task.CompletedTask;
-                }
-
+                var currentVersion = GetComponentVersion(component);
                 if (currentVersion == null)
                 {
                     Logger.Info($"Dependency marked to get updated: {component}");
@@ -259,12 +248,25 @@ namespace FocLauncherHost.Updater
                     return Task.CompletedTask;
                 }
 
+                component.CurrentState = CurrentState.Installed;
                 component.CurrentVersion = currentVersion;
+                component.DiskSize = new FileInfo(filePath).Length;
+
+
+                if (component.OriginInfo is null)
+                    return Task.CompletedTask;
+
+                var newVersion = component.OriginInfo.Version;
+
+                if (newVersion == null)
+                {
+                    Logger.Info($"Dependency marked to keep: {component}");
+                    return Task.CompletedTask;
+                }
 
                 if (newVersion != currentVersion)
                 {
                     Logger.Info($"Dependency marked to get updated: {component}");
-                    component.CurrentState = CurrentState.Installed;
                     component.RequiredAction = ComponentAction.Update;
                     return Task.CompletedTask;
                 }
@@ -276,10 +278,9 @@ namespace FocLauncherHost.Updater
                 }
 
                 var fileHash = UpdaterUtilities.GetFileHash(filePath, component.OriginInfo.ValidationContext.HashType);
-                if (fileHash == null || !fileHash.SequenceEqual(component.OriginInfo.ValidationContext.Hash))
+                if (!fileHash.SequenceEqual(component.OriginInfo.ValidationContext.Hash))
                 {
                     Logger.Info($"Dependency marked to get updated: {component}");
-                    component.CurrentState = CurrentState.Installed;
                     component.RequiredAction = ComponentAction.Update;
                     return Task.CompletedTask;
                 }
@@ -297,9 +298,16 @@ namespace FocLauncherHost.Updater
 
         protected abstract Task<bool> ValidateCatalogStreamAsync(Stream inputStream);
 
-        protected virtual Version? GetComponentVersion(IComponent component, string filePath)
+        protected virtual Version? GetComponentVersion(IComponent component)
         {
-            return UpdaterUtilities.GetAssemblyVersion(filePath);
+            try
+            {
+                return UpdaterUtilities.GetAssemblyVersion(component.GetFilePath());
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         protected virtual bool FileCanBeDeleted(FileInfo file)

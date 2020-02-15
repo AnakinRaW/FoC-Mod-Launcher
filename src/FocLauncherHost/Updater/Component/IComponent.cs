@@ -15,5 +15,7 @@ namespace FocLauncherHost.Updater.Component
         Version? CurrentVersion { get; set; }
 
         OriginInfo? OriginInfo { get; set; }
+
+        long? DiskSize { get; set; }
     }
 }

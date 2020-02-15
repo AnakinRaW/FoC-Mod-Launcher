@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Threading;
 using FocLauncherHost.Updater.Component;
 
@@ -33,10 +32,7 @@ namespace FocLauncherHost.Updater.Tasks
             {
                 try
                 {
-                    if (Action == ComponentAction.Update)
-                    {
-
-                    }
+                    ValidateEnoughDiskSpaceAvailable(Component);
 
                     if (UpdateConfiguration.Instance.BackupPolicy != BackupPolicy.Disable)
                         BackupComponent();
@@ -72,6 +68,12 @@ namespace FocLauncherHost.Updater.Tasks
             {
                 // remove progress event
             }
+        }
+
+        private void ValidateEnoughDiskSpaceAvailable(IComponent component)
+        {
+            if (component.RequiredAction == ComponentAction.Keep)
+                return;
         }
 
         private void BackupComponent()
