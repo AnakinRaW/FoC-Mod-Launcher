@@ -1,12 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading;
 using FocLauncherHost.Updater.Component;
+using FocLauncherHost.Updater.FileSystem;
 
 namespace FocLauncherHost.Updater.Tasks
 {
     internal class ComponentInstallTask : SynchronizedUpdaterTask
     {
+        internal static readonly long AdditionalSizeBuffer = 20000000;
+
         internal ComponentAction Action { get; }
 
         internal InstallResult Result { get; set; }
@@ -28,7 +30,7 @@ namespace FocLauncherHost.Updater.Tasks
         {
             if (Action == ComponentAction.Keep)
                 return;
-            var installer = new FileInstaller(Component);
+            var installer = FileInstaller.Instance;
             try
             {
                 try
@@ -44,7 +46,7 @@ namespace FocLauncherHost.Updater.Tasks
                     }
                     else if (Action == ComponentAction.Delete)
                     {
-
+                        Result = installer.Remove(Component ,token);
                     }
 
                 }
@@ -71,10 +73,17 @@ namespace FocLauncherHost.Updater.Tasks
             }
         }
 
-        private void ValidateEnoughDiskSpaceAvailable(IComponent component)
+        private static void ValidateEnoughDiskSpaceAvailable(IComponent component)
         {
             if (component.RequiredAction == ComponentAction.Keep)
                 return;
+            foreach (var diskData in new DiskSpaceCalculator(component, AdditionalSizeBuffer).CalculatedDiskSizes)
+            {
+                if (!diskData.Value.HasEnoughDiskSpace)
+                    throw new OutOfDiskspaceException(
+                        $"There is not enough space to install “{component.Name}”. {diskData.Key} is required on drive {diskData.Value.RequestedSize + AdditionalSizeBuffer} " +
+                        $"but you only have {diskData.Value.AvailableDiskSpace} available.");
+            }
         }
 
         private void BackupComponent()
@@ -92,16 +101,6 @@ namespace FocLauncherHost.Updater.Tasks
                     throw new OperationCanceledException();
                 }
             }
-
-        }
-    }
-
-    internal class DiskSpaceCalculator
-    {
-        public IDictionary<string, DriveSpaceEvaluation> CalculatedDiskSizes { get; }
-
-        public DiskSpaceCalculator(IComponent component)
-        {
 
         }
     }

@@ -8,6 +8,8 @@ namespace FocLauncherHost.Updater.FileSystem
 {
     internal static class FileSystemExtensions
     {
+        private static readonly char DirectorySeparatorChar = '\\';
+
         public static bool FileExists(FileInfo fileInfo)
         {
             if (fileInfo == null)
@@ -15,11 +17,49 @@ namespace FocLauncherHost.Updater.FileSystem
             return File.Exists(fileInfo.FullName);
         }
 
+        public static long GetDriveFreeSpace(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException(nameof(path));
+            return new DriveInfo(Path.GetPathRoot(path)).AvailableFreeSpace;
+        }
+
         public static void DeleteFile(string path)
         {
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException(nameof(path));
             File.Delete(path);
+        }
+
+        public static bool ContainsPath(string fullPath, string path)
+        {
+            return ContainsPath(fullPath, path, false);
+        }
+
+        public static bool ContainsPath(string fullPath, string path, bool excludeSame)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(fullPath) || string.IsNullOrEmpty(path))
+                    return false;
+                fullPath = Path.GetFullPath(fullPath);
+                path = Path.GetFullPath(path);
+                fullPath = AddBackslashIfNotPresent(fullPath);
+                path = AddBackslashIfNotPresent(path);
+                var flag = fullPath.StartsWith(path, StringComparison.OrdinalIgnoreCase);
+                return flag & excludeSame ? !fullPath.Equals(path, StringComparison.OrdinalIgnoreCase) : flag;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public static string AddBackslashIfNotPresent(string path)
+        {
+            if (!string.IsNullOrEmpty(path) && path[path.Length - 1] != DirectorySeparatorChar)
+                path += DirectorySeparatorChar.ToString();
+            return path;
         }
 
         public static void CopyFileWithRetry(string source, string destination, int retryCount = 2, int retryDelay = 500)
@@ -58,17 +98,17 @@ namespace FocLauncherHost.Updater.FileSystem
             fileInfo.Refresh();
         }
 
-        public static bool DeleteFileWithRetry(string path, out bool rebootRequired,
-            bool rebootOk = false, int retryCount = 2, int retryDelay = 500, Func<Exception, int, bool> errorAction = null)
+        public static bool DeleteFileWithRetry(string path, out bool restartRequired,
+            bool restartOk = false, int retryCount = 2, int retryDelay = 500, Func<Exception, int, bool> errorAction = null)
         {
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException(nameof(path));
 
-            rebootRequired = false;
+            restartRequired = false;
             if (!File.Exists(path))
                 return true;
 
-            var flag = ExecuteFileActionWithRetry(retryCount, retryDelay, () => DeleteFile(path), !rebootOk, (ex, attempt) =>
+            var flag = ExecuteFileActionWithRetry(retryCount, retryDelay, () => DeleteFile(path), !restartOk, (ex, attempt) =>
             {
                 if (ex is UnauthorizedAccessException)
                 {
@@ -81,19 +121,19 @@ namespace FocLauncherHost.Updater.FileSystem
                             return true;
                         }
                     }
-                    else if (!rebootOk && attempt == retryCount)
+                    else if (!restartOk && attempt == retryCount)
                         throw ex;
                 }
                 errorAction?.Invoke(ex, attempt);
                 return false;
             });
-            if (flag || !rebootOk)
+            if (flag || !restartOk)
                 return flag;
 
-            //rebootRequired = MoveFile(path, null, true, false);
+            restartRequired = true;
             return false;
         }
-
+        
         // Based on: https://stackoverflow.com/questions/1410127/c-sharp-test-if-user-has-write-access-to-a-folder
         public static bool UserHasDirectoryAccessRights(string path, FileSystemRights accessRights, bool create = false)
         {
@@ -141,6 +181,17 @@ namespace FocLauncherHost.Updater.FileSystem
                 return false;
             }
             return isInRoleWithAccess;
+        }
+
+        internal static string? GetPathRoot(string filePath)
+        {
+            if (!string.IsNullOrEmpty(filePath))
+            {
+                var pathRoot = Path.GetPathRoot(Environment.ExpandEnvironmentVariables(filePath));
+                if (!string.IsNullOrEmpty(pathRoot))
+                    return pathRoot;
+            }
+            return null;
         }
 
 

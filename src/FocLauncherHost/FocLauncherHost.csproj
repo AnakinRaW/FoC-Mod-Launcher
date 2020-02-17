@@ -92,7 +92,8 @@
     <Compile Include="Updater\Component\IComponent.cs" />
     <Compile Include="Updater\Component\OriginInfo.cs" />
     <Compile Include="Updater\Component\ValidationContext.cs" />
-    <Compile Include="Updater\OutOfDiskspaceException.cs" />
+    <Compile Include="Updater\FileSystem\DriveSpaceData.cs" />
+    <Compile Include="Updater\FileSystem\OutOfDiskspaceException.cs" />
     <Compile Include="Updater\TaskRunner\StopTaskRunnerException.cs" />
     <Compile Include="Updater\Tasks\AcquireMutexTask.cs" />
     <Compile Include="Updater\InstallResult.cs" />
@@ -105,12 +106,12 @@
     <Compile Include="Updater\IUpdaterOperation.cs" />
     <Compile Include="Updater\CurrentDependencyState.cs" />
     <Compile Include="Updater\DependencyAction.cs" />
+    <Compile Include="Updater\FileSystem\DiskSpaceCalculator.cs" />
     <Compile Include="Updater\Tasks\FileInstaller.cs" />
-    <Compile Include="Updater\Tasks\RemoveFileTask.cs" />
+    <Compile Include="Updater\FileSystem\LockedFileLogger.cs" />
     <Compile Include="Updater\Tasks\ComponentDownloadTask.cs" />
     <Compile Include="Updater\IUpdaterTask.cs" />
     <Compile Include="Updater\Tasks\SynchronizedUpdaterTask.cs" />
-    <Compile Include="Updater\Tasks\DummyTask.cs" />
     <Compile Include="Updater\Extensions.cs" />
     <Compile Include="Updater\IProduct.cs" />
     <Compile Include="Updater\Tasks\KeepTask.cs" />
@@ -128,7 +129,7 @@
     <Compile Include="Updater\UpdateServer.cs" />
     <Compile Include="Updater\UpdaterUtilities.cs" />
     <Compile Include="Updater\Tasks\UpdaterTask.cs" />
-    <Compile Include="Updater\WaitTask.cs" />
+    <Compile Include="Updater\Tasks\WaitTask.cs" />
     <Compile Include="Utilities\AssemblyExtractor.cs" />
     <Compile Include="Utilities\NullToVisibilityConverter.cs" />
     <Compile Include="Utilities\UrlCombine.cs" />

@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Threading;
 using FocLauncherHost.Updater.TaskRunner;
-using FocLauncherHost.Updater.Tasks;
 
-namespace FocLauncherHost.Updater
+namespace FocLauncherHost.Updater.Tasks
 {
     internal class WaitTask : UpdaterTask
     {
