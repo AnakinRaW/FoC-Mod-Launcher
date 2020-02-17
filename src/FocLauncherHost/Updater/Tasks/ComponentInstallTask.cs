@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using FocLauncherHost.Updater.Component;
 
@@ -91,6 +92,16 @@ namespace FocLauncherHost.Updater.Tasks
                     throw new OperationCanceledException();
                 }
             }
+
+        }
+    }
+
+    internal class DiskSpaceCalculator
+    {
+        public IDictionary<string, DriveSpaceEvaluation> CalculatedDiskSizes { get; }
+
+        public DiskSpaceCalculator(IComponent component)
+        {
 
         }
     }
