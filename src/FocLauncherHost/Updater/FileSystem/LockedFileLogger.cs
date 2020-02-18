@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using FocLauncherHost.Updater.NativeMethods;
 using NLog;
 
 namespace FocLauncherHost.Updater.FileSystem
@@ -23,25 +25,28 @@ namespace FocLauncherHost.Updater.FileSystem
             var files = paths.Where(File.Exists).ToArray();
             if (files.Length != 0)
             {
-                //var processes = LockingProcessMaanager.Instance.GetProcesses(files);
-                //if (!processes.IsNullOrEmpt())
-                //    Logger.Warn($"The following file(s) are locked: {files.TryJoin(", ")}, process(es): {processes.Select(Format).TryJoin(", ")}");
+                var processes = LockingProcessManager.GetProcesses(files);
+                if (!processes.IsNullOrEmpty())
+                    Logger.Warn($"The following file(s) are locked: {files.TryJoin(", ")}, process(es): {processes.Select(Format).TryJoin(", ")}");
             }
-            var dirs = paths.Where(Directory.Exists).ToArray();
-            if (dirs.Length == 0)
-                return;
-            //var viewer = (services1 != null ? services1.GetService<IHandleViewer>(false) : (IHandleViewer)null) ?? (IHandleViewer)new HandleViewer(this.services);
-            //var source1 = array2.SelectMany((directory => viewer.GetHandleInformation(directory))).Distinct();
-            //if (source1.IsNullOrEmpty())
-            //    return;
-            //var source2 = source1.Select(Format);
-            //Logger.Warn($"The following directory/directories are locked: {array2.TryJoin(", ")}, process(es): {source2.TryJoin(", ")}");
+            // TODO: Directories??
         }
 
-        //private string Format(ILockingProcessInfo info)
-        //{
-        //    return "";
-        //}
+        private static string Format(LockingProcessInfo info)
+        {
+            if (info == null)
+                return (string)null;
+            var str = info.Description;
+            if (info.ApplicationType == RestartMgr.ApplicationType.Service)
+                str = info.ServiceName;
+            else
+            {
+                var process = Process.GetProcessById(info.Id);
+                if (process.StartTime == info.StartTime)
+                    str = process.ProcessName;
+            }
+            return $"{str} ({info.Id})";
+        }
 
     }
 }

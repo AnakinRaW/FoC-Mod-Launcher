@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -54,6 +55,29 @@ namespace FocLauncherHost.Updater
         public static string TryJoin(this IEnumerable<string> source, string separator)
         {
             return source == null ? null : string.Join(separator, source);
+        }
+
+        public static bool IsNullOrEmpty<T>(this IEnumerable<T> source)
+        {
+            return source == null || !FastAny<T>(source);
+        }
+
+        private static bool FastAny<T>(IEnumerable<T> source)
+        {
+            switch (source)
+            {
+                case ICollection<T> collection:
+                    return (uint) collection.Count > 0U;
+                case ICollection collection:
+                    return (uint)collection.Count > 0U;
+                default:
+                    using (var enumerator = source.GetEnumerator())
+                    {
+                        if (enumerator.MoveNext())
+                            return true;
+                    }
+                    return false;
+            }
         }
     }
 }

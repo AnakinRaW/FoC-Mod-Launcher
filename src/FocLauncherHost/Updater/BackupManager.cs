@@ -7,7 +7,7 @@ using FocLauncherHost.Updater.FileSystem;
 
 namespace FocLauncherHost.Updater
 {
-    internal class BackupManager
+    public class BackupManager
     {
         private static BackupManager _instance;
 

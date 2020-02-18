@@ -7,7 +7,7 @@ using FocLauncherHost.Updater.Component;
 using FocLauncherHost.Updater.FileSystem;
 using NLog;
 
-namespace FocLauncherHost.Updater.Tasks
+namespace FocLauncherHost.Updater
 {
     internal class FileInstaller
     {
@@ -17,6 +17,7 @@ namespace FocLauncherHost.Updater.Tasks
 
         private List<string> _lockedFiles;
         private LockedFileLogger _lockedFileLogger;
+        private RestartFilesWatcher _restartFilesWatcher;
 
         protected CancellationToken Token { get; private set; }
 
@@ -30,8 +31,7 @@ namespace FocLauncherHost.Updater.Tasks
 
         private FileInstaller()
         {
-            // TODO:
-            //rebootPendingOperationsService = services != null ? services.GetService(false) : null;
+            _restartFilesWatcher = RestartFilesWatcher.Instance;
             _lockedFiles = new List<string>();
         }
 
@@ -57,7 +57,7 @@ namespace FocLauncherHost.Updater.Tasks
 
             var restartPending = false;
             var file = component.GetFilePath();
-            var deleteResult = DeleteFile(file, out bool restartRequired);
+            var deleteResult = DeleteFile(file, out var restartRequired);
             restartPending |= restartRequired;
             if (!deleteResult && !restartRequired)
                 return InstallResult.Failure;
@@ -89,7 +89,8 @@ namespace FocLauncherHost.Updater.Tasks
                 if (restartRequired)
                 {
                     Logger.Info($"{file} file is scheduled for deletion after restarting.");
-                    // TODO:
+                    if (!_restartFilesWatcher.FilesToBeDeleted.Contains(file))
+                        _restartFilesWatcher.FilesToBeDeleted.Add(file);
                 }
                 else
                     Logger?.Warn($"File '{file}' could not be deleted nor could it be scheduled for deletion until after the reboot.");
@@ -129,7 +130,7 @@ namespace FocLauncherHost.Updater.Tasks
 
         private InstallResult UninstallHelper(InstallData uninstallData)
         {
-            var result = InstallResult.None;
+            InstallResult result;
             var component = uninstallData.Component;
 
             try

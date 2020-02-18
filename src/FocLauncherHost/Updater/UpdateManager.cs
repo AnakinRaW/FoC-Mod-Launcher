@@ -44,7 +44,6 @@ namespace FocLauncherHost.Updater
         }
 
 
-        // TODO: Do not allow reentracne
         public virtual async Task<UpdateInformation> CheckAndPerformUpdateAsync(CancellationToken cancellation)
         {
             cancellation.ThrowIfCancellationRequested();
@@ -94,58 +93,64 @@ namespace FocLauncherHost.Updater
                 return ErrorInformation(updateInformation, "Unable to check dependencies if update is available");
 
 
-            var updateResult =  await UpdateAsync(cts.Token);
-
-            if (updateResult == UpdateResult.Cancelled || updateResult == UpdateResult.Failed)
+            try
             {
-                return ErrorInformation(updateInformation, "TODO");
+                await UpdateAsync(cts.Token);
             }
-
-            if (updateResult != UpdateResult.Success)
+            catch (OperationCanceledException)
             {
-                return SuccessInformation(updateInformation, "Successfully updated");
+                return CancelledInformation(updateInformation);
             }
+            catch (UpdaterException e)
+            {
+                return ErrorInformation(updateInformation, e.Message);
+            }
+            catch (Exception e)
+            {
+                Logger.Error($"Failed processing catalog: {e.Message}");
+                throw;
+            }
+            
+            // TODO: Restart, cleanup, restore
 
             return SuccessInformation(updateInformation, "Success");
         }
 
-        // TODO: Do not allow reentracne
         public async Task<UpdateResult> UpdateAsync(CancellationToken cancellation)
         {
             cancellation.ThrowIfCancellationRequested();
 
             Logger.Trace("Performing update...");
 
+            var allComponents = Components.Concat(RemovableComponents);
             var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellation);
 
-            var allComponents = Components.Concat(RemovableComponents);
-
-
-            // TODO: Return ?!....
-            await Task.Run(() =>
+            var operation = new UpdateOperation(Product, allComponents);
+            try
             {
-                var operation = new UpdateOperation(Product, allComponents);
-                operation.Schedule();
-                try
+                await Task.Run(() =>
                 {
+                    operation.Schedule();
                     operation.Run(cts.Token);
-                }
-                catch (OperationCanceledException e)
-                {
-                    Logger.Error(e, $"Cancelled update: {e.Message}");
-                    throw;
-                }
-                catch (Exception e)
-                {
-                    Logger.Error(e, $"Failed update: {e.Message}");
-                    throw;
-                }
-            }, cts.Token);
+                }, cts.Token);
 
-            if (cts.IsCancellationRequested)
-                return UpdateResult.Failed;
-
-            return UpdateResult.Success;
+                return UpdateResult.Success;
+            }
+            catch (OperationCanceledException e)
+            {
+                Logger.Error(e, $"Cancelled update: {e.Message}");
+                throw;
+            }
+            catch (ComponentFailedException e)
+            {
+                Logger?.Error(e, "Component Failed to update");
+                throw;
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e, $"Failed update: {e.Message}");
+                throw;
+            }
         }
 
         public async Task CalculateComponentStatusAsync(CancellationToken cancellation = default)
@@ -318,7 +323,7 @@ namespace FocLauncherHost.Updater
         protected static UpdateInformation SuccessInformation(UpdateInformation updateInformation, string message, bool requiresRestart = false, bool userNotification = false)
         {
             Logger.Debug("Operation was completed sucessfully");
-            updateInformation.Result = requiresRestart ? UpdateInformationResult.SuccessRequiresRestart : UpdateInformationResult.Success;
+            updateInformation.Result = requiresRestart ? UpdateResult.SuccessRestartRequired : UpdateResult.Success;
             updateInformation.Message = message;
             updateInformation.RequiresUserNotification = userNotification;
             return updateInformation;
@@ -327,7 +332,7 @@ namespace FocLauncherHost.Updater
         protected static UpdateInformation ErrorInformation(UpdateInformation updateInformation, string errorMessage, bool userNotification = false)
         {
             Logger.Debug($"Operation failed with message: {errorMessage}");
-            updateInformation.Result = UpdateInformationResult.Error;
+            updateInformation.Result = UpdateResult.Failed;
             updateInformation.Message = errorMessage;
             updateInformation.RequiresUserNotification = userNotification;
             return updateInformation;
@@ -336,7 +341,7 @@ namespace FocLauncherHost.Updater
         protected static UpdateInformation CancelledInformation(UpdateInformation updateInformation, bool userNotification = false)
         {
             Logger.Debug("Operation was cancelled by user request");
-            updateInformation.Result = UpdateInformationResult.UserCancelled;
+            updateInformation.Result = UpdateResult.Failed;
             updateInformation.Message = "Operation cancelled by user request";
             updateInformation.RequiresUserNotification = userNotification;
             return updateInformation;
@@ -345,7 +350,7 @@ namespace FocLauncherHost.Updater
     
     public class UpdateInformation
     {
-        public UpdateInformationResult Result { get; set; }
+        public UpdateResult Result { get; set; }
 
         public bool RequiresUserNotification { get; set; }
 
@@ -361,15 +366,7 @@ namespace FocLauncherHost.Updater
     {
         Failed,
         Success,
-        SuccessPending,
+        SuccessRestartRequired,
         Cancelled
-    }
-
-    public enum UpdateInformationResult
-    {
-        Success,
-        SuccessRequiresRestart,
-        Error,
-        UserCancelled
     }
 }

@@ -84,6 +84,7 @@
     <Compile Include="UpdateCatalog\DependencyHelper.cs" />
     <Compile Include="Updater\BackupManager.cs" />
     <Compile Include="Updater\BackupPolicy.cs" />
+    <Compile Include="Updater\ComponentFailedException.cs" />
     <Compile Include="Updater\Component\Component.cs" />
     <Compile Include="Updater\Component\ComponentAction.cs" />
     <Compile Include="Updater\Component\ComponentIdentityComparer.cs" />
@@ -93,7 +94,11 @@
     <Compile Include="Updater\Component\OriginInfo.cs" />
     <Compile Include="Updater\Component\ValidationContext.cs" />
     <Compile Include="Updater\FileSystem\DriveSpaceData.cs" />
+    <Compile Include="Updater\FileSystem\LockingProcessInfo.cs" />
+    <Compile Include="Updater\FileSystem\LockingProcessManager.cs" />
     <Compile Include="Updater\FileSystem\OutOfDiskspaceException.cs" />
+    <Compile Include="Updater\NativeMethods\Kernel32.cs" />
+    <Compile Include="Updater\NativeMethods\RestartMgr.cs" />
     <Compile Include="Updater\TaskRunner\StopTaskRunnerException.cs" />
     <Compile Include="Updater\Tasks\AcquireMutexTask.cs" />
     <Compile Include="Updater\InstallResult.cs" />
@@ -107,10 +112,11 @@
     <Compile Include="Updater\CurrentDependencyState.cs" />
     <Compile Include="Updater\DependencyAction.cs" />
     <Compile Include="Updater\FileSystem\DiskSpaceCalculator.cs" />
-    <Compile Include="Updater\Tasks\FileInstaller.cs" />
+    <Compile Include="Updater\FileInstaller.cs" />
     <Compile Include="Updater\FileSystem\LockedFileLogger.cs" />
     <Compile Include="Updater\Tasks\ComponentDownloadTask.cs" />
     <Compile Include="Updater\IUpdaterTask.cs" />
+    <Compile Include="Updater\FileSystem\RestartFilesWatcher.cs" />
     <Compile Include="Updater\Tasks\SynchronizedUpdaterTask.cs" />
     <Compile Include="Updater\Extensions.cs" />
     <Compile Include="Updater\IProduct.cs" />
@@ -130,6 +136,7 @@
     <Compile Include="Updater\UpdaterUtilities.cs" />
     <Compile Include="Updater\Tasks\UpdaterTask.cs" />
     <Compile Include="Updater\Tasks\WaitTask.cs" />
+    <Compile Include="Updater\WindowsException.cs" />
     <Compile Include="Utilities\AssemblyExtractor.cs" />
     <Compile Include="Utilities\NullToVisibilityConverter.cs" />
     <Compile Include="Utilities\UrlCombine.cs" />

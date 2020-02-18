@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using FocLauncherHost.Updater.Component;
+using FocLauncherHost.Updater.FileSystem;
 using FocLauncherHost.Updater.TaskRunner;
 using FocLauncherHost.Updater.Tasks;
 using NLog;
@@ -95,7 +97,7 @@ namespace FocLauncherHost.Updater
         {
             Schedule();
             var installsOrUninstalls = _installsOrUninstalls?.OfType<ComponentInstallTask>() ?? Enumerable.Empty<ComponentInstallTask>();
-            
+
             using var mutex = UpdaterUtilities.CheckAndSetGlobalMutex();
             try
             {
@@ -123,9 +125,10 @@ namespace FocLauncherHost.Updater
                         _linkedCancellationTokenSource.Dispose();
                         _linkedCancellationTokenSource = null;
                     }
+
                     Logger.Trace("Completed update operation");
                 }
-                
+
                 if (IsCancelled)
                     throw new OperationCanceledException(token);
                 token.ThrowIfCancellationRequested();
@@ -136,25 +139,14 @@ namespace FocLauncherHost.Updater
                     .Where(installTask => installTask.Result.IsFailure()).ToList();
 
 
-                // TODO: Check for any restart requests
-                var requiresRestart = false;
-
-                // TODO: Do something if restart is requested
-
-                if (!requiresRestart)
+                var requiresRestart = RestartFilesWatcher.Instance.FilesToBeDeleted.Any();
+                if (requiresRestart) 
+                    Logger.Info("The operation finished. A restart is pedning.");
+                else
                 {
                     if (failedDownloads.Any() || failedInstalls.Any())
-                        throw new InvalidOperationException("Update Failed");
+                        throw new ComponentFailedException("Update Failed");
                 }
-                // TODO: Somehwere here but after checking for restart should be a cleanup of backus....
-                // If we get here everything should be ready to remove backups
-
-            }
-            catch (OperationCanceledException ex)
-            {
-                Logger.Trace("Running cancellation cleanup activities");
-                _cancelRestore.Run(new CancellationToken());
-                throw;
             }
             finally
             {
@@ -177,10 +169,7 @@ namespace FocLauncherHost.Updater
             foreach (var installsOrUninstall in _installsOrUninstalls)
                 _installs.Queue(installsOrUninstall);
 
-            // TODO _installs might be wrong for our case. A _cleanup might be better
-            //QueueCompletionActivities(_cleanup);
             QueueCancelCleanupActivities(_cancelRestore);
-
             _scheduled = true;
         }
 
@@ -206,12 +195,6 @@ namespace FocLauncherHost.Updater
                 _cancelRestore = new TaskRunner.TaskRunner();
                 _cancelRestore.Error += OnError;
             }
-            // TODO: Add _cleanup
-            //if (_cleanup == null)
-            //{
-            //    _cleanup = new UpdateTaskRunner();
-            //    _cleanup.Error += OnError;
-            //}
         }
         
         private void QueueInitialActivities()
@@ -300,11 +283,11 @@ namespace FocLauncherHost.Updater
                 {
                     if (installTask.Result.IsFailure())
                     {
-
+                        // TODO
                     }
                     else
                     {
-                        
+                        // TODO
                     }
                 }
                 else if (e.Task is ComponentDownloadTask downloadTask)

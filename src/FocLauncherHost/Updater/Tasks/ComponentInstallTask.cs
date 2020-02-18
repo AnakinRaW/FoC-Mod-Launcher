@@ -63,7 +63,7 @@ namespace FocLauncherHost.Updater.Tasks
                 }
 
                 if (Result.IsFailure())
-                    throw new UpdaterException($"Component '{Component.Name}' failed to {Component.RequiredAction}");
+                    throw new ComponentFailedException(new[] {Component});
                 if (Result == InstallResult.Cancel)
                     throw new OperationCanceledException();
             }
