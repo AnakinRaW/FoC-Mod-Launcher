@@ -1,9 +1,9 @@
 ﻿using System;
 using FocLauncherHost.Updater.NativeMethods;
 
-namespace FocLauncherHost.Updater.FileSystem
+namespace FocLauncherHost.Updater.Restart
 {
-    internal class LockingProcessInfo
+    internal class LockingProcessInfo : ILockingProcessInfo
     {
         public int Id { get; }
 
@@ -13,9 +13,9 @@ namespace FocLauncherHost.Updater.FileSystem
 
         public string ServiceName { get; }
 
-        public RestartMgr.ApplicationType ApplicationType { get; }
+        public ApplicationType ApplicationType { get; }
 
-        public RestartMgr.ApplicationStatus ApplicationStatus { get; }
+        public ApplicationStatus ApplicationStatus { get; }
 
         public bool IsRestartable { get; }
 

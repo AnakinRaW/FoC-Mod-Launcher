@@ -1,6 +1,7 @@
-﻿using System;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using System.Text;
+using FocLauncherHost.Updater.FileSystem;
+using FocLauncherHost.Updater.Restart;
 
 namespace FocLauncherHost.Updater.NativeMethods
 {
@@ -28,38 +29,7 @@ namespace FocLauncherHost.Updater.NativeMethods
         }
 
         internal delegate void RmWriteStatusCallback([MarshalAs(UnmanagedType.U4)] int nPercentComplete);
-
-        [Flags]
-        public enum WindowsRestartManagerShutdown
-        {
-            ForceShutdown = 1,
-            ShutdownOnlyRegistered = 16,
-        }
-
-        public enum ApplicationType
-        {
-            Unknown = 0,
-            MainWindow = 1,
-            OtherWindow = 2,
-            Service = 3,
-            Explorer = 4,
-            Console = 5,
-            Critical = 1000
-        }
-
-        [Flags]
-        public enum ApplicationStatus
-        {
-            Unknown = 0,
-            Running = 1,
-            Stopped = 2,
-            StoppedOther = 4,
-            Restarted = 8,
-            ErrorOnStop = 16,
-            ErrorOnRestart = 32,
-            ShutdownMasked = 64,
-            RestartMasked = 128,
-        }
+        
 
         [DllImport("rstrtmgr.dll", CharSet = CharSet.Unicode)]
         internal static extern int RmStartSession(out int pSessionHandle, int dwSessionFlags, [Out] StringBuilder strSessionKey);

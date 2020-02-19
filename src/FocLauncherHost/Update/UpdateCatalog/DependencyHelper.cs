@@ -1,7 +1,7 @@
 ﻿using System;
 using FocLauncherHost.Updater.Component;
 
-namespace FocLauncherHost.UpdateCatalog
+namespace FocLauncherHost.Update.UpdateCatalog
 {
     internal static class DependencyHelper
     {

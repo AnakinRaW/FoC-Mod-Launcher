@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using FocLauncherHost.Updater.Component;
-using FocLauncherHost.Updater.FileSystem;
+using FocLauncherHost.Updater.Restart;
 using FocLauncherHost.Updater.TaskRunner;
 using FocLauncherHost.Updater.Tasks;
 using NLog;
@@ -139,7 +138,7 @@ namespace FocLauncherHost.Updater
                     .Where(installTask => installTask.Result.IsFailure()).ToList();
 
 
-                var requiresRestart = RestartFilesWatcher.Instance.FilesToBeDeleted.Any();
+                var requiresRestart = LockedFilesWatcher.Instance.LockedFiles.Any();
                 if (requiresRestart) 
                     Logger.Info("The operation finished. A restart is pedning.");
                 else

@@ -7,7 +7,7 @@ using System.Xml.Serialization;
 using FocLauncherHost.Updater;
 using FocLauncherHost.Utilities;
 
-namespace FocLauncherHost.UpdateCatalog
+namespace FocLauncherHost.Update.UpdateCatalog
 {
     [Serializable]
     [XmlRoot("Products", Namespace = "", IsNullable = false)]

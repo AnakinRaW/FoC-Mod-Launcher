@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -6,6 +7,9 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FocLauncherHost.Updater.Component;
+using FocLauncherHost.Updater.FileSystem;
+using FocLauncherHost.Updater.NativeMethods;
+using FocLauncherHost.Updater.Restart;
 using NLog;
 
 namespace FocLauncherHost.Updater
@@ -110,11 +114,57 @@ namespace FocLauncherHost.Updater
                 Logger.Error($"Failed processing catalog: {e.Message}");
                 throw;
             }
-            
-            // TODO: Restart, cleanup, restore
+
+
+            if (LockedFilesWatcher.Instance.LockedFiles.Any())
+            {
+                try
+                {
+                    var components = FindComponentsFromFiles(LockedFilesWatcher.Instance.LockedFiles).ToList();
+                    var p = LockingProcessManager.Create();
+                    p.Register(LockedFilesWatcher.Instance.LockedFiles);
+                    HandleRestartRequest(components, p, cts.Token);
+                }
+                catch (OperationCanceledException)
+                {
+                    return CancelledInformation(updateInformation);
+                }
+                catch (UpdaterException e)
+                {
+                    return ErrorInformation(updateInformation, e.Message);
+                }
+                catch (Exception e)
+                {
+                    Logger.Error("Failed handling restart");
+                    throw;
+                }
+                finally
+                {
+                    LockedFilesWatcher.Instance.Clear();
+                }
+            }
+
+            // If we get here the application itself was not restarted and all restarts have been handled successfully.
+            // TODO: cleanup
 
             return SuccessInformation(updateInformation, "Success");
         }
+
+        protected virtual void HandleRestartRequest(ICollection<IComponent> pendingComponents, ILockingProcessManager lockingProcessManager, CancellationToken token)
+        {
+            throw new RestartDeniedOrFailedException("Handling restart is not implemented");
+        }
+
+        private IEnumerable<IComponent> FindComponentsFromFiles(IEnumerable<string> files)
+        {
+            return files.Select(FindComponentsFromFile).Where(component => component != null);
+        }
+
+        private IComponent? FindComponentsFromFile(string file)
+        {
+            return Components.Concat(RemovableComponents).FirstOrDefault(x => x.GetFilePath().Equals(file));
+        }
+
 
         public async Task<UpdateResult> UpdateAsync(CancellationToken cancellation)
         {

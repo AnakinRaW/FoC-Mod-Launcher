@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Xml.Serialization;
 
-namespace FocLauncherHost.UpdateCatalog
+namespace FocLauncherHost.Update.UpdateCatalog
 {
     [Serializable]
     public class Dependency

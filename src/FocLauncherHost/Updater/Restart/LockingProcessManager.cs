@@ -5,9 +5,9 @@ using System.Text;
 using FocLauncherHost.Updater.NativeMethods;
 using NLog;
 
-namespace FocLauncherHost.Updater.FileSystem
+namespace FocLauncherHost.Updater.Restart
 {
-    internal class LockingProcessManager : IDisposable
+    internal class LockingProcessManager : ILockingProcessManager
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
@@ -41,9 +41,25 @@ namespace FocLauncherHost.Updater.FileSystem
             return new LockingProcessManager(pSessionHandle, strSessionKey.ToString());
         }
 
-        public static IEnumerable<LockingProcessInfo> GetProcesses(IEnumerable<string> paths)
+        public void Restart()
         {
-            IEnumerable<LockingProcessInfo> source = null;
+            if (!_registered)
+                return;
+            ThrowOnError(RestartMgr.RmRestart(_sessionId, 0, null));
+        }
+
+        public void Shutdown(WindowsRestartManagerShutdown action = WindowsRestartManagerShutdown.ForceShutdown)
+        {
+            if (!_registered)
+                return;
+            ThrowOnError(RestartMgr.RmShutdown(_sessionId, action, null));
+        }
+
+
+
+        public static IEnumerable<ILockingProcessInfo> GetProcesses(IEnumerable<string> paths)
+        {
+            IEnumerable<ILockingProcessInfo> source = null;
             try
             {
                 using var manager = Create();
@@ -56,11 +72,9 @@ namespace FocLauncherHost.Updater.FileSystem
             }
 
             if (source != null)
-                return source.Where(process =>
-                    process.ApplicationStatus != RestartMgr.ApplicationStatus.Stopped &&
-                    process.ApplicationStatus != RestartMgr.ApplicationStatus.StoppedOther).ToArray();
+                return source.Where(process => process.ApplicationStatus != ApplicationStatus.Stopped && process.ApplicationStatus != ApplicationStatus.StoppedOther).ToArray();
 
-            return Enumerable.Empty<LockingProcessInfo>();
+            return Enumerable.Empty<ILockingProcessInfo>();
         }
 
         public void Register(IEnumerable<string> files = null)
@@ -73,7 +87,7 @@ namespace FocLauncherHost.Updater.FileSystem
             ThrowOnError(RestartMgr.RmRegisterResources(_sessionId, count, fileNames, 0, null, 0, null));
         }
 
-        public IEnumerable<LockingProcessInfo> GetProcesses()
+        public IEnumerable<ILockingProcessInfo> GetProcesses()
         {
             if (_registered)
             {
@@ -102,7 +116,7 @@ namespace FocLauncherHost.Updater.FileSystem
                     return array.Select(process => new LockingProcessInfo(process)).ToArray();
             }
 
-            return Enumerable.Empty<LockingProcessInfo>();
+            return Enumerable.Empty<ILockingProcessInfo>();
         }
 
         internal static void ThrowOnError(int result)

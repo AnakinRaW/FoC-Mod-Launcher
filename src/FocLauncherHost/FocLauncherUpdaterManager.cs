@@ -1,14 +1,17 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FocLauncher;
 using FocLauncherHost.Properties;
-using FocLauncherHost.UpdateCatalog;
+using FocLauncherHost.Update.UpdateCatalog;
 using FocLauncherHost.Updater;
 using FocLauncherHost.Updater.Component;
+using FocLauncherHost.Updater.Restart;
 using FocLauncherHost.Utilities;
 
 namespace FocLauncherHost
@@ -64,6 +67,30 @@ namespace FocLauncherHost
             return await Task.FromResult(validator.Validate(inputStream));
         }
 
+        protected override void HandleRestartRequest(ICollection<IComponent> pendingComponents, ILockingProcessManager lockingProcessManager,
+            CancellationToken token)
+        {
+            token.ThrowIfCancellationRequested();
+            if (!pendingComponents.Any())
+                return;
+            var processes = lockingProcessManager.GetProcesses().ToList();
+            if (processes.Any(x => x.ApplicationType == ApplicationType.Critical))
+                throw new RestartDeniedOrFailedException("Files are locked by a system process that cannot be terminated. Please restart the system");
+
+            var currentProcess = Process.GetCurrentProcess();
+            if (processes.Any(x => x.Id.Equals(currentProcess.Id)))
+            {
+                if (processes.Count == 1)
+                    HandleRestartOnlySelf(pendingComponents, lockingProcessManager, token);
+                else
+                    HandleRestartWithSelf(pendingComponents, lockingProcessManager, token);
+            }
+            else
+            {
+                HandleRestartWithExternalProcesses(pendingComponents, lockingProcessManager, token);
+            }
+        }
+
         protected override Version? GetComponentVersion(IComponent component)
         {
             try
@@ -74,6 +101,21 @@ namespace FocLauncherHost
             {
                 return null;
             }
+        }
+
+        private void HandleRestartWithExternalProcesses(IEnumerable<IComponent> pendingComponents, ILockingProcessManager lockingProcessManager, CancellationToken token)
+        {
+
+        }
+
+        private void HandleRestartWithSelf(IEnumerable<IComponent> pendingComponents, ILockingProcessManager lockingProcessManager, CancellationToken token)
+        {
+
+        }
+
+        private void HandleRestartOnlySelf(IEnumerable<IComponent> pendingComponents, ILockingProcessManager lockingProcessManager, CancellationToken token)
+        {
+
         }
 
         private static Task<Catalogs> TryGetProductFromStreamAsync(Stream stream)

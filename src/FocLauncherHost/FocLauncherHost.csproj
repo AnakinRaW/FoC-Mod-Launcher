@@ -81,7 +81,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="FocLauncherUpdaterManager.cs" />
-    <Compile Include="UpdateCatalog\DependencyHelper.cs" />
+    <Compile Include="Update\UpdateCatalog\DependencyHelper.cs" />
     <Compile Include="Updater\BackupManager.cs" />
     <Compile Include="Updater\BackupPolicy.cs" />
     <Compile Include="Updater\ComponentFailedException.cs" />
@@ -94,11 +94,17 @@
     <Compile Include="Updater\Component\OriginInfo.cs" />
     <Compile Include="Updater\Component\ValidationContext.cs" />
     <Compile Include="Updater\FileSystem\DriveSpaceData.cs" />
-    <Compile Include="Updater\FileSystem\LockingProcessInfo.cs" />
-    <Compile Include="Updater\FileSystem\LockingProcessManager.cs" />
+    <Compile Include="Updater\Restart\ApplicationStatus.cs" />
+    <Compile Include="Updater\Restart\ApplicationType.cs" />
+    <Compile Include="Updater\Restart\ILockingProcessInfo.cs" />
+    <Compile Include="Updater\Restart\ILockingProcessManager.cs" />
+    <Compile Include="Updater\Restart\LockingProcessInfo.cs" />
+    <Compile Include="Updater\Restart\LockingProcessManager.cs" />
     <Compile Include="Updater\FileSystem\OutOfDiskspaceException.cs" />
     <Compile Include="Updater\NativeMethods\Kernel32.cs" />
     <Compile Include="Updater\NativeMethods\RestartMgr.cs" />
+    <Compile Include="Updater\Restart\RestartDeniedOrFailedException.cs" />
+    <Compile Include="Updater\Restart\WindowsRestartManagerShutdown.cs" />
     <Compile Include="Updater\TaskRunner\StopTaskRunnerException.cs" />
     <Compile Include="Updater\Tasks\AcquireMutexTask.cs" />
     <Compile Include="Updater\InstallResult.cs" />
@@ -116,15 +122,15 @@
     <Compile Include="Updater\FileSystem\LockedFileLogger.cs" />
     <Compile Include="Updater\Tasks\ComponentDownloadTask.cs" />
     <Compile Include="Updater\IUpdaterTask.cs" />
-    <Compile Include="Updater\FileSystem\RestartFilesWatcher.cs" />
+    <Compile Include="Updater\Restart\LockedFilesWatcher.cs" />
     <Compile Include="Updater\Tasks\SynchronizedUpdaterTask.cs" />
     <Compile Include="Updater\Extensions.cs" />
     <Compile Include="Updater\IProduct.cs" />
     <Compile Include="Updater\Tasks\KeepTask.cs" />
-    <Compile Include="UpdateCatalog\Dependency.cs" />
-    <Compile Include="UpdateCatalog\InstallLocation.cs" />
-    <Compile Include="UpdateCatalog\ProductCatalog.cs" />
-    <Compile Include="UpdateCatalog\Catalogs.cs" />
+    <Compile Include="Update\UpdateCatalog\Dependency.cs" />
+    <Compile Include="Update\UpdateCatalog\InstallLocation.cs" />
+    <Compile Include="Update\UpdateCatalog\ProductCatalog.cs" />
+    <Compile Include="Update\UpdateCatalog\Catalogs.cs" />
     <Compile Include="Updater\StreamExtensions.cs" />
     <Compile Include="Updater\TaskRunner\TaskRunner.cs" />
     <Compile Include="Updater\UpdateConfiguration.cs" />

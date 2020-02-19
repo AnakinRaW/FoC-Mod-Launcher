@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using FocLauncherHost.Updater.NativeMethods;
+using FocLauncherHost.Updater.Restart;
 using NLog;
 
 namespace FocLauncherHost.Updater.FileSystem
@@ -32,12 +33,12 @@ namespace FocLauncherHost.Updater.FileSystem
             // TODO: Directories??
         }
 
-        private static string Format(LockingProcessInfo info)
+        private static string Format(ILockingProcessInfo info)
         {
             if (info == null)
                 return (string)null;
             var str = info.Description;
-            if (info.ApplicationType == RestartMgr.ApplicationType.Service)
+            if (info.ApplicationType == ApplicationType.Service)
                 str = info.ServiceName;
             else
             {

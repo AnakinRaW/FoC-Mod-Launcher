@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace FocLauncherHost.UpdateCatalog
+namespace FocLauncherHost.Update.UpdateCatalog
 {
     [Serializable]
     public class ProductCatalog

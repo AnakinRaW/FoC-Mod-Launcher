@@ -1,4 +1,4 @@
-﻿namespace FocLauncherHost.UpdateCatalog
+﻿namespace FocLauncherHost.Update.UpdateCatalog
 {
     public enum InstallLocation
     {

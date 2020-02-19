@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using FocLauncherHost.Updater.Component;
 using FocLauncherHost.Updater.FileSystem;
+using FocLauncherHost.Updater.Restart;
 using NLog;
 
 namespace FocLauncherHost.Updater
@@ -17,7 +18,7 @@ namespace FocLauncherHost.Updater
 
         private List<string> _lockedFiles;
         private LockedFileLogger _lockedFileLogger;
-        private RestartFilesWatcher _restartFilesWatcher;
+        private LockedFilesWatcher _lockedFilesWatcher;
 
         protected CancellationToken Token { get; private set; }
 
@@ -31,7 +32,7 @@ namespace FocLauncherHost.Updater
 
         private FileInstaller()
         {
-            _restartFilesWatcher = RestartFilesWatcher.Instance;
+            _lockedFilesWatcher = LockedFilesWatcher.Instance;
             _lockedFiles = new List<string>();
         }
 
@@ -62,7 +63,11 @@ namespace FocLauncherHost.Updater
             if (!deleteResult && !restartRequired)
                 return InstallResult.Failure;
 
-            return restartPending ? InstallResult.SuccessRestartRequired : InstallResult.Success;
+            if (restartPending)
+                return InstallResult.SuccessRestartRequired;
+
+            component.CurrentState = CurrentState.Removed;
+            return InstallResult.Success;
         }
 
         protected bool DeleteFile(string file, out bool restartRequired)
@@ -89,8 +94,8 @@ namespace FocLauncherHost.Updater
                 if (restartRequired)
                 {
                     Logger.Info($"{file} file is scheduled for deletion after restarting.");
-                    if (!_restartFilesWatcher.FilesToBeDeleted.Contains(file))
-                        _restartFilesWatcher.FilesToBeDeleted.Add(file);
+                    if (!_lockedFilesWatcher.LockedFiles.Contains(file))
+                        _lockedFilesWatcher.LockedFiles.Add(file);
                 }
                 else
                     Logger?.Warn($"File '{file}' could not be deleted nor could it be scheduled for deletion until after the reboot.");
