@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using FocLauncher;
 using FocLauncher.Threading;
 using FocLauncher.WaitDialog;
-using FocLauncherHost.ExceptionHandling;
+using FocLauncherHost.Controls;
 using FocLauncherHost.Updater;
 using FocLauncherHost.Utilities;
 using Microsoft.VisualStudio.Threading;
@@ -18,6 +19,9 @@ namespace FocLauncherHost
 
         private readonly AsyncManualResetEvent _canCloseApplicationEvent = new AsyncManualResetEvent(false, true);
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        private bool _waitWindowShown;
+        private TimeSpan _waitWindowDelay = TimeSpan.FromSeconds(2);
 
 
         static HostApplication()
@@ -44,19 +48,23 @@ namespace FocLauncherHost
             {
                 var data = new WaitDialogProgressData("Please wait while the launcher is downloading an update.", isCancelable: true);
 
-                var session = WaitDialogFactory.Instance.StartWaitDialog("FoC Launcher", data, TimeSpan.FromSeconds(2));
+                var session = WaitDialogFactory.Instance.StartWaitDialog("FoC Launcher", data, _waitWindowDelay);
+                SetWhenWaitDialogIsShownAsync(_waitWindowDelay, session.UserCancellationToken).Forget();
+
                 session.UserCancellationToken.Register(OnUserCancelled);
+
+                var cts = CancellationTokenSource.CreateLinkedTokenSource(session.UserCancellationToken);
+
                 UpdateInformation updateInformation = null;
                 Exception updateException = null;
                 try
                 {
                     Task.WhenAll(extractTask, Task.Delay(200)).ContinueWith(async task => await ShowMainWindowAsync(),
-                        session.UserCancellationToken,
-                        TaskContinuationOptions.OnlyOnRanToCompletion,
+                        cts.Token, TaskContinuationOptions.OnlyOnRanToCompletion,
                         TaskScheduler.FromCurrentSynchronizationContext()).Forget();
 
                     var updateManager = new FocLauncherUpdaterManager(@"C:\Users\Anakin\OneDrive\launcherUpdate.xml");
-                    updateInformation = await updateManager.CheckAndPerformUpdateAsync(session.UserCancellationToken);
+                    updateInformation = await updateManager.CheckAndPerformUpdateAsync(cts.Token);
                     Logger.Info($"Finished automatic update with result {updateInformation}");
 
                     //await Task.Delay(5000, session.UserCancellationToken);
@@ -72,8 +80,9 @@ namespace FocLauncherHost
                 }
                 finally
                 {
-                    await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(session.UserCancellationToken);
+                    await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(cts.Token);
                     session.Dispose();
+                    cts.Dispose();
                 }
 
                 
@@ -86,12 +95,20 @@ namespace FocLauncherHost
             });
         }
 
-        private static void ReportUpdateResult(UpdateInformation updateInformation)
+        private async Task SetWhenWaitDialogIsShownAsync(TimeSpan delay, CancellationToken token)
+        {
+            await Task.Delay(delay, token);
+            if (token.IsCancellationRequested)
+                return;
+            _waitWindowShown = true;
+        }
+
+        private void ReportUpdateResult(UpdateInformation updateInformation)
         {
 
             if (updateInformation != null)
             {
-                if (updateInformation.RequiresUserNotification ||
+                if (updateInformation.RequiresUserNotification && _waitWindowShown ||
 #if DEBUG
                     true
 #endif

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -7,8 +6,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FocLauncherHost.Updater.Component;
-using FocLauncherHost.Updater.FileSystem;
-using FocLauncherHost.Updater.NativeMethods;
 using FocLauncherHost.Updater.Restart;
 using NLog;
 
@@ -34,12 +31,7 @@ namespace FocLauncherHost.Updater
 
         public IReadOnlyCollection<IComponent> RemovableComponents => _removableComponentsReadOnly ??= new ReadOnlyCollection<IComponent>(_removableComponents);
 
-        //protected UpdateManager(IProductInfo productInfo)
-        //{
-        //    Product = productInfo;
-        //}
-
-        protected UpdateManager(IProductInfo productInfo, string versionMetadataPath) // : this(productInfo)
+        protected UpdateManager(IProductInfo productInfo, string versionMetadataPath)
         {
             if (!Uri.TryCreate(versionMetadataPath, UriKind.Absolute, out var metadataUri))
                 throw new UriFormatException();
@@ -56,126 +48,99 @@ namespace FocLauncherHost.Updater
 
             var updateInformation = new UpdateInformation();
 
-            var stream = await GetMetadataStreamAsync(cts.Token);
-            if (cts.IsCancellationRequested)
-                return CancelledInformation(updateInformation);
-            if (stream is null || stream.Length == 0)
-                return ErrorInformation(updateInformation,
-                    $"Unable to get the update metadata from: {UpdateCatalogLocation}");
-
-            
-            if (!await ValidateCatalogStreamAsync(stream))
-                return ErrorInformation(updateInformation,
-                    "Stream validation for metadata failed. Download corrupted?");
-
             try
             {
-                var components = await GetCatalogComponentsAsync(stream, cts.Token);
-                _components.AddRange(components);
-            }
-            catch (OperationCanceledException)
-            {
-                return CancelledInformation(updateInformation);
-            }
-            catch (UpdaterException e)
-            {
-                return ErrorInformation(updateInformation, e.Message);
-            }
-            catch (Exception e)
-            {
-                Logger.Error($"Failed processing catalog: {e.Message}");
-                throw;
-            }
+                var stream = await GetMetadataStreamAsync(cts.Token);
+                cts.Token.ThrowIfCancellationRequested();
 
+                if (stream is null || stream.Length == 0)
+                    throw new UpdaterException($"Unable to get the update metadata from: {UpdateCatalogLocation}");
+                if (!await ValidateCatalogStreamAsync(stream))
+                    throw new UpdaterException("Stream validation for metadata failed. Download corrupted?");
 
-            await CalculateComponentStatusAsync(cts.Token);
-            await CalculateRemovableComponentsAsync();
-
-            if (cts.IsCancellationRequested)
-                return CancelledInformation(updateInformation);
-            if (!Components.Any() && !RemovableComponents.Any())
-                return ErrorInformation(updateInformation, "Unable to check dependencies if update is available");
-
-
-            try
-            {
-                await UpdateAsync(cts.Token);
-            }
-            catch (OperationCanceledException)
-            {
-                return CancelledInformation(updateInformation);
-            }
-            catch (UpdaterException e)
-            {
-                return ErrorInformation(updateInformation, e.Message);
-            }
-            catch (Exception e)
-            {
-                Logger.Error($"Failed processing catalog: {e.Message}");
-                throw;
-            }
-
-
-            if (LockedFilesWatcher.Instance.LockedFiles.Any())
-            {
                 try
+                {
+                    var components = await GetCatalogComponentsAsync(stream, cts.Token);
+                    _components.AddRange(components);
+                }
+                catch (Exception e)
+                {
+                    Logger.Error($"Failed processing catalog: {e.Message}");
+                    throw;
+                }
+
+
+                await CalculateComponentStatusAsync(cts.Token);
+                await CalculateRemovableComponentsAsync();
+
+                cts.Token.ThrowIfCancellationRequested();
+
+                if (!Components.Any() && !RemovableComponents.Any())
+                    throw new UpdaterException("Unable to check dependencies if update is available");
+
+                await UpdateAsync(cts.Token);
+
+                if (LockedFilesWatcher.Instance.LockedFiles.Any())
                 {
                     var components = FindComponentsFromFiles(LockedFilesWatcher.Instance.LockedFiles).ToList();
                     var p = LockingProcessManager.Create();
                     p.Register(LockedFilesWatcher.Instance.LockedFiles);
-                    HandleRestartRequest(components, p, cts.Token);
+                    await HandleRestartRequestAsync(components, p, cts.Token);
                 }
-                catch (OperationCanceledException)
+                SuccessInformation(updateInformation, "Success");
+            }
+            catch (OperationCanceledException)
+            {
+                CancelledInformation(updateInformation);
+            }
+            catch (UpdaterException e)
+            {
+                ErrorInformation(updateInformation, e.Message);
+            }
+            catch (Exception e)
+            {
+                Logger.Error($"Failed processing catalog: {e.Message}");
+                throw;
+            }
+            finally
+            {
+                switch (updateInformation.Result)
                 {
-                    return CancelledInformation(updateInformation);
-                }
-                catch (UpdaterException e)
-                {
-                    return ErrorInformation(updateInformation, e.Message);
-                }
-                catch (Exception e)
-                {
-                    Logger.Error("Failed handling restart");
-                    throw;
-                }
-                finally
-                {
-                    LockedFilesWatcher.Instance.Clear();
+                    case UpdateResult.Success:
+                        BackupManager.Instance.RemoveAllBackups();
+                        break;
+                    case UpdateResult.Failed:
+                    case UpdateResult.Cancelled:
+                    case UpdateResult.SuccessRestartRequired:
+                        BackupManager.Instance.RestoreAllBackups();
+                        break;
                 }
             }
 
-            // If we get here the application itself was not restarted and all restarts have been handled successfully.
-            // TODO: cleanup
-
-            return SuccessInformation(updateInformation, "Success");
+            return updateInformation;
         }
 
-        protected virtual void HandleRestartRequest(ICollection<IComponent> pendingComponents, ILockingProcessManager lockingProcessManager, CancellationToken token)
+        protected virtual Task HandleRestartRequestAsync(ICollection<IComponent> pendingComponents, ILockingProcessManager lockingProcessManager, CancellationToken token)
         {
             throw new RestartDeniedOrFailedException("Handling restart is not implemented");
         }
 
-        private IEnumerable<IComponent> FindComponentsFromFiles(IEnumerable<string> files)
-        {
-            return files.Select(FindComponentsFromFile).Where(component => component != null);
-        }
-
-        private IComponent? FindComponentsFromFile(string file)
-        {
-            return Components.Concat(RemovableComponents).FirstOrDefault(x => x.GetFilePath().Equals(file));
-        }
-
-
         public async Task<UpdateResult> UpdateAsync(CancellationToken cancellation)
+        {
+            var allComponents = Components.Concat(RemovableComponents);
+            return await UpdateAsync(allComponents, cancellation);
+        }
+
+        protected internal async Task<UpdateResult> UpdateAsync(IEnumerable<IComponent> components,
+            CancellationToken cancellation)
         {
             cancellation.ThrowIfCancellationRequested();
 
             Logger.Trace("Performing update...");
 
-            var allComponents = Components.Concat(RemovableComponents);
             var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellation);
 
-            var operation = new UpdateOperation(Product, allComponents);
+            var operation = new UpdateOperation(Product, components);
             try
             {
                 await Task.Run(() =>
@@ -370,53 +335,38 @@ namespace FocLauncherHost.Updater
             return false;
         }
 
-        protected static UpdateInformation SuccessInformation(UpdateInformation updateInformation, string message, bool requiresRestart = false, bool userNotification = false)
+        protected static void SuccessInformation(UpdateInformation updateInformation, string message, bool requiresRestart = false, bool userNotification = false)
         {
             Logger.Debug("Operation was completed sucessfully");
             updateInformation.Result = requiresRestart ? UpdateResult.SuccessRestartRequired : UpdateResult.Success;
             updateInformation.Message = message;
             updateInformation.RequiresUserNotification = userNotification;
-            return updateInformation;
         }
 
-        protected static UpdateInformation ErrorInformation(UpdateInformation updateInformation, string errorMessage, bool userNotification = false)
+        protected static void ErrorInformation(UpdateInformation updateInformation, string errorMessage, bool userNotification = false)
         {
             Logger.Debug($"Operation failed with message: {errorMessage}");
             updateInformation.Result = UpdateResult.Failed;
             updateInformation.Message = errorMessage;
             updateInformation.RequiresUserNotification = userNotification;
-            return updateInformation;
         }
 
-        protected static UpdateInformation CancelledInformation(UpdateInformation updateInformation, bool userNotification = false)
+        protected static void CancelledInformation(UpdateInformation updateInformation, bool userNotification = false)
         {
             Logger.Debug("Operation was cancelled by user request");
-            updateInformation.Result = UpdateResult.Failed;
+            updateInformation.Result = UpdateResult.Cancelled;
             updateInformation.Message = "Operation cancelled by user request";
             updateInformation.RequiresUserNotification = userNotification;
-            return updateInformation;
         }
-    }
-    
-    public class UpdateInformation
-    {
-        public UpdateResult Result { get; set; }
 
-        public bool RequiresUserNotification { get; set; }
-
-        public string Message { get; set; }
-
-        public override string ToString()
+        private IEnumerable<IComponent> FindComponentsFromFiles(IEnumerable<string> files)
         {
-            return $"Result: {Result}, Message: {Message}";
+            return files.Select(FindComponentsFromFile).Where(component => component != null);
         }
-    }
 
-    public enum UpdateResult
-    {
-        Failed,
-        Success,
-        SuccessRestartRequired,
-        Cancelled
+        private IComponent? FindComponentsFromFile(string file)
+        {
+            return Components.Concat(RemovableComponents).FirstOrDefault(x => x.GetFilePath().Equals(file));
+        }
     }
 }

@@ -65,11 +65,16 @@
     <Resource Include="Resources\Fonts\EaW-bold.ttf" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\UpdateMessageBox.xaml.cs">
+      <DependentUpon>UpdateMessageBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\WindowHost.cs" />
     <Compile Include="FocLauncherProduct.cs" />
+    <Compile Include="LauncherRestartManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="HostApplication.cs" />
     <Compile Include="ExceptionHandling\ExceptionToTextConverter.cs" />
-    <Compile Include="ExceptionHandling\ExceptionWindow.xaml.cs">
+    <Compile Include="Controls\ExceptionWindow.xaml.cs">
       <DependentUpon>ExceptionWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ExceptionHandling\StackTraceToShortMessageConverter.cs" />
@@ -81,6 +86,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="FocLauncherUpdaterManager.cs" />
+    <Compile Include="Updater\UpdateInformation.cs" />
+    <Compile Include="Updater\UpdateResult.cs" />
     <Compile Include="Update\UpdateCatalog\DependencyHelper.cs" />
     <Compile Include="Updater\BackupManager.cs" />
     <Compile Include="Updater\BackupPolicy.cs" />
@@ -126,7 +133,6 @@
     <Compile Include="Updater\Tasks\SynchronizedUpdaterTask.cs" />
     <Compile Include="Updater\Extensions.cs" />
     <Compile Include="Updater\IProduct.cs" />
-    <Compile Include="Updater\Tasks\KeepTask.cs" />
     <Compile Include="Update\UpdateCatalog\Dependency.cs" />
     <Compile Include="Update\UpdateCatalog\InstallLocation.cs" />
     <Compile Include="Update\UpdateCatalog\ProductCatalog.cs" />
@@ -135,7 +141,6 @@
     <Compile Include="Updater\TaskRunner\TaskRunner.cs" />
     <Compile Include="Updater\UpdateConfiguration.cs" />
     <Compile Include="Updater\UpdateManager.cs" />
-    <Compile Include="Updater\Tasks\UpdaterOnCancelTask.cs" />
     <Compile Include="Updater\UpdateOperation.cs" />
     <Compile Include="Updater\UpdaterException.cs" />
     <Compile Include="Updater\UpdateServer.cs" />
@@ -153,7 +158,11 @@
     <Compile Include="Utilities\XmlValidator.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="ExceptionHandling\ExceptionWindow.xaml">
+    <Page Include="Controls\ExceptionWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\UpdateMessageBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -233,6 +242,8 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\kill.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

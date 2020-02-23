@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -24,11 +23,6 @@ namespace FocLauncherHost
         {
             SetUpdateConfiguration();
         }
-
-        //public FocLauncherUpdaterManager(IProductInfo product) : base(product)
-        //{
-            
-        //}
 
         private static void SetUpdateConfiguration()
         {
@@ -67,7 +61,7 @@ namespace FocLauncherHost
             return await Task.FromResult(validator.Validate(inputStream));
         }
 
-        protected override void HandleRestartRequest(ICollection<IComponent> pendingComponents, ILockingProcessManager lockingProcessManager,
+        protected override async Task HandleRestartRequestAsync(ICollection<IComponent> pendingComponents, ILockingProcessManager lockingProcessManager,
             CancellationToken token)
         {
             token.ThrowIfCancellationRequested();
@@ -77,18 +71,23 @@ namespace FocLauncherHost
             if (processes.Any(x => x.ApplicationType == ApplicationType.Critical))
                 throw new RestartDeniedOrFailedException("Files are locked by a system process that cannot be terminated. Please restart the system");
 
-            var currentProcess = Process.GetCurrentProcess();
-            if (processes.Any(x => x.Id.Equals(currentProcess.Id)))
+            var isSelfLocking = ProcessesContainsLauncher(processes);
+            var restartRequestResult = LauncherRestartManager.ShowProcessKillDialog(lockingProcessManager, token);
+
+            if (!restartRequestResult)
+                throw new RestartDeniedOrFailedException("Update aborted because locked files have not been released.");
+
+            if (!isSelfLocking)
             {
-                if (processes.Count == 1)
-                    HandleRestartOnlySelf(pendingComponents, lockingProcessManager, token);
-                else
-                    HandleRestartWithSelf(pendingComponents, lockingProcessManager, token);
+                lockingProcessManager.Shutdown();
+                LockedFilesWatcher.Instance.LockedFiles.Clear();
+                await UpdateAsync(pendingComponents, token);
+                if (LockedFilesWatcher.Instance.LockedFiles.Any())
+                    throw new RestartDeniedOrFailedException(
+                        "Update failed because there are still locked files which have not been released.");
+                return;
             }
-            else
-            {
-                HandleRestartWithExternalProcesses(pendingComponents, lockingProcessManager, token);
-            }
+            // TODO: Using the process manager might result in that this process is also shutted down. Test the behaviour!
         }
 
         protected override Version? GetComponentVersion(IComponent component)
@@ -103,19 +102,10 @@ namespace FocLauncherHost
             }
         }
 
-        private void HandleRestartWithExternalProcesses(IEnumerable<IComponent> pendingComponents, ILockingProcessManager lockingProcessManager, CancellationToken token)
+        private static bool ProcessesContainsLauncher(IEnumerable<ILockingProcessInfo> processes)
         {
-
-        }
-
-        private void HandleRestartWithSelf(IEnumerable<IComponent> pendingComponents, ILockingProcessManager lockingProcessManager, CancellationToken token)
-        {
-
-        }
-
-        private void HandleRestartOnlySelf(IEnumerable<IComponent> pendingComponents, ILockingProcessManager lockingProcessManager, CancellationToken token)
-        {
-
+            var currentProcess = Process.GetCurrentProcess();
+            return processes.Any(x => x.Id.Equals(currentProcess.Id));
         }
 
         private static Task<Catalogs> TryGetProductFromStreamAsync(Stream stream)

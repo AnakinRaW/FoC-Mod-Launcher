@@ -5,14 +5,12 @@ using System.Media;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows;
-using FocLauncherHost.Properties;
 using Microsoft.Win32;
 
-namespace FocLauncherHost.ExceptionHandling
+namespace FocLauncherHost.Controls
 {
     public partial class ExceptionWindow : INotifyPropertyChanged
     {
-        private readonly Window _hostWindow;
         private Exception _exception;
 
         public Exception Exception
@@ -26,27 +24,16 @@ namespace FocLauncherHost.ExceptionHandling
             }
         }
 
-        public ExceptionWindow() : this(null)
-        {          
-        }
-
         public ExceptionWindow(Exception exception)
         {
             InitializeComponent();
             Exception = exception;
-            _hostWindow = new Window
-            {
-                Title = "FoC Launcher",
-                SizeToContent = SizeToContent.WidthAndHeight,
-                ResizeMode = ResizeMode.NoResize
-            };
         }
 
-        public void ShowDialog()
+        public override void ShowDialog()
         {
             SystemSounds.Exclamation.Play();
-            _hostWindow.Content = this;
-            _hostWindow.ShowDialog();
+            base.ShowDialog();
         }
 
         private void OnSaveStackTrace(object sender, RoutedEventArgs e)
@@ -65,12 +52,11 @@ namespace FocLauncherHost.ExceptionHandling
             sb.AppendLine(Exception.ToString());
 
             File.WriteAllText(saveFileDialog.FileName, sb.ToString());
-            _hostWindow.Close();
+            HostWindow.Close();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

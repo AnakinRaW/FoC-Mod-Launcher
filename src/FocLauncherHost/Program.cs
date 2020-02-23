@@ -3,7 +3,7 @@ using System.IO;
 using System.Security.AccessControl;
 using System.Windows;
 using FocLauncher;
-using FocLauncherHost.ExceptionHandling;
+using FocLauncherHost.Controls;
 using Microsoft.Win32;
 using NLog;
 

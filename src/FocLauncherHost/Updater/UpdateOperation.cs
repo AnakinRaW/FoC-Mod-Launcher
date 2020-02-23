@@ -30,7 +30,6 @@ namespace FocLauncherHost.Updater
         private IEnumerable<IUpdaterTask> _installsOrUninstalls;
 
         private TaskRunner.TaskRunner _installs;
-        private TaskRunner.TaskRunner _cancelRestore;
         private AsyncTaskRunner _downloads;
         private DownloadManager _downloadManager;
         private AcquireMutexTask _installMutexTask;
@@ -163,12 +162,9 @@ namespace FocLauncherHost.Updater
                 return;
 
             _componentsToDownload.ForEach(download => _downloads.Queue(download));
-
             QueueInitialActivities();
             foreach (var installsOrUninstall in _installsOrUninstalls)
                 _installs.Queue(installsOrUninstall);
-
-            QueueCancelCleanupActivities(_cancelRestore);
             _scheduled = true;
         }
 
@@ -189,11 +185,6 @@ namespace FocLauncherHost.Updater
                 _installs = new TaskRunner.TaskRunner();
                 _installs.Error += OnError;
             }
-            if (_cancelRestore == null)
-            {
-                _cancelRestore = new TaskRunner.TaskRunner();
-                _cancelRestore.Error += OnError;
-            }
         }
         
         private void QueueInitialActivities()
@@ -202,18 +193,6 @@ namespace FocLauncherHost.Updater
             _installMutexTask = new AcquireMutexTask();
             _installs.Queue(_installMutexTask);
         }
-
-        private void QueueCompletionActivities(TaskRunner.TaskRunner installs)
-        {
-            // TODO: Probably remove backup files?!
-        }
-
-        private void QueueCancelCleanupActivities(TaskRunner.TaskRunner taskRunner)
-        {
-            var instanceOnCancel = new UpdaterOnCancelTask();
-            taskRunner.Queue(instanceOnCancel);
-        }
-
 
         private PackageActivities PlanInstallable(IComponent component, Dictionary<IComponent, ComponentDownloadTask> downloadLookup)
         {
@@ -238,9 +217,7 @@ namespace FocLauncherHost.Updater
                     if (packageActivities.Download != null)
                         downloadLookup[component] = packageActivities.Download;
                 }
-
             }
-
             return packageActivities;
         }
 

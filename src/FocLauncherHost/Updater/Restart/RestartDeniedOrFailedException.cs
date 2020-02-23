@@ -2,11 +2,7 @@
 {
     public class RestartDeniedOrFailedException : UpdaterException
     {
-        public RestartDeniedOrFailedException()
-        {
-        }
-
-        public RestartDeniedOrFailedException(string message)
+        public RestartDeniedOrFailedException(string message) : base(message)
         {
         }
     }

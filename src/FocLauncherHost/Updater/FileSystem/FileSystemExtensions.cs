@@ -1,8 +1,10 @@
 ﻿using System;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Threading.Tasks;
+using FocLauncherHost.Updater.NativeMethods;
 
 namespace FocLauncherHost.Updater.FileSystem
 {
@@ -183,6 +185,26 @@ namespace FocLauncherHost.Updater.FileSystem
             return isInRoleWithAccess;
         }
 
+        public static bool MoveFile(string source, string destination, bool replace = false)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            var isDirectory = Directory.Exists(source);
+            if (!replace)
+            {
+                if (isDirectory)
+                    Directory.Move(source, destination);
+                else
+                    File.Move(source, destination);
+                return true;
+            }
+            var flags = MoveFileFlags.MoveFileWriteThrough;
+            flags |= MoveFileFlags.MoveFileReplaceExisting;
+            if (!isDirectory)
+                flags |= MoveFileFlags.MoveFileCopyAllowed;
+            return MoveFileEx(source, destination, flags);
+        }
+
         internal static string? GetPathRoot(string filePath)
         {
             if (!string.IsNullOrEmpty(filePath))
@@ -228,6 +250,11 @@ namespace FocLauncherHost.Updater.FileSystem
                 }
             }
             return false;
+        }
+
+        private static bool MoveFileEx(string source, string destination, MoveFileFlags flags)
+        {
+            return Kernel32.MoveFileEx(source, destination, flags);
         }
     }
 
