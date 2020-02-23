@@ -12,6 +12,7 @@ using FocLauncherHost.Updater;
 using FocLauncherHost.Updater.Component;
 using FocLauncherHost.Updater.Restart;
 using FocLauncherHost.Utilities;
+using NLog.Fluent;
 
 namespace FocLauncherHost
 {
@@ -67,12 +68,17 @@ namespace FocLauncherHost
             token.ThrowIfCancellationRequested();
             if (!pendingComponents.Any())
                 return;
+
+            Logger.Trace("Hanlde restart request due to locked files");
+
             var processes = lockingProcessManager.GetProcesses().ToList();
             if (processes.Any(x => x.ApplicationType == ApplicationType.Critical))
                 throw new RestartDeniedOrFailedException("Files are locked by a system process that cannot be terminated. Please restart the system");
 
             var isSelfLocking = ProcessesContainsLauncher(processes);
             var restartRequestResult = LauncherRestartManager.ShowProcessKillDialog(lockingProcessManager, token);
+
+            Logger.Trace($"Kill locking processes: {restartRequestResult}, Launcher needs restart: {isSelfLocking}");
 
             if (!restartRequestResult)
                 throw new RestartDeniedOrFailedException("Update aborted because locked files have not been released.");

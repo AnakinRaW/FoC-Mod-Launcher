@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using FocLauncherHost.Updater.Component;
@@ -23,10 +22,6 @@ namespace FocLauncherHost.Updater
         private readonly List<UpdaterTask> _componentsToRemove = new List<UpdaterTask>();
         private readonly List<ComponentDownloadTask> _componentsToDownload = new List<ComponentDownloadTask>();
 
-        private IReadOnlyCollection<ComponentDownloadTask> _componentsToDownloadReadOnly;
-        private IReadOnlyCollection<UpdaterTask> _componentsToInstallReadOnly;
-        private IReadOnlyCollection<UpdaterTask> _componentsToRemoveReadOnly;
-
         private IEnumerable<IUpdaterTask> _installsOrUninstalls;
 
         private TaskRunner.TaskRunner _installs;
@@ -36,21 +31,9 @@ namespace FocLauncherHost.Updater
 
         private CancellationTokenSource _linkedCancellationTokenSource;
 
-
-        public IReadOnlyCollection<ComponentDownloadTask> DependenciesToDownload =>
-            _componentsToDownloadReadOnly ??= new ReadOnlyCollection<ComponentDownloadTask>(_componentsToDownload);
-
-        public IReadOnlyCollection<UpdaterTask> DependenciesToInstall => _componentsToInstallReadOnly ??=
-            new ReadOnlyCollection<UpdaterTask>(_componentsToInstall);
-
-        public IReadOnlyCollection<UpdaterTask> DependenciesToRemove => _componentsToRemoveReadOnly ??=
-            new ReadOnlyCollection<UpdaterTask>(_componentsToRemove);
-
-        public long DownloadSize { get; }
-
         internal bool IsCancelled { get; private set; }
 
-        private int ParallelDownload => 2;
+        private static int ParallelDownload => 2;
 
         public UpdateOperation(IProductInfo product, IEnumerable<IComponent> dependencies)
         {
@@ -73,7 +56,7 @@ namespace FocLauncherHost.Updater
             foreach (var dependency in _allComponents)
             {
                 var packageActivities = PlanInstallable(dependency, downloadLookup);
-                if (dependency.RequiredAction == ComponentAction.Delete && packageActivities?.Install != null)
+                if (dependency.RequiredAction == ComponentAction.Delete && packageActivities.Install != null)
                     _componentsToRemove.Add(packageActivities.Install);
             }
 
