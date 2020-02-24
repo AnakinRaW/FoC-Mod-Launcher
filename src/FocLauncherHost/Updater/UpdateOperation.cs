@@ -118,7 +118,7 @@ namespace FocLauncherHost.Updater
                 var failedDownloads = _componentsToDownload.Where(p => p.Error != null && !p.Error.IsExceptionType<OperationCanceledException>());
 
                 var failedInstalls = installsOrUninstalls
-                    .Where(installTask => installTask.Result.IsFailure()).ToList();
+                    .Where(installTask => !installTask.Result.IsSuccess()).ToList();
 
 
                 var requiresRestart = LockedFilesWatcher.Instance.LockedFiles.Any();

@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using NLog;
 
@@ -10,20 +9,21 @@ namespace FocLauncherHost.Updater.TaskRunner
 {
     internal class TaskRunner : IEnumerable<IUpdaterTask>
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private readonly List<IUpdaterTask> _tasks = new List<IUpdaterTask>();
+        protected static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private readonly List<IUpdaterTask> _tasks;
 
         public event EventHandler<TaskEventArgs> Error;
 
         protected ConcurrentQueue<IUpdaterTask> TaskQueue { get; }
 
-        internal IReadOnlyList<IUpdaterTask> Tasks => _tasks.ToList();
+        internal IList<IUpdaterTask> Tasks => _tasks;
 
         internal bool IsCancelled { get; private set; }
 
         public TaskRunner()
         {
             TaskQueue = new ConcurrentQueue<IUpdaterTask>();
+            _tasks = new List<IUpdaterTask>();
         }
 
         public void Run(CancellationToken token)

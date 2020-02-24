@@ -5,7 +5,6 @@ using System.Linq;
 using System.Security.AccessControl;
 using FocLauncherHost.Updater.Component;
 using FocLauncherHost.Updater.FileSystem;
-using FocLauncherHost.Updater.Restart;
 
 namespace FocLauncherHost.Updater
 {
@@ -28,9 +27,13 @@ namespace FocLauncherHost.Updater
             ValidateHasAccess(backupPath);
             if (_backupLookup.ContainsKey(component))
                 return;
-            var backupFilePath = CreateBackupFilePath(component, backupPath);
+            var backupFilePath = string.Empty;
             var componentFilePath = component.GetFilePath();
-            FileSystemExtensions.CopyFileWithRetry(componentFilePath, backupFilePath);
+            if (File.Exists(componentFilePath))
+            {
+                backupFilePath = CreateBackupFilePath(component, backupPath);
+                FileSystemExtensions.CopyFileWithRetry(componentFilePath, backupFilePath);
+            }
             _backupLookup.Add(component, backupFilePath);
         }
 
@@ -53,27 +56,45 @@ namespace FocLauncherHost.Updater
             if (!_backupLookup.ContainsKey(component))
                 return;
             var backupFile = _backupLookup[component];
+            var componentFile = component.GetFilePath();
             try
             {
-                if (!File.Exists(backupFile))
-                    return;
-
-                var componentFile = component.GetFilePath();
-
-                if (File.Exists(componentFile))
+                if (string.IsNullOrEmpty(backupFile))
                 {
-                    var backupHash = UpdaterUtilities.GetFileHash(backupFile, HashType.Sha256);
-                    var fileHash = UpdaterUtilities.GetFileHash(backupFile, HashType.Sha256);
-                    if (backupHash.SequenceEqual(fileHash))
+                    if (!File.Exists(componentFile))
                         return;
+                    var success = FileSystemExtensions.DeleteFileWithRetry(componentFile, out _);
+                    if (!success)
+                        throw new IOException("Unable to restore the backup. Please restart your computer and try again.");
                 }
-                var success = FileSystemExtensions.MoveFile(backupFile, component.GetFilePath(), true);
-                if (!success)
-                    throw new IOException("Unable to restore the backup file. Please restart your computer and try again.");
+                else
+                {
+                    if (!File.Exists(backupFile))
+                        return;
+
+                    if (File.Exists(componentFile))
+                    {
+                        var backupHash = UpdaterUtilities.GetFileHash(backupFile, HashType.Sha256);
+                        var fileHash = UpdaterUtilities.GetFileHash(backupFile, HashType.Sha256);
+                        if (backupHash.SequenceEqual(fileHash))
+                            return;
+                    }
+                    var success = FileSystemExtensions.MoveFile(backupFile, component.GetFilePath(), true);
+                    if (!success)
+                        throw new IOException("Unable to restore the backup file. Please restart your computer and try again.");
+
+                    try
+                    {
+                        FileSystemExtensions.DeleteFileWithRetry(backupFile, out _);
+                    }
+                    catch
+                    {
+                        // Ignore
+                    }
+                }
             }
             finally
             {
-                FileSystemExtensions.DeleteFileWithRetry(backupFile, out _);
                 _backupLookup.Remove(component);
             }
         }
@@ -100,9 +121,6 @@ namespace FocLauncherHost.Updater
             if (component == null)
                 throw new ArgumentNullException(nameof(component));
             if (string.IsNullOrEmpty(component.Destination))
-                throw new FileNotFoundException("Unable to resolve the component's file path");
-            var filePath = Path.Combine(component.Destination, component.Name);
-            if (!File.Exists(filePath))
                 throw new FileNotFoundException("Unable to resolve the component's file path");
         }
 

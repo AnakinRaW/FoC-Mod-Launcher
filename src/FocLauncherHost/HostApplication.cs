@@ -21,7 +21,7 @@ namespace FocLauncherHost
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         private bool _waitWindowShown;
-        private TimeSpan _waitWindowDelay = TimeSpan.FromSeconds(2);
+        private readonly TimeSpan _waitWindowDelay = TimeSpan.FromSeconds(2);
 
 
         static HostApplication()

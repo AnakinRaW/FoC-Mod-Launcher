@@ -29,7 +29,10 @@ namespace FocLauncherHost.Updater.Tasks
         protected override void SynchronizedInvoke(CancellationToken token)
         {
             if (Action == ComponentAction.Keep)
+            {
+                Result = InstallResult.Success;
                 return;
+            }
             var installer = FileInstaller.Instance;
             try
             {
@@ -46,13 +49,17 @@ namespace FocLauncherHost.Updater.Tasks
                     }
                     else if (Action == ComponentAction.Delete)
                     {
-                        Result = installer.Remove(Component ,token);
+                        Result = installer.Remove(Component, token);
                     }
 
                 }
                 catch (OutOfDiskspaceException)
                 {
                     Result = InstallResult.Failure;
+                    throw;
+                }
+                catch
+                {
                     throw;
                 }
 
@@ -98,7 +105,7 @@ namespace FocLauncherHost.Updater.Tasks
                 if (UpdateConfiguration.Instance.BackupPolicy == BackupPolicy.Required)
                 {
                     Logger.Trace("Cancelling update operation due to BackupPolicy");
-                    throw new OperationCanceledException();
+                    throw;
                 }
             }
 
