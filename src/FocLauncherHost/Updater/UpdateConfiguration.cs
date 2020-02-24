@@ -14,8 +14,20 @@
 
         public bool DiagnosticMode { get; set; }
 
+        public int DownloadRetryDelay { get; set; } = 5000;
+
+        public bool AllowEmptyFileDownload { get; set; }
+
+        public ValidationPolicy ValidationPolicy { get; set; }
+
         private UpdateConfiguration()
         {
         }
+    }
+
+    public enum ValidationPolicy
+    {
+        AllowSkipWhenContextNullOrBroken,
+        Enforce,
     }
 }

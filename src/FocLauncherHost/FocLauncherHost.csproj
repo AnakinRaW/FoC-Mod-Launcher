@@ -86,6 +86,21 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="FocLauncherUpdaterManager.cs" />
+    <Compile Include="Updater\Download\DownloadContext.cs" />
+    <Compile Include="Updater\Download\DownloadEngineBase.cs" />
+    <Compile Include="Updater\Download\DownloadFailureException.cs" />
+    <Compile Include="Updater\Download\DownloadFailureInformation.cs" />
+    <Compile Include="Updater\Download\DownloadResult.cs" />
+    <Compile Include="Updater\Download\DownloadSource.cs" />
+    <Compile Include="Updater\Download\DownloadSummary.cs" />
+    <Compile Include="Updater\Download\FileDownloader.cs" />
+    <Compile Include="Updater\Download\IDownloadEngine.cs" />
+    <Compile Include="Updater\Download\IDownloadManager.cs" />
+    <Compile Include="Updater\Download\PreferredDownloadEngines.cs" />
+    <Compile Include="Updater\Download\ValidationFailedException.cs" />
+    <Compile Include="Updater\FileSystem\HashVerifier.cs" />
+    <Compile Include="Updater\ProgressUpdateCallback.cs" />
+    <Compile Include="Updater\ProgressUpdateStatus.cs" />
     <Compile Include="Updater\UpdateInformation.cs" />
     <Compile Include="Updater\UpdateResult.cs" />
     <Compile Include="Update\UpdateCatalog\DependencyHelper.cs" />
@@ -117,7 +132,7 @@
     <Compile Include="Updater\InstallResult.cs" />
     <Compile Include="Updater\TaskRunner\AsyncTaskRunner.cs" />
     <Compile Include="Updater\TaskRunner\TaskEventArgs.cs" />
-    <Compile Include="Updater\DownloadManager.cs" />
+    <Compile Include="Updater\Download\DownloadManager.cs" />
     <Compile Include="Updater\InstallAction.cs" />
     <Compile Include="Updater\Tasks\ComponentInstallTask.cs" />
     <Compile Include="Updater\FileSystem\FileSystemExtensions.cs" />
@@ -245,5 +260,6 @@
   <ItemGroup>
     <Resource Include="Resources\kill.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -23,7 +23,7 @@ namespace FocLauncherHost.Update.UpdateCatalog
 
                 ValidationContext validationContext = null;
                 if (hash != null)
-                    validationContext = new ValidationContext { Hash = hash, HashType = HashType.Sha2 };
+                    validationContext = new ValidationContext { Hash = hash, HashType = HashType.Sha256 };
                 var originInfo = new OriginInfo(new Uri(dependency.Origin, UriKind.Absolute), newVersion, size, validationContext);
                 component.OriginInfo = originInfo;
             }

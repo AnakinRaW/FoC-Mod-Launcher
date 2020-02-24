@@ -62,8 +62,8 @@ namespace FocLauncherHost.Updater
 
                 if (File.Exists(componentFile))
                 {
-                    var backupHash = UpdaterUtilities.GetFileHash(backupFile, HashType.Sha2);
-                    var fileHash = UpdaterUtilities.GetFileHash(backupFile, HashType.Sha2);
+                    var backupHash = UpdaterUtilities.GetFileHash(backupFile, HashType.Sha256);
+                    var fileHash = UpdaterUtilities.GetFileHash(backupFile, HashType.Sha256);
                     if (backupHash.SequenceEqual(fileHash))
                         return;
                 }

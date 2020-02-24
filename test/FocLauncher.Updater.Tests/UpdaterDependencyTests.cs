@@ -116,7 +116,7 @@ namespace FocLauncher.Updater.Tests
             dependency.Name = "FocLauncher.dll";
             dependency.Version = "1.0.0.0";
             dependency.Destination = ApplicationBasePath;
-            dependency.Sha2 = UpdaterUtilities.GetFileHash(Path.Combine(ApplicationBasePath, dependency.Name), HashType.Sha2);
+            dependency.Sha2 = UpdaterUtilities.GetFileHash(Path.Combine(ApplicationBasePath, dependency.Name), HashType.Sha256);
             dependency.Origin = "https://example.com";
 
             var component = DependencyHelper.DependencyToComponent(dependency);

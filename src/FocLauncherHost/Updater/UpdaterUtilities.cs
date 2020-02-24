@@ -50,15 +50,14 @@ namespace FocLauncherHost.Updater
                     return GetFileHash(file, HashAlgorithmName.MD5);
                 case HashType.Sha1:
                     return GetFileHash(file, HashAlgorithmName.SHA1);
-                case HashType.Sha2:
+                case HashType.Sha256:
                     return GetFileHash(file, HashAlgorithmName.SHA256);
-                case HashType.Sha3:
+                case HashType.Sha512:
                     return GetFileHash(file, HashAlgorithmName.SHA512);
                 default:
                     throw new InvalidOperationException("Unable to find a hashing algorithm");
             }
         }
-
 
         private static byte[] GetFileHash(string file, HashAlgorithmName algorithm)
         {
@@ -148,6 +147,29 @@ namespace FocLauncherHost.Updater
                 throw new FileNotFoundException(nameof(filePath));
             using var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
             await fileStream.CopyToAsync(stream, 81920, cancellation);
+        }
+
+        public static long CopyFileToStream(string filePath, Stream outStream, ProgressUpdateCallback progress, CancellationToken cancellationToken)
+        {
+            if (!File.Exists(filePath))
+                throw new FileNotFoundException(nameof(filePath));
+            var downloadSize = 0L;
+            var array = new byte[32768];
+            using var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+            while (true)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                var readSize = fileStream.Read(array, 0, array.Length);
+                cancellationToken.ThrowIfCancellationRequested();
+                if (readSize <= 0)
+                    break;
+                outStream.Write(array, 0, readSize);
+                downloadSize += readSize;
+                progress?.Invoke(new ProgressUpdateStatus(downloadSize, fileStream.Length, 0.0));
+            }
+            if (downloadSize != fileStream.Length)
+                throw new IOException("Internal error copying streams. Total read bytes does not match stream Length.");
+            return downloadSize;
         }
     }
 }

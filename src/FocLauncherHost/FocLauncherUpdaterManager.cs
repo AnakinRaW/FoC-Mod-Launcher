@@ -12,7 +12,6 @@ using FocLauncherHost.Updater;
 using FocLauncherHost.Updater.Component;
 using FocLauncherHost.Updater.Restart;
 using FocLauncherHost.Utilities;
-using NLog.Fluent;
 
 namespace FocLauncherHost
 {
@@ -29,6 +28,7 @@ namespace FocLauncherHost
         {
             UpdateConfiguration.Instance.BackupPolicy = BackupPolicy.Required;
             UpdateConfiguration.Instance.BackupPath = LauncherConstants.ApplicationBasePath;
+            UpdateConfiguration.Instance.DownloadRetryDelay = 500;
         }
 
         protected override bool FileCanBeDeleted(FileInfo file)

@@ -6,6 +6,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FocLauncherHost.Updater.Component;
+using FocLauncherHost.Updater.Download;
+using FocLauncherHost.Updater.FileSystem;
 using FocLauncherHost.Updater.Restart;
 using NLog;
 
@@ -180,33 +182,22 @@ namespace FocLauncherHost.Updater
             }
         }
 
-        public async Task<Stream?> GetMetadataStreamAsync(CancellationToken cancellation)
+        public async Task<Stream> GetMetadataStreamAsync(CancellationToken cancellation)
         {
             cancellation.ThrowIfCancellationRequested();
             try
             {
                 Stream metadataStream = new MemoryStream();
-                if (UpdateCatalogLocation.Scheme == Uri.UriSchemeFile)
-                {
-                    Logger.Trace($"Try getting update metadata stream from local file: {UpdateCatalogLocation.LocalPath}");
-                    await UpdaterUtilities.CopyFileToStreamAsync(UpdateCatalogLocation.LocalPath, metadataStream, cancellation);
-                }
-
-                if (UpdateCatalogLocation.Scheme == Uri.UriSchemeHttp ||
-                    UpdateCatalogLocation.Scheme == Uri.UriSchemeHttps)
-                {
-                    Logger.Trace($"Try getting update metadata stream from online file: {UpdateCatalogLocation.AbsolutePath}");
-                    throw new NotImplementedException();
-                }
-
+                await DownloadManager.Instance.DownloadAsync(UpdateCatalogLocation, metadataStream, null, cancellation);
                 Logger.Info($"Retrieved metadata stream from {UpdateCatalogLocation}");
                 return metadataStream;
             }
-            catch (TaskCanceledException)
+            catch (OperationCanceledException)
             {
                 Logger.Trace("Getting metadata stream was cancelled");
-                return null;
+                throw;
             }
+
         }
 
         public async Task CalculateRemovableComponentsAsync()
@@ -278,7 +269,7 @@ namespace FocLauncherHost.Updater
 
                 var newVersion = component.OriginInfo.Version;
 
-                if (newVersion == null)
+                if (newVersion is null)
                 {
                     Logger.Info($"Dependency marked to keep: {component}");
                     return Task.CompletedTask;
@@ -297,8 +288,8 @@ namespace FocLauncherHost.Updater
                     return Task.CompletedTask;
                 }
 
-                var fileHash = UpdaterUtilities.GetFileHash(filePath, component.OriginInfo.ValidationContext.HashType);
-                if (!fileHash.SequenceEqual(component.OriginInfo.ValidationContext.Hash))
+                var hashResult = HashVerifier.VerifyFile(filePath, component.OriginInfo.ValidationContext);
+                if (hashResult == ValidationResult.HashMismatch)
                 {
                     Logger.Info($"Dependency marked to get updated: {component}");
                     component.RequiredAction = ComponentAction.Update;

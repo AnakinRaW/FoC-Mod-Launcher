@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using FocLauncherHost.Updater.Component;
+using FocLauncherHost.Updater.Download;
 using FocLauncherHost.Updater.Restart;
 using FocLauncherHost.Updater.TaskRunner;
 using FocLauncherHost.Updater.Tasks;
@@ -26,7 +27,7 @@ namespace FocLauncherHost.Updater
 
         private TaskRunner.TaskRunner _installs;
         private AsyncTaskRunner _downloads;
-        private DownloadManager _downloadManager;
+        private IDownloadManager _downloadManager;
         private AcquireMutexTask _installMutexTask;
 
         private CancellationTokenSource _linkedCancellationTokenSource;

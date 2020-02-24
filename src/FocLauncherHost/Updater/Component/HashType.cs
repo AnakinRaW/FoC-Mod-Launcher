@@ -5,7 +5,8 @@
         None,
         MD5,
         Sha1,
-        Sha2,
-        Sha3
+        Sha256,
+        Sha384,
+        Sha512
     }
 }
