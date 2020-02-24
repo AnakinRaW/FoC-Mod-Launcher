@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Threading;
+using FocLauncherHost.Updater.Component;
 
 namespace FocLauncherHost.Updater.Download
 {
@@ -28,9 +29,9 @@ namespace FocLauncherHost.Updater.Download
         }
 
         public DownloadSummary Download(Uri uri, Stream outputStream, ProgressUpdateCallback progress,
-            CancellationToken cancellationToken, DownloadContext downloadContext)
+            CancellationToken cancellationToken, IComponent? component)
         {
-            return DownloadWithBitRate(uri, outputStream, progress, cancellationToken, downloadContext);
+            return DownloadWithBitRate(uri, outputStream, progress, cancellationToken, component);
         }
 
         public void Dispose()
@@ -39,13 +40,13 @@ namespace FocLauncherHost.Updater.Download
         }
 
         protected abstract DownloadSummary DownloadCore(Uri uri, Stream outputStream, ProgressUpdateCallback progress,
-            CancellationToken cancellationToken, DownloadContext downloadContext);
+            CancellationToken cancellationToken, IComponent? component);
 
         protected virtual void DisposeResources()
         {
         }
 
-        private DownloadSummary DownloadWithBitRate(Uri uri, Stream outputStream, ProgressUpdateCallback progress, CancellationToken cancellationToken, DownloadContext downloadContext)
+        private DownloadSummary DownloadWithBitRate(Uri uri, Stream outputStream, ProgressUpdateCallback progress, CancellationToken cancellationToken, IComponent? component)
         {
             var now = DateTime.Now;
             var lastProgressUpdate = now;
@@ -59,7 +60,7 @@ namespace FocLauncherHost.Updater.Download
                     progress(new ProgressUpdateStatus(p.BytesRead, p.TotalBytes, bitRate));
                     lastProgressUpdate = now2;
                 };
-            var downloadSummary = DownloadCore(uri, outputStream, wrappedProgress, cancellationToken, downloadContext);
+            var downloadSummary = DownloadCore(uri, outputStream, wrappedProgress, cancellationToken, component);
             downloadSummary.DownloadTime = DateTime.Now - now;
             downloadSummary.BitRate = 8.0 * downloadSummary.DownloadedSize / downloadSummary.DownloadTime.TotalSeconds;
             return downloadSummary;

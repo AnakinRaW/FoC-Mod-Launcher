@@ -22,6 +22,18 @@ namespace FocLauncherHost.Updater
             }
         }
 
+        public static Exception? TryGetWrappedException(this Exception exception)
+        {
+            var wrappedExceptions = exception.TryGetWrappedExceptions();
+            return wrappedExceptions != null && wrappedExceptions.Count == 1 ? wrappedExceptions.Single() : null;
+        }
+
+        public static IReadOnlyCollection<Exception>? TryGetWrappedExceptions(
+            this Exception exception)
+        {
+            return exception is AggregateException aggregateException ? aggregateException.Flatten().InnerExceptions : null;
+        }
+
         public static bool IsSuccess(this InstallResult result)
         {
             return result == InstallResult.Success || result == InstallResult.SuccessRestartRequired;

@@ -121,7 +121,7 @@ namespace FocLauncherHost.Updater
             if (component == null)
                 throw new ArgumentNullException(nameof(component));
             if (string.IsNullOrEmpty(component.Destination))
-                throw new FileNotFoundException("Unable to resolve the component's file path");
+                throw new IOException("Unable to resolve the component's file path");
         }
 
         internal static void ValidateHasAccess(string path)

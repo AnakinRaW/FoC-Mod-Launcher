@@ -36,11 +36,11 @@ namespace FocLauncherHost.Updater
             _lockedFiles = new List<string>();
         }
 
-        public InstallResult Remove(IComponent component, CancellationToken token)
+        public InstallResult Remove(IComponent component, CancellationToken token, bool isPresent = false)
         {
             Token = token;
             var location = component.Destination;
-            return PlanAndApplyExecuteAction(location, component);
+            return PlanAndApplyExecuteAction(location, component, isPresent);
         }
 
         protected InstallResult UninstallCore(string installDir, IComponent component)
@@ -174,7 +174,7 @@ namespace FocLauncherHost.Updater
             return installResult;
         }
 
-        private InstallResult PlanAndApplyExecuteAction(string location, IComponent component)
+        private InstallResult PlanAndApplyExecuteAction(string location, IComponent component, bool isPresent)
         {
             var requestedAction = component.RequiredAction;
             var state = component.CurrentState;
@@ -187,7 +187,8 @@ namespace FocLauncherHost.Updater
                     //action = InstallHelper;
                     break;
                 case ComponentAction.Delete:
-                    action = UninstallHelper;
+                    if (isPresent)
+                        action = UninstallHelper;
                     break;
             }
 

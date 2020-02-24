@@ -33,7 +33,7 @@ namespace FocLauncherHost.Updater.Tasks
         protected override void Dispose(bool disposing)
         {
             if (disposing)
-                _handle?.Dispose();
+                _handle.Dispose();
             base.Dispose(disposing);
         }
 

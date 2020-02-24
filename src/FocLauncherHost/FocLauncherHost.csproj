@@ -86,7 +86,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="FocLauncherUpdaterManager.cs" />
-    <Compile Include="Updater\Download\DownloadContext.cs" />
     <Compile Include="Updater\Download\DownloadEngineBase.cs" />
     <Compile Include="Updater\Download\DownloadFailureException.cs" />
     <Compile Include="Updater\Download\DownloadFailureInformation.cs" />
@@ -96,11 +95,13 @@
     <Compile Include="Updater\Download\FileDownloader.cs" />
     <Compile Include="Updater\Download\IDownloadEngine.cs" />
     <Compile Include="Updater\Download\IDownloadManager.cs" />
+    <Compile Include="Updater\Download\NoSuitableEngineException.cs" />
     <Compile Include="Updater\Download\PreferredDownloadEngines.cs" />
     <Compile Include="Updater\Download\ValidationFailedException.cs" />
     <Compile Include="Updater\FileSystem\HashVerifier.cs" />
     <Compile Include="Updater\ProgressUpdateCallback.cs" />
     <Compile Include="Updater\ProgressUpdateStatus.cs" />
+    <Compile Include="Updater\Tasks\DownloadTask.cs" />
     <Compile Include="Updater\UpdateInformation.cs" />
     <Compile Include="Updater\UpdateResult.cs" />
     <Compile Include="Update\UpdateCatalog\DependencyHelper.cs" />

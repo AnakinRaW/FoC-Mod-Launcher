@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading;
+using FocLauncherHost.Updater.Component;
 
 namespace FocLauncherHost.Updater.Download
 {
@@ -11,6 +12,6 @@ namespace FocLauncherHost.Updater.Download
         bool IsSupported(DownloadSource source);
 
         DownloadSummary Download(Uri uri, Stream outputStream, ProgressUpdateCallback progress, 
-            CancellationToken cancellationToken, DownloadContext downloadContext);
+            CancellationToken cancellationToken, IComponent? component);
     }
 }

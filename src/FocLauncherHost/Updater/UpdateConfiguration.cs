@@ -20,6 +20,10 @@
 
         public ValidationPolicy ValidationPolicy { get; set; }
 
+        public bool DownloadOnlyMode { get; set; }
+
+        public int DownloadRetryCount { get; set; } = 3;
+
         private UpdateConfiguration()
         {
         }

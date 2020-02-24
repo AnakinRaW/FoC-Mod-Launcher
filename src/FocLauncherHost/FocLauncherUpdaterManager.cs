@@ -27,6 +27,7 @@ namespace FocLauncherHost
         private static void SetUpdateConfiguration()
         {
             UpdateConfiguration.Instance.BackupPolicy = BackupPolicy.Required;
+            UpdateConfiguration.Instance.DownloadRetryCount = 1;
             UpdateConfiguration.Instance.BackupPath = LauncherConstants.ApplicationBasePath;
             UpdateConfiguration.Instance.DownloadRetryDelay = 500;
         }

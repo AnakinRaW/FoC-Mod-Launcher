@@ -7,7 +7,9 @@ namespace FocLauncherHost.Updater.Tasks
 {
     internal class ComponentInstallTask : SynchronizedUpdaterTask
     {
+        private readonly ComponentDownloadTask _download;
         internal static readonly long AdditionalSizeBuffer = 20000000;
+        private readonly bool _isPresent;
 
         internal ComponentAction Action { get; }
 
@@ -15,10 +17,19 @@ namespace FocLauncherHost.Updater.Tasks
 
         internal bool? RestartRequired { get; private set; }
 
-        public ComponentInstallTask(IComponent component, ComponentAction action)
+        public virtual TimeSpan DownloadWaitTime { get; internal set; } = new TimeSpan(0L);
+
+        public ComponentInstallTask(IComponent component, ComponentAction action, ComponentDownloadTask download, bool isPresent = false) :
+            this(component, action, isPresent)
         {
-            Component = component;
+            _download = download;
+        }
+
+        public ComponentInstallTask(IComponent component, ComponentAction action, bool isPresent = false)
+        {
+            Component = component ?? throw new ArgumentNullException(nameof(component));
             Action = action;
+            _isPresent = isPresent;
         }
 
         public override string ToString()
@@ -33,6 +44,16 @@ namespace FocLauncherHost.Updater.Tasks
                 Result = InstallResult.Success;
                 return;
             }
+
+            var now = DateTime.Now;
+            _download?.Wait();
+            DownloadWaitTime += DateTime.Now - now;
+            if (_download?.Error != null)
+            {
+                Logger.Warn($"Skipping {Action} of '{Component.Name}' since downloading it failed.");
+                return;
+            }
+
             var installer = FileInstaller.Instance;
             try
             {
@@ -49,17 +70,13 @@ namespace FocLauncherHost.Updater.Tasks
                     }
                     else if (Action == ComponentAction.Delete)
                     {
-                        Result = installer.Remove(Component, token);
+                        Result = installer.Remove(Component, token, _isPresent);
                     }
 
                 }
                 catch (OutOfDiskspaceException)
                 {
                     Result = InstallResult.Failure;
-                    throw;
-                }
-                catch
-                {
                     throw;
                 }
 
@@ -70,7 +87,7 @@ namespace FocLauncherHost.Updater.Tasks
                 }
 
                 if (Result.IsFailure())
-                    throw new ComponentFailedException(new[] {Component});
+                    throw new ComponentFailedException(new[] { Component });
                 if (Result == InstallResult.Cancel)
                     throw new OperationCanceledException();
             }
@@ -108,7 +125,6 @@ namespace FocLauncherHost.Updater.Tasks
                     throw;
                 }
             }
-
         }
     }
 }

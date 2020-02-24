@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading;
+using FocLauncherHost.Updater.Component;
 
 namespace FocLauncherHost.Updater.Download
 {
@@ -11,7 +12,7 @@ namespace FocLauncherHost.Updater.Download
         }
 
         protected override DownloadSummary DownloadCore(Uri uri, Stream outputStream, ProgressUpdateCallback progress,
-            CancellationToken cancellationToken, DownloadContext downloadContext)
+            CancellationToken cancellationToken, IComponent? component)
         {
             if (!uri.IsFile && !uri.IsUnc)
                 throw new ArgumentException("Expected file or UNC path", nameof(uri));

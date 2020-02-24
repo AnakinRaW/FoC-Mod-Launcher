@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using FocLauncherHost.Updater.Component;
 using FocLauncherHost.Updater.FileSystem;
 using NLog;
 
@@ -55,7 +56,7 @@ namespace FocLauncherHost.Updater.Download
         }
 
         public Task<DownloadSummary> DownloadAsync(Uri uri, Stream outputStream, ProgressUpdateCallback progress, CancellationToken cancellationToken,
-            DownloadContext downloadContext = default, bool verify = false)
+            IComponent? component = default, bool verify = false)
         {
             Logger.Trace($"Download requested: {uri.AbsoluteUri}");
             if (outputStream == null)
@@ -82,7 +83,7 @@ namespace FocLauncherHost.Updater.Download
             {
                 var engines = GetSuitableEngines(_defaultEngines, uri);
                 return Task.Factory.StartNew(() => DownloadWithRetry(engines, uri, outputStream, progress,
-                        cancellationToken, downloadContext, verify), cancellationToken,
+                        cancellationToken, component, verify), cancellationToken,
                     TaskCreationOptions.LongRunning, TaskScheduler.Default);
             }
             catch (Exception ex)
@@ -92,7 +93,7 @@ namespace FocLauncherHost.Updater.Download
             }
         }
 
-        private DownloadSummary DownloadWithRetry(IDownloadEngine[] engines, Uri uri, Stream outputStream, ProgressUpdateCallback progress, CancellationToken cancellationToken, DownloadContext downloadContext = null, bool verify = false)
+        private DownloadSummary DownloadWithRetry(IDownloadEngine[] engines, Uri uri, Stream outputStream, ProgressUpdateCallback progress, CancellationToken cancellationToken, IComponent? component = null, bool verify = false)
         {
             var failureList = new List<DownloadFailureInformation>();
             foreach (var engine in engines)
@@ -106,7 +107,7 @@ namespace FocLauncherHost.Updater.Download
                         {
                             progress?.Invoke(new ProgressUpdateStatus(engine.Name, status.BytesRead, status.TotalBytes, status.BitRate));
                         }, cancellationToken,
-                        downloadContext);
+                        component);
                     if (outputStream.Length == 0 && !UpdateConfiguration.Instance.AllowEmptyFileDownload)
                     {
                         var exception = new UpdaterException($"Empty file downloaded on '{uri}'.");
@@ -116,7 +117,7 @@ namespace FocLauncherHost.Updater.Download
 
                     if (verify && outputStream.Length != 0)
                     {
-                        if (downloadContext is null)
+                        if (component is null)
                         {
                             if (UpdateConfiguration.Instance.ValidationPolicy == ValidationPolicy.Enforce)
                                 throw new ValidationFailedException(DownloadResult.MissingOrInvalidValidationContext, 
@@ -124,12 +125,12 @@ namespace FocLauncherHost.Updater.Download
                         }
                         else
                         {
-                            var componentValidationContext = downloadContext.Component.OriginInfo?.ValidationContext;
+                            var componentValidationContext = component.OriginInfo?.ValidationContext;
                             var valid = componentValidationContext?.Verify();
 
                             if ((!valid.HasValue || !valid.Value) && UpdateConfiguration.Instance.ValidationPolicy == ValidationPolicy.Enforce)
                                 throw new ValidationFailedException(DownloadResult.MissingOrInvalidValidationContext,
-                                    $"Component '{downloadContext.Component.Name}' is missing or has an invalid ValidationInfo");
+                                    $"Component '{component.Name}' is missing or has an invalid ValidationInfo");
 
                             if (valid.HasValue && valid.Value)
                             {
@@ -144,7 +145,7 @@ namespace FocLauncherHost.Updater.Download
                                 }
                             }
                             else
-                                Logger.Trace($"Skipping validation because validation context of Component {downloadContext.Component.Name} is not valid.");
+                                Logger.Trace($"Skipping validation because validation context of Component {component.Name} is not valid.");
                         }
                     }
 
@@ -195,7 +196,7 @@ namespace FocLauncherHost.Updater.Download
             if (array.Length == 0)
             {
                 Logger?.Trace("Unable to select suitable download engine.");
-                throw new InvalidOperationException("Can not download. No suitable download engine found.");
+                throw new NoSuitableEngineException("Can not download. No suitable download engine found.");
             }
             return PreferredDownloadEngines.Instance.GetEnginesInPriorityOrder(array).ToArray();
         }

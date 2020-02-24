@@ -88,7 +88,7 @@ namespace FocLauncherHost.Updater
                     _linkedCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(token);
                     _downloads.Run(_linkedCancellationTokenSource.Token);
 #if DEBUG
-                    _downloads.Wait();
+                    //_downloads.Wait();
 #endif
                     _installs.Run(_linkedCancellationTokenSource.Token);
 
@@ -120,15 +120,12 @@ namespace FocLauncherHost.Updater
                 var failedInstalls = installsOrUninstalls
                     .Where(installTask => !installTask.Result.IsSuccess()).ToList();
 
+                if (failedDownloads.Any() || failedInstalls.Any())
+                    throw new ComponentFailedException("Update failed because one or more downloads or installs had an error.");
 
                 var requiresRestart = LockedFilesWatcher.Instance.LockedFiles.Any();
                 if (requiresRestart) 
                     Logger.Info("The operation finished. A restart is pedning.");
-                else
-                {
-                    if (failedDownloads.Any() || failedInstalls.Any())
-                        throw new ComponentFailedException("Update Failed");
-                }
             }
             finally
             {
@@ -205,26 +202,26 @@ namespace FocLauncherHost.Updater
             return packageActivities;
         }
 
-        private static PackageActivities CreateDownloadInstallActivities(IComponent component, ComponentAction action, bool isPresent)
+        private PackageActivities CreateDownloadInstallActivities(IComponent component, ComponentAction action, bool isPresent)
         {
-            // TODO: Not complete....
-            ComponentDownloadTask downloadPackage;
+            ComponentDownloadTask downloadComponent;
             ComponentInstallTask install;
 
             if (action == ComponentAction.Update)
             {
-                downloadPackage = new ComponentDownloadTask();
-                install = new ComponentInstallTask(component, action);
+                downloadComponent = new ComponentDownloadTask(component);
+                downloadComponent.Canceled += (_, __) => _linkedCancellationTokenSource?.Cancel();
+                install = new ComponentInstallTask(component, action, downloadComponent, isPresent);
             }
             else
             {
-                downloadPackage = null;
-                install = new ComponentInstallTask(component, action);
+                downloadComponent = null;
+                install = new ComponentInstallTask(component, action, isPresent);
             }
             
             return new PackageActivities
             {
-                Download = downloadPackage,
+                Download = downloadComponent,
                 Install = install
             };
         }
