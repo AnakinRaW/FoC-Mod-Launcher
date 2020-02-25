@@ -17,7 +17,9 @@ namespace FocLauncherHost.Updater.Component
         public OriginInfo? OriginInfo { get; set; }
 
         public long? DiskSize { get; set; }
-        
+
+        public string DownloadPath { get; set; }
+
         public override string ToString()
         {
             return !string.IsNullOrEmpty(Name) ? $"{Name},destination='{Destination}'" : base.ToString();

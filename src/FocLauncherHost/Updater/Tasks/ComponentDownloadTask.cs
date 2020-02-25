@@ -86,16 +86,14 @@ namespace FocLauncherHost.Updater.Tasks
                     break;
                 try
                 {
-                    var realDestination = Component.GetFilePath();
-                    if (!UpdateConfiguration.Instance.DownloadOnlyMode)
-                        realDestination += NewFileExtension;
-                    DownloadAndVerifyAsync(downloadManager, realDestination, token).Wait();
-                    if (!File.Exists(realDestination))
+                    SetDownloadPath();
+                    DownloadAndVerifyAsync(downloadManager, Component.DownloadPath, token).Wait();
+                    if (!File.Exists(Component.DownloadPath))
                     {
                         var message = "File not found after being successfully downloaded and verified: " +
-                                      realDestination + ", package: " + Component.Name;
+                                      Component.DownloadPath + ", package: " + Component.Name;
                         Logger.Warn(message);
-                        throw new FileNotFoundException(message, realDestination);
+                        throw new FileNotFoundException(message, Component.DownloadPath);
                     }
                     hadExceptionFlag = false;
                     lastException = null;
@@ -127,6 +125,20 @@ namespace FocLauncherHost.Updater.Tasks
                 }
             }
             return !hadExceptionFlag;
+        }
+
+        private void SetDownloadPath()
+        {
+            if (UpdateConfiguration.Instance.DownloadOnlyMode)
+            {
+                var destination = Component.GetFilePath();
+                Component.DownloadPath = destination;
+                return;
+            }
+
+            var randomFileName = Path.GetFileNameWithoutExtension(Path.GetRandomFileName());
+            var backupFileName = $"{Component.Name}.{randomFileName}{NewFileExtension}";
+            Component.DownloadPath = Path.Combine(Component.Destination, backupFileName);
         }
 
         private async Task DownloadAndVerifyAsync(IDownloadManager downloadManager, string destination, CancellationToken token)

@@ -17,5 +17,7 @@ namespace FocLauncherHost.Updater.Component
         OriginInfo? OriginInfo { get; set; }
 
         long? DiskSize { get; set; }
+
+        string DownloadPath { get; set; }
     }
 }
