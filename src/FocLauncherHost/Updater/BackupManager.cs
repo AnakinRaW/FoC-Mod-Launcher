@@ -65,7 +65,7 @@ namespace FocLauncherHost.Updater
                         return;
                     var success = FileSystemExtensions.DeleteFileWithRetry(componentFile, out _);
                     if (!success)
-                        throw new IOException("Unable to restore the backup. Please restart your computer and try again.");
+                        throw new IOException("Unable to restore the backup. Please restart your computer!");
                 }
                 else
                 {
@@ -81,7 +81,7 @@ namespace FocLauncherHost.Updater
                     }
                     var success = FileSystemExtensions.MoveFile(backupFile, component.GetFilePath(), true);
                     if (!success)
-                        throw new IOException("Unable to restore the backup file. Please restart your computer and try again.");
+                        throw new IOException($"Unable to restore the backup file '{backupFile}'. Please restart your computer!");
 
                     try
                     {
