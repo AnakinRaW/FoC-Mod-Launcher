@@ -83,7 +83,6 @@ namespace FocLauncherHost.Updater.Tasks
                 if (Result == InstallResult.SuccessRestartRequired)
                 {
                     RestartRequired = true;
-                    //SetRestartManagerRebootState(RebootType.FinalReboot);
                 }
 
                 if (Result.IsFailure())
@@ -93,7 +92,6 @@ namespace FocLauncherHost.Updater.Tasks
             }
             finally
             {
-                // remove progress event
             }
         }
 

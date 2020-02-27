@@ -9,7 +9,7 @@ using FocLauncherHost.Updater.TaskRunner;
 using FocLauncherHost.Updater.Tasks;
 using NLog;
 
-namespace FocLauncherHost.Updater
+namespace FocLauncherHost.Updater.Operations
 {
     internal class UpdateOperation : IUpdaterOperation
     {
@@ -88,7 +88,7 @@ namespace FocLauncherHost.Updater
                     _linkedCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(token);
                     _downloads.Run(_linkedCancellationTokenSource.Token);
 #if DEBUG
-                    //_downloads.Wait();
+                    _downloads.Wait();
 #endif
                     _installs.Run(_linkedCancellationTokenSource.Token);
 

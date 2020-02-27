@@ -48,7 +48,6 @@ namespace FocLauncherHost.Updater.FileSystem
                     HasEnoughDiskSpace = false;
                 }
             }
-
         }
 
         public static void ThrowIfNotEnoughDiskSpaceAvailable(IComponent component, long additionalBuffer = 0,

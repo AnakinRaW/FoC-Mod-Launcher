@@ -8,6 +8,8 @@ namespace FocLauncherHost.Updater
     {
         private static ComponentDownloadPathStorage _instance;
 
+        private readonly object _syncObject = new object();
+
         private readonly Dictionary<IComponent, string> _downloadLookup = new Dictionary<IComponent, string>();
 
         public static ComponentDownloadPathStorage Instance => _instance ??= new ComponentDownloadPathStorage();
@@ -18,20 +20,25 @@ namespace FocLauncherHost.Updater
 
         public void Add(IComponent component, string downloadPath)
         {
-            if (_downloadLookup.ContainsKey(component))
-                _downloadLookup[component] = downloadPath;
-            else
-                _downloadLookup.Add(component, downloadPath);
+            lock (_syncObject)
+            {
+                if (_downloadLookup.ContainsKey(component))
+                    _downloadLookup[component] = downloadPath;
+                else
+                    _downloadLookup.Add(component, downloadPath);
+            }
         }
 
         public bool TryGetValue(IComponent component, out string value)
         {
-            return _downloadLookup.TryGetValue(component, out value);
+            lock (_syncObject)
+                return _downloadLookup.TryGetValue(component, out value);
         }
 
         public bool Remove(IComponent component)
         {
-            return _downloadLookup.Remove(component);
+            lock (_syncObject)
+                return _downloadLookup.Remove(component);
         }
 
         public void Clear()

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,10 +9,13 @@ using FocLauncherHost.Updater.FileSystem;
 
 namespace FocLauncherHost.Updater
 {
-    public class BackupManager
+    public class BackupManager : IEnumerable<KeyValuePair<IComponent, string>>
     {
+        private const string NonExistentSource = "SOURCE_ORIGINALLY_MISSING";
+
         private static BackupManager _instance;
 
+        private readonly object _syncObject = new object();
         private readonly Dictionary<IComponent, string> _backupLookup = new Dictionary<IComponent, string>();
 
         public static BackupManager Instance => _instance ??= new BackupManager();
@@ -27,21 +31,19 @@ namespace FocLauncherHost.Updater
             ValidateHasAccess(backupPath);
             if (_backupLookup.ContainsKey(component))
                 return;
-            var backupFilePath = string.Empty;
+            string backupFilePath;
             var componentFilePath = component.GetFilePath();
             if (File.Exists(componentFilePath))
             {
                 backupFilePath = CreateBackupFilePath(component, backupPath);
                 FileSystemExtensions.CopyFileWithRetry(componentFilePath, backupFilePath);
             }
-            _backupLookup.Add(component, backupFilePath);
-        }
-
-        public void RemoveAllBackups()
-        {
-            var keys = _backupLookup.Keys.ToList();
-            foreach (var component in keys) 
-                RemoveBackup(component);
+            else
+            {
+                backupFilePath = NonExistentSource;
+            }
+            lock (_syncObject)
+                _backupLookup.Add(component, backupFilePath);
         }
 
         public void RestoreAllBackups()
@@ -50,22 +52,27 @@ namespace FocLauncherHost.Updater
             foreach (var component in keys)
                 RestoreBackup(component);
         }
-
-        private void RestoreBackup(IComponent component)
+        
+        public void RestoreBackup(IComponent component)
         {
             if (!_backupLookup.ContainsKey(component))
                 return;
             var backupFile = _backupLookup[component];
             var componentFile = component.GetFilePath();
+
+            var remove = true;
+
             try
             {
-                if (string.IsNullOrEmpty(backupFile))
+                if (backupFile.Equals(NonExistentSource))
                 {
                     if (!File.Exists(componentFile))
                         return;
                     var success = FileSystemExtensions.DeleteFileWithRetry(componentFile, out _);
-                    if (!success)
-                        throw new IOException("Unable to restore the backup. Please restart your computer!");
+                    if (success) 
+                        return;
+                    remove = false;
+                    throw new IOException("Unable to restore the backup. Please restart your computer!");
                 }
                 else
                 {
@@ -81,7 +88,13 @@ namespace FocLauncherHost.Updater
                     }
                     var success = FileSystemExtensions.MoveFile(backupFile, component.GetFilePath(), true);
                     if (!success)
+                    {
+                        remove = false;
                         throw new IOException($"Unable to restore the backup file '{backupFile}'. Please restart your computer!");
+                    }
+
+                    if (UpdateConfiguration.Instance.DownloadOnlyMode)
+                        ComponentDownloadPathStorage.Instance.Remove(component);
 
                     try
                     {
@@ -89,31 +102,31 @@ namespace FocLauncherHost.Updater
                     }
                     catch
                     {
-                        // Ignore
+                        remove = false;
                     }
                 }
             }
             finally
             {
-                _backupLookup.Remove(component);
+                if (remove)
+                    lock (_syncObject)
+                        _backupLookup.Remove(component);
             }
         }
 
-        private void RemoveBackup(IComponent component)
+        public void Flush()
         {
-            if (!_backupLookup.ContainsKey(component))
-                return;
-            var backupFile = _backupLookup[component];
-            try
-            {
-                if (!File.Exists(backupFile))
-                    return;
-                FileSystemExtensions.DeleteFileWithRetry(backupFile, out _);
-            }
-            finally
-            {
-                _backupLookup.Remove(component);
-            }
+            _backupLookup.Clear();
+        }
+
+        public IEnumerator<KeyValuePair<IComponent, string>> GetEnumerator()
+        {
+            return _backupLookup.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
 
         internal static void ValidateComponent(IComponent component)

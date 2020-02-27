@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using FocLauncherHost.Updater.Component;
 using FocLauncherHost.Updater.Download;
 using FocLauncherHost.Updater.FileSystem;
+using FocLauncherHost.Updater.Operations;
 using FocLauncherHost.Updater.Restart;
 using NLog;
 
@@ -128,7 +129,14 @@ namespace FocLauncherHost.Updater
             }
             finally
             {
-                BackupManager.Instance.RemoveAllBackups();
+                try
+                {
+                    new CleanOperation().Run(default);
+                }
+                catch (Exception e)
+                {
+                    Logger.Trace(e, $"Failed clean up: {e.Message}");
+                }
             }
 
             return updateInformation;

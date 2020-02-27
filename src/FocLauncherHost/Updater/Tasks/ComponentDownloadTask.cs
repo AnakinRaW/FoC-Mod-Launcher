@@ -41,8 +41,6 @@ namespace FocLauncherHost.Updater.Tasks
                 throw new InvalidOperationException("Unable to determine a download directory");
             Directory.CreateDirectory(directoryName);
 
-            ValidateEnoughDiskSpaceAvailable(Component);
-
             if (UpdateConfiguration.Instance.BackupPolicy != BackupPolicy.NotRequired && UpdateConfiguration.Instance.DownloadOnlyMode)
                 BackupComponent();
 
@@ -103,7 +101,15 @@ namespace FocLauncherHost.Updater.Tasks
                     }
                     hadExceptionFlag = false;
                     lastException = null;
-                    Component.CurrentState = CurrentState.Downloaded;
+
+                    if (UpdateConfiguration.Instance.DownloadOnlyMode)
+                    {
+                        Component.CurrentState = CurrentState.Installed;
+                        ComponentDownloadPathStorage.Instance.Remove(Component);
+                    }
+                    else
+                        Component.CurrentState = CurrentState.Downloaded;
+
                     break;
                 }
                 catch (OperationCanceledException ex)
@@ -168,6 +174,7 @@ namespace FocLauncherHost.Updater.Tasks
             }
         }
 
+        // TODO: This has to be a precheck, because of parallel download tasks
         private static void ValidateEnoughDiskSpaceAvailable(IComponent component)
         {
             var option = DiskSpaceCalculator.CalculationOption.Download;
