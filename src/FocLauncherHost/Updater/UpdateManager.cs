@@ -52,71 +52,83 @@ namespace FocLauncherHost.Updater
 
             try
             {
-                var stream = await GetMetadataStreamAsync(cts.Token);
-                cts.Token.ThrowIfCancellationRequested();
-
-                if (stream is null || stream.Length == 0)
-                    throw new UpdaterException($"Unable to get the update metadata from: {UpdateCatalogLocation}");
-                if (!await ValidateCatalogStreamAsync(stream))
-                    throw new UpdaterException("Stream validation for metadata failed. Download corrupted?");
-
                 try
                 {
-                    var components = await GetCatalogComponentsAsync(stream, cts.Token);
-                    _components.AddRange(components);
+
+                    var stream = await GetMetadataStreamAsync(cts.Token);
+                    cts.Token.ThrowIfCancellationRequested();
+
+                    if (stream is null || stream.Length == 0)
+                        throw new UpdaterException($"Unable to get the update metadata from: {UpdateCatalogLocation}");
+                    if (!await ValidateCatalogStreamAsync(stream))
+                        throw new UpdaterException("Stream validation for metadata failed. Download corrupted?");
+
+                    try
+                    {
+                        var components = await GetCatalogComponentsAsync(stream, cts.Token);
+                        _components.AddRange(components);
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.Error($"Failed processing catalog: {e.Message}");
+                        throw;
+                    }
+
+
+                    await CalculateComponentStatusAsync(cts.Token);
+                    await CalculateRemovableComponentsAsync();
+
+                    cts.Token.ThrowIfCancellationRequested();
+
+                    if (!Components.Any() && !RemovableComponents.Any())
+                        throw new UpdaterException("Unable to check dependencies if update is available");
+
+                    await UpdateAsync(cts.Token);
+
+                    if (LockedFilesWatcher.Instance.LockedFiles.Any())
+                    {
+                        SuccessInformation(updateInformation, "Success, restart required", true);
+                        var components = FindComponentsFromFiles(LockedFilesWatcher.Instance.LockedFiles).ToList();
+                        var p = LockingProcessManager.Create();
+                        p.Register(LockedFilesWatcher.Instance.LockedFiles);
+                        await HandleRestartRequestAsync(components, p, cts.Token);
+                    }
+
+                    SuccessInformation(updateInformation, "Success");
                 }
                 catch (Exception e)
                 {
-                    Logger.Error($"Failed processing catalog: {e.Message}");
-                    throw;
+                    var throwFlag = false;
+                    if (e.IsExceptionType<OperationCanceledException>())
+                        CancelledInformation(updateInformation);
+                    else if (e.IsExceptionType<UpdaterException>())
+                        ErrorInformation(updateInformation, e.Message);
+                    else
+                        throwFlag = true;
+
+                    try
+                    {
+                        BackupManager.Instance.RestoreAllBackups();
+                    }
+                    catch (Exception restoreException)
+                    {
+                        var message =
+                            $"Failed to restore from an unsuccessful update attempt: {restoreException.Message}. " +
+                            "Please Restart your computer and try again!";
+                        Logger.Error(message);
+                        throw new RestoreFailedException(message, restoreException);
+                    }
+                    if (throwFlag)
+                        throw;
                 }
-
-
-                await CalculateComponentStatusAsync(cts.Token);
-                await CalculateRemovableComponentsAsync();
-
-                cts.Token.ThrowIfCancellationRequested();
-
-                if (!Components.Any() && !RemovableComponents.Any())
-                    throw new UpdaterException("Unable to check dependencies if update is available");
-
-                await UpdateAsync(cts.Token);
-
-                if (LockedFilesWatcher.Instance.LockedFiles.Any())
-                {
-                    var components = FindComponentsFromFiles(LockedFilesWatcher.Instance.LockedFiles).ToList();
-                    var p = LockingProcessManager.Create();
-                    p.Register(LockedFilesWatcher.Instance.LockedFiles);
-                    await HandleRestartRequestAsync(components, p, cts.Token);
-                }
-                SuccessInformation(updateInformation, "Success");
             }
-            catch (OperationCanceledException)
-            {
-                CancelledInformation(updateInformation);
-            }
-            catch (UpdaterException e)
+            catch (RestoreFailedException e)
             {
                 ErrorInformation(updateInformation, e.Message);
             }
-            catch (Exception e)
-            {
-                Logger.Error($"Failed processing catalog: {e.Message}");
-                throw;
-            }
             finally
             {
-                switch (updateInformation.Result)
-                {
-                    case UpdateResult.Success:
-                        BackupManager.Instance.RemoveAllBackups();
-                        break;
-                    case UpdateResult.Failed:
-                    case UpdateResult.Cancelled:
-                    case UpdateResult.SuccessRestartRequired:
-                        BackupManager.Instance.RestoreAllBackups();
-                        break;
-                }
+                BackupManager.Instance.RemoveAllBackups();
             }
 
             return updateInformation;
@@ -358,6 +370,14 @@ namespace FocLauncherHost.Updater
         private IComponent? FindComponentsFromFile(string file)
         {
             return Components.Concat(RemovableComponents).FirstOrDefault(x => x.GetFilePath().Equals(file));
+        }
+    }
+
+    public class RestoreFailedException : IOException
+    {
+        public RestoreFailedException(string message, Exception innerException) : base(message, innerException)
+        {
+            
         }
     }
 }
