@@ -101,13 +101,12 @@ namespace FocLauncherHost.Updater.Tasks
         {
             if (component.RequiredAction == ComponentAction.Keep)
                 return;
-            foreach (var diskData in new DiskSpaceCalculator(component, AdditionalSizeBuffer).CalculatedDiskSizes)
-            {
-                if (!diskData.Value.HasEnoughDiskSpace)
-                    throw new OutOfDiskspaceException(
-                        $"There is not enough space to install “{component.Name}”. {diskData.Key} is required on drive {diskData.Value.RequestedSize + AdditionalSizeBuffer} " +
-                        $"but you only have {diskData.Value.AvailableDiskSpace} available.");
-            }
+            var option = DiskSpaceCalculator.CalculationOption.All;
+            if (component.CurrentState == CurrentState.Downloaded)
+                option &= ~DiskSpaceCalculator.CalculationOption.Download;
+            if (UpdateConfiguration.Instance.BackupPolicy == BackupPolicy.Disable)
+                option &= ~DiskSpaceCalculator.CalculationOption.Backup;
+            DiskSpaceCalculator.ThrowIfNotEnoughDiskSpaceAvailable(component, AdditionalSizeBuffer, option);
         }
 
         private void BackupComponent()

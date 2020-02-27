@@ -10,18 +10,24 @@ namespace FocLauncherHost.Updater.FileSystem
 
         public bool HasEnoughDiskSpace { get; } = true;
 
-        public DiskSpaceCalculator(IComponent component, long additionalBuffer = 0)
+        internal DiskSpaceCalculator(IComponent component, long additionalBuffer = 0, CalculationOption option = CalculationOption.All)
         {
             CalculatedDiskSizes = new Dictionary<string, DriveSpaceData>(StringComparer.OrdinalIgnoreCase);
 
             var destinationRoot = FileSystemExtensions.GetPathRoot(component.Destination);
+            var downloadRoot = FileSystemExtensions.GetPathRoot(component.DownloadPath);
             var backupRoot = FileSystemExtensions.GetPathRoot(UpdateConfiguration.Instance.BackupPath);
 
             if (string.IsNullOrEmpty(backupRoot)) 
                 backupRoot = destinationRoot;
 
-            SetSizeMembers(component.OriginInfo?.Size, destinationRoot);
-            SetSizeMembers(component.DiskSize, backupRoot);
+            if (!string.IsNullOrEmpty(downloadRoot) && option.HasFlag(CalculationOption.Download))
+                SetSizeMembers(component.OriginInfo?.Size, downloadRoot);
+
+            if (option.HasFlag(CalculationOption.Install))
+                SetSizeMembers(component.OriginInfo?.Size, destinationRoot);
+            if (option.HasFlag(CalculationOption.Backup))
+                SetSizeMembers(component.DiskSize, backupRoot);
 
             foreach (var sizes in CalculatedDiskSizes)
             {
@@ -40,6 +46,18 @@ namespace FocLauncherHost.Updater.FileSystem
 
         }
 
+        public static void ThrowIfNotEnoughDiskSpaceAvailable(IComponent component, long additionalBuffer = 0,
+            CalculationOption option = CalculationOption.All)
+        {
+            foreach (var diskData in new DiskSpaceCalculator(component, additionalBuffer, option).CalculatedDiskSizes)
+            {
+                if (!diskData.Value.HasEnoughDiskSpace)
+                    throw new OutOfDiskspaceException(
+                        $"There is not enough space to install “{component.Name}”. {diskData.Key} is required on drive {diskData.Value.RequestedSize + additionalBuffer} " +
+                        $"but you only have {diskData.Value.AvailableDiskSpace} available.");
+            }
+        }
+
         private void SetSizeMembers(long? actualSize, string drive)
         {
             if (!actualSize.HasValue)
@@ -50,6 +68,15 @@ namespace FocLauncherHost.Updater.FileSystem
             {
                 CalculatedDiskSizes[drive].RequestedSize += actualSize.Value;
             }
+        }
+
+        [Flags]
+        public enum CalculationOption
+        {
+            Install = 1,
+            Download = 2,
+            Backup = 4,
+            All = Install | Download | Backup
         }
     }
 }

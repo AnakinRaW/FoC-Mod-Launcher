@@ -4,12 +4,14 @@ using System.Threading;
 using System.Threading.Tasks;
 using FocLauncherHost.Updater.Component;
 using FocLauncherHost.Updater.Download;
+using FocLauncherHost.Updater.FileSystem;
 
 namespace FocLauncherHost.Updater.Tasks
 {
     internal sealed class ComponentDownloadTask : SynchronizedUpdaterTask
     {
         public const string NewFileExtension = ".new";
+        internal static readonly long AdditionalSizeBuffer = 20000000;
 
         private readonly ProgressUpdateCallback _progress;
 
@@ -38,6 +40,8 @@ namespace FocLauncherHost.Updater.Tasks
             if (string.IsNullOrEmpty(directoryName))
                 throw new InvalidOperationException("Unable to determine a download directory");
             Directory.CreateDirectory(directoryName);
+
+            ValidateEnoughDiskSpaceAvailable(Component);
 
             if (UpdateConfiguration.Instance.BackupPolicy != BackupPolicy.NotRequired && UpdateConfiguration.Instance.DownloadOnlyMode)
                 BackupComponent();
@@ -161,6 +165,19 @@ namespace FocLauncherHost.Updater.Tasks
                 }
                 throw;
             }
+        }
+
+        private static void ValidateEnoughDiskSpaceAvailable(IComponent component)
+        {
+            var option = DiskSpaceCalculator.CalculationOption.Download;
+            if (UpdateConfiguration.Instance.DownloadOnlyMode)
+            {
+                option |= DiskSpaceCalculator.CalculationOption.Install;
+                if (UpdateConfiguration.Instance.BackupPolicy != BackupPolicy.Disable)
+                    option |= DiskSpaceCalculator.CalculationOption.Backup;
+            }
+
+            DiskSpaceCalculator.ThrowIfNotEnoughDiskSpaceAvailable(component, AdditionalSizeBuffer, option);
         }
     }
 }
