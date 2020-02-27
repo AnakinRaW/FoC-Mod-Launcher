@@ -15,14 +15,19 @@ namespace FocLauncherHost.Updater.FileSystem
             CalculatedDiskSizes = new Dictionary<string, DriveSpaceData>(StringComparer.OrdinalIgnoreCase);
 
             var destinationRoot = FileSystemExtensions.GetPathRoot(component.Destination);
-            var downloadRoot = FileSystemExtensions.GetPathRoot(component.DownloadPath);
             var backupRoot = FileSystemExtensions.GetPathRoot(UpdateConfiguration.Instance.BackupPath);
 
             if (string.IsNullOrEmpty(backupRoot)) 
                 backupRoot = destinationRoot;
 
-            if (!string.IsNullOrEmpty(downloadRoot) && option.HasFlag(CalculationOption.Download))
-                SetSizeMembers(component.OriginInfo?.Size, downloadRoot);
+            
+
+            if (ComponentDownloadPathStorage.Instance.TryGetValue(component, out var downloadPath) && option.HasFlag(CalculationOption.Download))
+            {
+                var downloadRoot = FileSystemExtensions.GetPathRoot(downloadPath);
+                if (!string.IsNullOrEmpty(downloadPath))
+                    SetSizeMembers(component.OriginInfo?.Size, downloadRoot);
+            }
 
             if (option.HasFlag(CalculationOption.Install))
                 SetSizeMembers(component.OriginInfo?.Size, destinationRoot);

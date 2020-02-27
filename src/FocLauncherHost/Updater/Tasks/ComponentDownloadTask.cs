@@ -90,14 +90,16 @@ namespace FocLauncherHost.Updater.Tasks
                     break;
                 try
                 {
-                    SetDownloadPath();
-                    DownloadAndVerifyAsync(downloadManager, Component.DownloadPath, token).Wait();
-                    if (!File.Exists(Component.DownloadPath))
+                    var downloadPath = CalculateDownloadPath();
+                    ComponentDownloadPathStorage.Instance.Add(Component, downloadPath);
+
+                    DownloadAndVerifyAsync(downloadManager, downloadPath, token).Wait();
+                    if (!File.Exists(downloadPath))
                     {
                         var message = "File not found after being successfully downloaded and verified: " +
-                                      Component.DownloadPath + ", package: " + Component.Name;
+                                      downloadPath + ", package: " + Component.Name;
                         Logger.Warn(message);
-                        throw new FileNotFoundException(message, Component.DownloadPath);
+                        throw new FileNotFoundException(message, downloadPath);
                     }
                     hadExceptionFlag = false;
                     lastException = null;
@@ -131,18 +133,17 @@ namespace FocLauncherHost.Updater.Tasks
             return !hadExceptionFlag;
         }
 
-        private void SetDownloadPath()
+        private string CalculateDownloadPath()
         {
             if (UpdateConfiguration.Instance.DownloadOnlyMode)
             {
-                var destination = Component.GetFilePath();
-                Component.DownloadPath = destination;
-                return;
+                var destination = Component.GetFilePath(); 
+                return destination;
             }
 
             var randomFileName = Path.GetFileNameWithoutExtension(Path.GetRandomFileName());
             var backupFileName = $"{Component.Name}.{randomFileName}{NewFileExtension}";
-            Component.DownloadPath = Path.Combine(Component.Destination, backupFileName);
+            return Path.Combine(Component.Destination, backupFileName);
         }
 
         private async Task DownloadAndVerifyAsync(IDownloadManager downloadManager, string destination, CancellationToken token)
