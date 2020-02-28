@@ -39,7 +39,6 @@ namespace FocLauncherHost.Controls
         {
             HostWindow.Topmost = true;
             HostWindow.Owner = Application.Current.MainWindow;
-            HostWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             base.ShowDialog();
         }
 
