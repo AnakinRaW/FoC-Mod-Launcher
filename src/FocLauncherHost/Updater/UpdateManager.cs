@@ -289,13 +289,7 @@ namespace FocLauncherHost.Updater
 
                 var newVersion = component.OriginInfo.Version;
 
-                if (newVersion is null)
-                {
-                    Logger.Info($"Dependency marked to keep: {component}");
-                    return Task.CompletedTask;
-                }
-
-                if (newVersion != currentVersion)
+                if (newVersion != null && newVersion != currentVersion)
                 {
                     Logger.Info($"Dependency marked to get updated: {component}");
                     component.RequiredAction = ComponentAction.Update;

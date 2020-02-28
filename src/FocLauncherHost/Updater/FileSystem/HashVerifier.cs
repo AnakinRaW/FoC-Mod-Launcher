@@ -23,7 +23,7 @@ namespace FocLauncherHost.Updater.FileSystem
             stream.Seek(0L, SeekOrigin.Begin);
             if (!validationContext.Verify())
                 return ValidationResult.ValidationContextError;
-            var hash = GetHashOfStream(stream);
+            var hash = GetHashOfStream(stream, GetAlgorithmName(validationContext.HashType));
             var expected = validationContext.Hash;
             return hash.SequenceEqual(expected) ? ValidationResult.Success : ValidationResult.HashMismatch;
         }
@@ -32,9 +32,26 @@ namespace FocLauncherHost.Updater.FileSystem
         {
             if (!validationContext.Verify())
                 return ValidationResult.ValidationContextError;
-            var hash = GetHashOfFile(file);
+            var hash = GetHashOfFile(file, GetAlgorithmName(validationContext.HashType));
             var expected = validationContext.Hash;
             return hash.SequenceEqual(expected) ? ValidationResult.Success : ValidationResult.HashMismatch;
+        }
+
+        private static HashAlgorithmName GetAlgorithmName(HashType hashType)
+        {
+            switch (hashType)
+            {
+                case HashType.MD5:
+                    return HashAlgorithmName.MD5;
+                case HashType.Sha1:
+                    return HashAlgorithmName.SHA1;
+                case HashType.Sha256:
+                    return HashAlgorithmName.SHA256;
+                case HashType.Sha512:
+                    return HashAlgorithmName.SHA512;
+                default:
+                    throw new InvalidOperationException("Unable to find a hashing algorithm");
+            }
         }
 
         private static byte[] GetHashOfStream(Stream stream, HashAlgorithmName algorithm = default)

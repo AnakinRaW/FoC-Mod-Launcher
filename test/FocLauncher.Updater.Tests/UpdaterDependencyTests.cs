@@ -163,6 +163,23 @@ namespace FocLauncher.Updater.Tests
             Assert.AreEqual(expected, component.RequiredAction);
         }
 
+        [TestMethod]
+        public async Task VersionNotSpecifiedShaNotEqual()
+        {
+            var dependency = new Dependency();
+            dependency.Name = "FocLauncher.dll";
+            dependency.Destination = ApplicationBasePath;
+            dependency.Sha2 = UpdaterUtilities.HexToArray("d32b568cd1b96d459e7291ebf4b25d007f275c9f13149beeb782fac0716613f8");
+            dependency.Origin = "https://example.com";
+
+            var component = DependencyHelper.DependencyToComponent(dependency);
+
+            const ComponentAction expected = ComponentAction.Update;
+            await _updateManager.CalculateComponentStatusAsync(component);
+
+            Assert.AreEqual(expected, component.RequiredAction);
+        }
+
         internal class TestUpdateManager : UpdateManager
         {
             public TestUpdateManager(IProductInfo productInfo, string versionMetadataPath) : base(productInfo, versionMetadataPath)

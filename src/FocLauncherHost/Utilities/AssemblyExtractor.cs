@@ -6,10 +6,10 @@ using System.Reflection;
 using System.Security.AccessControl;
 using System.Threading.Tasks;
 using FocLauncher;
-#if !DEBUG
+//#if !DEBUG
 using System.Diagnostics;
 using dnlib.DotNet;
-#endif
+//#endif
 
 
 namespace FocLauncherHost.Utilities
@@ -52,7 +52,7 @@ namespace FocLauncherHost.Utilities
                 if (compressed)
                     assemblyStream = await rs.DecompressAsync();
                 assemblyStream.Position = 0;
-#if !DEBUG
+//#if !DEBUG
                 if (File.Exists(filePath))
                 {
                     var embeddedAssembly = AssemblyDef.Load(assemblyStream, new ModuleContext(new AssemblyResolver(), null));
@@ -73,7 +73,7 @@ namespace FocLauncherHost.Utilities
                     }
                     assemblyStream.Position = 0;
                 }
-#endif
+//#endif
                 await WriteToFileAsync(assemblyStream, filePath);
             }
             catch (Exception ex)
