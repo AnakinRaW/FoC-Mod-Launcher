@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -76,7 +77,7 @@ namespace FocLauncherHost.Updater.Operations
                 {
                     _taskRunner.Wait();
                 }
-                catch
+                catch (Exception e)
                 {
                 }
 

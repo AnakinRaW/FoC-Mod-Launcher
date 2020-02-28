@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using dnlib.DotNet.MD;
 using FocLauncherHost.Updater.Component;
 using FocLauncherHost.Updater.Download;
 using FocLauncherHost.Updater.Restart;
@@ -96,7 +97,7 @@ namespace FocLauncherHost.Updater.Operations
                     {
                         _downloads.Wait();
                     }
-                    catch
+                    catch (Exception e)
                     {
                     }
                 }
@@ -207,7 +208,7 @@ namespace FocLauncherHost.Updater.Operations
             ComponentDownloadTask downloadComponent;
             ComponentInstallTask install;
 
-            if (action == ComponentAction.Update)
+            if (DownloadRequired(action, component))
             {
                 downloadComponent = new ComponentDownloadTask(component);
                 downloadComponent.Canceled += (_, __) => _linkedCancellationTokenSource?.Cancel();
@@ -224,6 +225,18 @@ namespace FocLauncherHost.Updater.Operations
                 Download = downloadComponent,
                 Install = install
             };
+        }
+
+        private bool DownloadRequired(ComponentAction action, IComponent component)
+        {
+            if (action != ComponentAction.Update)
+                return false;
+
+            if (component.CurrentState == CurrentState.Downloaded && ComponentDownloadPathStorage.Instance.TryGetValue(component, out _))
+                return false;
+
+
+            return true;
         }
 
         private void OnError(object sender, TaskEventArgs e)

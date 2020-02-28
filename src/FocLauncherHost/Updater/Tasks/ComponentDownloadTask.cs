@@ -19,6 +19,8 @@ namespace FocLauncherHost.Updater.Tasks
 
         public Uri Uri { get; }
 
+        public string DownloadPath { get; private set; }
+
         public ComponentDownloadTask(IComponent component)
         {
             Component = component ?? throw new ArgumentNullException(nameof(component));
@@ -89,15 +91,16 @@ namespace FocLauncherHost.Updater.Tasks
                 try
                 {
                     var downloadPath = CalculateDownloadPath();
-                    ComponentDownloadPathStorage.Instance.Add(Component, downloadPath);
+                    DownloadPath = downloadPath;
+                    ComponentDownloadPathStorage.Instance.Add(Component, DownloadPath);
 
-                    DownloadAndVerifyAsync(downloadManager, downloadPath, token).Wait();
-                    if (!File.Exists(downloadPath))
+                    DownloadAndVerifyAsync(downloadManager, DownloadPath, token).Wait();
+                    if (!File.Exists(DownloadPath))
                     {
                         var message = "File not found after being successfully downloaded and verified: " +
-                                      downloadPath + ", package: " + Component.Name;
+                                      DownloadPath + ", package: " + Component.Name;
                         Logger.Warn(message);
-                        throw new FileNotFoundException(message, downloadPath);
+                        throw new FileNotFoundException(message, DownloadPath);
                     }
                     hadExceptionFlag = false;
                     lastException = null;

@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using FocLauncherHost.Controls;
+using FocLauncherHost.Updater;
 using FocLauncherHost.Updater.Restart;
 
 namespace FocLauncherHost
@@ -17,7 +19,7 @@ namespace FocLauncherHost
                 token.ThrowIfCancellationRequested();
                 var launcherId = Process.GetCurrentProcess().Id;
                 var processes = WithoutProcess(processManager.GetProcesses(), launcherId).
-                    Where(x => x.ApplicationStatus == ApplicationStatus.Running).ToList();
+                    Where(x => x.ApplicationStatus == ApplicationStatus.Running).DistinctBy(x => x.Description).ToList();
                 if (!processes.Any())
                     return true;
                 var dialog = new UpdateMessageBox(processes);

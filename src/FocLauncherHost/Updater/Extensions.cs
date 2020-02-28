@@ -84,6 +84,18 @@ namespace FocLauncherHost.Updater
                 source.Add(obj);
         }
 
+        public static IEnumerable<TSource> DistinctBy<TSource, TKey>(this IEnumerable<TSource> source,
+            Func<TSource, TKey> keySelector)
+        {
+            return DistinctBy(source, keySelector, null);
+        }
+
+        public static IEnumerable<TSource> DistinctBy<TSource, TKey>(this IEnumerable<TSource> source,
+            Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
+        {
+            return source.GroupBy(keySelector, comparer).Select(x => x.First());
+        }
+
         private static bool FastAny<T>(IEnumerable<T> source)
         {
             switch (source)

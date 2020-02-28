@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Threading;
 using FocLauncherHost.Updater.Component;
 using FocLauncherHost.Updater.FileSystem;
@@ -66,7 +67,15 @@ namespace FocLauncherHost.Updater.Tasks
 
                     if (Action == ComponentAction.Update)
                     {
+                        string localPath;
+                        if (_download != null)
+                            localPath = _download.DownloadPath;
+                        else if (Component.CurrentState == CurrentState.Downloaded && ComponentDownloadPathStorage.Instance.TryGetValue(Component, out var downloadedFile))
+                            localPath = downloadedFile;
+                        else
+                            throw new FileNotFoundException("Unable to find the downloaded file.");
 
+                        Result = installer.Install(Component, token, localPath, _isPresent);
                     }
                     else if (Action == ComponentAction.Delete)
                     {

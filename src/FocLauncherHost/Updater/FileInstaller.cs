@@ -7,6 +7,7 @@ using FocLauncherHost.Updater.Component;
 using FocLauncherHost.Updater.FileSystem;
 using FocLauncherHost.Updater.Restart;
 using NLog;
+using NLog.Fluent;
 
 namespace FocLauncherHost.Updater
 {
@@ -40,7 +41,19 @@ namespace FocLauncherHost.Updater
         {
             Token = token;
             var location = component.Destination;
-            return PlanAndApplyExecuteAction(location, component, isPresent);
+            return PlanAndApplyExecuteAction(location, component, isPresent, null);
+        }
+
+        public InstallResult Install(IComponent component, CancellationToken token, string localPath, bool isPresent)
+        {
+            Token = token;
+            var location = component.Destination;
+            return PlanAndApplyExecuteAction(location, component, isPresent, localPath);
+        }
+
+        protected InstallResult InstallCore(string localPath, string installDir, IComponent component = null)
+        {
+            return DoAction(() => InstallCoreInternal(localPath, installDir, component));
         }
 
         protected InstallResult UninstallCore(string installDir, IComponent component)
@@ -48,6 +61,28 @@ namespace FocLauncherHost.Updater
             return DoAction(() => UninstallCoreInternal(installDir, component));
         }
 
+        protected InstallResult InstallCoreInternal(string localPath, string installDir, IComponent component)
+        {
+            var file = component.GetFilePath();
+            if (localPath.Equals(file))
+            {
+                Logger.Warn("Install: Local path and destination path are equal.");
+                return InstallResult.Failure;
+            }
+
+            var restartPending = false;
+            var result = CopyFile(localPath, file, out var restartRequired);
+            restartPending |= restartRequired;
+            if (!result && !restartRequired)
+                return InstallResult.Failure;
+
+            if (restartPending)
+                return InstallResult.SuccessRestartRequired;
+
+            component.CurrentState = CurrentState.Installed;
+            return InstallResult.Success;
+        }
+        
         internal InstallResult UninstallCoreInternal(string installDir, IComponent component)
         {
             if (!FileSystemExtensions.ContainsPath(installDir, component.Destination))
@@ -70,6 +105,38 @@ namespace FocLauncherHost.Updater
             return InstallResult.Success;
         }
 
+        private bool CopyFile(string source, string destination, out bool restartRequired)
+        {
+            restartRequired = false;
+            if (LockedFilesWatcher.Instance.LockedFiles.Contains(destination))
+                restartRequired = true;
+            
+            Directory.CreateDirectory(Path.GetDirectoryName(destination));
+            Stream output = null;
+            try
+            {
+                output = FileSystemExtensions.CreateFileWithRetry(destination, 2, 500);
+            }
+            catch (Exception ex) when (ex is UnauthorizedAccessException || ex is IOException)
+            {
+                _lockedFiles.Add(destination);
+                restartRequired = true;
+            }
+
+            if (output == null)
+            {
+                Logger.Error($"Creation of file {destination} failed");
+                return false;
+            }
+
+            using (output)
+            {
+                using var sourceStream = new FileStream(source, FileMode.Open, FileAccess.Read);
+                sourceStream.CopyTo(output);
+            }
+            return true;
+        }
+
         protected bool DeleteFile(string file, out bool restartRequired)
         {
             if (!File.Exists(file))
@@ -83,7 +150,7 @@ namespace FocLauncherHost.Updater
                 (ex, attempt) =>
                 {
                     Logger?.Trace(
-                        $"Error occurred while deleting file '{(object) file}'. Error details: {(object) ex.Message}. Retrying after {(object) 0.5f} seconds...");
+                        $"Error occurred while deleting file '{file}'. Error details: {ex.Message}. Retrying after {0.5f} seconds...");
                     return true;
                 });
             if (deleteSuccess)
@@ -91,14 +158,7 @@ namespace FocLauncherHost.Updater
             else
             {
                 _lockedFiles.Add(file);
-                if (restartRequired)
-                {
-                    Logger.Info($"{file} file is scheduled for deletion after restarting.");
-                    if (!_lockedFilesWatcher.LockedFiles.Contains(file))
-                        _lockedFilesWatcher.LockedFiles.Add(file);
-                }
-                else
-                    Logger?.Warn($"File '{file}' could not be deleted nor could it be scheduled for deletion until after the reboot.");
+                Logger.Info($"{file} file is scheduled for deletion after restarting.");
             }
 
             return deleteSuccess;
@@ -133,6 +193,35 @@ namespace FocLauncherHost.Updater
             return stringBuilder.ToString();
         }
 
+        private InstallResult InstallHelper(InstallData installData)
+        {
+            InstallResult installResult = InstallResult.None;
+            var component = installData.Component;
+
+            try
+            {
+                if (installData.LocalPath == null)
+                    return InstallResult.Failure;
+                installResult = InstallCore(installData.LocalPath, installData.InstallDir, component);
+            }
+            catch (OperationCanceledException ex)
+            {
+                Logger.Info("User canceled during install.");
+                return InstallResult.Cancel;
+            }
+            catch (FileFormatException ex)
+            {
+                // TODO
+            }
+            catch (Exception ex)
+            {
+                LogFailure(component, ComponentAction.Update, ex.Message);
+                return InstallResult.FailureException;
+            }
+            PrintReturnCode(installResult, component, ComponentAction.Update);
+            return installResult;
+        }
+
         private InstallResult UninstallHelper(InstallData uninstallData)
         {
             InstallResult result;
@@ -140,7 +229,7 @@ namespace FocLauncherHost.Updater
 
             try
             {
-                if (component == null && uninstallData.InstallDir == null)
+                if (uninstallData.Component == null && uninstallData.LocalPath == null)
                     result = InstallResult.Failure;
                 else
                     result = UninstallCore(uninstallData.InstallDir, component);
@@ -165,7 +254,7 @@ namespace FocLauncherHost.Updater
             var installResult = action();
             try
             {
-                LogLockingProcesses();
+                RegisterLockedFiles();
             }
             catch (Exception ex)
             {
@@ -174,7 +263,7 @@ namespace FocLauncherHost.Updater
             return installResult;
         }
 
-        private InstallResult PlanAndApplyExecuteAction(string location, IComponent component, bool isPresent)
+        private InstallResult PlanAndApplyExecuteAction(string location, IComponent component, bool isPresent, string localPath)
         {
             var requestedAction = component.RequiredAction;
             var state = component.CurrentState;
@@ -183,8 +272,8 @@ namespace FocLauncherHost.Updater
             switch (requestedAction)
             {
                 case ComponentAction.Update:
-                    // TODO
-                    //action = InstallHelper;
+                    if (component.CurrentState == CurrentState.Downloaded)
+                        action = InstallHelper;
                     break;
                 case ComponentAction.Delete:
                     if (isPresent)
@@ -197,18 +286,21 @@ namespace FocLauncherHost.Updater
             try
             {
                 CurrentComponent = component;
-                return action(new InstallData(component, location));
+                return action(new InstallData(component, location, localPath));
             }
             finally
             {
                 CurrentComponent = null;
             }
         }
-
-        private void LogLockingProcesses()
+        
+        private void RegisterLockedFiles()
         {
             if (_lockedFiles.Count <= 0)
                 return;
+
+            _lockedFilesWatcher.LockedFiles.AddRange(_lockedFiles);
+
             if (_lockedFileLogger == null) 
                 _lockedFileLogger = LockedFileLogger.Instance;
             _lockedFileLogger.Log(_lockedFiles);
@@ -231,14 +323,14 @@ namespace FocLauncherHost.Updater
         {
             internal string InstallDir { get; set; }
 
-            //internal string LocalPath { get; set; }
+            internal string? LocalPath { get; set; }
 
             internal IComponent Component { get; set; }
 
-            internal InstallData(IComponent component, string installDir)
+            internal InstallData(IComponent component, string installDir, string localPath)
             {
                 InstallDir = installDir;
-                //LocalPath = localPath;
+                LocalPath = localPath;
                 Component = component;
             }
         }

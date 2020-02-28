@@ -64,6 +64,15 @@ namespace FocLauncherHost.Updater.FileSystem
             return path;
         }
 
+        public static Stream CreateFileWithRetry(string path, int retryCount = 2, int retryDelay = 500)
+        {
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException(nameof(path));
+            Stream stream = null;
+            ExecuteFileActionWithRetry(retryCount, retryDelay, () => stream = new FileStream(path, FileMode.Create, FileAccess.ReadWrite, FileShare.None));
+            return stream;
+        }
+
         public static void CopyFileWithRetry(string source, string destination, int retryCount = 2, int retryDelay = 500)
         {
             if (string.IsNullOrEmpty(source))

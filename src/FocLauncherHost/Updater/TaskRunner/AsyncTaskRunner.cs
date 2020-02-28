@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace FocLauncherHost.Updater.TaskRunner
 {
     internal class AsyncTaskRunner : TaskRunner
     {
         private readonly ConcurrentBag<Exception> _exceptions;
-        private readonly ManualResetEvent[] _handles;
+        private readonly Task[] _tasks;
         private CancellationToken _cancel;
 
         internal int WorkerCount { get; }
@@ -20,9 +21,7 @@ namespace FocLauncherHost.Updater.TaskRunner
                 throw new ArgumentOutOfRangeException(nameof(workerCount));
             WorkerCount = workerCount;
             _exceptions = new ConcurrentBag<Exception>();
-            _handles = new ManualResetEvent[workerCount];
-            for (var index = 0; index < _handles.Length; ++index)
-                _handles[index] = new ManualResetEvent(false);
+            _tasks = new Task[workerCount];
         }
 
         public void Wait()
@@ -35,8 +34,7 @@ namespace FocLauncherHost.Updater.TaskRunner
 
         internal void Wait(TimeSpan timeout)
         {
-            if (!WaitHandle.WaitAll(_handles, timeout))
-                throw new TimeoutException();
+            Task.WaitAll(_tasks);
         }
 
         protected override void Invoke(CancellationToken token)
@@ -45,57 +43,42 @@ namespace FocLauncherHost.Updater.TaskRunner
             Tasks.AddRange(TaskQueue);
             _cancel = token;
             var threads = new Thread[WorkerCount];
-            for (var index = 0; index < WorkerCount; ++index)
-            {
-                threads[index] = new Thread(InvokeThreaded)
-                {
-                    IsBackground = true,
-                    Name = $"AsyncTaskRunnerThread{index}"
-                };
-                threads[index].Start(_handles[index]);
-            }
+            for (var index = 0; index < WorkerCount; ++index) 
+                _tasks[index] = Task.Run(InvokeThreaded);
         }
 
-        private void InvokeThreaded(object obj)
+        private void InvokeThreaded()
         {
-            var manualResetEvent = (ManualResetEvent)obj;
             var linkedTokenSource = CancellationTokenSource.CreateLinkedTokenSource(_cancel);
-            try
+            var canceled = false;
+            while (TaskQueue.TryDequeue(out var task))
             {
-                var canceled = false;
-                while (TaskQueue.TryDequeue(out var task))
+                try
                 {
-                    try
+                    ThrowIfCancelled(_cancel);
+                    task.Run(_cancel);
+                }
+                catch (Exception ex)
+                {
+                    _exceptions.Add(ex);
+                    if (!canceled)
                     {
-                        ThrowIfCancelled(_cancel);
-                        task.Run(_cancel);
+                        if (ex.IsExceptionType<OperationCanceledException>())
+                            Logger.Trace($"Activity threw exception {ex.GetType()}: {ex.Message}" + Environment.NewLine + $"{ex.StackTrace}");
+                        else
+                            Logger.Error(ex, $"Activity threw exception {ex.GetType()}: {ex.Message}");
                     }
-                    catch (Exception ex)
+                    var e = new TaskEventArgs(task)
                     {
-                        _exceptions.Add(ex);
-                        if (!canceled)
-                        {
-                            if (ex.IsExceptionType<OperationCanceledException>())
-                                Logger.Trace($"Activity threw exception {ex.GetType()}: {ex.Message}" + Environment.NewLine + $"{ex.StackTrace}");
-                            else
-                                Logger.Error(ex, $"Activity threw exception {ex.GetType()}: {ex.Message}");
-                        }
-                        var e = new TaskEventArgs(task)
-                        {
-                            Cancel = _cancel.IsCancellationRequested || IsCancelled || ex.IsExceptionType<OperationCanceledException>()
-                        };
-                        OnError(e);
-                        if (e.Cancel)
-                        {
-                            canceled = true;
-                            linkedTokenSource.Cancel();
-                        }
+                        Cancel = _cancel.IsCancellationRequested || IsCancelled || ex.IsExceptionType<OperationCanceledException>()
+                    };
+                    OnError(e);
+                    if (e.Cancel)
+                    {
+                        canceled = true;
+                        linkedTokenSource.Cancel();
                     }
                 }
-            }
-            finally
-            {
-                manualResetEvent.Set();
             }
         }
     }
