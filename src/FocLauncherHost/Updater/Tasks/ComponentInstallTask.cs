@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading;
 using FocLauncherHost.Updater.Component;
+using FocLauncherHost.Updater.Configuration;
 using FocLauncherHost.Updater.FileSystem;
 
 namespace FocLauncherHost.Updater.Tasks

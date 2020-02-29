@@ -1,4 +1,4 @@
-﻿namespace FocLauncherHost.Updater
+﻿namespace FocLauncherHost.Updater.Configuration
 {
     public class UpdateConfiguration
     {
@@ -27,11 +27,5 @@
         private UpdateConfiguration()
         {
         }
-    }
-
-    public enum ValidationPolicy
-    {
-        AllowSkipWhenContextNullOrBroken,
-        Enforce,
     }
 }

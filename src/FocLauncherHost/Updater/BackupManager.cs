@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Security.AccessControl;
 using FocLauncherHost.Updater.Component;
+using FocLauncherHost.Updater.Configuration;
 using FocLauncherHost.Updater.FileSystem;
 
 namespace FocLauncherHost.Updater

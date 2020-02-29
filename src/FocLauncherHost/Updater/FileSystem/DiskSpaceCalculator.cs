@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using FocLauncherHost.Updater.Component;
+using FocLauncherHost.Updater.Configuration;
 
 namespace FocLauncherHost.Updater.FileSystem
 {

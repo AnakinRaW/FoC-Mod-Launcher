@@ -10,6 +10,7 @@ using FocLauncherHost.Properties;
 using FocLauncherHost.Update.UpdateCatalog;
 using FocLauncherHost.Updater;
 using FocLauncherHost.Updater.Component;
+using FocLauncherHost.Updater.Configuration;
 using FocLauncherHost.Updater.Restart;
 using FocLauncherHost.Utilities;
 

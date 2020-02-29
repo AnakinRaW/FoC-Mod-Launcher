@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using FocLauncherHost.Updater.Component;
+using FocLauncherHost.Updater.Configuration;
 using FocLauncherHost.Updater.Download;
 using FocLauncherHost.Updater.FileSystem;
 

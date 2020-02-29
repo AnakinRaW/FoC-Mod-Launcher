@@ -1,4 +1,4 @@
-﻿namespace FocLauncherHost.Updater
+﻿namespace FocLauncherHost.Updater.Configuration
 {
     public enum BackupPolicy
     {

@@ -7,7 +7,6 @@ using FocLauncherHost.Updater.Component;
 using FocLauncherHost.Updater.FileSystem;
 using FocLauncherHost.Updater.Restart;
 using NLog;
-using NLog.Fluent;
 
 namespace FocLauncherHost.Updater
 {
@@ -17,9 +16,9 @@ namespace FocLauncherHost.Updater
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        private List<string> _lockedFiles;
+        private readonly List<string> _lockedFiles;
         private LockedFileLogger _lockedFileLogger;
-        private LockedFilesWatcher _lockedFilesWatcher;
+        private readonly LockedFilesWatcher _lockedFilesWatcher;
 
         protected CancellationToken Token { get; private set; }
 
@@ -321,11 +320,11 @@ namespace FocLauncherHost.Updater
 
         private class InstallData
         {
-            internal string InstallDir { get; set; }
+            internal string InstallDir { get; }
 
-            internal string? LocalPath { get; set; }
+            internal string? LocalPath { get; }
 
-            internal IComponent Component { get; set; }
+            internal IComponent Component { get; }
 
             internal InstallData(IComponent component, string installDir, string localPath)
             {
