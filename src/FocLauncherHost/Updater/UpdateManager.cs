@@ -50,12 +50,12 @@ namespace FocLauncherHost.Updater
             var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellation);
 
             var updateInformation = new UpdateInformation();
+            var finalCleanUp = true;
 
             try
             {
                 try
                 {
-
                     var stream = await GetMetadataStreamAsync(cts.Token);
                     cts.Token.ThrowIfCancellationRequested();
 
@@ -90,12 +90,23 @@ namespace FocLauncherHost.Updater
                     {
                         SuccessInformation(updateInformation, "Success, restart required", true);
                         var components = FindComponentsFromFiles(LockedFilesWatcher.Instance.LockedFiles).ToList();
-                        var p = LockingProcessManager.Create();
+                        using var p = LockingProcessManager.Create();
                         p.Register(LockedFilesWatcher.Instance.LockedFiles);
-                        await HandleRestartRequestAsync(components, p, cts.Token);
-                    }
+                        var restartResult = await HandleRestartRequestAsync(components, p, cts.Token);
 
-                    SuccessInformation(updateInformation, "Success");
+                        Logger.Info($"Handled restart request with result: {restartResult.Status}; Message: {restartResult.Message}");
+
+                        if (restartResult.Status == HandleRestartStatus.Declined)
+                            throw new RestartDeniedOrFailedException(restartResult.Message);
+                        if (restartResult.Status == HandleRestartStatus.Restart)
+                        {
+                            finalCleanUp = false;
+                            Restart(components);
+                            SuccessInformation(updateInformation, "Restart in progress", true);
+                        }
+                    }
+                    else
+                        SuccessInformation(updateInformation, "Success");
                 }
                 catch (Exception e)
                 {
@@ -119,6 +130,7 @@ namespace FocLauncherHost.Updater
                         Logger.Error(message);
                         throw new RestoreFailedException(message, restoreException);
                     }
+
                     if (throwFlag)
                         throw;
                 }
@@ -129,28 +141,36 @@ namespace FocLauncherHost.Updater
             }
             finally
             {
-                try
+                if (finalCleanUp)
                 {
-                    new CleanOperation().Run(default);
-                }
-                catch (Exception e)
-                {
-                    Logger.Trace(e, $"Failed clean up: {e.Message}");
+                    try
+                    {
+                        new CleanOperation().Run(default);
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.Trace(e, $"Failed clean up: {e.Message}");
+                    }
                 }
             }
 
             return updateInformation;
         }
 
-        protected virtual Task HandleRestartRequestAsync(ICollection<IComponent> pendingComponents, ILockingProcessManager lockingProcessManager, CancellationToken token)
+        protected virtual Task<HandleRestartResult> HandleRestartRequestAsync(ICollection<IComponent> pendingComponents, ILockingProcessManager lockingProcessManager, CancellationToken token)
         {
-            throw new RestartDeniedOrFailedException("Handling restart is not implemented");
+            return Task.FromResult(new HandleRestartResult(HandleRestartStatus.Declined, "Handling restart is not implemented"));
         }
 
         public async Task<UpdateResult> UpdateAsync(CancellationToken cancellation)
         {
             var allComponents = Components.Concat(RemovableComponents);
             return await UpdateAsync(allComponents, cancellation);
+        }
+
+        protected internal virtual void Restart(IEnumerable<IComponent> components)
+        {
+
         }
 
         protected internal async Task<UpdateResult> UpdateAsync(IEnumerable<IComponent> components,

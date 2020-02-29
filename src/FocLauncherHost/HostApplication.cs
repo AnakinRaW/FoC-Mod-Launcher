@@ -111,7 +111,7 @@ namespace FocLauncherHost
             {
                 if (updateInformation.RequiresUserNotification && _waitWindowShown 
 #if DEBUG
-                  // || true
+                   || true
 #endif
                     )
                 {

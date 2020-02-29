@@ -63,38 +63,50 @@ namespace FocLauncherHost
             return await Task.FromResult(validator.Validate(inputStream));
         }
 
-        protected override async Task HandleRestartRequestAsync(ICollection<IComponent> pendingComponents, ILockingProcessManager lockingProcessManager,
+        protected override async Task<HandleRestartResult> HandleRestartRequestAsync(ICollection<IComponent> pendingComponents, ILockingProcessManager lockingProcessManager,
             CancellationToken token)
         {
             token.ThrowIfCancellationRequested();
             if (!pendingComponents.Any())
-                return;
+                return new HandleRestartResult(HandleRestartStatus.NotRequired);
 
             Logger.Trace("Hanlde restart request due to locked files");
 
             var processes = lockingProcessManager.GetProcesses().ToList();
-            if (processes.Any(x => x.ApplicationType == ApplicationType.Critical))
-                throw new RestartDeniedOrFailedException("Files are locked by a system process that cannot be terminated. Please restart the system");
 
             var isSelfLocking = ProcessesContainsLauncher(processes);
-            var restartRequestResult = LauncherRestartManager.ShowProcessKillDialog(lockingProcessManager, token);
 
-            Logger.Trace($"Kill locking processes: {restartRequestResult}, Launcher needs restart: {isSelfLocking}");
+            if (!isSelfLocking && processes.Any(x => x.ApplicationType == ApplicationType.Critical))
+                return new HandleRestartResult(HandleRestartStatus.Declined, "Files are locked by a system process that cannot be terminated. Please restart the system");
 
-            if (!restartRequestResult)
-                throw new RestartDeniedOrFailedException("Update aborted because locked files have not been released.");
-
+            
             if (!isSelfLocking)
             {
+                var restartRequestResult = LauncherRestartManager.ShowProcessKillDialog(lockingProcessManager, token);
+                Logger.Trace($"Kill locking processes: {restartRequestResult}, Launcher needs restart: {false}");
+                if (!restartRequestResult)
+                    return new HandleRestartResult(HandleRestartStatus.Declined, "Update aborted because locked files have not been released.");
+
                 lockingProcessManager.Shutdown();
                 LockedFilesWatcher.Instance.LockedFiles.Clear();
                 await UpdateAsync(pendingComponents, token);
-                if (LockedFilesWatcher.Instance.LockedFiles.Any())
-                    throw new RestartDeniedOrFailedException(
-                        "Update failed because there are still locked files which have not been released.");
-                return;
+                return LockedFilesWatcher.Instance.LockedFiles.Any()
+                    ? new HandleRestartResult(HandleRestartStatus.Declined,
+                        "Update failed because there are still locked files which have not been released.")
+                    : new HandleRestartResult(HandleRestartStatus.NotRequired);
             }
-            // TODO: Using the process manager might result in that this process is also shutted down. Test the behaviour!
+
+            var result = LauncherRestartManager.ShowSelfKillDialog(lockingProcessManager, token);
+            Logger.Trace($"Kill locking processes: {result}, Launcher needs restart: {true}");
+            if (!result)
+                return new HandleRestartResult(HandleRestartStatus.Declined,
+                    "Update aborted because locked files have not been released.");
+
+            var processesWithoutSelf = WithoutProcess(processes, Process.GetCurrentProcess().Id);
+            using var newLockingProcessManager = LockingProcessManager.Create();
+            newLockingProcessManager.Register(null, processesWithoutSelf);
+            newLockingProcessManager.Shutdown();
+            return new HandleRestartResult(HandleRestartStatus.Restart);
         }
 
         protected override Version? GetComponentVersion(IComponent component)
@@ -127,6 +139,11 @@ namespace FocLauncherHost
                 Logger.Debug(e, "Getting catalogs from stream failed with exception. Returning null instead.");
                 return Task.FromResult<Catalogs>(null);
             }
+        }
+
+        private static IEnumerable<ILockingProcessInfo> WithoutProcess(IEnumerable<ILockingProcessInfo> processes, int processId)
+        {
+            return processes.Where(x => !x.Id.Equals(processId));
         }
     }
 }

@@ -10,6 +10,8 @@ namespace FocLauncherHost.Controls
     public partial class UpdateMessageBox : INotifyPropertyChanged
     {
         private string _buttonText;
+        private bool _retry;
+        private string _description;
         public event PropertyChangedEventHandler PropertyChanged;
 
         public ProcessKillResult Result { get; private set; }
@@ -26,13 +28,59 @@ namespace FocLauncherHost.Controls
             }
         }
 
+        public string Description
+        {
+            get => _description;
+            set
+            {
+                if (_description == value)
+                    return;
+                _description = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool Retry
+        {
+            get => _retry;
+            private set
+            {
+                if (value == _retry)
+                    return;
+                _retry = value;
+                OnPropertyChanged();
+            }
+        }
+
         public ObservableCollection<ILockingProcessInfo> Processes { get; }
 
-        public UpdateMessageBox(IEnumerable<ILockingProcessInfo> processes)
+        public UpdateMessageBox(IEnumerable<ILockingProcessInfo> processes) : this(processes, true) 
         {
+        }
+
+        public UpdateMessageBox(IEnumerable<ILockingProcessInfo> processes, bool retry)
+        {
+            Retry = retry;
             Processes = new ObservableCollection<ILockingProcessInfo>(processes);
             ButtonText = Processes.Count == 1 ? "End Process" : "End Processes";
             InitializeComponent();
+
+            if (retry)
+            {
+                Description = "Please end the following processes to continue the update.";
+                ButtonText = Processes.Count == 1 ? "End Process" : "End Processes";
+            }
+            else if (Processes.Count == 1)
+            {
+                Description = "The launcher needs be restarted.";
+                ButtonText = "Restart Launcher";
+            }
+            else
+            {
+                Description = "The launcher needs to be restarted. Other processes need to be ended.";
+                ButtonText = "End and restart";
+            }
+
         }
 
         public override void ShowDialog()

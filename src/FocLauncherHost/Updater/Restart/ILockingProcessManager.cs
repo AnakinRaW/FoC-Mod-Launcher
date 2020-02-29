@@ -5,7 +5,7 @@ namespace FocLauncherHost.Updater.Restart
 {
     public interface ILockingProcessManager : IDisposable
     {
-        void Register(IEnumerable<string> files = null);
+        void Register(IEnumerable<string> files = null, IEnumerable<ILockingProcessInfo> processes = null);
 
         void Shutdown(WindowsRestartManagerShutdown action = WindowsRestartManagerShutdown.ForceShutdown);
 

@@ -103,6 +103,8 @@
     <Compile Include="Updater\Operations\CleanOperation.cs" />
     <Compile Include="Updater\ProgressUpdateCallback.cs" />
     <Compile Include="Updater\ProgressUpdateStatus.cs" />
+    <Compile Include="Updater\Restart\HandleRestartResult.cs" />
+    <Compile Include="Updater\Restart\HandleRestartStatus.cs" />
     <Compile Include="Updater\Tasks\CleanFileTask.cs" />
     <Compile Include="Updater\Tasks\DownloadTask.cs" />
     <Compile Include="Updater\UpdateInformation.cs" />
@@ -168,6 +170,7 @@
     <Compile Include="Updater\Tasks\WaitTask.cs" />
     <Compile Include="Updater\WindowsException.cs" />
     <Compile Include="Utilities\AssemblyExtractor.cs" />
+    <Compile Include="Utilities\ILockingProcessInfoTextConverter.cs" />
     <Compile Include="Utilities\NullToVisibilityConverter.cs" />
     <Compile Include="Utilities\UrlCombine.cs" />
     <Compile Include="SplashScreen.xaml.cs">

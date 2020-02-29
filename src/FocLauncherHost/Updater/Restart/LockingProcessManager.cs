@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using FocLauncherHost.Updater.NativeMethods;
 using NLog;
@@ -56,7 +57,6 @@ namespace FocLauncherHost.Updater.Restart
         }
 
 
-
         public static IEnumerable<ILockingProcessInfo> GetProcesses(IEnumerable<string> paths)
         {
             IEnumerable<ILockingProcessInfo> source = null;
@@ -77,14 +77,17 @@ namespace FocLauncherHost.Updater.Restart
             return Enumerable.Empty<ILockingProcessInfo>();
         }
 
-        public void Register(IEnumerable<string> files = null)
+        public void Register(IEnumerable<string> files = null, IEnumerable<ILockingProcessInfo> processes = null)
         {
             var fileNames = files?.ToArray();
-            var count = fileNames?.Length ?? 0;
-            if (count == 0)
+            var fileCount = fileNames?.Length ?? 0;
+            var processArray = processes?.ToArray();
+            var processCount = processArray?.Length ?? 0;
+            if (fileCount == 0 && processCount == 0)
                 return;
             _registered = true;
-            ThrowOnError(RestartMgr.RmRegisterResources(_sessionId, count, fileNames, 0, null, 0, null));
+            var rgProcesses = processArray?.Select(Convert).ToArray();
+            ThrowOnError(RestartMgr.RmRegisterResources(_sessionId, fileCount, fileNames, processCount, rgProcesses, 0, null));
         }
 
         public IEnumerable<ILockingProcessInfo> GetProcesses()
@@ -132,6 +135,23 @@ namespace FocLauncherHost.Updater.Restart
             var result = RestartMgr.RmEndSession(_sessionId);
             IsDisposed = true;
             ThrowOnError(result);
+        }
+
+        private static RestartMgr.RmUniqueProcess Convert(ILockingProcessInfo process)
+        {
+            if (process == null)
+                throw new ArgumentNullException(nameof(process));
+            var fileTimeUtc = process.StartTime.ToFileTimeUtc();
+            var filetime = new FILETIME()
+            {
+                dwHighDateTime = (int)(fileTimeUtc >> 32),
+                dwLowDateTime = (int)(fileTimeUtc & (long)uint.MaxValue)
+            };
+            return new RestartMgr.RmUniqueProcess()
+            {
+                DwProcessId = process.Id,
+                ProcessStartTime = filetime
+            };
         }
     }
 }

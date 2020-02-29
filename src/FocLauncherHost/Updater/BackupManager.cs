@@ -84,7 +84,10 @@ namespace FocLauncherHost.Updater
                         var backupHash = UpdaterUtilities.GetFileHash(backupFile, HashType.Sha256);
                         var fileHash = UpdaterUtilities.GetFileHash(backupFile, HashType.Sha256);
                         if (backupHash.SequenceEqual(fileHash))
+                        {
+                            remove = false;
                             return;
+                        }
                     }
                     var success = FileSystemExtensions.MoveFile(backupFile, component.GetFilePath(), true);
                     if (!success)

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading;
 using FocLauncherHost.Controls;
-using FocLauncherHost.Updater;
 using FocLauncherHost.Updater.Restart;
 
 namespace FocLauncherHost
@@ -13,27 +9,29 @@ namespace FocLauncherHost
     {
         internal static bool ShowProcessKillDialog(ILockingProcessManager processManager, CancellationToken token)
         {
+            return ShowKillDialogCore(processManager, true, token);
+        }
+
+        internal static bool ShowSelfKillDialog(ILockingProcessManager processManager, CancellationToken token)
+        {
+            return ShowKillDialogCore(processManager, false, token);
+        }
+
+        private static bool ShowKillDialogCore(ILockingProcessManager processManager, bool retry, CancellationToken token)
+        {
             UpdateMessageBox.ProcessKillResult result;
             do
             {
                 token.ThrowIfCancellationRequested();
-                var launcherId = Process.GetCurrentProcess().Id;
-                var processes = WithoutProcess(processManager.GetProcesses(), launcherId).
-                    Where(x => x.ApplicationStatus == ApplicationStatus.Running).DistinctBy(x => x.Description).ToList();
+                var processes = processManager.GetProcesses().Where(x => x.ApplicationStatus == ApplicationStatus.Running).ToList();
                 if (!processes.Any())
                     return true;
-                var dialog = new UpdateMessageBox(processes);
+                var dialog = new UpdateMessageBox(processes, retry);
                 dialog.ShowDialog();
                 result = dialog.Result;
             } while (result == UpdateMessageBox.ProcessKillResult.Retry);
 
             return result == UpdateMessageBox.ProcessKillResult.Kill;
-        }
-
-        private static IEnumerable<ILockingProcessInfo> WithoutProcess(IEnumerable<ILockingProcessInfo> processes,
-            int processId)
-        {
-            return processes.Where(x => !x.Id.Equals(processId));
         }
     }
 }
