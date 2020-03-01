@@ -79,10 +79,9 @@ namespace FocLauncherHost.Updater.Tasks
             }
         }
 
-        private bool DownloadAction(CancellationToken token, out Exception? lastException)
+        private void DownloadAction(CancellationToken token, out Exception? lastException)
         {
             lastException = null;
-            var hadExceptionFlag = false;
             var downloadManager = DownloadManager.Instance;
 
             for (var i = 0; i <= UpdateConfiguration.Instance.DownloadRetryCount; i++)
@@ -103,7 +102,7 @@ namespace FocLauncherHost.Updater.Tasks
                         Logger.Warn(message);
                         throw new FileNotFoundException(message, DownloadPath);
                     }
-                    hadExceptionFlag = false;
+
                     lastException = null;
 
                     if (UpdateConfiguration.Instance.DownloadOnlyMode)
@@ -120,7 +119,6 @@ namespace FocLauncherHost.Updater.Tasks
                 {
                     lastException = ex;
                     Logger.Warn($"Download of {Uri} was cancelled.");
-                    hadExceptionFlag = false;
                     break;
                 }
                 catch (Exception ex)
@@ -129,18 +127,22 @@ namespace FocLauncherHost.Updater.Tasks
                     {
                         lastException = ex;
                         Logger.Warn($"Download of {Uri} was cancelled.");
-                        hadExceptionFlag = false;
                         break;
                     }
                     var wrappedException = ex.TryGetWrappedException();
                     if (wrappedException != null)
                         ex = wrappedException;
+                    if (ex is UnauthorizedAccessException unauthorizedAccessException)
+                    {
+                        lastException = ex;//new ElevationRequireException(ex);
+                        Logger.Error(ex, $"Failed to download \"{Uri}\" to {DownloadPath}: {ex.Message}");
+                        Elevator.Instance.RequestElevation(unauthorizedAccessException);
+                        break;
+                    }
                     lastException = ex;
                     Logger.Error(ex, $"Failed to download \"{Uri}\" on try {i}: {ex.Message}");
-                    hadExceptionFlag = true;
                 }
             }
-            return !hadExceptionFlag;
         }
 
         private string CalculateDownloadPath()

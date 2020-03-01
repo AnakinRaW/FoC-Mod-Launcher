@@ -113,7 +113,9 @@ namespace FocLauncherHost.Updater
                     var throwFlag = false;
                     if (e.IsExceptionType<OperationCanceledException>())
                         CancelledInformation(updateInformation);
-                    else if (e.IsExceptionType<UpdaterException>())
+                    else if (e is AggregateException && e.IsExceptionType<UpdaterException>())
+                        ErrorInformation(updateInformation, e.TryGetWrappedException()?.Message);
+                    else if (e is UpdaterException)
                         ErrorInformation(updateInformation, e.Message);
                     else
                         throwFlag = true;
@@ -170,7 +172,7 @@ namespace FocLauncherHost.Updater
 
         protected internal virtual void Restart(IEnumerable<IComponent> components)
         {
-
+            ApplicationRestartManager.RestartAndExecutePendingComponents(components);
         }
 
         protected internal async Task<UpdateResult> UpdateAsync(IEnumerable<IComponent> components,

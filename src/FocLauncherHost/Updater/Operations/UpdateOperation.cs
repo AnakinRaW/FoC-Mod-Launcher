@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using dnlib.DotNet.MD;
 using FocLauncherHost.Updater.Component;
+using FocLauncherHost.Updater.Configuration;
 using FocLauncherHost.Updater.Download;
 using FocLauncherHost.Updater.Restart;
 using FocLauncherHost.Updater.TaskRunner;
@@ -23,17 +23,22 @@ namespace FocLauncherHost.Updater.Operations
         private readonly List<UpdaterTask> _componentsToInstall = new List<UpdaterTask>();
         private readonly List<UpdaterTask> _componentsToRemove = new List<UpdaterTask>();
         private readonly List<ComponentDownloadTask> _componentsToDownload = new List<ComponentDownloadTask>();
+        private readonly ICollection<ElevationRequestData> _elevationRequests = new HashSet<ElevationRequestData>();
 
         private IEnumerable<IUpdaterTask> _installsOrUninstalls;
 
         private TaskRunner.TaskRunner _installs;
         private AsyncTaskRunner _downloads;
         private IDownloadManager _downloadManager;
-        private AcquireMutexTask _installMutexTask;
+        private AcquireMutexTask? _installMutexTask;
 
-        private CancellationTokenSource _linkedCancellationTokenSource;
+        private CancellationTokenSource? _linkedCancellationTokenSource;
+        private Elevator _elevator;
+        
 
         internal bool IsCancelled { get; private set; }
+
+        internal bool RequiredProcessElevation { get; private set; }
 
         private static int ParallelDownload => 2;
 
@@ -89,7 +94,7 @@ namespace FocLauncherHost.Updater.Operations
                     _linkedCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(token);
                     _downloads.Run(_linkedCancellationTokenSource.Token);
 #if DEBUG
-                    _downloads.Wait();
+                    //_downloads.Wait();
 #endif
                     _installs.Run(_linkedCancellationTokenSource.Token);
 
@@ -112,20 +117,25 @@ namespace FocLauncherHost.Updater.Operations
                     Logger.Trace("Completed update operation");
                 }
 
+                if (RequiredProcessElevation)
+                    throw new ElevationRequireException(_elevationRequests);
+
                 if (IsCancelled)
                     throw new OperationCanceledException(token);
                 token.ThrowIfCancellationRequested();
-
-                var failedDownloads = _componentsToDownload.Where(p => p.Error != null && !p.Error.IsExceptionType<OperationCanceledException>());
+                
+                var failedDownloads = _componentsToDownload.Where(p =>
+                    p.Error != null && !p.Error.IsExceptionType<OperationCanceledException>());
 
                 var failedInstalls = installsOrUninstalls
                     .Where(installTask => !installTask.Result.IsSuccess()).ToList();
 
                 if (failedDownloads.Any() || failedInstalls.Any())
-                    throw new ComponentFailedException("Update failed because one or more downloads or installs had an error.");
+                    throw new ComponentFailedException(
+                        "Update failed because one or more downloads or installs had an error.");
 
                 var requiresRestart = LockedFilesWatcher.Instance.LockedFiles.Any();
-                if (requiresRestart) 
+                if (requiresRestart)
                     Logger.Info("The operation finished. A restart is pedning.");
             }
             finally
@@ -133,6 +143,16 @@ namespace FocLauncherHost.Updater.Operations
                 mutex.ReleaseMutex();
                 _installMutexTask?.Dispose();
             }
+        }
+
+        private void OnElevationRequested(object sender, ElevationRequestData e)
+        {
+            Logger.Info($"Elevation requested: {e.Exception.Message}");
+            RequiredProcessElevation = true;
+            _elevationRequests.Add(e);
+            if (UpdateConfiguration.Instance.RequiredElevationCancelsUpdate)
+                _linkedCancellationTokenSource?.Cancel();
+
         }
 
         internal void Schedule()
@@ -155,6 +175,11 @@ namespace FocLauncherHost.Updater.Operations
             if (_downloadManager == null)
                 _downloadManager = DownloadManager.Instance;
 
+            if (_elevator == null)
+            {
+                _elevator = Elevator.Instance;
+                _elevator.ElevationRequested += OnElevationRequested;
+            }
             if (_downloads == null)
             {
                 var workers = ParallelDownload;
@@ -167,6 +192,15 @@ namespace FocLauncherHost.Updater.Operations
                 _installs = new TaskRunner.TaskRunner();
                 _installs.Error += OnError;
             }
+        }
+
+        private void CleanEvents()
+        {
+            if (_downloads != null)
+                _downloads.Error -= OnError;
+            if (_installs != null)
+                _installs.Error -= OnError;
+            _elevator.ElevationRequested -= OnElevationRequested;
         }
         
         private void QueueInitialActivities()
@@ -248,6 +282,7 @@ namespace FocLauncherHost.Updater.Operations
             {
                 if (e.Cancel || e.Task.Component == null)
                     return;
+
 
                 if (e.Task is ComponentInstallTask installTask)
                 {

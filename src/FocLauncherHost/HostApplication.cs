@@ -51,7 +51,7 @@ namespace FocLauncherHost
 
                 Task.Delay(_waitSplashDelay).ContinueWith(async _ => await ShowMainWindowAsync(), default,
                     TaskContinuationOptions.None, TaskScheduler.FromCurrentSynchronizationContext()).Forget();
-                
+
                 await ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
                 {
                     var data = new WaitDialogProgressData("Please wait while the launcher is downloading an update.",
@@ -82,12 +82,18 @@ namespace FocLauncherHost
                         session.Dispose();
                         cts.Dispose();
                     }
+
                     ReportUpdateResult(updateInformation);
                 });
             }
+            catch (ElevationRequireException)
+            {
+                MessageBox.Show("Show Elevated");
+            }
             catch (Exception e)
             {
-                new ExceptionWindow(e).ShowDialog();
+                var realException = e.TryGetWrappedException() ?? e;
+                new ExceptionWindow(realException).ShowDialog();
             }
             finally
             {

@@ -99,10 +99,12 @@
     <Compile Include="Updater\Download\NoSuitableEngineException.cs" />
     <Compile Include="Updater\Download\PreferredDownloadEngines.cs" />
     <Compile Include="Updater\Download\ValidationFailedException.cs" />
+    <Compile Include="Updater\Elevator.cs" />
     <Compile Include="Updater\FileSystem\HashVerifier.cs" />
     <Compile Include="Updater\Operations\CleanOperation.cs" />
     <Compile Include="Updater\ProgressUpdateCallback.cs" />
     <Compile Include="Updater\ProgressUpdateStatus.cs" />
+    <Compile Include="Updater\Restart\ApplicationRestartManager.cs" />
     <Compile Include="Updater\Restart\HandleRestartResult.cs" />
     <Compile Include="Updater\Restart\HandleRestartStatus.cs" />
     <Compile Include="Updater\Tasks\CleanFileTask.cs" />

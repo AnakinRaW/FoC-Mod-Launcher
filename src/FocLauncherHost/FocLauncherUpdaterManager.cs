@@ -31,6 +31,9 @@ namespace FocLauncherHost
             UpdateConfiguration.Instance.DownloadRetryCount = 1;
             UpdateConfiguration.Instance.BackupPath = LauncherConstants.ApplicationBasePath;
             UpdateConfiguration.Instance.DownloadRetryDelay = 500;
+            UpdateConfiguration.Instance.SupportsRestart = true;
+            UpdateConfiguration.Instance.ExternalUpdaterPath = "";
+            UpdateConfiguration.Instance.RequiredElevationCancelsUpdate = true;
         }
 
         protected override bool FileCanBeDeleted(FileInfo file)
@@ -96,6 +99,9 @@ namespace FocLauncherHost
                         "Update failed because there are still locked files which have not been released.")
                     : new HandleRestartResult(HandleRestartStatus.NotRequired);
             }
+
+            if (!UpdateConfiguration.Instance.SupportsRestart)
+                return new HandleRestartResult(HandleRestartStatus.Declined, "Update requires a self-update which is not supported for this update configuration.");
 
             var result = LauncherRestartManager.ShowSelfKillDialog(lockingProcessManager, token);
             Logger.Trace($"Kill locking processes: {result}, Launcher needs restart: {true}");

@@ -24,6 +24,12 @@
 
         public int DownloadRetryCount { get; set; } = 3;
 
+        public bool SupportsRestart { get; set; }
+
+        public string ExternalUpdaterPath { get; set; }
+
+        public bool RequiredElevationCancelsUpdate { get; set; }
+
         private UpdateConfiguration()
         {
         }
