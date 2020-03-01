@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Threading;
 using FocLauncherHost.Controls;
-using FocLauncherHost.Updater.Restart;
+using TaskBasedUpdater.Restart;
 
 namespace FocLauncherHost
 {

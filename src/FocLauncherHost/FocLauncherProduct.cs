@@ -1,5 +1,5 @@
 ﻿using FocLauncher;
-using FocLauncherHost.Updater;
+using TaskBasedUpdater;
 
 namespace FocLauncherHost
 {

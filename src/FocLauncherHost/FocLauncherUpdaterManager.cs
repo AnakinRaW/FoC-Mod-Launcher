@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 using FocLauncher;
 using FocLauncherHost.Properties;
 using FocLauncherHost.Update.UpdateCatalog;
-using FocLauncherHost.Updater;
-using FocLauncherHost.Updater.Component;
-using FocLauncherHost.Updater.Configuration;
-using FocLauncherHost.Updater.Restart;
 using FocLauncherHost.Utilities;
+using TaskBasedUpdater;
+using TaskBasedUpdater.Component;
+using TaskBasedUpdater.Configuration;
+using TaskBasedUpdater.Restart;
 
 namespace FocLauncherHost
 {
@@ -110,7 +110,7 @@ namespace FocLauncherHost
                     "Update aborted because locked files have not been released.");
 
             var processesWithoutSelf = WithoutProcess(processes, Process.GetCurrentProcess().Id);
-            using var newLockingProcessManager = LockingProcessManager.Create();
+            using var newLockingProcessManager = LockingProcessManagerFactory.Create();
             newLockingProcessManager.Register(null, processesWithoutSelf);
             newLockingProcessManager.Shutdown();
             return new HandleRestartResult(HandleRestartStatus.Restart);

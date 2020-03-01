@@ -1,5 +1,5 @@
 ﻿using System;
-using FocLauncherHost.Updater.Component;
+using TaskBasedUpdater.Component;
 
 namespace FocLauncherHost.Update.UpdateCatalog
 {

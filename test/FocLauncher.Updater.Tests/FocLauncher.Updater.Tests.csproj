@@ -58,6 +58,10 @@
       <Project>{511ea4f6-7c7a-4242-9986-16f28f126d11}</Project>
       <Name>FocLauncher</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\src\TaskBasedUpdater\TaskBasedUpdater.csproj">
+      <Project>{0855D868-8864-47A4-AAD2-D89056AD536F}</Project>
+      <Name>TaskBasedUpdater</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MSTest.TestAdapter">

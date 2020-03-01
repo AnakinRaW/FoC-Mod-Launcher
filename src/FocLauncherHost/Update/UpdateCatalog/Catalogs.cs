@@ -4,8 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
-using FocLauncherHost.Updater;
 using FocLauncherHost.Utilities;
+using TaskBasedUpdater;
 
 namespace FocLauncherHost.Update.UpdateCatalog
 {

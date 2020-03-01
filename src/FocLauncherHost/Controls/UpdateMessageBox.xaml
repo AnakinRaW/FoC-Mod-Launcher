@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:FocLauncherHost.Controls"
-             xmlns:restart="clr-namespace:FocLauncherHost.Updater.Restart"
+             xmlns:restart="clr-namespace:TaskBasedUpdater.Restart;assembly=TaskBasedUpdater"
              xmlns:utilities="clr-namespace:FocLauncherHost.Utilities"
              mc:Ignorable="d" d:DesignHeight="175" d:DesignWidth="480" 
              MinHeight="180" Width="490" Background="#FF252526" Foreground="#FFF1F1F1"

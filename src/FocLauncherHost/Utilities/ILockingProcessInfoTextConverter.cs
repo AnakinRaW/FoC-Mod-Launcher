@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Data;
-using FocLauncherHost.Updater.Restart;
+using TaskBasedUpdater.Restart;
 
 namespace FocLauncherHost.Utilities
 {

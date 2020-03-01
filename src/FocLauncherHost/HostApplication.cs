@@ -6,10 +6,10 @@ using FocLauncher;
 using FocLauncher.Threading;
 using FocLauncher.WaitDialog;
 using FocLauncherHost.Controls;
-using FocLauncherHost.Updater;
 using FocLauncherHost.Utilities;
 using Microsoft.VisualStudio.Threading;
 using NLog;
+using TaskBasedUpdater;
 
 namespace FocLauncherHost
 {

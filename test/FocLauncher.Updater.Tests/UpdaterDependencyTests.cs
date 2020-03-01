@@ -5,9 +5,9 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FocLauncherHost.Update.UpdateCatalog;
-using FocLauncherHost.Updater;
-using FocLauncherHost.Updater.Component;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using TaskBasedUpdater;
+using TaskBasedUpdater.Component;
 
 namespace FocLauncher.Updater.Tests
 {
