@@ -141,6 +141,10 @@
       <Project>{511EA4F6-7C7A-4242-9986-16F28F126D11}</Project>
       <Name>FocLauncher</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TaskBasedUpdater.Elevator\TaskBasedUpdater.Elevator.csproj">
+      <Project>{b10160b6-ed51-48b7-a45d-637157d656ab}</Project>
+      <Name>TaskBasedUpdater.Elevator</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TaskBasedUpdater\TaskBasedUpdater.csproj">
       <Project>{0855d868-8864-47a4-aad2-d89056ad536f}</Project>
       <Name>TaskBasedUpdater</Name>

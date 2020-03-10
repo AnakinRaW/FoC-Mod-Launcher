@@ -18,6 +18,8 @@ namespace FocLauncherHost.Utilities
     {
         public static async Task WriteNecessaryAssembliesToDiskAsync(string fileDirectory, params string[] assemblyFiles)
         {
+            var i = Assembly.GetExecutingAssembly().GetManifestResourceNames();
+
             foreach (var assemblyFile in assemblyFiles)
             {
                 foreach (var resourceName in Assembly.GetExecutingAssembly().GetManifestResourceNames())
