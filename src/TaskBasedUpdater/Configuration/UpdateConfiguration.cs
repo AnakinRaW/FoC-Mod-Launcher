@@ -28,6 +28,8 @@
 
         public string ExternalUpdaterPath { get; set; }
 
+        public string ExternalElevatorPath { get; set; }
+
         public bool RequiredElevationCancelsUpdate { get; set; }
 
         private UpdateConfiguration()

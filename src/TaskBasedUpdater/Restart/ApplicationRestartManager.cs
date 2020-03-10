@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using TaskBasedUpdater.Component;
@@ -25,7 +26,18 @@ namespace TaskBasedUpdater.Restart
 
         public static void RestartApplication(bool elevated)
         {
-            throw new NotImplementedException();
+            var elevator = UpdateConfiguration.Instance.ExternalElevatorPath;
+            if (!File.Exists(elevator))
+                throw new RestartDeniedOrFailedException("Elevator tool not found");
+
+            var startInfo = new ProcessStartInfo(elevator) {CreateNoWindow = true};
+
+            var currentProcessInfo = ProcessUtilities.GetCurrentProcessInfo();
+
+            startInfo.Arguments = $"{currentProcessInfo.Id} {currentProcessInfo.Arguments}";
+            Process.Start(startInfo);
+
+            Environment.Exit(0);
         }
 
         private static void RestartAndExecuteCore(string updater, IEnumerable<IComponent> pendingComponents)

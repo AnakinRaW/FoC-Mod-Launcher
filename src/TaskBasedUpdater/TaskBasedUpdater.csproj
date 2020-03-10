@@ -97,6 +97,7 @@
     <Compile Include="NativeMethods\RestartMgr.cs" />
     <Compile Include="Operations\CleanOperation.cs" />
     <Compile Include="Operations\UpdateOperation.cs" />
+    <Compile Include="ProcessUtilities.cs" />
     <Compile Include="ProgressUpdateCallback.cs" />
     <Compile Include="ProgressUpdateStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -22,8 +22,8 @@ namespace FocLauncherHost
 
         private bool _waitWindowShown;
 
-        private static readonly TimeSpan _waitSplashDelay = TimeSpan.FromSeconds(2);
-        private static readonly TimeSpan _waitWindowDelay = TimeSpan.FromSeconds(_waitSplashDelay.Seconds + 2);
+        private static readonly TimeSpan WaitSplashDelay = TimeSpan.FromSeconds(2);
+        private static readonly TimeSpan WaitWindowDelay = TimeSpan.FromSeconds(WaitSplashDelay.Seconds + 2);
 
 
         static HostApplication()
@@ -47,9 +47,9 @@ namespace FocLauncherHost
             try
             {
                 await AssemblyExtractor.WriteNecessaryAssembliesToDiskAsync(LauncherConstants.ApplicationBasePath,
-                    "FocLauncher.dll", "FocLauncher.Theming.dll", "FocLauncher Elevator.exe");
+                    "FocLauncher.dll", "FocLauncher.Theming.dll", LauncherConstants.ElevatorFileName);
 
-                Task.Delay(_waitSplashDelay).ContinueWith(async _ => await ShowMainWindowAsync(), default,
+                Task.Delay(WaitSplashDelay).ContinueWith(async _ => await ShowMainWindowAsync(), default,
                     TaskContinuationOptions.None, TaskScheduler.FromCurrentSynchronizationContext()).Forget();
 
                 await ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
@@ -57,8 +57,8 @@ namespace FocLauncherHost
                     var data = new WaitDialogProgressData("Please wait while the launcher is downloading an update.",
                         isCancelable: true);
 
-                    var session = WaitDialogFactory.Instance.StartWaitDialog("FoC Launcher", data, _waitWindowDelay);
-                    SetWhenWaitDialogIsShownAsync(_waitWindowDelay, session.UserCancellationToken).Forget();
+                    var session = WaitDialogFactory.Instance.StartWaitDialog("FoC Launcher", data, WaitWindowDelay);
+                    SetWhenWaitDialogIsShownAsync(WaitWindowDelay, session.UserCancellationToken).Forget();
 
                     session.UserCancellationToken.Register(OnUserCancelled);
 
@@ -88,12 +88,18 @@ namespace FocLauncherHost
             }
             catch (ElevationRequireException)
             {
-                MessageBox.Show("Show Elevated");
+                try
+                {
+                    Elevator.RestartElevated();
+                }
+                catch (Exception e)
+                {
+                    LogAndShowException(e);
+                }
             }
             catch (Exception e)
             {
-                var realException = e.TryGetWrappedException() ?? e;
-                new ExceptionWindow(realException).ShowDialog();
+                LogAndShowException(e);
             }
             finally
             {
@@ -154,6 +160,13 @@ namespace FocLauncherHost
                 await Task.Delay(500);
                 await splashScreen.HideAnimationAsync();
             }
+        }
+
+        private void LogAndShowException(Exception e)
+        {
+            Logger.Error(e, e.Message);
+            var realException = e.TryGetWrappedException() ?? e;
+            new ExceptionWindow(realException).ShowDialog();
         }
     }
 }

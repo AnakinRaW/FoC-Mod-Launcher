@@ -33,6 +33,7 @@ namespace FocLauncherHost
             UpdateConfiguration.Instance.DownloadRetryDelay = 500;
             UpdateConfiguration.Instance.SupportsRestart = true;
             UpdateConfiguration.Instance.ExternalUpdaterPath = "";
+            UpdateConfiguration.Instance.ExternalElevatorPath = LauncherConstants.ElevatorPath;
             UpdateConfiguration.Instance.RequiredElevationCancelsUpdate = true;
         }
 

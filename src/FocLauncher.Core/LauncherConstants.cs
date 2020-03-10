@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace FocLauncher
 {
@@ -6,6 +7,8 @@ namespace FocLauncher
     {
         public const string ApplicationBaseVariable = "APPLICATIONBASE";
         public const string ExecutablePathVariable = "EXECUTABLE";
+
+        public const string ElevatorFileName = "FocLauncher Elevator.exe";
 
         // TODO: Get from Assembly
         public const string ProductName = "FoC-Launcher";
@@ -16,5 +19,7 @@ namespace FocLauncher
 
         public static string ApplicationBasePath => ApplicationBasePathLazy.Value;
         public static string ExecutablePath => ExecutablePathLazy.Value;
+
+        public static string ElevatorPath => Path.Combine(ApplicationBasePath, ElevatorFileName);
     }
 }
