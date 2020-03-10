@@ -5,7 +5,7 @@ namespace FocLauncher
     public static class LauncherConstants
     {
         public const string ApplicationBaseVariable = "APPLICATIONBASE";
-        public const string ExecutablePathVariable = "%EXECUTABLE%";
+        public const string ExecutablePathVariable = "EXECUTABLE";
 
         // TODO: Get from Assembly
         public const string ProductName = "FoC-Launcher";
