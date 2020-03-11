@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using FocLauncher;
 using FocLauncherHost.Properties;
 using FocLauncherHost.Update.UpdateCatalog;
@@ -29,12 +30,13 @@ namespace FocLauncherHost
         {
             UpdateConfiguration.Instance.BackupPolicy = BackupPolicy.Required;
             UpdateConfiguration.Instance.DownloadRetryCount = 1;
-            UpdateConfiguration.Instance.BackupPath = LauncherConstants.ApplicationBasePath;
+            UpdateConfiguration.Instance.BackupPath = Path.Combine(LauncherConstants.ApplicationBasePath, "Backups");
             UpdateConfiguration.Instance.DownloadRetryDelay = 500;
             UpdateConfiguration.Instance.SupportsRestart = true;
             UpdateConfiguration.Instance.ExternalUpdaterPath = "";
             UpdateConfiguration.Instance.ExternalElevatorPath = LauncherConstants.ElevatorPath;
             UpdateConfiguration.Instance.RequiredElevationCancelsUpdate = true;
+            UpdateConfiguration.Instance.AlternativeDownloadPath = Path.Combine(LauncherConstants.ApplicationBasePath, "Downloads");
         }
 
         protected override bool FileCanBeDeleted(FileInfo file)
@@ -66,6 +68,11 @@ namespace FocLauncherHost
             var schemeStream = Resources.UpdateValidator.ToStream();
             var validator = new XmlValidator(schemeStream);
             return await Task.FromResult(validator.Validate(inputStream));
+        }
+
+        protected override bool PermitElevationRequest()
+        {
+            return MessageBox.Show("Test", "Yes/No", MessageBoxButton.YesNo) == MessageBoxResult.Yes;
         }
 
         protected override async Task<HandleRestartResult> HandleRestartRequestAsync(ICollection<IComponent> pendingComponents, ILockingProcessManager lockingProcessManager,

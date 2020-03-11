@@ -86,7 +86,8 @@ namespace FocLauncherHost.Controls
         public override void ShowDialog()
         {
             HostWindow.Topmost = true;
-            HostWindow.Owner = Application.Current.MainWindow;
+            if (Application.Current.MainWindow != null && Application.Current.MainWindow.IsVisible)
+                HostWindow.Owner = Application.Current.MainWindow;
             base.ShowDialog();
         }
 

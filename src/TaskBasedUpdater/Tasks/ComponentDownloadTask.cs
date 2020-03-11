@@ -39,10 +39,15 @@ namespace TaskBasedUpdater.Tasks
         {
             if (token.IsCancellationRequested)
                 return;
-            var directoryName = Path.GetDirectoryName(Component.Destination);
-            if (string.IsNullOrEmpty(directoryName))
-                throw new InvalidOperationException("Unable to determine a download directory");
-            Directory.CreateDirectory(directoryName);
+            var destination = Component.Destination;
+
+            if (!Path.IsPathRooted(destination))
+            {
+                var directoryName = Path.GetDirectoryName(destination);
+                if (string.IsNullOrEmpty(directoryName))
+                    throw new InvalidOperationException("Unable to determine a download directory");
+                Directory.CreateDirectory(directoryName);
+            }
 
             if (UpdateConfiguration.Instance.BackupPolicy != BackupPolicy.NotRequired && UpdateConfiguration.Instance.DownloadOnlyMode)
                 BackupComponent();
@@ -134,9 +139,9 @@ namespace TaskBasedUpdater.Tasks
                         ex = wrappedException;
                     if (ex is UnauthorizedAccessException unauthorizedAccessException)
                     {
-                        lastException = ex;//new ElevationRequireException(ex);
+                        lastException = ex;
                         Logger.Error(ex, $"Failed to download \"{Uri}\" to {DownloadPath}: {ex.Message}");
-                        Elevator.Instance.RequestElevation(unauthorizedAccessException, DownloadPath);
+                        Elevator.Instance.RequestElevation(unauthorizedAccessException, Component);
                         break;
                     }
                     lastException = ex;
@@ -155,6 +160,12 @@ namespace TaskBasedUpdater.Tasks
 
             var randomFileName = Path.GetFileNameWithoutExtension(Path.GetRandomFileName());
             var backupFileName = $"{Component.Name}.{randomFileName}{NewFileExtension}";
+
+            if (!string.IsNullOrEmpty(UpdateConfiguration.Instance.AlternativeDownloadPath))
+            {
+                Directory.CreateDirectory(UpdateConfiguration.Instance.AlternativeDownloadPath);
+                return Path.Combine(UpdateConfiguration.Instance.AlternativeDownloadPath, backupFileName);
+            }
             return Path.Combine(Component.Destination, backupFileName);
         }
 

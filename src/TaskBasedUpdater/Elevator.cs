@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using TaskBasedUpdater.Component;
 using TaskBasedUpdater.Restart;
 
 namespace TaskBasedUpdater
@@ -20,10 +21,13 @@ namespace TaskBasedUpdater
         {
         }
 
-        public void RequestElevation(UnauthorizedAccessException accessException, string deniedLocation)
+        public bool RequestElevation(UnauthorizedAccessException accessException, IComponent component)
         {
-            var data = new ElevationRequestData(accessException, deniedLocation);
+            if (IsElevated())
+                return false;
+            var data = new ElevationRequestData(accessException, component);
             OnElevationRequested(data);
+            return true;
         }
 
         public static void RestartElevated()
@@ -44,21 +48,21 @@ namespace TaskBasedUpdater
 
     public class ElevationRequestData : IEquatable<ElevationRequestData>
     {
-        public string Location { get; }
+        public IComponent Component { get; }
 
         public Exception Exception { get; }
 
-        public ElevationRequestData(Exception exception, string location)
+        public ElevationRequestData(Exception exception, IComponent component)
         {
             Exception = exception;
-            Location = location;
+            Component = component;
         }
 
         public bool Equals(ElevationRequestData? other)
         {
             if (other is null)
                 return false;
-            return ReferenceEquals(this, other) || string.Equals(Location, other.Location, StringComparison.OrdinalIgnoreCase);
+            return ReferenceEquals(this, other) || Component.Equals(other.Component);
         }
 
         public override bool Equals(object obj)
@@ -72,7 +76,7 @@ namespace TaskBasedUpdater
 
         public override int GetHashCode()
         {
-            return StringComparer.OrdinalIgnoreCase.GetHashCode(Location);
+            return StringComparer.OrdinalIgnoreCase.GetHashCode(Component);
         }
     }
 

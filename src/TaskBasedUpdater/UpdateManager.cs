@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -11,6 +12,7 @@ using TaskBasedUpdater.Download;
 using TaskBasedUpdater.FileSystem;
 using TaskBasedUpdater.Operations;
 using TaskBasedUpdater.Restart;
+using IComponent = TaskBasedUpdater.Component.IComponent;
 
 namespace TaskBasedUpdater
 {
@@ -120,18 +122,7 @@ namespace TaskBasedUpdater
                     else
                         throwFlag = true;
 
-                    try
-                    {
-                        BackupManager.Instance.RestoreAllBackups();
-                    }
-                    catch (Exception restoreException)
-                    {
-                        var message =
-                            $"Failed to restore from an unsuccessful update attempt: {restoreException.Message}. " +
-                            "Please Restart your computer and try again!";
-                        Logger.Error(message);
-                        throw new RestoreFailedException(message, restoreException);
-                    }
+                    RestoreBackup();
 
                     if (throwFlag)
                         throw;
@@ -140,6 +131,10 @@ namespace TaskBasedUpdater
             catch (RestoreFailedException e)
             {
                 ErrorInformation(updateInformation, e.Message);
+            }
+            catch (ElevationRequireException e)
+            {
+                HandleElevationRequest(e, updateInformation);
             }
             finally
             {
@@ -157,6 +152,56 @@ namespace TaskBasedUpdater
             }
 
             return updateInformation;
+        }
+
+        protected virtual void HandleElevationRequest(ElevationRequireException e, UpdateInformation updateInformation)
+        {
+            var restoreBackup = true;
+            try
+            {
+                if (Elevator.IsProcessElevated)
+                    throw new UpdaterException("The process is already elevated", e);
+
+                if (!PermitElevationRequest())
+                {
+                    ErrorInformation(updateInformation, "The update was stopped because the process needed to be elevated");
+                    return;
+                }
+
+                try
+                {
+                    Elevator.RestartElevated();
+                    restoreBackup = false;
+                }
+                catch (Exception ex)
+                {
+                    if (!(ex is Win32Exception && ex.HResult == -2147467259))
+                        throw;
+                    // The elevation was not accepted by the user
+                    CancelledInformation(updateInformation);
+                }
+            }
+            finally
+            {
+                if (restoreBackup)
+                    RestoreBackup();
+            }
+        }
+
+        protected static void RestoreBackup()
+        {
+            try
+            {
+                BackupManager.Instance.RestoreAllBackups();
+            }
+            catch (Exception restoreException)
+            {
+                var message =
+                    $"Failed to restore from an unsuccessful update attempt: {restoreException.Message}. " +
+                    "Please Restart your computer and try again!";
+                Logger.Error(message);
+                throw new RestoreFailedException(message, restoreException);
+            }
         }
 
         protected virtual Task<HandleRestartResult> HandleRestartRequestAsync(ICollection<IComponent> pendingComponents, ILockingProcessManager lockingProcessManager, CancellationToken token)
@@ -355,6 +400,11 @@ namespace TaskBasedUpdater
             {
                 return null;
             }
+        }
+
+        protected virtual bool PermitElevationRequest()
+        {
+            return true;
         }
 
         protected virtual bool FileCanBeDeleted(FileInfo file)

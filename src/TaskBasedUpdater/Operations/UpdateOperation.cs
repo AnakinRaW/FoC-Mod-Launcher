@@ -152,7 +152,6 @@ namespace TaskBasedUpdater.Operations
             _elevationRequests.Add(e);
             if (UpdateConfiguration.Instance.RequiredElevationCancelsUpdate)
                 _linkedCancellationTokenSource?.Cancel();
-
         }
 
         internal void Schedule()

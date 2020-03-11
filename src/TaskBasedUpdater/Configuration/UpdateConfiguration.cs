@@ -22,6 +22,8 @@
 
         public bool DownloadOnlyMode { get; set; }
 
+        public string? AlternativeDownloadPath { get; set; }
+
         public int DownloadRetryCount { get; set; } = 3;
 
         public bool SupportsRestart { get; set; }

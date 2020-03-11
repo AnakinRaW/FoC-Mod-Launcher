@@ -52,7 +52,7 @@ namespace TaskBasedUpdater.Tasks
             DownloadWaitTime += DateTime.Now - now;
             if (_download?.Error != null)
             {
-                Logger.Warn($"Skipping {Action} of '{Component.Name}' since downloading it failed.");
+                Logger.Warn($"Skipping {Action} of '{Component.Name}' since downloading it failed: {_download.Error.Message}");
                 return;
             }
 

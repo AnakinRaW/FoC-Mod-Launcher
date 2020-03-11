@@ -116,7 +116,7 @@ namespace TaskBasedUpdater
             {
                 output = FileSystemExtensions.CreateFileWithRetry(destination, 2, 500);
             }
-            catch (Exception ex) when (ex is UnauthorizedAccessException || ex is IOException)
+            catch (IOException)
             {
                 _lockedFiles.Add(destination);
                 restartRequired = true;
@@ -194,7 +194,7 @@ namespace TaskBasedUpdater
 
         private InstallResult InstallHelper(InstallData installData)
         {
-            InstallResult installResult = InstallResult.None;
+            var installResult = InstallResult.None;
             var component = installData.Component;
 
             try
@@ -207,6 +207,11 @@ namespace TaskBasedUpdater
             {
                 Logger.Info("User canceled during install.");
                 return InstallResult.Cancel;
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                Elevator.Instance.RequestElevation(e, CurrentComponent);
+                return InstallResult.Failure;
             }
             catch (FileFormatException ex)
             {
