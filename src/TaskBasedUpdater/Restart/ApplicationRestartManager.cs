@@ -20,18 +20,34 @@ namespace TaskBasedUpdater.Restart
             {
                 RestartApplication(Elevator.IsProcessElevated);
             }
-            var updaterTool = UpdateConfiguration.Instance.ExternalUpdaterPath;
-            if (string.IsNullOrEmpty(updaterTool) || !File.Exists(updaterTool))
-                throw new RestartDeniedOrFailedException("External updater tool not found");
+            else
+            {
+                var updaterTool = UpdateConfiguration.Instance.ExternalUpdaterPath;
+                if (string.IsNullOrEmpty(updaterTool) || !File.Exists(updaterTool))
+                    throw new RestartDeniedOrFailedException("External updater tool not found");
+            }
         }
 
         public static void RestartApplication(bool elevated)
         {
+            if (!UpdateConfiguration.Instance.SupportsRestart)
+                throw new RestartDeniedOrFailedException("Application restart is not supported.");
+
+            var updaterTool = UpdateConfiguration.Instance.ExternalUpdaterPath;
+            if (string.IsNullOrEmpty(updaterTool) || !File.Exists(updaterTool))
+                throw new RestartDeniedOrFailedException("External updater tool not found");
+
+            if (!elevated)
+            {
+
+            }
+
+
             var elevator = UpdateConfiguration.Instance.ExternalElevatorPath;
             if (!File.Exists(elevator))
                 throw new RestartDeniedOrFailedException("Elevator tool not found");
 
-            var startInfo = new ProcessStartInfo(elevator) {CreateNoWindow = true};
+            var startInfo = new ProcessStartInfo(elevator) {CreateNoWindow = true, WindowStyle = ProcessWindowStyle.Hidden};
 
             var currentProcessInfo = ProcessUtilities.GetCurrentProcessInfo();
 
