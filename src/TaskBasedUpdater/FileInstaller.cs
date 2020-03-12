@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using NLog;
 using TaskBasedUpdater.Component;
+using TaskBasedUpdater.Elevation;
 using TaskBasedUpdater.FileSystem;
 using TaskBasedUpdater.Restart;
 

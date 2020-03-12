@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using TaskBasedUpdater.Component;
 using TaskBasedUpdater.Configuration;
 using TaskBasedUpdater.Download;
+using TaskBasedUpdater.Elevation;
 using TaskBasedUpdater.FileSystem;
 
 namespace TaskBasedUpdater.Tasks

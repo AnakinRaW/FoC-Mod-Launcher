@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using TaskBasedUpdater.Component;
 using TaskBasedUpdater.Configuration;
+using TaskBasedUpdater.Elevation;
 
 namespace TaskBasedUpdater.Restart
 {

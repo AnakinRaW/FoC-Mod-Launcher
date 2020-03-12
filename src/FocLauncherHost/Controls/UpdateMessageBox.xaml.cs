@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -86,6 +87,7 @@ namespace FocLauncherHost.Controls
         public override void ShowDialog()
         {
             HostWindow.Topmost = true;
+            HostApplication.SplashVisibleResetEvent.WaitOne(TimeSpan.FromSeconds(2));
             if (Application.Current.MainWindow != null && Application.Current.MainWindow.IsVisible)
                 HostWindow.Owner = Application.Current.MainWindow;
             base.ShowDialog();

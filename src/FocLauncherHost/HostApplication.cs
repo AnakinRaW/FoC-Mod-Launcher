@@ -11,6 +11,7 @@ using FocLauncherHost.Utilities;
 using Microsoft.VisualStudio.Threading;
 using NLog;
 using TaskBasedUpdater;
+using TaskBasedUpdater.Elevation;
 
 namespace FocLauncherHost
 {
@@ -26,6 +27,7 @@ namespace FocLauncherHost
         private static readonly TimeSpan WaitSplashDelay = TimeSpan.FromSeconds(2);
         private static readonly TimeSpan WaitWindowDelay = TimeSpan.FromSeconds(WaitSplashDelay.Seconds + 2);
 
+        internal static ManualResetEvent SplashVisibleResetEvent { get; } = new ManualResetEvent(false);
 
         static HostApplication()
         {
@@ -156,6 +158,7 @@ namespace FocLauncherHost
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
             MainWindow?.Show();
+            SplashVisibleResetEvent.Set();
         }
 
         private async Task HideSplashScreenAnimatedAsync()

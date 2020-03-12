@@ -79,7 +79,13 @@
     <Compile Include="Download\NoSuitableEngineException.cs" />
     <Compile Include="Download\PreferredDownloadEngines.cs" />
     <Compile Include="Download\ValidationFailedException.cs" />
-    <Compile Include="Elevator.cs" />
+    <Compile Include="Elevation\ElevationRequestData.cs" />
+    <Compile Include="Elevation\ElevationRequireException.cs" />
+    <Compile Include="Elevation\Elevator.cs" />
+    <Compile Include="Elevation\ProcessIntegrity.cs" />
+    <Compile Include="Elevation\SafeTokenHandle.cs" />
+    <Compile Include="Elevation\SidAndAttributes.cs" />
+    <Compile Include="Elevation\TokenMandatoryLabel.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="FileInstaller.cs" />
     <Compile Include="FileSystem\DiskSpaceCalculator.cs" />
@@ -93,6 +99,7 @@
     <Compile Include="IProduct.cs" />
     <Compile Include="IUpdaterOperation.cs" />
     <Compile Include="IUpdaterTask.cs" />
+    <Compile Include="NativeMethods\Advapi32.cs" />
     <Compile Include="NativeMethods\Kernel32.cs" />
     <Compile Include="NativeMethods\RestartMgr.cs" />
     <Compile Include="Operations\CleanOperation.cs" />
@@ -135,5 +142,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

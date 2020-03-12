@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using NLog;
 using TaskBasedUpdater.Component;
 using TaskBasedUpdater.Download;
+using TaskBasedUpdater.Elevation;
 using TaskBasedUpdater.FileSystem;
 using TaskBasedUpdater.Operations;
 using TaskBasedUpdater.Restart;

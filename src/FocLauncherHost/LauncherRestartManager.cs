@@ -7,6 +7,13 @@ namespace FocLauncherHost
 {
     internal sealed class LauncherRestartManager
     {
+        internal static bool ShowElevateDialog()
+        {
+            var window = new RestartElevatedWindow();
+            window.ShowDialog();
+            return window.ElevateResult;
+        }
+
         internal static bool ShowProcessKillDialog(ILockingProcessManager processManager, CancellationToken token)
         {
             return ShowKillDialogCore(processManager, true, token);

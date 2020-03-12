@@ -6,6 +6,7 @@ using NLog;
 using TaskBasedUpdater.Component;
 using TaskBasedUpdater.Configuration;
 using TaskBasedUpdater.Download;
+using TaskBasedUpdater.Elevation;
 using TaskBasedUpdater.Restart;
 using TaskBasedUpdater.TaskRunner;
 using TaskBasedUpdater.Tasks;

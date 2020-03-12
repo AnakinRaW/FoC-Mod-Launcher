@@ -65,6 +65,9 @@
     <Resource Include="Resources\Fonts\EaW-bold.ttf" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\RestartElevatedWindow.xaml.cs">
+      <DependentUpon>RestartElevatedWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\UpdateMessageBox.xaml.cs">
       <DependentUpon>UpdateMessageBox.xaml</DependentUpon>
     </Compile>
@@ -105,6 +108,10 @@
     <Page Include="Controls\ExceptionWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\RestartElevatedWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\UpdateMessageBox.xaml">
       <SubType>Designer</SubType>
@@ -197,6 +204,8 @@
   <ItemGroup>
     <Resource Include="Resources\kill.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\senat.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

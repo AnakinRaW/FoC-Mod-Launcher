@@ -7,9 +7,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using FocLauncher;
+using FocLauncherHost.Controls;
 using FocLauncherHost.Properties;
 using FocLauncherHost.Update.UpdateCatalog;
 using FocLauncherHost.Utilities;
+using NLog.LayoutRenderers;
 using TaskBasedUpdater;
 using TaskBasedUpdater.Component;
 using TaskBasedUpdater.Configuration;
@@ -72,7 +74,7 @@ namespace FocLauncherHost
 
         protected override bool PermitElevationRequest()
         {
-            return MessageBox.Show("Test", "Yes/No", MessageBoxButton.YesNo) == MessageBoxResult.Yes;
+            return LauncherRestartManager.ShowElevateDialog();
         }
 
         protected override async Task<HandleRestartResult> HandleRestartRequestAsync(ICollection<IComponent> pendingComponents, ILockingProcessManager lockingProcessManager,
