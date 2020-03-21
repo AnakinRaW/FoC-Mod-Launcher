@@ -111,8 +111,8 @@
     <Compile Include="Restart\ApplicationRestartManager.cs" />
     <Compile Include="Restart\ApplicationStatus.cs" />
     <Compile Include="Restart\ApplicationType.cs" />
-    <Compile Include="Restart\HandleRestartResult.cs" />
-    <Compile Include="Restart\HandleRestartStatus.cs" />
+    <Compile Include="Restart\PendingHandledResult.cs" />
+    <Compile Include="Restart\HandlePendingComponentsStatus.cs" />
     <Compile Include="Restart\ILockingProcessInfo.cs" />
     <Compile Include="Restart\ILockingProcessManager.cs" />
     <Compile Include="Restart\LockedFilesWatcher.cs" />
@@ -121,6 +121,7 @@
     <Compile Include="Restart\LockingProcessManagerFactory.cs" />
     <Compile Include="Restart\RestartDeniedOrFailedException.cs" />
     <Compile Include="Restart\WindowsRestartManagerShutdown.cs" />
+    <Compile Include="RestoreFailedException.cs" />
     <Compile Include="TaskRunner\AsyncTaskRunner.cs" />
     <Compile Include="TaskRunner\StopTaskRunnerException.cs" />
     <Compile Include="TaskRunner\TaskEventArgs.cs" />

@@ -11,14 +11,17 @@ namespace TaskBasedUpdater.Restart
 {
     internal static class ApplicationRestartManager
     {
-        public static void RestartAndExecutePendingComponents(IEnumerable<IComponent> pendingComponents)
+        public static void RestartAndExecutePendingComponents(IRestartOptions restartOptions, IReadOnlyList<IComponent> pendingComponents)
         {
             if (!UpdateConfiguration.Instance.SupportsRestart)
                 throw new RestartDeniedOrFailedException("Application restart is not supported.");
+
+            if (restartOptions is null)
+                throw new ArgumentNullException(nameof(restartOptions));
             
             if (!pendingComponents.Any())
             {
-                RestartApplication(Elevator.IsProcessElevated);
+                RestartApplication(restartOptions, Elevator.IsProcessElevated);
             }
             else
             {
@@ -28,30 +31,28 @@ namespace TaskBasedUpdater.Restart
             }
         }
 
-        public static void RestartApplication(bool elevated)
+        public static void RestartApplication(IRestartOptions restartOptions, bool elevated)
         {
             if (!UpdateConfiguration.Instance.SupportsRestart)
                 throw new RestartDeniedOrFailedException("Application restart is not supported.");
+
+            if (restartOptions is null)
+                throw new ArgumentNullException(nameof(restartOptions));
 
             var updaterTool = UpdateConfiguration.Instance.ExternalUpdaterPath;
             if (string.IsNullOrEmpty(updaterTool) || !File.Exists(updaterTool))
                 throw new RestartDeniedOrFailedException("External updater tool not found");
 
-            if (!elevated)
+            var startInfo = new ProcessStartInfo(updaterTool)
             {
+                //CreateNoWindow = true, 
+                //WindowStyle = ProcessWindowStyle.Hidden,
+            };
 
-            }
+            if (elevated) 
+                startInfo.Verb = "runas";
 
-
-            var elevator = UpdateConfiguration.Instance.ExternalElevatorPath;
-            if (!File.Exists(elevator))
-                throw new RestartDeniedOrFailedException("Elevator tool not found");
-
-            var startInfo = new ProcessStartInfo(elevator) {CreateNoWindow = true, WindowStyle = ProcessWindowStyle.Hidden};
-
-            var currentProcessInfo = ProcessUtilities.GetCurrentProcessInfo();
-
-            startInfo.Arguments = $"{currentProcessInfo.Id} {currentProcessInfo.Arguments}";
+            startInfo.Arguments = restartOptions.Unparse();
             Process.Start(startInfo);
 
             Environment.Exit(0);
@@ -61,5 +62,21 @@ namespace TaskBasedUpdater.Restart
         {
 
         }
+    }
+
+    public interface IRestartOptions
+    {
+        int? Pid { get; set; }
+
+        int Timeout { get; set; }
+
+        string ExecutablePath { get; set; }
+
+        string Unparse();
+    }
+
+    public interface IUpdateOptions : IRestartOptions
+    {
+        bool Update { get; set; }
     }
 }

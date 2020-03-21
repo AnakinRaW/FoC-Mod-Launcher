@@ -29,9 +29,9 @@ namespace TaskBasedUpdater.Elevation
             return true;
         }
 
-        public static void RestartElevated()
+        public static void RestartElevated(IRestartOptions restartOptions)
         {
-            ApplicationRestartManager.RestartApplication(true);
+            ApplicationRestartManager.RestartApplication(restartOptions, true);
         }
 
         private static bool IsElevated()

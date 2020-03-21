@@ -5,13 +5,10 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
 using FocLauncher;
-using FocLauncherHost.Controls;
 using FocLauncherHost.Properties;
 using FocLauncherHost.Update.UpdateCatalog;
 using FocLauncherHost.Utilities;
-using NLog.LayoutRenderers;
 using TaskBasedUpdater;
 using TaskBasedUpdater.Component;
 using TaskBasedUpdater.Configuration;
@@ -35,7 +32,7 @@ namespace FocLauncherHost
             UpdateConfiguration.Instance.BackupPath = Path.Combine(LauncherConstants.ApplicationBasePath, "Backups");
             UpdateConfiguration.Instance.DownloadRetryDelay = 500;
             UpdateConfiguration.Instance.SupportsRestart = true;
-            UpdateConfiguration.Instance.ExternalUpdaterPath = "";
+            UpdateConfiguration.Instance.ExternalUpdaterPath = LauncherConstants.UpdaterPath;
             UpdateConfiguration.Instance.ExternalElevatorPath = LauncherConstants.ElevatorPath;
             UpdateConfiguration.Instance.RequiredElevationCancelsUpdate = true;
             UpdateConfiguration.Instance.AlternativeDownloadPath = Path.Combine(LauncherConstants.ApplicationBasePath, "Downloads");
@@ -72,58 +69,84 @@ namespace FocLauncherHost
             return await Task.FromResult(validator.Validate(inputStream));
         }
 
+        protected override IRestartOptions CreateRestartOptions(IReadOnlyCollection<IComponent>? components = null)
+        {
+            var options = new LauncherRestartOptions
+            {
+                Pid = Process.GetCurrentProcess().Id,
+                ExecutablePath = Environment.GetCommandLineArgs()[0],
+                Update = components != null && components.Any()
+            };
+            var args = options.Unparse();
+            Logger.Debug($"Created restart options: {args}");
+            return options;
+        }
+        
         protected override bool PermitElevationRequest()
         {
             return LauncherRestartManager.ShowElevateDialog();
         }
 
-        protected override async Task<HandleRestartResult> HandleRestartRequestAsync(ICollection<IComponent> pendingComponents, ILockingProcessManager lockingProcessManager,
-            CancellationToken token)
+
+        protected override async Task<PendingHandledResult> HandleLockedComponentsCoreAsync(
+            ICollection<IComponent> pendingComponents, ILockingProcessManager lockingProcessManager,
+            bool ignoreSelfLocked, CancellationToken token)
         {
             token.ThrowIfCancellationRequested();
             if (!pendingComponents.Any())
-                return new HandleRestartResult(HandleRestartStatus.NotRequired);
+                return new PendingHandledResult(HandlePendingComponentsStatus.Handled);
 
             Logger.Trace("Hanlde restart request due to locked files");
 
             var processes = lockingProcessManager.GetProcesses().ToList();
-
-            var isSelfLocking = ProcessesContainsLauncher(processes);
+            var isSelfLocking = lockingProcessManager.ProcessesContainsSelf();
 
             if (!isSelfLocking && processes.Any(x => x.ApplicationType == ApplicationType.Critical))
-                return new HandleRestartResult(HandleRestartStatus.Declined, "Files are locked by a system process that cannot be terminated. Please restart the system");
+                return new PendingHandledResult(HandlePendingComponentsStatus.Declined,
+                    "Files are locked by a system process that cannot be terminated. Please restart the system");
 
-            
-            if (!isSelfLocking)
+            using var lockingProcessManagerWithoutSelf = CreateFromProcessesWithoutSelf(processes);
+
+            if (!isSelfLocking || ignoreSelfLocked)
             {
-                var restartRequestResult = LauncherRestartManager.ShowProcessKillDialog(lockingProcessManager, token);
+                var restartRequestResult =
+                    LauncherRestartManager.ShowProcessKillDialog(lockingProcessManagerWithoutSelf, token);
                 Logger.Trace($"Kill locking processes: {restartRequestResult}, Launcher needs restart: {false}");
                 if (!restartRequestResult)
-                    return new HandleRestartResult(HandleRestartStatus.Declined, "Update aborted because locked files have not been released.");
+                    return new PendingHandledResult(HandlePendingComponentsStatus.Declined,
+                        "Update aborted because locked files have not been released.");
 
-                lockingProcessManager.Shutdown();
+                lockingProcessManagerWithoutSelf.Shutdown();
                 LockedFilesWatcher.Instance.LockedFiles.Clear();
-                await UpdateAsync(pendingComponents, token);
+                await UpdateAsync(pendingComponents, token).ConfigureAwait(false);
+
                 return LockedFilesWatcher.Instance.LockedFiles.Any()
-                    ? new HandleRestartResult(HandleRestartStatus.Declined,
+                    ? new PendingHandledResult(HandlePendingComponentsStatus.HandledButStillPending,
                         "Update failed because there are still locked files which have not been released.")
-                    : new HandleRestartResult(HandleRestartStatus.NotRequired);
+                    : new PendingHandledResult(HandlePendingComponentsStatus.Handled);
             }
 
             if (!UpdateConfiguration.Instance.SupportsRestart)
-                return new HandleRestartResult(HandleRestartStatus.Declined, "Update requires a self-update which is not supported for this update configuration.");
+                return new PendingHandledResult(HandlePendingComponentsStatus.Declined,
+                    "Update requires a self-update which is not supported for this update configuration.");
 
             var result = LauncherRestartManager.ShowSelfKillDialog(lockingProcessManager, token);
             Logger.Trace($"Kill locking processes: {result}, Launcher needs restart: {true}");
             if (!result)
-                return new HandleRestartResult(HandleRestartStatus.Declined,
+                return new PendingHandledResult(HandlePendingComponentsStatus.Declined,
                     "Update aborted because locked files have not been released.");
 
+            lockingProcessManagerWithoutSelf.Shutdown();
+            return new PendingHandledResult(HandlePendingComponentsStatus.Restart);
+        }
+
+
+        private ILockingProcessManager CreateFromProcessesWithoutSelf(IEnumerable<ILockingProcessInfo> processes)
+        {
             var processesWithoutSelf = WithoutProcess(processes, Process.GetCurrentProcess().Id);
-            using var newLockingProcessManager = LockingProcessManagerFactory.Create();
-            newLockingProcessManager.Register(null, processesWithoutSelf);
-            newLockingProcessManager.Shutdown();
-            return new HandleRestartResult(HandleRestartStatus.Restart);
+            var processManager = LockingProcessManagerFactory.Create();
+            processManager.Register(null, processesWithoutSelf);
+            return processManager;
         }
 
         protected override Version? GetComponentVersion(IComponent component)
@@ -136,12 +159,6 @@ namespace FocLauncherHost
             {
                 return null;
             }
-        }
-
-        private static bool ProcessesContainsLauncher(IEnumerable<ILockingProcessInfo> processes)
-        {
-            var currentProcess = Process.GetCurrentProcess();
-            return processes.Any(x => x.Id.Equals(currentProcess.Id));
         }
 
         private static Task<Catalogs> TryGetProductFromStreamAsync(Stream stream)

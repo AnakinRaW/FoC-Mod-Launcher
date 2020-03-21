@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -11,7 +10,6 @@ using FocLauncherHost.Utilities;
 using Microsoft.VisualStudio.Threading;
 using NLog;
 using TaskBasedUpdater;
-using TaskBasedUpdater.Elevation;
 
 namespace FocLauncherHost
 {
@@ -50,7 +48,8 @@ namespace FocLauncherHost
             try
             {
                 await AssemblyExtractor.WriteNecessaryAssembliesToDiskAsync(LauncherConstants.ApplicationBasePath,
-                    "FocLauncher.dll", "FocLauncher.Theming.dll", LauncherConstants.ElevatorFileName);
+                    "FocLauncher.dll", "FocLauncher.Theming.dll", 
+                    LauncherConstants.ElevatorFileName, LauncherConstants.UpdaterFileName);
 
                 Task.Delay(WaitSplashDelay).ContinueWith(async _ => await ShowMainWindowAsync(), default,
                     TaskContinuationOptions.None, TaskScheduler.FromCurrentSynchronizationContext()).Forget();
@@ -89,23 +88,23 @@ namespace FocLauncherHost
                     ReportUpdateResult(updateInformation);
                 });
             }
-            catch (ElevationRequireException)
-            {
-                try
-                {
-                    Elevator.RestartElevated();
-                }
-                catch (Exception e)
-                {
-                    // The elevation was not accepted by the user
-                    if (e is Win32Exception && e.HResult == -2147467259)
-                    {
-                        MessageBox.Show("The update failed");
-                        return;
-                    }
-                    LogAndShowException(e);
-                }
-            }
+            //catch (ElevationRequireException)
+            //{
+            //    try
+            //    {
+            //        Elevator.RestartElevated();
+            //    }
+            //    catch (Exception e)
+            //    {
+            //        // The elevation was not accepted by the user
+            //        if (e is Win32Exception && e.HResult == -2147467259)
+            //        {
+            //            MessageBox.Show("The update failed");
+            //            return;
+            //        }
+            //        LogAndShowException(e);
+            //    }
+            //}
             catch (Exception e)
             {
                 LogAndShowException(e);

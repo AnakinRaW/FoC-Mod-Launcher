@@ -45,6 +45,45 @@ namespace TaskBasedUpdater
             Product = productInfo;
         }
 
+        public async Task<UpdateResult> UpdateAsync(CancellationToken cancellation)
+        {
+            var allComponents = Components.Concat(RemovableComponents);
+            return await UpdateAsync(allComponents, cancellation);
+        }
+
+        public async Task CalculateComponentStatusAsync(CancellationToken cancellation = default)
+        {
+            Logger.Trace("Calculating current component state");
+
+            foreach (var component in Components)
+            {
+                cancellation.ThrowIfCancellationRequested();
+                await Task.Yield();
+                await CalculateComponentStatusAsync(component);
+            }
+        }
+
+        public async Task<Stream> GetMetadataStreamAsync(CancellationToken cancellation)
+        {
+            cancellation.ThrowIfCancellationRequested();
+            try
+            {
+                Stream metadataStream = new MemoryStream();
+                await DownloadManager.Instance.DownloadAsync(UpdateCatalogLocation, metadataStream, null, cancellation);
+                Logger.Info($"Retrieved metadata stream from {UpdateCatalogLocation}");
+                return metadataStream;
+            }
+            catch (OperationCanceledException)
+            {
+                Logger.Trace("Getting metadata stream was cancelled");
+                throw;
+            }
+        }
+
+        public async Task CalculateRemovableComponentsAsync()
+        {
+            await CalculateRemovableComponentsAsync(Product.AppDataPath);
+        }
 
         public virtual async Task<UpdateInformation> CheckAndPerformUpdateAsync(CancellationToken cancellation)
         {
@@ -89,27 +128,21 @@ namespace TaskBasedUpdater
 
                     await UpdateAsync(cts.Token);
 
-                    if (LockedFilesWatcher.Instance.LockedFiles.Any())
+                    var pendingResult = await HandleLockedComponentsAsync(false, out var pc, cts.Token);
+                    switch (pendingResult.Status)
                     {
-                        SuccessInformation(updateInformation, "Success, restart required", true);
-                        var components = FindComponentsFromFiles(LockedFilesWatcher.Instance.LockedFiles).ToList();
-                        using var p = LockingProcessManagerFactory.Create();
-                        p.Register(LockedFilesWatcher.Instance.LockedFiles);
-                        var restartResult = await HandleRestartRequestAsync(components, p, cts.Token);
-
-                        Logger.Info($"Handled restart request with result: {restartResult.Status}; Message: {restartResult.Message}");
-
-                        if (restartResult.Status == HandleRestartStatus.Declined)
-                            throw new RestartDeniedOrFailedException(restartResult.Message);
-                        if (restartResult.Status == HandleRestartStatus.Restart)
-                        {
+                        case HandlePendingComponentsStatus.HandledButStillPending:
+                        case HandlePendingComponentsStatus.Declined:
+                            throw new RestartDeniedOrFailedException(pendingResult.Message);
+                        case HandlePendingComponentsStatus.Restart:
                             finalCleanUp = false;
-                            Restart(components);
+                            Restart(pc.ToList());
                             SuccessInformation(updateInformation, "Restart in progress", true);
-                        }
+                            break;
+                        default:
+                            SuccessInformation(updateInformation, "Success");
+                            break;
                     }
-                    else
-                        SuccessInformation(updateInformation, "Success");
                 }
                 catch (Exception e)
                 {
@@ -155,38 +188,37 @@ namespace TaskBasedUpdater
             return updateInformation;
         }
 
-        protected virtual void HandleElevationRequest(ElevationRequireException e, UpdateInformation updateInformation)
+        internal Task CalculateRemovableComponentsAsync(string basePath)
         {
-            var restoreBackup = true;
-            try
-            {
-                if (Elevator.IsProcessElevated)
-                    throw new UpdaterException("The process is already elevated", e);
+            if (basePath == null || !Directory.Exists(basePath))
+                return Task.FromException(new DirectoryNotFoundException(nameof(basePath)));
 
-                if (!PermitElevationRequest())
-                {
-                    ErrorInformation(updateInformation, "The update was stopped because the process needed to be elevated");
-                    return;
-                }
 
-                try
-                {
-                    Elevator.RestartElevated();
-                    restoreBackup = false;
-                }
-                catch (Exception ex)
-                {
-                    if (!(ex is Win32Exception && ex.HResult == -2147467259))
-                        throw;
-                    // The elevation was not accepted by the user
-                    CancelledInformation(updateInformation);
-                }
-            }
-            finally
+            var localFiles = new DirectoryInfo(basePath).GetFilesByExtensions(FileDeleteExtensionFilter.ToArray());
+
+            foreach (var file in localFiles)
             {
-                if (restoreBackup)
-                    RestoreBackup();
+                if (FileDeleteIgnoreFilter.Any(x => file.Name.EndsWith(x)))
+                    continue;
+
+                if (!FileCanBeDeleted(file))
+                    continue;
+
+                Logger.Info($"File marked to get deleted: {file.FullName}");
+
+                var component = new Component.Component
+                {
+                    Name = file.Name,
+                    DiskSize = file.Length,
+                    CurrentState = CurrentState.Installed,
+                    RequiredAction = ComponentAction.Delete,
+                    Destination = file.DirectoryName
+                };
+
+                _removableComponents.Add(component);
             }
+
+            return Task.CompletedTask;
         }
 
         protected static void RestoreBackup()
@@ -205,20 +237,76 @@ namespace TaskBasedUpdater
             }
         }
 
-        protected virtual Task<HandleRestartResult> HandleRestartRequestAsync(ICollection<IComponent> pendingComponents, ILockingProcessManager lockingProcessManager, CancellationToken token)
+        protected static void SuccessInformation(UpdateInformation updateInformation, string message, bool requiresRestart = false, bool userNotification = false)
         {
-            return Task.FromResult(new HandleRestartResult(HandleRestartStatus.Declined, "Handling restart is not implemented"));
+            Logger.Debug("Operation was completed sucessfully");
+            updateInformation.Result = requiresRestart ? UpdateResult.SuccessRestartRequired : UpdateResult.Success;
+            updateInformation.Message = message;
+            updateInformation.RequiresUserNotification = userNotification;
         }
 
-        public async Task<UpdateResult> UpdateAsync(CancellationToken cancellation)
+        protected static void ErrorInformation(UpdateInformation updateInformation, string errorMessage, bool userNotification = false)
         {
-            var allComponents = Components.Concat(RemovableComponents);
-            return await UpdateAsync(allComponents, cancellation);
+            Logger.Debug($"Operation failed with message: {errorMessage}");
+            updateInformation.Result = UpdateResult.Failed;
+            updateInformation.Message = errorMessage;
+            updateInformation.RequiresUserNotification = userNotification;
         }
 
-        protected internal virtual void Restart(IEnumerable<IComponent> components)
+        protected static void CancelledInformation(UpdateInformation updateInformation, bool userNotification = false)
         {
-            ApplicationRestartManager.RestartAndExecutePendingComponents(components);
+            Logger.Debug("Operation was cancelled by user request");
+            updateInformation.Result = UpdateResult.Cancelled;
+            updateInformation.Message = "Operation cancelled by user request";
+            updateInformation.RequiresUserNotification = userNotification;
+        }
+
+        protected abstract Task<IEnumerable<IComponent>> GetCatalogComponentsAsync(Stream catalogStream, CancellationToken token);
+
+        protected abstract Task<bool> ValidateCatalogStreamAsync(Stream inputStream);
+
+        protected abstract IRestartOptions CreateRestartOptions(IReadOnlyCollection<IComponent>? components = null);
+        
+        protected virtual Task<PendingHandledResult> HandleLockedComponentsCoreAsync(ICollection<IComponent> pendingComponents, ILockingProcessManager lockingProcessManager,
+            bool ignoreSelfLocked, CancellationToken token)
+        {
+            return Task.FromResult(new PendingHandledResult(HandlePendingComponentsStatus.Declined, "Handling restart is not implemented"));
+        }
+
+        protected virtual Version? GetComponentVersion(IComponent component)
+        {
+            try
+            {
+                return UpdaterUtilities.GetAssemblyVersion(component.GetFilePath());
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        protected virtual bool PermitElevationRequest()
+        {
+            return false;
+        }
+
+        protected virtual bool FileCanBeDeleted(FileInfo file)
+        {
+            return false;
+        }
+
+        protected internal ICollection<IComponent> GetPendingComponents(ICollection<string> files, out ILockingProcessManager lockingProcessManager)
+        {
+            var components = FindComponentsFromFiles(files).ToList();
+            lockingProcessManager = LockingProcessManagerFactory.Create();
+            lockingProcessManager.Register(files);
+            return components;
+        }
+
+        protected internal void Restart(IReadOnlyList<IComponent> components)
+        {
+            var options = CreateRestartOptions(components);
+            ApplicationRestartManager.RestartAndExecutePendingComponents(options, components);
         }
 
         protected internal async Task<UpdateResult> UpdateAsync(IEnumerable<IComponent> components,
@@ -237,7 +325,7 @@ namespace TaskBasedUpdater
                 {
                     operation.Schedule();
                     operation.Run(cts.Token);
-                }, cts.Token);
+                }, cts.Token).ConfigureAwait(false);
 
                 return UpdateResult.Success;
             }
@@ -256,74 +344,6 @@ namespace TaskBasedUpdater
                 Logger.Error(e, $"Failed update: {e.Message}");
                 throw;
             }
-        }
-
-        public async Task CalculateComponentStatusAsync(CancellationToken cancellation = default)
-        {
-            Logger.Trace("Calculating current component state");
-            
-            foreach (var component in Components)
-            {
-                cancellation.ThrowIfCancellationRequested();
-                await Task.Yield();
-                await CalculateComponentStatusAsync(component);
-            }
-        }
-
-        public async Task<Stream> GetMetadataStreamAsync(CancellationToken cancellation)
-        {
-            cancellation.ThrowIfCancellationRequested();
-            try
-            {
-                Stream metadataStream = new MemoryStream();
-                await DownloadManager.Instance.DownloadAsync(UpdateCatalogLocation, metadataStream, null, cancellation);
-                Logger.Info($"Retrieved metadata stream from {UpdateCatalogLocation}");
-                return metadataStream;
-            }
-            catch (OperationCanceledException)
-            {
-                Logger.Trace("Getting metadata stream was cancelled");
-                throw;
-            }
-
-        }
-
-        public async Task CalculateRemovableComponentsAsync()
-        {
-            await CalculateRemovableComponentsAsync(Product.AppDataPath);
-        }
-
-        internal Task CalculateRemovableComponentsAsync(string basePath)
-        {
-            if (basePath == null || !Directory.Exists(basePath))
-                return Task.FromException(new DirectoryNotFoundException(nameof(basePath)));
-
-
-            var localFiles = new DirectoryInfo(basePath).GetFilesByExtensions(FileDeleteExtensionFilter.ToArray());
-
-            foreach (var file in localFiles)
-            {
-                if (FileDeleteIgnoreFilter.Any(x => file.Name.EndsWith(x)))
-                    continue;
-
-                if (!FileCanBeDeleted(file))
-                    continue;
-                
-                Logger.Info($"File marked to get deleted: {file.FullName}");
-
-                var component = new Component.Component
-                {
-                    Name = file.Name,
-                    DiskSize = file.Length,
-                    CurrentState = CurrentState.Installed,
-                    RequiredAction = ComponentAction.Delete,
-                    Destination = file.DirectoryName
-                };
-
-                _removableComponents.Add(component);
-            }
-
-            return Task.CompletedTask;
         }
         
         protected internal Task CalculateComponentStatusAsync(IComponent component)
@@ -386,55 +406,59 @@ namespace TaskBasedUpdater
             component.RequiredAction = ComponentAction.Update;
             return Task.CompletedTask;
         }
-
-        protected abstract Task<IEnumerable<IComponent>> GetCatalogComponentsAsync(Stream catalogStream, CancellationToken token);
-
-        protected abstract Task<bool> ValidateCatalogStreamAsync(Stream inputStream);
-
-        protected virtual Version? GetComponentVersion(IComponent component)
+        
+        private Task<PendingHandledResult> HandleLockedComponentsAsync(bool ignoreSelfLockedProcess, out IEnumerable<IComponent> pendingComponents, CancellationToken token = default)
         {
+            pendingComponents = Enumerable.Empty<IComponent>();
+            var lockedFiles = LockedFilesWatcher.Instance.LockedFiles.ToList();
+            if (!lockedFiles.Any())
+                return Task.FromResult(new PendingHandledResult(HandlePendingComponentsStatus.Handled));
+            var allPendingComponents = GetPendingComponents(lockedFiles, out var p);
+            var result = HandleLockedComponentsCoreAsync(allPendingComponents, p, ignoreSelfLockedProcess, token).Result;
+            pendingComponents = GetPendingComponents(LockedFilesWatcher.Instance.LockedFiles, out _);
+            return Task.FromResult(result);
+        }
+
+        private void HandleElevationRequest(ElevationRequireException e, UpdateInformation updateInformation)
+        {
+            var restoreBackup = true;
             try
             {
-                return UpdaterUtilities.GetAssemblyVersion(component.GetFilePath());
+                if (Elevator.IsProcessElevated)
+                    throw new UpdaterException("The process is already elevated", e);
+
+                var lockedResult = HandleLockedComponentsAsync(true, out var components).Result;
+                switch (lockedResult.Status)
+                {
+                    case HandlePendingComponentsStatus.Declined:
+                        ErrorInformation(updateInformation, lockedResult.Message);
+                        return;
+                }
+
+                if (!PermitElevationRequest())
+                {
+                    ErrorInformation(updateInformation, "The update was stopped because the process needed to be elevated");
+                    return;
+                }
+
+                try
+                {
+                    Elevator.RestartElevated(CreateRestartOptions(components.ToList()));
+                    restoreBackup = false;
+                }
+                catch (Exception ex)
+                {
+                    if (!(ex is Win32Exception && ex.HResult == -2147467259))
+                        throw;
+                    // The elevation was not accepted by the user
+                    CancelledInformation(updateInformation);
+                }
             }
-            catch
+            finally
             {
-                return null;
+                if (restoreBackup)
+                    RestoreBackup();
             }
-        }
-
-        protected virtual bool PermitElevationRequest()
-        {
-            return true;
-        }
-
-        protected virtual bool FileCanBeDeleted(FileInfo file)
-        {
-            return false;
-        }
-
-        protected static void SuccessInformation(UpdateInformation updateInformation, string message, bool requiresRestart = false, bool userNotification = false)
-        {
-            Logger.Debug("Operation was completed sucessfully");
-            updateInformation.Result = requiresRestart ? UpdateResult.SuccessRestartRequired : UpdateResult.Success;
-            updateInformation.Message = message;
-            updateInformation.RequiresUserNotification = userNotification;
-        }
-
-        protected static void ErrorInformation(UpdateInformation updateInformation, string errorMessage, bool userNotification = false)
-        {
-            Logger.Debug($"Operation failed with message: {errorMessage}");
-            updateInformation.Result = UpdateResult.Failed;
-            updateInformation.Message = errorMessage;
-            updateInformation.RequiresUserNotification = userNotification;
-        }
-
-        protected static void CancelledInformation(UpdateInformation updateInformation, bool userNotification = false)
-        {
-            Logger.Debug("Operation was cancelled by user request");
-            updateInformation.Result = UpdateResult.Cancelled;
-            updateInformation.Message = "Operation cancelled by user request";
-            updateInformation.RequiresUserNotification = userNotification;
         }
 
         private IEnumerable<IComponent> FindComponentsFromFiles(IEnumerable<string> files)
@@ -445,14 +469,6 @@ namespace TaskBasedUpdater
         private IComponent? FindComponentsFromFile(string file)
         {
             return Components.Concat(RemovableComponents).FirstOrDefault(x => x.GetFilePath().Equals(file));
-        }
-    }
-
-    public class RestoreFailedException : IOException
-    {
-        public RestoreFailedException(string message, Exception innerException) : base(message, innerException)
-        {
-            
         }
     }
 }

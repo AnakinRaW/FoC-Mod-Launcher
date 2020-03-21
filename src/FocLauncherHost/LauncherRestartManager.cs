@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using FocLauncherHost.Controls;
 using TaskBasedUpdater.Restart;
@@ -16,21 +17,24 @@ namespace FocLauncherHost
 
         internal static bool ShowProcessKillDialog(ILockingProcessManager processManager, CancellationToken token)
         {
-            return ShowKillDialogCore(processManager, true, token);
+            return ShowKillDialogCore(processManager, true, false, token);
         }
 
         internal static bool ShowSelfKillDialog(ILockingProcessManager processManager, CancellationToken token)
         {
-            return ShowKillDialogCore(processManager, false, token);
+            return ShowKillDialogCore(processManager, false, true, token);
         }
 
-        private static bool ShowKillDialogCore(ILockingProcessManager processManager, bool retry, CancellationToken token)
+        private static bool ShowKillDialogCore(ILockingProcessManager processManager, bool retry, bool showSelf, CancellationToken token)
         {
+            var currentProcessId = Process.GetCurrentProcess().Id;
             UpdateMessageBox.ProcessKillResult result;
             do
             {
                 token.ThrowIfCancellationRequested();
                 var processes = processManager.GetProcesses().Where(x => x.ApplicationStatus == ApplicationStatus.Running).ToList();
+                if (!showSelf) 
+                    processes = processes.Where(x => x.Id != currentProcessId).ToList();
                 if (!processes.Any())
                     return true;
                 var dialog = new UpdateMessageBox(processes, retry);

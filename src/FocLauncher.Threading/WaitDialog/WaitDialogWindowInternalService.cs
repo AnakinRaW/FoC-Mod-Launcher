@@ -70,7 +70,7 @@ namespace FocLauncher.WaitDialog
         internal void Close()
         {
             if (_disposed)
-                throw new ObjectDisposedException(nameof(Close));
+                return;
             try
             {
                 if (_application == null)

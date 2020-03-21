@@ -88,6 +88,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="FocLauncherUpdaterManager.cs" />
+    <Compile Include="LauncherRestartOptions.cs" />
     <Compile Include="Update\UpdateCatalog\DependencyHelper.cs" />
     <Compile Include="Update\UpdateCatalog\Dependency.cs" />
     <Compile Include="Update\UpdateCatalog\InstallLocation.cs" />
@@ -131,6 +132,10 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FocLauncher.AppUpdater\FocLauncher.AppUpdater.csproj">
+      <Project>{9ebd4d73-3c76-4d60-b156-04fe46d7b9de}</Project>
+      <Name>FocLauncher.AppUpdater</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FocLauncher.Core\FocLauncher.Core.csproj">
       <Project>{93cdc38a-d74a-4cd5-a5aa-9ce8d953519a}</Project>
       <Name>FocLauncher.Core</Name>
@@ -185,6 +190,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="CommandLineParser">
+      <Version>2.7.82</Version>
+    </PackageReference>
     <PackageReference Include="Costura.Fody">
       <Version>4.1.0</Version>
     </PackageReference>
