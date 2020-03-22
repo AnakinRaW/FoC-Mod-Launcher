@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using FocLauncher;
 using FocLauncher.Threading;
-using FocLauncher.WaitDialog;
 using FocLauncherHost.Controls;
 using FocLauncherHost.Utilities;
 using Microsoft.VisualStudio.Threading;
