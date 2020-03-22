@@ -24,13 +24,15 @@ namespace FocLauncherHost
         private readonly AsyncManualResetEvent _canCloseApplicationEvent = new AsyncManualResetEvent(false, true);
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        private bool _waitWindowShown;
+        private bool _progressVisible;
 
         private static readonly TimeSpan WaitSplashDelay = TimeSpan.FromSeconds(2);
-        private static readonly TimeSpan WaitWindowDelay = TimeSpan.FromSeconds(WaitSplashDelay.Seconds + 2);
+        private static readonly TimeSpan WaitProgressDelay = TimeSpan.FromSeconds(WaitSplashDelay.Seconds + 2);
 
         internal static ManualResetEvent SplashVisibleResetEvent { get; } = new ManualResetEvent(false);
 
+        internal SplashScreen SplashScreen { get; }
+        
         static HostApplication()
         {
             // Since FocLauncher.Threading.dll and Microsoft.VisualStudio.Utilities.dll are used by the WaitWindow AppDomain we need to have them on disk
@@ -38,11 +40,15 @@ namespace FocLauncherHost
             AssemblyExtractor.WriteNecessaryAssembliesToDisk(LauncherConstants.ApplicationBasePath,
                 "FocLauncher.Threading.dll", "Microsoft.VisualStudio.Utilities.dll");
         }
-        
+
+        public HostApplication()
+        {
+            MainWindow = SplashScreen = new SplashScreen();
+        }
+
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            MainWindow = new SplashScreen();
             WaitAndShutdownAsync().Forget();
             PrepareAndUpdateLauncherAsync().Forget();
         }
@@ -61,15 +67,10 @@ namespace FocLauncherHost
 
                 await ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
                 {
-                    var data = new WaitDialogProgressData("Please wait while the launcher is downloading an update.",
-                        isCancelable: true);
+                    //SetWhenWaitDialogIsShownAsync(WaitProgressDelay, session.UserCancellationToken).Forget();
+                    //var cts = CancellationTokenSource.CreateLinkedTokenSource(session.UserCancellationToken);
 
-                    var session = WaitDialogFactory.Instance.StartWaitDialog("FoC Launcher", data, WaitWindowDelay);
-                    SetWhenWaitDialogIsShownAsync(WaitWindowDelay, session.UserCancellationToken).Forget();
-
-                    session.UserCancellationToken.Register(OnUserCancelled);
-
-                    var cts = CancellationTokenSource.CreateLinkedTokenSource(session.UserCancellationToken);
+                    var cts = new CancellationTokenSource();
 
                     UpdateInformation updateInformation = null;
                     try
@@ -86,7 +87,6 @@ namespace FocLauncherHost
                     finally
                     {
                         await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(cts.Token);
-                        session.Dispose();
                         cts.Dispose();
                     }
 
@@ -124,14 +124,14 @@ namespace FocLauncherHost
             await Task.Delay(delay, token);
             if (token.IsCancellationRequested)
                 return;
-            _waitWindowShown = true;
+            _progressVisible = true;
         }
 
         private void ReportUpdateResult(UpdateInformation updateInformation)
         {
             if (updateInformation != null)
             {
-                if (updateInformation.RequiresUserNotification && _waitWindowShown 
+                if (updateInformation.RequiresUserNotification && _progressVisible 
 #if DEBUG
                    || true
 #endif
@@ -173,7 +173,7 @@ namespace FocLauncherHost
             }
         }
 
-        private void LogAndShowException(Exception e)
+        private static void LogAndShowException(Exception e)
         {
             Logger.Error(e, e.Message);
             var realException = e.TryGetWrappedException() ?? e;
