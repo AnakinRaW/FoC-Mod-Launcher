@@ -1,9 +1,8 @@
 ﻿using CommandLine;
-using TaskBasedUpdater.Restart;
 
-namespace FocLauncherHost
+namespace FocLauncher.Shared
 {
-    public class LauncherRestartOptions : IUpdateOptions
+    public partial class LauncherRestartOptions
     {
         [Option('p', "pid", Required = false, HelpText = "The PID of the process to wait until terminated.")]
         public int? Pid { get; set; }
@@ -16,6 +15,9 @@ namespace FocLauncherHost
 
         [Option('u', "update", Required = false, HelpText = "Tell the application to run the update procedure.")]
         public bool Update { get; set; }
+
+        [Option('p', "payload", Required = false, HelpText = "Payload in base64 format which is required for the update")]
+        public string Payload { get; set; }
 
         public string Unparse()
         {

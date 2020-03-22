@@ -4,7 +4,7 @@ using TaskBasedUpdater.Component;
 
 namespace TaskBasedUpdater
 {
-    internal class ComponentDownloadPathStorage : IEnumerable<KeyValuePair<IComponent, string>>
+    public class ComponentDownloadPathStorage : IEnumerable<KeyValuePair<IComponent, string>>
     {
         private static ComponentDownloadPathStorage _instance;
 

@@ -427,7 +427,7 @@ namespace TaskBasedUpdater
                 if (Elevator.IsProcessElevated)
                     throw new UpdaterException("The process is already elevated", e);
 
-                var lockedResult = HandleLockedComponentsAsync(true, out var components).Result;
+                var lockedResult = HandleLockedComponentsAsync(true, out var pendingComponents).Result;
                 switch (lockedResult.Status)
                 {
                     case HandlePendingComponentsStatus.Declined:
@@ -443,7 +443,8 @@ namespace TaskBasedUpdater
 
                 try
                 {
-                    Elevator.RestartElevated(CreateRestartOptions(components.ToList()));
+                    var allComponents = CreateRestartOptions(e.AggregateComponents().Union(pendingComponents).Distinct().ToList());
+                    Elevator.RestartElevated(allComponents);
                     restoreBackup = false;
                 }
                 catch (Exception ex)

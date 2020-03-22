@@ -12,6 +12,7 @@
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+	<Nullable>enable</Nullable>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -81,6 +82,7 @@
     <Compile Include="Download\ValidationFailedException.cs" />
     <Compile Include="Elevation\ElevationRequestData.cs" />
     <Compile Include="Elevation\ElevationRequireException.cs" />
+    <Compile Include="Elevation\ElevationUtilities.cs" />
     <Compile Include="Elevation\Elevator.cs" />
     <Compile Include="Elevation\ProcessIntegrity.cs" />
     <Compile Include="Elevation\SafeTokenHandle.cs" />
@@ -111,6 +113,8 @@
     <Compile Include="Restart\ApplicationRestartManager.cs" />
     <Compile Include="Restart\ApplicationStatus.cs" />
     <Compile Include="Restart\ApplicationType.cs" />
+    <Compile Include="Restart\IRestartOptions.cs" />
+    <Compile Include="Restart\IUpdateOptions.cs" />
     <Compile Include="Restart\PendingHandledResult.cs" />
     <Compile Include="Restart\HandlePendingComponentsStatus.cs" />
     <Compile Include="Restart\ILockingProcessInfo.cs" />

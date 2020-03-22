@@ -63,20 +63,4 @@ namespace TaskBasedUpdater.Restart
 
         }
     }
-
-    public interface IRestartOptions
-    {
-        int? Pid { get; set; }
-
-        int Timeout { get; set; }
-
-        string ExecutablePath { get; set; }
-
-        string Unparse();
-    }
-
-    public interface IUpdateOptions : IRestartOptions
-    {
-        bool Update { get; set; }
-    }
 }

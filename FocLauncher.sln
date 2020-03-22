@@ -31,6 +31,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Updater", "Updater", "{65A0
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskBasedUpdater.Elevator", "src\TaskBasedUpdater.Elevator\TaskBasedUpdater.Elevator.csproj", "{B10160B6-ED51-48B7-A45D-637157D656AB}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FocLauncher.Shared", "FocLauncher.Shared", "{E7727DCB-6639-49BF-A4EF-D8A0C5C75F14}"
+	ProjectSection(SolutionItems) = preProject
+		src\FocLauncher.Shared\ExternalUpdaterResult.cs = src\FocLauncher.Shared\ExternalUpdaterResult.cs
+		src\FocLauncher.Shared\LauncherRestartOptions.cs = src\FocLauncher.Shared\LauncherRestartOptions.cs
+		src\FocLauncher.Shared\LauncherUpdateItem.cs = src\FocLauncher.Shared\LauncherUpdateItem.cs
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -98,6 +105,7 @@ Global
 		{0855D868-8864-47A4-AAD2-D89056AD536F} = {65A0B4B2-985A-4B05-8A2E-266B5A4F33E8}
 		{65A0B4B2-985A-4B05-8A2E-266B5A4F33E8} = {8F2264D6-12F2-47DA-8C17-25D430DA43B2}
 		{B10160B6-ED51-48B7-A45D-637157D656AB} = {65A0B4B2-985A-4B05-8A2E-266B5A4F33E8}
+		{E7727DCB-6639-49BF-A4EF-D8A0C5C75F14} = {8F2264D6-12F2-47DA-8C17-25D430DA43B2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {031206AD-43AB-4EF2-B59D-2DFCD7ACA476}

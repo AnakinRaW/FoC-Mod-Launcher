@@ -117,6 +117,12 @@ namespace TaskBasedUpdater
                         _backupLookup.Remove(component);
             }
         }
+        
+        public bool TryGetValue(IComponent component, out string value)
+        {
+            lock (_syncObject)
+                return _backupLookup.TryGetValue(component, out value);
+        }
 
         public void Flush()
         {

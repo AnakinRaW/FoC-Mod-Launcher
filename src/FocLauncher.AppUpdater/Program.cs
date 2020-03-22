@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CommandLine;
+using FocLauncher.Shared;
+using Newtonsoft.Json;
 
 namespace FocLauncher.AppUpdater
 {
@@ -16,6 +19,8 @@ namespace FocLauncher.AppUpdater
         {
             try
             {
+                var updateResult = ExternalUpdaterResult.NoUpdate;
+
                 var parserResult = Parser.Default.ParseArguments<LauncherRestartOptions>(args);
                 parserResult.WithParsed(o =>
                 {
@@ -26,6 +31,7 @@ namespace FocLauncher.AppUpdater
                         {
                             try
                             {
+                                Console.WriteLine($"Waiting for {parentProcess.ProcessName} to exit...");
                                 if (!WaitForExitAsync(parentProcess, o.Timeout * 1000, CancellationTokenSource.Token)
                                     .Result)
                                 {
@@ -45,17 +51,20 @@ namespace FocLauncher.AppUpdater
 
                     if (o.Update)
                     {
+                        Console.WriteLine("Updating...");
                         try
                         {
-
+                            Console.WriteLine("Deserializing Payload");
+                            var updateItems = JsonConvert.DeserializeObject<List<LauncherUpdaterItem>>(Base64Decode(o.Payload));
+                            Console.WriteLine("Payload Deserialized");
+                            var updater = new ExternalUpdater(updateItems);
+                            updateResult = updater.Run();
+                            Console.WriteLine($"Updated with result: {updateResult}");
                         }
                         catch (Exception e)
                         {
                             Console.WriteLine(e);
                             throw;
-                        }
-                        finally
-                        {
                         }
                     }
 
@@ -63,10 +72,13 @@ namespace FocLauncher.AppUpdater
                     if (!File.Exists(launcher))
                         throw new FileNotFoundException("The launcher executable was not found.", launcher);
 
-                    var launcherStartInfo = new ProcessStartInfo(launcher);
+                    var launcherStartInfo = new ProcessStartInfo(launcher) {Arguments = updateResult.ToString()};
                     using var process = new Process {StartInfo = launcherStartInfo};
 
                     Console.WriteLine($"Starting {launcher}");
+#if DEBUG
+                    Console.ReadKey();
+#endif
                     process.Start();
                 });
             }
@@ -85,6 +97,12 @@ namespace FocLauncher.AppUpdater
         {
             var processTask = Task.Run(() => process.WaitForExit(timeout), token);
             return await Task.WhenAny(Task.Delay(timeout, token), processTask) == processTask && processTask.Result;
+        }
+
+        private static string Base64Decode(string base64EncodedData)
+        {
+            var base64EncodedBytes = System.Convert.FromBase64String(base64EncodedData);
+            return System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
         }
     }
 }

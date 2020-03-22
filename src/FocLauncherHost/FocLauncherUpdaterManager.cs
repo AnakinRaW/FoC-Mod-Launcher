@@ -6,9 +6,11 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FocLauncher;
+using FocLauncher.Shared;
 using FocLauncherHost.Properties;
 using FocLauncherHost.Update.UpdateCatalog;
 using FocLauncherHost.Utilities;
+using Newtonsoft.Json;
 using TaskBasedUpdater;
 using TaskBasedUpdater.Component;
 using TaskBasedUpdater.Configuration;
@@ -77,6 +79,14 @@ namespace FocLauncherHost
                 ExecutablePath = Environment.GetCommandLineArgs()[0],
                 Update = components != null && components.Any()
             };
+
+            if (options.Update && components != null)
+            {
+                var output = JsonConvert.SerializeObject(GetUpdaterItems(components));
+                options.Payload = Base64Encode(output);
+            }
+
+            
             var args = options.Unparse();
             Logger.Debug($"Created restart options: {args}");
             return options;
@@ -178,6 +188,40 @@ namespace FocLauncherHost
         private static IEnumerable<ILockingProcessInfo> WithoutProcess(IEnumerable<ILockingProcessInfo> processes, int processId)
         {
             return processes.Where(x => !x.Id.Equals(processId));
+        }
+
+        private static IEnumerable<LauncherUpdaterItem> GetUpdaterItems(IEnumerable<IComponent> components)
+        {
+            if (components is null)
+                throw new ArgumentNullException(nameof(components));
+            foreach (var component in components)
+            {
+                var item = new LauncherUpdaterItem();
+                switch (component.RequiredAction)
+                {
+                    case ComponentAction.Keep:
+                        continue;
+                    case ComponentAction.Delete:
+                        item.File = component.GetFilePath();
+                        item.Destination = null;
+                        break;
+                    case ComponentAction.Update:
+                        ComponentDownloadPathStorage.Instance.TryGetValue(component, out var file);
+                        item.File = file;
+                        item.Destination = component.GetFilePath();
+                        break;
+                }
+
+                BackupManager.Instance.TryGetValue(component, out var backup);
+                item.Backup = backup;
+                yield return item;
+            }
+        }
+
+        private static string Base64Encode(string plainText)
+        {
+            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
+            return Convert.ToBase64String(plainTextBytes);
         }
     }
 }

@@ -65,6 +65,15 @@
     <Resource Include="Resources\Fonts\EaW-bold.ttf" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\FocLauncher.Shared\ExternalUpdaterResult.cs">
+      <Link>Shared\ExternalUpdaterResult.cs</Link>
+    </Compile>
+    <Compile Include="..\FocLauncher.Shared\LauncherRestartOptions.cs">
+      <Link>Shared\LauncherRestartOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\FocLauncher.Shared\LauncherUpdateItem.cs">
+      <Link>Shared\LauncherUpdateItem.cs</Link>
+    </Compile>
     <Compile Include="Controls\RestartElevatedWindow.xaml.cs">
       <DependentUpon>RestartElevatedWindow.xaml</DependentUpon>
     </Compile>
@@ -88,7 +97,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="FocLauncherUpdaterManager.cs" />
-    <Compile Include="LauncherRestartOptions.cs" />
+    <Compile Include="Shared\LauncherRestartOptions_Interface.cs" />
     <Compile Include="Update\UpdateCatalog\DependencyHelper.cs" />
     <Compile Include="Update\UpdateCatalog\Dependency.cs" />
     <Compile Include="Update\UpdateCatalog\InstallLocation.cs" />
@@ -153,10 +162,6 @@
       <Project>{511EA4F6-7C7A-4242-9986-16F28F126D11}</Project>
       <Name>FocLauncher</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TaskBasedUpdater.Elevator\TaskBasedUpdater.Elevator.csproj">
-      <Project>{b10160b6-ed51-48b7-a45d-637157d656ab}</Project>
-      <Name>TaskBasedUpdater.Elevator</Name>
-    </ProjectReference>
     <ProjectReference Include="..\TaskBasedUpdater\TaskBasedUpdater.csproj">
       <Project>{0855d868-8864-47a4-aad2-d89056ad536f}</Project>
       <Name>TaskBasedUpdater</Name>
@@ -199,6 +204,9 @@
     <PackageReference Include="dnlib">
       <Version>3.3.1</Version>
     </PackageReference>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>12.0.3</Version>
+    </PackageReference>
     <PackageReference Include="NLog">
       <Version>4.6.8</Version>
     </PackageReference>
@@ -215,5 +223,6 @@
   <ItemGroup>
     <Resource Include="Resources\senat.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
