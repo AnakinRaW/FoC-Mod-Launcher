@@ -48,8 +48,7 @@ namespace FocLauncherHost
             try
             {
                 await AssemblyExtractor.WriteNecessaryAssembliesToDiskAsync(LauncherConstants.ApplicationBasePath,
-                    "FocLauncher.dll", "FocLauncher.Theming.dll", 
-                    LauncherConstants.ElevatorFileName, LauncherConstants.UpdaterFileName);
+                    "FocLauncher.dll", "FocLauncher.Theming.dll", LauncherConstants.UpdaterFileName);
 
                 Task.Delay(WaitSplashDelay).ContinueWith(async _ => await ShowMainWindowAsync(), default,
                     TaskContinuationOptions.None, TaskScheduler.FromCurrentSynchronizationContext()).Forget();
