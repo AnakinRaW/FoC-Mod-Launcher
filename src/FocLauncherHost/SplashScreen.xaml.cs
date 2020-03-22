@@ -1,12 +1,60 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media.Animation;
-using FocLauncher.Threading;
+using FocLauncher.Game;
 
 namespace FocLauncherHost
 {
-    public partial class SplashScreen
+    public partial class SplashScreen : INotifyPropertyChanged
     {
+        private bool _isProgressVisible;
+        private string _progressText;
+        private bool _cancelable = true;
+
+        private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+
+        public CancellationToken CancellationToken => _cancellationTokenSource.Token;
+
+        public bool IsProgressVisible
+        {
+            get => _isProgressVisible;
+            set
+            {
+                if (value == _isProgressVisible)
+                    return;
+                _isProgressVisible = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string ProgressText
+        {
+            get => _progressText;
+            set
+            {
+                if (value.Equals(_progressText))
+                    return;
+                _progressText = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool Cancelable
+        {
+            get => _cancelable;
+            set
+            {
+                if (value == _cancelable)
+                    return;
+                _cancelable = value;
+                OnPropertyChanged();
+            }
+        }
+
         public SplashScreen()
         {
             InitializeComponent();
@@ -15,7 +63,7 @@ namespace FocLauncherHost
         public Task HideAnimationAsync()
         {
             var storyboard = FindResource("HideAnimation") as Storyboard;
-            System.Threading.Tasks.TaskCompletionSource<bool> tcs = new TaskCompletionSource<bool>();
+            var tcs = new TaskCompletionSource<bool>();
             if (storyboard == null)
                 tcs.SetException(new ArgumentNullException());
             else
@@ -29,6 +77,19 @@ namespace FocLauncherHost
                 storyboard.Begin(this);
             }
             return tcs.Task;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void OnCancel(object sender, RoutedEventArgs e)
+        {
+            if (_cancelable)
+                _cancellationTokenSource.Cancel();
         }
     }
 }

@@ -25,8 +25,6 @@ namespace FocLauncherHost
         private readonly AsyncManualResetEvent _canCloseApplicationEvent = new AsyncManualResetEvent(false, true);
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        private bool _progressVisible;
-
         private static readonly TimeSpan WaitSplashDelay = TimeSpan.FromSeconds(2);
         private static readonly TimeSpan WaitProgressDelay = TimeSpan.FromSeconds(WaitSplashDelay.Seconds + 2);
 
@@ -77,11 +75,10 @@ namespace FocLauncherHost
 
                 await ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
                 {
-                    //SetWhenWaitDialogIsShownAsync(WaitProgressDelay, session.UserCancellationToken).Forget();
-                    //var cts = CancellationTokenSource.CreateLinkedTokenSource(session.UserCancellationToken);
-
-                    var cts = new CancellationTokenSource();
-
+                    SplashScreen.ProgressText = "Please wait while the launcher is downloading an update.";
+                    SetWhenWaitDialogIsShownAsync(WaitProgressDelay, SplashScreen.CancellationToken).Forget();
+                    var cts = CancellationTokenSource.CreateLinkedTokenSource(SplashScreen.CancellationToken);
+                    
                     UpdateInformation updateInformation = null;
                     try
                     {
@@ -134,29 +131,25 @@ namespace FocLauncherHost
             await Task.Delay(delay, token);
             if (token.IsCancellationRequested)
                 return;
-            _progressVisible = true;
+            SplashScreen.IsProgressVisible = true;
         }
 
         private void ReportUpdateResult(UpdateInformation updateInformation)
         {
             if (updateInformation != null)
             {
-                if (updateInformation.RequiresUserNotification && _progressVisible 
+                if (updateInformation.RequiresUserNotification && SplashScreen.IsProgressVisible
 #if DEBUG
                    || true
 #endif
                     )
                 {
+                    SplashScreen.Cancelable = false;
                     MessageBox.Show($"Updating finished with result: {updateInformation.Result}\r\n" +
                                     $"Message: {updateInformation.Message}", "FoC Launcher");
                 }
                 
             }
-        }
-
-        private void OnUserCancelled()
-        {
-            // This runs before the exception is getting caught.
         }
 
         private async Task WaitAndShutdownAsync()
@@ -176,10 +169,11 @@ namespace FocLauncherHost
         private async Task HideSplashScreenAnimatedAsync()
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-            if (MainWindow is SplashScreen splashScreen && splashScreen.IsVisible)
+            if (SplashScreen.IsVisible)
             {
+                SplashScreen.IsProgressVisible = false;
                 await Task.Delay(500);
-                await splashScreen.HideAnimationAsync();
+                await SplashScreen.HideAnimationAsync();
             }
         }
 
