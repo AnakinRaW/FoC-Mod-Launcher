@@ -2,7 +2,7 @@
 
 namespace FocLauncher.Shared
 {
-    public partial class LauncherRestartOptions
+    internal partial class LauncherRestartOptions
     {
         [Option('p', "pid", Required = false, HelpText = "The PID of the process to wait until terminated.")]
         public int? Pid { get; set; }
@@ -10,8 +10,11 @@ namespace FocLauncher.Shared
         [Option('t', "timeout", Required = false, HelpText = "The maximum time in seconds to wait for the specified process to terminate.", Default = 10)]
         public int Timeout { get; set; }
 
-        [Option('l', "location", Required = true, HelpText = "The absolute path of the Foc Launcher.exe file.")]
+        [Option('s', "startProcess", Required = true, HelpText = "The absolute path of the Foc Launcher.exe file.")]
         public string ExecutablePath { get; set; }
+
+        [Option('l', "logfile", Required = false, HelpText = "The absolute path of the log file to use")]
+        public string? LogFile { get; set; }
 
         [Option('u', "update", Required = false, HelpText = "Tell the application to run the update procedure.")]
         public bool Update { get; set; }

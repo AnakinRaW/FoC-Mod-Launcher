@@ -8,6 +8,8 @@
 
         string ExecutablePath { get; set; }
 
+        string? LogFile { get; set; }
+
         string Unparse();
     }
 }

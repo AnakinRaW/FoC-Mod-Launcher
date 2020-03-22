@@ -10,6 +10,7 @@ namespace FocLauncher
 
         public const string ElevatorFileName = "FocLauncher Elevator.exe";
         public const string UpdaterFileName = "FocLauncher.AppUpdater.exe";
+        public const string LogFileName = "FocLauncherLog.txt";
 
         // TODO: Get from Assembly
         public const string ProductName = "FoC-Launcher";
@@ -23,5 +24,6 @@ namespace FocLauncher
 
         public static string ElevatorPath => Path.Combine(ApplicationBasePath, ElevatorFileName);
         public static string UpdaterPath => Path.Combine(ApplicationBasePath, UpdaterFileName);
+        public static string LogFilePath => Path.Combine(ApplicationBasePath, LogFileName);
     }
 }

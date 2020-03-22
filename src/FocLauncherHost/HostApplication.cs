@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -50,6 +54,8 @@ namespace FocLauncherHost
                 await AssemblyExtractor.WriteNecessaryAssembliesToDiskAsync(LauncherConstants.ApplicationBasePath,
                     "FocLauncher.dll", "FocLauncher.Theming.dll", LauncherConstants.UpdaterFileName);
 
+                LogInstalledAssemblies();
+
                 Task.Delay(WaitSplashDelay).ContinueWith(async _ => await ShowMainWindowAsync(), default,
                     TaskContinuationOptions.None, TaskScheduler.FromCurrentSynchronizationContext()).Forget();
 
@@ -87,23 +93,6 @@ namespace FocLauncherHost
                     ReportUpdateResult(updateInformation);
                 });
             }
-            //catch (ElevationRequireException)
-            //{
-            //    try
-            //    {
-            //        Elevator.RestartElevated();
-            //    }
-            //    catch (Exception e)
-            //    {
-            //        // The elevation was not accepted by the user
-            //        if (e is Win32Exception && e.HResult == -2147467259)
-            //        {
-            //            MessageBox.Show("The update failed");
-            //            return;
-            //        }
-            //        LogAndShowException(e);
-            //    }
-            //}
             catch (Exception e)
             {
                 LogAndShowException(e);
@@ -112,6 +101,22 @@ namespace FocLauncherHost
             {
                 _canCloseApplicationEvent.Set();
             }
+        }
+
+        private static void LogInstalledAssemblies()
+        {
+            var fileList = new List<string> {Environment.GetCommandLineArgs()[0]};
+            var appBase = new DirectoryInfo(LauncherConstants.ApplicationBasePath);
+            fileList.AddRange(appBase.GetFilesByExtensions(false, ".exe", ".dll").Select(x => x.FullName));
+
+            Logger.Debug("****Installed Files*****");
+            foreach (var file in fileList)
+            {
+                var fileVersion = FileVersionInfo.GetVersionInfo(file).FileVersion;
+                var fileName = Path.GetFileName(file);
+                Logger.Debug($"\tFile: {fileName}, File-Version: {fileVersion}");
+            }
+            Logger.Debug("************************");
         }
 
         private async Task SetWhenWaitDialogIsShownAsync(TimeSpan delay, CancellationToken token)
@@ -124,7 +129,6 @@ namespace FocLauncherHost
 
         private void ReportUpdateResult(UpdateInformation updateInformation)
         {
-
             if (updateInformation != null)
             {
                 if (updateInformation.RequiresUserNotification && _waitWindowShown 

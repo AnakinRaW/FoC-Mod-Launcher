@@ -77,7 +77,8 @@ namespace FocLauncherHost
             {
                 Pid = Process.GetCurrentProcess().Id,
                 ExecutablePath = Environment.GetCommandLineArgs()[0],
-                Update = components != null && components.Any()
+                Update = components != null && components.Any(),
+                LogFile = LauncherConstants.LogFilePath
             };
 
             if (options.Update && components != null)
@@ -150,15 +151,6 @@ namespace FocLauncherHost
             return new PendingHandledResult(HandlePendingComponentsStatus.Restart);
         }
 
-
-        private ILockingProcessManager CreateFromProcessesWithoutSelf(IEnumerable<ILockingProcessInfo> processes)
-        {
-            var processesWithoutSelf = WithoutProcess(processes, Process.GetCurrentProcess().Id);
-            var processManager = LockingProcessManagerFactory.Create();
-            processManager.Register(null, processesWithoutSelf);
-            return processManager;
-        }
-
         protected override Version? GetComponentVersion(IComponent component)
         {
             try
@@ -183,6 +175,14 @@ namespace FocLauncherHost
                 Logger.Debug(e, "Getting catalogs from stream failed with exception. Returning null instead.");
                 return Task.FromResult<Catalogs>(null);
             }
+        }
+
+        private static ILockingProcessManager CreateFromProcessesWithoutSelf(IEnumerable<ILockingProcessInfo> processes)
+        {
+            var processesWithoutSelf = WithoutProcess(processes, Process.GetCurrentProcess().Id);
+            var processManager = LockingProcessManagerFactory.Create();
+            processManager.Register(null, processesWithoutSelf);
+            return processManager;
         }
 
         private static IEnumerable<ILockingProcessInfo> WithoutProcess(IEnumerable<ILockingProcessInfo> processes, int processId)

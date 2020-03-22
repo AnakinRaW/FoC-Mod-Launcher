@@ -31,7 +31,7 @@ namespace TaskBasedUpdater
         
         protected virtual IEnumerable<string> FileDeleteIgnoreFilter => new List<string>();
 
-        protected virtual IEnumerable<string> FileDeleteExtensionFilter => new List<string>{".dll", ".exe"};
+        protected virtual IEnumerable<string> FileDeleteExtensionFilter => new List<string> {".dll", ".exe"};
 
         public IReadOnlyCollection<IComponent> Components => _componentsReadOnly ??= new ReadOnlyCollection<IComponent>(_components);
 
@@ -306,7 +306,7 @@ namespace TaskBasedUpdater
         protected internal void Restart(IReadOnlyList<IComponent> components)
         {
             var options = CreateRestartOptions(components);
-            ApplicationRestartManager.RestartAndExecutePendingComponents(options, components);
+            ApplicationRestartManager.RestartApplication(options);
         }
 
         protected internal async Task<UpdateResult> UpdateAsync(IEnumerable<IComponent> components,

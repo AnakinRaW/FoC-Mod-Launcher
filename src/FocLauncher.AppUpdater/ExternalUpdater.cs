@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using FocLauncher.Shared;
+using NLog;
 
 namespace FocLauncher.AppUpdater
 {
     internal class ExternalUpdater
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         // Layout - Key: File, Value: Backup
         private readonly Dictionary<string, string> _backups;
 
@@ -15,11 +18,9 @@ namespace FocLauncher.AppUpdater
         public ExternalUpdater(IReadOnlyCollection<LauncherUpdaterItem> updaterItems)
         {
             UpdaterItems = updaterItems;
-
             _backups = updaterItems.Where(x => x.Backup != null).ToDictionary(x => x.File, x => x.Backup);
-
-            foreach (var pair in _backups) 
-                Console.WriteLine($"Backup added: {pair}");
+            foreach (var pair in _backups)
+                Logger.Debug($"Backup added: {pair}");
         }
 
         public ExternalUpdaterResult Run()
@@ -28,7 +29,7 @@ namespace FocLauncher.AppUpdater
             {
                 foreach (var item in UpdaterItems)
                 {
-                    Console.WriteLine($"Processing item: {item}");
+                    Logger.Debug($"Processing item: {item}");
                     FileUtilities.MoveFile(item.File, item.Destination, true);
                     Console.ReadKey();
                 }
@@ -36,8 +37,8 @@ namespace FocLauncher.AppUpdater
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Error while updating: {e.Message}");
-                Console.WriteLine("Restore backup");
+                Logger.Error($"Error while updating: {e.Message}");
+                Logger.Debug("Restore backup");
 
                 try
                 {
@@ -47,7 +48,7 @@ namespace FocLauncher.AppUpdater
                 }
                 catch (Exception backupException)
                 {
-                    Console.WriteLine($"Error while restoring backup: {backupException.Message}");
+                    Logger.Error($"Error while restoring backup: {backupException.Message}");
                     return ExternalUpdaterResult.UpdateFailedNoRestore;
                 }
             }
@@ -70,7 +71,7 @@ namespace FocLauncher.AppUpdater
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Cleaning failed with error: {e.Message}");
+                Logger.Error($"Cleaning failed with error: {e.Message}");
             }
         }
     }

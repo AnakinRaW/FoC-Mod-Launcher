@@ -8,11 +8,15 @@ using System.Threading.Tasks;
 using CommandLine;
 using FocLauncher.Shared;
 using Newtonsoft.Json;
+using NLog;
+using NLog.Conditions;
+using NLog.Targets;
 
 namespace FocLauncher.AppUpdater
 {
     internal static class Program
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private static readonly CancellationTokenSource CancellationTokenSource = new CancellationTokenSource();
 
         internal static void Main(string[] args)
@@ -24,6 +28,7 @@ namespace FocLauncher.AppUpdater
                 var parserResult = Parser.Default.ParseArguments<LauncherRestartOptions>(args);
                 parserResult.WithParsed(o =>
                 {
+                    SetLogging(o.LogFile);
                     if (o.Pid.HasValue)
                     {
                         var parentProcess = Process.GetProcesses().FirstOrDefault(x => x.Id == o.Pid.Value);
@@ -31,19 +36,18 @@ namespace FocLauncher.AppUpdater
                         {
                             try
                             {
-                                Console.WriteLine($"Waiting for {parentProcess.ProcessName} to exit...");
+                                Logger.Debug($"Waiting for {parentProcess.ProcessName} to exit...");
                                 if (!WaitForExitAsync(parentProcess, o.Timeout * 1000, CancellationTokenSource.Token)
                                     .Result)
                                 {
-                                    Console.WriteLine(
+                                    Logger.Error(
                                         $"The process '{parentProcess.ProcessName}:{parentProcess.Id}' did not exit within 10 seconds or the user requested cancellation. Aborting elevation.");
                                     return;
                                 }
                             }
                             catch (Exception e)
                             {
-                                Console.WriteLine(
-                                    $"Unable to wait for process '{parentProcess.ProcessName}:{parentProcess.Id}' to terminate: {e.Message}");
+                                Logger.Fatal(e, $"Unable to wait for process '{parentProcess.ProcessName}:{parentProcess.Id}' to terminate: {e.Message}");
                                 throw;
                             }
                         }
@@ -51,19 +55,19 @@ namespace FocLauncher.AppUpdater
 
                     if (o.Update)
                     {
-                        Console.WriteLine("Updating...");
+                        Logger.Info("Updating...");
                         try
                         {
-                            Console.WriteLine("Deserializing Payload");
+                            Logger.Debug("Deserializing Payload");
                             var updateItems = JsonConvert.DeserializeObject<List<LauncherUpdaterItem>>(Base64Decode(o.Payload));
-                            Console.WriteLine("Payload Deserialized");
+                            Logger.Debug("Payload Deserialized");
                             var updater = new ExternalUpdater(updateItems);
                             updateResult = updater.Run();
-                            Console.WriteLine($"Updated with result: {updateResult}");
+                            Logger.Debug($"Updated with result: {updateResult}");
                         }
                         catch (Exception e)
                         {
-                            Console.WriteLine(e);
+                            Logger.Fatal(e);
                             throw;
                         }
                     }
@@ -72,25 +76,51 @@ namespace FocLauncher.AppUpdater
                     if (!File.Exists(launcher))
                         throw new FileNotFoundException("The launcher executable was not found.", launcher);
 
-                    var launcherStartInfo = new ProcessStartInfo(launcher) {Arguments = updateResult.ToString()};
+                    var launcherStartInfo = new ProcessStartInfo(launcher) {Arguments = ((int) updateResult).ToString()};
                     using var process = new Process {StartInfo = launcherStartInfo};
 
-                    Console.WriteLine($"Starting {launcher}");
-#if DEBUG
-                    Console.ReadKey();
-#endif
+                    Logger.Info($"Starting {launcher}");
                     process.Start();
                 });
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Logger.Fatal(e);
+#if DEBUG
+                Console.WriteLine("Press enter to close!");
                 Console.ReadKey();
+#endif
             }
             finally
             {
                 Environment.Exit(0);
             }
+        }
+
+        private static void SetLogging(string? logfile)
+        {
+            var config = new NLog.Config.LoggingConfiguration();
+
+            Target logfileTarget = null;
+            if (!string.IsNullOrEmpty(logfile) && File.Exists(logfile))
+                logfileTarget = new FileTarget("logfile") { FileName = logfile };
+#if DEBUG
+            if (logfileTarget != null)
+                config.AddRule(LogLevel.Trace, LogLevel.Fatal, logfileTarget);
+            var consoleTarget = new ColoredConsoleTarget();
+            var highlightRule = new ConsoleRowHighlightingRule
+            {
+                Condition = ConditionParser.ParseExpression("level == LogLevel.Info"),
+                ForegroundColor = ConsoleOutputColor.Green
+            };
+            consoleTarget.RowHighlightingRules.Add(highlightRule);
+            
+            config.AddRule(LogLevel.Trace, LogLevel.Fatal, consoleTarget);
+#else
+            if (logfileTarget != null)
+                config.AddRule(LogLevel.Info, LogLevel.Fatal, logfileTarget);
+#endif
+            LogManager.Configuration = config;
         }
 
         private static async Task<bool> WaitForExitAsync(Process process, int timeout, CancellationToken token)

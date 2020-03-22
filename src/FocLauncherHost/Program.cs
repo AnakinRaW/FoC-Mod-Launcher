@@ -2,7 +2,9 @@
 using System.IO;
 using System.Security.AccessControl;
 using System.Windows;
+using System.Windows.Input;
 using FocLauncher;
+using FocLauncher.Shared;
 using FocLauncherHost.Controls;
 using Microsoft.Win32;
 using NLog;
@@ -17,7 +19,7 @@ namespace FocLauncherHost
 
         [STAThread]
         [LoaderOptimization(LoaderOptimization.MultiDomainHost)]
-        public static void Main()
+        public static void Main(string[] args)
         {
             if (!Get48FromRegistry())
                 Environment.Exit(0);
@@ -25,15 +27,27 @@ namespace FocLauncherHost
             // Gotta catch 'em all.
             AppDomain.CurrentDomain.UnhandledException += OnUnhandledExceptionReceived;
 
-            SetAndInitApplicationBasePath();
-            NLogUtils.DeleteOldLogFile();
+            var startOption = ExternalUpdaterResult.NoUpdate;
+            if (args.Length >= 1)
+            {
+                var argument = args[0];
+                if (int.TryParse(argument, out var value) && Enum.IsDefined(typeof(ExternalUpdaterResult), value)) 
+                    startOption = (ExternalUpdaterResult) value;
+            }
+                
+            SetAndInitApplicationBasePath(startOption);
+            if (startOption == ExternalUpdaterResult.NoUpdate)
+                NLogUtils.DeleteOldLogFile();
             NLogUtils.SetLoggingForAppDomain();
+
+            Logger.Debug($"Started FoC Launcher with arguments: {startOption}");
+
             ShowSplashScreen();
             StartLauncher();
             LogManager.Shutdown();
         }
 
-        private static void SetAndInitApplicationBasePath()
+        private static void SetAndInitApplicationBasePath(ExternalUpdaterResult launchOption)
         {
             var appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             if (!PathUtilities.UserHasDirectoryAccessRights(appDataPath, FileSystemRights.CreateDirectories))
@@ -44,6 +58,10 @@ namespace FocLauncherHost
 
             Environment.SetEnvironmentVariable(LauncherConstants.ApplicationBaseVariable, ApplicationBasePath, EnvironmentVariableTarget.Process);
             Environment.SetEnvironmentVariable(LauncherConstants.ExecutablePathVariable, Directory.GetCurrentDirectory(), EnvironmentVariableTarget.Process);
+
+            if ((launchOption == ExternalUpdaterResult.UpdateFailedNoRestore || (Keyboard.Modifiers & ModifierKeys.Shift) > 0)
+                && Directory.Exists(LauncherConstants.ApplicationBasePath))
+                Directory.Delete(LauncherConstants.ApplicationBasePath, true);
 
             if (!Directory.Exists(LauncherConstants.ApplicationBasePath))
                 Directory.CreateDirectory(LauncherConstants.ApplicationBasePath);

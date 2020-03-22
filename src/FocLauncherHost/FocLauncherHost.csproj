@@ -104,7 +104,8 @@
     <Compile Include="Update\UpdateCatalog\ProductCatalog.cs" />
     <Compile Include="Update\UpdateCatalog\Catalogs.cs" />
     <Compile Include="Utilities\AssemblyExtractor.cs" />
-    <Compile Include="Utilities\ILockingProcessInfoTextConverter.cs" />
+    <Compile Include="Utilities\FileExtensions.cs" />
+    <Compile Include="Utilities\LockingProcessInfoTextConverter.cs" />
     <Compile Include="Utilities\NullToVisibilityConverter.cs" />
     <Compile Include="Utilities\StreamExtensions.cs" />
     <Compile Include="Utilities\UrlCombine.cs" />

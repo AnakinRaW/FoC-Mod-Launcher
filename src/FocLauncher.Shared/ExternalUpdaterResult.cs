@@ -1,6 +1,6 @@
 ﻿namespace FocLauncher.Shared
 {
-    public enum ExternalUpdaterResult
+    internal enum ExternalUpdaterResult
     {
         UpdateFailedNoRestore = -2,
         UpdateFailedWithRestore = -1,
