@@ -18,17 +18,19 @@ namespace TaskBasedUpdater.Restart
 
             if (restartOptions is null)
                 throw new ArgumentNullException(nameof(restartOptions));
-            
-            if (!pendingComponents.Any())
-            {
-                RestartApplication(restartOptions, Elevator.IsProcessElevated);
-            }
-            else
-            {
-                var updaterTool = UpdateConfiguration.Instance.ExternalUpdaterPath;
-                if (string.IsNullOrEmpty(updaterTool) || !File.Exists(updaterTool))
-                    throw new RestartDeniedOrFailedException("External updater tool not found");
-            }
+
+            RestartApplication(restartOptions, Elevator.IsProcessElevated);
+
+            //if (!pendingComponents.Any())
+            //{
+            //    RestartApplication(restartOptions, Elevator.IsProcessElevated);
+            //}
+            //else
+            //{
+            //    var updaterTool = UpdateConfiguration.Instance.ExternalUpdaterPath;
+            //    if (string.IsNullOrEmpty(updaterTool) || !File.Exists(updaterTool))
+            //        throw new RestartDeniedOrFailedException("External updater tool not found");
+            //}
         }
 
         public static void RestartApplication(IRestartOptions restartOptions, bool elevated)
