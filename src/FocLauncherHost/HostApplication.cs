@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using FocLauncher;
+using FocLauncher.Shared;
 using FocLauncher.Threading;
 using FocLauncherHost.Controls;
 using FocLauncherHost.Utilities;
@@ -18,6 +19,7 @@ namespace FocLauncherHost
 {
     public class HostApplication : Application
     {
+        private readonly ExternalUpdaterResult _startOption;
         public const string ServerUrl = "https://raw.githubusercontent.com/AnakinSklavenwalker/FoC-Mod-Launcher/";
 
         private readonly AsyncManualResetEvent _canCloseApplicationEvent = new AsyncManualResetEvent(false, true);
@@ -40,8 +42,14 @@ namespace FocLauncherHost
                 "FocLauncher.Threading.dll", "Microsoft.VisualStudio.Utilities.dll");
         }
 
-        public HostApplication()
+        internal HostApplication() : this(ExternalUpdaterResult.NoUpdate)
         {
+            
+        }
+
+        internal HostApplication(ExternalUpdaterResult startOption)
+        {
+            _startOption = startOption;
             MainWindow = SplashScreen = new SplashScreen();
         }
 
@@ -56,6 +64,9 @@ namespace FocLauncherHost
         {
             try
             {
+                if (_startOption == ExternalUpdaterResult.UpdateSuccess)
+                    return;
+
                 await AssemblyExtractor.WriteNecessaryAssembliesToDiskAsync(LauncherConstants.ApplicationBasePath,
                     "FocLauncher.dll", "FocLauncher.Theming.dll", LauncherConstants.UpdaterFileName);
 

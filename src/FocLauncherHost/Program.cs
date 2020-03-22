@@ -16,6 +16,7 @@ namespace FocLauncherHost
         private static readonly string ApplicationBasePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "FoC Launcher");
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private static ExternalUpdaterResult _startOption;
 
         [STAThread]
         [LoaderOptimization(LoaderOptimization.MultiDomainHost)]
@@ -27,20 +28,20 @@ namespace FocLauncherHost
             // Gotta catch 'em all.
             AppDomain.CurrentDomain.UnhandledException += OnUnhandledExceptionReceived;
 
-            var startOption = ExternalUpdaterResult.NoUpdate;
+            _startOption = ExternalUpdaterResult.NoUpdate;
             if (args.Length >= 1)
             {
                 var argument = args[0];
-                if (int.TryParse(argument, out var value) && Enum.IsDefined(typeof(ExternalUpdaterResult), value)) 
-                    startOption = (ExternalUpdaterResult) value;
+                if (int.TryParse(argument, out var value) && Enum.IsDefined(typeof(ExternalUpdaterResult), value))
+                    _startOption = (ExternalUpdaterResult) value;
             }
                 
-            SetAndInitApplicationBasePath(startOption);
-            if (startOption == ExternalUpdaterResult.NoUpdate)
+            SetAndInitApplicationBasePath(_startOption);
+            if (_startOption == ExternalUpdaterResult.NoUpdate)
                 NLogUtils.DeleteOldLogFile();
             NLogUtils.SetLoggingForAppDomain();
 
-            Logger.Debug($"Started FoC Launcher with arguments: {startOption}");
+            Logger.Debug($"Started FoC Launcher with arguments: {_startOption}");
 
             ShowSplashScreen();
             StartLauncher();
@@ -104,7 +105,7 @@ namespace FocLauncherHost
         {
             NLogUtils.SetLoggingForAppDomain();
             Logger.Info("Starting Splash Screen on new AppDomain");
-            var app = new HostApplication();
+            var app = new HostApplication(_startOption);
             app.ShutdownMode = ShutdownMode.OnExplicitShutdown;
             app.Run();
             app.Shutdown(0);
