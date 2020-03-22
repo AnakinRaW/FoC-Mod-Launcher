@@ -4,7 +4,7 @@
     {
         UpdateFailedNoRestore = -2,
         UpdateFailedWithRestore = -1,
-        UpdateSuccess = 0,
-        NoUpdate = 0
+        NoUpdate = 0,
+        UpdateSuccess = 1,
     }
 }
