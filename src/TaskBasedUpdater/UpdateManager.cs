@@ -117,7 +117,6 @@ namespace TaskBasedUpdater
                         throw;
                     }
 
-
                     await CalculateComponentStatusAsync(cts.Token);
                     await CalculateRemovableComponentsAsync();
 

@@ -214,10 +214,6 @@ namespace TaskBasedUpdater
                 Elevator.Instance.RequestElevation(e, CurrentComponent);
                 return InstallResult.Failure;
             }
-            catch (FileFormatException ex)
-            {
-                // TODO
-            }
             catch (Exception ex)
             {
                 LogFailure(component, ComponentAction.Update, ex.Message);

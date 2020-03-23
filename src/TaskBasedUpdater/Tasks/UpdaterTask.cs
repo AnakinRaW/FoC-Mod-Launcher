@@ -30,7 +30,6 @@ namespace TaskBasedUpdater.Tasks
             GC.SuppressFinalize(this);
         }
 
-        // TODO: Decide return type
         public void Run(CancellationToken token)
         {
             Logger = _logger;
