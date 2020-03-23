@@ -39,7 +39,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <Border Grid.Row="0" Grid.RowSpan="3" Background="#FF2D2D30"/>
+            <Border Grid.Row="0" Grid.RowSpan="3" Background="#FF2D2D30" Opacity=".8"/>
             <TextBlock Grid.Row="1" Text="{Binding ProgressText}" Foreground="#FFF1F1F1"
                        Padding="8,0,8,0" TextTrimming="CharacterEllipsis" TextWrapping="WrapWithOverflow"/>
             <Grid Grid.Row="2">

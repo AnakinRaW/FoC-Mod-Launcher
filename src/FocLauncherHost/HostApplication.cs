@@ -19,26 +19,18 @@ namespace FocLauncherHost
 {
     public class HostApplication : Application
     {
-        private readonly ExternalUpdaterResult _startOption;
         public const string ServerUrl = "https://raw.githubusercontent.com/AnakinSklavenwalker/FoC-Mod-Launcher/";
 
-        private readonly AsyncManualResetEvent _canCloseApplicationEvent = new AsyncManualResetEvent(false, true);
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-
         private static readonly TimeSpan WaitSplashDelay = TimeSpan.FromSeconds(2);
         private static readonly TimeSpan WaitProgressDelay = TimeSpan.FromSeconds(WaitSplashDelay.Seconds + 2);
+
+        private readonly AsyncManualResetEvent _canCloseApplicationEvent = new AsyncManualResetEvent(false, true);
+        private readonly ExternalUpdaterResult _startOption;
 
         internal static ManualResetEvent SplashVisibleResetEvent { get; } = new ManualResetEvent(false);
 
         internal SplashScreen SplashScreen { get; }
-        
-        static HostApplication()
-        {
-            // Since FocLauncher.Threading.dll and Microsoft.VisualStudio.Utilities.dll are used by the WaitWindow AppDomain we need to have them on disk
-            // Make sure not to use async file writing as we need to block the app until necessary assembly are written to disk
-            AssemblyExtractor.WriteNecessaryAssembliesToDisk(LauncherConstants.ApplicationBasePath,
-                "FocLauncher.Threading.dll", "Microsoft.VisualStudio.Utilities.dll");
-        }
 
         internal HostApplication() : this(ExternalUpdaterResult.NoUpdate)
         {
@@ -66,7 +58,11 @@ namespace FocLauncherHost
                     return;
 
                 await AssemblyExtractor.WriteNecessaryAssembliesToDiskAsync(LauncherConstants.ApplicationBasePath,
-                    "FocLauncher.dll", "FocLauncher.Theming.dll", LauncherConstants.UpdaterFileName);
+                    "FocLauncher.dll", 
+                    "FocLauncher.Theming.dll", 
+                    LauncherConstants.UpdaterFileName, 
+                    "FocLauncher.Threading.dll", 
+                    "Microsoft.VisualStudio.Utilities.dll");
 
                 LogInstalledAssemblies();
 
