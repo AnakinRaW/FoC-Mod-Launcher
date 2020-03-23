@@ -16,8 +16,21 @@ namespace FocLauncherHost
         private bool _cancelable = true;
 
         private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+        private bool _isBeta;
 
         public CancellationToken CancellationToken => _cancellationTokenSource.Token;
+
+        public bool IsBeta
+        {
+            get => _isBeta;
+            set
+            {
+                if (value == _isBeta)
+                    return;
+                _isBeta = value;
+                OnPropertyChanged();
+            }
+        }
 
         public bool IsProgressVisible
         {

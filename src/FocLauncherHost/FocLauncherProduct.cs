@@ -15,7 +15,7 @@ namespace FocLauncherHost
         public PreviewType PreviewType { get; private set; }
 
         // TODO: Decide how to get data
-        public bool IsPreviewInstance { get; } = false;
+        public bool IsPreviewInstance { get; } = true;
 
         public static FocLauncherProduct Instance => _instance ??= new FocLauncherProduct();
 

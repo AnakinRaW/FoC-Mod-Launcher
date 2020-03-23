@@ -24,15 +24,18 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <TextBlock Text="FoC Launcher" FontFamily="{StaticResource EaWFont}" HorizontalAlignment="Center" FontSize="32"/>
-        <Image Grid.Row="1" Source="Resources/splash.png" Height="256" Width="256" RenderOptions.EdgeMode="Aliased" 
+        <TextBlock Grid.Row="1" Text="BETA" FontFamily="{StaticResource EaWFont}" HorizontalAlignment="Center" 
+                   FontSize="28" Foreground="Red" Visibility="{Binding IsBeta, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+        <Image Grid.Row="2" Source="Resources/splash.png" Height="256" Width="256" RenderOptions.EdgeMode="Aliased" 
                RenderOptions.BitmapScalingMode="Fant"/>
-        <TextBlock Grid.Row="2" HorizontalAlignment="Right" Text="Icon © Exhumed" FontSize="9"/>
-        <Grid Grid.Row="3" Margin="0,6,0,0"
+        <TextBlock Grid.Row="3" HorizontalAlignment="Right" Text="Icon © Exhumed" FontSize="9"/>
+        <Grid Grid.Row="4" Margin="0,6,0,0"
               Visibility="{Binding IsProgressVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />

@@ -41,6 +41,7 @@ namespace FocLauncherHost
         {
             _startOption = startOption;
             MainWindow = SplashScreen = new SplashScreen();
+            SplashScreen.IsBeta = FocLauncherProduct.Instance.IsPreviewInstance;
         }
 
         protected override void OnStartup(StartupEventArgs e)
@@ -140,6 +141,22 @@ namespace FocLauncherHost
 #endif
                     )
                 {
+                    switch (updateInformation.Result)
+                    {
+                        case UpdateResult.Failed:
+                            SplashScreen.ProgressText = "Update Failed";
+                            break;
+                        case UpdateResult.Success:
+                            SplashScreen.ProgressText = "Update finished";
+                            break;
+                        case UpdateResult.SuccessRestartRequired:
+                            SplashScreen.ProgressText = "Update requires restart";
+                            break;
+                        case UpdateResult.Cancelled:
+                            SplashScreen.ProgressText = "Update cancelled";
+                            break;
+                    }
+
                     SplashScreen.Cancelable = false;
                     MessageBox.Show($"Updating finished with result: {updateInformation.Result}\r\n" +
                                     $"Message: {updateInformation.Message}", "FoC Launcher");
