@@ -17,6 +17,18 @@ namespace FocLauncherHost
         // TODO: Decide how to get data
         public bool IsPreviewInstance { get; } = true;
 
+        public bool IsDebug
+        {
+            get
+            {
+#if DEBUG
+                return true;
+#else
+                return false;
+#endif
+            }
+        }
+
         public static FocLauncherProduct Instance => _instance ??= new FocLauncherProduct();
 
         private FocLauncherProduct()
@@ -29,6 +41,8 @@ namespace FocLauncherHost
             var name = LauncherConstants.ProductName;
             if (IsPreviewInstance && PreviewType != PreviewType.None)
                 name = $"{name}-{PreviewType}";
+            if (IsDebug)
+                name = $"{name}-Debug";
             return name;
         }
     }

@@ -32,13 +32,5 @@ namespace FocLauncherHost.Update.UpdateCatalog
             var parser = new XmlObjectParser<Catalogs>(stream);
             return await Task.FromResult(parser.Parse());
         }
-
-        internal ProductCatalog? GetMatchingProduct(IProductInfo product)
-        {
-            if (_products == null || !_products.Any())
-                throw new NotSupportedException("No products to update are found");
-
-            return _products.FirstOrDefault(x => x.Name.Equals(product.Name, StringComparison.InvariantCultureIgnoreCase));
-        }
     }
 }

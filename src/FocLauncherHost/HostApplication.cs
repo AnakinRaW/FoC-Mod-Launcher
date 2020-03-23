@@ -41,7 +41,7 @@ namespace FocLauncherHost
         {
             _startOption = startOption;
             MainWindow = SplashScreen = new SplashScreen();
-            SplashScreen.IsBeta = FocLauncherProduct.Instance.IsPreviewInstance;
+            SplashScreen.Product = FocLauncherProduct.Instance;
         }
 
         protected override void OnStartup(StartupEventArgs e)
@@ -135,11 +135,7 @@ namespace FocLauncherHost
         {
             if (updateInformation != null)
             {
-                if (updateInformation.RequiresUserNotification && SplashScreen.IsProgressVisible
-#if DEBUG
-                   || true
-#endif
-                    )
+                if (updateInformation.RequiresUserNotification && SplashScreen.IsProgressVisible || FocLauncherProduct.Instance.IsDebug)
                 {
                     switch (updateInformation.Result)
                     {

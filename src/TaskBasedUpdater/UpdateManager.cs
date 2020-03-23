@@ -123,8 +123,11 @@ namespace TaskBasedUpdater
 
                     cts.Token.ThrowIfCancellationRequested();
 
-                    if (!Components.Any() && !RemovableComponents.Any())
-                        throw new UpdaterException("Unable to check dependencies if update is available");
+                    if (!RemovableComponents.Any() && (!Components.Any() || Components.All(x => x.RequiredAction == ComponentAction.Keep)))
+                    {
+                        NoUpdateInformation(updateInformation);
+                        return updateInformation;
+                    }
 
                     await UpdateAsync(cts.Token);
 
@@ -137,7 +140,6 @@ namespace TaskBasedUpdater
                         case HandlePendingComponentsStatus.Restart:
                             finalCleanUp = false;
                             Restart(pc.ToList());
-                            SuccessInformation(updateInformation, "Restart in progress", true);
                             break;
                         default:
                             SuccessInformation(updateInformation, "Success");
@@ -164,6 +166,7 @@ namespace TaskBasedUpdater
             }
             catch (RestoreFailedException e)
             {
+                // TODO: When the restore fails we should restart and create the default state 
                 ErrorInformation(updateInformation, e.Message);
             }
             catch (ElevationRequireException e)
@@ -237,15 +240,23 @@ namespace TaskBasedUpdater
             }
         }
 
-        protected static void SuccessInformation(UpdateInformation updateInformation, string message, bool requiresRestart = false, bool userNotification = false)
+        protected static void NoUpdateInformation(UpdateInformation updateInformation, bool userNotification = false)
         {
-            Logger.Debug("Operation was completed sucessfully");
+            Logger.Debug("No update was required");
+            updateInformation.Result = UpdateResult.NoUpdate;
+            updateInformation.Message = "No update was required";
+            updateInformation.RequiresUserNotification = userNotification;
+        }
+
+        protected static void SuccessInformation(UpdateInformation updateInformation, string message, bool requiresRestart = false, bool userNotification = true)
+        {
+            Logger.Debug("Update was completed sucessfully");
             updateInformation.Result = requiresRestart ? UpdateResult.SuccessRestartRequired : UpdateResult.Success;
             updateInformation.Message = message;
             updateInformation.RequiresUserNotification = userNotification;
         }
 
-        protected static void ErrorInformation(UpdateInformation updateInformation, string errorMessage, bool userNotification = false)
+        protected static void ErrorInformation(UpdateInformation updateInformation, string errorMessage, bool userNotification = true)
         {
             Logger.Debug($"Operation failed with message: {errorMessage}");
             updateInformation.Result = UpdateResult.Failed;
@@ -437,7 +448,7 @@ namespace TaskBasedUpdater
 
                 if (!PermitElevationRequest())
                 {
-                    ErrorInformation(updateInformation, "The update was stopped because the process needed to be elevated");
+                    ErrorInformation(updateInformation, "The update was stopped because the process needs to be elevated");
                     return;
                 }
 

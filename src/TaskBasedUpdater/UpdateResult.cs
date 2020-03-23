@@ -5,6 +5,7 @@
         Failed,
         Success,
         SuccessRestartRequired,
-        Cancelled
+        Cancelled,
+        NoUpdate
     }
 }

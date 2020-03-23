@@ -31,7 +31,6 @@ namespace FocLauncher.AppUpdater
                 {
                     Logger.Debug($"Processing item: {item}");
                     FileUtilities.MoveFile(item.File, item.Destination, true);
-                    Console.ReadKey();
                 }
                 return ExternalUpdaterResult.UpdateSuccess;
             }

@@ -20,9 +20,10 @@ namespace FocLauncherHost
 {
     internal class FocLauncherUpdaterManager : UpdateManager
     {
-        protected override IEnumerable<string> FileDeleteIgnoreFilter => new List<string> { ".Theme.dll" };
+        protected override IEnumerable<string> FileDeleteIgnoreFilter => new List<string> {".Theme.dll"};
 
-        public FocLauncherUpdaterManager(string versionMetadataPath) : base(FocLauncherProduct.Instance, versionMetadataPath)
+        public FocLauncherUpdaterManager(string versionMetadataPath) : base(FocLauncherProduct.Instance,
+            versionMetadataPath)
         {
             SetUpdateConfiguration();
         }
@@ -37,7 +38,8 @@ namespace FocLauncherHost
             UpdateConfiguration.Instance.ExternalUpdaterPath = LauncherConstants.UpdaterPath;
             UpdateConfiguration.Instance.ExternalElevatorPath = LauncherConstants.ElevatorPath;
             UpdateConfiguration.Instance.RequiredElevationCancelsUpdate = true;
-            UpdateConfiguration.Instance.AlternativeDownloadPath = Path.Combine(LauncherConstants.ApplicationBasePath, "Downloads");
+            UpdateConfiguration.Instance.AlternativeDownloadPath =
+                Path.Combine(LauncherConstants.ApplicationBasePath, "Downloads");
         }
 
         protected override bool FileCanBeDeleted(FileInfo file)
@@ -46,7 +48,8 @@ namespace FocLauncherHost
                 file.Name.Equals(x.Name) && x.Destination.Equals(LauncherConstants.ApplicationBasePath));
         }
 
-        protected override async Task<IEnumerable<IComponent>> GetCatalogComponentsAsync(Stream catalogStream, CancellationToken token)
+        protected override async Task<IEnumerable<IComponent>> GetCatalogComponentsAsync(Stream catalogStream,
+            CancellationToken token)
         {
             token.ThrowIfCancellationRequested();
 
@@ -54,16 +57,17 @@ namespace FocLauncherHost
             if (products is null)
                 throw new UpdaterException("Failed to deserialize metadata stream. Incompatible version?");
 
-            var product = products.GetMatchingProduct(Product);
+            var product = GetCatalog(products);
             if (product is null)
                 throw new UpdaterException("No products to update are found");
 
             var result = new HashSet<IComponent>(ComponentIdentityComparer.Default);
-            foreach (var component in product.Dependencies.Select(DependencyHelper.DependencyToComponent).Where(component => component != null))
+            foreach (var component in product.Dependencies.Select(DependencyHelper.DependencyToComponent)
+                .Where(component => component != null))
                 result.Add(component);
             return result;
         }
-        
+
         protected override async Task<bool> ValidateCatalogStreamAsync(Stream inputStream)
         {
             var schemeStream = Resources.UpdateValidator.ToStream();
@@ -161,6 +165,15 @@ namespace FocLauncherHost
             {
                 return null;
             }
+        }
+
+        private ProductCatalog GetCatalog(Catalogs catalogs)
+        {
+            if (catalogs?.Products is null || !catalogs.Products.Any())
+                throw new NotSupportedException("No products to update are found");
+
+            return catalogs.Products.FirstOrDefault(x =>
+                x.Name.Equals(Product.Name, StringComparison.InvariantCultureIgnoreCase));
         }
 
         private static Task<Catalogs> TryGetProductFromStreamAsync(Stream stream)
