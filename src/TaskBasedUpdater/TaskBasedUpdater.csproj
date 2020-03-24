@@ -111,6 +111,7 @@
     <Compile Include="Restart\ApplicationStatus.cs" />
     <Compile Include="Restart\ApplicationType.cs" />
     <Compile Include="Restart\IRestartOptions.cs" />
+    <Compile Include="Restart\IRestoreOptions.cs" />
     <Compile Include="Restart\IUpdateOptions.cs" />
     <Compile Include="Restart\PendingHandledResult.cs" />
     <Compile Include="Restart\HandlePendingComponentsStatus.cs" />
