@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 
-namespace FocLauncherHost.Controls
+namespace FocLauncherHost.Dialogs
 {
     public partial class RestartElevatedWindow : INotifyPropertyChanged
     {

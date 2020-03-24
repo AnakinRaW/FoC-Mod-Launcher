@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
 
-namespace FocLauncherHost.Controls
+namespace FocLauncherHost.Dialogs
 {
     public class WindowHost : UserControl
     {

@@ -7,7 +7,7 @@ using System.Text;
 using System.Windows;
 using Microsoft.Win32;
 
-namespace FocLauncherHost.Controls
+namespace FocLauncherHost.Dialogs
 {
     public partial class ExceptionWindow : INotifyPropertyChanged
     {

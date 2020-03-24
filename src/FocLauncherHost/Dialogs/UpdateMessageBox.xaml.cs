@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using TaskBasedUpdater.Restart;
 
-namespace FocLauncherHost.Controls
+namespace FocLauncherHost.Dialogs
 {
     public partial class UpdateMessageBox : INotifyPropertyChanged
     {

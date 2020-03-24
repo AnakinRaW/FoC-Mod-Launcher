@@ -74,19 +74,22 @@
     <Compile Include="..\FocLauncher.Shared\LauncherUpdateItem.cs">
       <Link>Shared\LauncherUpdateItem.cs</Link>
     </Compile>
-    <Compile Include="Controls\RestartElevatedWindow.xaml.cs">
+    <Compile Include="Dialogs\RestartElevatedWindow.xaml.cs">
       <DependentUpon>RestartElevatedWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\UpdateMessageBox.xaml.cs">
+    <Compile Include="Dialogs\RestoreDialog.xaml.cs">
+      <DependentUpon>RestoreDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\UpdateMessageBox.xaml.cs">
       <DependentUpon>UpdateMessageBox.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\WindowHost.cs" />
+    <Compile Include="Dialogs\WindowHost.cs" />
     <Compile Include="FocLauncherProduct.cs" />
     <Compile Include="LauncherRestartManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="HostApplication.cs" />
     <Compile Include="ExceptionHandling\ExceptionToTextConverter.cs" />
-    <Compile Include="Controls\ExceptionWindow.xaml.cs">
+    <Compile Include="Dialogs\ExceptionWindow.xaml.cs">
       <DependentUpon>ExceptionWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ExceptionHandling\StackTraceToShortMessageConverter.cs" />
@@ -116,15 +119,19 @@
     <Compile Include="Utilities\XmlValidator.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Controls\ExceptionWindow.xaml">
+    <Page Include="Dialogs\ExceptionWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\RestartElevatedWindow.xaml">
+    <Page Include="Dialogs\RestartElevatedWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Controls\UpdateMessageBox.xaml">
+    <Page Include="Dialogs\RestoreDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Dialogs\UpdateMessageBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -224,6 +231,8 @@
   <ItemGroup>
     <Resource Include="Resources\senat.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\vader.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
