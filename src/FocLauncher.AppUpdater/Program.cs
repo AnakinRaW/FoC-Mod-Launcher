@@ -80,8 +80,6 @@ namespace FocLauncher.AppUpdater
                     using var process = new Process {StartInfo = launcherStartInfo};
 
                     Logger.Info($"Starting {launcher}");
-
-                    Console.ReadKey();
                     process.Start();
                 });
             }

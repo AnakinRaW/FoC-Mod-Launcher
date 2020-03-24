@@ -33,6 +33,8 @@ namespace TaskBasedUpdater
 
         protected virtual IEnumerable<string> FileDeleteExtensionFilter => new List<string> {".dll", ".exe"};
 
+        public IReadOnlyCollection<IComponent> AllComponents => Components.Union(RemovableComponents).ToList();
+
         public IReadOnlyCollection<IComponent> Components => _componentsReadOnly ??= new ReadOnlyCollection<IComponent>(_components);
 
         public IReadOnlyCollection<IComponent> RemovableComponents => _removableComponentsReadOnly ??= new ReadOnlyCollection<IComponent>(_removableComponents);

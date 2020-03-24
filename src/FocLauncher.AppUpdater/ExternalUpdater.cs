@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using FocLauncher.Shared;
+using Newtonsoft.Json;
 using NLog;
 
 namespace FocLauncher.AppUpdater
@@ -10,15 +11,16 @@ namespace FocLauncher.AppUpdater
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        // Layout - Key: File, Value: Backup
+        // Layout - Key: BackupDestination, Value: Backup
         private readonly Dictionary<string, string> _backups;
 
         private IReadOnlyCollection<LauncherUpdaterItem> UpdaterItems { get; }
         
         public ExternalUpdater(IReadOnlyCollection<LauncherUpdaterItem> updaterItems)
         {
+            Logger.Debug(JsonConvert.SerializeObject(updaterItems, Formatting.Indented));
             UpdaterItems = updaterItems;
-            _backups = updaterItems.Where(x => x.Backup != null).ToDictionary(x => x.File, x => x.Backup);
+            _backups = updaterItems.Where(x => x.BackupDestination != null).ToDictionary(x => x.BackupDestination, x => x.Backup);
             foreach (var pair in _backups)
                 Logger.Debug($"Backup added: {pair}");
         }
@@ -30,6 +32,8 @@ namespace FocLauncher.AppUpdater
                 foreach (var item in UpdaterItems)
                 {
                     Logger.Debug($"Processing item: {item}");
+                    if (string.IsNullOrEmpty(item.File))
+                        continue;
                     FileUtilities.MoveFile(item.File, item.Destination, true);
                 }
                 return ExternalUpdaterResult.UpdateSuccess;
@@ -42,7 +46,13 @@ namespace FocLauncher.AppUpdater
                 try
                 {
                     foreach (var backup in _backups)
-                        FileUtilities.MoveFile(backup.Value, backup.Key, true);
+                    {
+                        Logger.Debug($"Restore item: {backup}");
+                        if (string.IsNullOrEmpty(backup.Value))
+                            FileUtilities.DeleteFileWithRetry(backup.Key);
+                        else
+                            FileUtilities.MoveFile(backup.Value, backup.Key, true);
+                    }
                     return ExternalUpdaterResult.UpdateFailedWithRestore;
                 }
                 catch (Exception backupException)
@@ -63,7 +73,8 @@ namespace FocLauncher.AppUpdater
             {
                 foreach (var item in UpdaterItems)
                 {
-                    FileUtilities.DeleteFileWithRetry(item.File);
+                    if (!string.IsNullOrEmpty(item.File))
+                        FileUtilities.DeleteFileWithRetry(item.File);
                     if (!string.IsNullOrEmpty(item.Backup))
                         FileUtilities.DeleteFileWithRetry(item.Backup);
                 }

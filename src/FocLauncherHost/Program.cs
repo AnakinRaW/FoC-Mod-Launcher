@@ -60,6 +60,8 @@ namespace FocLauncherHost
             Environment.SetEnvironmentVariable(LauncherConstants.ApplicationBaseVariable, ApplicationBasePath, EnvironmentVariableTarget.Process);
             Environment.SetEnvironmentVariable(LauncherConstants.ExecutablePathVariable, Directory.GetCurrentDirectory(), EnvironmentVariableTarget.Process);
 
+            // TODO: Check if update should be skipped 
+
             if ((launchOption == ExternalUpdaterResult.UpdateFailedNoRestore || (Keyboard.Modifiers & ModifierKeys.Shift) > 0)
                 && Directory.Exists(LauncherConstants.ApplicationBasePath))
                 Directory.Delete(LauncherConstants.ApplicationBasePath, true);

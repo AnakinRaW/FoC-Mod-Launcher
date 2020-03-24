@@ -10,14 +10,14 @@ using TaskBasedUpdater.FileSystem;
 
 namespace TaskBasedUpdater
 {
-    public class BackupManager : IEnumerable<KeyValuePair<IComponent, string>>
+    public class BackupManager : IEnumerable<KeyValuePair<IComponent, string?>>
     {
-        private const string NonExistentSource = "SOURCE_ORIGINALLY_MISSING";
+        //private const string NonExistentSource = "SOURCE_ORIGINALLY_MISSING";
 
         private static BackupManager _instance;
 
         private readonly object _syncObject = new object();
-        private readonly Dictionary<IComponent, string> _backupLookup = new Dictionary<IComponent, string>();
+        private readonly Dictionary<IComponent, string?> _backupLookup = new Dictionary<IComponent, string?>();
 
         public static BackupManager Instance => _instance ??= new BackupManager();
 
@@ -41,7 +41,7 @@ namespace TaskBasedUpdater
             }
             else
             {
-                backupFilePath = NonExistentSource;
+                backupFilePath = null;
             }
             lock (_syncObject)
                 _backupLookup.Add(component, backupFilePath);
@@ -65,7 +65,7 @@ namespace TaskBasedUpdater
 
             try
             {
-                if (backupFile.Equals(NonExistentSource))
+                if (string.IsNullOrEmpty(backupFile))
                 {
                     if (!File.Exists(componentFile))
                         return;
@@ -118,7 +118,7 @@ namespace TaskBasedUpdater
             }
         }
         
-        public bool TryGetValue(IComponent component, out string value)
+        public bool TryGetValue(IComponent component, out string? value)
         {
             lock (_syncObject)
                 return _backupLookup.TryGetValue(component, out value);

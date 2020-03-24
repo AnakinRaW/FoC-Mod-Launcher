@@ -47,6 +47,10 @@ namespace TaskBasedUpdater.Operations
             foreach (var data in files)
             {
                 var file = data.Value;
+                if (file == null)
+                {
+
+                }
                 if (!File.Exists(file)) 
                     continue;
                 var cleanTask = new CleanFileTask(data.Key, file);
@@ -92,7 +96,7 @@ namespace TaskBasedUpdater.Operations
             }
         }
 
-        private static IEnumerable<KeyValuePair<IComponent, string>> GetFiles()
+        private static IEnumerable<KeyValuePair<IComponent, string?>> GetFiles()
         {
             var backupsFiles = BackupManager.Instance;
             var downloadFiles = ComponentDownloadPathStorage.Instance;

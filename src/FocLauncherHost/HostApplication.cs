@@ -58,6 +58,17 @@ namespace FocLauncherHost
                 if (_startOption == ExternalUpdaterResult.UpdateSuccess)
                     return;
 
+                if (_startOption == ExternalUpdaterResult.UpdateFailedWithRestore)
+                {
+                    // TODO: Report that the update failed but restored last state and return
+                    return;
+                }
+
+                if (_startOption == ExternalUpdaterResult.UpdateFailedNoRestore)
+                {
+                    // TODO: Report that the update failed and restored whole application
+                }
+
                 await AssemblyExtractor.WriteNecessaryAssembliesToDiskAsync(LauncherConstants.ApplicationBasePath,
                     "FocLauncher.dll", 
                     "FocLauncher.Theming.dll", 
@@ -66,6 +77,8 @@ namespace FocLauncherHost
                     "Microsoft.VisualStudio.Utilities.dll");
 
                 LogInstalledAssemblies();
+
+                // TODO: Check if update shall be skipped
 
                 Task.Delay(WaitSplashDelay).ContinueWith(async _ => await ShowMainWindowAsync(), default,
                     TaskContinuationOptions.None, TaskScheduler.FromCurrentSynchronizationContext()).Forget();
@@ -120,7 +133,6 @@ namespace FocLauncherHost
                 var fileName = Path.GetFileName(file);
                 Logger.Debug($"\tFile: {fileName}, File-Version: {fileVersion}");
             }
-            Logger.Debug("************************");
         }
 
         private async Task SetWhenWaitDialogIsShownAsync(TimeSpan delay, CancellationToken token)

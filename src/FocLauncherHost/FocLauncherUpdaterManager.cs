@@ -224,32 +224,48 @@ namespace FocLauncherHost
             return processes.Where(x => !x.Id.Equals(processId));
         }
 
-        private static IEnumerable<LauncherUpdaterItem> GetUpdaterItems(IEnumerable<IComponent> components)
+        private IEnumerable<LauncherUpdaterItem> GetUpdaterItems(IEnumerable<IComponent> components)
         {
             if (components is null)
                 throw new ArgumentNullException(nameof(components));
-            foreach (var component in components)
+
+            var pendingComponents = components.ToList();
+            foreach (var pendingComponent in pendingComponents)
             {
                 var item = new LauncherUpdaterItem();
-                switch (component.RequiredAction)
+                var componentFilePath = pendingComponent.GetFilePath();
+                switch (pendingComponent.RequiredAction)
                 {
                     case ComponentAction.Keep:
                         continue;
                     case ComponentAction.Delete:
-                        item.File = component.GetFilePath();
+                        item.File = componentFilePath;
                         item.Destination = null;
                         break;
                     case ComponentAction.Update:
-                        ComponentDownloadPathStorage.Instance.TryGetValue(component, out var file);
+                        ComponentDownloadPathStorage.Instance.TryGetValue(pendingComponent, out var file);
                         item.File = file;
-                        item.Destination = component.GetFilePath();
+                        item.Destination = componentFilePath;
                         break;
                 }
-
-                BackupManager.Instance.TryGetValue(component, out var backup);
+                item.BackupDestination = componentFilePath;
+                BackupManager.Instance.TryGetValue(pendingComponent, out var backup);
                 item.Backup = backup;
                 yield return item;
             }
+
+            var completedComponents = AllComponents.Except(pendingComponents).ToList();
+            foreach (var completedComponent in completedComponents)
+            {
+                if (completedComponent.RequiredAction == ComponentAction.Keep)
+                    continue;
+                var item = new LauncherUpdaterItem {BackupDestination = completedComponent.GetFilePath()};
+                BackupManager.Instance.TryGetValue(completedComponent, out var backup);
+                if (!string.IsNullOrEmpty(backup))
+                    item.Backup = backup;
+                yield return item;
+            }
+
         }
 
         private static string Base64Encode(string plainText)
