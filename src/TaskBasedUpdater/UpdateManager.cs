@@ -154,6 +154,8 @@ namespace TaskBasedUpdater
                         ErrorInformation(updateInformation, e.TryGetWrappedException()?.Message);
                     else if (e is UpdaterException)
                         ErrorInformation(updateInformation, e.Message);
+                    else if (e.IsExceptionType<ElevationRequireException>())
+                        throw;
                     else
                         throwFlag = true;
 
@@ -166,7 +168,7 @@ namespace TaskBasedUpdater
             catch (RestoreFailedException e)
             {
                 // TODO: When the restore fails we should restart and create the default state 
-                ErrorInformation(updateInformation, e.Message);
+                OnRestoreFailed(e, updateInformation);
             }
             catch (ElevationRequireException e)
             {
@@ -175,16 +177,7 @@ namespace TaskBasedUpdater
             finally
             {
                 if (finalCleanUp)
-                {
-                    try
-                    {
-                        new CleanOperation().Run(default);
-                    }
-                    catch (Exception e)
-                    {
-                        Logger.Trace(e, $"Failed clean up: {e.Message}");
-                    }
-                }
+                    await Clean();
             }
 
             return updateInformation;
@@ -227,6 +220,7 @@ namespace TaskBasedUpdater
         {
             try
             {
+                //throw new Exception();
                 BackupManager.Instance.RestoreAllBackups();
             }
             catch (Exception restoreException)
@@ -305,6 +299,24 @@ namespace TaskBasedUpdater
             return false;
         }
 
+        protected virtual void OnRestoreFailed(Exception ex, UpdateInformation updateInformation)
+        {
+            ErrorInformation(updateInformation, ex.Message);
+        }
+
+        protected Task Clean()
+        {
+            try
+            {
+                new CleanOperation().Run();
+            }
+            catch (Exception e)
+            {
+                Logger.Trace(e, $"Failed clean up: {e.Message}");
+            }
+            return Task.CompletedTask;
+        }
+
         protected internal ICollection<IComponent> GetPendingComponents(ICollection<string> files, out ILockingProcessManager lockingProcessManager)
         {
             var components = FindComponentsFromFiles(files).ToList();
@@ -328,7 +340,7 @@ namespace TaskBasedUpdater
 
             var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellation);
 
-            var operation = new UpdateOperation(Product, components);
+            var operation = new UpdateOperation(components);
             try
             {
                 await Task.Run(() =>
