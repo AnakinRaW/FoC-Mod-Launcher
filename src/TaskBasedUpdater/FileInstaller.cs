@@ -195,7 +195,7 @@ namespace TaskBasedUpdater
 
         private InstallResult InstallHelper(InstallData installData)
         {
-            var installResult = InstallResult.None;
+            InstallResult installResult;
             var component = installData.Component;
 
             try
@@ -267,7 +267,6 @@ namespace TaskBasedUpdater
         private InstallResult PlanAndApplyExecuteAction(string location, IComponent component, bool isPresent, string localPath)
         {
             var requestedAction = component.RequiredAction;
-            var state = component.CurrentState;
 
             Func<InstallData, InstallResult> action = null;
             switch (requestedAction)
