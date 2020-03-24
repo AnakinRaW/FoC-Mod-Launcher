@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Linq;
 using System.Threading;
-using FocLauncherHost.Controls;
+using FocLauncherHost.Dialogs;
 using TaskBasedUpdater.Restart;
 
 namespace FocLauncherHost
@@ -23,6 +23,13 @@ namespace FocLauncherHost
         internal static bool ShowSelfKillDialog(ILockingProcessManager processManager, CancellationToken token)
         {
             return ShowKillDialogCore(processManager, false, true, token);
+        }
+
+        internal static bool ShowRestoreDialog()
+        {
+            var dialog = new RestoreDialog();
+            dialog.ShowDialog();
+            return dialog.Restore;
         }
 
         private static bool ShowKillDialogCore(ILockingProcessManager processManager, bool retry, bool showSelf, CancellationToken token)

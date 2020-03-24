@@ -5,7 +5,7 @@ using System.Windows;
 using System.Windows.Input;
 using FocLauncher;
 using FocLauncher.Shared;
-using FocLauncherHost.Controls;
+using FocLauncherHost.Dialogs;
 using Microsoft.Win32;
 using NLog;
 

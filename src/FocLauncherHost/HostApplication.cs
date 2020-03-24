@@ -9,7 +9,7 @@ using System.Windows;
 using FocLauncher;
 using FocLauncher.Shared;
 using FocLauncher.Threading;
-using FocLauncherHost.Controls;
+using FocLauncherHost.Dialogs;
 using FocLauncherHost.Utilities;
 using Microsoft.VisualStudio.Threading;
 using NLog;
