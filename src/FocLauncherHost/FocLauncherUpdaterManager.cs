@@ -95,7 +95,16 @@ namespace FocLauncherHost
             Logger.Debug($"Created restart options: {args}");
             return options;
         }
-        
+
+        private  IRestartOptions? CreateRestoreRestartOptions()
+        {
+            if (!(CreateRestartOptions() is LauncherRestartOptions options)) 
+                return null;
+            options.Restore = true;
+            return options;
+        }
+
+
         protected override bool PermitElevationRequest()
         {
             return LauncherRestartManager.ShowElevateDialog();
@@ -153,7 +162,7 @@ namespace FocLauncherHost
             lockingProcessManagerWithoutSelf.Shutdown();
             return new PendingHandledResult(HandlePendingComponentsStatus.Restart);
         }
-
+        
         protected override Version? GetComponentVersion(IComponent component)
         {
             try
@@ -164,6 +173,19 @@ namespace FocLauncherHost
             {
                 return null;
             }
+        }
+
+        protected override void OnRestoreFailed(Exception ex, UpdateInformation updateInformation)
+        {
+            base.OnRestoreFailed(ex, updateInformation);
+            Clean();
+            var options = CreateRestoreRestartOptions();
+            if (options is null)
+                throw ex;
+            if (LauncherRestartManager.ShowRestoreDialog())
+                ApplicationRestartManager.RestartApplication(options);
+            else
+                Environment.Exit(-1);
         }
 
         private ProductCatalog GetCatalog(Catalogs catalogs)
