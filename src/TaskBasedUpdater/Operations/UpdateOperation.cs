@@ -15,7 +15,6 @@ namespace TaskBasedUpdater.Operations
 {
     internal class UpdateOperation : IUpdaterOperation
     {
-        private readonly IProductInfo _product;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         private readonly HashSet<IComponent> _allComponents;
@@ -43,9 +42,8 @@ namespace TaskBasedUpdater.Operations
 
         private static int ParallelDownload => 2;
 
-        public UpdateOperation(IProductInfo product, IEnumerable<IComponent> dependencies)
+        public UpdateOperation(IEnumerable<IComponent> dependencies)
         {
-            _product = product;
             _allComponents = new HashSet<IComponent>(dependencies, ComponentIdentityComparer.Default);
         }
 
@@ -94,9 +92,6 @@ namespace TaskBasedUpdater.Operations
                 {
                     _linkedCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(token);
                     _downloads.Run(_linkedCancellationTokenSource.Token);
-#if DEBUG
-                    //_downloads.Wait();
-#endif
                     _installs.Run(_linkedCancellationTokenSource.Token);
 
                     try
