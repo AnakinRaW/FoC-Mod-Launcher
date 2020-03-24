@@ -14,14 +14,28 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" Text="Launcher by AnakinSklavenwalker"/>
-        <TextBlock Grid.Row="1" Text="Icon (c) by Exhumed"/>
-        <TextBlock Grid.Row="1" HorizontalAlignment="Right">           
-            <Hyperlink NavigateUri="https://creativecommons.org/licenses/by-nc-nd/4.0/"
-                       RequestNavigate="OpenLicenseSite">
-                License
-            </Hyperlink>
-        </TextBlock>
-        <Grid Grid.Row="3">
+        <Grid Grid.Row="1" TextElement.Foreground="SlateGray" Opacity=".8">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" Text="Copyright Information:"/>
+            <StackPanel Grid.Row="1" Margin="10,0,0,0">
+                <DockPanel VerticalAlignment="Stretch">
+                    <TextBlock Text="Splash Screen Image © by Exhumed"/>
+                    <TextBlock HorizontalAlignment="Right">           
+                        <Hyperlink NavigateUri="https://creativecommons.org/licenses/by-nc-nd/4.0/"
+                                   RequestNavigate="OpenLicenseSite">
+                            Licence
+                        </Hyperlink>
+                    </TextBlock>
+                </DockPanel>
+                <TextBlock Text="Palpatine Image © Lucasfilm Ltd. LLC"/>
+                <TextBlock Text="Vader Image © by Marvel Comics"/>
+                <TextBlock Text="EaW Font © by Petroglyph/Lucasarts"/>
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Row="3" Margin="0,5,0,0">
             <StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Launcher Version: "/>
