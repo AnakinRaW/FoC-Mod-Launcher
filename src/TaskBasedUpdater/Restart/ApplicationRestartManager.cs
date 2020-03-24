@@ -6,7 +6,7 @@ using TaskBasedUpdater.Elevation;
 
 namespace TaskBasedUpdater.Restart
 {
-    internal static class ApplicationRestartManager
+    public static class ApplicationRestartManager
     {
         public static void RestartApplication(IRestartOptions restartOptions)
         {
