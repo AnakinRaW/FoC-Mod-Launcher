@@ -1,16 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using FocLauncher;
-using FocLauncher.Shared;
 using FocLauncher.Threading;
 using FocLauncherHost.Dialogs;
-using FocLauncherHost.Utilities;
 using Microsoft.VisualStudio.Threading;
 using NLog;
 using TaskBasedUpdater;
@@ -26,20 +19,13 @@ namespace FocLauncherHost
         private static readonly TimeSpan WaitProgressDelay = TimeSpan.FromSeconds(WaitSplashDelay.Seconds + 2);
 
         private readonly AsyncManualResetEvent _canCloseApplicationEvent = new AsyncManualResetEvent(false, true);
-        private readonly ExternalUpdaterResult _startOption;
 
         internal static ManualResetEvent SplashVisibleResetEvent { get; } = new ManualResetEvent(false);
 
         internal SplashScreen SplashScreen { get; }
 
-        internal HostApplication() : this(ExternalUpdaterResult.NoUpdate)
+        internal HostApplication()
         {
-            
-        }
-
-        internal HostApplication(ExternalUpdaterResult startOption)
-        {
-            _startOption = startOption;
             MainWindow = SplashScreen = new SplashScreen();
             SplashScreen.Product = FocLauncherProduct.Instance;
         }
@@ -55,31 +41,6 @@ namespace FocLauncherHost
         {
             try
             {
-                if (_startOption == ExternalUpdaterResult.UpdateSuccess)
-                    return;
-
-                if (_startOption == ExternalUpdaterResult.UpdateFailedWithRestore)
-                {
-                    // TODO: Report that the update failed but restored last state and return
-                    return;
-                }
-
-                if (_startOption == ExternalUpdaterResult.UpdateFailedNoRestore)
-                {
-                    // TODO: Report that the update failed and restored whole application
-                }
-
-                await AssemblyExtractor.WriteNecessaryAssembliesToDiskAsync(LauncherConstants.ApplicationBasePath,
-                    "FocLauncher.dll", 
-                    "FocLauncher.Theming.dll", 
-                    LauncherConstants.UpdaterFileName, 
-                    "FocLauncher.Threading.dll", 
-                    "Microsoft.VisualStudio.Utilities.dll");
-
-                LogInstalledAssemblies();
-
-                // TODO: Check if update shall be skipped
-
                 Task.Delay(WaitSplashDelay).ContinueWith(async _ => await ShowMainWindowAsync(), default,
                     TaskContinuationOptions.None, TaskScheduler.FromCurrentSynchronizationContext()).Forget();
 
@@ -119,22 +80,7 @@ namespace FocLauncherHost
                 _canCloseApplicationEvent.Set();
             }
         }
-
-        private static void LogInstalledAssemblies()
-        {
-            var fileList = new List<string> {Environment.GetCommandLineArgs()[0]};
-            var appBase = new DirectoryInfo(LauncherConstants.ApplicationBasePath);
-            fileList.AddRange(appBase.GetFilesByExtensions(false, ".exe", ".dll").Select(x => x.FullName));
-
-            Logger.Debug("****Installed Files*****");
-            foreach (var file in fileList)
-            {
-                var fileVersion = FileVersionInfo.GetVersionInfo(file).FileVersion;
-                var fileName = Path.GetFileName(file);
-                Logger.Debug($"\tFile: {fileName}, File-Version: {fileVersion}");
-            }
-        }
-
+        
         private async Task SetWhenWaitDialogIsShownAsync(TimeSpan delay, CancellationToken token)
         {
             await Task.Delay(delay, token);

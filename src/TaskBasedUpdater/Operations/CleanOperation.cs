@@ -47,10 +47,6 @@ namespace TaskBasedUpdater.Operations
             foreach (var data in files)
             {
                 var file = data.Value;
-                if (file == null)
-                {
-
-                }
                 if (!File.Exists(file)) 
                     continue;
                 var cleanTask = new CleanFileTask(data.Key, file);

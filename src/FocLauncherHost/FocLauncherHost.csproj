@@ -77,6 +77,9 @@
     <Compile Include="Dialogs\RestartElevatedWindow.xaml.cs">
       <DependentUpon>RestartElevatedWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Dialogs\RestartSystemDialog.xaml.cs">
+      <DependentUpon>RestartSystemDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Dialogs\RestoreDialog.xaml.cs">
       <DependentUpon>RestoreDialog.xaml</DependentUpon>
     </Compile>
@@ -85,7 +88,9 @@
     </Compile>
     <Compile Include="Dialogs\WindowHost.cs" />
     <Compile Include="FocLauncherProduct.cs" />
+    <Compile Include="LauncherInitializer.cs" />
     <Compile Include="LauncherRestartManager.cs" />
+    <Compile Include="LauncherStartOptions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="HostApplication.cs" />
     <Compile Include="ExceptionHandling\ExceptionToTextConverter.cs" />
@@ -124,6 +129,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Dialogs\RestartElevatedWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Dialogs\RestartSystemDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -233,6 +242,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\vader.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\cody.PNG" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

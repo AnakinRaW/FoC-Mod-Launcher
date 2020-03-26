@@ -25,11 +25,11 @@ namespace FocLauncherHost
             return ShowKillDialogCore(processManager, false, true, token);
         }
 
-        internal static bool ShowRestoreDialog()
+        internal static bool ShowRestoreDialog(bool requiresRestore)
         {
-            var dialog = new RestoreDialog();
+            var dialog = new RestoreDialog(requiresRestore);
             dialog.ShowDialog();
-            return dialog.Restore;
+            return dialog.RestoreNow;
         }
 
         private static bool ShowKillDialogCore(ILockingProcessManager processManager, bool retry, bool showSelf, CancellationToken token)

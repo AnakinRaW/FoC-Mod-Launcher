@@ -6,6 +6,8 @@ using System.Reflection;
 using System.Security.AccessControl;
 using System.Threading.Tasks;
 using FocLauncher;
+using NLog;
+
 #if !DEBUG
 using System.Diagnostics;
 using dnlib.DotNet;
@@ -16,10 +18,10 @@ namespace FocLauncherHost.Utilities
 {
     internal static class AssemblyExtractor
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         public static async Task WriteNecessaryAssembliesToDiskAsync(string fileDirectory, params string[] assemblyFiles)
         {
-            var i = Assembly.GetExecutingAssembly().GetManifestResourceNames();
-
             foreach (var assemblyFile in assemblyFiles)
             {
                 foreach (var resourceName in Assembly.GetExecutingAssembly().GetManifestResourceNames())
@@ -76,6 +78,7 @@ namespace FocLauncherHost.Utilities
                     assemblyStream.Position = 0;
                 }
 #endif
+                Logger.Debug($"Writing file: '{filePath}'");
                 await WriteToFileAsync(assemblyStream, filePath);
             }
             catch (Exception ex)

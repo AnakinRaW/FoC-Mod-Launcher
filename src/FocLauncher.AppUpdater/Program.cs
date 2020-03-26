@@ -53,6 +53,9 @@ namespace FocLauncher.AppUpdater
                         }
                     }
 
+                    if (o.Restore) 
+                        updateResult = ExternalUpdaterResult.DemandsRestore;
+
                     if (o.Update)
                     {
                         Logger.Info("Updating...");

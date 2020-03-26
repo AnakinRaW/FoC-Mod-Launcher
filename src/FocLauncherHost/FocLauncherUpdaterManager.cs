@@ -95,22 +95,12 @@ namespace FocLauncherHost
             Logger.Debug($"Created restart options: {args}");
             return options;
         }
-
-        private  IRestartOptions? CreateRestoreRestartOptions()
-        {
-            if (!(CreateRestartOptions() is LauncherRestartOptions options)) 
-                return null;
-            options.Restore = true;
-            return options;
-        }
-
-
+        
         protected override bool PermitElevationRequest()
         {
             return LauncherRestartManager.ShowElevateDialog();
         }
-
-
+        
         protected override async Task<PendingHandledResult> HandleLockedComponentsCoreAsync(
             ICollection<IComponent> pendingComponents, ILockingProcessManager lockingProcessManager,
             bool ignoreSelfLocked, CancellationToken token)
@@ -178,14 +168,28 @@ namespace FocLauncherHost
         protected override void OnRestoreFailed(Exception ex, UpdateInformation updateInformation)
         {
             base.OnRestoreFailed(ex, updateInformation);
-            Clean();
-            var options = CreateRestoreRestartOptions();
-            if (options is null)
-                throw ex;
-            if (LauncherRestartManager.ShowRestoreDialog())
+            Clean().Wait();
+            if (LauncherRestartManager.ShowRestoreDialog(true))
+            {
+                var options = CreateRestoreRestartOptions();
+                if (options is null)
+                    throw ex;
                 ApplicationRestartManager.RestartApplication(options);
+            }
             else
+            {
+                // TODO: Save in registry that a restore should be performed next start
                 Environment.Exit(-1);
+            }
+               
+        }
+
+        private IRestartOptions? CreateRestoreRestartOptions()
+        {
+            if (!(CreateRestartOptions() is LauncherRestartOptions options))
+                return null;
+            options.Restore = true;
+            return options;
         }
 
         private ProductCatalog GetCatalog(Catalogs catalogs)
