@@ -13,6 +13,7 @@ namespace FocLauncherHost.Update.UpdateCatalog
 
         private string _name;
         private string _author;
+        private PreviewType _preview;
 
         [XmlArrayItem("Dependency", IsNullable = false)]
         public List<Dependency> Dependencies
@@ -35,11 +36,19 @@ namespace FocLauncherHost.Update.UpdateCatalog
             set => _author = value;
         }
 
+        [XmlAttribute]
+        public PreviewType Preview
+        {
+            get => _preview;
+            set => _preview = value;
+        }
+
         public override string ToString()
         {
             var sb = new StringBuilder();
             sb.Append("Product: ");
             sb.Append($"Name: {Name}, ");
+            sb.Append($"Preview: {Preview}");
             sb.Append($"Author: {Author}");
 
             if (!Dependencies.Any())

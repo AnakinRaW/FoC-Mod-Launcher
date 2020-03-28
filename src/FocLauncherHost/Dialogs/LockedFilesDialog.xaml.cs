@@ -8,7 +8,7 @@ using TaskBasedUpdater.Restart;
 
 namespace FocLauncherHost.Dialogs
 {
-    public partial class UpdateMessageBox : INotifyPropertyChanged
+    public partial class LockedFilesDialog : INotifyPropertyChanged
     {
         private string _buttonText;
         private bool _retry;
@@ -55,11 +55,11 @@ namespace FocLauncherHost.Dialogs
 
         public ObservableCollection<ILockingProcessInfo> Processes { get; }
 
-        public UpdateMessageBox(IEnumerable<ILockingProcessInfo> processes) : this(processes, true) 
+        public LockedFilesDialog(IEnumerable<ILockingProcessInfo> processes) : this(processes, true) 
         {
         }
 
-        public UpdateMessageBox(IEnumerable<ILockingProcessInfo> processes, bool retry)
+        public LockedFilesDialog(IEnumerable<ILockingProcessInfo> processes, bool retry)
         {
             Retry = retry;
             Processes = new ObservableCollection<ILockingProcessInfo>(processes);

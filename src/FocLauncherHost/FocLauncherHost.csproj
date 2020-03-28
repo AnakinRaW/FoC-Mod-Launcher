@@ -77,20 +77,26 @@
     <Compile Include="Dialogs\RestartElevatedWindow.xaml.cs">
       <DependentUpon>RestartElevatedWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Dialogs\UpdateResultDialog.xaml.cs">
+      <DependentUpon>UpdateResultDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\UpdateSuccessDialog.xaml.cs">
+      <DependentUpon>UpdateSuccessDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Dialogs\RestartSystemDialog.xaml.cs">
       <DependentUpon>RestartSystemDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\RestoreDialog.xaml.cs">
       <DependentUpon>RestoreDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Dialogs\UpdateMessageBox.xaml.cs">
-      <DependentUpon>UpdateMessageBox.xaml</DependentUpon>
+    <Compile Include="Dialogs\LockedFilesDialog.xaml.cs">
+      <DependentUpon>LockedFilesDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\WindowHost.cs" />
     <Compile Include="FocLauncherProduct.cs" />
     <Compile Include="LauncherInitializer.cs" />
     <Compile Include="LauncherRestartManager.cs" />
-    <Compile Include="LauncherStartOptions.cs" />
+    <Compile Include="Update\UpdateCatalog\PreviewType.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="HostApplication.cs" />
     <Compile Include="ExceptionHandling\ExceptionToTextConverter.cs" />
@@ -106,6 +112,7 @@
     </Compile>
     <Compile Include="FocLauncherUpdaterManager.cs" />
     <Compile Include="Shared\LauncherRestartOptions_Interface.cs" />
+    <Compile Include="Update\UpdateCatalog\BuildType.cs" />
     <Compile Include="Update\UpdateCatalog\DependencyHelper.cs" />
     <Compile Include="Update\UpdateCatalog\Dependency.cs" />
     <Compile Include="Update\UpdateCatalog\InstallLocation.cs" />
@@ -113,7 +120,9 @@
     <Compile Include="Update\UpdateCatalog\Catalogs.cs" />
     <Compile Include="Utilities\AssemblyExtractor.cs" />
     <Compile Include="Utilities\FileExtensions.cs" />
+    <Compile Include="Utilities\LauncherTypeNameConverter.cs" />
     <Compile Include="Utilities\LockingProcessInfoTextConverter.cs" />
+    <Compile Include="Utilities\NullOrEmptyToVisibilityConverter.cs" />
     <Compile Include="Utilities\NullToVisibilityConverter.cs" />
     <Compile Include="Utilities\StreamExtensions.cs" />
     <Compile Include="Utilities\UrlCombine.cs" />
@@ -132,6 +141,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Dialogs\UpdateResultDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Dialogs\UpdateSuccessDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Dialogs\RestartSystemDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -140,7 +157,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Dialogs\UpdateMessageBox.xaml">
+    <Page Include="Dialogs\LockedFilesDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -245,6 +262,15 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\cody.PNG" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\anakin.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\han.PNG" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Utilities\Converters\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -5,7 +5,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Animation;
-using TaskBasedUpdater;
 
 namespace FocLauncherHost
 {
@@ -20,7 +19,7 @@ namespace FocLauncherHost
 
         public CancellationToken CancellationToken => _cancellationTokenSource.Token;
 
-        internal FocLauncherProduct Product
+        public FocLauncherProduct Product
         {
             get => _product;
             set

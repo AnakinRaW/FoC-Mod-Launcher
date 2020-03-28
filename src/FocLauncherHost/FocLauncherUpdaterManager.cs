@@ -22,6 +22,8 @@ namespace FocLauncherHost
     {
         protected override IEnumerable<string> FileDeleteIgnoreFilter => new List<string> {".Theme.dll"};
 
+        public FocLauncherProduct LauncherProduct => Product as FocLauncherProduct;
+
         public FocLauncherUpdaterManager(string versionMetadataPath) : base(FocLauncherProduct.Instance,
             versionMetadataPath)
         {
@@ -47,24 +49,31 @@ namespace FocLauncherHost
                 file.Name.Equals(x.Name) && x.Destination.Equals(LauncherConstants.ApplicationBasePath));
         }
 
-        protected override async Task<IEnumerable<IComponent>> GetCatalogComponentsAsync(Stream catalogStream,
+        protected override async Task<IEnumerable<IComponent>?> GetCatalogComponentsAsync(Stream catalogStream,
             CancellationToken token)
         {
             token.ThrowIfCancellationRequested();
 
-            var products = await TryGetProductFromStreamAsync(catalogStream);
-            if (products is null)
-                throw new UpdaterException("Failed to deserialize metadata stream. Incompatible version?");
+            try
+            {
+                var products = await Catalogs.TryDeserializeAsync(catalogStream);
+                if (products is null)
+                    throw new UpdaterException("Failed to deserialize metadata stream. Incompatible metadata version?");
 
-            var product = GetCatalog(products);
-            if (product is null)
-                throw new UpdaterException("No products to update are found");
+                var product = FindMatchingProductCatalog(products);
+                if (product == null)
+                    return null;
 
-            var result = new HashSet<IComponent>(ComponentIdentityComparer.Default);
-            foreach (var component in product.Dependencies.Select(DependencyHelper.DependencyToComponent)
-                .Where(component => component != null))
-                result.Add(component);
-            return result;
+                var result = new HashSet<IComponent>(ComponentIdentityComparer.Default);
+                foreach (var component in product.Dependencies.Select(DependencyHelper.DependencyToComponent)
+                    .Where(component => component != null))
+                    result.Add(component);
+                return result;
+            }
+            catch (Exception e)
+            {
+                throw new UpdaterException($"Failed to get update information from metadata: {e.Message}", e);
+            }
         }
 
         protected override async Task<bool> ValidateCatalogStreamAsync(Stream inputStream)
@@ -192,27 +201,17 @@ namespace FocLauncherHost
             return options;
         }
 
-        private ProductCatalog GetCatalog(Catalogs catalogs)
+        private ProductCatalog? FindMatchingProductCatalog(Catalogs catalogs)
         {
             if (catalogs?.Products is null || !catalogs.Products.Any())
                 throw new NotSupportedException("No products to update are found");
 
-            return catalogs.Products.FirstOrDefault(x =>
-                x.Name.Equals(Product.Name, StringComparison.InvariantCultureIgnoreCase));
-        }
+            var productsWithCorrectName = catalogs.Products.Where(x =>
+                    x.Name.Equals(Product.Name, StringComparison.InvariantCultureIgnoreCase));
 
-        private static Task<Catalogs> TryGetProductFromStreamAsync(Stream stream)
-        {
-            try
-            {
-                Logger.Trace("Try deserializing stream to Catalogs");
-                return Catalogs.DeserializeAsync(stream);
-            }
-            catch (Exception e)
-            {
-                Logger.Debug(e, "Getting catalogs from stream failed with exception. Returning null instead.");
-                return Task.FromResult<Catalogs>(null);
-            }
+            var matchingPreviewType = productsWithCorrectName.Where(x => x.Preview == LauncherProduct.PreviewType);
+            return matchingPreviewType.FirstOrDefault();
+
         }
 
         private static ILockingProcessManager CreateFromProcessesWithoutSelf(IEnumerable<ILockingProcessInfo> processes)

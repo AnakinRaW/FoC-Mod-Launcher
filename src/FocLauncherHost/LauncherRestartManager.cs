@@ -35,7 +35,7 @@ namespace FocLauncherHost
         private static bool ShowKillDialogCore(ILockingProcessManager processManager, bool retry, bool showSelf, CancellationToken token)
         {
             var currentProcessId = Process.GetCurrentProcess().Id;
-            UpdateMessageBox.ProcessKillResult result;
+            LockedFilesDialog.ProcessKillResult result;
             do
             {
                 token.ThrowIfCancellationRequested();
@@ -44,12 +44,12 @@ namespace FocLauncherHost
                     processes = processes.Where(x => x.Id != currentProcessId).ToList();
                 if (!processes.Any())
                     return true;
-                var dialog = new UpdateMessageBox(processes, retry);
+                var dialog = new LockedFilesDialog(processes, retry);
                 dialog.ShowDialog();
                 result = dialog.Result;
-            } while (result == UpdateMessageBox.ProcessKillResult.Retry);
+            } while (result == LockedFilesDialog.ProcessKillResult.Retry);
 
-            return result == UpdateMessageBox.ProcessKillResult.Kill;
+            return result == LockedFilesDialog.ProcessKillResult.Kill;
         }
     }
 }

@@ -16,12 +16,8 @@ namespace FocLauncherHost
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        internal static LauncherStartOptions Initialize(ExternalUpdaterResult launchOption)
+        internal static bool Initialize(ExternalUpdaterResult launchOption)
         {
-            var startOptions = new LauncherStartOptions { LastUpdaterResult = launchOption };
-            if (launchOption != ExternalUpdaterResult.NoUpdate)
-                startOptions.SkipUpdate = true;
-
             if (!Directory.Exists(LauncherConstants.ApplicationBasePath))
                 throw new DirectoryNotFoundException($"Required directory '{LauncherConstants.ApplicationBasePath}' not found.");
 
@@ -29,20 +25,35 @@ namespace FocLauncherHost
             {
                 RestoreIfNecessary(launchOption);
 
+                var skipWriteToDisk = false;
                 if (launchOption == ExternalUpdaterResult.UpdateFailedWithRestore)
                 {
-                    // TODO: Report that the update failed but restored last state and return
+                    skipWriteToDisk = true;
+                    new UpdateResultDialog("Update failed", 
+                        "The update of the launcher failed but it recovered itself to the last working state.").ShowDialog();
                 }
 
-                if (launchOption == ExternalUpdaterResult.UpdateFailedNoRestore) 
+                if (launchOption == ExternalUpdaterResult.UpdateFailedNoRestore)
+                {
                     new RestoreDialog(false).ShowDialog();
+                }
 
-                AssemblyExtractor.WriteNecessaryAssembliesToDisk(LauncherConstants.ApplicationBasePath,
-                    "FocLauncher.dll",
-                    "FocLauncher.Theming.dll",
-                    LauncherConstants.UpdaterFileName,
-                    "FocLauncher.Threading.dll",
-                    "Microsoft.VisualStudio.Utilities.dll");
+                if (launchOption == ExternalUpdaterResult.UpdateSuccess)
+                {
+                    skipWriteToDisk = true;
+                    new UpdateSuccessDialog().ShowDialog();
+                }
+
+                if (!skipWriteToDisk)
+                {
+                    AssemblyExtractor.WriteNecessaryAssembliesToDisk(LauncherConstants.ApplicationBasePath,
+                        "FocLauncher.dll",
+                        "FocLauncher.Theming.dll",
+                        LauncherConstants.UpdaterFileName,
+                        "FocLauncher.Threading.dll",
+                        "Microsoft.VisualStudio.Utilities.dll");
+                }
+                
 
                 LogInstalledAssemblies();
 
@@ -61,7 +72,7 @@ namespace FocLauncherHost
                 Environment.Exit(0);
             }
 
-            return startOptions;
+            return launchOption != ExternalUpdaterResult.NoUpdate;
         }
 
         private static void LogInstalledAssemblies()

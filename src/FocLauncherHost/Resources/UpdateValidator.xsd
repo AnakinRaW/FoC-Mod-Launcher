@@ -31,8 +31,9 @@
     <xs:sequence>
       <xs:element type="DependencyListType" name="Dependencies" minOccurs="1" maxOccurs="1"/>
     </xs:sequence>
-    <xs:attribute type="xs:string" name="Name" use="optional"/>
+    <xs:attribute type="xs:string" name="Name" use="required"/>
     <xs:attribute type="xs:string" name="Author" use="optional"/>
+    <xs:attribute type="xs:string" name="Preview" use="optional"/>
   </xs:complexType>
 
   <xs:complexType name="ProductsMetadata">

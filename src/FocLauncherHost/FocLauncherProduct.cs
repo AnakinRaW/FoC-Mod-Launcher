@@ -1,30 +1,31 @@
 ﻿using FocLauncher;
+using FocLauncherHost.Update.UpdateCatalog;
 using TaskBasedUpdater;
 
 namespace FocLauncherHost
 {
-    internal class FocLauncherProduct : IProductInfo
+    public class FocLauncherProduct : IProductInfo
     {
         private static FocLauncherProduct _instance;
 
-        public string Name { get; }
+        public string Name => LauncherConstants.ProductName;
         public string Author => LauncherConstants.Author;
         public string AppDataPath => LauncherConstants.ApplicationBasePath;
         public string CurrentLocation => GetType().Assembly.Location;
 
-        public PreviewType PreviewType { get; private set; }
-
         // TODO: Decide how to get data
-        public bool IsPreviewInstance { get; } = true;
+        public PreviewType PreviewType { get; }
 
-        public bool IsDebug
+        public bool IsPreviewInstance => PreviewType != PreviewType.None;
+
+        public BuildType BuildType
         {
             get
             {
 #if DEBUG
-                return true;
+                return BuildType.Debug;
 #else
-                return false;
+                return BuildType.Release;
 #endif
             }
         }
@@ -33,24 +34,6 @@ namespace FocLauncherHost
 
         private FocLauncherProduct()
         {
-            Name = GetProductName();
         }
-
-        private string GetProductName()
-        {
-            var name = LauncherConstants.ProductName;
-            if (IsPreviewInstance && PreviewType != PreviewType.None)
-                name = $"{name}-{PreviewType}";
-            if (IsDebug)
-                name = $"{name}-Debug";
-            return name;
-        }
-    }
-
-    internal enum PreviewType
-    {
-        None,
-        Beta,
-        Alpha
     }
 }

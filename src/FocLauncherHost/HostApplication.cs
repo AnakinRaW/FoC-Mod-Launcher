@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using FocLauncher.Threading;
 using FocLauncherHost.Dialogs;
+using FocLauncherHost.Update.UpdateCatalog;
 using Microsoft.VisualStudio.Threading;
 using NLog;
 using TaskBasedUpdater;
@@ -17,6 +18,8 @@ namespace FocLauncherHost
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private static readonly TimeSpan WaitSplashDelay = TimeSpan.FromSeconds(2);
         private static readonly TimeSpan WaitProgressDelay = TimeSpan.FromSeconds(WaitSplashDelay.Seconds + 2);
+
+        private int _shouldShowSplashScreen = 1;
 
         private readonly AsyncManualResetEvent _canCloseApplicationEvent = new AsyncManualResetEvent(false, true);
 
@@ -93,15 +96,19 @@ namespace FocLauncherHost
         {
             if (updateInformation != null)
             {
-                if (updateInformation.RequiresUserNotification && SplashScreen.IsProgressVisible || FocLauncherProduct.Instance.IsDebug)
+                if (updateInformation.RequiresUserNotification && SplashScreen.IsProgressVisible || FocLauncherProduct.Instance.BuildType == BuildType.Debug)
                 {
+                    Interlocked.Exchange(ref _shouldShowSplashScreen, 0);
+                    SplashScreen.Cancelable = false;
                     switch (updateInformation.Result)
                     {
                         case UpdateResult.Failed:
                             SplashScreen.ProgressText = "Update Failed";
+                            new UpdateResultDialog("Update Failed", updateInformation.Message).ShowDialog();
                             break;
                         case UpdateResult.Success:
                             SplashScreen.ProgressText = "Update finished";
+                            new UpdateSuccessDialog().ShowDialog();
                             break;
                         case UpdateResult.SuccessRestartRequired:
                             SplashScreen.ProgressText = "Update requires restart";
@@ -110,10 +117,6 @@ namespace FocLauncherHost
                             SplashScreen.ProgressText = "Update cancelled";
                             break;
                     }
-
-                    SplashScreen.Cancelable = false;
-                    MessageBox.Show($"Updating finished with result: {updateInformation.Result}\r\n" +
-                                    $"Message: {updateInformation.Message}", "FoC Launcher");
                 }
                 
             }
@@ -129,8 +132,11 @@ namespace FocLauncherHost
         private async Task ShowMainWindowAsync()
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-            MainWindow?.Show();
-            SplashVisibleResetEvent.Set();
+            if (Interlocked.CompareExchange(ref _shouldShowSplashScreen, 0, 1) == 1)
+            {
+                MainWindow?.Show();
+                SplashVisibleResetEvent.Set();
+            }
         }
 
         private async Task HideSplashScreenAnimatedAsync()

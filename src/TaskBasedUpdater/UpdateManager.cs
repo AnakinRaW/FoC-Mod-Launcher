@@ -111,6 +111,11 @@ namespace TaskBasedUpdater
                     try
                     {
                         var components = await GetCatalogComponentsAsync(stream, cts.Token);
+                        if (components is null)
+                        {
+                            NoUpdateInformation(updateInformation);
+                            return updateInformation;
+                        }
                         _components.AddRange(components);
                     }
                     catch (Exception e)
@@ -253,7 +258,7 @@ namespace TaskBasedUpdater
 
         protected static void ErrorInformation(UpdateInformation updateInformation, string errorMessage, bool userNotification = true)
         {
-            Logger.Debug($"Operation failed with message: {errorMessage}");
+            Logger.Debug($"Update failed with message: {errorMessage}");
             updateInformation.Result = UpdateResult.Failed;
             updateInformation.Message = errorMessage;
             updateInformation.RequiresUserNotification = userNotification;
@@ -267,7 +272,7 @@ namespace TaskBasedUpdater
             updateInformation.RequiresUserNotification = userNotification;
         }
 
-        protected abstract Task<IEnumerable<IComponent>> GetCatalogComponentsAsync(Stream catalogStream, CancellationToken token);
+        protected abstract Task<IEnumerable<IComponent>?> GetCatalogComponentsAsync(Stream catalogStream, CancellationToken token);
 
         protected abstract Task<bool> ValidateCatalogStreamAsync(Stream inputStream);
 
