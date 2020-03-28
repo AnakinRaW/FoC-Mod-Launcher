@@ -57,14 +57,17 @@ namespace FocLauncherHost
         {
             if ((Keyboard.GetKeyStates(Key.T) & KeyStates.Down) > 0)
             {
+                Logger.Debug($"Setting CurrentUpdateSearchOption in registry to {ApplicationType.Test}");
                 FocLauncherInformation.Instance.CurrentUpdateSearchOption = ApplicationType.Test;
                 return;
             }
             if ((Keyboard.GetKeyStates(Key.B) & KeyStates.Down) > 0)
             {
+                Logger.Debug($"Setting CurrentUpdateSearchOption in registry to {ApplicationType.Beta}");
                 FocLauncherInformation.Instance.CurrentUpdateSearchOption = ApplicationType.Beta;
                 return;
             }
+            Logger.Debug("Removing CurrentUpdateSearchOption from registry (Current = Persisted)");
             FocLauncherInformation.Instance.CurrentUpdateSearchOption = null;
         }
 
@@ -106,7 +109,6 @@ namespace FocLauncherHost
 
         private static bool CheckRestoreRequired(ExternalUpdaterResult launchOption)
         {
-            Logger.Debug("Check if a full restore is required.");
             var restore = false;
             if (launchOption == ExternalUpdaterResult.UpdateFailedNoRestore)
                 restore = true;
@@ -117,7 +119,7 @@ namespace FocLauncherHost
             var successRegistry = LauncherRegistryHelper.GetValue<bool>(LauncherRegistryKeys.ForceRestore, out var forceRestore);
             if (!successRegistry || forceRestore)
                 restore = true;
-            Logger.Debug(restore);
+            Logger.Debug($"Check if a full restore is required: {restore}");
             return restore;
         }
 
