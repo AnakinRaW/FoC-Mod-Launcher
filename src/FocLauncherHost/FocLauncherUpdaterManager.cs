@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using FocLauncher;
 using FocLauncher.Shared;
 using FocLauncherHost.Properties;
@@ -189,10 +190,9 @@ namespace FocLauncherHost
             }
             else
             {
-                // TODO: Save in registry that a restore should be performed next start
+                LauncherRegistryHelper.WriteValue(LauncherRegistryKeys.ForceRestore, true);
                 Environment.Exit(-1);
             }
-               
         }
 
         private IRestartOptions? CreateRestoreRestartOptions()
@@ -214,10 +214,13 @@ namespace FocLauncherHost
             var searchOption = LauncherProduct.CurrentUpdateSearchOption ?? LauncherProduct.UpdateSearchOption;
 
             var matchingProduct = productsWithCorrectName.FirstOrDefault(x => x.Preview == searchOption);
-            if (fallbackAction == null || matchingProduct != null || LauncherProduct.UpdateMode == UpdateMode.Explicit)
+            if (fallbackAction == null || matchingProduct != null || LauncherProduct.UpdateMode == UpdateMode.Explicit || LauncherProduct.UpdateMode == UpdateMode.FallbackStable)
                 return matchingProduct;
 
-            return fallbackAction(productsWithCorrectName);
+            var messageBoxResult = MessageBox.Show(
+                $"No updates for {searchOption}-Version available. Do you want to update to the latest stable version instead?",
+                "FoC-Launcher", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.Yes);
+            return messageBoxResult == MessageBoxResult.Yes ? fallbackAction(productsWithCorrectName) : null;
         }
 
         private static ILockingProcessManager CreateFromProcessesWithoutSelf(IEnumerable<ILockingProcessInfo> processes)

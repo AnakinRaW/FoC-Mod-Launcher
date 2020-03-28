@@ -174,7 +174,6 @@ namespace TaskBasedUpdater
             }
             catch (RestoreFailedException e)
             {
-                // TODO: When the restore fails we should restart and create the default state 
                 OnRestoreFailed(e, updateInformation);
             }
             catch (ElevationRequireException e)
@@ -223,12 +222,11 @@ namespace TaskBasedUpdater
             return Task.CompletedTask;
         }
 
-        protected static void RestoreBackup()
+        protected void RestoreBackup()
         {
             try
             {
-                //throw new Exception();
-                BackupManager.Instance.RestoreAllBackups();
+                OnRestore();
             }
             catch (Exception restoreException)
             {
@@ -238,6 +236,11 @@ namespace TaskBasedUpdater
                 Logger.Error(message);
                 throw new RestoreFailedException(message, restoreException);
             }
+        }
+
+        protected virtual void OnRestore()
+        {
+            BackupManager.Instance.RestoreAllBackups();
         }
 
         protected static void NoUpdateInformation(UpdateInformation updateInformation, bool userNotification = false)

@@ -6,16 +6,22 @@ namespace FocLauncher
     {
         public const string UpdateSearchMode = nameof(UpdateSearchMode);
         public const string SessionUpdateSearchMode = nameof(SessionUpdateSearchMode);
+        public const string SuppressFallbackUpdate = nameof(SuppressFallbackUpdate);
+        public const string ForceRestore = nameof(ForceRestore);
     }
 
     public static class LauncherRegistryHelper
     {
         public const string LauncherRegistryPath = "Software\\FocLauncher";
 
-        public static T GetValueOrDefault<T>(string name, T defaultValue)
+        public static bool GetValueOrDefault<T>(string name, out T result, T defaultValue)
         {
             using var key = GetKey(true);
-            return (T) key.GetValue(name, defaultValue);
+            var value = key.GetValue(name);
+            if (!(value is null)) 
+                return ValueSerializer.Deserialize(value.ToString(), out result, defaultValue);
+            result = defaultValue;
+            return true;
         }
 
         public static T GetValueOrSetDefault<T>(string name, T defaultValue)
@@ -31,10 +37,9 @@ namespace FocLauncher
             return (T) value;
         }
 
-        public static T GetValue<T>(string name)
+        public static bool GetValue<T>(string name, out T value)
         {
-            using var key = GetKey();
-            return (T) key.GetValue(name);
+            return GetValueOrDefault(name, out value, default);
         }
 
         public static bool WriteValue(string name, object value)
@@ -42,7 +47,8 @@ namespace FocLauncher
             try
             {
                 using var key = GetKey(true);
-                key.SetValue(name, value);
+                var serializedValue = ValueSerializer.Serialize(value, value.GetType());
+                key.SetValue(name, serializedValue);
                 return true;
             }
             catch

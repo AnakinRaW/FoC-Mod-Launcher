@@ -13,7 +13,7 @@ using NLog;
 
 namespace FocLauncherHost
 {
-    internal static class LauncherHelpers
+    internal static class LauncherInitializer
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
@@ -39,15 +39,12 @@ namespace FocLauncherHost
             }
             catch (Exception e)
             {
-                //Logger.Error(e);
+                Logger.Error(e);
                 if (e is AggregateException aggregate)
                     e = aggregate.GetBaseException();
-
+                LauncherRegistryHelper.WriteValue(LauncherRegistryKeys.ForceRestore, true);
                 // TODO: This and the exception dialog should be the same dialog
                 new RestartSystemDialog(e.Message).ShowDialog();
-                
-                // TODO: Set restore for next start in registry
-
                 Environment.Exit(0);
             }
 
@@ -61,12 +58,15 @@ namespace FocLauncherHost
         {
             if ((Keyboard.GetKeyStates(Key.T) & KeyStates.Down) > 0)
             {
-                LauncherRegistryHelper.WriteValue(LauncherRegistryKeys.SessionUpdateSearchMode, PreviewType.Test);
+                FocLauncherProduct.Instance.CurrentUpdateSearchOption = PreviewType.Test;
                 return;
             }
-
             if ((Keyboard.GetKeyStates(Key.B) & KeyStates.Down) > 0)
-                LauncherRegistryHelper.WriteValue(LauncherRegistryKeys.SessionUpdateSearchMode, PreviewType.Beta);
+            {
+                FocLauncherProduct.Instance.CurrentUpdateSearchOption = PreviewType.Beta;
+                return;
+            }
+            FocLauncherProduct.Instance.CurrentUpdateSearchOption = null;
         }
 
         private static void SetupRegistry()
@@ -100,8 +100,9 @@ namespace FocLauncherHost
         private static void Restore()
         {
            Logger.Debug("Performing full restore by deleting the application's base directory.");
-            Directory.Delete(LauncherConstants.ApplicationBasePath, true);
-            // TODO: Reset registry 
+           Directory.Delete(LauncherConstants.ApplicationBasePath, true);
+           Directory.CreateDirectory(LauncherConstants.ApplicationBasePath);
+           LauncherRegistryHelper.DeleteValue(LauncherRegistryKeys.ForceRestore);
         }
 
         private static bool CheckRestoreRequired(ExternalUpdaterResult launchOption)
@@ -114,7 +115,9 @@ namespace FocLauncherHost
                 restore = true;
             else if ((Keyboard.Modifiers & ModifierKeys.Shift) > 0)
                 restore = true;
-            // TODO Registry check
+            var successRegistry = LauncherRegistryHelper.GetValue<bool>(LauncherRegistryKeys.ForceRestore, out var forceRestore);
+            if (!successRegistry || forceRestore)
+                restore = true;
             Logger.Debug(restore);
             return restore;
         }
@@ -132,17 +135,6 @@ namespace FocLauncherHost
                 var fileVersion = FileVersionInfo.GetVersionInfo(file).FileVersion;
                 var fileName = Path.GetFileName(file);
                 Logger.Debug($"\tFile: {fileName}, File-Version: {fileVersion}");
-            }
-        }
-
-        public static void Cleanup()
-        {
-            try
-            {
-                LauncherRegistryHelper.DeleteValue(LauncherRegistryKeys.SessionUpdateSearchMode);
-            }
-            catch
-            {
             }
         }
     }

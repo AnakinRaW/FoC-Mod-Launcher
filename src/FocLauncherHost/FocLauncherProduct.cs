@@ -13,13 +13,60 @@ namespace FocLauncherHost
         public string AppDataPath => LauncherConstants.ApplicationBasePath;
         public string CurrentLocation => GetType().Assembly.Location;
 
-        public PreviewType UpdateSearchOption => GetPreviewMode();
-        
-        public PreviewType? CurrentUpdateSearchOption => GetCurrentPreviewMode();
-        
-        public bool IsPreviewInstance => UpdateSearchOption != PreviewType.Stable;
+        public PreviewType UpdateSearchOption
+        {
+            get
+            {
+                LauncherRegistryHelper.GetValueOrDefault(LauncherRegistryKeys.UpdateSearchMode, out var value, PreviewType.Stable);
+                return value;
+            }
+            set => LauncherRegistryHelper.WriteValue(LauncherRegistryKeys.UpdateSearchMode, value);
+        }
 
-        public UpdateMode UpdateMode => CurrentUpdateSearchOption == null ? UpdateMode.FallbackStable : UpdateMode.Explicit;
+        public PreviewType? CurrentUpdateSearchOption
+        {
+            get
+            {
+                LauncherRegistryHelper.GetValue<PreviewType?>(LauncherRegistryKeys.SessionUpdateSearchMode, out var value);
+                return value;
+            }
+            set
+            {
+                if (value == null)
+                    LauncherRegistryHelper.DeleteValue(LauncherRegistryKeys.SessionUpdateSearchMode);
+                else
+                    LauncherRegistryHelper.WriteValue(LauncherRegistryKeys.SessionUpdateSearchMode, value);
+            }
+        }
+
+        public bool IsPreviewInstance
+        {
+            get
+            {
+                var current = CurrentUpdateSearchOption ?? UpdateSearchOption;
+                return current != PreviewType.Stable;
+            }
+        }
+
+        public static bool SuppressFallbackUpdate
+        {
+            get
+            {
+                LauncherRegistryHelper.GetValueOrDefault(LauncherRegistryKeys.SuppressFallbackUpdate, out var value, false);
+                return value;
+            }
+            set => LauncherRegistryHelper.WriteValue(LauncherRegistryKeys.SuppressFallbackUpdate, value);
+        }
+
+        public UpdateMode UpdateMode
+        {
+            get
+            {
+                if (SuppressFallbackUpdate)
+                    return UpdateMode.NoFallback;
+                return CurrentUpdateSearchOption == null ? UpdateMode.FallbackStable : UpdateMode.Explicit;
+            }
+        }
 
 
         public BuildType BuildType
@@ -39,27 +86,12 @@ namespace FocLauncherHost
         private FocLauncherProduct()
         {
         }
-
-        private static PreviewType GetPreviewMode()
-        {
-            var initialValue =
-                LauncherRegistryHelper.GetValueOrDefault(LauncherRegistryKeys.UpdateSearchMode, PreviewType.Stable);
-
-            return initialValue;
-        }
-
-        private PreviewType GetCurrentPreviewMode()
-        {
-            var initialValue =
-                LauncherRegistryHelper.GetValueOrDefault(LauncherRegistryKeys.SessionUpdateSearchMode, PreviewType.Stable);
-
-            return initialValue;
-        }
     }
 
     public enum UpdateMode
     {
         FallbackStable,
-        Explicit
+        Explicit,
+        NoFallback,
     }
 }

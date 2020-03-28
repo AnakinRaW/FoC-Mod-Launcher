@@ -48,6 +48,7 @@
     <Compile Include="NLogUtils.cs" />
     <Compile Include="PathUtilities.cs" />
     <Compile Include="LauncherRegistryHelper.cs" />
+    <Compile Include="ValueSerializer.cs" />
     <Compile Include="WiniNet.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -61,6 +62,7 @@
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="NLog">
