@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Data;
-using FocLauncherHost.Update.UpdateCatalog;
+using FocLauncher;
 
 namespace FocLauncherHost.Converters
 {
@@ -9,9 +9,9 @@ namespace FocLauncherHost.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (!(value is PreviewType previewType))
+            if (!(value is ApplicationType previewType))
                 return string.Empty;
-            return previewType == PreviewType.Stable ? string.Empty : Enum.GetName(typeof(PreviewType), value)?.ToUpper();
+            return previewType == ApplicationType.Stable ? string.Empty : Enum.GetName(typeof(ApplicationType), value)?.ToUpper();
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

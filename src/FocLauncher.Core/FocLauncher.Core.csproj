@@ -39,13 +39,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AppDomainHelper.cs" />
-    <Compile Include="BuildType.cs" />
+    <Compile Include="Information\BuildType.cs" />
     <Compile Include="Converters\BooleanAndConverter.cs" />
     <Compile Include="ConnectionManager.cs" />
-    <Compile Include="FocLauncherInformation.cs" />
-    <Compile Include="UpdateMode.cs" />
+    <Compile Include="Information\FocLauncherInformation.cs" />
+    <Compile Include="Information\UpdateMode.cs" />
     <Compile Include="LauncherConstants.cs" />
-    <Compile Include="PreviewType.cs" />
+    <Compile Include="Information\ApplicationType.cs" />
     <Compile Include="Utilities\NLogUtils.cs" />
     <Compile Include="Utilities\PathUtilities.cs" />
     <Compile Include="LauncherRegistryHelper.cs" />

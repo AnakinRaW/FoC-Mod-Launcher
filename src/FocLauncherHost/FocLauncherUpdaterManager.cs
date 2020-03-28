@@ -16,6 +16,7 @@ using TaskBasedUpdater;
 using TaskBasedUpdater.Component;
 using TaskBasedUpdater.Configuration;
 using TaskBasedUpdater.Restart;
+using ApplicationType = FocLauncher.ApplicationType;
 
 namespace FocLauncherHost
 {
@@ -57,7 +58,7 @@ namespace FocLauncherHost
             var products = await Catalogs.TryDeserializeAsync(catalogStream);
             if (products is null)
                 throw new UpdaterException("Failed to deserialize metadata stream. Incompatible metadata version?");
-            return GetCatalogComponents(products, catalogs => catalogs.FirstOrDefault(x => x.Preview == PreviewType.Stable));
+            return GetCatalogComponents(products, catalogs => catalogs.FirstOrDefault(x => x.ApplicationType == ApplicationType.Stable));
         }
 
         protected IEnumerable<IComponent>? GetCatalogComponents(Catalogs catalogs, Func<IEnumerable<ProductCatalog>, ProductCatalog> fallbackAction)
@@ -127,7 +128,7 @@ namespace FocLauncherHost
             var processes = lockingProcessManager.GetProcesses().ToList();
             var isSelfLocking = lockingProcessManager.ProcessesContainsSelf();
 
-            if (!isSelfLocking && processes.Any(x => x.ApplicationType == ApplicationType.Critical))
+            if (!isSelfLocking && processes.Any(x => x.ApplicationType == TaskBasedUpdater.Restart.ApplicationType.Critical))
                 return new PendingHandledResult(HandlePendingComponentsStatus.Declined,
                     "Files are locked by a system process that cannot be terminated. Please restart the system");
 
@@ -214,7 +215,7 @@ namespace FocLauncherHost
 
             var searchOption = LauncherInformation.CurrentUpdateSearchOption ?? LauncherInformation.UpdateSearchOption;
 
-            var matchingProduct = productsWithCorrectName.FirstOrDefault(x => x.Preview == searchOption);
+            var matchingProduct = productsWithCorrectName.FirstOrDefault(x => x.ApplicationType == searchOption);
             if (fallbackAction == null || matchingProduct != null || LauncherInformation.UpdateMode == UpdateMode.Explicit || LauncherInformation.UpdateMode == UpdateMode.FallbackStable)
                 return matchingProduct;
 

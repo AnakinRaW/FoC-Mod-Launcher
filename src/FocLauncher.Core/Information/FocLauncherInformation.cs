@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using FocLauncherHost.Update.UpdateCatalog;
 
 namespace FocLauncher
 {
@@ -13,11 +12,11 @@ namespace FocLauncher
         public string AppDataPath => LauncherConstants.ApplicationBasePath;
         public string CurrentLocation => GetType().Assembly.Location;
 
-        public PreviewType UpdateSearchOption
+        public ApplicationType UpdateSearchOption
         {
             get
             {
-                LauncherRegistryHelper.GetValueOrDefault(LauncherRegistryKeys.UpdateSearchMode, out var value, PreviewType.Stable);
+                LauncherRegistryHelper.GetValueOrDefault(LauncherRegistryKeys.UpdateSearchMode, out var value, ApplicationType.Stable);
                 return value;
             }
             set
@@ -27,11 +26,11 @@ namespace FocLauncher
             }
         }
 
-        public PreviewType? CurrentUpdateSearchOption
+        public ApplicationType? CurrentUpdateSearchOption
         {
             get
             {
-                LauncherRegistryHelper.GetValue<PreviewType?>(LauncherRegistryKeys.SessionUpdateSearchMode, out var value);
+                LauncherRegistryHelper.GetValue<ApplicationType?>(LauncherRegistryKeys.SessionUpdateSearchMode, out var value);
                 return value;
             }
             set
@@ -49,7 +48,7 @@ namespace FocLauncher
             get
             {
                 var current = CurrentUpdateSearchOption ?? UpdateSearchOption;
-                return current != PreviewType.Stable;
+                return current != ApplicationType.Stable;
             }
         }
 

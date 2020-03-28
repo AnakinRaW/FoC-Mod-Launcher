@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
+using FocLauncher;
 
 namespace FocLauncherHost.Update.UpdateCatalog
 {
@@ -13,7 +14,7 @@ namespace FocLauncherHost.Update.UpdateCatalog
 
         private string _name;
         private string _author;
-        private PreviewType _preview;
+        private ApplicationType _application;
 
         [XmlArrayItem("Dependency", IsNullable = false)]
         public List<Dependency> Dependencies
@@ -37,10 +38,10 @@ namespace FocLauncherHost.Update.UpdateCatalog
         }
 
         [XmlAttribute]
-        public PreviewType Preview
+        public ApplicationType ApplicationType
         {
-            get => _preview;
-            set => _preview = value;
+            get => _application;
+            set => _application = value;
         }
 
         public override string ToString()
@@ -48,7 +49,7 @@ namespace FocLauncherHost.Update.UpdateCatalog
             var sb = new StringBuilder();
             sb.Append("Launcher: ");
             sb.Append($"Name: {Name}, ");
-            sb.Append($"Preview: {Preview}");
+            sb.Append($"ApplicationType: {ApplicationType}");
             sb.Append($"Author: {Author}");
 
             if (!Dependencies.Any())
