@@ -13,7 +13,7 @@ namespace FocLauncherHost
 {
     public static class Program
     {
-        private static readonly string ApplicationBasePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "FoC LauncherInformation");
+        private static readonly string ApplicationBasePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "FoC Launcher");
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 

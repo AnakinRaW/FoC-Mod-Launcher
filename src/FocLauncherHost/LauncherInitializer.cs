@@ -7,7 +7,6 @@ using System.Windows.Input;
 using FocLauncher;
 using FocLauncher.Shared;
 using FocLauncherHost.Dialogs;
-using FocLauncherHost.Update.UpdateCatalog;
 using FocLauncherHost.Utilities;
 using NLog;
 
