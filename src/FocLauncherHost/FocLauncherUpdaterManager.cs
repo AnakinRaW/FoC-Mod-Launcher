@@ -49,18 +49,20 @@ namespace FocLauncherHost
                 file.Name.Equals(x.Name) && x.Destination.Equals(LauncherConstants.ApplicationBasePath));
         }
 
-        protected override async Task<IEnumerable<IComponent>?> GetCatalogComponentsAsync(Stream catalogStream,
-            CancellationToken token)
+        protected override async Task<IEnumerable<IComponent>?> GetCatalogComponentsAsync(Stream catalogStream, CancellationToken token)
         {
             token.ThrowIfCancellationRequested();
+            var products = await Catalogs.TryDeserializeAsync(catalogStream);
+            if (products is null)
+                throw new UpdaterException("Failed to deserialize metadata stream. Incompatible metadata version?");
+            return GetCatalogComponents(products, catalogs => catalogs.FirstOrDefault(x => x.Preview == PreviewType.Stable));
+        }
 
+        protected IEnumerable<IComponent>? GetCatalogComponents(Catalogs catalogs, Func<IEnumerable<ProductCatalog>, ProductCatalog> fallbackAction)
+        {
             try
             {
-                var products = await Catalogs.TryDeserializeAsync(catalogStream);
-                if (products is null)
-                    throw new UpdaterException("Failed to deserialize metadata stream. Incompatible metadata version?");
-
-                var product = FindMatchingProductCatalog(products);
+                var product = FindMatchingProductCatalog(catalogs, fallbackAction);
                 if (product == null)
                     return null;
 
@@ -201,17 +203,21 @@ namespace FocLauncherHost
             return options;
         }
 
-        private ProductCatalog? FindMatchingProductCatalog(Catalogs catalogs)
+        private ProductCatalog? FindMatchingProductCatalog(Catalogs catalogs, Func<IEnumerable<ProductCatalog>, ProductCatalog> fallbackAction)
         {
             if (catalogs?.Products is null || !catalogs.Products.Any())
                 throw new NotSupportedException("No products to update are found");
 
             var productsWithCorrectName = catalogs.Products.Where(x =>
-                    x.Name.Equals(Product.Name, StringComparison.InvariantCultureIgnoreCase));
+                    x.Name.Equals(Product.Name, StringComparison.InvariantCultureIgnoreCase)).ToList();
 
-            var matchingPreviewType = productsWithCorrectName.Where(x => x.Preview == LauncherProduct.PreviewType);
-            return matchingPreviewType.FirstOrDefault();
+            var searchOption = LauncherProduct.CurrentUpdateSearchOption ?? LauncherProduct.UpdateSearchOption;
 
+            var matchingProduct = productsWithCorrectName.FirstOrDefault(x => x.Preview == searchOption);
+            if (fallbackAction == null || matchingProduct != null || LauncherProduct.UpdateMode == UpdateMode.Explicit)
+                return matchingProduct;
+
+            return fallbackAction(productsWithCorrectName);
         }
 
         private static ILockingProcessManager CreateFromProcessesWithoutSelf(IEnumerable<ILockingProcessInfo> processes)

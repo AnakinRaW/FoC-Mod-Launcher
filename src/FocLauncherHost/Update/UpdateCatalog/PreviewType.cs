@@ -2,7 +2,7 @@
 {
     public enum PreviewType
     {
-        None,
+        Stable,
         Beta,
         //Alpha,
         Test

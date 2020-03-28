@@ -35,7 +35,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <TextBlock Text="FoC Launcher" FontFamily="{StaticResource EaWFont}" HorizontalAlignment="Center" FontSize="32"/>
-        <TextBlock x:Name="PreviewTextBlock" Grid.Row="1" Text="{Binding Product.PreviewType, Converter={StaticResource LauncherTypeNameConverter}}" FontFamily="{StaticResource EaWFont}" HorizontalAlignment="Center" 
+        <TextBlock x:Name="PreviewTextBlock" Grid.Row="1" Text="{Binding Product.UpdateSearchOption, Converter={StaticResource LauncherTypeNameConverter}}" FontFamily="{StaticResource EaWFont}" HorizontalAlignment="Center" 
                    FontSize="28" Foreground="Red">
             <TextBlock.Visibility>
                 <MultiBinding Converter="{StaticResource BooleanAndConverter}">

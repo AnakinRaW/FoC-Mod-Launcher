@@ -13,10 +13,14 @@ namespace FocLauncherHost
         public string AppDataPath => LauncherConstants.ApplicationBasePath;
         public string CurrentLocation => GetType().Assembly.Location;
 
-        // TODO: Decide how to get data
-        public PreviewType PreviewType { get; }
+        public PreviewType UpdateSearchOption => GetPreviewMode();
+        
+        public PreviewType? CurrentUpdateSearchOption => GetCurrentPreviewMode();
+        
+        public bool IsPreviewInstance => UpdateSearchOption != PreviewType.Stable;
 
-        public bool IsPreviewInstance => PreviewType != PreviewType.None;
+        public UpdateMode UpdateMode => CurrentUpdateSearchOption == null ? UpdateMode.FallbackStable : UpdateMode.Explicit;
+
 
         public BuildType BuildType
         {
@@ -35,5 +39,27 @@ namespace FocLauncherHost
         private FocLauncherProduct()
         {
         }
+
+        private static PreviewType GetPreviewMode()
+        {
+            var initialValue =
+                LauncherRegistryHelper.GetValueOrDefault(LauncherRegistryKeys.UpdateSearchMode, PreviewType.Stable);
+
+            return initialValue;
+        }
+
+        private PreviewType GetCurrentPreviewMode()
+        {
+            var initialValue =
+                LauncherRegistryHelper.GetValueOrDefault(LauncherRegistryKeys.SessionUpdateSearchMode, PreviewType.Stable);
+
+            return initialValue;
+        }
+    }
+
+    public enum UpdateMode
+    {
+        FallbackStable,
+        Explicit
     }
 }

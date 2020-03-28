@@ -37,10 +37,10 @@ namespace FocLauncherHost
         {
             base.OnStartup(e);
             WaitAndShutdownAsync().Forget();
-            PrepareAndUpdateLauncherAsync().Forget();
+            UpdateLauncherAsync().Forget();
         }
         
-        internal async Task PrepareAndUpdateLauncherAsync()
+        internal async Task UpdateLauncherAsync()
         {
             try
             {

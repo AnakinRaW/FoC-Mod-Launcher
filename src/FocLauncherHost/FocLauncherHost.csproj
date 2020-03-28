@@ -94,7 +94,7 @@
     </Compile>
     <Compile Include="Dialogs\WindowHost.cs" />
     <Compile Include="FocLauncherProduct.cs" />
-    <Compile Include="LauncherInitializer.cs" />
+    <Compile Include="LauncherHelpers.cs" />
     <Compile Include="LauncherRestartManager.cs" />
     <Compile Include="Update\UpdateCatalog\PreviewType.cs" />
     <Compile Include="Program.cs" />

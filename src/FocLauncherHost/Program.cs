@@ -25,6 +25,7 @@ namespace FocLauncherHost
 
             // Gotta catch 'em all.
             AppDomain.CurrentDomain.UnhandledException += OnUnhandledExceptionReceived;
+            AppDomain.CurrentDomain.ProcessExit += CurrentDomain_ProcessExit;
 
             var lastResult = ExternalUpdaterResult.NoUpdate;
             if (args.Length >= 1)
@@ -41,8 +42,8 @@ namespace FocLauncherHost
 
             Logger.Debug($"Started FoC Launcher with arguments: {lastResult}");
 
-            var skipUpdate = LauncherInitializer.Initialize(lastResult);
-            if (!skipUpdate)
+            var update = LauncherHelpers.Initialize(lastResult);
+            if (update)
                 ShowSplashScreen();
 
             StartLauncher();
@@ -170,6 +171,11 @@ namespace FocLauncherHost
         {
             if (!File.Exists(filePath))
                 throw new FileNotFoundException($"Could not find {Path.GetFileName(filePath)}", filePath);
+        }
+
+        private static void CurrentDomain_ProcessExit(object sender, EventArgs e)
+        {
+            LauncherHelpers.Cleanup();
         }
     }
 }
