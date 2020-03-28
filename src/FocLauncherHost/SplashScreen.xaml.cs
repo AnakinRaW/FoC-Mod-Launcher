@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Animation;
+using FocLauncher;
 
 namespace FocLauncherHost
 {
@@ -15,18 +16,18 @@ namespace FocLauncherHost
         private bool _cancelable = true;
 
         private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
-        private FocLauncherProduct _product;
+        private FocLauncherInformation _launcher;
 
         public CancellationToken CancellationToken => _cancellationTokenSource.Token;
 
-        public FocLauncherProduct Product
+        public FocLauncherInformation Launcher
         {
-            get => _product;
+            get => _launcher;
             set
             {
-                if (value.Equals(_product))
+                if (value.Equals(_launcher))
                     return;
-                _product = value;
+                _launcher = value;
                 OnPropertyChanged();
             }
         }

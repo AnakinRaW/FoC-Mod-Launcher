@@ -17,7 +17,7 @@ namespace FocLauncherHost.Update.UpdateCatalog
         [XmlIgnore]
         protected static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        [XmlElement("Product")]
+        [XmlElement("Launcher")]
         public List<ProductCatalog> Products
         {
             get => _products;

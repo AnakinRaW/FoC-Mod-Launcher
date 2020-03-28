@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema id="UpdateValidator" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
-  <xs:element name="Products" type="ProductsMetadata"/>
+  <xs:element name="Launchers" type="LaunchersMetadata"/>
 
   <xs:complexType name="DependencyType">
     <xs:all>
@@ -27,7 +27,7 @@
     </xs:restriction>
   </xs:simpleType>
 
-  <xs:complexType name="ProductMetadata">
+  <xs:complexType name="LauncherMetadata">
     <xs:sequence>
       <xs:element type="DependencyListType" name="Dependencies" minOccurs="1" maxOccurs="1"/>
     </xs:sequence>
@@ -36,9 +36,9 @@
     <xs:attribute type="xs:string" name="Preview" use="optional"/>
   </xs:complexType>
 
-  <xs:complexType name="ProductsMetadata">
+  <xs:complexType name="LaunchersMetadata">
     <xs:sequence>
-      <xs:element type="ProductMetadata" name="Product" maxOccurs="unbounded" minOccurs="0"/>
+      <xs:element type="LauncherMetadata" name="Launcher" maxOccurs="unbounded" minOccurs="0"/>
     </xs:sequence>
   </xs:complexType>
 

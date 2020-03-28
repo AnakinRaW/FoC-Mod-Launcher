@@ -14,7 +14,7 @@ namespace FocLauncher.Updater.Tests
     [TestClass]
     public class UpdaterDependencyTests
     {
-        private static readonly string ApplicationBasePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "FoC Launcher");
+        private static readonly string ApplicationBasePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "FoC LauncherInformation");
         private UpdateManager _updateManager;
 
         [TestInitialize]
@@ -199,9 +199,9 @@ namespace FocLauncher.Updater.Tests
 
         internal class Product : IProductInfo
         {
-            public string Name { get; } = "FoC-Launcher";
+            public string Name { get; } = "FoC-LauncherInformation";
             public string Author { get; }
-            public string AppDataPath => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "FoC Launcher");
+            public string AppDataPath => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "FoC LauncherInformation");
             public string CurrentLocation => GetType().Assembly.Location;
         }
     }

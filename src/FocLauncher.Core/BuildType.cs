@@ -1,4 +1,4 @@
-﻿namespace FocLauncherHost.Update.UpdateCatalog
+﻿namespace FocLauncher
 {
     public enum BuildType
     {

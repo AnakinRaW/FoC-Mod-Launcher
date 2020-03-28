@@ -15,7 +15,7 @@ namespace FocLauncherHost.Dialogs
         {
             HostWindow = new Window
             {
-                Title = "FoC Launcher",
+                Title = "FoC LauncherInformation",
                 SizeToContent = SizeToContent.WidthAndHeight,
                 ResizeMode = ResizeMode.NoResize
             };

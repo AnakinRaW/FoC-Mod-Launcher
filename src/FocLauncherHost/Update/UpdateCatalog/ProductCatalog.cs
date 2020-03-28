@@ -46,7 +46,7 @@ namespace FocLauncherHost.Update.UpdateCatalog
         public override string ToString()
         {
             var sb = new StringBuilder();
-            sb.Append("Product: ");
+            sb.Append("Launcher: ");
             sb.Append($"Name: {Name}, ");
             sb.Append($"Preview: {Preview}");
             sb.Append($"Author: {Author}");

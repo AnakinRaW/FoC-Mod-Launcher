@@ -36,12 +36,12 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TextBlock Text="FoC Launcher" FontFamily="{StaticResource EaWFont}" HorizontalAlignment="Center" FontSize="32"/>
-        <TextBlock x:Name="PreviewTextBlock" Grid.Row="1" Text="{Binding Product.UpdateSearchOption, Converter={StaticResource LauncherTypeNameConverter}}" FontFamily="{StaticResource EaWFont}" HorizontalAlignment="Center" 
+        <TextBlock Text="FoC LauncherInformation" FontFamily="{StaticResource EaWFont}" HorizontalAlignment="Center" FontSize="32"/>
+        <TextBlock x:Name="PreviewTextBlock" Grid.Row="1" Text="{Binding Launcher.UpdateSearchOption, Converter={StaticResource LauncherTypeNameConverter}}" FontFamily="{StaticResource EaWFont}" HorizontalAlignment="Center" 
                    FontSize="28" Foreground="Red">
             <TextBlock.Visibility>
                 <MultiBinding Converter="{StaticResource BooleanAndConverter}">
-                    <Binding Path="Product.IsPreviewInstance"/>
+                    <Binding Path="Launcher.IsPreviewInstance"/>
                     <Binding ElementName="PreviewTextBlock" Path="Text" Converter="{StaticResource NullOrEmptyToVisibilityConverter}"/>
                 </MultiBinding>
             </TextBlock.Visibility>
@@ -49,7 +49,7 @@
         <Image Grid.Row="2" Source="Resources/splash.png" Height="256" Width="256" RenderOptions.EdgeMode="Aliased" 
                RenderOptions.BitmapScalingMode="Fant"/>
         <TextBlock Grid.Row="3" HorizontalAlignment="Right" Text="Icon © Exhumed" FontSize="9"/>
-        <TextBlock Grid.Row="3" HorizontalAlignment="Left" Text="Debug Build" FontSize="9" Visibility="{Binding Product.IsDebug}"/>
+        <TextBlock Grid.Row="3" HorizontalAlignment="Left" Text="Debug Build" FontSize="9" Visibility="{Binding Launcher.IsDebug}"/>
         <Grid Grid.Row="4" Margin="0,6,0,0"
               Visibility="{Binding IsProgressVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Grid.RowDefinitions>

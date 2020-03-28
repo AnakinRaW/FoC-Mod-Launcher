@@ -27,7 +27,7 @@ namespace TaskBasedUpdater
 
         public Uri UpdateCatalogLocation { get; }
 
-        public IProductInfo Product { get; }
+        public string ApplicationPath { get; }
         
         protected virtual IEnumerable<string> FileDeleteIgnoreFilter => new List<string>();
 
@@ -39,12 +39,12 @@ namespace TaskBasedUpdater
 
         public IReadOnlyCollection<IComponent> RemovableComponents => _removableComponentsReadOnly ??= new ReadOnlyCollection<IComponent>(_removableComponents);
 
-        protected UpdateManager(IProductInfo productInfo, string versionMetadataPath)
+        protected UpdateManager(string applicationPath, string versionMetadataPath)
         {
             if (!Uri.TryCreate(versionMetadataPath, UriKind.Absolute, out var metadataUri))
                 throw new UriFormatException();
             UpdateCatalogLocation = metadataUri;
-            Product = productInfo;
+            ApplicationPath = applicationPath;
         }
 
         public async Task<UpdateResult> UpdateAsync(CancellationToken cancellation)
@@ -84,7 +84,7 @@ namespace TaskBasedUpdater
 
         public async Task CalculateRemovableComponentsAsync()
         {
-            await CalculateRemovableComponentsAsync(Product.AppDataPath);
+            await CalculateRemovableComponentsAsync(ApplicationPath);
         }
 
         public virtual async Task<UpdateInformation> CheckAndPerformUpdateAsync(CancellationToken cancellation)

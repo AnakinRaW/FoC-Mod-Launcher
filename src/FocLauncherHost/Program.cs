@@ -13,7 +13,7 @@ namespace FocLauncherHost
 {
     public static class Program
     {
-        private static readonly string ApplicationBasePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "FoC Launcher");
+        private static readonly string ApplicationBasePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "FoC LauncherInformation");
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
@@ -40,7 +40,7 @@ namespace FocLauncherHost
                 NLogUtils.DeleteOldLogFile();
             NLogUtils.SetLoggingForAppDomain();
 
-            Logger.Debug($"Started FoC Launcher with arguments: {lastResult}");
+            Logger.Debug($"Started FoC LauncherInformation with arguments: {lastResult}");
 
             var update = LauncherInitializer.Initialize(lastResult);
             if (update)
@@ -124,7 +124,7 @@ namespace FocLauncherHost
         {
             var s = new AppDomainSetup
             {
-                ApplicationName = "FoC Launcher",
+                ApplicationName = "FoC LauncherInformation",
                 ApplicationBase = LauncherConstants.ApplicationBasePath,
                 //LoaderOptimization = LoaderOptimization.MultiDomainHost
             };

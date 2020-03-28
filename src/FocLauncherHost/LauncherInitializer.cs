@@ -58,15 +58,15 @@ namespace FocLauncherHost
         {
             if ((Keyboard.GetKeyStates(Key.T) & KeyStates.Down) > 0)
             {
-                FocLauncherProduct.Instance.CurrentUpdateSearchOption = PreviewType.Test;
+                FocLauncherInformation.Instance.CurrentUpdateSearchOption = PreviewType.Test;
                 return;
             }
             if ((Keyboard.GetKeyStates(Key.B) & KeyStates.Down) > 0)
             {
-                FocLauncherProduct.Instance.CurrentUpdateSearchOption = PreviewType.Beta;
+                FocLauncherInformation.Instance.CurrentUpdateSearchOption = PreviewType.Beta;
                 return;
             }
-            FocLauncherProduct.Instance.CurrentUpdateSearchOption = null;
+            FocLauncherInformation.Instance.CurrentUpdateSearchOption = null;
         }
 
         private static void SetupRegistry()

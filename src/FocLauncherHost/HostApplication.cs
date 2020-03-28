@@ -2,9 +2,9 @@
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using FocLauncher;
 using FocLauncher.Threading;
 using FocLauncherHost.Dialogs;
-using FocLauncherHost.Update.UpdateCatalog;
 using Microsoft.VisualStudio.Threading;
 using NLog;
 using TaskBasedUpdater;
@@ -13,7 +13,7 @@ namespace FocLauncherHost
 {
     public class HostApplication : Application
     {
-        public const string ServerUrl = "https://raw.githubusercontent.com/AnakinSklavenwalker/FoC-Mod-Launcher/";
+        public const string ServerUrl = "https://raw.githubusercontent.com/AnakinSklavenwalker/FoC-Mod-LauncherInformation/";
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private static readonly TimeSpan WaitSplashDelay = TimeSpan.FromSeconds(2);
@@ -30,7 +30,7 @@ namespace FocLauncherHost
         internal HostApplication()
         {
             MainWindow = SplashScreen = new SplashScreen();
-            SplashScreen.Product = FocLauncherProduct.Instance;
+            SplashScreen.Launcher = FocLauncherInformation.Instance;
         }
 
         protected override void OnStartup(StartupEventArgs e)
@@ -96,7 +96,7 @@ namespace FocLauncherHost
         {
             if (updateInformation != null)
             {
-                if (updateInformation.RequiresUserNotification && SplashScreen.IsProgressVisible || FocLauncherProduct.Instance.BuildType == BuildType.Debug)
+                if (updateInformation.RequiresUserNotification && SplashScreen.IsProgressVisible || FocLauncherInformation.Instance.BuildType == BuildType.Debug)
                 {
                     Interlocked.Exchange(ref _shouldShowSplashScreen, 0);
                     SplashScreen.Cancelable = false;

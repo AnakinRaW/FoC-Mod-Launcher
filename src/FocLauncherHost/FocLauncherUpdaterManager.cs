@@ -23,12 +23,13 @@ namespace FocLauncherHost
     {
         protected override IEnumerable<string> FileDeleteIgnoreFilter => new List<string> {".Theme.dll"};
 
-        public FocLauncherProduct LauncherProduct => Product as FocLauncherProduct;
+        public FocLauncherInformation LauncherInformation { get; }
 
-        public FocLauncherUpdaterManager(string versionMetadataPath) : base(FocLauncherProduct.Instance,
+        public FocLauncherUpdaterManager(string versionMetadataPath) : base(LauncherConstants.ApplicationBasePath,
             versionMetadataPath)
         {
             SetUpdateConfiguration();
+            LauncherInformation = FocLauncherInformation.Instance;
         }
 
         private static void SetUpdateConfiguration()
@@ -136,7 +137,7 @@ namespace FocLauncherHost
             {
                 var restartRequestResult =
                     LauncherRestartManager.ShowProcessKillDialog(lockingProcessManagerWithoutSelf, token);
-                Logger.Trace($"Kill locking processes: {restartRequestResult}, Launcher needs restart: {false}");
+                Logger.Trace($"Kill locking processes: {restartRequestResult}, LauncherInformation needs restart: {false}");
                 if (!restartRequestResult)
                     return new PendingHandledResult(HandlePendingComponentsStatus.Declined,
                         "Update aborted because locked files have not been released.");
@@ -156,7 +157,7 @@ namespace FocLauncherHost
                     "Update requires a self-update which is not supported for this update configuration.");
 
             var result = LauncherRestartManager.ShowSelfKillDialog(lockingProcessManager, token);
-            Logger.Trace($"Kill locking processes: {result}, Launcher needs restart: {true}");
+            Logger.Trace($"Kill locking processes: {result}, LauncherInformation needs restart: {true}");
             if (!result)
                 return new PendingHandledResult(HandlePendingComponentsStatus.Declined,
                     "Update aborted because locked files have not been released.");
@@ -209,17 +210,17 @@ namespace FocLauncherHost
                 throw new NotSupportedException("No products to update are found");
 
             var productsWithCorrectName = catalogs.Products.Where(x =>
-                    x.Name.Equals(Product.Name, StringComparison.InvariantCultureIgnoreCase)).ToList();
+                    x.Name.Equals(LauncherInformation.Name, StringComparison.InvariantCultureIgnoreCase)).ToList();
 
-            var searchOption = LauncherProduct.CurrentUpdateSearchOption ?? LauncherProduct.UpdateSearchOption;
+            var searchOption = LauncherInformation.CurrentUpdateSearchOption ?? LauncherInformation.UpdateSearchOption;
 
             var matchingProduct = productsWithCorrectName.FirstOrDefault(x => x.Preview == searchOption);
-            if (fallbackAction == null || matchingProduct != null || LauncherProduct.UpdateMode == UpdateMode.Explicit || LauncherProduct.UpdateMode == UpdateMode.FallbackStable)
+            if (fallbackAction == null || matchingProduct != null || LauncherInformation.UpdateMode == UpdateMode.Explicit || LauncherInformation.UpdateMode == UpdateMode.FallbackStable)
                 return matchingProduct;
 
             var messageBoxResult = MessageBox.Show(
                 $"No updates for {searchOption}-Version available. Do you want to update to the latest stable version instead?",
-                "FoC-Launcher", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.Yes);
+                "FoC-LauncherInformation", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.Yes);
             return messageBoxResult == MessageBoxResult.Yes ? fallbackAction(productsWithCorrectName) : null;
         }
 

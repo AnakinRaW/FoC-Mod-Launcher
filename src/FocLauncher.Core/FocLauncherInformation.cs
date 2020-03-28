@@ -1,15 +1,12 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using FocLauncher;
-using FocLauncherHost.Annotations;
 using FocLauncherHost.Update.UpdateCatalog;
-using TaskBasedUpdater;
 
-namespace FocLauncherHost
+namespace FocLauncher
 {
-    public class FocLauncherProduct : IProductInfo, INotifyPropertyChanged
+    public class FocLauncherInformation : INotifyPropertyChanged
     {
-        private static FocLauncherProduct _instance;
+        private static FocLauncherInformation _instance;
 
         public string Name => LauncherConstants.ProductName;
         public string Author => LauncherConstants.Author;
@@ -39,7 +36,7 @@ namespace FocLauncherHost
             }
             set
             {
-                if (value == null)
+                if (value is null)
                     LauncherRegistryHelper.DeleteValue(LauncherRegistryKeys.SessionUpdateSearchMode);
                 else
                     LauncherRegistryHelper.WriteValue(LauncherRegistryKeys.SessionUpdateSearchMode, value);
@@ -93,25 +90,17 @@ namespace FocLauncherHost
             }
         }
 
-        public static FocLauncherProduct Instance => _instance ??= new FocLauncherProduct();
+        public static FocLauncherInformation Instance => _instance ??= new FocLauncherInformation();
 
-        private FocLauncherProduct()
+        private FocLauncherInformation()
         {
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-    }
-
-    public enum UpdateMode
-    {
-        FallbackStable,
-        Explicit,
-        NoFallback,
     }
 }

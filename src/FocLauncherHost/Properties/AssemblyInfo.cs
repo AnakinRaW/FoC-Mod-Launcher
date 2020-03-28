@@ -7,11 +7,11 @@ using System.Windows;
 // Allgemeine Informationen über eine Assembly werden über die folgenden
 // Attribute gesteuert. Ändern Sie diese Attributwerte, um die Informationen zu ändern,
 // die einer Assembly zugeordnet sind.
-[assembly: AssemblyTitle("FoC Launcher")]
+[assembly: AssemblyTitle("FoC LauncherInformation")]
 [assembly: AssemblyDescription("Mod and game launcher for Star Wars Empire at War: Forces of Corruption")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Republic at War Modding Team")]
-[assembly: AssemblyProduct("FoC Launcher")]
+[assembly: AssemblyProduct("FoC LauncherInformation")]
 [assembly: AssemblyCopyright("Copyright © 2020 Anakin Sklavenwalker")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

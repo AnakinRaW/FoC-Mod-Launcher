@@ -93,11 +93,9 @@
       <DependentUpon>LockedFilesDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\WindowHost.cs" />
-    <Compile Include="FocLauncherProduct.cs" />
     <Compile Include="LauncherInitializer.cs" />
     <Compile Include="LauncherRestartManager.cs" />
     <Compile Include="Properties\Annotations.cs" />
-    <Compile Include="Update\UpdateCatalog\PreviewType.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="HostApplication.cs" />
     <Compile Include="ExceptionHandling\ExceptionToTextConverter.cs" />
@@ -113,7 +111,6 @@
     </Compile>
     <Compile Include="FocLauncherUpdaterManager.cs" />
     <Compile Include="Shared\LauncherRestartOptions_Interface.cs" />
-    <Compile Include="Update\UpdateCatalog\BuildType.cs" />
     <Compile Include="Update\UpdateCatalog\DependencyHelper.cs" />
     <Compile Include="Update\UpdateCatalog\Dependency.cs" />
     <Compile Include="Update\UpdateCatalog\InstallLocation.cs" />
