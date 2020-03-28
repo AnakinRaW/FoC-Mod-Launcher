@@ -96,6 +96,7 @@
     <Compile Include="FocLauncherProduct.cs" />
     <Compile Include="LauncherInitializer.cs" />
     <Compile Include="LauncherRestartManager.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Update\UpdateCatalog\PreviewType.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="HostApplication.cs" />
@@ -120,10 +121,10 @@
     <Compile Include="Update\UpdateCatalog\Catalogs.cs" />
     <Compile Include="Utilities\AssemblyExtractor.cs" />
     <Compile Include="Utilities\FileExtensions.cs" />
-    <Compile Include="Utilities\LauncherTypeNameConverter.cs" />
-    <Compile Include="Utilities\LockingProcessInfoTextConverter.cs" />
-    <Compile Include="Utilities\NullOrEmptyToVisibilityConverter.cs" />
-    <Compile Include="Utilities\NullToVisibilityConverter.cs" />
+    <Compile Include="Converters\LauncherTypeNameConverter.cs" />
+    <Compile Include="Converters\LockingProcessInfoTextConverter.cs" />
+    <Compile Include="Converters\NullOrEmptyToVisibilityConverter.cs" />
+    <Compile Include="Converters\NullToVisibilityConverter.cs" />
     <Compile Include="Utilities\StreamExtensions.cs" />
     <Compile Include="Utilities\UrlCombine.cs" />
     <Compile Include="SplashScreen.xaml.cs">
@@ -269,8 +270,6 @@
   <ItemGroup>
     <Resource Include="Resources\han.PNG" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Utilities\Converters\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

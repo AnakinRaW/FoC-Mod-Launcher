@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace FocLauncher
+namespace FocLauncher.NativeMethods
 {
     internal static class WiniNet
     {

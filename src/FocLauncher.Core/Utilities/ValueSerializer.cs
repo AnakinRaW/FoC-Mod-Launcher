@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Windows;
 
-namespace FocLauncher
+namespace FocLauncher.Utilities
 {
     internal static class ValueSerializer
     {

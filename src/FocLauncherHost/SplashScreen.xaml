@@ -3,6 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:utilities="clr-namespace:FocLauncherHost.Utilities"
              xmlns:focLauncher="clr-namespace:FocLauncher;assembly=FocLauncher.Core"
+             xmlns:converters="clr-namespace:FocLauncher.Converters;assembly=FocLauncher.Core"
+             xmlns:converters1="clr-namespace:FocLauncherHost.Converters"
              ResizeMode="NoResize" ShowInTaskbar="True" SizeToContent="Height" TextOptions.TextFormattingMode="Ideal"
              WindowStartupLocation="CenterScreen" WindowStyle="None" AllowsTransparency="True" Background="Transparent"
              Width="320" DataContext="{Binding RelativeSource={RelativeSource Self}}">
@@ -10,9 +12,9 @@
         <FontFamily x:Key="EaWFont">pack://application:,,,./Resources/Fonts/EaW-bold.ttf#Empire At War</FontFamily>
 
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-        <utilities:NullOrEmptyToVisibilityConverter x:Key="NullOrEmptyToVisibilityConverter"/>
-        <utilities:LauncherTypeNameConverter x:Key="LauncherTypeNameConverter"/>
-        <focLauncher:BooleanAndConverter x:Key="BooleanAndConverter"/>
+        <converters1:NullOrEmptyToVisibilityConverter x:Key="NullOrEmptyToVisibilityConverter"/>
+        <converters1:LauncherTypeNameConverter x:Key="LauncherTypeNameConverter"/>
+        <converters:BooleanAndConverter x:Key="BooleanAndConverter"/>
         
         <!-- ReSharper disable once Xaml.RedundantResource -->
         <Storyboard x:Key="HideAnimation">

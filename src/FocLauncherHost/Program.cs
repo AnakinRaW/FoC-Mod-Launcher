@@ -4,6 +4,7 @@ using System.Security.AccessControl;
 using System.Windows;
 using FocLauncher;
 using FocLauncher.Shared;
+using FocLauncher.Utilities;
 using FocLauncherHost.Dialogs;
 using Microsoft.Win32;
 using NLog;

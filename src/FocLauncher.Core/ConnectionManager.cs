@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Threading;
 using System.Threading.Tasks;
+using FocLauncher.NativeMethods;
 
 namespace FocLauncher
 {

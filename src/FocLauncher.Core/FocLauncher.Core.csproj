@@ -38,18 +38,15 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <None Include="Readme.md" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="AppDomainHelper.cs" />
-    <Compile Include="BooleanAndConverter.cs" />
+    <Compile Include="Converters\BooleanAndConverter.cs" />
     <Compile Include="ConnectionManager.cs" />
     <Compile Include="LauncherConstants.cs" />
-    <Compile Include="NLogUtils.cs" />
-    <Compile Include="PathUtilities.cs" />
+    <Compile Include="Utilities\NLogUtils.cs" />
+    <Compile Include="Utilities\PathUtilities.cs" />
     <Compile Include="LauncherRegistryHelper.cs" />
-    <Compile Include="ValueSerializer.cs" />
-    <Compile Include="WiniNet.cs" />
+    <Compile Include="Utilities\ValueSerializer.cs" />
+    <Compile Include="NativeMethods\WiniNet.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
@@ -69,5 +66,6 @@
       <Version>4.7.0</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

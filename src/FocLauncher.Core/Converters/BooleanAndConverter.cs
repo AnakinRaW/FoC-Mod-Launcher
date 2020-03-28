@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace FocLauncher
+namespace FocLauncher.Converters
 {
     public class BooleanAndConverter : IMultiValueConverter
     {

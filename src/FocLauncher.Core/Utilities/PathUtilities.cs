@@ -3,7 +3,7 @@ using System.IO;
 using System.Security.AccessControl;
 using System.Security.Principal;
 
-namespace FocLauncher
+namespace FocLauncher.Utilities
 {
     public static class PathUtilities
     {

@@ -1,10 +1,13 @@
-﻿using FocLauncher;
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using FocLauncher;
+using FocLauncherHost.Annotations;
 using FocLauncherHost.Update.UpdateCatalog;
 using TaskBasedUpdater;
 
 namespace FocLauncherHost
 {
-    public class FocLauncherProduct : IProductInfo
+    public class FocLauncherProduct : IProductInfo, INotifyPropertyChanged
     {
         private static FocLauncherProduct _instance;
 
@@ -20,7 +23,11 @@ namespace FocLauncherHost
                 LauncherRegistryHelper.GetValueOrDefault(LauncherRegistryKeys.UpdateSearchMode, out var value, PreviewType.Stable);
                 return value;
             }
-            set => LauncherRegistryHelper.WriteValue(LauncherRegistryKeys.UpdateSearchMode, value);
+            set
+            {
+                LauncherRegistryHelper.WriteValue(LauncherRegistryKeys.UpdateSearchMode, value);
+                OnPropertyChanged();
+            }
         }
 
         public PreviewType? CurrentUpdateSearchOption
@@ -36,6 +43,7 @@ namespace FocLauncherHost
                     LauncherRegistryHelper.DeleteValue(LauncherRegistryKeys.SessionUpdateSearchMode);
                 else
                     LauncherRegistryHelper.WriteValue(LauncherRegistryKeys.SessionUpdateSearchMode, value);
+                OnPropertyChanged();
             }
         }
 
@@ -48,14 +56,18 @@ namespace FocLauncherHost
             }
         }
 
-        public static bool SuppressFallbackUpdate
+        public bool SuppressFallbackUpdate
         {
             get
             {
                 LauncherRegistryHelper.GetValueOrDefault(LauncherRegistryKeys.SuppressFallbackUpdate, out var value, false);
                 return value;
             }
-            set => LauncherRegistryHelper.WriteValue(LauncherRegistryKeys.SuppressFallbackUpdate, value);
+            set
+            {
+                LauncherRegistryHelper.WriteValue(LauncherRegistryKeys.SuppressFallbackUpdate, value);
+                OnPropertyChanged();
+            }
         }
 
         public UpdateMode UpdateMode
@@ -85,6 +97,14 @@ namespace FocLauncherHost
 
         private FocLauncherProduct()
         {
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 

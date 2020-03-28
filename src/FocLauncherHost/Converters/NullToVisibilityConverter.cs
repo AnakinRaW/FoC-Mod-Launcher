@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
-namespace FocLauncherHost.Utilities
+namespace FocLauncherHost.Converters
 {
     internal class NullToVisibilityConverter : IValueConverter
     {

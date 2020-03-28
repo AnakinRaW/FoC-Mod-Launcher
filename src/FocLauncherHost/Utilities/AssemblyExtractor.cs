@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Security.AccessControl;
 using System.Threading.Tasks;
 using FocLauncher;
+using FocLauncher.Utilities;
 using NLog;
 
 #if !DEBUG

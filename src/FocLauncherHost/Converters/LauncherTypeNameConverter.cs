@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows.Data;
 using FocLauncherHost.Update.UpdateCatalog;
 
-namespace FocLauncherHost.Utilities
+namespace FocLauncherHost.Converters
 {
     internal class LauncherTypeNameConverter : IValueConverter
     {

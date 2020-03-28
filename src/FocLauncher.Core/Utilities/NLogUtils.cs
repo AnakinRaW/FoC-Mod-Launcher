@@ -3,7 +3,7 @@ using NLog;
 using NLog.Layouts;
 using LogLevel = NLog.LogLevel;
 
-namespace FocLauncher
+namespace FocLauncher.Utilities
 {
     public static class NLogUtils
     {
@@ -16,15 +16,11 @@ namespace FocLauncher
                 FileName = logFilePath,
                 Layout = new LayoutWithHeaderAndFooter
                 {
-                    Header = new SimpleLayout("/**************** Foc Launcher by Anakin Sklavenwalker ****************/"),
+                    Header = new SimpleLayout($"/**************** {LauncherConstants.ProductName} by {LauncherConstants.Author} ****************/"),
                     Layout = new SimpleLayout("${longdate}|${level:uppercase=true}|${logger}|${message}")
                 }
             };
-#if DEBUG
             config.AddRule(LogLevel.Trace, LogLevel.Fatal, logfile);
-#else
-            config.AddRule(LogLevel.Info, LogLevel.Fatal, logfile);
-#endif
             LogManager.Configuration = config;
         }
 

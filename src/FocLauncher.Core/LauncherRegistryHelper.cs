@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using FocLauncher.Utilities;
+using Microsoft.Win32;
 
 namespace FocLauncher
 {
