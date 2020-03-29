@@ -1,0 +1,20 @@
+﻿<Window x:Class="FocLauncher.Dialogs.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Foc Launcher Settings" SizeToContent="WidthAndHeight"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}">
+    <Grid Margin="12">
+        <StackPanel>
+            <CheckBox IsChecked="{Binding UseBetaBuilds, Mode=TwoWay}" Content="Use beta builds for launcher updates"/>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="When no beta builds are available:"/>
+                <ComboBox ItemsSource="{Binding Path=ExampleEnumsWithCaptions}" DisplayMemberPath="Value" SelectedValuePath="Key"
+                          SelectedValue="{Binding Path=UpdateFallbackOption, Mode=TwoWay}"
+                          MinWidth="150"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>

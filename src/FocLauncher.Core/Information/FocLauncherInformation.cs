@@ -52,11 +52,11 @@ namespace FocLauncher
             }
         }
 
-        public bool SuppressFallbackUpdate
+        public FallbackSuppression UpdateFallbackSuppression
         {
             get
             {
-                LauncherRegistryHelper.GetValueOrDefault(LauncherRegistryKeys.SuppressFallbackUpdate, out var value, false);
+                LauncherRegistryHelper.GetValueOrDefault(LauncherRegistryKeys.SuppressFallbackUpdate, out var value, FallbackSuppression.Always);
                 return value;
             }
             set
@@ -70,9 +70,17 @@ namespace FocLauncher
         {
             get
             {
-                if (SuppressFallbackUpdate)
-                    return UpdateMode.NoFallback;
-                return CurrentUpdateSearchOption == null ? UpdateMode.FallbackStable : UpdateMode.Explicit;
+                if (CurrentUpdateSearchOption != null)
+                    return UpdateMode.Explicit;
+                switch (UpdateFallbackSuppression)
+                {
+                    case FallbackSuppression.Always:
+                        return UpdateMode.NoFallback;
+                    case FallbackSuppression.Ask:
+                        return UpdateMode.AskFallbackStable;
+                    default:
+                        return UpdateMode.FallbackStable;
+                }
             }
         }
 

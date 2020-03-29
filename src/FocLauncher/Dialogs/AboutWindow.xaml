@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="About" SizeToContent="Height" Width="300" MinHeight="150"
+        Title="About" SizeToContent="Height" Width="350" MinHeight="150"
         ResizeMode="NoResize" DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <Grid Margin="6,12">
         <Grid.RowDefinitions>
@@ -30,7 +30,7 @@
                         </Hyperlink>
                     </TextBlock>
                 </DockPanel>
-                <TextBlock Text="Palpatine Image © Lucasfilm Ltd. LLC"/>
+                <TextBlock Text="Palpatine, Anakin, Han, Cody Image © Lucasfilm Ltd. LLC"/>
                 <TextBlock Text="Vader Image © by Marvel Comics"/>
                 <TextBlock Text="EaW Font © by Petroglyph/Lucasarts"/>
             </StackPanel>

@@ -35,27 +35,27 @@ namespace FocLauncher
             mainWindow.DataContext = viewModel;
             mainWindow.Show();
             
-            ThreadHelper.JoinableTaskFactory.Run(async () =>
-            {
-                var data = new WaitDialogProgressData("Please wait while the launcher is loading an update.", "Updating....", null, true);
+            //ThreadHelper.JoinableTaskFactory.Run(async () =>
+            //{
+            //    var data = new WaitDialogProgressData("Please wait while the launcher is loading an update.", "Updating....", null, true);
 
                 
-                var s = WaitDialogFactory.Instance.StartWaitDialog("123", data, TimeSpan.FromSeconds(2));
-                try
-                {
-                    await Task.Delay(50000, s.UserCancellationToken);
+            //    var s = WaitDialogFactory.Instance.StartWaitDialog("123", data, TimeSpan.FromSeconds(2));
+            //    try
+            //    {
+            //        await Task.Delay(50000, s.UserCancellationToken);
 
-                    //foreach (var func in actionQueue) 
-                    //    await func();
-                }
-                catch (TaskCanceledException)
-                {
-                }
-                finally
-                {
-                    s.Dispose();
-                }
-            });
+            //        //foreach (var func in actionQueue) 
+            //        //    await func();
+            //    }
+            //    catch (TaskCanceledException)
+            //    {
+            //    }
+            //    finally
+            //    {
+            //        s.Dispose();
+            //    }
+            //});
         }
 
         private void LauncherApp_Exit(object sender, ExitEventArgs e)

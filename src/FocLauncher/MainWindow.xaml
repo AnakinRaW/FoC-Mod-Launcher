@@ -114,8 +114,12 @@
                         <AccessText Text="Change _Theme" TextDecorations="Underline" Foreground="{DynamicResource {x:Static theming:EnvironmentColors.StatusBarDefaultText}}"/>
                     </Button>
                     <Button Margin="0,0,3,0" Background="Transparent" BorderBrush="Transparent" FocusVisualStyle="{x:Null}"
-                                Click="OpenAboutWindow">
-                        <AccessText Text="Abo_ut" TextDecorations="Underline" Foreground="{DynamicResource {x:Static theming:EnvironmentColors.StatusBarDefaultText}}"/>
+                            Click="OpenSettingsWindow">
+                        <Image Source="Resources/SettingsOutline_16x.png"/>
+                    </Button>
+                    <Button Margin="0,0,3,0" Background="Transparent" BorderBrush="Transparent" FocusVisualStyle="{x:Null}"
+                            Click="OpenAboutWindow">
+                        <Image Source="Resources/StatusHelp_grey_disabled_16x.png"></Image>
                     </Button>
                 </DockPanel>
             </Grid>

@@ -42,6 +42,7 @@
     <Compile Include="Information\BuildType.cs" />
     <Compile Include="Converters\BooleanAndConverter.cs" />
     <Compile Include="ConnectionManager.cs" />
+    <Compile Include="Information\FallbackSuppression.cs" />
     <Compile Include="Information\FocLauncherInformation.cs" />
     <Compile Include="Information\UpdateMode.cs" />
     <Compile Include="LauncherConstants.cs" />

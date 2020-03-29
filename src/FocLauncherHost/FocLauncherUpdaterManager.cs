@@ -216,13 +216,18 @@ namespace FocLauncherHost
             var searchOption = LauncherInformation.CurrentUpdateSearchOption ?? LauncherInformation.UpdateSearchOption;
 
             var matchingProduct = productsWithCorrectName.FirstOrDefault(x => x.ApplicationType == searchOption);
-            if (fallbackAction == null || matchingProduct != null || LauncherInformation.UpdateMode == UpdateMode.Explicit || LauncherInformation.UpdateMode == UpdateMode.FallbackStable)
+            if (fallbackAction == null || matchingProduct != null || LauncherInformation.UpdateMode == UpdateMode.Explicit || LauncherInformation.UpdateMode == UpdateMode.NoFallback)
                 return matchingProduct;
 
-            var messageBoxResult = MessageBox.Show(
-                $"No updates for {searchOption}-Version available. Do you want to update to the latest stable version instead?",
-                "FoC-LauncherInformation", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.Yes);
-            return messageBoxResult == MessageBoxResult.Yes ? fallbackAction(productsWithCorrectName) : null;
+            var useFallback = true;
+            if (LauncherInformation.UpdateMode == UpdateMode.AskFallbackStable)
+            {
+                var messageBoxResult = MessageBox.Show(
+                    $"No updates for {searchOption}-Version available. Do you want to update to the latest stable version instead?",
+                    "FoC-LauncherInformation", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.Yes);
+                useFallback = messageBoxResult == MessageBoxResult.Yes;
+            }
+            return useFallback ? fallbackAction(productsWithCorrectName) : null;
         }
 
         private static ILockingProcessManager CreateFromProcessesWithoutSelf(IEnumerable<ILockingProcessInfo> processes)

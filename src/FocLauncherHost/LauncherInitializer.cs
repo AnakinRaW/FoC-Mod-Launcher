@@ -21,6 +21,8 @@ namespace FocLauncherHost
             if (!Directory.Exists(LauncherConstants.ApplicationBasePath))
                 throw new DirectoryNotFoundException($"Required directory '{LauncherConstants.ApplicationBasePath}' not found.");
 
+            SetupRegistry();
+
             try
             {
                 if (CheckRestoreRequired(launchOption)) 
@@ -48,7 +50,6 @@ namespace FocLauncherHost
             }
 
             LogInstalledAssemblies();
-            SetupRegistry();
             SetCurrentUpdateSearchMode();
             return launchOption == ExternalUpdaterResult.NoUpdate;
         }

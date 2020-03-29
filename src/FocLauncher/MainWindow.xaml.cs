@@ -19,6 +19,11 @@ namespace FocLauncher
             new AboutWindow().ShowDialog();
         }
 
+        private void OpenSettingsWindow(object sender, RoutedEventArgs e)
+        {
+            new SettingsWindow().ShowDialog();
+        }
+
         private void OpenChangeThemeDialog(object sender, RoutedEventArgs e)
         {
             new ChangeThemeDialog().ShowDialog();
