@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
-using FocLauncherHost.Utilities;
+using FocLauncher.Utilities;
 using NLog;
 
-namespace FocLauncherHost.Update.UpdateCatalog
+namespace FocLauncher.UpdateMetadata
 {
     [Serializable]
     [XmlRoot("Products", Namespace = "", IsNullable = false)]

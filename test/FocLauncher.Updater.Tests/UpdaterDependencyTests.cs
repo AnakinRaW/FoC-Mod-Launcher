@@ -4,7 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using FocLauncherHost.Update.UpdateCatalog;
+using FocLauncher.UpdateMetadata;
+using FocLauncherHost.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TaskBasedUpdater;
 using TaskBasedUpdater.Component;
@@ -34,7 +35,7 @@ namespace FocLauncher.Updater.Tests
             dependency.Destination = ApplicationBasePath;
             dependency.Origin = "https://example.com";
 
-            var component = DependencyHelper.DependencyToComponent(dependency);
+            var component = CatalogExtensions.DependencyToComponent(dependency);
 
             const ComponentAction expected = ComponentAction.Update;
             await _updateManager.CalculateComponentStatusAsync(component);
@@ -51,7 +52,7 @@ namespace FocLauncher.Updater.Tests
             dependency.Destination = ApplicationBasePath;
             dependency.Origin = "https://example.com";
 
-            var component = DependencyHelper.DependencyToComponent(dependency);
+            var component = CatalogExtensions.DependencyToComponent(dependency);
 
             const ComponentAction expected = ComponentAction.Update;
             await _updateManager.CalculateComponentStatusAsync(component);
@@ -68,7 +69,7 @@ namespace FocLauncher.Updater.Tests
             dependency.Destination = ApplicationBasePath;
             dependency.Origin = "https://example.com";
 
-            var component = DependencyHelper.DependencyToComponent(dependency);
+            var component = CatalogExtensions.DependencyToComponent(dependency);
 
             const ComponentAction expected = ComponentAction.Update;
             await _updateManager.CalculateComponentStatusAsync(component);
@@ -85,7 +86,7 @@ namespace FocLauncher.Updater.Tests
             dependency.Destination = ApplicationBasePath;
             dependency.Origin = "https://example.com";
 
-            var component = DependencyHelper.DependencyToComponent(dependency);
+            var component = CatalogExtensions.DependencyToComponent(dependency);
 
             const ComponentAction expected = ComponentAction.Update;
             await _updateManager.CalculateComponentStatusAsync(component);
@@ -102,7 +103,7 @@ namespace FocLauncher.Updater.Tests
             dependency.Destination = ApplicationBasePath;
             dependency.Origin = "https://example.com";
 
-            var component = DependencyHelper.DependencyToComponent(dependency);
+            var component = CatalogExtensions.DependencyToComponent(dependency);
 
             const ComponentAction expected = ComponentAction.Keep;
             await _updateManager.CalculateComponentStatusAsync(component);
@@ -120,7 +121,7 @@ namespace FocLauncher.Updater.Tests
             dependency.Sha2 = UpdaterUtilities.GetFileHash(Path.Combine(ApplicationBasePath, dependency.Name), HashType.Sha256);
             dependency.Origin = "https://example.com";
 
-            var component = DependencyHelper.DependencyToComponent(dependency);
+            var component = CatalogExtensions.DependencyToComponent(dependency);
 
             const ComponentAction expected = ComponentAction.Keep;
             await _updateManager.CalculateComponentStatusAsync(component);
@@ -138,7 +139,7 @@ namespace FocLauncher.Updater.Tests
             dependency.Destination = ApplicationBasePath;
             dependency.Origin = "https://example.com";
 
-            var component = DependencyHelper.DependencyToComponent(dependency);
+            var component = CatalogExtensions.DependencyToComponent(dependency);
 
             const ComponentAction expected = ComponentAction.Keep;
             await _updateManager.CalculateComponentStatusAsync(component);
@@ -156,7 +157,7 @@ namespace FocLauncher.Updater.Tests
             dependency.Sha2 = UpdaterUtilities.HexToArray("d32b568cd1b96d459e7291ebf4b25d007f275c9f13149beeb782fac0716613f8");
             dependency.Origin = "https://example.com";
 
-            var component = DependencyHelper.DependencyToComponent(dependency);
+            var component = CatalogExtensions.DependencyToComponent(dependency);
 
             const ComponentAction expected = ComponentAction.Update;
             await _updateManager.CalculateComponentStatusAsync(component);
@@ -173,7 +174,7 @@ namespace FocLauncher.Updater.Tests
             dependency.Sha2 = UpdaterUtilities.HexToArray("d32b568cd1b96d459e7291ebf4b25d007f275c9f13149beeb782fac0716613f8");
             dependency.Origin = "https://example.com";
 
-            var component = DependencyHelper.DependencyToComponent(dependency);
+            var component = CatalogExtensions.DependencyToComponent(dependency);
 
             const ComponentAction expected = ComponentAction.Update;
             await _updateManager.CalculateComponentStatusAsync(component);

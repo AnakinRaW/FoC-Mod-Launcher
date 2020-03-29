@@ -7,9 +7,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using FocLauncher;
+using FocLauncher.Properties;
 using FocLauncher.Shared;
-using FocLauncherHost.Properties;
-using FocLauncherHost.Update.UpdateCatalog;
+using FocLauncher.UpdateMetadata;
+using FocLauncher.Utilities;
 using FocLauncherHost.Utilities;
 using Newtonsoft.Json;
 using TaskBasedUpdater;
@@ -70,7 +71,7 @@ namespace FocLauncherHost
                     return null;
 
                 var result = new HashSet<IComponent>(ComponentIdentityComparer.Default);
-                foreach (var component in product.Dependencies.Select(DependencyHelper.DependencyToComponent)
+                foreach (var component in product.Dependencies.Select(CatalogExtensions.DependencyToComponent)
                     .Where(component => component != null))
                     result.Add(component);
                 return result;

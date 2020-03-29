@@ -3,7 +3,7 @@ using System.IO;
 using System.Xml;
 using System.Xml.Schema;
 
-namespace FocLauncherHost.Utilities
+namespace FocLauncher.Utilities
 {
     public class XmlValidator
     {

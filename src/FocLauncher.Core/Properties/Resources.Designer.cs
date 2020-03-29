@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FocLauncherHost.Properties {
+namespace FocLauncher.Properties {
     using System;
     
     
@@ -22,7 +22,7 @@ namespace FocLauncherHost.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    public class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,10 +36,10 @@ namespace FocLauncherHost.Properties {
         ///   Gibt die zwischengespeicherte ResourceManager-Instanz zurück, die von dieser Klasse verwendet wird.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FocLauncherHost.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FocLauncher.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -51,7 +51,7 @@ namespace FocLauncherHost.Properties {
         ///   Ressourcenzuordnungen, die diese stark typisierte Ressourcenklasse verwenden.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -68,11 +68,12 @@ namespace FocLauncherHost.Properties {
         ///
         ///  &lt;xs:complexType name=&quot;DependencyType&quot;&gt;
         ///    &lt;xs:all&gt;
-        ///      &lt;xs:element type=&quot;InstallLocationEnum&quot; name=&quot;InstallLocation&quot; maxOccurs=&quot;1&quot;/&gt;
-        ///      &lt;xs:element type=&quot;xs:boolean&quot; name=&quot;RequiresRestart&quot; minOccurs=&quot;0&quot; maxOccurs=&quot;1&quot;/&gt;
-        ///      &lt;xs:element type=&quot;xs:anyURI&quot; name=&quot;SourceLocation&quot; maxOccurs=&quot;1&quot;/ [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        ///      &lt;xs:element type=&quot;xs:string&quot; name=&quot;Destination&quot; minOccurs=&quot;1&quot; maxOccurs=&quot;1&quot;/&gt;
+        ///      &lt;xs:element type=&quot;xs:anyURI&quot; name=&quot;Origin&quot; minOccurs=&quot;1&quot; maxOccurs=&quot;1&quot;/&gt;
+        ///      &lt;xs:element type=&quot;SHA2&quot; name=&quot;SHA2&quot; minOccurs=&quot;0&quot; maxOccurs=&quot;1&quot;/&gt;
+        ///      &lt;x [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
-        internal static string UpdateValidator {
+        public static string UpdateValidator {
             get {
                 return ResourceManager.GetString("UpdateValidator", resourceCulture);
             }

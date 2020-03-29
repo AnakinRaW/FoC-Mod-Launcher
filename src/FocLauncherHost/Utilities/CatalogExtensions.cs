@@ -1,11 +1,12 @@
 ﻿using System;
+using FocLauncher.UpdateMetadata;
 using TaskBasedUpdater.Component;
 
-namespace FocLauncherHost.Update.UpdateCatalog
+namespace FocLauncherHost.Utilities
 {
-    internal static class DependencyHelper
+    public static class CatalogExtensions
     {
-        internal static IComponent? DependencyToComponent(Dependency dependency)
+        public static IComponent? DependencyToComponent(Dependency dependency)
         {
             if (string.IsNullOrEmpty(dependency.Name) || string.IsNullOrEmpty(dependency.Destination))
                 return null;
@@ -29,13 +30,6 @@ namespace FocLauncherHost.Update.UpdateCatalog
             }
 
             return component;
-        }
-
-        internal static Version? GetVersion(this Dependency dependency)
-        {
-            if (string.IsNullOrEmpty(dependency.Version))
-                return null;
-            return !Version.TryParse(dependency.Version, out var version) ? null : version;
         }
 
         private static string GetRealDependencyDestination(Dependency dependency)

@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
-using FocLauncher;
 
-namespace FocLauncherHost.Update.UpdateCatalog
+namespace FocLauncher.UpdateMetadata
 {
     [Serializable]
     public class ProductCatalog

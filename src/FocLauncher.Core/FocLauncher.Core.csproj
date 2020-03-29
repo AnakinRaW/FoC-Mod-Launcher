@@ -47,12 +47,24 @@
     <Compile Include="Information\UpdateMode.cs" />
     <Compile Include="LauncherConstants.cs" />
     <Compile Include="Information\ApplicationType.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="UpdateMetadata\Catalogs.cs" />
+    <Compile Include="UpdateMetadata\Dependency.cs" />
+    <Compile Include="UpdateMetadata\DependencyHelper.cs" />
+    <Compile Include="UpdateMetadata\InstallLocation.cs" />
+    <Compile Include="UpdateMetadata\ProductCatalog.cs" />
     <Compile Include="Utilities\NLogUtils.cs" />
     <Compile Include="Utilities\PathUtilities.cs" />
     <Compile Include="LauncherRegistryHelper.cs" />
     <Compile Include="Utilities\UrlCombine.cs" />
     <Compile Include="Utilities\ValueSerializer.cs" />
     <Compile Include="NativeMethods\WiniNet.cs" />
+    <Compile Include="Utilities\XmlObjectParser.cs" />
+    <Compile Include="Utilities\XmlValidator.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
@@ -72,6 +84,16 @@
       <Version>4.7.0</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\UpdateValidator.xsd">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
