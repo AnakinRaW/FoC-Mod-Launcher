@@ -14,6 +14,7 @@ namespace FocLauncher
         public const string UpdaterFileName = "FocLauncher.AppUpdater.exe";
         public const string LogFileName = "FocLauncherLog.txt";
         public const string UpdateMetadataFileName = "LauncherUpdateData.xml";
+        public const string LauncherFileName = "FoC Launcher.exe";
 
         public const string ProductName = "FoC-Launcher";
         public const string Author = "AnakinSklavenwalker";
