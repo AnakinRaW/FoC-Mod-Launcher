@@ -49,8 +49,7 @@ namespace TaskBasedUpdater.Download
 
         private DownloadManager()
         {
-            // TODO:
-            //AddDownloadEngine((IDownloadEngine)new WebClientDownloader());
+            AddDownloadEngine(new WebClientDownloader());
             AddDownloadEngine(new FileDownloader());
             DefaultEngines = _allEngines.Select(e => e.Name);
             SleepDurationBetweenRetries = UpdateConfiguration.Instance.DownloadRetryDelay;

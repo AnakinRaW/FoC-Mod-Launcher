@@ -50,6 +50,7 @@
     <Compile Include="Utilities\NLogUtils.cs" />
     <Compile Include="Utilities\PathUtilities.cs" />
     <Compile Include="LauncherRegistryHelper.cs" />
+    <Compile Include="Utilities\UrlCombine.cs" />
     <Compile Include="Utilities\ValueSerializer.cs" />
     <Compile Include="NativeMethods\WiniNet.cs" />
   </ItemGroup>

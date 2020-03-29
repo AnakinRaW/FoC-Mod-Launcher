@@ -13,8 +13,6 @@ namespace FocLauncherHost
 {
     public class HostApplication : Application
     {
-        public const string ServerUrl = "https://raw.githubusercontent.com/AnakinSklavenwalker/FoC-Mod-LauncherInformation/";
-
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private static readonly TimeSpan WaitSplashDelay = TimeSpan.FromSeconds(2);
         private static readonly TimeSpan WaitProgressDelay = TimeSpan.FromSeconds(WaitSplashDelay.Seconds + 2);
@@ -47,6 +45,9 @@ namespace FocLauncherHost
                 Task.Delay(WaitSplashDelay).ContinueWith(async _ => await ShowMainWindowAsync(), default,
                     TaskContinuationOptions.None, TaskScheduler.FromCurrentSynchronizationContext()).Forget();
 
+                if (! await ConnectionManager.Instance.CheckConnectionAsync())
+                    return;
+
                 await ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
                 {
                     SplashScreen.ProgressText = "Please wait while the launcher is downloading an update.";
@@ -56,8 +57,7 @@ namespace FocLauncherHost
                     UpdateInformation updateInformation = null;
                     try
                     {
-                        var updateManager =
-                            new FocLauncherUpdaterManager(@"C:\Users\Anakin\OneDrive\launcherUpdate.xml");
+                        var updateManager = new FocLauncherUpdaterManager(LauncherConstants.UpdateMetadataPath);
                         updateInformation = await updateManager.CheckAndPerformUpdateAsync(cts.Token);
                         Logger.Info($"Finished automatic update with result {updateInformation}");
                     }

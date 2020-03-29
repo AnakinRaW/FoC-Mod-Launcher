@@ -1,15 +1,19 @@
 ﻿using System;
 using System.IO;
+using FocLauncher.Utilities;
 
 namespace FocLauncher
 {
     public static class LauncherConstants
     {
+        public const string UpdateMetadataServerUrl = "https://raw.githubusercontent.com/AnakinSklavenwalker/TestLauncherBuilds/master";
+
         public const string ApplicationBaseVariable = "APPLICATIONBASE";
         public const string ExecutablePathVariable = "EXECUTABLE";
 
         public const string UpdaterFileName = "FocLauncher.AppUpdater.exe";
         public const string LogFileName = "FocLauncherLog.txt";
+        public const string UpdateMetadataFileName = "LauncherUpdateData.xml";
 
         public const string ProductName = "FoC-Launcher";
         public const string Author = "AnakinSklavenwalker";
@@ -22,5 +26,6 @@ namespace FocLauncher
 
         public static string UpdaterPath => Path.Combine(ApplicationBasePath, UpdaterFileName);
         public static string LogFilePath => Path.Combine(ApplicationBasePath, LogFileName);
+        public static string UpdateMetadataPath => UrlCombine.Combine(UpdateMetadataServerUrl, UpdateMetadataFileName);
     }
 }

@@ -67,6 +67,7 @@
     <Compile Include="Download\DownloadEngineBase.cs" />
     <Compile Include="Download\DownloadFailureException.cs" />
     <Compile Include="Download\DownloadFailureInformation.cs" />
+    <Compile Include="Download\DownloadHelpers.cs" />
     <Compile Include="Download\DownloadManager.cs" />
     <Compile Include="Download\DownloadResult.cs" />
     <Compile Include="Download\DownloadSource.cs" />
@@ -76,7 +77,10 @@
     <Compile Include="Download\IDownloadManager.cs" />
     <Compile Include="Download\NoSuitableEngineException.cs" />
     <Compile Include="Download\PreferredDownloadEngines.cs" />
+    <Compile Include="Download\ProxyResolution.cs" />
     <Compile Include="Download\ValidationFailedException.cs" />
+    <Compile Include="Download\WebClientDownloader.cs" />
+    <Compile Include="Download\WrappedWebException.cs" />
     <Compile Include="Elevation\ElevationRequestData.cs" />
     <Compile Include="Elevation\ElevationRequireException.cs" />
     <Compile Include="Elevation\ElevationUtilities.cs" />
