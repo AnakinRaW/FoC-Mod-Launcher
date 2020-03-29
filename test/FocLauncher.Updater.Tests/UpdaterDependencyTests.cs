@@ -8,13 +8,14 @@ using FocLauncherHost.Update.UpdateCatalog;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TaskBasedUpdater;
 using TaskBasedUpdater.Component;
+using TaskBasedUpdater.Restart;
 
 namespace FocLauncher.Updater.Tests
 {
     [TestClass]
     public class UpdaterDependencyTests
     {
-        private static readonly string ApplicationBasePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "FoC LauncherInformation");
+        private static readonly string ApplicationBasePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "FoC Launcher");
         private UpdateManager _updateManager;
 
         [TestInitialize]
@@ -182,7 +183,7 @@ namespace FocLauncher.Updater.Tests
 
         internal class TestUpdateManager : UpdateManager
         {
-            public TestUpdateManager(IProductInfo productInfo, string versionMetadataPath) : base(productInfo, versionMetadataPath)
+            public TestUpdateManager(IProductInfo productInfo, string versionMetadataPath) : base(productInfo.AppDataPath, versionMetadataPath)
             {
             }
 
@@ -195,11 +196,16 @@ namespace FocLauncher.Updater.Tests
             {
                 return Task.FromResult(true);
             }
+
+            protected override IRestartOptions CreateRestartOptions(IReadOnlyCollection<IComponent>? components = null)
+            {
+                throw new NotImplementedException();
+            }
         }
 
         internal class Product : IProductInfo
         {
-            public string Name { get; } = "FoC-LauncherInformation";
+            public string Name { get; } = "FoC-Launcher";
             public string Author { get; }
             public string AppDataPath => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "FoC LauncherInformation");
             public string CurrentLocation => GetType().Assembly.Location;
