@@ -51,7 +51,7 @@ namespace FocLauncherHost
 
             LogInstalledAssemblies();
             SetCurrentUpdateSearchMode();
-            return launchOption == ExternalUpdaterResult.NoUpdate;
+            return launchOption == ExternalUpdaterResult.NoUpdate && FocLauncherInformation.Instance.AutoUpdateEnabled;
         }
 
         private static void SetCurrentUpdateSearchMode()

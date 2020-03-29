@@ -9,6 +9,7 @@ namespace FocLauncher
         public const string SessionUpdateSearchMode = nameof(SessionUpdateSearchMode);
         public const string SuppressFallbackUpdate = nameof(SuppressFallbackUpdate);
         public const string ForceRestore = nameof(ForceRestore);
+        public const string AutoUpdateEnabled = nameof(AutoUpdateEnabled);
     }
 
     public static class LauncherRegistryHelper

@@ -12,6 +12,20 @@ namespace FocLauncher
         public string AppDataPath => LauncherConstants.ApplicationBasePath;
         public string CurrentLocation => GetType().Assembly.Location;
 
+        public bool AutoUpdateEnabled
+        {
+            get
+            {
+                LauncherRegistryHelper.GetValueOrDefault(LauncherRegistryKeys.AutoUpdateEnabled, out var value, true);
+                return value;
+            }
+            set
+            {
+                LauncherRegistryHelper.WriteValue(LauncherRegistryKeys.AutoUpdateEnabled, value);
+                OnPropertyChanged();
+            }
+        }
+
         public ApplicationType UpdateSearchOption
         {
             get

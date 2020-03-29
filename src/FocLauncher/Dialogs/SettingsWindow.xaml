@@ -8,8 +8,9 @@
         DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <Grid Margin="12">
         <StackPanel>
-            <CheckBox IsChecked="{Binding UseBetaBuilds, Mode=TwoWay}" Content="Use beta builds for launcher updates"/>
-            <StackPanel Orientation="Horizontal">
+            <CheckBox IsChecked="{Binding Launcher.AutoUpdateEnabled, Mode=TwoWay}" Content="Search for launcher updates on startup"/>
+            <CheckBox x:Name="UseBetaCheckBox" IsChecked="{Binding UseBetaBuilds, Mode=TwoWay}" Content="Use beta builds for launcher updates"/>
+            <StackPanel Orientation="Horizontal" IsEnabled="{Binding ElementName=UseBetaCheckBox, Path=IsChecked}">
                 <Label Content="When no beta builds are available:"/>
                 <ComboBox ItemsSource="{Binding Path=ExampleEnumsWithCaptions}" DisplayMemberPath="Value" SelectedValuePath="Key"
                           SelectedValue="{Binding Path=UpdateFallbackOption, Mode=TwoWay}"
