@@ -9,7 +9,7 @@ namespace FocLauncher.Dialogs
         public FocLauncherInformation Launcher { get; }
 
         public Dictionary<FallbackSuppression, string> ExampleEnumsWithCaptions { get; } =
-            new Dictionary<FallbackSuppression, string>()
+            new Dictionary<FallbackSuppression, string>
             {
                 {FallbackSuppression.Always, "Do nothing"},
                 {FallbackSuppression.Never, "Update last stable version"},
