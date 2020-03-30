@@ -51,6 +51,13 @@ namespace FocLauncherHost
 
             LogInstalledAssemblies();
             SetCurrentUpdateSearchMode();
+            return ShallUpdate(launchOption);
+        }
+
+        private static bool ShallUpdate(ExternalUpdaterResult launchOption)
+        {
+            if ((Keyboard.GetKeyStates(Key.N) & KeyStates.Down) > 0)
+                return false;
             return launchOption == ExternalUpdaterResult.NoUpdate && FocLauncherInformation.Instance.AutoUpdateEnabled;
         }
 
