@@ -30,8 +30,7 @@ namespace TaskBasedUpdater.Download
         {
             var summary = new DownloadSummary();
 
-            HttpWebRequest webRequest;
-            using var webResponse = GetWebResponse(uri, ref summary, out webRequest, cancellationToken);
+            using var webResponse = GetWebResponse(uri, ref summary, out var webRequest, cancellationToken);
             if (webResponse != null)
             {
                 var registration1 = cancellationToken.Register(() => webResponse.Close());

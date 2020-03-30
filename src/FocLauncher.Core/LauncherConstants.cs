@@ -6,7 +6,7 @@ namespace FocLauncher
 {
     public static class LauncherConstants
     {
-        public const string UpdateMetadataServerUrl = "https://raw.githubusercontent.com/AnakinSklavenwalker/FoC-Mod-Launcher/master";
+        public const string UpdateMetadataServerUrl = "https://republicatwar.com/downloads/FocLauncher/";
 
         public const string ApplicationBaseVariable = "APPLICATIONBASE";
         public const string ExecutablePathVariable = "EXECUTABLE";
