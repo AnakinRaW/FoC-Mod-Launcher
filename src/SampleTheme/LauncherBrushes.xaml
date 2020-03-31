@@ -1,10 +1,10 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:themes="clr-namespace:FocLauncher.Theming;assembly=FocLauncher.Theming">
+                    xmlns:theming1="clr-namespace:FocLauncher.Theming;assembly=FocLauncher.Theming">
 
 
     <!-- TODO: Add the colors and images you want to change here-->
 
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type themes:EnvironmentColors},
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly=theming1:EnvironmentColors,
                      ResourceId=BackgroundColor}" Color="Blue"/>
 </ResourceDictionary>

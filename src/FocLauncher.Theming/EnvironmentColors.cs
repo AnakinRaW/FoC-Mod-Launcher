@@ -12,6 +12,7 @@ namespace FocLauncher.Theming
 
         private static ComponentResourceKey _statusBarRunningBackground;
         private static ComponentResourceKey _statusBarRunningText;
+
         public static ComponentResourceKey BackgroundColor =>
             _backgroundColor ?? (_backgroundColor = new ComponentResourceKey(typeof(EnvironmentColors), nameof(BackgroundColor)));
 
