@@ -33,7 +33,7 @@ namespace FocLauncher.UpdateMetadata
             set => _origin = value;
         }
 
-        [XmlElement(DataType = "hexBinary")]
+        [XmlElement(ElementName = "SHA2", DataType = "hexBinary")]
         public byte[]? Sha2
         {
             get => _sha2;
