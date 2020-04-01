@@ -1,35 +1,60 @@
-﻿using System.Collections.Generic;
-using CommandLine;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using FocLauncher;
 
 namespace MetadataCreator
 {
-    internal class DataOptions
+    internal class ApplicationFilesSet : IEnumerable<ApplicationFiles>
     {
-        [Option("exe", HelpText = "The main executable of the application")]
-        public string Executable { get; set; }
+        public ApplicationFiles StableFiles { get; } = new ApplicationFiles(ApplicationType.Stable);
+        //public ApplicationFiles AlphaFiles { get; } = new ApplicationFiles(ApplicationType.Alpha);
+        public ApplicationFiles BetaFiles { get; } = new ApplicationFiles(ApplicationType.Beta);
+        public ApplicationFiles TestFiles { get; } = new ApplicationFiles(ApplicationType.Test);
 
-        [Option('f', "applicationFiles", Separator = ';', HelpText = "List of all applications files separated with an ';'")]
-        public IEnumerable<string> ApplicationFiles { get; set; }
+        public ApplicationFiles GetFilesDataFromApplicationType(ApplicationType applicationType)
+        {
+            switch (applicationType)
+            {
+                case ApplicationType.Stable:
+                    return StableFiles;
+                case ApplicationType.Beta:
+                    return BetaFiles;
+                case ApplicationType.Test:
+                    return TestFiles;
+                default:
+                    throw new NotImplementedException();
+            }
+        }
 
+        public bool Validate()
+        {
+            if (!StableFiles.Validate(true))
+                return false;
+            //if (!AlphaFiles.Validate())
+            //    return false;
+            if (!BetaFiles.Validate())
+                return false;
+            if (!TestFiles.Validate())
+                return false;
+            return true;
+        }
 
-        [Option("exeAlpha", HelpText = "The main executable of the application (Alpha Build)")]
-        public string? AlphaExecutable { get; set; }
+        public IEnumerator<ApplicationFiles> GetEnumerator()
+        {
+            if (StableFiles.Validate(true))
+                yield return StableFiles;
+            if (BetaFiles.Validate(true))
+                yield return BetaFiles;
+            //if (AlphaFiles.Validate(true))
+            //    yield return AlphaFiles;
+            if (TestFiles.Validate(true))
+                yield return TestFiles;
+        }
 
-        [Option('a', "alphaFiles", Separator = ';', HelpText = "List of all (Alpha Build) applications files separated with an ';'")]
-        public IEnumerable<string>? AlphaFiles { get; set; }
-
-
-        [Option("exeBeta", HelpText = "The main executable of the application (Beta Build)")]
-        public string? BetaExecutable { get; set; }
-
-        [Option('b', "betaFiles", Separator = ';', HelpText = "List of all (Beta Build) applications files separated with an ';'")]
-        public IEnumerable<string>? BetaFiles { get; set; }
-
-
-        [Option("exeTest", HelpText = "The main executable of the application (Test Build)")]
-        public string? TestExecutable { get; set; }
-
-        [Option('t', "betaFiles", Separator = ';', HelpText = "List of all (Test Build) applications files separated with an ';'")]
-        public IEnumerable<string>? TestFiles { get; set; }
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
     }
 }

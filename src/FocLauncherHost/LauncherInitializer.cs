@@ -30,12 +30,7 @@ namespace FocLauncherHost
                 HandleLastUpdateResult(launchOption, out var skipWriteToDisk);
                 if (!skipWriteToDisk)
                 {
-                    AssemblyExtractor.WriteNecessaryAssembliesToDisk(LauncherConstants.ApplicationBasePath,
-                        "FocLauncher.dll",
-                        "FocLauncher.Theming.dll",
-                        LauncherConstants.UpdaterFileName,
-                        "FocLauncher.Threading.dll",
-                        "Microsoft.VisualStudio.Utilities.dll");
+                    AssemblyExtractor.WriteNecessaryAssembliesToDisk(LauncherConstants.ApplicationBasePath, LauncherConstants.ApplicationFileNames);
                 }
             }
             catch (Exception e)
