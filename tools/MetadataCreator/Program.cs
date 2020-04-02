@@ -28,47 +28,56 @@ namespace MetadataCreator
             LaunchOptions options = null;
             Parser.Default.ParseArguments<LaunchOptions>(args).WithParsed(launchOptions =>
             {
-                if (string.IsNullOrEmpty(launchOptions.Output))
-                    launchOptions.Output = Directory.GetCurrentDirectory();
+                if (string.IsNullOrEmpty(launchOptions.XmlOutput))
+                    launchOptions.XmlOutput = Directory.GetCurrentDirectory();
                 if (string.IsNullOrEmpty(launchOptions.OriginPathRoot))
                     launchOptions.OriginPathRoot = DefaultFileRootPath;
+                if (launchOptions.XmlIntegrationMode < 0 || launchOptions.XmlIntegrationMode > 2)
+                    throw new InvalidOperationException($"Value {launchOptions.XmlIntegrationMode} is not supported for parameter --integrationMode (-m).");
                 _launchOptions = launchOptions;
             });
             if (_launchOptions is null)
                 return;
 
+            _launchOptions.XmlIntegrationMode = 2;
+            _launchOptions.CurrentMetadataFile = LauncherConstants.UpdateMetadataPath;
+
             var dir = new DirectoryInfo(Directory.GetCurrentDirectory());
             var files = GetFilesByExtensions(dir, true, SupportedFileEndings);
-            var applicationFiles = GetApplicationFiles(files.ToList(), _launchOptions.BuildType).ToList();
-            if (applicationFiles.Count() != LauncherConstants.ApplicationFileNames.Length)
+            var applicationFileInfos = GetApplicationFiles(files.ToList(), _launchOptions.BuildType).ToList();
+            if (applicationFileInfos.Count != LauncherConstants.ApplicationFileNames.Length)
                 throw new InvalidOperationException();
 
             if (!Enum.TryParse<ApplicationType>(_launchOptions.ApplicationType, true, out var applicationType))
                 throw new InvalidOperationException($"Could not parse '{_launchOptions.ApplicationType}' into a real ApplicationType");
 
-            
-            var data = new ApplicationFilesSet();
+
+            var applicationFiles = new ApplicationFiles(applicationType);
             try
             {
-                FillData(applicationType, applicationFiles, data.GetFilesDataFromApplicationType(applicationType));
+                FillData(applicationFileInfos, applicationFiles);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
+                throw;
             }
 
-            if (!data.Validate())
+            if (!applicationFiles.Validate())
                 throw new InvalidOperationException("The file set was not valid");
 
-            var catalogs = CreateCatalogs(data);
+            var product = CreateProduct(applicationFiles);
+
+            var catalog = CreateCatalogOrIntegrate(product);
+
 
             var serializer = new XmlSerializer(typeof(Catalogs));
-            var outputFile = Path.Combine(_launchOptions.Output, LauncherConstants.UpdateMetadataFileName);
+            var outputFile = Path.Combine(_launchOptions.XmlOutput, LauncherConstants.UpdateMetadataFileName);
             using var file = new FileStream(outputFile, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
             using var writer = new XmlTextWriter(file, Encoding.UTF8) {Formatting = Formatting.Indented};
             var ns = new XmlSerializerNamespaces();
             ns.Add("", "");
-            serializer.Serialize(writer, catalogs, ns);
+            serializer.Serialize(writer, catalog, ns);
             file.Dispose();
             
             var schemeStream = Resources.UpdateValidator.ToStream();
@@ -84,6 +93,46 @@ namespace MetadataCreator
             Console.ReadKey();
         }
 
+        private static Catalogs CreateCatalogOrIntegrate(ProductCatalog product)
+        {
+            var catalog = new Catalogs {Products = new List<ProductCatalog> {product}};
+
+            if (_launchOptions.XmlIntegrationMode == 0)
+                return catalog;
+
+            if (product.ApplicationType == ApplicationType.Stable && _launchOptions.XmlIntegrationMode == 1)
+                return catalog;
+
+
+            if (!Uri.TryCreate(_launchOptions.CurrentMetadataFile, UriKind.RelativeOrAbsolute, out var metadataUri))
+            {
+                Console.WriteLine("Unable to get the current metadata file");
+                return catalog;
+            }
+
+            using var metadataStream = new MemoryStream();
+            if (!Downloader.Download(metadataUri, metadataStream))
+            {
+                Console.WriteLine("Unable to get the current metadata file");
+                return catalog;
+            }
+            
+            Catalogs currentCatalog;
+            try
+            {
+                var parser = new XmlObjectParser<Catalogs>(metadataStream);
+                currentCatalog = parser.Parse();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return catalog;
+            }
+
+            // TODO: Find existing and integrate/add
+            return currentCatalog;
+        }
+
         private static IEnumerable<FileInfo> GetApplicationFiles(IReadOnlyCollection<FileInfo> files, string buildType)
         {
             foreach (var fileName in LauncherConstants.ApplicationFileNames)
@@ -94,19 +143,6 @@ namespace MetadataCreator
                     throw new FileNotFoundException($"File '{fileName}' was not found as {buildType}-Build");
                 yield return foundFile;
             }
-        }
-
-
-        internal static Catalogs CreateCatalogs(ApplicationFilesSet dataSet)
-        {
-            var catalog = new Catalogs {Products = new List<ProductCatalog>()};
-
-            foreach (var applicationFiles in dataSet)
-            {
-                var p = CreateProduct(applicationFiles);
-                catalog.Products.Add(p);
-            }
-            return catalog;
         }
 
         private static ProductCatalog CreateProduct(ApplicationFiles applicationFiles)
@@ -137,12 +173,8 @@ namespace MetadataCreator
         }
 
 
-        internal static void FillData(ApplicationType applicationType, IEnumerable<FileInfo> files, in ApplicationFiles data)
+        internal static void FillData(IEnumerable<FileInfo> files, in ApplicationFiles data)
         {
-            var typeName = Enum.GetName(typeof(ApplicationType), applicationType);
-            if (string.IsNullOrEmpty(typeName))
-                return;
-          
             foreach (var file in files)
             {
                 if (file.Name.Equals(LauncherConstants.LauncherFileName))
@@ -154,7 +186,6 @@ namespace MetadataCreator
                 }
                 data.Files.Add(file);
             }
-
         }
 
         internal static IEnumerable<FileInfo> GetFilesByExtensions(DirectoryInfo dir, bool includeSubs = false, params string[] extensions)

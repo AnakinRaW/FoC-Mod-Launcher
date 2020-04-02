@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationFiles.cs" />
+    <Compile Include="Downloader.cs" />
     <Compile Include="FileHashHelper.cs" />
     <Compile Include="LaunchOptions.cs" />
     <Compile Include="DataOptions.cs" />
