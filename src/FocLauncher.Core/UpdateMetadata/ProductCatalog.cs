@@ -42,7 +42,7 @@ namespace FocLauncher.UpdateMetadata
             get => _application;
             set => _application = value;
         }
-
+        
         public override string ToString()
         {
             var sb = new StringBuilder();

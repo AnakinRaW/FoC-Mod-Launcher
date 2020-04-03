@@ -14,6 +14,8 @@ namespace MetadataCreator
             Type = type;
         }
 
+        public IEnumerable<FileInfo> AllFiles => Files.ToList().Append(Executable);
+
         public FileInfo? Executable { get; set; }
 
         public ICollection<FileInfo>? Files { get; } = new HashSet<FileInfo>();

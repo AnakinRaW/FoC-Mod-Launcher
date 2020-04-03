@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Xml.Serialization;
 
 namespace FocLauncher.UpdateMetadata
@@ -77,6 +78,5 @@ namespace FocLauncher.UpdateMetadata
         {
             return _name == other._name;
         }
-
     }
 }

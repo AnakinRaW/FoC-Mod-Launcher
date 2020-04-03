@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -11,6 +10,9 @@ using FocLauncher;
 using FocLauncher.Properties;
 using FocLauncher.UpdateMetadata;
 using FocLauncher.Utilities;
+using NLog;
+using NLog.Conditions;
+using NLog.Targets;
 
 namespace MetadataCreator
 {
@@ -19,67 +21,140 @@ namespace MetadataCreator
         private const string DefaultFileRootPath = "https://raw.githubusercontent.com/AnakinSklavenwalker/FoC-Mod-Launcher-Builds/master";
         public static readonly string[] SupportedFileEndings = {".exe", ".dll"};
 
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        private static LaunchOptions _launchOptions;
+
+        internal static LaunchOptions LaunchOptions;
 
 
         private static void Main(string[] args)
         {
-            LaunchOptions options = null;
+            SetLogging();
             Parser.Default.ParseArguments<LaunchOptions>(args).WithParsed(launchOptions =>
             {
                 if (string.IsNullOrEmpty(launchOptions.XmlOutput))
                     launchOptions.XmlOutput = Directory.GetCurrentDirectory();
                 if (string.IsNullOrEmpty(launchOptions.OriginPathRoot))
                     launchOptions.OriginPathRoot = DefaultFileRootPath;
-                if (launchOptions.XmlIntegrationMode < 0 || launchOptions.XmlIntegrationMode > 2)
-                    throw new InvalidOperationException($"Value {launchOptions.XmlIntegrationMode} is not supported for parameter --integrationMode (-m).");
-                _launchOptions = launchOptions;
+                if (string.IsNullOrEmpty(launchOptions.SourceDirectory))
+                    launchOptions.SourceDirectory = Directory.GetCurrentDirectory();
+                if (string.IsNullOrEmpty(launchOptions.XmlOutput))
+                    launchOptions.XmlOutput = Directory.GetCurrentDirectory();
+                LaunchOptions = launchOptions;
             });
-            if (_launchOptions is null)
+            if (LaunchOptions is null)
+            {
+                Logger.Fatal("Failed parsing arguments.");
                 return;
+            }
 
-            _launchOptions.XmlIntegrationMode = 2;
-            _launchOptions.CurrentMetadataFile = LauncherConstants.UpdateMetadataPath;
+            //LaunchOptions.XmlIntegrationMode = IntegrationMode.DependencyVersion;
+            //LaunchOptions.CurrentMetadataFile = LauncherConstants.UpdateMetadataPath;
+            //LaunchOptions.FilesCopyLocation = @"C:\Users\Anakin\source\repos\FoC-Mod-Launcher-Builds";
 
-            var dir = new DirectoryInfo(Directory.GetCurrentDirectory());
-            var files = GetFilesByExtensions(dir, true, SupportedFileEndings);
-            var applicationFileInfos = GetApplicationFiles(files.ToList(), _launchOptions.BuildType).ToList();
-            if (applicationFileInfos.Count != LauncherConstants.ApplicationFileNames.Length)
-                throw new InvalidOperationException();
-
-            if (!Enum.TryParse<ApplicationType>(_launchOptions.ApplicationType, true, out var applicationType))
-                throw new InvalidOperationException($"Could not parse '{_launchOptions.ApplicationType}' into a real ApplicationType");
-
-
-            var applicationFiles = new ApplicationFiles(applicationType);
             try
             {
+                var dir = new DirectoryInfo(LaunchOptions.SourceDirectory);
+                var files = dir.GetFilesByExtensions(true, SupportedFileEndings);
+                var applicationFileInfos = FileUtilities.GetApplicationFiles(files.ToList(), LaunchOptions.BuildType).ToList();
+                if (applicationFileInfos.Count != LauncherConstants.ApplicationFileNames.Length)
+                    throw new InvalidOperationException("Unexpected number of applications files found.");
+
+                if (!Enum.TryParse<ApplicationType>(LaunchOptions.ApplicationType, true, out var applicationType))
+                    throw new InvalidOperationException(
+                        $"Could not parse '{LaunchOptions.ApplicationType}' into a real ApplicationType");
+
+
+                var applicationFiles = new ApplicationFiles(applicationType);
                 FillData(applicationFileInfos, applicationFiles);
+
+                if (!applicationFiles.Validate())
+                    throw new InvalidOperationException("The file set was not valid");
+
+                var product = CatalogUtilities.CreateProduct(applicationFiles);
+                var catalog = CreateCatalogOrIntegrate(in product, out var actualNewDependencies);
+
+                WriteXmlFile(catalog, LaunchOptions.XmlOutput);
+
+                if (!string.IsNullOrEmpty(LaunchOptions.FilesCopyLocation))
+                {
+                    product = catalog.FindMatchingCatalog(product.Name, product.ApplicationType);
+                    var filesToCopy = applicationFiles.AllFiles.Where(x => actualNewDependencies.Contains(x.Name));
+                    CopyFiles(product, filesToCopy, LaunchOptions.FilesCopyLocation);
+                }
+
+                Logger.Info("Operation succeeded successfully!");
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
-                throw;
+                Logger.Fatal(e, $"The tool failed with an error: {e.Message}");
+            }
+            Console.ReadKey();
+        }
+
+        private static void CopyFiles(ProductCatalog product, IEnumerable<FileInfo> newDependencyFiles, string filesLocation)
+        {
+            var typeName = Enum.GetName(typeof(ApplicationType), product.ApplicationType);
+            if (typeName == null)
+                throw new InvalidOperationException();
+            var path = Path.Combine(filesLocation, typeName);
+            var directory = new DirectoryInfo(path);
+            Directory.CreateDirectory(path);
+
+            foreach (var file in directory.GetFiles())
+            {
+                if (file.Name.Equals(".gitkeep"))
+                    continue;
+                if (!product.Dependencies.Any(x => x.Name.Equals(file.Name)))
+                {
+                    Logger.Warn($"Deleting '{file.Name}' because it was not present in the product catalog");
+                    file.Delete();
+                }
             }
 
-            if (!applicationFiles.Validate())
-                throw new InvalidOperationException("The file set was not valid");
+            foreach (var newFile in newDependencyFiles)
+            {
+                Logger.Debug($"Copying file '{newFile.Name}' to location {directory.FullName}");
+                newFile.CopyTo(Path.Combine(directory.FullName, newFile.Name), true);
+            }
+        }
 
-            var product = CreateProduct(applicationFiles);
+        private static Catalogs CreateCatalogOrIntegrate(in ProductCatalog product, out ICollection<string> newDependencyNames)
+        {
+            var catalog = new Catalogs {Products = new List<ProductCatalog> {product}};
+            newDependencyNames = product.Dependencies.Select(x => x.Name).ToList();
 
-            var catalog = CreateCatalogOrIntegrate(product);
+            if (LaunchOptions.XmlIntegrationMode == IntegrationMode.None)
+            {
+                if (product.ApplicationType != ApplicationType.Stable)
+                    throw new NotSupportedException("Only having preview versions in the metadata file is not valid");
+                Logger.Info($"Created new Catalog. Option: {LaunchOptions.XmlIntegrationMode}");
+                return catalog;
+            }
 
 
+            if (!Uri.TryCreate(LaunchOptions.CurrentMetadataFile, UriKind.RelativeOrAbsolute, out var metadataUri))
+            {
+                Logger.Warn("Unable to get the current metadata file. Returning new catalog instead");
+                return catalog;
+            }
+            
+            catalog = Integrate(metadataUri, product, LaunchOptions.XmlIntegrationMode, out newDependencyNames);
+            return catalog;
+        }
+
+        private static void WriteXmlFile(Catalogs catalog, string location)
+        {
             var serializer = new XmlSerializer(typeof(Catalogs));
-            var outputFile = Path.Combine(_launchOptions.XmlOutput, LauncherConstants.UpdateMetadataFileName);
+            var outputFile = Path.Combine(location, LauncherConstants.UpdateMetadataFileName);
             using var file = new FileStream(outputFile, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
-            using var writer = new XmlTextWriter(file, Encoding.UTF8) {Formatting = Formatting.Indented};
+            using var writer = new XmlTextWriter(file, Encoding.UTF8) { Formatting = Formatting.Indented };
             var ns = new XmlSerializerNamespaces();
             ns.Add("", "");
             serializer.Serialize(writer, catalog, ns);
+            writer.Dispose();
             file.Dispose();
-            
+
             var schemeStream = Resources.UpdateValidator.ToStream();
             var validator = new XmlValidator(schemeStream);
             if (!validator.Validate(outputFile))
@@ -89,92 +164,75 @@ namespace MetadataCreator
                 throw new InvalidOperationException("Created .xml is not valid");
             }
 
-            Console.WriteLine(File.ReadAllText(outputFile));
-            Console.ReadKey();
+            Logger.Info($"Wrote {LauncherConstants.UpdateMetadataFileName} to path '{outputFile}'");
+            Logger.Trace(File.ReadAllText(outputFile));
         }
 
-        private static Catalogs CreateCatalogOrIntegrate(ProductCatalog product)
+        private static Catalogs Integrate(Uri currentMetadataUri, ProductCatalog newProduct, IntegrationMode integrationMode, out ICollection<string> newDependencyNames)
         {
-            var catalog = new Catalogs {Products = new List<ProductCatalog> {product}};
+            newDependencyNames = newProduct.Dependencies.Select(x => x.Name).ToList();
 
-            if (_launchOptions.XmlIntegrationMode == 0)
-                return catalog;
+            if (!CatalogUtilities.DownloadCurrentCatalog(currentMetadataUri, out var currentCatalog))
+                return new Catalogs {Products = new List<ProductCatalog> {newProduct}};
 
-            if (product.ApplicationType == ApplicationType.Stable && _launchOptions.XmlIntegrationMode == 1)
-                return catalog;
-
-
-            if (!Uri.TryCreate(_launchOptions.CurrentMetadataFile, UriKind.RelativeOrAbsolute, out var metadataUri))
+            var currentProduct = currentCatalog.FindMatchingCatalog(newProduct.Name, newProduct.ApplicationType);
+            if (currentProduct == null)
             {
-                Console.WriteLine("Unable to get the current metadata file");
-                return catalog;
+                if (currentCatalog.Products == null)
+                    currentCatalog.Products = new List<ProductCatalog>();
+                currentCatalog.Products.Add(newProduct);
+                Logger.Info($"Created new Product. Option: {LaunchOptions.XmlIntegrationMode}");
+                return currentCatalog;
             }
 
-            using var metadataStream = new MemoryStream();
-            if (!Downloader.Download(metadataUri, metadataStream))
+
+            switch (integrationMode)
             {
-                Console.WriteLine("Unable to get the current metadata file");
-                return catalog;
-            }
-            
-            Catalogs currentCatalog;
-            try
-            {
-                var parser = new XmlObjectParser<Catalogs>(metadataStream);
-                currentCatalog = parser.Parse();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                return catalog;
+                case IntegrationMode.Product:
+                    currentCatalog.Products.Remove(currentProduct);
+                    currentCatalog.Products.Add(newProduct);
+                    Logger.Info($"Added Product. Option: {LaunchOptions.XmlIntegrationMode}");
+                    break;
+                case IntegrationMode.Dependency:
+                    currentProduct.Dependencies = new List<Dependency>();
+                    currentProduct.Dependencies.AddRange(newProduct.Dependencies);
+                    Logger.Info($"Replaced missmatching product dependencies. Option: {LaunchOptions.XmlIntegrationMode}");
+                    break;
+                case IntegrationMode.DependencyVersion:
+                {
+                    var currentDependencies = currentProduct.Dependencies;
+                    var newDependencies = newProduct.Dependencies;
+                    newDependencyNames = new List<string>();
+               
+                    currentProduct.Dependencies = new List<Dependency>();
+
+                    foreach (var newDependency in newDependencies)
+                    {
+                        var oldDependency = currentDependencies.FirstOrDefault(x => DependencyComparer.Name.Equals(x, newDependency));
+                        if (oldDependency != null)
+                        {
+                            if (DependencyComparer.NameAndVersion.Equals(oldDependency, newDependency))
+                            {
+                                Logger.Trace($"Keeping old dependency {newDependency.Name} because version are equal");
+                                currentProduct.Dependencies.Add(oldDependency);
+                                continue;
+                            }
+                        }
+                        Logger.Trace($"Adding new dependency '{newDependency.Name}' because version are different");
+                        newDependencyNames.Add(newDependency.Name);
+                        currentProduct.Dependencies.Add(newDependency);
+                    }
+                    Logger.Info($"Replaced missmatching product dependencies. Option: {LaunchOptions.XmlIntegrationMode}");
+                    break;
+                }
             }
 
-            // TODO: Find existing and integrate/add
             return currentCatalog;
         }
 
-        private static IEnumerable<FileInfo> GetApplicationFiles(IReadOnlyCollection<FileInfo> files, string buildType)
-        {
-            foreach (var fileName in LauncherConstants.ApplicationFileNames)
-            {
-                var foundFile = files.FirstOrDefault(x =>
-                    x.Name.Equals(fileName) && x.Directory != null && x.Directory.Name.Equals(buildType));
-                if (foundFile is null)
-                    throw new FileNotFoundException($"File '{fileName}' was not found as {buildType}-Build");
-                yield return foundFile;
-            }
-        }
-
-        private static ProductCatalog CreateProduct(ApplicationFiles applicationFiles)
-        {
-            var product = new ProductCatalog
-            {
-                Name = LauncherConstants.ProductName,
-                Author = LauncherConstants.Author,
-                ApplicationType = applicationFiles.Type,
-                Dependencies = new List<Dependency> {CreateDependency(applicationFiles.Executable, true)}
-            };
-            foreach (var file in applicationFiles.Files) 
-                product.Dependencies.Add(CreateDependency(file));
-            return product;
-        }
-
-        private static Dependency CreateDependency(FileInfo file, bool isLauncherExecutable = false)
-        {
-            var dependency= new Dependency();
-            dependency.Name = file.Name;
-            var destination = isLauncherExecutable ? LauncherConstants.ExecutablePathVariable : LauncherConstants.ApplicationBaseVariable;
-            dependency.Destination = $"%{destination}%";
-            dependency.Version = FileVersionInfo.GetVersionInfo(file.FullName).FileVersion;
-            dependency.Sha2 = FileHashHelper.GetFileHash(file.FullName, FileHashHelper.HashType.Sha256);
-            dependency.Size = file.Length;
-            dependency.Origin = UrlCombine.Combine(_launchOptions.OriginPathRoot, file.Directory?.Name, file.Name);
-            return dependency;
-        }
-
-
         internal static void FillData(IEnumerable<FileInfo> files, in ApplicationFiles data)
         {
+            Logger.Trace("Added application files to an ApplicationFiles");
             foreach (var file in files)
             {
                 if (file.Name.Equals(LauncherConstants.LauncherFileName))
@@ -187,13 +245,19 @@ namespace MetadataCreator
                 data.Files.Add(file);
             }
         }
-
-        internal static IEnumerable<FileInfo> GetFilesByExtensions(DirectoryInfo dir, bool includeSubs = false, params string[] extensions)
+        
+        private static void SetLogging()
         {
-            if (extensions == null)
-                extensions = new[] { ".*" };
-            var files = dir.EnumerateFiles("*.*", includeSubs ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
-            return files.Where(f => extensions.Contains(f.Extension));
+            var config = new NLog.Config.LoggingConfiguration();
+            var consoleTarget = new ColoredConsoleTarget();
+            var highlightRule = new ConsoleRowHighlightingRule
+            {
+                Condition = ConditionParser.ParseExpression("level == LogLevel.Info"),
+                ForegroundColor = ConsoleOutputColor.Green
+            };
+            consoleTarget.RowHighlightingRules.Add(highlightRule);
+            config.AddRule(LogLevel.Trace, LogLevel.Fatal, consoleTarget);
+            LogManager.Configuration = config;
         }
     }
 }
