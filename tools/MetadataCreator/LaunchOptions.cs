@@ -4,7 +4,7 @@ namespace MetadataCreator
 {
     internal class LaunchOptions
     {
-        [Option('r', "originRoot", HelpText = "The base path for generated origin links")]
+        [Option('r', "originRoot", HelpText = "The base path for generated origin links. Default is taken from the launcher constants")]
         public string? OriginPathRoot { get; set; }
 
         [Option('o', "output", HelpText = "The path where the generated .xml shall be stored. Default is the current directory.")]

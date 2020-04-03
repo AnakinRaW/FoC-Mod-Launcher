@@ -27,7 +27,7 @@ namespace MetadataCreator
         internal static LaunchOptions LaunchOptions;
 
 
-        private static void Main(string[] args)
+        private static int Main(string[] args)
         {
             SetLogging();
             Parser.Default.ParseArguments<LaunchOptions>(args).WithParsed(launchOptions =>
@@ -45,7 +45,7 @@ namespace MetadataCreator
             if (LaunchOptions is null)
             {
                 Logger.Fatal("Failed parsing arguments.");
-                return;
+                return -1;
             }
 
             //LaunchOptions.XmlIntegrationMode = IntegrationMode.DependencyVersion;
@@ -88,8 +88,10 @@ namespace MetadataCreator
             catch (Exception e)
             {
                 Logger.Fatal(e, $"The tool failed with an error: {e.Message}");
+                return e.HResult;
             }
-            Console.ReadKey();
+
+            return 0;
         }
 
         private static void CopyFiles(ProductCatalog product, IEnumerable<FileInfo> newDependencyFiles, string filesLocation)
@@ -147,6 +149,7 @@ namespace MetadataCreator
         {
             var serializer = new XmlSerializer(typeof(Catalogs));
             var outputFile = Path.Combine(location, LauncherConstants.UpdateMetadataFileName);
+            Directory.CreateDirectory(location);
             using var file = new FileStream(outputFile, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
             using var writer = new XmlTextWriter(file, Encoding.UTF8) { Formatting = Formatting.Indented };
             var ns = new XmlSerializerNamespaces();
