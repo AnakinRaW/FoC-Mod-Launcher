@@ -50,6 +50,8 @@ namespace MetadataCreator
 
             //LaunchOptions.XmlIntegrationMode = IntegrationMode.DependencyVersion;
             //LaunchOptions.CurrentMetadataFile = LauncherConstants.UpdateMetadataPath;
+            //LaunchOptions.ApplicationType = "Beta";
+            //LaunchOptions.SourceDirectory = @"C:\Users\Anakin\source\repos\FoC-Mod-Launcher";
             //LaunchOptions.FilesCopyLocation = @"C:\Users\Anakin\source\repos\FoC-Mod-Launcher-Builds";
 
             try
@@ -88,9 +90,9 @@ namespace MetadataCreator
             catch (Exception e)
             {
                 Logger.Fatal(e, $"The tool failed with an error: {e.Message}");
+                Console.ReadKey();
                 return e.HResult;
             }
-
             return 0;
         }
 
@@ -150,6 +152,13 @@ namespace MetadataCreator
             var serializer = new XmlSerializer(typeof(Catalogs));
             var outputFile = Path.Combine(location, LauncherConstants.UpdateMetadataFileName);
             Directory.CreateDirectory(location);
+
+            if (File.Exists(outputFile))
+            {
+                Logger.Trace("Deleteing old xml file");
+                File.Delete(outputFile);
+            }
+
             using var file = new FileStream(outputFile, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
             using var writer = new XmlTextWriter(file, Encoding.UTF8) { Formatting = Formatting.Indented };
             var ns = new XmlSerializerNamespaces();
@@ -164,7 +173,7 @@ namespace MetadataCreator
             {
                 if (File.Exists(outputFile))
                     File.Delete(outputFile);
-                throw new InvalidOperationException("Created .xml is not valid");
+                throw new InvalidOperationException("Created .xml is not valid. File deleted");
             }
 
             Logger.Info($"Wrote {LauncherConstants.UpdateMetadataFileName} to path '{outputFile}'");

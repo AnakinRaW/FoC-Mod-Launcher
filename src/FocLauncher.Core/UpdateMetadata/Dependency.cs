@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 using System.Xml.Serialization;
 
 namespace FocLauncher.UpdateMetadata
@@ -13,7 +12,7 @@ namespace FocLauncher.UpdateMetadata
         private string _name;
         private string _version;
         private long? _size;
-
+        
         public string Destination
         {
             get => _destination;
@@ -72,6 +71,18 @@ namespace FocLauncher.UpdateMetadata
         public override int GetHashCode()
         {
             return _name.GetHashCode();
+        }
+
+        // Prevents null tags when deserializing 
+        public bool ShouldSerializeSize()
+        {
+            return _size != null;
+        }
+
+        // Prevents null tags when deserializing 
+        public bool ShouldSerializeSha2()
+        {
+            return _sha2 != null;
         }
 
         protected bool Equals(Dependency other)

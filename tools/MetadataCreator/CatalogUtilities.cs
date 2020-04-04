@@ -53,15 +53,15 @@ namespace MetadataCreator
                 Name = LauncherConstants.ProductName,
                 Author = LauncherConstants.Author,
                 ApplicationType = applicationFiles.Type,
-                Dependencies = new List<Dependency> { CreateDependency(applicationFiles.Executable, true) }
+                Dependencies = new List<Dependency> { CreateDependency(applicationFiles.Executable, applicationFiles.Type, true) }
             };
             foreach (var file in applicationFiles.Files)
-                product.Dependencies.Add(CreateDependency(file));
+                product.Dependencies.Add(CreateDependency(file, applicationFiles.Type));
             Logger.Debug($"Product created: {product}");
             return product;
         }
 
-        internal static Dependency CreateDependency(FileInfo file, bool isLauncherExecutable = false)
+        internal static Dependency CreateDependency(FileInfo file, ApplicationType application, bool isLauncherExecutable = false)
         {
             var dependency = new Dependency();
             dependency.Name = file.Name;
@@ -70,7 +70,7 @@ namespace MetadataCreator
             dependency.Version = FileVersionInfo.GetVersionInfo(file.FullName).FileVersion;
             dependency.Sha2 = FileHashHelper.GetFileHash(file.FullName, FileHashHelper.HashType.Sha256);
             dependency.Size = file.Length;
-            dependency.Origin = UrlCombine.Combine(Program.LaunchOptions.OriginPathRoot, file.Directory?.Name, file.Name);
+            dependency.Origin = UrlCombine.Combine(Program.LaunchOptions.OriginPathRoot, application.ToString(), file.Name);
             Logger.Debug($"Dependency created: {dependency}");
             return dependency;
         }
