@@ -43,8 +43,11 @@ namespace FocLauncherHost
             Logger.Debug($"Started FoC LauncherInformation with arguments: {lastResult}");
 
             var update = LauncherInitializer.Initialize(lastResult);
+#if !DEBUG
             if (update)
                 ShowSplashScreen();
+#endif
+
 
             StartLauncher();
             LogManager.Shutdown();
