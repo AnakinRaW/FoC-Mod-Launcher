@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("FocLauncher.Threading")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Contains threading primities for the launcher.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Republic at War Modding Team")]
 [assembly: AssemblyProduct("FocLauncher.Threading")]
-[assembly: AssemblyCopyright("Copyright ©  2020")]
+[assembly: AssemblyCopyright("Copyright © 2020 Anakin Sklavenwalker")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

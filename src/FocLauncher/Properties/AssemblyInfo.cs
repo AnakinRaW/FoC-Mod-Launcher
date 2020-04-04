@@ -6,11 +6,11 @@ using System.Windows;
 // Attribute gesteuert. Ändern Sie diese Attributwerte, um die Informationen zu ändern,
 // die einer Assembly zugeordnet sind.
 [assembly: AssemblyTitle("FoC Launcher Code Base")]
-[assembly: AssemblyDescription("Contains the logic of the launcher")]
+[assembly: AssemblyDescription("Contains the main logic of the launcher")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Republic at War Modding Team")]
 [assembly: AssemblyProduct("FoC Launcher")]
-[assembly: AssemblyCopyright("Copyright © 2019 Anakin Sklavenwalker")]
+[assembly: AssemblyCopyright("Copyright © 2020 Anakin Sklavenwalker")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

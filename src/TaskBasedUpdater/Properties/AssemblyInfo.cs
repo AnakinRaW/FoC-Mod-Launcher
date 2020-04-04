@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("TaskBasedUpdater")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("A pipeline and task based updater with a lot of features.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("TaskBasedUpdater")]
-[assembly: AssemblyCopyright("Copyright ©  2020")]
+[assembly: AssemblyProduct("Task Based Updater")]
+[assembly: AssemblyCopyright("Copyright © 2020 Anakin Sklavenwalker")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

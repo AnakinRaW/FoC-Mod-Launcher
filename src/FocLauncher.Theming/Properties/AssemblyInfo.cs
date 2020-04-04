@@ -8,9 +8,9 @@ using System.Windows;
 [assembly: AssemblyTitle("FoC Launcher Theming")]
 [assembly: AssemblyDescription("Contains resources and code to create custom themes used by the launcher")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("FocLauncher.Theming")]
-[assembly: AssemblyCopyright("Copyright © 2019 Anakin Sklavenwalker")]
+[assembly: AssemblyCompany("Republic at War Modding Team")]
+[assembly: AssemblyProduct("Foc Launcher")]
+[assembly: AssemblyCopyright("Copyright © 2020 Anakin Sklavenwalker")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
