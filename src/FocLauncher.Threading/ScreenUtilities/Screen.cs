@@ -4,7 +4,6 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Media;
 using FocLauncher.NativeMethods;
-using Microsoft.VisualStudio.Utilities;
 using Microsoft.Win32;
 
 namespace FocLauncher.ScreenUtilities
@@ -25,14 +24,14 @@ namespace FocLauncher.ScreenUtilities
 
         public static double LogicalToDeviceUnitsX(int display, double value)
         {
-            GetMonitorDpi(display, out var dpiX, out var dpiY);
-            return ScaleLogicalToDevice(dpiY, value);
+            var x = GetMonitorDpi(display).X;
+            return ScaleLogicalToDevice(x, value);
         }
 
         public static double LogicalToDeviceUnitsY(int display, double value)
         {
-            GetMonitorDpi(display, out var dpiX, out var dpiY);
-            return ScaleLogicalToDevice(dpiY, value);
+            var y = GetMonitorDpi(display).Y;
+            return ScaleLogicalToDevice(y, value);
         }
 
         public static void SetInitialWindowRect(IntPtr hwnd, Window window, Int32Rect windowBounds)
@@ -169,16 +168,15 @@ namespace FocLauncher.ScreenUtilities
             UpdateDisplays();
         }
 
-        private static void GetMonitorDpi(int display, out double dpiX, out double dpiY)
+        private static Dpi GetMonitorDpi(int display)
         {
             try
             {
-                Displays[display].MonitorHandle.GetMonitorDpi(out dpiX, out dpiY);
+                return Displays[display].MonitorHandle.GetMonitorDpi();
             }
-            catch (MonitorDpiAwarenessException)
+            catch (DpiErrorException)
             {
-                dpiX = 96.0;
-                dpiY = 96.0;
+                return Dpi.Default;
             }
         }
 

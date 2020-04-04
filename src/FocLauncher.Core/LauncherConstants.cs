@@ -18,7 +18,6 @@ namespace FocLauncher
         public const string LauncherDllFileName = "FocLauncher.dll";
         public const string LauncherThemeFileName = "FocLauncher.Theming.dll";
         public const string LauncherThreadingFileName = "FocLauncher.Threading.dll";
-        public const string VsUtilitiesFileName = "Microsoft.VisualStudio.Utilities.dll";
 
         public const string ProductName = "FoC-Launcher";
         public const string Author = "AnakinSklavenwalker";
@@ -29,8 +28,7 @@ namespace FocLauncher
             UpdaterFileName, 
             LauncherDllFileName, 
             LauncherThemeFileName, 
-            LauncherThreadingFileName,
-            VsUtilitiesFileName
+            LauncherThreadingFileName
         };
 
         private static readonly Lazy<string> ApplicationBasePathLazy = new Lazy<string>(() => Environment.GetEnvironmentVariable(ApplicationBaseVariable));

@@ -1,5 +1,6 @@
 ﻿using System.Windows.Media;
-using Microsoft.VisualStudio.PlatformUI;
+using FocLauncher.Utilities;
+
 
 namespace FocLauncher.WaitDialog
 {

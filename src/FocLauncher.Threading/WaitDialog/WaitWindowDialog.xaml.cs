@@ -150,6 +150,7 @@ namespace FocLauncher.WaitDialog
             var twdDeviceTop = (int)(rect.Top + (rect.Height - twdDeviceHeight) / 2.0);
             var twdDeviceLeft = (int)(rect.Left + (rect.Width - twdDeviceWidth) / 2.0);
             Screen.SetInitialWindowRect(_dialogWindowHandle, this, new Int32Rect(twdDeviceLeft, twdDeviceTop, twdDeviceWidth, twdDeviceHeight));
+
             LogInfo(() =>
                 $"Host window rect = L{hostWindowRect.Left}, T{hostWindowRect.Top}, W{hostWindowRect.Width}, H{hostWindowRect.Height}", nameof(PositionAndShowDialog));
             LogInfo(() => $"Display = {display}", nameof(PositionAndShowDialog));

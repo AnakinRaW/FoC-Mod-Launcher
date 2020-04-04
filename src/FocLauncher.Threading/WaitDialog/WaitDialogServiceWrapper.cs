@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Interop;
 using FocLauncher.NativeMethods;
 using FocLauncher.Threading;
-using Microsoft.VisualStudio.PlatformUI;
+using FocLauncher.Utilities;
 
 namespace FocLauncher.WaitDialog
 {

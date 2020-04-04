@@ -2,7 +2,6 @@
 using System.Threading;
 using System.Windows;
 using System.Windows.Media;
-using Microsoft.VisualStudio.PlatformUI;
 
 namespace FocLauncher.WaitDialog
 {
@@ -142,11 +141,11 @@ namespace FocLauncher.WaitDialog
                 throw new ObjectDisposedException(nameof(UpdateDialogStyle));
             if (_dataSource == null)
                 return;
-            _dataSource.ForegroundColorBrush = new SolidColorBrush(args.TextColor.ToColorFromRgba());
-            _dataSource.BackgroundColorBrush = new SolidColorBrush(args.BackgroundColor.ToColorFromRgba());
-            _dataSource.BorderColorBrush = new SolidColorBrush(args.BorderColor.ToColorFromRgba());
-            _dataSource.CaptionBackgroundColorBrush = new SolidColorBrush(args.CaptionBackgroundColor.ToColorFromRgba());
-            _dataSource.CaptionForegroundColorBrush = new SolidColorBrush(args.CaptionTextColor.ToColorFromRgba());
+            _dataSource.ForegroundColorBrush = new SolidColorBrush(ToColorFromRgba(args.TextColor));
+            _dataSource.BackgroundColorBrush = new SolidColorBrush(ToColorFromRgba(args.BackgroundColor));
+            _dataSource.BorderColorBrush = new SolidColorBrush(ToColorFromRgba(args.BorderColor));
+            _dataSource.CaptionBackgroundColorBrush = new SolidColorBrush(ToColorFromRgba(args.CaptionBackgroundColor));
+            _dataSource.CaptionForegroundColorBrush = new SolidColorBrush(ToColorFromRgba(args.CaptionTextColor));
             _dataSource.CancelText = args.CancelText;
         }
 
@@ -171,6 +170,11 @@ namespace FocLauncher.WaitDialog
         private static void OnDialogCancelled(ICancelHandler cancelHandler)
         {
             cancelHandler?.OnCancel();
+        }
+
+        private static Color ToColorFromRgba(uint colorValue)
+        {
+            return Color.FromArgb((byte)(colorValue >> 24), (byte)colorValue, (byte)(colorValue >> 8), (byte)(colorValue >> 16));
         }
     }
 }

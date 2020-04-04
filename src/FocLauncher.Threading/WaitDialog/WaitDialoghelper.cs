@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading;
-using Microsoft.Internal.VisualStudio.Shell;
+using Microsoft;
 
 namespace FocLauncher.WaitDialog
 {
@@ -13,7 +13,7 @@ namespace FocLauncher.WaitDialog
         /// <returns>The instance of the <see cref="IWaitDialog"/></returns>
         public static IWaitDialog CreateInstance(this WaitDialogFactory factory)
         {
-            Validate.IsNotNull(factory, nameof(factory));
+            Requires.NotNull(factory, nameof(factory));
             factory.CreateInstance(out var dialog);
             return dialog;
         }
@@ -25,7 +25,7 @@ namespace FocLauncher.WaitDialog
         /// <returns>Returns <see langword="true"/> if the task was canceled by the user</returns>
         public static bool EndWaitDialog(this IWaitDialog dialog)
         {
-            Validate.IsNotNull(dialog, nameof(dialog));
+            Requires.NotNull(dialog, nameof(dialog));
             dialog.EndWaitDialog(out var canceled);
             return canceled;
         }
@@ -75,7 +75,7 @@ namespace FocLauncher.WaitDialog
                 IWaitDialogCallback callback)
             {
                 _dialog = dialog;
-                Validate.IsNotNull(progress, nameof(progress));
+                Requires.NotNull(progress, nameof(progress));
                 Progress = progress;
                 UserCancellationToken = token;
                 Callback = callback;
@@ -96,7 +96,7 @@ namespace FocLauncher.WaitDialog
 
             internal CancellationCallback(CancellationTokenSource cancellationSource)
             {
-                Validate.IsNotNull(cancellationSource, nameof(cancellationSource));
+                Requires.NotNull(cancellationSource, nameof(cancellationSource));
                 _cancellationSource = cancellationSource;
             }
 
@@ -113,7 +113,7 @@ namespace FocLauncher.WaitDialog
 
             internal ProgressAdapter(IWaitDialog dialog, CancellationTokenSource cancellationTokenSource)
             {
-                Validate.IsNotNull(dialog, nameof(dialog));
+                Requires.NotNull(dialog, nameof(dialog));
                 _dialog = dialog;
                 _cancellationTokenSource = cancellationTokenSource;
             }
