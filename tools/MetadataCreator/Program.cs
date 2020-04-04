@@ -47,13 +47,7 @@ namespace MetadataCreator
                 Logger.Fatal("Failed parsing arguments.");
                 return -1;
             }
-
-            //LaunchOptions.XmlIntegrationMode = IntegrationMode.DependencyVersion;
-            //LaunchOptions.CurrentMetadataFile = LauncherConstants.UpdateMetadataPath;
-            //LaunchOptions.ApplicationType = "Beta";
-            //LaunchOptions.SourceDirectory = @"C:\Users\Anakin\source\repos\FoC-Mod-Launcher";
-            //LaunchOptions.FilesCopyLocation = @"C:\Users\Anakin\source\repos\FoC-Mod-Launcher-Builds";
-
+            
             try
             {
                 var dir = new DirectoryInfo(LaunchOptions.SourceDirectory);
