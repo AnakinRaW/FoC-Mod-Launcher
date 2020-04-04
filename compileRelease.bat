@@ -8,6 +8,9 @@ set METADATA_OUTPUT="gen"
 set CURRENT_METADATA_LOCATION="https://republicatwar.com/downloads/FocLauncher/LauncherUpdateData.xml"
 set COPY_FILES_LOCATION="C:\Users\Anakin\source\repos\FoC-Mod-Launcher-Builds"
 
+set METADATA_CREATOR_BIN=".\tools\MetadataCreator\bin"
+set METADATA_CREATOR_FILE="MetadataCreator.exe"
+
 
 :configureBuild
 echo "Select [B] to build or [R] to rebuild the visual studio solution"
@@ -15,10 +18,11 @@ CHOICE /C BR
 IF %ERRORLEVEL% EQU 1 set BUILD_TYPE="Build"
 IF %ERRORLEVEL% EQU 2 set BUILD_TYPE="Rebuild"
 
-echo "Select [R] to build or [D] to build as [R]elease or [D]ebug"
-CHOICE /C BR
-IF %ERRORLEVEL% EQU 1 set BUILD_CONFIG="Release"
-IF %ERRORLEVEL% EQU 2 set BUILD_CONFIG="Debug"
+echo "Select [D] or [R] to build as [D]ebug or [R]elease"
+CHOICE /C DR
+IF %ERRORLEVEL% EQU 1 set BUILD_CONFIG="Debug"
+IF %ERRORLEVEL% EQU 2 set BUILD_CONFIG="Release"
+
 
 :build
 echo %BUILD_TYPE% with configuration %BUILD_CONFIG% on platfrom %BUILD_PLATFORM%
@@ -32,7 +36,23 @@ if not %BUILD_STATUS%==0 goto fail
 :buildSuccess 
 echo build was successful
 pause 
-goto configureMetadata
+goto copyMetadataCreator
+
+
+:copyMetadataCreator
+
+echo removing old metadata creator
+if exist %METADATA_CREATOR_FILE% (
+	del %METADATA_CREATOR_FILE%
+)
+
+echo copying metadata creator to current directory
+if exist "%METADATA_CREATOR_BIN%\%BUILD_CONFIG%\%METADATA_CREATOR_FILE%" (
+	copy "%METADATA_CREATOR_BIN%\%BUILD_CONFIG%\%METADATA_CREATOR_FILE%" %METADATA_CREATOR_FILE%
+) else (
+	goto fail
+)
+
 
 :configureMetadata
 
@@ -67,6 +87,7 @@ if not %CREATOR_STATUS%==0 goto fail
 echo creating metadata was successful
 pause 
 goto commitChangesChoice
+
 
 :commitChangesChoice
 
