@@ -1,8 +1,6 @@
 ﻿using System.Diagnostics;
 using System.IO;
 using System.Windows;
-using FocLauncher.Utilities;
-using Microsoft.VisualStudio.PlatformUI;
 using Microsoft.Win32;
 
 namespace FocLauncher.Game
@@ -89,7 +87,7 @@ namespace FocLauncher.Game
             if (!File.Exists(Path.Combine(currentPath, "swfoc.exe")))
                 return;
 
-            if (result.FocPath.NormalizePath() == currentPath.NormalizePath())
+            if (Path.GetFullPath(currentPath) == Path.GetFullPath(result.FocPath))
                 return;
 
             var newResult = default(GameDetectionResult);
