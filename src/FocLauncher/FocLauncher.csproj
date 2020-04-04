@@ -96,7 +96,6 @@
     <Compile Include="Mods\ModHelper.cs" />
     <Compile Include="ModInfo\ModInfoFileException.cs" />
     <Compile Include="ModInfo\SteamWorkshopVisibility.cs" />
-    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Theming\ThemeManager.cs" />
     <Compile Include="Utilities\HashCodeCombiner.cs" />
     <Compile Include="Utilities\HtmlDownloader.cs" />
