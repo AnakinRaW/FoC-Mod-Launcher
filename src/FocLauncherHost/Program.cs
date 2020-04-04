@@ -40,7 +40,7 @@ namespace FocLauncherHost
                 NLogUtils.DeleteOldLogFile();
             NLogUtils.SetLoggingForAppDomain();
 
-            Logger.Debug($"Started FoC LauncherInformation with arguments: {lastResult}");
+            Logger.Debug($"Started FoC Launcher with arguments: {lastResult}");
 
             var update = LauncherInitializer.Initialize(lastResult);
 #if !DEBUG
@@ -127,7 +127,7 @@ namespace FocLauncherHost
         {
             var s = new AppDomainSetup
             {
-                ApplicationName = "FoC LauncherInformation",
+                ApplicationName = "FoC Launcher",
                 ApplicationBase = LauncherConstants.ApplicationBasePath,
                 //LoaderOptimization = LoaderOptimization.MultiDomainHost
             };

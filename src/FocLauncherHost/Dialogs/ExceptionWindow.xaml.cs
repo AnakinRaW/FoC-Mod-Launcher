@@ -47,7 +47,7 @@ namespace FocLauncherHost.Dialogs
                 return;
 
             var sb = new StringBuilder();
-            sb.AppendLine("FoC LauncherInformation error log");
+            sb.AppendLine("FoC Launcher error log");
             sb.AppendLine();
             sb.AppendLine(Exception.ToString());
 

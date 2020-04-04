@@ -10,7 +10,7 @@ namespace FocLauncher.Shared
         [Option('t', "timeout", Required = false, HelpText = "The maximum time in seconds to wait for the specified process to terminate.", Default = 10)]
         public int Timeout { get; set; }
 
-        [Option('s', "startProcess", Required = true, HelpText = "The absolute path of the Foc LauncherInformation.exe file.")]
+        [Option('s', "startProcess", Required = true, HelpText = "The absolute path of the Foc Launcher.exe file.")]
         public string ExecutablePath { get; set; }
 
         [Option('l', "logfile", Required = false, HelpText = "The absolute path of the log file to use")]

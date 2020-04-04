@@ -74,7 +74,7 @@ namespace FocLauncherHost.Dialogs
             else if (Processes.Count == 1)
             {
                 Description = "The launcher needs be restarted.";
-                ButtonText = "Restart LauncherInformation";
+                ButtonText = "Restart Launcher";
             }
             else
             {

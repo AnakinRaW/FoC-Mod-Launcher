@@ -139,7 +139,7 @@ namespace FocLauncherHost
             {
                 var restartRequestResult =
                     LauncherRestartManager.ShowProcessKillDialog(lockingProcessManagerWithoutSelf, token);
-                Logger.Trace($"Kill locking processes: {restartRequestResult}, LauncherInformation needs restart: {false}");
+                Logger.Trace($"Kill locking processes: {restartRequestResult}, Launcher needs restart: {false}");
                 if (!restartRequestResult)
                     return new PendingHandledResult(HandlePendingComponentsStatus.Declined,
                         "Update aborted because locked files have not been released.");
@@ -159,7 +159,7 @@ namespace FocLauncherHost
                     "Update requires a self-update which is not supported for this update configuration.");
 
             var result = LauncherRestartManager.ShowSelfKillDialog(lockingProcessManager, token);
-            Logger.Trace($"Kill locking processes: {result}, LauncherInformation needs restart: {true}");
+            Logger.Trace($"Kill locking processes: {result}, Launcher needs restart: {true}");
             if (!result)
                 return new PendingHandledResult(HandlePendingComponentsStatus.Declined,
                     "Update aborted because locked files have not been released.");
@@ -225,7 +225,7 @@ namespace FocLauncherHost
             {
                 var messageBoxResult = MessageBox.Show(
                     $"No updates for {searchOption}-Version available. Do you want to update to the latest stable version instead?",
-                    "FoC-LauncherInformation", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.Yes);
+                    "FoC Launcher", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.Yes);
                 useFallback = messageBoxResult == MessageBoxResult.Yes;
             }
             return useFallback ? fallbackAction(productsWithCorrectName) : null;

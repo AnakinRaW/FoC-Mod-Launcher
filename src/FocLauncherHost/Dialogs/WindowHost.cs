@@ -9,13 +9,13 @@ namespace FocLauncherHost.Dialogs
     public class WindowHost : UserControl
     {
         protected readonly Window HostWindow;
-        private IntPtr _dialogWindowHandle;
+        private readonly IntPtr _dialogWindowHandle;
 
         public WindowHost()
         {
             HostWindow = new Window
             {
-                Title = "FoC LauncherInformation",
+                Title = "FoC Launcher",
                 SizeToContent = SizeToContent.WidthAndHeight,
                 ResizeMode = ResizeMode.NoResize
             };

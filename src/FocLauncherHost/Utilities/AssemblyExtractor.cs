@@ -43,7 +43,7 @@ namespace FocLauncherHost.Utilities
         private static async Task WriteToFileAsync(string resourceName, string matching, string fileDirectory, bool compressed)
         {
             if (!Directory.Exists(fileDirectory) || !PathUtilities.UserHasDirectoryAccessRights(fileDirectory, FileSystemRights.Modify))
-                throw new IOException("The LauncherInformation's base directory does not exists");
+                throw new IOException("The Launcher's base directory does not exists");
             var filePath = Path.Combine(fileDirectory, matching);
             try
             {

@@ -44,7 +44,7 @@
                     <TextBlock Grid.Row="0" Text="A critical error occurred" FontSize="16" FontWeight="Bold"/>
                     <TextBlock Grid.Row="2" Text="While initializing the launcher an exception occurred:" TextWrapping="Wrap" TextTrimming="CharacterEllipsis" FontSize="13"/>
                     <TextBlock Grid.Row="4" Text="{Binding ExceptionMessage}" TextWrapping="Wrap" TextTrimming="CharacterEllipsis" FontSize="10" FontStyle="Italic"/>
-                    <TextBlock Grid.Row="6" Text="A System restart should solve the problem. The LauncherInformation will now exit." TextWrapping="Wrap" TextTrimming="CharacterEllipsis" FontSize="13"/>
+                    <TextBlock Grid.Row="6" Text="A System restart should solve the problem. The Launcher will now exit." TextWrapping="Wrap" TextTrimming="CharacterEllipsis" FontSize="13"/>
                 </Grid>
             </Grid>
         </Border>

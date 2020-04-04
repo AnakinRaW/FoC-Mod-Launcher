@@ -208,7 +208,7 @@ namespace FocLauncher.Updater.Tests
         {
             public string Name { get; } = "FoC-Launcher";
             public string Author { get; }
-            public string AppDataPath => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "FoC LauncherInformation");
+            public string AppDataPath => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "FoC Launcher");
             public string CurrentLocation => GetType().Assembly.Location;
         }
     }
