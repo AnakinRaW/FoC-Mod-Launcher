@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using FocLauncher.ModInfo;
-using FocLauncher.Properties;
 using FocLauncher.Versioning;
 
 namespace FocLauncher.Mods

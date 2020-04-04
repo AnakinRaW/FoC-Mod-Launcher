@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using FocLauncher.Properties;
 
 namespace FocLauncher.Game
 {

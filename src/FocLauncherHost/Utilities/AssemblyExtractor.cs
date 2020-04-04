@@ -5,7 +5,6 @@ using System.IO.Compression;
 using System.Reflection;
 using System.Security.AccessControl;
 using System.Threading.Tasks;
-using FocLauncher;
 using FocLauncher.Utilities;
 using NLog;
 

@@ -5,7 +5,6 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using FocLauncher.Game;
 using FocLauncher.ModInfo;
-using FocLauncher.Properties;
 using FocLauncher.Utilities;
 using FocLauncher.Versioning;
 

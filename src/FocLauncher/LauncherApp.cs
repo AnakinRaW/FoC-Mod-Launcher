@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Threading.Tasks;
 using System.Windows;
 using FocLauncher.Properties;
 using FocLauncher.Theming;
-using FocLauncher.Threading;
-using FocLauncher.WaitDialog;
 
 namespace FocLauncher
 {

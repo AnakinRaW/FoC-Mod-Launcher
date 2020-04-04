@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows.Navigation;
-using FocLauncher.Properties;
 using FocLauncher.Theming;
 
 namespace FocLauncher.Dialogs
