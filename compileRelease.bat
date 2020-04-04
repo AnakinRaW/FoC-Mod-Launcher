@@ -64,8 +64,33 @@ if %BUILD_STATUS%==0 goto createSuccess
 if not %CREATOR_STATUS%==0 goto fail
 
 :createSuccess
+echo creating metadata was successful
 pause 
+goto commitChangesChoice
+
+:commitChangesChoice
+
+echo "Shall the changes to %COPY_FILES_LOCATION% be commited"
+CHOICE /C YN
+IF %ERRORLEVEL% EQU 1 goto commitChanges
 exit /b 0
+
+:commitChanges
+
+cd %COPY_FILES_LOCATION%
+git add .
+git commit -m "Updated version for %APPLICATION_TYPE%"
+if not %BUILD_STATUS%==0 goto fail 
+
+echo commit created.
+echo pushing needs to be done manually.
+goto success
+
+
+:success
+echo operation finished
+pause
+exit /b 0 
 
 
 :fail 
