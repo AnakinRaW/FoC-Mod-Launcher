@@ -20,14 +20,13 @@ namespace FocLauncher.Game
 
         public override bool IsPatched()
         {
-            if (!File.Exists(Path.Combine(GameDirectory, @"Data\XML\GAMECONSTANTS.xml")))
+            var constantsFilePath = Path.Combine(GameDirectory, @"Data\XML\GAMECONSTANTS.xml");
+            if (!File.Exists(constantsFilePath))
                 return false;
             var hashProvider = new HashProvider();
-            if (hashProvider.GetFileHash(Path.Combine(GameDirectory, @"Data\XML\GAMECONSTANTS.xml")) != GameconstantsUpdateHashEaW)
+            if (hashProvider.GetFileHash(constantsFilePath) != GameconstantsUpdateHashEaW)
                 return false;
-            if (Directory.GetFiles(Path.Combine(GameDirectory, @"Data\XML\")).Length != 1)
-                return false;
-            return true;
+            return Directory.GetFiles(Path.Combine(GameDirectory, @"Data\XML\")).Length == 1;
         }
 
         public override bool IsGameAiClear()

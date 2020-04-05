@@ -23,12 +23,11 @@ namespace FocLauncher.Game
 
         public override bool IsPatched()
         {
-            if (!File.Exists(GameDirectory + @"\Data\XML\GAMECONSTANTS.XML"))
+            var gameConstantsFilePath = Path.Combine(GameDirectory, @"Data\XML\GAMECONSTANTS.XML");
+            if (!File.Exists(gameConstantsFilePath))
                 return false;
             var hashProvider = new HashProvider();
-            if (hashProvider.GetFileHash(GameDirectory + @"\Data\XML\GAMECONSTANTS.XML") != GameconstantsUpdateHash)
-                return false;
-            return true;
+            return hashProvider.GetFileHash(gameConstantsFilePath) == GameconstantsUpdateHash;
         }
 
         protected override void OnGameStarting(IMod mod, ref GameRunArguments args)
