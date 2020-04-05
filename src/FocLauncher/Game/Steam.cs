@@ -12,7 +12,7 @@ namespace FocLauncher.Game
             {
                 try
                 {
-                    return Registry.CurrentUser.CreateSubKey("Software\\Valve\\Steam", RegistryKeyPermissionCheck.ReadSubTree)?.GetValue("SteamExe", null).ToString();
+                    return Registry.CurrentUser.OpenSubKey("Software\\Valve\\Steam", RegistryKeyPermissionCheck.ReadSubTree)?.GetValue("SteamExe", null).ToString();
                 }
                 catch (Exception)
                 {
