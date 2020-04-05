@@ -8,13 +8,15 @@ using System.Text;
 using System.Windows;
 using FocLauncher.Game;
 using FocLauncher.Mods;
-using FocLauncher.Properties;
 using FocLauncher.Theming;
+using NLog;
 
 namespace FocLauncher
 {
-    public class LauncherDataModel : IDataModel, IDebugPrinter
+    public class LauncherDataModel : IDataModel
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         public static string IconPath = Path.Combine(LauncherConstants.ApplicationBasePath, "foc.ico");
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -161,20 +163,12 @@ namespace FocLauncher
                 return;
             }
 
+            Logger.Info(GetInstalledGameInfo);
             SearchMods();
             RegisterThemes();
             OnInitialized();
         }
-
-        public string GetDebugInfo()
-        {
-            var sb = new StringBuilder();
-            sb.AppendLine("----------DEBUG Information----------");
-            sb.AppendLine(EaW == null ? "EaW is null" : $"EaW found at: {EaW.GameDirectory};");
-            sb.AppendLine(FoC == null ? "FoC is null" : $"FoC found at: {FoC.GameDirectory}; FoC Version: {FocGameType}");
-            return sb.ToString();
-        }
-
+        
         private bool InitGames(out GameDetectionResult result)
         {
             result = GameHelper.GetGameInstallations();
@@ -246,7 +240,16 @@ namespace FocLauncher
             if (File.Exists(IconPath))
                 return;
             using var fs = new FileStream(IconPath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
-            Resources.foc.Save(fs);
+            App.Properties.Resources.foc.Save(fs);
+        }
+
+        private string GetInstalledGameInfo()
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("----------Installed Game Information----------");
+            sb.AppendLine(EaW == null ? "EaW is null" : $"EaW found at: {EaW.GameDirectory};");
+            sb.AppendLine(FoC == null ? "FoC is null" : $"FoC found at: {FoC.GameDirectory}; FoC Version: {FocGameType}");
+            return sb.ToString();
         }
 
 

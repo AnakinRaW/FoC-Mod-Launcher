@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using FocLauncher.Utilities;
 
 namespace FocLauncher
 {
@@ -15,6 +16,7 @@ namespace FocLauncher
 
         public void StartLauncherApplication()
         {
+            NLogUtils.SetLoggingForAppDomain();
             var app = new LauncherApp();
             app.Run();
         }
@@ -46,17 +48,14 @@ namespace FocLauncher
             return dll == null ? null : Assembly.LoadFile(dll);
         }
 
-        private void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
+        private static void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             if (!(e.ExceptionObject is Exception exception))
                 return;
             if (exception is LauncherException)
                 return;
-
             var message = $"{exception.Message} ({exception.GetType().Name})";
-            var wrappedException = new LauncherException(message, exception);
-            wrappedException.Data.Add(LauncherException.LauncherDataModelKey, LauncherDataModel.Instance?.GetDebugInfo());
-            throw wrappedException;
+            throw new LauncherException(message, exception);
         }
     }
 }

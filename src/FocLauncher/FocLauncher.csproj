@@ -73,7 +73,6 @@
     <Compile Include="Game\GameRunArguments.cs" />
     <Compile Include="Game\PetroglyphGame.cs" />
     <Compile Include="Game\PetroglyphGameManager.cs" />
-    <Compile Include="IDebugPrinter.cs" />
     <Compile Include="LauncherApp.cs" />
     <Compile Include="Converters\GameTypeToStringConverter.cs" />
     <Compile Include="Converters\ModNameConverter.cs" />

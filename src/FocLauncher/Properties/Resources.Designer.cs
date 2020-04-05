@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FocLauncher.Properties {
+namespace FocLauncher.App.Properties {
     using System;
     
     
