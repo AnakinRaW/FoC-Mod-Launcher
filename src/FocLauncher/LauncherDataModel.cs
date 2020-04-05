@@ -158,6 +158,7 @@ namespace FocLauncher
                 MessageBox.Show(message + "\r\nThe launcher will now be closed", "FoC Launcher", MessageBoxButton.OK,
                     MessageBoxImage.Error);
                 Application.Current.Shutdown();
+                return;
             }
 
             SearchMods();
