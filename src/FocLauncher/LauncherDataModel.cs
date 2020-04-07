@@ -171,7 +171,7 @@ namespace FocLauncher
         
         private bool InitGames(out GameDetectionResult result)
         {
-            result = GameHelper.GetGameInstallations();
+            result = GameDetectionHelper.GetGameInstallations();
 
             if (result.IsError)
                 return false;

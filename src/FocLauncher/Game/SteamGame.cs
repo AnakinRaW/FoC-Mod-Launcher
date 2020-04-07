@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.Diagnostics;
+using System.IO;
 using FocLauncher.Mods;
 using FocLauncher.Utilities;
 
@@ -7,6 +9,10 @@ namespace FocLauncher.Game
     public sealed class SteamGame : AbstractFocGame
     {
         public const string GameconstantsUpdateHash = "b0818f73031b7150a839bb83e7aa6187";
+
+        public const int EmpireAtWarSteamId = 32470;
+        public const int ForcesOfCorruptionSteamId = 32472;
+
 
         protected override string GameExeFileName => "StarwarsG.exe";
         protected override string DebugGameExeFileName => "StarwarsI.exe";
@@ -32,8 +38,8 @@ namespace FocLauncher.Game
 
         protected override void OnGameStarting(IMod mod, ref GameRunArguments args)
         {
-            if (!Steam.IsSteamRunning())
-                Steam.StartSteam();
+            if (!SteamClient.Instance.IsSteamRunning())
+                SteamClient.Instance.StartSteam();
             if (mod != null)
             {
                 args.IsWorkshopMod = mod.WorkshopMod;
