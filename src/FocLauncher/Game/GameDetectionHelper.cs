@@ -5,9 +5,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using FocLauncher.Threading;
 using FocLauncher.Utilities;
-using Microsoft.VisualStudio.Threading;
 using NLog;
-using NLog.Fluent;
 
 namespace FocLauncher.Game
 {
@@ -20,24 +18,24 @@ namespace FocLauncher.Game
             "The launcher can open the Steam-Version of the game for you now (and close it immediately after setup).\r\n" +
             "Would you like to setup the games now?";
 
-        // TODO: Don't ref too much around....
         internal static GameDetectionResult GetGameInstallations()
         {
             var result = FindGamesFromRegistry();
             if (result.IsError)
                 return result;
 
-            result.FocType = GameTypeHelper.GetGameType(ref result);
 
-            FindGamesFromExecutingPath(ref result);
+            // TODO: Check from here
+            result.FocType = GameTypeHelper.GetGameType(result);
 
-            if (string.IsNullOrEmpty(result.FocPath) || !File.Exists(result.FocPath))
+            FindGamesFromExecutingPath(result);
+
+            if (string.IsNullOrEmpty(result.FocExePath) || !File.Exists(result.FocExePath))
             {
-                result.IsError = true;
                 result.Error = DetectionError.NotInstalled;
                 return result;
             }
-            result.FocType = GameTypeHelper.GetGameType(ref result);
+            result.FocType = GameTypeHelper.GetGameType(result);
             return result;
         }
 
@@ -52,7 +50,6 @@ namespace FocLauncher.Game
             if (eawResult == DetectionError.NotInstalled || focResult == DetectionError.NotInstalled)
             {
                 Logger.Trace("The games are not found in the registry");
-                result.IsError = true;
                 result.Error = DetectionError.NotInstalled;
                 return result;
             }
@@ -62,12 +59,11 @@ namespace FocLauncher.Game
                 if (RunSteamInitialization())
                 {
                     Logger.Trace("After initialization, the games are now setted up.");
-                    result.EawPath = EaWRegistryHelper.Instance.ExePath;
-                    result.FocPath = FocRegistryHelper.Instance.ExePath;
+                    result.EawExePath = EaWRegistryHelper.Instance.ExePath;
+                    result.FocExePath = FocRegistryHelper.Instance.ExePath;
                     return result;
                 }
                 Logger.Trace("The games are (still) not setted up.");
-                result.IsError = true;
                 result.Error = DetectionError.NotSettedUp;
                 return result;
             }
@@ -75,36 +71,37 @@ namespace FocLauncher.Game
             if (eawResult == DetectionError.None && focResult == DetectionError.None)
             {
                 Logger.Trace("The games have been found in the registry.");
-                result.EawPath = EaWRegistryHelper.Instance.ExePath;
-                result.FocPath = FocRegistryHelper.Instance.ExePath;
+                result.EawExePath = EaWRegistryHelper.Instance.ExePath;
+                result.FocExePath = FocRegistryHelper.Instance.ExePath;
                 return result;
             }
             return result;
         }
         
-        private static void FindGamesFromExecutingPath(ref GameDetectionResult result)
+        private static void FindGamesFromExecutingPath(GameDetectionResult result)
         {
-            var currentPath = Directory.GetCurrentDirectory();
+            // TODO
+            //var currentPath = Directory.GetCurrentDirectory();
 
-            if (!File.Exists(Path.Combine(currentPath, "swfoc.exe")))
-                return;
+            //if (!File.Exists(Path.Combine(currentPath, "swfoc.exe")))
+            //    return;
 
-            if (Path.GetFullPath(currentPath) == Path.GetFullPath(result.FocPath))
-                return;
+            //if (Path.GetFullPath(currentPath) == Path.GetFullPath(result.FocPath))
+            //    return;
 
-            var newResult = default(GameDetectionResult);
-            newResult.FocPath = currentPath;
+            //var newResult = default(GameDetectionResult);
+            //newResult.FocPath = currentPath;
 
-            var gameType = GameTypeHelper.GetGameType(ref newResult);
-            newResult.FocType = gameType;
-            if (!Eaw.FindInstallationRelativeToFoc(newResult.FocPath, gameType, out var eawPath))
-            {
-                newResult.EawPath = result.EawPath;
-                result = newResult;
-                return;
-            }
-            newResult.EawPath = eawPath;
-            result = newResult;
+            //var gameType = GameTypeHelper.GetGameType(newResult);
+            //newResult.FocType = gameType;
+            //if (!Eaw.FindInstallationRelativeToFoc(newResult.FocPath, gameType, out var eawPath))
+            //{
+            //    newResult.EawPath = result.EawPath;
+            //    result = newResult;
+            //    return;
+            //}
+            //newResult.EawPath = eawPath;
+            //result = newResult;
         }
 
         private static DetectionError CheckGameExists(PetroglyphGameRegistry gameRegistry)

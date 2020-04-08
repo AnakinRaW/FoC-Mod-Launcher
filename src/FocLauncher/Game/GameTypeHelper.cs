@@ -5,13 +5,13 @@ namespace FocLauncher.Game
     public static class GameTypeHelper
     {
         // TODO: Test all checks again 
-        internal static GameType GetGameType(ref GameDetectionResult result)
+        internal static GameType GetGameType(GameDetectionResult result)
         {
-            if (CheckSteam(result.FocPath))
+            if (CheckSteam(result.FocExePath))
                 return GameType.SteamGold;
-            if (CheckGoG(result.FocPath))
+            if (CheckGoG(result.FocExePath))
                 return GameType.GoG;
-            if (CheckOrigin(ref result))
+            if (CheckOrigin(result))
                 return GameType.Origin;
             return GameType.Disk;
         }
@@ -41,22 +41,22 @@ namespace FocLauncher.Game
             return true;
         }
 
-        private static bool CheckOrigin(ref GameDetectionResult result)
+        private static bool CheckOrigin(GameDetectionResult result)
         {
-            FixPossibleOriginBug(ref result);
-            if (new DirectoryInfo(result.FocPath).Name != "EAWX")
+            FixPossibleOriginBug(result);
+            if (new DirectoryInfo(result.FocExePath).Name != "EAWX")
                 return false;
-            if (!Directory.Exists(Path.Combine(Directory.GetParent(result.FocPath).FullName, "Manuals")))
+            if (!Directory.Exists(Path.Combine(Directory.GetParent(result.FocExePath).FullName, "Manuals")))
                 return false;
-            if (!Directory.Exists(Path.Combine(Directory.GetParent(result.FocPath).FullName, "__Installer")))
+            if (!Directory.Exists(Path.Combine(Directory.GetParent(result.FocExePath).FullName, "__Installer")))
                 return false;
             return true;
         }
 
 
-        private static void FixPossibleOriginBug(ref GameDetectionResult result)
+        private static void FixPossibleOriginBug(GameDetectionResult result)
         {
-            var exeDir = new DirectoryInfo(result.FocPath);
+            var exeDir = new DirectoryInfo(result.FocExePath);
             if (exeDir.Name == "corruption")
             {
                 var parentPath = exeDir.Parent?.FullName;
@@ -65,7 +65,7 @@ namespace FocLauncher.Game
 
                 var correctedPath = Path.Combine(parentPath, "EAWX");
                 if (Directory.Exists(correctedPath))
-                    result.FocPath = correctedPath;
+                    result.FocExePath = correctedPath;
             }
         }
     }

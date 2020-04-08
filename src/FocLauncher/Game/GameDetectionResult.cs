@@ -1,15 +1,15 @@
 ﻿namespace FocLauncher.Game
 {
-    public struct GameDetectionResult
+    public class GameDetectionResult
     {
         public GameType FocType { get; set; }
 
-        public string FocPath { get; set; }
+        public string FocExePath { get; internal set; }
 
-        public string EawPath { get; set; }
+        public string EawExePath { get; internal set; }
 
-        public DetectionError Error { get; set; }
+        public DetectionError Error { get; internal set; }
 
-        public bool IsError { get; set; }
+        public bool IsError => Error != DetectionError.None;
     }
 }

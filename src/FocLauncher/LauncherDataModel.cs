@@ -152,9 +152,9 @@ namespace FocLauncher
             if (!InitGames(out var result))
             {
                 string message = string.Empty;
-                if (string.IsNullOrEmpty(result.EawPath))
+                if (string.IsNullOrEmpty(result.EawExePath))
                     message = "Could not find Empire at War!\r\n";
-                else if (string.IsNullOrEmpty(result.FocPath))
+                else if (string.IsNullOrEmpty(result.FocExePath))
                     message += "Could not find Forces of Corruption\r\n";
 
                 MessageBox.Show(message + "\r\nThe launcher will now be closed", "FoC Launcher", MessageBoxButton.OK,
@@ -178,7 +178,7 @@ namespace FocLauncher
 
             try
             {
-                EaW = new Eaw(result.EawPath);
+                EaW = new Eaw(result.EawExePath);
             }
             catch
             {
@@ -188,14 +188,14 @@ namespace FocLauncher
             switch (result.FocType)
             {
                 case GameType.SteamGold:
-                    FoC = new SteamGame(result.FocPath);
+                    FoC = new SteamGame(result.FocExePath);
                     SteamModNamePersister.CreateInstance();
                     break;
                 case GameType.Disk:
                 case GameType.Origin:
                 case GameType.GoG:
                 case GameType.DiskGold:
-                    FoC = new Foc(result.FocPath, result.FocType);
+                    FoC = new Foc(result.FocExePath, result.FocType);
                     break;
             }
 
