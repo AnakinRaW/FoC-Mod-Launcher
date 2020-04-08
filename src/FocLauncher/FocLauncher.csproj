@@ -138,8 +138,8 @@
     <Compile Include="Dialogs\AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Game\DetectionError.cs" />
-    <Compile Include="Game\GameDetectionResult.cs" />
+    <Compile Include="Game\DetectionResult.cs" />
+    <Compile Include="Game\GameDetection.cs" />
     <Compile Include="Game\GameDetectionHelper.cs" />
     <Compile Include="Game\GameProcessWatcher.cs" />
     <Compile Include="Game\GameType.cs" />

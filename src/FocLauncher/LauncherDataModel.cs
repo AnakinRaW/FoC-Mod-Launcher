@@ -169,7 +169,7 @@ namespace FocLauncher
             OnInitialized();
         }
         
-        private bool InitGames(out GameDetectionResult result)
+        private bool InitGames(out GameDetection result)
         {
             result = GameDetectionHelper.GetGameInstallations();
 

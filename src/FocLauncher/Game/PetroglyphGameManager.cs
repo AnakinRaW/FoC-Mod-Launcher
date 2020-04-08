@@ -24,20 +24,17 @@ namespace FocLauncher.Game
 
         internal string ApplicationPath { get; private set; }
 
+        // Make this a real instance
         private PetroglyphGameManager()
         {
         }
 
+        // TODO: Consume GameDetection
         public void Initialize(string localAppPath)
         {
             if (!Directory.Exists(localAppPath))
                 throw new DirectoryNotFoundException();
             ApplicationPath = localAppPath;
-        }
-
-        public GameDetectionResult FindGames(FindGameOptions options)
-        {
-            return default;
         }
 
         private void RegisterEvents(IGame game)
@@ -64,12 +61,5 @@ namespace FocLauncher.Game
         {
             GameClosed?.Invoke(this, e);
         }
-    }
-
-    public enum FindGameOptions
-    {
-        Default,
-        LocalOnly,
-        RegistryOnly
     }
 }

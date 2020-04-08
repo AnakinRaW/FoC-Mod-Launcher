@@ -9,6 +9,14 @@ using NLog;
 
 namespace FocLauncher.Game
 {
+    // TODO: Use
+    public enum FindGameOptions
+    {
+        Default,
+        LocalOnly,
+        RegistryOnly
+    }
+
     public static class GameDetectionHelper
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
@@ -18,7 +26,7 @@ namespace FocLauncher.Game
             "The launcher can open the Steam-Version of the game for you now (and close it immediately after setup).\r\n" +
             "Would you like to setup the games now?";
 
-        internal static GameDetectionResult GetGameInstallations()
+        internal static GameDetection GetGameInstallations()
         {
             var result = FindGamesFromRegistry();
             if (result.IsError)
@@ -32,29 +40,29 @@ namespace FocLauncher.Game
 
             if (string.IsNullOrEmpty(result.FocExePath) || !File.Exists(result.FocExePath))
             {
-                result.Error = DetectionError.NotInstalled;
+                result.Result = DetectionResult.NotInstalled;
                 return result;
             }
             result.FocType = GameTypeHelper.GetGameType(result);
             return result;
         }
 
-        private static GameDetectionResult FindGamesFromRegistry()
+        private static GameDetection FindGamesFromRegistry()
         {
             Logger.Trace("Atempting to fetch the game from the registry.");
             var eawResult = CheckGameExists(EaWRegistryHelper.Instance);
             var focResult = CheckGameExists(FocRegistryHelper.Instance);
 
-            var result = new GameDetectionResult();
+            var result = new GameDetection();
 
-            if (eawResult == DetectionError.NotInstalled || focResult == DetectionError.NotInstalled)
+            if (eawResult == DetectionResult.NotInstalled || focResult == DetectionResult.NotInstalled)
             {
                 Logger.Trace("The games are not found in the registry");
-                result.Error = DetectionError.NotInstalled;
+                result.Result = DetectionResult.NotInstalled;
                 return result;
             }
 
-            if (eawResult == DetectionError.NotSettedUp || focResult == DetectionError.NotSettedUp)
+            if (eawResult == DetectionResult.NotSettedUp || focResult == DetectionResult.NotSettedUp)
             {
                 if (RunSteamInitialization())
                 {
@@ -64,11 +72,11 @@ namespace FocLauncher.Game
                     return result;
                 }
                 Logger.Trace("The games are (still) not setted up.");
-                result.Error = DetectionError.NotSettedUp;
+                result.Result = DetectionResult.NotSettedUp;
                 return result;
             }
 
-            if (eawResult == DetectionError.None && focResult == DetectionError.None)
+            if (eawResult == DetectionResult.None && focResult == DetectionResult.None)
             {
                 Logger.Trace("The games have been found in the registry.");
                 result.EawExePath = EaWRegistryHelper.Instance.ExePath;
@@ -78,7 +86,7 @@ namespace FocLauncher.Game
             return result;
         }
         
-        private static void FindGamesFromExecutingPath(GameDetectionResult result)
+        private static void FindGamesFromExecutingPath(GameDetection result)
         {
             // TODO
             //var currentPath = Directory.GetCurrentDirectory();
@@ -104,13 +112,13 @@ namespace FocLauncher.Game
             //result = newResult;
         }
 
-        private static DetectionError CheckGameExists(PetroglyphGameRegistry gameRegistry)
+        private static DetectionResult CheckGameExists(PetroglyphGameRegistry gameRegistry)
         {
             if (!gameRegistry.Exists)
-                return DetectionError.NotInstalled;
+                return DetectionResult.NotInstalled;
             if (!gameRegistry.Installed)
-                return DetectionError.NotSettedUp;
-            return DetectionError.None;
+                return DetectionResult.NotSettedUp;
+            return DetectionResult.None;
         }
 
         private static bool RunSteamInitialization()
@@ -134,7 +142,7 @@ namespace FocLauncher.Game
             });
 
             Logger.Trace("Re-try checking the game is setted up in the registry.");
-            return CheckGameExists(EaWRegistryHelper.Instance) == DetectionError.None && CheckGameExists(FocRegistryHelper.Instance) == DetectionError.None;
+            return CheckGameExists(EaWRegistryHelper.Instance) == DetectionResult.None && CheckGameExists(FocRegistryHelper.Instance) == DetectionResult.None;
         }
 
         private static async Task SetupSteamGamesAsync(CancellationToken cancellationToken)

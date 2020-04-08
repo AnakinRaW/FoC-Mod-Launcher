@@ -5,7 +5,7 @@ namespace FocLauncher.Game
     public static class GameTypeHelper
     {
         // TODO: Test all checks again 
-        internal static GameType GetGameType(GameDetectionResult result)
+        internal static GameType GetGameType(GameDetection result)
         {
             if (CheckSteam(result.FocExePath))
                 return GameType.SteamGold;
@@ -41,7 +41,7 @@ namespace FocLauncher.Game
             return true;
         }
 
-        private static bool CheckOrigin(GameDetectionResult result)
+        private static bool CheckOrigin(GameDetection result)
         {
             FixPossibleOriginBug(result);
             if (new DirectoryInfo(result.FocExePath).Name != "EAWX")
@@ -54,7 +54,7 @@ namespace FocLauncher.Game
         }
 
 
-        private static void FixPossibleOriginBug(GameDetectionResult result)
+        private static void FixPossibleOriginBug(GameDetection result)
         {
             var exeDir = new DirectoryInfo(result.FocExePath);
             if (exeDir.Name == "corruption")

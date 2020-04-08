@@ -1,6 +1,6 @@
 ﻿namespace FocLauncher.Game
 {
-    public enum DetectionError
+    public enum DetectionResult
     {
         None,
         NotInstalled,

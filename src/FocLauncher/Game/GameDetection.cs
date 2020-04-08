@@ -1,6 +1,6 @@
 ﻿namespace FocLauncher.Game
 {
-    public class GameDetectionResult
+    public class GameDetection
     {
         public GameType FocType { get; set; }
 
@@ -8,8 +8,8 @@
 
         public string EawExePath { get; internal set; }
 
-        public DetectionError Error { get; internal set; }
+        public DetectionResult Result { get; internal set; }
 
-        public bool IsError => Error != DetectionError.None;
+        public bool IsError => Result != DetectionResult.None;
     }
 }
