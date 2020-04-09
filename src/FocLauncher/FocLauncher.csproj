@@ -68,8 +68,12 @@
     <Compile Include="Dialogs\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Game\Detection\GameDetector.cs" />
+    <Compile Include="Game\Detection\LocalGameDetector.cs" />
+    <Compile Include="Game\Detection\RegistryGameDetector.cs" />
     <Compile Include="Game\EaWRegistryHelper.cs" />
     <Compile Include="Game\EawSteamGameSlim.cs" />
+    <Compile Include="Game\Detection\GameDetectionOptions.cs" />
     <Compile Include="Game\FocRegistryHelper.cs" />
     <Compile Include="Game\GameTypeHelper.cs" />
     <Compile Include="Game\PetroglyphGameRegistry.cs" />
@@ -138,9 +142,9 @@
     <Compile Include="Dialogs\AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Game\DetectionResult.cs" />
-    <Compile Include="Game\GameDetection.cs" />
-    <Compile Include="Game\GameDetectionHelper.cs" />
+    <Compile Include="Game\Detection\DetectionResult.cs" />
+    <Compile Include="Game\Detection\GameDetection.cs" />
+    <Compile Include="Game\Detection\GameDetectionHelper.cs" />
     <Compile Include="Game\GameProcessWatcher.cs" />
     <Compile Include="Game\GameType.cs" />
     <Compile Include="Game\ProcessHelper.cs" />
@@ -246,5 +250,6 @@
   <ItemGroup>
     <Resource Include="Resources\StatusHelp_grey_disabled_16x.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

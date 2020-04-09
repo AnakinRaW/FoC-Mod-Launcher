@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows;
 using FocLauncher.Game;
+using FocLauncher.Game.Detection;
 using FocLauncher.Mods;
 using FocLauncher.Theming;
 using NLog;
@@ -146,15 +147,12 @@ namespace FocLauncher
             Instance = this;
             InitAppDataDirectory();
 
-            GameManager = PetroglyphGameManager.Instance;
-            GameManager.Initialize(LauncherConstants.ApplicationBasePath);
-
             if (!InitGames(out var result))
             {
-                string message = string.Empty;
-                if (string.IsNullOrEmpty(result.EawExePath))
+                var message = string.Empty;
+                if (result.EawExe == null || !result.EawExe.Exists)
                     message = "Could not find Empire at War!\r\n";
-                else if (string.IsNullOrEmpty(result.FocExePath))
+                else if (result.FocExe == null || !result.FocExe.Exists)
                     message += "Could not find Forces of Corruption\r\n";
 
                 MessageBox.Show(message + "\r\nThe launcher will now be closed", "FoC Launcher", MessageBoxButton.OK,
@@ -178,7 +176,7 @@ namespace FocLauncher
 
             try
             {
-                EaW = new Eaw(result.EawExePath);
+                EaW = new Eaw(result.EawExe.Directory?.FullName);
             }
             catch
             {
@@ -188,14 +186,15 @@ namespace FocLauncher
             switch (result.FocType)
             {
                 case GameType.SteamGold:
-                    FoC = new SteamGame(result.FocExePath);
+                    FoC = new SteamGame(result.FocExe.Directory?.FullName);
                     SteamModNamePersister.CreateInstance();
                     break;
                 case GameType.Disk:
                 case GameType.Origin:
+                    // TODO: Apply path fix here (if applicable). This should be a method in the Detection itself
                 case GameType.GoG:
                 case GameType.DiskGold:
-                    FoC = new Foc(result.FocExePath, result.FocType);
+                    FoC = new Foc(result.FocExe.Directory?.FullName, result.FocType);
                     break;
             }
 

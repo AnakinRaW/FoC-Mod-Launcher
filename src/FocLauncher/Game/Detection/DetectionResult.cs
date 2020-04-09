@@ -1,8 +1,8 @@
-﻿namespace FocLauncher.Game
+﻿namespace FocLauncher.Game.Detection
 {
     public enum DetectionResult
     {
-        None,
+        Installed,
         NotInstalled,
         NotSettedUp
     }

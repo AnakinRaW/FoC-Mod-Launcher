@@ -28,6 +28,7 @@ namespace FocLauncher.Game
 
         protected abstract string? DebugGameExeFileName { get; }
 
+        // TODO: Change to DirectoryInfo
         protected PetroglyphGame(string gameDirectory)
         {
             GameDirectory = gameDirectory;
