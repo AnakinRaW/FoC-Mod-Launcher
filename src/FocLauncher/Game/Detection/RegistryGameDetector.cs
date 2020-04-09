@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using FocLauncher.Threading;
 using FocLauncher.Utilities;
+using FocLauncher.WaitDialog;
 
 namespace FocLauncher.Game.Detection
 {
@@ -81,8 +82,22 @@ namespace FocLauncher.Game.Detection
 
             ThreadHelper.JoinableTaskFactory.Run(async () =>
             {
-                // TODO: Use wait dialog with text update
-                await SetupSteamGamesAsync(new CancellationToken());
+                var data = new WaitDialogProgressData("Please wait while setting up the games for steam", "Setting up the games....", null, true);
+                var s = WaitDialogFactory.Instance.StartWaitDialog("FoC Launcher", data, TimeSpan.FromSeconds(2));
+                try
+                {
+                    // TODO: Use wait dialog with text update
+                    await SetupSteamGamesAsync(s.UserCancellationToken);
+                }
+                catch (OperationCanceledException)
+                {
+                }
+                finally
+                {
+                    s.Dispose();
+                }
+
+                
             });
 
             Logger.Trace("Re-try checking the game is setted up in the registry.");
@@ -97,7 +112,7 @@ namespace FocLauncher.Game.Detection
             {
                 // TODO: Check steam running and await start if not
                 eawSlim.Close();
-                eawSlim.StartGame();
+                //eawSlim.StartGame();
                 using var linkedTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
                 linkedTokenSource.CancelAfter(30_000);
                 Logger.Trace("Waiting max. 30 seconds for the game to be started");
