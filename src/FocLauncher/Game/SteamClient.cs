@@ -108,7 +108,7 @@ namespace FocLauncher.Game
             process.Start();
         }
 
-        public async Task WaitSteamRunningAndLoggedInAsync(CancellationToken token)
+        public async Task WaitSteamRunningAndLoggedInAsync(CancellationToken token = default)
         {
             ThrowIfSteamNotInstalled();
 

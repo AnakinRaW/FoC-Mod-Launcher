@@ -1,6 +1,9 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using FocLauncher.Mods;
+using FocLauncher.Threading;
 using FocLauncher.Utilities;
+using FocLauncher.WaitDialog;
 
 namespace FocLauncher.Game
 {
@@ -36,9 +39,16 @@ namespace FocLauncher.Game
 
         protected override void OnGameStarting(IMod mod, ref GameRunArguments args)
         {
-            // TODO: Use wait dialog
             if (!SteamClient.Instance.IsRunning)
-                SteamClient.Instance.StartSteam();
+            {
+                ThreadHelper.JoinableTaskFactory.Run(async () =>
+                {
+                    var data = new WaitDialogProgressData("Waiting for Steam...");
+                    using var s = WaitDialogFactory.Instance.StartWaitDialog("FoC Launcher", data, TimeSpan.FromSeconds(2));
+                    SteamClient.Instance.StartSteam();
+                    await SteamClient.Instance.WaitSteamRunningAndLoggedInAsync();
+                });
+            }
             if (mod != null)
             {
                 args.IsWorkshopMod = mod.WorkshopMod;
