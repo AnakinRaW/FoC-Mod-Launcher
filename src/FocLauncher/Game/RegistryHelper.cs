@@ -94,7 +94,7 @@ namespace FocLauncher.Game
             }
         }
 
-        protected RegistryKey GetKey(string subPath, bool writable = false)
+        public RegistryKey GetKey(string subPath, bool writable = false)
         {
             return RootRegistryKey.OpenSubKey(Path.Combine(RegistryBasePath, subPath), writable);
         }

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using System.IO;
+﻿using System.IO;
 using FocLauncher.Mods;
 using FocLauncher.Utilities;
 
@@ -38,7 +36,8 @@ namespace FocLauncher.Game
 
         protected override void OnGameStarting(IMod mod, ref GameRunArguments args)
         {
-            if (!SteamClient.Instance.IsSteamRunning())
+            // TODO: Use wait dialog
+            if (!SteamClient.Instance.IsRunning)
                 SteamClient.Instance.StartSteam();
             if (mod != null)
             {

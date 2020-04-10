@@ -1,11 +1,9 @@
 ﻿using System;
 using System.IO;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using FocLauncher.Threading;
-using FocLauncher.Utilities;
-using FocLauncher.WaitDialog;
+using Microsoft.VisualStudio.Threading;
 
 namespace FocLauncher.Game.Detection
 {
@@ -38,9 +36,12 @@ namespace FocLauncher.Game.Detection
 
             if (eawResult == DetectionResult.NotSettedUp || focResult == DetectionResult.NotSettedUp)
             {
+                // TODO: Move this out to a launcher component, because this will be outsourced into a new project
                 if (RunSteamInitialization())
                 {
                     Logger.Trace("After initialization, the games are now setted up.");
+                    Task.Run(() => MessageBox.Show("Setting up the game was successful!", "FoC Launcher",
+                        MessageBoxButton.OK, MessageBoxImage.Information)).Forget();
                     return new GameDetection(new FileInfo(EaWRegistryHelper.Instance.ExePath),
                         new FileInfo(FocRegistryHelper.Instance.ExePath));
                 }
@@ -82,56 +83,19 @@ namespace FocLauncher.Game.Detection
 
             ThreadHelper.JoinableTaskFactory.Run(async () =>
             {
-                var data = new WaitDialogProgressData("Please wait while setting up the games for steam", "Setting up the games....", null, true);
-                var s = WaitDialogFactory.Instance.StartWaitDialog("FoC Launcher", data, TimeSpan.FromSeconds(2));
                 try
                 {
-                    // TODO: Use wait dialog with text update
-                    await SetupSteamGamesAsync(s.UserCancellationToken);
+                    await LauncherSteamHelper.SetupSteamGamesAsync();
                 }
                 catch (OperationCanceledException)
                 {
-                }
-                finally
-                {
-                    s.Dispose();
                 }
             });
 
             Logger.Trace("Re-try checking the game is setted up in the registry.");
             return CheckGameExists(EaWRegistryHelper.Instance) == DetectionResult.Installed && CheckGameExists(FocRegistryHelper.Instance) == DetectionResult.Installed;
         }
-
-        private static async Task SetupSteamGamesAsync(CancellationToken cancellationToken)
-        {
-            Logger.Trace("Atempting to configure the Steam Version");
-            var eawSlim = new EawSteamGameSlim();
-            try
-            {
-                // TODO: Check steam running and await start if not
-                eawSlim.Close();
-                //eawSlim.StartGame();
-                using var linkedTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-                linkedTokenSource.CancelAfter(30_000);
-                Logger.Trace("Waiting max. 30 seconds for the game to be started");
-                await ProcessCreationListener.WaitProcessCreatedAsync(EawSteamGameSlim.Executable, linkedTokenSource.Token);
-                if (!linkedTokenSource.IsCancellationRequested)
-                {
-                    Logger.Trace($"{EawSteamGameSlim.Executable} was started. Waiting another second. Just to be sure");
-                    await Task.Delay(1000, cancellationToken);
-                }
-            }
-            catch (OperationCanceledException)
-            {
-                Logger.Trace("The procedure was cancelled or reached the timeout");
-            }
-            finally
-            {
-                Logger.Trace("Close the application again if it was started.");
-                eawSlim.Close();
-            }
-        }
-
+        
         internal static bool PromptGameSetupDialog()
         {
             var mbResult = MessageBox.Show(SetupMessage, "FoC Launcher", MessageBoxButton.YesNo, MessageBoxImage.Information, MessageBoxResult.Yes);

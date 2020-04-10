@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.VisualStudio.Threading;
 using Microsoft.Win32;
 using NLog;
 
@@ -18,6 +21,40 @@ namespace FocLauncher.Game
 
         public bool Installed => !string.IsNullOrEmpty(SteamExePath);
 
+        public bool IsRunning
+        {
+            get
+            {
+                var pid = ProcessId;
+                if (!pid.HasValue)
+                    return false;
+                if (pid.Value == 0)
+                    return false;
+                return ProcessHelper.GetProcessByPid(pid.Value) != null;
+            }
+        }
+
+        internal bool IsUserLoggedIn => ActiveUser.HasValue && ActiveUser.Value != 0;
+
+        private int? ActiveUser
+        {
+            get
+            {
+                _registry.GetValue("ActiveUser", "ActiveProcess", out int? user);
+                return user;
+            }
+            set => _registry.WriteValue("ActiveUser", "ActiveProcess", value);
+        }
+
+        private int? ProcessId
+        {
+            get
+            {
+                _registry.GetValue("pid", "ActiveProcess", out int? pid);
+                return pid;
+            }
+        }
+        
         private SteamClient()
         {
             _registry = new SteamRegistry();
@@ -42,56 +79,6 @@ namespace FocLauncher.Game
                 Logger.Warn("Erro checking whether steam is installed");
             }
         }
-
-        public bool IsSteamRunning()
-        {
-            ThrowIfSteamNotInstalled();
-            using (var registry = RegistryKey.OpenBaseKey(RegistryHive.CurrentUser, RegistryView.Default))
-            {
-                var steamKey = registry.OpenSubKey("Software\\Valve\\Steam\\ActiveProcess", false);
-                if (steamKey == null)
-                    return false;
-                var pid = (int)steamKey.GetValue("pid");
-                if (pid == 0)
-                    return false;
-                if (ProcessHelper.GetProcessByPid(pid) == null)
-                    return false;
-                return true;
-            }
-        }
-
-        public bool IsUserLoggedIn(out int userId)
-        {
-            ThrowIfSteamNotInstalled();
-            userId = -1;
-
-            using (var registry = RegistryKey.OpenBaseKey(RegistryHive.CurrentUser, RegistryView.Default))
-            {
-                var steamKey = registry.OpenSubKey("Software\\Valve\\Steam\\ActiveProcess", false);
-                if (steamKey == null)
-                    return false;
-                userId = (int)steamKey.GetValue("ActiveUser");
-                return userId > 0;
-            }
-        }
-
-        public void WaitUserChanged(int ticks)
-        {
-            ThrowIfSteamNotInstalled();
-            IsUserLoggedIn(out var lastUserId);
-            if (lastUserId > 0)
-                return;
-
-            var tick = 0;
-            while (tick++ < tick)
-            {
-                IsUserLoggedIn(out var currentUser);
-                if (currentUser == 0 || currentUser == lastUserId)
-                    continue;
-                return;
-            }
-        }
-
 
         public bool IsGameInstalled(int gameId)
         {
@@ -119,7 +106,48 @@ namespace FocLauncher.Game
                 }
             };
             process.Start();
-            WaitUserChanged(3000);
+        }
+
+        public async Task WaitSteamRunningAndLoggedInAsync(CancellationToken token)
+        {
+            ThrowIfSteamNotInstalled();
+
+            var running = IsRunning;
+            if (!running)
+            {
+                // Required because a taskmgr kill does not reset this value, so we have to do this manually
+                ActiveUser = 0;
+                await WaitSteamRunningAsync(token);
+            }
+            if (IsUserLoggedIn)
+                return;
+            await WaitSteamUserLoggedInAsync(token);
+        }
+
+        private async Task WaitSteamRunningAsync(CancellationToken token)
+        {
+            token.ThrowIfCancellationRequested();
+            if (IsRunning)
+                return;
+            
+            while (!token.IsCancellationRequested && !IsRunning)
+            {
+                var k = _registry.GetKey("ActiveProcess");
+                await k.WaitForChangeAsync(false, RegistryChangeNotificationFilters.Value, token);
+            }
+        }
+
+        public async Task WaitSteamUserLoggedInAsync(CancellationToken token)
+        {
+            token.ThrowIfCancellationRequested();
+            if (IsUserLoggedIn)
+                return;
+
+            while (!token.IsCancellationRequested && !IsUserLoggedIn)
+            {
+                var k = _registry.GetKey("ActiveProcess");
+                await k.WaitForChangeAsync(false, RegistryChangeNotificationFilters.Value, token);
+            }
         }
 
         protected void ThrowIfSteamNotInstalled()
