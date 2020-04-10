@@ -17,12 +17,30 @@ namespace FocLauncher.Game
             if (CheckGoG(result.FocExe))
                 return GameType.GoG;
             // TODO: This should not mutate the object anymore. It then can probably be made to an struct again
+            //  It also should only accept the FileInfo
             if (CheckOrigin(result))
                 return GameType.Origin;
             // TODO: Check DiskGold (just to have them all)
             return GameType.Disk;
         }
-        
+
+
+        internal static GameType GetGameType(FileInfo focExe)
+        {
+            if (CheckSteam(focExe))
+                return GameType.SteamGold;
+            if (CheckGoG(focExe))
+                return GameType.GoG;
+            // TODO: This should not mutate the object anymore. It then can probably be made to an struct again
+            //  It also should only accept the FileInfo
+            //if (CheckOrigin(focExe))
+            //    return GameType.Origin;
+            // TODO: Check DiskGold (just to have them all)
+            return GameType.Disk;
+        }
+
+
+
         private static bool CheckSteam(FileInfo exeFile)
         {
             var directory = exeFile.Directory;

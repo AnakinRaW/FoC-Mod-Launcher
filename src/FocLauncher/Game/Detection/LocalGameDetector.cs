@@ -1,4 +1,6 @@
-﻿namespace FocLauncher.Game.Detection
+﻿using System.IO;
+
+namespace FocLauncher.Game.Detection
 {
     public class LocalGameDetector : GameDetector
     {
@@ -12,30 +14,27 @@
 
         private static GameDetection FindGamesFromExecutingPath()
         {
-            // TODO
-            //var currentPath = Directory.GetCurrentDirectory();
+            var currentPath = Directory.GetCurrentDirectory();
 
-            //if (!File.Exists(Path.Combine(currentPath, "swfoc.exe")))
-            //    return;
+            var focExe = new FileInfo(Path.Combine(currentPath, "swfoc.exe"));
+            if (!focExe.Exists)
+                return GameDetection.NotInstalled;
 
-            //if (Path.GetFullPath(currentPath) == Path.GetFullPath(result.FocPath))
-            //    return;
+            var regPath = FocRegistryHelper.Instance.ExePath;
+            if (!string.IsNullOrEmpty(regPath) && Path.GetFullPath(currentPath) == Path.GetFullPath(regPath))
+            {
+                var eawRegPath = EaWRegistryHelper.Instance.ExePath;
+                return new GameDetection(new FileInfo(eawRegPath), focExe);
+            }
 
-            //var newResult = default(GameDetectionResult);
-            //newResult.FocPath = currentPath;
+            var gameType = GameTypeHelper.GetGameType(focExe);
+            if (!Eaw.FindInstallationRelativeToFoc(focExe, gameType, out var eawPath))
+            {
+                var eawRegPath = EaWRegistryHelper.Instance.ExePath;
+                return new GameDetection(new FileInfo(eawRegPath), focExe);
+            }
 
-            //var gameType = GameTypeHelper.GetGameType(newResult);
-            //newResult.FocType = gameType;
-            //if (!Eaw.FindInstallationRelativeToFoc(newResult.FocPath, gameType, out var eawPath))
-            //{
-            //    newResult.EawPath = result.EawPath;
-            //    result = newResult;
-            //    return;
-            //}
-            //newResult.EawPath = eawPath;
-            //result = newResult;
-
-            return GameDetection.NotInstalled;
+            return new GameDetection(eawPath, focExe);
         }
     }
 }
