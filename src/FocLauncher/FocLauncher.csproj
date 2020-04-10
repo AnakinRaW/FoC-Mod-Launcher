@@ -148,7 +148,7 @@
     <Compile Include="Game\GameProcessWatcher.cs" />
     <Compile Include="Game\GameType.cs" />
     <Compile Include="Game\ProcessHelper.cs" />
-    <Compile Include="Game\Steam.cs" />
+    <Compile Include="Game\SteamClientException.cs" />
     <Compile Include="IDataModel.cs" />
     <Compile Include="Game\IGame.cs" />
     <Compile Include="Mods\IMod.cs" />
