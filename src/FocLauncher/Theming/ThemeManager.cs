@@ -7,12 +7,14 @@ using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using FocLauncher.Mods;
 using FocLauncher.Properties;
+using Pen = System.Drawing.Pen;
 
 namespace FocLauncher.Theming
 {
-    public class ThemeManager
+    public class ThemeManager : IThemeManager
     {
         private ITheme _theme;
 
@@ -24,6 +26,8 @@ namespace FocLauncher.Theming
 
         private readonly Dictionary<IMod, ITheme> _modThemeMapping = new Dictionary<IMod, ITheme>();
         private static ThemeManager _instance;
+
+        public event EventHandler<ThemeChangedEventArgs> ThemeChanged;
 
         public ITheme Theme
         {
@@ -38,6 +42,7 @@ namespace FocLauncher.Theming
                 var theme = _theme;
                 _theme = value;
                 ChangeTheme(theme, _theme, true);
+                OnThemeChanged(value);
             }
         }
 
@@ -55,6 +60,28 @@ namespace FocLauncher.Theming
             if (Themes.Contains(theme))
                 return;
             Themes.Add(theme);
+        }
+
+        public uint GetThemedColorRgba(ComponentResourceKey componentResourceKey)
+        {
+            if (componentResourceKey is null)
+                return 0;
+
+            var rd = new ResourceDictionary
+            {
+                Source = Theme.GetResourceUri()
+            };
+
+            if (rd.Contains(componentResourceKey))
+            {
+                var themedObject = rd[componentResourceKey];
+                if (themedObject is Color color)
+                    return (uint) (color.A << 24 | color.B << 16 | color.G << 8) | color.R;
+                if (themedObject is SolidColorBrush colorBrush)
+                    return (uint) (colorBrush.Color.A << 24 | colorBrush.Color.B << 16 | colorBrush.Color.G << 8) |
+                           colorBrush.Color.R;
+            }
+            return 0;
         }
 
         public static void Initialize(ContentControl mainWindow)
@@ -120,6 +147,11 @@ namespace FocLauncher.Theming
         public bool TryGetThemeByMod(IMod mod, out ITheme theme)
         {
             return _modThemeMapping.TryGetValue(mod, out theme);
+        }
+
+        protected virtual void OnThemeChanged(ITheme theme)
+        {
+            ThemeChanged?.Invoke(this, new ThemeChangedEventArgs(theme));
         }
     }
 }

@@ -135,7 +135,7 @@ namespace FocLauncher.WaitDialog
             _application?.Dispatcher?.Invoke(() => _onCancelAction?.Invoke());
         }
 
-        private void UpdateDialogStyle(DialogInitializationArguments args)
+        public void UpdateDialogStyle(DialogInitializationArguments args)
         {
             if (_disposed)
                 throw new ObjectDisposedException(nameof(UpdateDialogStyle));

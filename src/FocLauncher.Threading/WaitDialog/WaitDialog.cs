@@ -4,6 +4,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
+using FocLauncher.Theming;
 using FocLauncher.Threading;
 using Microsoft.VisualStudio.Threading;
 
@@ -11,6 +12,7 @@ namespace FocLauncher.WaitDialog
 {
     internal sealed class WaitDialog : MarshalByRefObject
     {
+        private readonly IServiceProvider _serviceProvider;
         private static WaitDialog _sharedInstance;
         private static bool _isInstanceAcquired;
         private IWaitDialogCallback _cancellationCallback;
@@ -25,10 +27,15 @@ namespace FocLauncher.WaitDialog
 
         public bool IsCancelled { get; private set; }
 
-        public WaitDialog()
+        public WaitDialog(IServiceProvider serviceProvider)
         {
+            _serviceProvider = serviceProvider;
             Application.Current.Exit += OnApplicationExit;
             _cancelHandler = new CancelHandler(this);
+
+            if (!(_serviceProvider.GetService(typeof(IThemeManager)) is IThemeManager themeManager))
+                return;
+            themeManager.ThemeChanged += OnThemeChanged;
         }
         
         public static void ReleaseInstance(WaitDialog instance)
@@ -45,7 +52,7 @@ namespace FocLauncher.WaitDialog
             if (_isInstanceAcquired)
                 return null;
             if (_sharedInstance == null)
-                _sharedInstance = new WaitDialog();
+                _sharedInstance = new WaitDialog(LauncherServiceProvider.Instance);
             _isInstanceAcquired = true;
             ++_currentInstanceId;
             return _sharedInstance;
@@ -142,6 +149,7 @@ namespace FocLauncher.WaitDialog
                 _initializationArguments.AppMainWindowHandle = new WindowInteropHelper(Application.Current.MainWindow).Handle;
                 _initializationArguments.AppProcessId = Process.GetCurrentProcess().Id;
                 _initializationArguments.AppName = "FoC Launcher";
+                _initializationArguments.CancelText = "Cancel";
                 InitializeFontAndColorInformation();
             }
             if (_provider != null)
@@ -151,29 +159,27 @@ namespace FocLauncher.WaitDialog
 
         private void InitializeFontAndColorInformation()
         {
-            //_initializationArguments.BackgroundColor =
-            //    _themeManager.GetThemedColorRgba(EnvironmentColors.ToolWindowBackground);
-            //_initializationArguments.TextColor = _themeManager.GetThemedColorRgba(EnvironmentColors.ToolWindowText);
-            //_initializationArguments.CaptionBackgroundColor =
-            //    _themeManager.GetThemedColorRgba(EnvironmentColors.MainWindowTitleBarBackground);
-            //_initializationArguments.CaptionTextColor =
-            //    _themeManager.GetThemedColorRgba(EnvironmentColors.MainWindowTitleBarForeground);
-            //_initializationArguments.BorderColor =
-            //    _themeManager.GetThemedColorRgba(EnvironmentColors.MainWindowActiveShadowAndBorderColor);
+            if (_serviceProvider.GetService(typeof(IThemeManager)) is IThemeManager themeManager)
+            {
+                _initializationArguments.BackgroundColor = themeManager.GetThemedColorRgba(EnvironmentColors.WaitWindowBackground);
+                _initializationArguments.TextColor = themeManager.GetThemedColorRgba(EnvironmentColors.WaitWindowText);
+                _initializationArguments.CaptionBackgroundColor = themeManager.GetThemedColorRgba(EnvironmentColors.WaitWindowCaptionBackground);
+                _initializationArguments.CaptionTextColor = themeManager.GetThemedColorRgba(EnvironmentColors.WaitWindowCaptionText);
+                _initializationArguments.BorderColor = themeManager.GetThemedColorRgba(EnvironmentColors.WaitWindowBorder);
+            }
+            else
+            {
+                _initializationArguments.BackgroundColor = 4143380223U;
+                _initializationArguments.TextColor = 505290495U;
+                _initializationArguments.CaptionBackgroundColor = 4025479935U;
+                _initializationArguments.CaptionTextColor = 505290495U;
+                _initializationArguments.BorderColor = 8047871U;
+            }
         }
 
         private void CreateAndStartAppDomain()
         {
-            var currentDomainSetup = AppDomain.CurrentDomain.SetupInformation;
-            var info = new AppDomainSetup
-            {
-                ApplicationBase = LauncherConstants.ApplicationBasePath,
-                //ApplicationBase = currentDomainSetup.ApplicationBase,
-                //ConfigurationFile = currentDomainSetup.ConfigurationFile ?? string.Empty,
-                
-                LoaderOptimization = LoaderOptimization.MultiDomain
-            };
-
+            var info = new AppDomainSetup {ApplicationBase = LauncherConstants.ApplicationBasePath};
             _appDomain = AppDomain.CreateDomain("LauncherWaitDialog", null, info);
 
             // Since we may execute this code from an embedded assembly typeof().Assembly.Location might return "". 
@@ -200,6 +206,15 @@ namespace FocLauncher.WaitDialog
                     break;
             }
             return handle;
+        }
+
+        private void OnThemeChanged(object sender, ThemeChangedEventArgs e)
+        {
+            if (_initializationArguments != null)
+            {
+                InitializeFontAndColorInformation();
+                _provider.UpdateDialogStyle(_initializationArguments);
+            }
         }
 
         [Serializable]

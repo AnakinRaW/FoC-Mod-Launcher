@@ -26,6 +26,7 @@ namespace FocLauncher
             var mainWindow = new MainWindow();
 
             ThemeManager.Initialize(mainWindow);
+            LauncherServiceProvider.Instance.RegisterService(ThemeManager.Instance, typeof(IThemeManager));
 
             var dataModel = new LauncherDataModel();
             dataModel.Initialized += OnDataModelInitialized;

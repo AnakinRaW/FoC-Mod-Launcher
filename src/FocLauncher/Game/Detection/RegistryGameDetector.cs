@@ -96,8 +96,6 @@ namespace FocLauncher.Game.Detection
                 {
                     s.Dispose();
                 }
-
-                
             });
 
             Logger.Trace("Re-try checking the game is setted up in the registry.");
