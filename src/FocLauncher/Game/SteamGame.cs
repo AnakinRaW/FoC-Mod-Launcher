@@ -1,12 +1,19 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using FocLauncher.Mods;
+using FocLauncher.Threading;
 using FocLauncher.Utilities;
+using FocLauncher.WaitDialog;
 
 namespace FocLauncher.Game
 {
     public sealed class SteamGame : AbstractFocGame
     {
         public const string GameconstantsUpdateHash = "b0818f73031b7150a839bb83e7aa6187";
+
+        public const int EmpireAtWarSteamId = 32470;
+        public const int ForcesOfCorruptionSteamId = 32472;
+
 
         protected override string GameExeFileName => "StarwarsG.exe";
         protected override string DebugGameExeFileName => "StarwarsI.exe";
@@ -23,18 +30,25 @@ namespace FocLauncher.Game
 
         public override bool IsPatched()
         {
-            if (!File.Exists(GameDirectory + @"\Data\XML\GAMECONSTANTS.XML"))
+            var gameConstantsFilePath = Path.Combine(GameDirectory, @"Data\XML\GAMECONSTANTS.XML");
+            if (!File.Exists(gameConstantsFilePath))
                 return false;
             var hashProvider = new HashProvider();
-            if (hashProvider.GetFileHash(GameDirectory + @"\Data\XML\GAMECONSTANTS.XML") != GameconstantsUpdateHash)
-                return false;
-            return true;
+            return hashProvider.GetFileHash(gameConstantsFilePath) == GameconstantsUpdateHash;
         }
 
         protected override void OnGameStarting(IMod mod, ref GameRunArguments args)
         {
-            if (!Steam.IsSteamRunning())
-                Steam.StartSteam();
+            if (!SteamClient.Instance.IsRunning)
+            {
+                ThreadHelper.JoinableTaskFactory.Run(async () =>
+                {
+                    var data = new WaitDialogProgressData("Waiting for Steam...");
+                    using var s = WaitDialogFactory.Instance.StartWaitDialog("FoC Launcher", data, TimeSpan.FromSeconds(2));
+                    SteamClient.Instance.StartSteam();
+                    await SteamClient.Instance.WaitSteamRunningAndLoggedInAsync();
+                });
+            }
             if (mod != null)
             {
                 args.IsWorkshopMod = mod.WorkshopMod;

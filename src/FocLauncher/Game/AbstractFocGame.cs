@@ -19,9 +19,7 @@ namespace FocLauncher.Game
             var number = Directory.EnumerateFiles(xmlDir).Count();
             if (number != DefaultXmlFileCount)
                 return false;
-            if (Directory.Exists(Path.Combine(xmlDir, @"AI\")))
-                return false;
-            return true;
+            return !Directory.Exists(Path.Combine(xmlDir, @"AI\"));
         }
     }
 }

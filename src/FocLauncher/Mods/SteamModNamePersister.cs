@@ -20,7 +20,7 @@ namespace FocLauncher.Mods
 
         private SteamModNamePersister()
         {
-            FilePath = Path.Combine(PetroglyphGameManager.Instance.ApplicationPath, FileName);
+            FilePath = Path.Combine(LauncherConstants.ApplicationBasePath, FileName);
 
             if (!File.Exists(FilePath))
             {

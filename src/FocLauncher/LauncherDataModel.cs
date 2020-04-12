@@ -7,14 +7,17 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows;
 using FocLauncher.Game;
+using FocLauncher.Game.Detection;
 using FocLauncher.Mods;
-using FocLauncher.Properties;
 using FocLauncher.Theming;
+using NLog;
 
 namespace FocLauncher
 {
-    public class LauncherDataModel : IDataModel, IDebugPrinter
+    public class LauncherDataModel : IDataModel
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         public static string IconPath = Path.Combine(LauncherConstants.ApplicationBasePath, "foc.ico");
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -144,46 +147,36 @@ namespace FocLauncher
             Instance = this;
             InitAppDataDirectory();
 
-            GameManager = PetroglyphGameManager.Instance;
-            GameManager.Initialize(LauncherConstants.ApplicationBasePath);
-
             if (!InitGames(out var result))
             {
-                string message = string.Empty;
-                if (string.IsNullOrEmpty(result.EawPath))
+                var message = string.Empty;
+                if (result.EawExe == null || !result.EawExe.Exists)
                     message = "Could not find Empire at War!\r\n";
-                else if (string.IsNullOrEmpty(result.FocPath))
+                else if (result.FocExe == null || !result.FocExe.Exists)
                     message += "Could not find Forces of Corruption\r\n";
 
                 MessageBox.Show(message + "\r\nThe launcher will now be closed", "FoC Launcher", MessageBoxButton.OK,
                     MessageBoxImage.Error);
                 Application.Current.Shutdown();
+                return;
             }
 
+            Logger.Info(GetInstalledGameInfo);
             SearchMods();
             RegisterThemes();
             OnInitialized();
         }
-
-        public string GetDebugInfo()
+        
+        private bool InitGames(out GameDetection result)
         {
-            var sb = new StringBuilder();
-            sb.AppendLine("----------DEBUG Information----------");
-            sb.AppendLine(EaW == null ? "EaW is null" : $"EaW found at: {EaW.GameDirectory};");
-            sb.AppendLine(FoC == null ? "FoC is null" : $"FoC found at: {FoC.GameDirectory}; FoC Version: {FocGameType}");
-            return sb.ToString();
-        }
-
-        private bool InitGames(out GameDetectionResult result)
-        {
-            result = GameHelper.GetGameInstallations();
+            result = GameDetectionHelper.GetGameInstallations();
 
             if (result.IsError)
                 return false;
 
             try
             {
-                EaW = new Eaw(result.EawPath);
+                EaW = new Eaw(result.EawExe.Directory?.FullName);
             }
             catch
             {
@@ -193,14 +186,15 @@ namespace FocLauncher
             switch (result.FocType)
             {
                 case GameType.SteamGold:
-                    FoC = new SteamGame(result.FocPath);
+                    FoC = new SteamGame(result.FocExe.Directory?.FullName);
                     SteamModNamePersister.CreateInstance();
                     break;
                 case GameType.Disk:
                 case GameType.Origin:
+                    // TODO: Apply path fix here (if applicable). This should be a method in the Detection itself
                 case GameType.GoG:
                 case GameType.DiskGold:
-                    FoC = new Foc(result.FocPath, result.FocType);
+                    FoC = new Foc(result.FocExe.Directory?.FullName, result.FocType);
                     break;
             }
 
@@ -245,7 +239,16 @@ namespace FocLauncher
             if (File.Exists(IconPath))
                 return;
             using var fs = new FileStream(IconPath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
-            Resources.foc.Save(fs);
+            App.Properties.Resources.foc.Save(fs);
+        }
+
+        private string GetInstalledGameInfo()
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("----------Installed Game Information----------");
+            sb.AppendLine(EaW == null ? "EaW is null" : $"EaW found at: {EaW.GameDirectory};");
+            sb.AppendLine(FoC == null ? "FoC is null" : $"FoC found at: {FoC.GameDirectory}; FoC Version: {FocGameType}");
+            return sb.ToString();
         }
 
 

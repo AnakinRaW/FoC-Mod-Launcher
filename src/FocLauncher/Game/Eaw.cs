@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using FocLauncher.Utilities;
 
 namespace FocLauncher.Game
@@ -20,14 +21,13 @@ namespace FocLauncher.Game
 
         public override bool IsPatched()
         {
-            if (!File.Exists(Path.Combine(GameDirectory, @"Data\XML\GAMECONSTANTS.xml")))
+            var constantsFilePath = Path.Combine(GameDirectory, @"Data\XML\GAMECONSTANTS.xml");
+            if (!File.Exists(constantsFilePath))
                 return false;
             var hashProvider = new HashProvider();
-            if (hashProvider.GetFileHash(Path.Combine(GameDirectory, @"Data\XML\GAMECONSTANTS.xml")) != GameconstantsUpdateHashEaW)
+            if (hashProvider.GetFileHash(constantsFilePath) != GameconstantsUpdateHashEaW)
                 return false;
-            if (Directory.GetFiles(Path.Combine(GameDirectory, @"Data\XML\")).Length != 1)
-                return false;
-            return true;
+            return Directory.GetFiles(Path.Combine(GameDirectory, @"Data\XML\")).Length == 1;
         }
 
         public override bool IsGameAiClear()
@@ -40,27 +40,39 @@ namespace FocLauncher.Game
             return false;
         }
 
-        public static bool FindInstallationRelativeToFoc(string focPath, GameType type, out string eawPath)
+        // TODO: Add Origin
+        // TODO: Put into game detection
+        public static bool FindInstallationRelativeToFoc(FileInfo focExe, GameType type, out FileInfo? eawExe)
         {
-            eawPath = string.Empty;
+            eawExe = null;
             switch (type)
             {
                 case GameType.Disk:
-                    if (!File.Exists(Path.Combine(Directory.GetParent(focPath).FullName, @"Star Wars Empire at War\GameData\sweaw.exe")))
+                    var parent = focExe.Directory?.Parent;
+                    var eawDir = parent?.GetDirectories().FirstOrDefault(x => x.Name.Equals("Star Wars Empire at War"));
+                    if (eawDir is null)
                         return false;
-                    eawPath = Path.Combine(Directory.GetParent(focPath).FullName, @"Star Wars Empire at War\GameData\");
-                    break;
+
+                    var eawExePath = Path.Combine(eawDir.FullName, @"GameData\sweaw.exe");
+                    if (!File.Exists(eawExePath))
+                        return false;
+                    eawExe = new FileInfo(eawExePath);
+                    return true;
                 case GameType.SteamGold:
                 case GameType.GoG:
-                    if (!File.Exists(Path.Combine(Directory.GetParent(focPath).FullName, "GameData\\sweaw.exe")))
+                    var eawDir2 = focExe.Directory?.Parent;
+                    if (eawDir2 is null)
                         return false;
-                    eawPath = Path.Combine(Directory.GetParent(focPath).FullName, "GameData\\");
+                    var eawExePath2 = Path.Combine(eawDir2.FullName, @"GameData\\sweaw.exe");
+                    if (!File.Exists(eawExePath2))
+                        return false;
+                    eawExe = new FileInfo(eawExePath2);
                     break;
                 case GameType.DiskGold:
                 case GameType.Undefined:
                     return false;
             }
-            return true;
+            return false;
         }
     }
 }

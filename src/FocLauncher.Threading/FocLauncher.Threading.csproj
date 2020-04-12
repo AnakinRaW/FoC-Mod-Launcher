@@ -134,6 +134,10 @@
       <Project>{93cdc38a-d74a-4cd5-a5aa-9ce8d953519a}</Project>
       <Name>FocLauncher.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\FocLauncher.Theming\FocLauncher.Theming.csproj">
+      <Project>{b952dcaa-749d-476c-bbc3-2074adfb1cc4}</Project>
+      <Name>FocLauncher.Theming</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

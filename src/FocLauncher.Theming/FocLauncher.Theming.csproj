@@ -54,10 +54,12 @@
     <Compile Include="EnvironmentColors.cs" />
     <Compile Include="ITheme.cs" />
     <Compile Include="DefaultTheme.cs" />
+    <Compile Include="IThemeManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AbstractTheme.cs" />
+    <Compile Include="ThemeChangedEventArgs.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="DefaultTheme.xaml">

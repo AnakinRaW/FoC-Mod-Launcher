@@ -13,6 +13,12 @@ namespace FocLauncher.Theming
         private static ComponentResourceKey _statusBarRunningBackground;
         private static ComponentResourceKey _statusBarRunningText;
 
+        private static ComponentResourceKey _waitWindowBackground;
+        private static ComponentResourceKey _waitWindowBorder;
+        private static ComponentResourceKey _waitWindowText;
+        private static ComponentResourceKey _waitWindowCaptionBackground;
+        private static ComponentResourceKey _waitWindowCaptionText;
+        
         public static ComponentResourceKey BackgroundColor =>
             _backgroundColor ?? (_backgroundColor = new ComponentResourceKey(typeof(EnvironmentColors), nameof(BackgroundColor)));
 
@@ -31,5 +37,21 @@ namespace FocLauncher.Theming
 
         public static ComponentResourceKey StatusBarRunningText =>
             _statusBarRunningText ?? (_statusBarRunningText = new ComponentResourceKey(typeof(EnvironmentColors), nameof(StatusBarRunningText)));
+
+
+        public static ComponentResourceKey WaitWindowBackground =>
+            _waitWindowBackground ?? (_waitWindowBackground = new ComponentResourceKey(typeof(EnvironmentColors), nameof(WaitWindowBackground)));
+
+        public static ComponentResourceKey WaitWindowBorder =>
+            _waitWindowBorder ?? (_waitWindowBorder = new ComponentResourceKey(typeof(EnvironmentColors), nameof(WaitWindowBorder)));
+
+        public static ComponentResourceKey WaitWindowText =>
+            _waitWindowText ?? (_waitWindowText = new ComponentResourceKey(typeof(EnvironmentColors), nameof(WaitWindowText)));
+
+        public static ComponentResourceKey WaitWindowCaptionBackground =>
+            _waitWindowCaptionBackground ?? (_waitWindowCaptionBackground = new ComponentResourceKey(typeof(EnvironmentColors), nameof(WaitWindowCaptionBackground)));
+
+        public static ComponentResourceKey WaitWindowCaptionText =>
+            _waitWindowCaptionText ?? (_waitWindowCaptionText = new ComponentResourceKey(typeof(EnvironmentColors), nameof(WaitWindowCaptionText)));
     }
 }

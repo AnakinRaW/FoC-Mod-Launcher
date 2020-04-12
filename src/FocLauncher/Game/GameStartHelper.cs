@@ -15,7 +15,7 @@ namespace FocLauncher.Game
             var fileName = startInfo.FileName;
             var a = startInfo.Arguments;
 
-            var linkPath = Path.Combine(PetroglyphGameManager.Instance.ApplicationPath, "tmp.lnk");
+            var linkPath = Path.Combine(LauncherConstants.ApplicationBasePath, "tmp.lnk");
 
             CreateShortcut(fileName, linkPath, a, startInfo.WorkingDirectory, iconPath);
 

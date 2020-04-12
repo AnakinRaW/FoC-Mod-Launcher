@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
-using System.IO;
 using System.Runtime.CompilerServices;
+using FocLauncher.Game.Detection;
 
 namespace FocLauncher.Game
 {
@@ -21,23 +21,22 @@ namespace FocLauncher.Game
         public IGame EmpireAtWar { get; private set; }
 
         public IGame ForcesOfCorruption { get; private set; }
+        
 
-        internal string ApplicationPath { get; private set; }
-
+        // TODO: Make this a real instance
         private PetroglyphGameManager()
         {
         }
 
-        public void Initialize(string localAppPath)
+        // TODO: Consume GameDetection
+        public void Initialize(GameDetection gameDetection)
         {
-            if (!Directory.Exists(localAppPath))
-                throw new DirectoryNotFoundException();
-            ApplicationPath = localAppPath;
+
         }
 
-        public GameDetectionResult FindGames(FindGameOptions options)
+        public void FindAndInitialize(GameDetectionOptions findOptions)
         {
-            return default;
+
         }
 
         private void RegisterEvents(IGame game)
@@ -64,12 +63,5 @@ namespace FocLauncher.Game
         {
             GameClosed?.Invoke(this, e);
         }
-    }
-
-    public enum FindGameOptions
-    {
-        Default,
-        LocalOnly,
-        RegistryOnly
     }
 }

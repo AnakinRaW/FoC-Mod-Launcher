@@ -27,15 +27,14 @@ namespace FocLauncher.Game
 
         public override bool IsPatched()
         {
-            if (!File.Exists(GameDirectory + @"\Data\XML\GAMECONSTANTS.XML") ||
-                !File.Exists(GameDirectory + @"\Data\XML\GRAPHICDETAILS.XML"))
+            var constantsFilePath = Path.Combine(GameDirectory, @"Data\XML\GAMECONSTANTS.XML");
+            var graphicsFilePath = Path.Combine(GameDirectory, @"Data\XML\GRAPHICDETAILS.XML");
+            if (!File.Exists(constantsFilePath) || !File.Exists(graphicsFilePath))
                 return false;
             var hashProvider = new HashProvider();
-            if (hashProvider.GetFileHash(GameDirectory + @"\Data\XML\GAMECONSTANTS.XML") != GameconstantsUpdateHash)
+            if (hashProvider.GetFileHash(constantsFilePath) != GameconstantsUpdateHash)
                 return false;
-            if (hashProvider.GetFileHash(GameDirectory + @"\Data\XML\GRAPHICDETAILS.XML") != GraphicdetailsUpdateHash)
-                return false;
-            return true;
+            return hashProvider.GetFileHash(graphicsFilePath) == GraphicdetailsUpdateHash;
         }
 
         protected override void OnGameStarting(IMod mod, ref GameRunArguments args)
