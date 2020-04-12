@@ -54,6 +54,7 @@ namespace FocLauncher.Mods
             }
         }
 
+        // TODO:
         public Mod(string modDirectory, bool workshopMod = false)
         {
             ModDirectory = modDirectory;

@@ -37,26 +37,26 @@ namespace FocLauncher.Game
             return hashProvider.GetFileHash(gameConstantsFilePath) == GameconstantsUpdateHash;
         }
 
-        protected override void OnGameStarting(IMod mod, ref GameRunArguments args)
+        protected override void OnGameStarting(GameStartingEventArgs args)
         {
             if (!SteamClient.Instance.IsRunning)
             {
                 ThreadHelper.JoinableTaskFactory.Run(async () =>
                 {
-                    var data = new WaitDialogProgressData("Waiting for Steam...");
+                    var data = new WaitDialogProgressData("Waiting for Steam...", isCancelable: true);
                     using var s = WaitDialogFactory.Instance.StartWaitDialog("FoC Launcher", data, TimeSpan.FromSeconds(2));
                     SteamClient.Instance.StartSteam();
-                    await SteamClient.Instance.WaitSteamRunningAndLoggedInAsync();
+                    try
+                    {
+                        await SteamClient.Instance.WaitSteamRunningAndLoggedInAsync(s.UserCancellationToken);
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        args.Cancel = true;
+                    }
                 });
             }
-            if (mod != null)
-            {
-                args.IsWorkshopMod = mod.WorkshopMod;
-                if (!args.IsWorkshopMod)
-                    args.ModPath = "MODPATH=" + "Mods/" + mod.FolderName;
-                else
-                    args.SteamMod = mod.FolderName;
-            }
+            base.OnGameStarting(args);
         }
 
         public override bool HasDebugBuild()

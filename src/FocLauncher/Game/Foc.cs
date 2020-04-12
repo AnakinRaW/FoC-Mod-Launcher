@@ -37,14 +37,11 @@ namespace FocLauncher.Game
             return hashProvider.GetFileHash(graphicsFilePath) == GraphicdetailsUpdateHash;
         }
 
-        protected override void OnGameStarting(IMod mod, ref GameRunArguments args)
+        protected override void OnGameStarting(GameStartingEventArgs args)
         {
-            if (!(mod is DummyMod) && !mod.ModDirectory.StartsWith(GameDirectory))
+            if (!(args.GameArguments.Mod is DummyMod) && !args.GameArguments.Mod.ModDirectory.StartsWith(GameDirectory))
                 throw new Exception("Mod is not compatible");
-
-            if (mod is Mod)
-                args.ModPath = "Mods/" + mod.FolderName;
-
+            base.OnGameStarting(args);
         }
     }
 }

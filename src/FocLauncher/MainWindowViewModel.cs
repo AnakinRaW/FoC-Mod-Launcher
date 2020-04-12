@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Input;
 using FocLauncher.Game;
 using FocLauncher.Input;
@@ -23,13 +24,18 @@ namespace FocLauncher
 
         private void ExecutedLaunch()
         {
-            var args = new GameRunArguments
+            var args = new GameRunArguments(DataModel.SelectedMod)
             {
                 UseDebug = DataModel.UseDebugBuild,
                 IgnoreAsserts = DataModel.IgnoreAsserts,
                 NoArtProcess = DataModel.NoArtProcess
             };
-            DataModel.FoC.PlayGame(DataModel.SelectedMod, args);
+            var started = DataModel.FoC.PlayGame(args);
+            if (!started)
+            {
+                MessageBox.Show("Game did not start.", "FoC Launcher", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
             if (Settings.Default.AutoSwitchTheme &&
                 ThemeManager.Instance.TryGetThemeByMod(DataModel.SelectedMod, out var theme))
                 ThemeManager.Instance.Theme = theme;

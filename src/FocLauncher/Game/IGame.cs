@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using FocLauncher.Mods;
 
 namespace FocLauncher.Game
 {
@@ -8,7 +7,7 @@ namespace FocLauncher.Game
     {
         event EventHandler<Process> GameStarted;
 
-        event EventHandler GameStarting;
+        event EventHandler<GameStartingEventArgs> GameStarting;
 
         event EventHandler GameClosed;
 
@@ -43,9 +42,9 @@ namespace FocLauncher.Game
         /// <summary>
         /// Plays the game with the mod
         /// </summary>
-        /// <param name="mod">The mod instance that should be started</param>
-        /// <param name="args">Additional arguments</param>
-        void PlayGame(IMod mod, GameRunArguments args);
+        /// <param name="args">Arguments which specify more options, including the mod, that shall get used.</param>
+        /// <returns><c>true</c> when the game process was invoked; <c>false</c> otherwise. E.g. when the procedure was cancelled.</returns>
+        bool PlayGame(GameRunArguments args);
 
         /// <summary>
         /// Checks if the patch is installed

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using FocLauncher.Mods;
@@ -10,7 +11,7 @@ namespace FocLauncher.Game
         public event EventHandler<Process> GameStarted;
 
 
-        public event EventHandler GameStarting;
+        public event EventHandler<GameStartingEventArgs> GameStarting;
 
 
         public event EventHandler GameClosed;
@@ -45,18 +46,22 @@ namespace FocLauncher.Game
 
         public void PlayGame()
         {
-            PlayGame(null, default);
+            PlayGame(new GameRunArguments());
         }
 
-        public void PlayGame(IMod mod, GameRunArguments args)
+        public bool PlayGame(GameRunArguments args)
         {
             if (!Exists())
                 throw new Exception("Game was not found");
-            OnGameStarting(mod, ref args);
+            var startingArguments = new GameStartingEventArgs(args);
+            OnGameStarting(startingArguments);
+            if (startingArguments.Cancel)
+                return false;
             var startInfo = CreateGameProcess(args);
-            var process = StartGameProcess(startInfo, mod);
+            var process = StartGameProcess(startInfo, args.Mod);
             if (process != null)
                 OnGameStarted(process);
+            return true;
         }
 
         public abstract bool IsPatched();
@@ -72,10 +77,10 @@ namespace FocLauncher.Game
         {
             throw new NotImplementedException();
         }
-
-        protected virtual void OnGameStarting(IMod mod, ref GameRunArguments args)
+        
+        protected virtual void OnGameStarting(GameStartingEventArgs args)
         {
-            GameStarting?.Invoke(this, EventArgs.Empty);
+            GameStarting?.Invoke(this, args);
         }
 
         private Process StartGameProcess(ProcessStartInfo startInfo, IMod mod)
@@ -118,6 +123,16 @@ namespace FocLauncher.Game
         {
             GameProcessWatcher.SetProcess(process);
             GameStarted?.Invoke(this, process);
+        }
+    }
+
+    public class GameStartingEventArgs : CancelEventArgs
+    {
+        public GameRunArguments GameArguments { get; }
+
+        public GameStartingEventArgs(GameRunArguments arguments)
+        {
+            GameArguments = arguments;
         }
     }
 }
