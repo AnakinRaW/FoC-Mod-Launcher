@@ -101,7 +101,6 @@
     <Compile Include="Game\WorkshopNameResolver.cs" />
     <Compile Include="LauncherException.cs" />
     <Compile Include="ModInfo\SteamData.cs" />
-    <Compile Include="Mods\DummyMod.cs" />
     <Compile Include="ModInfo\ModInfoFile.cs" />
     <Compile Include="Mods\Mod.cs" />
     <Compile Include="Mods\ModHelper.cs" />

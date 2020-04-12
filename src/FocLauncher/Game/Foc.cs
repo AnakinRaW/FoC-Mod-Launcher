@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using FocLauncher.Mods;
 using FocLauncher.Utilities;
 
 namespace FocLauncher.Game
@@ -42,7 +41,7 @@ namespace FocLauncher.Game
 
         protected override void OnGameStarting(GameStartingEventArgs args)
         {
-            if (!(args.GameArguments.Mod is DummyMod) && !args.GameArguments.Mod.ModDirectory.StartsWith(GameDirectory))
+            if (!args.GameArguments.Mod.ModDirectory.StartsWith(GameDirectory))
                 throw new Exception("Mod is not compatible");
             base.OnGameStarting(args);
         }
