@@ -63,26 +63,19 @@ namespace FocLauncher.Game
                 return false;
             var startInfo = CreateGameProcess(args);
 
-            Process process = null;
+            Process process;
             try
             {
-                try
-                {
-                    process = StartGameProcess(startInfo, iconFile);
-                }
-                catch
-                {
-                    return false;
-                }
-                if (process != null)
-                    OnGameStarted(process);
-                process?.Dispose();
-                return true;
+                process = StartGameProcess(startInfo, iconFile);
             }
-            finally
+            catch
             {
-                process?.Dispose();
+                return false;
             }
+
+            if (process != null)
+                OnGameStarted(process);
+            return true;
         }
 
         public abstract bool IsPatched();
