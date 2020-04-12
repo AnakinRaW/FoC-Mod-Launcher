@@ -78,8 +78,8 @@ namespace FocLauncher.Utilities
         {
 			Dispose(false);
         }
-        
-        public static async Task WaitProcessCreatedAsync(string processName, CancellationToken token)
+
+        public static async Task WaitProcessCreatedAsync(string processName, CancellationToken token = default)
         {
             var m = new AsyncManualResetEvent();
             using var listener = new ProcessCreationListener(processName, true);
