@@ -106,8 +106,8 @@ namespace FocLauncherHost
             finally
             {
                 Logger.Info("Unloading launcher appdomain");
-                launcherBootstrapper.Dispose();
                 AppDomain.CurrentDomain.UnhandledException -= OnUnhandledExceptionReceived;
+                launcherBootstrapper.Dispose();
                 AppDomain.Unload(launcherDomain);
             }
         }
