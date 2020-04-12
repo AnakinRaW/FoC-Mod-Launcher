@@ -2,7 +2,9 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using FocLauncher.Mods;
+using FocLauncher.Versioning;
 
 namespace FocLauncher.Game
 {
@@ -20,6 +22,9 @@ namespace FocLauncher.Game
         public string GameDirectory { get; protected set; }
 
         public abstract string Name { get; }
+        public abstract string Description { get; }
+        public virtual string? IconFile => string.Empty;
+        public virtual ModVersion? Version => null;
 
         public GameProcessWatcher GameProcessWatcher { get; } = new GameProcessWatcher();
 
@@ -66,7 +71,18 @@ namespace FocLauncher.Game
 
         public abstract bool IsPatched();
 
-        public abstract bool IsGameAiClear();
+        public virtual bool IsGameAiClear()
+        {
+            if (Directory.Exists(Path.Combine(GameDirectory, @"Data\Scripts\")))
+                return false;
+            var xmlDir = Path.Combine(GameDirectory, @"Data\XML\");
+            if (!Directory.Exists(xmlDir))
+                return false;
+            var number = Directory.EnumerateFiles(xmlDir).Count();
+            if (number != DefaultXmlFileCount)
+                return false;
+            return !Directory.Exists(Path.Combine(xmlDir, @"AI\"));
+        }
 
         public virtual bool HasDebugBuild()
         {

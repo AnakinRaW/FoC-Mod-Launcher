@@ -5,7 +5,7 @@ using FocLauncher.Utilities;
 
 namespace FocLauncher.Game
 {
-    public class Foc : AbstractFocGame
+    public class Foc : PetroglyphGame
     {
         public const string GameconstantsUpdateHash = "b0818f73031b7150a839bb83e7aa6187";
         public const string GraphicdetailsUpdateHash = "4d7e140887fc1dd52f47790a6e20b5c5";
@@ -19,6 +19,7 @@ namespace FocLauncher.Game
         protected override int DefaultXmlFileCount => 2;
 
         public override string Name => "Forces of Corruption";
+        public override string Description => string.Empty;
 
         public Foc(string gameDirectory, GameType type) : base(gameDirectory)
         {

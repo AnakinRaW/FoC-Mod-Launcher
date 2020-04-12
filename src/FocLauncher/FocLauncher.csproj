@@ -76,6 +76,7 @@
     <Compile Include="Game\Detection\GameDetectionOptions.cs" />
     <Compile Include="Game\FocRegistryHelper.cs" />
     <Compile Include="Game\GameTypeHelper.cs" />
+    <Compile Include="Game\IPetroglyhLaunchable.cs" />
     <Compile Include="Game\LauncherSteamHelper.cs" />
     <Compile Include="Game\PetroglyphGameRegistry.cs" />
     <Compile Include="Game\RegistryHelper.cs" />
@@ -93,7 +94,6 @@
     <Compile Include="Dialogs\ChangeThemeDialog.xaml.cs">
       <DependentUpon>ChangeThemeDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Game\AbstractFocGame.cs" />
     <Compile Include="Game\Eaw.cs" />
     <Compile Include="Game\Foc.cs" />
     <Compile Include="Game\GameStartHelper.cs" />

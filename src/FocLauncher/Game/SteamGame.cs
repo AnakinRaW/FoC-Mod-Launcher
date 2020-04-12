@@ -1,13 +1,12 @@
 ﻿using System;
 using System.IO;
-using FocLauncher.Mods;
 using FocLauncher.Threading;
 using FocLauncher.Utilities;
 using FocLauncher.WaitDialog;
 
 namespace FocLauncher.Game
 {
-    public sealed class SteamGame : AbstractFocGame
+    public sealed class SteamGame : PetroglyphGame
     {
         public const string GameconstantsUpdateHash = "b0818f73031b7150a839bb83e7aa6187";
 
@@ -23,6 +22,8 @@ namespace FocLauncher.Game
         public override GameType Type => GameType.SteamGold;
 
         public override string Name => "Forces of Corruption (Steam)";
+
+        public override string Description => string.Empty;
 
         public SteamGame(string gameDirectory) : base(gameDirectory)
         {

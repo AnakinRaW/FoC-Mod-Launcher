@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 namespace FocLauncher.Game
 {
-    public interface IGame
+    public interface IGame : IPetroglyhGameableObject
     {
         event EventHandler<Process> GameStarted;
 
@@ -18,10 +18,10 @@ namespace FocLauncher.Game
         /// </summary>
         string GameDirectory { get; }
 
-        /// <summary>
-        /// Returns the name of the Game
-        /// </summary>
-        string Name { get; }
+        ///// <summary>
+        ///// Returns the name of the Game
+        ///// </summary>
+        //string Name { get; }
 
         /// <summary>
         /// Contains Data of the Process

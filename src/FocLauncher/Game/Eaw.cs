@@ -5,7 +5,7 @@ using FocLauncher.Utilities;
 
 namespace FocLauncher.Game
 {
-    public class Eaw : AbstractFocGame
+    public class Eaw : PetroglyphGame
     {
         public const string GameconstantsUpdateHashEaW = "1d44b0797c8becbe240adc0098c2302a";
 
@@ -15,6 +15,7 @@ namespace FocLauncher.Game
 
         public override GameType Type => GameType.Undefined;
         public override string Name => "Star Wars: Empire at War";
+        public override string Description => string.Empty;
         protected override int DefaultXmlFileCount => 1;
         protected override string GameExeFileName => "sweaw.exe";
         protected override string? DebugGameExeFileName => null;
