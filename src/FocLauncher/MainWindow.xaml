@@ -7,6 +7,7 @@
         xmlns:converters="clr-namespace:FocLauncher.Converters"
         xmlns:mods="clr-namespace:FocLauncher.Mods"
         xmlns:controls="clr-namespace:FocLauncher.Controls"
+        xmlns:game="clr-namespace:FocLauncher.Game"
         mc:Ignorable="d"
         Title="FoC Launcher by Anakin" Width="400" ResizeMode="CanMinimize" Height="600" 
         Background="{DynamicResource {x:Static theming:EnvironmentColors.BackgroundImage}}"
@@ -18,7 +19,7 @@
         <converters:SteamToVisibilityConverter x:Key="SteamToVisibilityConverter"/>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
 
-        <DataTemplate x:Key="ModDataTemplate" DataType="{x:Type mods:IMod}">
+        <DataTemplate x:Key="LaunchableDataTemplate" DataType="{x:Type game:IPetroglyhGameableObject}">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
@@ -40,9 +41,11 @@
                 <Image Grid.Column="4" Height="16" Width="16" Source="Resources/steam.png" 
                        RenderOptions.BitmapScalingMode="Fant"
                        RenderOptions.EdgeMode="Aliased"
-                       Visibility="{Binding WorkshopMod, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                       Visibility="{Binding WorkshopMod, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}"/>
             </Grid>
         </DataTemplate>
+
+        <DataTemplate x:Key="Test" DataType="{x:Type mods:IMod}" ></DataTemplate>
 
     </Window.Resources>
     <Grid Background="{DynamicResource {x:Static theming:EnvironmentColors.BackgroundColor}}">
@@ -66,7 +69,7 @@
         <ListView x:Name="ListBox" Grid.Row="1" Margin="6,0" Background="#AAADAF"
                  FocusVisualStyle="{x:Null}"
                  ItemsSource="{Binding DataModel.Mods}"
-                 ItemTemplate="{StaticResource ModDataTemplate}"
+                 ItemTemplate="{StaticResource LaunchableDataTemplate}"
                  SelectedItem="{Binding DataModel.SelectedMod, Mode=TwoWay}"
                  HorizontalContentAlignment="Stretch"
                  MouseDoubleClick="ListBox_OnMouseDoubleClick">

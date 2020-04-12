@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -26,8 +26,7 @@ namespace FocLauncher
         private IGame _eaW;
         private IGame _foC;
         private GameType _focGameType;
-        private IEnumerable<IMod> _mods;
-        private IMod _selectedMod;
+        private IPetroglyhGameableObject _selectedMod;
         private bool _useDebugBuild;
         private bool _ignoreAsserts = true;
         private bool _noArtProcess = true;
@@ -84,18 +83,9 @@ namespace FocLauncher
             }
         }
 
-        public IEnumerable<IMod> Mods
-        {
-            get => _mods;
-            set
-            {
-                if (Equals(value, _mods)) return;
-                _mods = value;
-                OnPropertyChanged();
-            }
-        }
+        public ObservableCollection<IPetroglyhGameableObject> Mods { get; } = new ObservableCollection<IPetroglyhGameableObject>();
 
-        public IMod SelectedMod
+        public IPetroglyhGameableObject SelectedMod
         {
             get => _selectedMod;
             set
@@ -204,13 +194,15 @@ namespace FocLauncher
 
         private void SearchMods()
         {
-            Mods = ModHelper.FindMods(FoC);
+            Mods.Add(FoC);
+            foreach (var mod in ModHelper.FindMods(FoC))
+                Mods.Add(mod);
             SelectedMod = Mods.FirstOrDefault();
         }
 
         private void RegisterThemes()
         {
-            foreach (var mod in Mods)
+            foreach (var mod in Mods.OfType<IMod>())
                 RegisterTheme(mod);
         }
 

@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using FocLauncher.Game;
-using FocLauncher.Mods;
 
 namespace FocLauncher
 {
@@ -13,9 +12,9 @@ namespace FocLauncher
 
          GameType FocGameType { get; set; }
 
-         IEnumerable<IMod> Mods { get; set; }
+         ObservableCollection<IPetroglyhGameableObject> Mods { get; }
 
-         IMod SelectedMod { get; set; }
+         IPetroglyhGameableObject SelectedMod { get; set; }
 
          bool UseDebugBuild { get; set; }
 

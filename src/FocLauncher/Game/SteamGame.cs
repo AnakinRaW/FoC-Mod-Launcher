@@ -23,6 +23,8 @@ namespace FocLauncher.Game
 
         public override string Name => "Forces of Corruption (Steam)";
 
+        public override string? IconFile => LauncherDataModel.IconPath;
+
         public override string Description => string.Empty;
 
         public SteamGame(string gameDirectory) : base(gameDirectory)

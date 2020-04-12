@@ -7,7 +7,7 @@ namespace FocLauncher.Game
 {
     internal static class GameStartHelper
     {
-        public static Process StartGameProcess(ProcessStartInfo startInfo, string iconPath)
+        public static Process StartGameProcess(ProcessStartInfo startInfo, string? iconPath)
         {
             if (startInfo == null)
                 throw new ArgumentNullException(nameof(startInfo), "Game startup info must not be null");
@@ -27,7 +27,7 @@ namespace FocLauncher.Game
             return startingProcess;
         }
 
-        private static void CreateShortcut(string filePath, string linkPath, string arguments, string wd, string iconPath)
+        private static void CreateShortcut(string filePath, string linkPath, string arguments, string wd, string? iconPath)
         {
             var link = (NativeMethods.NativeMethods.IShellLink)new NativeMethods.NativeMethods.ShellLink();
             link.SetPath(filePath);

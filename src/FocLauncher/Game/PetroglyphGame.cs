@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using FocLauncher.Mods;
 using FocLauncher.Versioning;
 
 namespace FocLauncher.Game
@@ -49,12 +48,12 @@ namespace FocLauncher.Game
             return ExistsGameDirectoryAndGameExecutable();
         }
 
-        public void PlayGame()
+        public void PlayGame(string? iconFile = null)
         {
             PlayGame(new GameRunArguments());
         }
 
-        public bool PlayGame(GameRunArguments args)
+        public bool PlayGame(GameRunArguments args, string? iconFile = null)
         {
             if (!Exists())
                 throw new Exception("Game was not found");
@@ -63,10 +62,27 @@ namespace FocLauncher.Game
             if (startingArguments.Cancel)
                 return false;
             var startInfo = CreateGameProcess(args);
-            var process = StartGameProcess(startInfo, args.Mod);
-            if (process != null)
-                OnGameStarted(process);
-            return true;
+
+            Process process = null;
+            try
+            {
+                try
+                {
+                    process = StartGameProcess(startInfo, iconFile);
+                }
+                catch
+                {
+                    return false;
+                }
+                if (process != null)
+                    OnGameStarted(process);
+                process?.Dispose();
+                return true;
+            }
+            finally
+            {
+                process?.Dispose();
+            }
         }
 
         public abstract bool IsPatched();
@@ -99,16 +115,9 @@ namespace FocLauncher.Game
             GameStarting?.Invoke(this, args);
         }
 
-        private Process StartGameProcess(ProcessStartInfo startInfo, IMod mod)
+        private Process StartGameProcess(ProcessStartInfo startInfo, string? iconFile)
         {
-            try
-            {
-                return GameStartHelper.StartGameProcess(startInfo, mod.IconFile);
-            }
-            catch (Exception)
-            {
-                return null;
-            }
+            return GameStartHelper.StartGameProcess(startInfo, iconFile);
         }
 
         private ProcessStartInfo CreateGameProcess(GameRunArguments args)

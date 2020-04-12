@@ -21,6 +21,8 @@ namespace FocLauncher.Game
         public override string Name => "Forces of Corruption";
         public override string Description => string.Empty;
 
+        public override string? IconFile => LauncherDataModel.IconPath;
+
         public Foc(string gameDirectory, GameType type) : base(gameDirectory)
         {
             Type = type;

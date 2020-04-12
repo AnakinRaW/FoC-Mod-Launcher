@@ -37,14 +37,14 @@ namespace FocLauncher.Game
         /// <summary>
         /// Plays the default game
         /// </summary>
-        void PlayGame();
+        void PlayGame(string? iconFile = null);
 
         /// <summary>
         /// Plays the game with the mod
         /// </summary>
         /// <param name="args">Arguments which specify more options, including the mod, that shall get used.</param>
         /// <returns><c>true</c> when the game process was invoked; <c>false</c> otherwise. E.g. when the procedure was cancelled.</returns>
-        bool PlayGame(GameRunArguments args);
+        bool PlayGame(GameRunArguments args, string? iconFile = null);
 
         /// <summary>
         /// Checks if the patch is installed

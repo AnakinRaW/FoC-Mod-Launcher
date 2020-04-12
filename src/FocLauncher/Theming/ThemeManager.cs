@@ -10,7 +10,6 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using FocLauncher.Mods;
 using FocLauncher.Properties;
-using Pen = System.Drawing.Pen;
 
 namespace FocLauncher.Theming
 {
@@ -146,7 +145,8 @@ namespace FocLauncher.Theming
 
         public bool TryGetThemeByMod(IMod mod, out ITheme theme)
         {
-            return _modThemeMapping.TryGetValue(mod, out theme);
+            theme = default;
+            return mod != null && _modThemeMapping.TryGetValue(mod, out theme);
         }
 
         protected virtual void OnThemeChanged(ITheme theme)
