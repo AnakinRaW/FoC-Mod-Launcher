@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Gameloop.Vdf;
+using Gameloop.Vdf.JsonConverter;
 using Microsoft.VisualStudio.Threading;
 using Microsoft.Win32;
 using NLog;
@@ -17,9 +21,9 @@ namespace FocLauncher.Game
 
         public static SteamClient Instance => _instance ??= new SteamClient();
 
-        internal string? SteamExePath { get; private set; }
+        internal FileInfo SteamExe { get; private set; }
 
-        public bool Installed => !string.IsNullOrEmpty(SteamExePath);
+        public bool Installed => SteamExe != null && SteamExe.Exists;
 
         public bool IsRunning
         {
@@ -54,7 +58,35 @@ namespace FocLauncher.Game
                 return pid;
             }
         }
-        
+
+        private bool? WantsOfflineMode
+        {
+            get
+            {
+                if (!Installed)
+                    return null;
+                var steamDirectory = SteamExe.Directory;
+                if (steamDirectory == null || !steamDirectory.Exists)
+                    return null;
+
+                var configFile = Path.Combine(steamDirectory.FullName, "config\\loginusers.vdf");
+                if (!File.Exists(configFile))
+                    return null;
+
+                var config = VdfConvert.Deserialize(File.ReadAllText(configFile)).ToJson();
+                var usersWantingOffline = config.SelectTokens("$..[?(@.WantsOfflineMode=='1')]").ToList();
+                if (!usersWantingOffline.Any())
+                    return false;
+
+                var anyMostRecent = config.SelectTokens("$..[?(@.mostrecent)]");
+                if (!anyMostRecent.Any())
+                    return true;
+
+                var mostRecent = usersWantingOffline.FirstOrDefault(x => x.SelectToken("$..[?(@.mostrecent=='1')]") != null);
+                return !(mostRecent is null);
+            }
+        }
+
         private SteamClient()
         {
             _registry = new SteamRegistry();
@@ -69,7 +101,7 @@ namespace FocLauncher.Game
                 if (_registry.GetValue<string>("SteamExe", out var path))
                 {
                     Logger.Trace($"Steam installed under location: '{path}'");
-                    SteamExePath = path;
+                    SteamExe = new FileInfo(path);
                 }
                 else
                     Logger.Warn("Steam is not installed");
@@ -101,7 +133,7 @@ namespace FocLauncher.Game
             {
                 StartInfo =
                 {
-                    FileName = SteamExePath,
+                    FileName = SteamExe.FullName,
                     UseShellExecute = false
                 }
             };
@@ -121,7 +153,19 @@ namespace FocLauncher.Game
             }
             if (IsUserLoggedIn)
                 return;
-            await WaitSteamUserLoggedInAsync(token);
+
+            // Fix Issue #1
+            if (WantsOfflineMode.HasValue && WantsOfflineMode.Value)
+            {
+                await Task.Delay(2000, token);
+                await WaitSteamProcessCountChangeAsync(token);
+                if (!IsRunning)
+                    throw new SteamClientException("Steam is not running anymore.");
+            }
+            else
+            {
+                await WaitSteamUserLoggedInAsync(token);
+            }
         }
 
         private async Task WaitSteamRunningAsync(CancellationToken token)
@@ -155,6 +199,52 @@ namespace FocLauncher.Game
             if (!Installed)
                 throw new SteamClientException("Steam is not installed!");
         }
+
+
+
+        private async Task WaitSteamProcessCountChangeAsync(CancellationToken token)
+        {
+            if (token.IsCancellationRequested)
+                return;
+            var initialProcesses = GetSteamProcesses();
+            var initialWindowHandle = GetSteamMainWindowHandle();
+            while (!token.IsCancellationRequested || IsRunning)
+            {
+                var current = GetSteamProcesses();
+                var currentHandle = GetSteamMainWindowHandle();
+                try
+                {
+                    if (initialProcesses != current || initialWindowHandle != currentHandle)
+                        return;
+                    
+                    await Task.Delay(750, token);
+                }
+                finally
+                {
+                    //foreach (var process in current) 
+                    //    process.Dispose();
+                }
+            }
+            //foreach (var initialProcess in initialProcesses) 
+            //    initialProcess.Dispose();
+
+            static int GetSteamProcesses() => Process.GetProcesses().Count(x => x.ProcessName.Contains("steam") || x.ProcessName.Contains("Steam"));
+
+            static IntPtr GetSteamMainWindowHandle()
+            {
+                var p = Process.GetProcessesByName("steam").FirstOrDefault();
+                try
+                {
+                    return p?.MainWindowHandle ?? IntPtr.Zero;
+                }
+                finally
+                {
+                    p?.Dispose();
+                }
+            }
+                
+        }
+
 
         private class SteamRegistry : RegistryHelper
         {
