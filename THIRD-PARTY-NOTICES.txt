@@ -47,6 +47,26 @@ Copyright (c) Simon Cropp
 Licensed under the MIT License
 
 
+License notice for Gameloop.Vdf
+-------------------------------
+
+https://github.com/shravan2x/Gameloop.Vdf
+
+Copyright (c) 2016 Shravan Rajinikanth
+
+Licensed under the MIT License
+
+
+License notice for Gameloop.Vdf.JsonConverter
+-------------------------------
+
+https://github.com/shravan2x/Gameloop.Vdf.JsonConverter
+
+Copyright (c) 2016 Shravan Rajinikanth
+
+Licensed under the MIT License
+
+
 License notice for HtmlAgilityPack
 -------------------------------
 
