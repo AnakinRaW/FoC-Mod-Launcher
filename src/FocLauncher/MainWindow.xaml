@@ -17,7 +17,16 @@
         <converters:GameTypeToStringConverter x:Key="GameTypeToStringConverter"/>
         <converters:ModNameConverter x:Key="ModNameConverter"/>
         <converters:SteamToVisibilityConverter x:Key="SteamToVisibilityConverter"/>
+        <converters:DebugBuildToVisibilityConverter x:Key="DebugBuildToVisibilityConverter"/>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+
+        <Style x:Key="StyledCheckBox" TargetType="{x:Type CheckBox}">
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+
+        <Style x:Key="ArgumentCheckBox" TargetType="{x:Type CheckBox}" BasedOn="{StaticResource StyledCheckBox}">
+            <Setter Property="Margin" Value="0,6,24,0"/>
+        </Style>
 
         <DataTemplate x:Key="LaunchableDataTemplate" DataType="{x:Type game:IPetroglyhGameableObject}">
             <Grid>
@@ -81,29 +90,26 @@
             </Grid.ColumnDefinitions>
             <Image Grid.Column="0" Height="16" Width="16" Source="Resources/steam.png" 
                    RenderOptions.BitmapScalingMode="Fant"
-                   RenderOptions.EdgeMode="Aliased"/>
-            <TextBlock Grid.Column="1" Margin="6,0" Text="Steam Workshops"></TextBlock>
+                   RenderOptions.EdgeMode="Aliased"
+                   Visibility="{Binding DataModel.FoC, Converter={StaticResource SteamToVisibilityConverter}}"/>
+            <TextBlock Grid.Column="1" Margin="6,0" Text="Steam Workshops"/>
         </Grid>
         <StackPanel Grid.Row="3" Margin="0,12,0,12">
-            <Button HorizontalAlignment="Center" Padding="6,3,6,3" Width="100" Height="30" IsDefault="True"
+            <Button HorizontalAlignment="Center" Margin="8" Padding="8,3,8,3" Width="100" Height="30" IsDefault="True"
                     Content="Play"
                     Command="{Binding LaunchCommand}"/>
-            <StackPanel>
-                <CheckBox x:Name="DebugCheckBox" Content="Use DebugBuild" HorizontalAlignment="Center"
-                          IsChecked="{Binding DataModel.UseDebugBuild, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                          Visibility="{Binding DataModel.FoC, Converter={StaticResource SteamToVisibilityConverter}}"
-                          Foreground="White"/>
-                <DockPanel HorizontalAlignment="Center"
-                           Visibility="{Binding ElementName=DebugCheckBox, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}">
-                    <CheckBox Content="IgnoreAsserts" Margin="0,0,24,0" IsChecked="{Binding DataModel.IgnoreAsserts, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                              Foreground="White"/>
+            <CheckBox x:Name="DebugCheckBox" Content="Use Debug Build" IsChecked="{Binding DataModel.UseDebugBuild, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                      Visibility="{Binding DataModel.FoC, Converter={StaticResource DebugBuildToVisibilityConverter}}"
+                      Style="{StaticResource StyledCheckBox}" HorizontalAlignment="Center"/>
+            <DockPanel HorizontalAlignment="Center">
+                    <CheckBox Content="IgnoreAsserts" IsChecked="{Binding DataModel.IgnoreAsserts, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+                              Style="{StaticResource ArgumentCheckBox}"/>
                     <CheckBox Content="No art process" IsChecked="{Binding DataModel.NoArtProcess, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                              Foreground="White"/>
+                              Style="{StaticResource ArgumentCheckBox}"/>
                     <CheckBox Content="Windowed" IsChecked="{Binding DataModel.Windowed, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                              Foreground="White"/>
+                              Style="{StaticResource ArgumentCheckBox}"/>
                 </DockPanel>
             </StackPanel>
-        </StackPanel>
 
         <controls:LauncherStatusBar Grid.Row="4" >
             <Grid>

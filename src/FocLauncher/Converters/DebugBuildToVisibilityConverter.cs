@@ -6,11 +6,11 @@ using FocLauncher.Game;
 
 namespace FocLauncher.Converters
 {
-    internal class SteamToVisibilityConverter : IValueConverter
+    internal class DebugBuildToVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is SteamGame)
+            if (value is IGame game && game.HasDebugBuild())
                 return Visibility.Visible;
             return Visibility.Collapsed;
         }
