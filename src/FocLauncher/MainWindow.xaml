@@ -91,11 +91,14 @@
             <StackPanel>
                 <CheckBox x:Name="DebugCheckBox" Content="Use DebugBuild" HorizontalAlignment="Center"
                           IsChecked="{Binding DataModel.UseDebugBuild, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                          Visibility="{Binding DataModel.FoC, Converter={StaticResource SteamToVisibilityConverter}}"/>
-                <DockPanel HorizontalAlignment="Center" 
+                          Visibility="{Binding DataModel.FoC, Converter={StaticResource SteamToVisibilityConverter}}"
+                          Foreground="White"/>
+                <DockPanel HorizontalAlignment="Center"
                            Visibility="{Binding ElementName=DebugCheckBox, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}">
-                    <CheckBox Content="IgnoreAsserts" Margin="0,0,24,0" IsChecked="{Binding DataModel.IgnoreAsserts, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                    <CheckBox Content="No art process" IsChecked="{Binding DataModel.NoArtProcess, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                    <CheckBox Content="IgnoreAsserts" Margin="0,0,24,0" IsChecked="{Binding DataModel.IgnoreAsserts, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                              Foreground="White"/>
+                    <CheckBox Content="No art process" IsChecked="{Binding DataModel.NoArtProcess, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                              Foreground="White"/>
                 </DockPanel>
             </StackPanel>
         </StackPanel>
