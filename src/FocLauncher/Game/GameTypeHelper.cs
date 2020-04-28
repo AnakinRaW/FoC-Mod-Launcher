@@ -58,15 +58,15 @@ namespace FocLauncher.Game
             return parentFiles.Any(x => x.Name.Equals("runm2.dat")) && parentFiles.Any(x => x.Name.Equals("runme.dat"));
         }
 
-        private static bool CheckGoG(FileInfo path)
+        private static bool CheckGoG(FileInfo exeFile)
         {
-            //if (new DirectoryInfo(path).Name != "EAWX")
-            //    return false;
-            //if (!File.Exists(Directory.GetParent(path) + "\\GameData\\sweaw.exe"))
-            //    return false;
-            //if (!File.Exists(Directory.GetParent(path) + "\\GameData\\goggame-1421404887.dll"))
-            //    return false;
-            return true;
+            if (exeFile.Directory?.Name != "EAWX")
+                return false;
+            var eawPath = exeFile.Directory.Parent?.EnumerateDirectories().FirstOrDefault(x => x.Name.Equals("GameData"));
+            if (eawPath == null)
+                return false;
+            var fileNames = eawPath.EnumerateFiles().Select(x => x.Name).ToList();
+            return fileNames.Any(x => x.Equals("sweaw.exe")) && fileNames.Any(x => x.Equals("goggame-1421404887.dll"));
         }
 
         private static bool CheckOrigin(GameDetection result)
@@ -78,7 +78,7 @@ namespace FocLauncher.Game
             //    return false;
             //if (!Directory.Exists(Path.Combine(Directory.GetParent(result.FocExe).FullName, "__Installer")))
             //    return false;
-            return true;
+            return false;
         }
 
 
