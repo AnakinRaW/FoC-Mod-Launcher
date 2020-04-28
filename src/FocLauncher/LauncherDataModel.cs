@@ -31,6 +31,7 @@ namespace FocLauncher
         private bool _ignoreAsserts = true;
         private bool _noArtProcess = true;
         private PetroglyphGameManager _gameManager;
+        private bool _windowed;
 
         internal static LauncherDataModel Instance { get; private set; }
 
@@ -130,6 +131,19 @@ namespace FocLauncher
             }
         }
 
+        public bool Windowed
+        {
+            get => _windowed;
+            set
+            {
+                if (value == _windowed)
+                    return;
+                _windowed = value;
+                OnPropertyChanged();
+            }
+        }
+
+        // TODO: This is not view model code!
         public void Initialize()
         {
             if (Instance != null)

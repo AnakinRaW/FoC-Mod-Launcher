@@ -11,6 +11,8 @@ namespace FocLauncher.Game
 
         public bool NoArtProcess { get; set; }
 
+        public bool Windowed { get; set; }
+
         public IMod? Mod { get; }
         
         public GameRunArguments()

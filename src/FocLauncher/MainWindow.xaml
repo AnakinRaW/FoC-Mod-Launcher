@@ -45,7 +45,7 @@
             </Grid>
         </DataTemplate>
 
-        <DataTemplate x:Key="Test" DataType="{x:Type mods:IMod}" ></DataTemplate>
+        <DataTemplate x:Key="Test" DataType="{x:Type mods:IMod}"></DataTemplate>
 
     </Window.Resources>
     <Grid Background="{DynamicResource {x:Static theming:EnvironmentColors.BackgroundColor}}">
@@ -98,6 +98,8 @@
                     <CheckBox Content="IgnoreAsserts" Margin="0,0,24,0" IsChecked="{Binding DataModel.IgnoreAsserts, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                               Foreground="White"/>
                     <CheckBox Content="No art process" IsChecked="{Binding DataModel.NoArtProcess, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                              Foreground="White"/>
+                    <CheckBox Content="Windowed" IsChecked="{Binding DataModel.Windowed, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                               Foreground="White"/>
                 </DockPanel>
             </StackPanel>

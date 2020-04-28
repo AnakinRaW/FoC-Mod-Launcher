@@ -34,6 +34,7 @@ namespace FocLauncher
             args.UseDebug = DataModel.UseDebugBuild;
             args.IgnoreAsserts = DataModel.IgnoreAsserts;
             args.NoArtProcess = DataModel.NoArtProcess;
+            args.Windowed = DataModel.Windowed;
 
 
             var started = DataModel.FoC.PlayGame(args, DataModel.SelectedMod.IconFile);

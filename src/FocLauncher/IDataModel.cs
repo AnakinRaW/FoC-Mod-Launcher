@@ -21,6 +21,8 @@ namespace FocLauncher
          bool IgnoreAsserts { get; set; }
 
          bool NoArtProcess { get; set; }
+
+         bool Windowed { get; set; }
          
     }
 }
