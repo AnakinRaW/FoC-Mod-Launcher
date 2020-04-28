@@ -15,7 +15,6 @@
         Closing="MainWindow_OnClosing">
     <Window.Resources>
         <converters:GameTypeToStringConverter x:Key="GameTypeToStringConverter"/>
-        <converters:ModNameConverter x:Key="ModNameConverter"/>
         <converters:SteamToVisibilityConverter x:Key="SteamToVisibilityConverter"/>
         <converters:DebugBuildToVisibilityConverter x:Key="DebugBuildToVisibilityConverter"/>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
@@ -38,14 +37,7 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <Image Grid.Column="0" Source="{Binding IconFile}" Width="32" Height="32"/>
-                <TextBlock Grid.Column="2" VerticalAlignment="Center" Text="{Binding Name}">
-                    <!--<TextBlock.Text>
-                        <MultiBinding Converter="{StaticResource ModNameConverter}">
-                            <Binding Path="Name"/>
-                            <Binding/>
-                        </MultiBinding>
-                    </TextBlock.Text>-->
-                </TextBlock>
+                <TextBlock Grid.Column="2" VerticalAlignment="Center" Text="{Binding Name}"/>
                 <TextBlock Grid.Column="3" Margin="12,0" VerticalAlignment="Center" HorizontalAlignment="Right" Text="{Binding Version}"/>
                 <Image Grid.Column="4" Height="16" Width="16" Source="Resources/steam.png" 
                        RenderOptions.BitmapScalingMode="Fant"
@@ -123,18 +115,17 @@
                     <TextBlock VerticalAlignment="Center" Text="{Binding DataModel.FocGameType, Converter={StaticResource GameTypeToStringConverter}}"/>
                 </DockPanel>
                 <DockPanel Grid.Column="2" HorizontalAlignment="Stretch">
-                    <Button Margin="0,0,12,0" Background="Transparent" BorderBrush="Transparent" FocusVisualStyle="{x:Null}"
-                                Click="OpenChangeThemeDialog">
+                    <controls:StatusBarButton Margin="0,0,12,0" Click="OpenChangeThemeDialog">
                         <AccessText Text="Change _Theme" TextDecorations="Underline" Foreground="{DynamicResource {x:Static theming:EnvironmentColors.StatusBarDefaultText}}"/>
-                    </Button>
-                    <Button Margin="0,0,3,0" Background="Transparent" BorderBrush="Transparent" FocusVisualStyle="{x:Null}"
-                            Click="OpenSettingsWindow">
+                    </controls:StatusBarButton>
+                    <controls:StatusBarButton Margin="0,0,3,0" Background="Transparent" BorderBrush="Transparent" FocusVisualStyle="{x:Null}"
+                                     Click="OpenSettingsWindow">
                         <Image Source="Resources/SettingsOutline_16x.png"/>
-                    </Button>
-                    <Button Margin="0,0,3,0" Background="Transparent" BorderBrush="Transparent" FocusVisualStyle="{x:Null}"
-                            Click="OpenAboutWindow">
+                    </controls:StatusBarButton>
+                    <controls:StatusBarButton Margin="0,0,3,0" Background="Transparent" BorderBrush="Transparent" FocusVisualStyle="{x:Null}"
+                                     Click="OpenAboutWindow">
                         <Image Source="Resources/StatusHelp_grey_disabled_16x.png"></Image>
-                    </Button>
+                    </controls:StatusBarButton>
                 </DockPanel>
             </Grid>
         </controls:LauncherStatusBar>
