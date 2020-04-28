@@ -27,8 +27,9 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type controls:StatusBarButton}">
-                    <StackPanel IsHitTestVisible="true" Orientation="Horizontal" Style="{StaticResource StackPanelHoverStyle}">
-                        <ContentPresenter/>
+                    <StackPanel IsHitTestVisible="true" Orientation="Horizontal" Style="{StaticResource StackPanelHoverStyle}"
+                                Margin="{TemplateBinding Margin}">
+                        <ContentPresenter Margin="{TemplateBinding Padding}"/>
                     </StackPanel>
                 </ControlTemplate>
             </Setter.Value>

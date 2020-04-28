@@ -12,6 +12,8 @@
         Title="FoC Launcher by Anakin" Width="400" ResizeMode="CanMinimize" Height="600" 
         Background="{DynamicResource {x:Static theming:EnvironmentColors.BackgroundImage}}"
         Foreground="White"
+        UseLayoutRounding="True"
+        TextOptions.TextFormattingMode="Display"
         Closing="MainWindow_OnClosing">
     <Window.Resources>
         <converters:GameTypeToStringConverter x:Key="GameTypeToStringConverter"/>
@@ -115,16 +117,14 @@
                     <TextBlock VerticalAlignment="Center" Text="{Binding DataModel.FocGameType, Converter={StaticResource GameTypeToStringConverter}}"/>
                 </DockPanel>
                 <DockPanel Grid.Column="2" HorizontalAlignment="Stretch">
-                    <controls:StatusBarButton Margin="0,0,12,0" Click="OpenChangeThemeDialog">
-                        <AccessText Text="Change _Theme" TextDecorations="Underline" Foreground="{DynamicResource {x:Static theming:EnvironmentColors.StatusBarDefaultText}}"/>
+                    <controls:StatusBarButton Margin="0,0,12,0" Click="OpenChangeThemeDialog" Padding="5,2">
+                        <AccessText VerticalAlignment="Center" Text="Change _Theme" TextDecorations="Underline"/>
                     </controls:StatusBarButton>
-                    <controls:StatusBarButton Margin="0,0,3,0" Background="Transparent" BorderBrush="Transparent" FocusVisualStyle="{x:Null}"
-                                     Click="OpenSettingsWindow">
+                    <controls:StatusBarButton Margin="0,0,3,0" Click="OpenSettingsWindow" Padding="5,2">
                         <Image Source="Resources/SettingsOutline_16x.png"/>
                     </controls:StatusBarButton>
-                    <controls:StatusBarButton Margin="0,0,3,0" Background="Transparent" BorderBrush="Transparent" FocusVisualStyle="{x:Null}"
-                                     Click="OpenAboutWindow">
-                        <Image Source="Resources/StatusHelp_grey_disabled_16x.png"></Image>
+                    <controls:StatusBarButton Margin="0,0,3,0" Click="OpenAboutWindow" Padding="5,2">
+                        <Image Source="Resources/StatusHelp_grey_disabled_16x.png"/>
                     </controls:StatusBarButton>
                 </DockPanel>
             </Grid>

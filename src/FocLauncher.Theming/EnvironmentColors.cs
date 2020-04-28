@@ -7,6 +7,10 @@ namespace FocLauncher.Theming
         private static ComponentResourceKey _backgroundColor;
         private static ComponentResourceKey _backgroundImage;
 
+        private static ComponentResourceKey _captionText;
+        private static ComponentResourceKey _windowText;
+        private static ComponentResourceKey _checkBoxText;
+
         private static ComponentResourceKey _statusBarDefaultBackground;
         private static ComponentResourceKey _statusBarDefaultText;
 
@@ -24,6 +28,15 @@ namespace FocLauncher.Theming
 
         public static ComponentResourceKey BackgroundImage =>
             _backgroundImage ?? (_backgroundImage = new ComponentResourceKey(typeof(EnvironmentColors), nameof(BackgroundImage)));
+
+        public static ComponentResourceKey CaptionText =>
+            _captionText ?? (_captionText = new ComponentResourceKey(typeof(EnvironmentColors), nameof(CaptionText)));
+
+        public static ComponentResourceKey WindowText =>
+            _windowText ?? (_windowText = new ComponentResourceKey(typeof(EnvironmentColors), nameof(WindowText)));
+
+        public static ComponentResourceKey CheckBoxText =>
+            _checkBoxText ?? (_checkBoxText = new ComponentResourceKey(typeof(EnvironmentColors), nameof(CheckBoxText)));
 
 
         public static ComponentResourceKey StatusBarDefaultBackground =>
