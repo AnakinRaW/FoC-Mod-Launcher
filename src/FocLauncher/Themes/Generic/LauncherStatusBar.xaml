@@ -8,7 +8,7 @@
         <Setter Property="Background" Value="{DynamicResource {x:Static theming:EnvironmentColors.StatusBarDefaultBackground}}"/>
         <Setter Property="TextElement.Foreground" Value="{DynamicResource {x:Static theming:EnvironmentColors.StatusBarDefaultText}}"/>
         <Style.Triggers>
-            <DataTrigger Binding="{Binding DataModel.FoC.GameProcessWatcher.IsProcessRunning}" Value="true">
+            <DataTrigger Binding="{Binding GameProcessWatcher.IsProcessRunning}" Value="true">
                 <Setter Property="Background" Value="{DynamicResource {x:Static theming:EnvironmentColors.StatusBarRunningBackground}}"/>
                 <Setter Property="TextElement.Foreground" Value="{DynamicResource {x:Static theming:EnvironmentColors.StatusBarRunningText}}"/>
             </DataTrigger>

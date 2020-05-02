@@ -37,14 +37,14 @@ namespace FocLauncher.Game
         /// <summary>
         /// Plays the default game
         /// </summary>
-        void PlayGame(string? iconFile = null);
+        bool PlayGame(string? iconFile = null);
 
         /// <summary>
         /// Plays the game with the mod
         /// </summary>
         /// <param name="args">Arguments which specify more options, including the mod, that shall get used.</param>
         /// <returns><c>true</c> when the game process was invoked; <c>false</c> otherwise. E.g. when the procedure was cancelled.</returns>
-        bool PlayGame(GameRunArguments args, string? iconFile = null);
+        bool PlayGame(GameCommandArguments args, string? iconFile = null);
 
         /// <summary>
         /// Checks if the patch is installed
@@ -66,7 +66,5 @@ namespace FocLauncher.Game
         /// <param name="language">The english name of the language</param>
         /// <returns><see langword="true"/> if game is the language is available; otherwise, <see langword="false"/>.</returns>
         bool IsLanguageInstalled(string language);
-
-        bool HasDebugBuild();
     }
 }

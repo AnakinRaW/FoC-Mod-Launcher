@@ -18,8 +18,6 @@ namespace FocLauncher.Game
         public override string Description => string.Empty;
         protected override int DefaultXmlFileCount => 1;
         protected override string GameExeFileName => "sweaw.exe";
-        protected override string? DebugGameExeFileName => null;
-
         public override bool IsPatched()
         {
             var constantsFilePath = Path.Combine(GameDirectory, @"Data\XML\GAMECONSTANTS.xml");

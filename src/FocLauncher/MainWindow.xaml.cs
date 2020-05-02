@@ -1,8 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Windows;
-using System.Windows.Input;
 using FocLauncher.Dialogs;
-using FocLauncher.Game;
 using FocLauncher.Mods;
 
 namespace FocLauncher
@@ -28,18 +26,8 @@ namespace FocLauncher
         private void OpenChangeThemeDialog(object sender, RoutedEventArgs e)
         {
             new ChangeThemeDialog().ShowDialog();
-            
         }
-
-        private void ListBox_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            if (((FrameworkElement)e.OriginalSource).DataContext is IPetroglyhGameableObject)
-            {
-                var model = DataContext as MainWindowViewModel;
-                model?.LaunchCommand.Execute(null);
-            }
-        }
-
+        
         private void MainWindow_OnClosing(object sender, CancelEventArgs e)
         {
             SteamModNamePersister.Instance.Save();

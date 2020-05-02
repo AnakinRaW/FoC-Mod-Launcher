@@ -10,7 +10,7 @@ namespace FocLauncher.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is IGame game && game.HasDebugBuild())
+            if (value is IDebugable debugable && debugable.DebugBuildExists)
                 return Visibility.Visible;
             return Visibility.Collapsed;
         }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -18,7 +17,7 @@ namespace FocLauncher.Game
         public event EventHandler GameClosed;
 
         public abstract GameType Type { get; }
-        public string GameDirectory { get; protected set; }
+        public string GameDirectory { get; }
 
         public abstract string Name { get; }
         public abstract string Description { get; }
@@ -31,7 +30,6 @@ namespace FocLauncher.Game
 
         protected abstract string GameExeFileName { get; }
 
-        protected abstract string? DebugGameExeFileName { get; }
 
         // TODO: Change to DirectoryInfo
         protected PetroglyphGame(string gameDirectory)
@@ -48,34 +46,15 @@ namespace FocLauncher.Game
             return ExistsGameDirectoryAndGameExecutable();
         }
 
-        public void PlayGame(string? iconFile = null)
+        public bool PlayGame(string? iconFile = null)
         {
-            PlayGame(new GameRunArguments());
+            return PlayGame(new GameCommandArguments());
         }
 
-        public bool PlayGame(GameRunArguments args, string? iconFile = null)
+        public bool PlayGame(GameCommandArguments args, string? iconFile = null)
         {
-            if (!Exists())
-                throw new Exception("Game was not found");
-            var startingArguments = new GameStartingEventArgs(args);
-            OnGameStarting(startingArguments);
-            if (startingArguments.Cancel)
-                return false;
-            var startInfo = CreateGameProcess(args);
-
-            Process process;
-            try
-            {
-                process = StartGameProcess(startInfo, iconFile);
-            }
-            catch
-            {
-                return false;
-            }
-
-            if (process != null)
-                OnGameStarted(process);
-            return true;
+            var exeFile = new FileInfo(Path.Combine(GameDirectory, GameExeFileName));
+            return StartGame(args, new GameStartInfo(exeFile, GameBuildType.Release), iconFile);
         }
 
         public abstract bool IsPatched();
@@ -92,15 +71,35 @@ namespace FocLauncher.Game
                 return false;
             return !Directory.Exists(Path.Combine(xmlDir, @"AI\"));
         }
-
-        public virtual bool HasDebugBuild()
-        {
-            return false;
-        }
-
+        
         public virtual bool IsLanguageInstalled(string language)
         {
             throw new NotImplementedException();
+        }
+
+        protected bool StartGame(GameCommandArguments args, GameStartInfo gameStartInfo, string? iconFile = null)
+        {
+            if (!Exists())
+                throw new Exception("Game was not found");
+            var startingArguments = new GameStartingEventArgs(args, gameStartInfo.BuildType);
+            OnGameStarting(startingArguments);
+            if (startingArguments.Cancel)
+                return false;
+            var processStartInfo = CreateGameProcess(args, gameStartInfo.Executable);
+
+            Process process;
+            try
+            {
+                process = StartGameProcess(processStartInfo, iconFile);
+            }
+            catch
+            {
+                return false;
+            }
+
+            if (process != null)
+                OnGameStarted(process);
+            return true;
         }
         
         protected virtual void OnGameStarting(GameStartingEventArgs args)
@@ -113,14 +112,11 @@ namespace FocLauncher.Game
             return GameStartHelper.StartGameProcess(startInfo, iconFile);
         }
 
-        private ProcessStartInfo CreateGameProcess(GameRunArguments args)
+        private ProcessStartInfo CreateGameProcess(GameCommandArguments options, FileInfo executable)
         {
-            var exePath = Path.Combine(GameDirectory, args.UseDebug ? DebugGameExeFileName : GameExeFileName);
-
-            var startInfo = new ProcessStartInfo
+            var startInfo = new ProcessStartInfo(executable.FullName)
             {
-                FileName = exePath,
-                Arguments = args.ToString(),
+                Arguments = options.ToArgs(),
                 WorkingDirectory = GameDirectory,
                 UseShellExecute = false
             };
@@ -142,15 +138,18 @@ namespace FocLauncher.Game
             GameProcessWatcher.SetProcess(process);
             GameStarted?.Invoke(this, process);
         }
-    }
 
-    public class GameStartingEventArgs : CancelEventArgs
-    {
-        public GameRunArguments GameArguments { get; }
-
-        public GameStartingEventArgs(GameRunArguments arguments)
+        protected class GameStartInfo
         {
-            GameArguments = arguments;
+            public GameBuildType BuildType { get; }
+
+            public FileInfo Executable { get; }
+
+            public GameStartInfo(FileInfo executable, GameBuildType buildType)
+            {
+                Executable = executable;
+                BuildType = buildType;
+            }
         }
     }
 }

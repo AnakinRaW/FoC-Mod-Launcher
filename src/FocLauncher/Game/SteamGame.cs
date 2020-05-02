@@ -6,16 +6,16 @@ using FocLauncher.WaitDialog;
 
 namespace FocLauncher.Game
 {
-    public sealed class SteamGame : PetroglyphGame
+    public sealed class SteamGame : PetroglyphGame, IDebugable
     {
+        private const string DebugGameExeFileName = "StarwarsI.exe";
+
         public const string GameconstantsUpdateHash = "b0818f73031b7150a839bb83e7aa6187";
 
         public const int EmpireAtWarSteamId = 32470;
         public const int ForcesOfCorruptionSteamId = 32472;
 
-
         protected override string GameExeFileName => "StarwarsG.exe";
-        protected override string DebugGameExeFileName => "StarwarsI.exe";
 
         protected override int DefaultXmlFileCount => 1;
 
@@ -23,7 +23,7 @@ namespace FocLauncher.Game
 
         public override string Name => "Forces of Corruption (Steam)";
 
-        public override string? IconFile => LauncherDataModel.IconPath;
+        public override string? IconFile => PetroglyphInitialization.IconPath;
 
         public override string Description => string.Empty;
 
@@ -61,10 +61,17 @@ namespace FocLauncher.Game
             }
             base.OnGameStarting(args);
         }
+        
+        public bool DebugBuildExists => File.Exists(Path.Combine(GameDirectory, DebugGameExeFileName));
 
-        public override bool HasDebugBuild()
+        public bool DebugGame(string? iconFile = null)
         {
-            return File.Exists(Path.Combine(GameDirectory, DebugGameExeFileName));
+            return DebugGame(new GameCommandArguments(), iconFile);
+        }
+
+        public bool DebugGame(GameCommandArguments args, string? iconFile = null)
+        {
+            return false;
         }
     }
 }

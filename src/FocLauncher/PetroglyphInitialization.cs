@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -9,146 +9,32 @@ using System.Windows;
 using FocLauncher.Game;
 using FocLauncher.Game.Detection;
 using FocLauncher.Mods;
+using FocLauncher.Properties;
 using FocLauncher.Theming;
 using NLog;
 
 namespace FocLauncher
 {
-    public class LauncherDataModel : IDataModel
+    public class PetroglyphInitialization
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public static string IconPath = Path.Combine(LauncherConstants.ApplicationBasePath, "foc.ico");
+        private ICollection<IPetroglyhGameableObject> _gameObjects;
 
         public event PropertyChangedEventHandler PropertyChanged;
         public event EventHandler Initialized;
+        
+        public PetroglyphGameManager GameManager { get; private set; }
 
-        private IGame _eaW;
-        private IGame _foC;
-        private GameType _focGameType;
-        private IPetroglyhGameableObject _selectedMod;
-        private bool _useDebugBuild;
-        private bool _ignoreAsserts = true;
-        private bool _noArtProcess = true;
-        private PetroglyphGameManager _gameManager;
-        private bool _windowed;
+        public IGame EaW { get; private set; }
 
-        internal static LauncherDataModel Instance { get; private set; }
+        public IGame FoC { get; private set; }
 
+        public GameType FocGameType { get; private set; }
 
-        public IGame EaW
-        {
-            get => _eaW;
-            set
-            {
-                if (Equals(value, _eaW))
-                    return;
-                _eaW = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public PetroglyphGameManager GameManager
-        {
-            get => _gameManager;
-            private set
-            {
-                if (value == _gameManager)
-                    return;
-                _gameManager = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public IGame FoC
-        {
-            get => _foC;
-            set
-            {
-                if (Equals(value, _foC))
-                    return;
-                _foC = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public GameType FocGameType
-        {
-            get => _focGameType;
-            set
-            {
-                if (value == _focGameType)
-                    return;
-                _focGameType = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public ObservableCollection<IPetroglyhGameableObject> Mods { get; } = new ObservableCollection<IPetroglyhGameableObject>();
-
-        public IPetroglyhGameableObject SelectedMod
-        {
-            get => _selectedMod;
-            set
-            {
-                if (Equals(value, _selectedMod)) return;
-                _selectedMod = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public bool UseDebugBuild
-        {
-            get => _useDebugBuild;
-            set
-            {
-                if (value == _useDebugBuild) return;
-                _useDebugBuild = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public bool IgnoreAsserts
-        {
-            get => _ignoreAsserts;
-            set
-            {
-                if (value == _ignoreAsserts)
-                    return;
-                _ignoreAsserts = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public bool NoArtProcess
-        {
-            get => _noArtProcess;
-            set
-            {
-                if (value == _noArtProcess) return;
-                _noArtProcess = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public bool Windowed
-        {
-            get => _windowed;
-            set
-            {
-                if (value == _windowed)
-                    return;
-                _windowed = value;
-                OnPropertyChanged();
-            }
-        }
-
-        // TODO: This is not view model code!
         public void Initialize()
         {
-            if (Instance != null)
-                throw new InvalidOperationException("The Launcher already was initialized");
-            Instance = this;
             InitAppDataDirectory();
 
             if (!InitGames(out var result))
@@ -166,7 +52,7 @@ namespace FocLauncher
             }
 
             Logger.Info(GetInstalledGameInfo);
-            SearchMods();
+            SearchGameObjects();
             RegisterThemes();
             OnInitialized();
         }
@@ -195,7 +81,6 @@ namespace FocLauncher
                     break;
                 case GameType.Disk:
                 case GameType.Origin:
-                    // TODO: Apply path fix here (if applicable). This should be a method in the Detection itself
                 case GameType.GoG:
                 case GameType.DiskGold:
                     FoC = new Foc(result.FocExe.Directory?.FullName, result.FocType);
@@ -206,17 +91,20 @@ namespace FocLauncher
             return true;
         }
 
-        private void SearchMods()
+        internal IReadOnlyCollection<IPetroglyhGameableObject> SearchGameObjects()
         {
-            Mods.Add(FoC);
-            foreach (var mod in ModHelper.FindMods(FoC))
-                Mods.Add(mod);
-            SelectedMod = Mods.FirstOrDefault();
+            if (_gameObjects == null)
+            {
+                _gameObjects = new HashSet<IPetroglyhGameableObject> {FoC};
+                foreach (var mod in ModHelper.FindMods(FoC))
+                    _gameObjects.Add(mod);
+            }
+            return _gameObjects.ToList();
         }
 
         private void RegisterThemes()
         {
-            foreach (var mod in Mods.OfType<IMod>())
+            foreach (var mod in _gameObjects.OfType<IMod>())
                 RegisterTheme(mod);
         }
 
@@ -245,7 +133,7 @@ namespace FocLauncher
             if (File.Exists(IconPath))
                 return;
             using var fs = new FileStream(IconPath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
-            App.Properties.Resources.foc.Save(fs);
+            Resources.foc.Save(fs);
         }
 
         private string GetInstalledGameInfo()

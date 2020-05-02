@@ -25,7 +25,7 @@ namespace FocLauncher.Input
         {
         }
 
-        public Command(Action<object> executeMethod) : this(executeMethod, o => true)
+        public Command(Action<object> executeMethod) : this(executeMethod, o=> true)
         {
         }
 
@@ -73,7 +73,7 @@ namespace FocLauncher.Input
             if (executeMethod == null || canExecuteMethod == null)
                 throw new ArgumentNullException(nameof(executeMethod));
         }
-
+        
         public static Command FromAsyncHandler(Func<Task> executeMethod)
         {
             return new Command(executeMethod);

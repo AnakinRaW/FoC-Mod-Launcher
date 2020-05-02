@@ -28,6 +28,15 @@ namespace FocLauncher.Input
             WrappedCommand = new Command(executeAction, cantExecuteFunc);
         }
 
+        protected AbstractCommandWrapper(Action<object> executeAction, Func<object, bool> cantExecuteFunc)
+        {
+            if (executeAction == null)
+                throw new ArgumentNullException(nameof(executeAction));
+            if (cantExecuteFunc == null)
+                throw new ArgumentNullException(nameof(cantExecuteFunc));
+            WrappedCommand = new Command(executeAction, cantExecuteFunc);
+        }
+
         protected AbstractCommandWrapper(ICommand wrappedCommand)
         {
             WrappedCommand = wrappedCommand ?? throw new ArgumentNullException(nameof(wrappedCommand));

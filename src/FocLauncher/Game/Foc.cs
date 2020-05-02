@@ -12,15 +12,13 @@ namespace FocLauncher.Game
         public override GameType Type { get; }
 
         protected override string GameExeFileName => "swfoc.exe";
-
-        protected override string? DebugGameExeFileName => null;
-
+        
         protected override int DefaultXmlFileCount => 2;
 
         public override string Name => "Forces of Corruption";
         public override string Description => string.Empty;
 
-        public override string? IconFile => LauncherDataModel.IconPath;
+        public override string? IconFile => PetroglyphInitialization.IconPath;
 
         public Foc(string gameDirectory, GameType type) : base(gameDirectory)
         {
