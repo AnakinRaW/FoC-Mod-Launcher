@@ -18,11 +18,6 @@ namespace FocLauncher.Game
         /// </summary>
         string GameDirectory { get; }
 
-        ///// <summary>
-        ///// Returns the name of the Game
-        ///// </summary>
-        //string Name { get; }
-
         /// <summary>
         /// Contains Data of the Process
         /// </summary>

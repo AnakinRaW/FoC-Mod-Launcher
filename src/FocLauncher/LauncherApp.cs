@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using FocLauncher.Properties;
 using FocLauncher.Theming;
 using NLog;

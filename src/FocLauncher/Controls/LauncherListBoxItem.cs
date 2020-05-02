@@ -29,7 +29,7 @@ namespace FocLauncher.Controls
 
         static LauncherListBoxItem()
         {
-            // TODO: Style
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(LauncherListBoxItem), new FrameworkPropertyMetadata(typeof(LauncherListBoxItem)));
             InvokedEvent = EventManager.RegisterRoutedEvent("Invoked", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(LauncherListBoxItem));
             InvokeFailedEvent = EventManager.RegisterRoutedEvent("InvokeFailed", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(LauncherListBoxItem));
         }

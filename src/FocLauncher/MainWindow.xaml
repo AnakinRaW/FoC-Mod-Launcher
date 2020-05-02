@@ -39,7 +39,7 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <Image Grid.Column="0" Source="{Binding GameObject.IconFile}" Width="32" Height="32"/>
+                <Image Grid.Column="0" Source="{Binding GameObject.IconFile}" Width="32" Height="32" Margin="0,2,4,2"/>
                 <TextBlock Grid.Column="2" VerticalAlignment="Center" Text="{Binding GameObject.Name}"/>
                 <TextBlock Grid.Column="3" Margin="12,0" VerticalAlignment="Center" HorizontalAlignment="Right" Text="{Binding GameObject.Version}"/>
                 <Image Grid.Column="4" Height="16" Width="16" Source="Resources/steam.png" 
@@ -70,12 +70,10 @@
             <TextBlock Grid.Row="2" Text="Choose the mod you want to play:"/>
         </Grid>
 
-        <controls:LauncherListBox x:Name="ListBox" Grid.Row="1" Margin="6,0" Background="{DynamicResource {x:Static theming:EnvironmentColors.ListBoxBackground}}"
-                         BorderBrush="{DynamicResource {x:Static theming:EnvironmentColors.ListBoxBorder}}"
-                         FocusVisualStyle="{x:Null}"
-                         ItemsSource="{Binding GameObjects}"
-                         ItemTemplate="{StaticResource ItemDataTemplate}"
-                         HorizontalContentAlignment="Stretch">
+        <controls:LauncherListBox x:Name="ListBox" Grid.Row="1" Margin="6,0"
+                                  ItemsSource="{Binding GameObjects}"
+                                  ItemTemplate="{StaticResource ItemDataTemplate}"
+                                  HorizontalContentAlignment="Stretch">
         </controls:LauncherListBox>
         <Grid Grid.Row="2" Margin="6,3">
             <Grid.ColumnDefinitions>

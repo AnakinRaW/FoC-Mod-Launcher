@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
@@ -16,7 +15,7 @@ namespace FocLauncher.Controls
 
         static LauncherListBox()
         {
-            // TODO: Style
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(LauncherListBox), new FrameworkPropertyMetadata(typeof(LauncherListBox)));
         }
 
         public LauncherListBox()
