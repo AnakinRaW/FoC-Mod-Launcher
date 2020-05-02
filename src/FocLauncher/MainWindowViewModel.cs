@@ -21,14 +21,15 @@ namespace FocLauncher
         private bool _ignoreAsserts = true;
         private bool _noArtProcess = true;
         private LauncherSession _session;
-        private IGame _foc;
+        private IGame _foC;
+        private IGame _eaW;
 
         internal LauncherSession LauncherSession
         {
             get
             {
                 if (_session == null){
-                    _session = new LauncherSession(this, _foc);
+                    _session = new LauncherSession(this, _foC);
                     _session.Started += OnGameStarted;
                     _session.StartFailed += OnGameStartFailed;
                 }
@@ -41,7 +42,30 @@ namespace FocLauncher
         public PetroglyphInitialization PetroglyphInitialization { get; }
 
         public ObservableCollection<LauncherListItemModel> GameObjects { get; } = new ObservableCollection<LauncherListItemModel>();
-        
+
+        public IGame FoC
+        {
+            get => _foC;
+            set
+            {
+                if (_foC == value)
+                    return;
+                _foC = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public IGame EaW
+        {
+            get => _eaW;
+            set
+            {
+                if (_eaW == value)
+                    _eaW = value;
+                OnPropertyChanged();
+            }
+        }
+
         public GameType GameType
         {
             get => _gameType;
@@ -100,30 +124,31 @@ namespace FocLauncher
             }
         }
         
-        public GameProcessWatcher GameProcessWatcher { get; }
-
         public MainWindowViewModel()
         {
             // TODO: Replace PetroglyphInitialization with GameManager
             var initialization = new PetroglyphInitialization();
             initialization.Initialize();
 
+            if (initialization.FoC is null)
+                return;
+
             PetroglyphInitialization = initialization;
             GameType = initialization.FocGameType;
 
-            _foc = initialization.FoC;
-            GameProcessWatcher = initialization.FoC.GameProcessWatcher;
+            FoC = initialization.FoC;
+            EaW = initialization.EaW;
 
             foreach (var gameObject in initialization.SearchGameObjects())
                 GameObjects.Add(new LauncherListItemModel(gameObject, LauncherSession));
         }
         
-        private void OnGameStartFailed(object sender, IPetroglyhGameableObject e)
+        private static void OnGameStartFailed(object sender, IPetroglyhGameableObject e)
         {
             MessageBox.Show($"Unable to start {e.Name}", "FoC Launcher", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
-        private void OnGameStarted(object sender, IPetroglyhGameableObject e)
+        private static void OnGameStarted(object sender, IPetroglyhGameableObject e)
         {
             if (Settings.Default.AutoSwitchTheme &&
                 ThemeManager.Instance.TryGetThemeByMod(e as IMod, out var theme))

@@ -70,20 +70,17 @@
             <TextBlock Grid.Row="2" Text="Choose the mod you want to play:"/>
         </Grid>
 
-        <controls:LauncherListBox x:Name="ListBox" Grid.Row="1" Margin="6,0"
-                                  ItemsSource="{Binding GameObjects}"
-                                  ItemTemplate="{StaticResource ItemDataTemplate}"
+        <controls:LauncherListBox x:Name="ListBox" Grid.Row="1" Margin="6,0" ItemsSource="{Binding GameObjects}" ItemTemplate="{StaticResource ItemDataTemplate}"
                                   HorizontalContentAlignment="Stretch">
         </controls:LauncherListBox>
-        <Grid Grid.Row="2" Margin="6,3">
+        <Grid Grid.Row="2" Margin="6,3" Visibility="{Binding FoC, Converter={StaticResource SteamToVisibilityConverter}}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Image Grid.Column="0" Height="16" Width="16" Source="Resources/steam.png" 
                    RenderOptions.BitmapScalingMode="Fant"
-                   RenderOptions.EdgeMode="Aliased"
-                   Visibility="{Binding DataModel.FoC, Converter={StaticResource SteamToVisibilityConverter}}"/>
+                   RenderOptions.EdgeMode="Aliased"/>
             <TextBlock Grid.Column="1" Margin="6,0" Text="Steam Workshops"/>
         </Grid>
         <StackPanel Grid.Row="3" Margin="0,12,0,12">
@@ -91,7 +88,7 @@
                     Content="Play"
                     Command="{Binding LaunchCommand}" CommandParameter="{Binding SelectedItem.GameObject, ElementName=ListBox}"/>
             <CheckBox x:Name="DebugCheckBox" Content="Use Debug Build" IsChecked="{Binding UseDebugBuild, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                      Visibility="{Binding DataModel.FoC, Converter={StaticResource DebugBuildToVisibilityConverter}}"
+                      Visibility="{Binding FoC, Converter={StaticResource DebugBuildToVisibilityConverter}}"
                       Style="{StaticResource StyledCheckBox}" HorizontalAlignment="Center"/>
             <DockPanel HorizontalAlignment="Center">
                     <CheckBox Content="IgnoreAsserts" IsChecked="{Binding IgnoreAsserts, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
