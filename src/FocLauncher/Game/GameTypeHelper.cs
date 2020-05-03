@@ -2,11 +2,14 @@
 using System.IO;
 using System.Linq;
 using FocLauncher.Game.Detection;
+using NLog;
 
 namespace FocLauncher.Game
 {
     public static class GameTypeHelper
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         // TODO: Test all checks again 
         internal static GameType GetGameType(GameDetection result)
         {
@@ -16,13 +19,19 @@ namespace FocLauncher.Game
                 return GameType.SteamGold;
             if (CheckGoG(result.FocExe))
                 return GameType.GoG;
+            Logger.Info("Checking CheckOrigin...");
             if (CheckOrigin(result, out var fixedFileInfo))
             {
+                Logger.Info("End Checking CheckOrigin: Result TRUE");
                 if (fixedFileInfo != null)
+                {
+                    Logger.Info($"Replacing result data to: {fixedFileInfo.FullName}");
                     result.FocExe = fixedFileInfo;
+                }
 
                 return GameType.Origin;
             }
+            Logger.Info("End Checking CheckOrigin: Result FALSE");
 
             // TODO: Check DiskGold (just to have them all)
             return GameType.Disk;
@@ -85,11 +94,12 @@ namespace FocLauncher.Game
             if (exists)
                 return true;
 
+            Logger.Info("Try to check again with with applied");
             var fixedFocExe = CreateOriginFileInfo(focExe);
             if (fixedFocExe is null)
                 return false;
 
-            var fixWorked = CheckOrigin(fixedFileInfo);
+            var fixWorked = CheckOrigin(fixedFocExe);
             if (fixWorked)
             {
                 fixedFileInfo = fixedFocExe;
@@ -101,24 +111,41 @@ namespace FocLauncher.Game
 
         private static bool CheckOrigin(FileInfo exeFile)
         {
+            Logger.Info($"CheckOrigin on file: {exeFile}");
             var directory = exeFile?.Directory;
             if (directory is null)
+            {
+                Logger.Info("Directory is null");
                 return false;
+            }
 
-            if ( exeFile.Exists || !directory.Exists)
+            if (!exeFile.Exists || !directory.Exists)
+            {
+                Logger.Info("Exe file OR directory does not exists");
                 return false;
+            }
 
             if (!directory.EnumerateFiles().Any(x => x.Name.Equals("EALaunchHelper.exe")))
+            {
+                Logger.Info("Unable to find EALaunchHelper.exe");
                 return false;
+            }
 
             var parent = directory.Parent;
             if (parent is null)
+            {
+                Logger.Info("Parent is null");
                 return false;
+            }
 
             if (!parent.EnumerateDirectories().Any(x => x.Name.Equals("Manuals")) ||
                 !parent.EnumerateDirectories().Any(x => x.Name.Equals("__Installer")))
+            {
+                Logger.Info("Unable to find directory 'Manual' OR '__Installer'");
                 return false;
+            }
 
+            Logger.Info("Origin found");
             return true;
         }
 
@@ -130,20 +157,32 @@ namespace FocLauncher.Game
 
             var exeDir = focExeFile.Directory;
             if (exeDir is null)
+            {
+                Logger.Info("exeDir is null");
                 return null;
+            }
 
             if (exeDir.Name.Equals("EAWX"))
+            {
+                Logger.Info("Fix not required because directory already called 'EAWX'");
                 return focExeFile;
+            }
 
             if (exeDir.Name.Equals("corruption"))
             {
+                Logger.Info("Changing direcotry name from 'corruption' to 'EAWX'");
                 var parentPath = exeDir.Parent?.FullName;
-                if (parentPath == null)
+                if (parentPath is null)
+                {
+                    Logger.Info("parentPath is null");
                     return null;
+                }
                 var correctedPath = Path.Combine(parentPath, "EAWX", focExeFile.Name);
+                Logger.Info($"returning corrected new FileInfo({correctedPath})");
                 return new FileInfo(correctedPath);
             }
 
+            Logger.Info($"Returning null because no fix could be applied");
             return null;
         }
     }
