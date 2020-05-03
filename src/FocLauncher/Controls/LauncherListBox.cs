@@ -1,17 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
+using FocLauncher.Controls.Controllers;
+using FocLauncher.NativeMethods;
+using FocLauncher.Utilities;
 
 namespace FocLauncher.Controls
 {
     class LauncherListBox : ListBox
     {
+        private static readonly DependencyPropertyKey IsContextMenuOpenPropertyKey =
+            DependencyProperty.RegisterAttachedReadOnly("IsContextMenuOpen", typeof(bool), typeof(LauncherListBox),
+                new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.Inherits));
+        public static readonly DependencyProperty IsContextMenuOpenProperty = IsContextMenuOpenPropertyKey.DependencyProperty;
+
         private object _pendingFocusTarget;
         private WeakReference _lastFocusedItem;
         internal bool IsDirectlyGainingKeyboardFocus { get; set; }
+
+        public static bool GetIsContextMenuOpen(UIElement element)
+        {
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
+            return (bool)element.GetValue(IsContextMenuOpenProperty);
+        }
+
+        private static void SetIsContextMenuOpen(UIElement element, bool value)
+        {
+            if (element == null)
+                throw new ArgumentNullException(nameof(element));
+            element.SetValue(IsContextMenuOpenPropertyKey, value);
+        }
 
         static LauncherListBox()
         {
@@ -24,14 +47,25 @@ namespace FocLauncher.Controls
             SetValue(VirtualizingStackPanel.VirtualizationModeProperty, VirtualizationMode.Recycling);
         }
 
-        // TODO OnContextMenuOpening
-
-        private void OnMouseDown(object sender, MouseButtonEventArgs e)
+        protected override void OnContextMenuOpening(ContextMenuEventArgs e)
         {
-            if (IsKeyboardFocusWithin || Mouse.Captured != null || e.ClickCount != 1)
+            if (e.OriginalSource is DependencyObject originalSource && DescendantHasContextMenu(originalSource))
                 return;
-            Focus();
+            using (EnterContextMenuVisualState())
+            {
+                var contextMenuItems = GetDistinctSelection<object>().OfType<IHasContextMenuController>();
+                e.Handled = ContextMenuController.ShowContextMenu(contextMenuItems, GetContextMenuLocation());
+            }
         }
+
+        private static Point GetContextMenuLocation()
+        {
+            if (InputManager.Current.MostRecentInputDevice is KeyboardDevice && Keyboard.FocusedElement is UIElement focusedElement)
+                return focusedElement.PointToScreen(new Point(0.0, focusedElement.RenderSize.Height));
+            var messagePos = User32.GetMessagePos();
+            return new Point(NativeMethods.NativeMethods.SignedLow(messagePos), NativeMethods.NativeMethods.SignedHigh(messagePos));
+        }
+
 
         public void SelectFirstItem()
         {
@@ -58,6 +92,11 @@ namespace FocLauncher.Controls
                     objSet.Add(treeNodeKeyFromItem);
             }
             return objSet;
+        }
+
+        public IDisposable EnterContextMenuVisualState()
+        {
+            return new ContextMenuScope(this);
         }
 
         protected virtual object GetTreeNodeKeyFromItem(object item)
@@ -128,6 +167,13 @@ namespace FocLauncher.Controls
             base.OnGotKeyboardFocus(e);
         }
 
+        private void OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (IsKeyboardFocusWithin || Mouse.Captured != null || e.ClickCount != 1)
+                return;
+            Focus();
+        }
+
         private void FocusDefaultItem()
         {
             if (_lastFocusedItem?.Target is IInputElement inputElement &&
@@ -136,6 +182,72 @@ namespace FocLauncher.Controls
                 inputElement.Focus();
             else
                 FocusSelectedItem();
+        }
+
+        private bool DescendantHasContextMenu(DependencyObject descendant)
+        {
+            return descendant.FindAncestorOrSelf(GetParentWithinSubtree, ContextMenuIsEnabled) != null;
+        }
+
+        private DependencyObject GetParentWithinSubtree(DependencyObject o)
+        {
+            return o == this ? null : o.GetVisualOrLogicalParent();
+        }
+
+        private static bool ContextMenuIsEnabled(DependencyObject o)
+        {
+            if (ContextMenuService.GetContextMenu(o) == null || !ContextMenuService.GetIsEnabled(o))
+                return false;
+            return IsElementEnabled(o) || ContextMenuService.GetShowOnDisabled(o);
+        }
+
+        private static bool IsElementEnabled(DependencyObject o)
+        {
+            switch (o)
+            {
+                case UIElement uiElement:
+                    return uiElement.IsEnabled;
+                case ContentElement contentElement:
+                    return contentElement.IsEnabled;
+                case UIElement3D uiElement3D:
+                    return uiElement3D.IsEnabled;
+                default:
+                    return true;
+            }
+        }
+
+        private class ContextMenuScope : IDisposable
+        {
+            private readonly LauncherListBox _view;
+
+            private bool IsDisposed { get; set; }
+
+            public ContextMenuScope(LauncherListBox view)
+            {
+                _view = view;
+                SetIsContextMenuOpen(view, true);
+            }
+
+            ~ContextMenuScope()
+            {
+                Dispose(false);
+            }
+
+            public void Dispose()
+            {
+                Dispose(true);
+                GC.SuppressFinalize(this);
+            }
+
+            private void Dispose(bool disposing)
+            {
+                if (!IsDisposed)
+                {
+                    if (disposing)
+                        SetIsContextMenuOpen(_view, false);
+                    IsDisposed = true;
+                }
+            }
         }
     }
 }

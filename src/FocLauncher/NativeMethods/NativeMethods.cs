@@ -6,6 +6,16 @@ namespace FocLauncher.NativeMethods
 {
     internal class NativeMethods
     {
+        public static int SignedHigh(int n)
+        {
+            return (short)(n >> 16 & ushort.MaxValue);
+        }
+
+        public static int SignedLow(int n)
+        {
+            return (short)(n & ushort.MaxValue);
+        }
+
         [ComImport]
         [Guid("00021401-0000-0000-C000-000000000046")]
         public class ShellLink

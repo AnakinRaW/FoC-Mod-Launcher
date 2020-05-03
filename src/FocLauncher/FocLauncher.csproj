@@ -65,6 +65,9 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\Controllers\ContextMenuController.cs" />
+    <Compile Include="Controls\Controllers\IContextMenuController.cs" />
+    <Compile Include="Controls\Controllers\IHasContextMenuController.cs" />
     <Compile Include="Controls\LauncherListBox.cs" />
     <Compile Include="Controls\LauncherListBoxItem.cs" />
     <Compile Include="Controls\StatusBarButton.cs" />
@@ -88,8 +91,8 @@
     <Compile Include="Game\PetroglyphGameRegistry.cs" />
     <Compile Include="Game\RegistryHelper.cs" />
     <Compile Include="Game\SteamClient.cs" />
-    <Compile Include="Controls\IHasInvocationController.cs" />
-    <Compile Include="Controls\IInvocationController.cs" />
+    <Compile Include="Controls\Controllers\IHasInvocationController.cs" />
+    <Compile Include="Controls\Controllers\IInvocationController.cs" />
     <Compile Include="ILauncherWindowModel.cs" />
     <Compile Include="IsolatingLauncherBootstrapper.cs" />
     <Compile Include="Controls\LauncherStatusBar.cs" />
@@ -118,6 +121,7 @@
     <Compile Include="Mods\ModHelper.cs" />
     <Compile Include="ModInfo\ModInfoFileException.cs" />
     <Compile Include="ModInfo\SteamWorkshopVisibility.cs" />
+    <Compile Include="NativeMethods\User32.cs" />
     <Compile Include="PetroglyphInitialization.cs" />
     <Compile Include="Theming\ThemeManager.cs" />
     <Compile Include="Utilities\HashCodeCombiner.cs" />

@@ -1,4 +1,4 @@
-﻿namespace FocLauncher.Controls
+﻿namespace FocLauncher.Controls.Controllers
 {
     internal interface IHasInvocationController
     {

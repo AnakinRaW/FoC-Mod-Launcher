@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using FocLauncher.Controls;
+using FocLauncher.Controls.Controllers;
 using FocLauncher.Game;
 using FocLauncher.Mods;
 

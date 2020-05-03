@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace FocLauncher.Controls
+namespace FocLauncher.Controls.Controllers
 {
     public interface IInvocationController
     {
