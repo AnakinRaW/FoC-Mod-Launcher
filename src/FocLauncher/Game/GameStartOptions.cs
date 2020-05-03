@@ -21,6 +21,8 @@ namespace FocLauncher.Game
                 sb.Append("IGNOREASSERTS ");
             if (args.NoArtProcess)
                 sb.Append("NOARTPROCESS ");
+            if (args.Windowed)
+                sb.Append("WINDOWED ");
 
             return sb.ToString().TrimEnd(' ');
         }

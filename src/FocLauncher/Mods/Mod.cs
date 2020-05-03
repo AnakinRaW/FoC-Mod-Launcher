@@ -5,8 +5,10 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using FocLauncher.Game;
 using FocLauncher.ModInfo;
+using FocLauncher.Threading;
 using FocLauncher.Utilities;
 using FocLauncher.Versioning;
+using Microsoft.VisualStudio.Threading;
 
 namespace FocLauncher.Mods
 {
@@ -70,13 +72,17 @@ namespace FocLauncher.Mods
             }
             else
             {
-                Task.Run(() => GetName(FolderName, workshopMod)).ContinueWith(t => Name = t.Result);
+                ThreadHelper.JoinableTaskFactory.Run(async () =>
+                {
+                    var name = await GetNameAsync(FolderName, workshopMod);
+                    Name = name;
+                });
                 var icon = Directory.EnumerateFiles(ModDirectory, "*.ico");
                 IconFile = icon.FirstOrDefault();
             }
         }
 
-        private async Task<string> GetName(string folderName, bool workshop)
+        private static async Task<string> GetNameAsync(string folderName, bool workshop)
         {
             if (!workshop)
                 return folderName.Replace('_', ' ');
@@ -84,8 +90,8 @@ namespace FocLauncher.Mods
             if (SteamModNamePersister.Instance.TryFind(folderName, out var modName))
                 return modName;
             
-            var doc = await HtmlDownloader.GetSteamModPageDocument(FolderName);
-            var name = new WorkshopNameResolver().GetName(doc, FolderName);
+            var doc = await HtmlDownloader.GetSteamModPageDocument(folderName);
+            var name = new WorkshopNameResolver().GetName(doc, folderName);
             SteamModNamePersister.Instance.AddModName(folderName, name);
             return name;            
         }
