@@ -39,6 +39,8 @@ namespace FocLauncher.Game
 
         protected override void OnGameStarting(GameStartingEventArgs args)
         {
+            if (args.GameArguments.Mod is null)
+                return;
             if (!args.GameArguments.Mod.ModDirectory.StartsWith(GameDirectory))
                 throw new Exception("Mod is not compatible");
             base.OnGameStarting(args);
