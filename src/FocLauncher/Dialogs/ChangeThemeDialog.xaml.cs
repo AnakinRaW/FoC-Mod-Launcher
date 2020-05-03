@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Input;
 using FocLauncher.Input;
 using FocLauncher.Properties;
@@ -32,6 +33,11 @@ namespace FocLauncher.Dialogs
                 _themeManager.Theme = SelectedTheme;  
             Settings.Default.Save();
             Close();
+        }
+
+        public ChangeThemeDialog(Window owner) : this()
+        {
+            Owner = owner;
         }
 
         public ChangeThemeDialog()

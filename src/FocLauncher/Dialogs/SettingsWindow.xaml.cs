@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows;
 
 namespace FocLauncher.Dialogs
 { 
@@ -40,6 +41,11 @@ namespace FocLauncher.Dialogs
                 Launcher.UpdateSearchOption = !value ? ApplicationType.Stable : ApplicationType.Beta;
                 OnPropertyChanged();
             }
+        }
+
+        public SettingsWindow(Window owner) : this()
+        {
+            Owner = owner;
         }
 
         public SettingsWindow()

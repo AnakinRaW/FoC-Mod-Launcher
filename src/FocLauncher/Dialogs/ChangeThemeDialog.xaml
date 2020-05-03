@@ -7,7 +7,7 @@
         xmlns:properties1="clr-namespace:FocLauncher.Properties"
         xmlns:converters="clr-namespace:FocLauncher.Converters"
         xmlns:theming2="clr-namespace:FocLauncher.Theming"
-        mc:Ignorable="d"
+        mc:Ignorable="d" WindowStartupLocation="CenterOwner"
         Title="Choose a Theme" Height="300" Width="350" DataContext="{Binding RelativeSource={RelativeSource Self}}"
         ResizeMode="NoResize">
     <FrameworkElement.Resources>

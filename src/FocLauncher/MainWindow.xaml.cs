@@ -15,17 +15,17 @@ namespace FocLauncher
 
         private void OpenAboutWindow(object sender, RoutedEventArgs e)
         {
-            new AboutWindow().ShowDialog();
+            new AboutWindow(this).ShowDialog();
         }
 
         private void OpenSettingsWindow(object sender, RoutedEventArgs e)
         {
-            new SettingsWindow().ShowDialog();
+            new SettingsWindow(this).ShowDialog();
         }
 
         private void OpenChangeThemeDialog(object sender, RoutedEventArgs e)
         {
-            new ChangeThemeDialog().ShowDialog();
+            new ChangeThemeDialog(this).ShowDialog();
         }
         
         private void MainWindow_OnClosing(object sender, CancelEventArgs e)

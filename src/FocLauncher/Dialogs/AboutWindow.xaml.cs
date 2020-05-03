@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Navigation;
 using FocLauncher.Theming;
 
@@ -32,6 +33,11 @@ namespace FocLauncher.Dialogs
                 _themeVersion = value;
                 OnPropertyChanged();
             }
+        }
+
+        public AboutWindow(Window owner) : this()
+        {
+            Owner = owner;
         }
 
         public AboutWindow()
