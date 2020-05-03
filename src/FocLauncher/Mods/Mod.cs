@@ -8,7 +8,6 @@ using FocLauncher.ModInfo;
 using FocLauncher.Threading;
 using FocLauncher.Utilities;
 using FocLauncher.Versioning;
-using Microsoft.VisualStudio.Threading;
 
 namespace FocLauncher.Mods
 {
