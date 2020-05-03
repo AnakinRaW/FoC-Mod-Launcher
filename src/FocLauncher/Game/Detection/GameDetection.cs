@@ -10,7 +10,8 @@ namespace FocLauncher.Game.Detection
 
         public GameType FocType { get; }
 
-        public FileInfo? FocExe { get; }
+        // Setter required, because EA was too dump to fix registry values when they adapted the game for their Origin client.
+        public FileInfo? FocExe { get; internal set; }
 
         public FileInfo? EawExe { get; }
 
@@ -19,7 +20,7 @@ namespace FocLauncher.Game.Detection
         private GameDetection(DetectionResult result)
         {
             Result = result;
-            FocType = GameTypeHelper.GetGameType(this);
+            FocType = GameType.Undefined;
         }
 
         public GameDetection(FileInfo eawExe, FileInfo focExe)

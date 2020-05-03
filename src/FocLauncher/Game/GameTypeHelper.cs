@@ -16,25 +16,27 @@ namespace FocLauncher.Game
                 return GameType.SteamGold;
             if (CheckGoG(result.FocExe))
                 return GameType.GoG;
-            // TODO: This should not mutate the object anymore. It then can probably be made to an struct again
-            //  It also should only accept the FileInfo
-            if (CheckOrigin(result))
+            if (CheckOrigin(result, out var fixedFileInfo))
+            {
+                if (fixedFileInfo != null)
+                    result.FocExe = fixedFileInfo;
+
                 return GameType.Origin;
+            }
+
             // TODO: Check DiskGold (just to have them all)
             return GameType.Disk;
         }
 
 
-        internal static GameType GetGameType(FileInfo focExe)
+        public static GameType GetGameType(FileInfo focExe)
         {
             if (CheckSteam(focExe))
                 return GameType.SteamGold;
             if (CheckGoG(focExe))
                 return GameType.GoG;
-            // TODO: This should not mutate the object anymore. It then can probably be made to an struct again
-            //  It also should only accept the FileInfo
-            //if (CheckOrigin(focExe))
-            //    return GameType.Origin;
+            if (CheckOrigin(focExe)) 
+                return GameType.Origin;
             // TODO: Check DiskGold (just to have them all)
             return GameType.Disk;
         }
@@ -43,6 +45,9 @@ namespace FocLauncher.Game
 
         private static bool CheckSteam(FileInfo exeFile)
         {
+            if (exeFile is null || !exeFile.Exists)
+                return false;
+
             var directory = exeFile.Directory;
             if (directory == null || !directory.Name.Equals("corruption", StringComparison.InvariantCultureIgnoreCase))
                 return false;
@@ -60,6 +65,8 @@ namespace FocLauncher.Game
 
         private static bool CheckGoG(FileInfo exeFile)
         {
+            if (exeFile is null || !exeFile.Exists)
+                return false;
             if (exeFile.Directory?.Name != "EAWX")
                 return false;
             var eawPath = exeFile.Directory.Parent?.EnumerateDirectories().FirstOrDefault(x => x.Name.Equals("GameData"));
@@ -69,32 +76,75 @@ namespace FocLauncher.Game
             return fileNames.Any(x => x.Equals("sweaw.exe")) && fileNames.Any(x => x.Equals("goggame-1421404887.dll"));
         }
 
-        private static bool CheckOrigin(GameDetection result)
+        private static bool CheckOrigin(GameDetection result, out FileInfo? fixedFileInfo)
         {
-            FixPossibleOriginBug(result);
-            //if (new DirectoryInfo(result.FocExe).Name != "EAWX")
-            //    return false;
-            //if (!Directory.Exists(Path.Combine(Directory.GetParent(result.FocExe).FullName, "Manuals")))
-            //    return false;
-            //if (!Directory.Exists(Path.Combine(Directory.GetParent(result.FocExe).FullName, "__Installer")))
-            //    return false;
+            fixedFileInfo = default;
+
+            var focExe = result.FocExe;
+            var exists = CheckOrigin(focExe);
+            if (exists)
+                return true;
+
+            var fixedFocExe = CreateOriginFileInfo(focExe);
+            if (fixedFocExe is null)
+                return false;
+
+            var fixWorked = CheckOrigin(fixedFileInfo);
+            if (fixWorked)
+            {
+                fixedFileInfo = fixedFocExe;
+                return true;
+            }
+
             return false;
         }
 
-
-        private static void FixPossibleOriginBug(GameDetection result)
+        private static bool CheckOrigin(FileInfo exeFile)
         {
-            //var exeDir = new DirectoryInfo(result.FocExe);
-            //if (exeDir.Name == "corruption")
-            //{
-            //    var parentPath = exeDir.Parent?.FullName;
-            //    if (parentPath == null)
-            //        return;
+            var directory = exeFile?.Directory;
+            if (directory is null)
+                return false;
 
-            //    var correctedPath = Path.Combine(parentPath, "EAWX");
-            //    if (Directory.Exists(correctedPath))
-            //        result.FocExe = correctedPath;
-            //}
+            if ( exeFile.Exists || !directory.Exists)
+                return false;
+
+            if (!directory.EnumerateFiles().Any(x => x.Name.Equals("EALaunchHelper.exe")))
+                return false;
+
+            var parent = directory.Parent;
+            if (parent is null)
+                return false;
+
+            if (!parent.EnumerateDirectories().Any(x => x.Name.Equals("Manuals")) ||
+                !parent.EnumerateDirectories().Any(x => x.Name.Equals("__Installer")))
+                return false;
+
+            return true;
+        }
+
+
+        private static FileInfo? CreateOriginFileInfo(FileInfo focExeFile)
+        {
+            if (focExeFile is null)
+                throw new ArgumentNullException(nameof(focExeFile));
+
+            var exeDir = focExeFile.Directory;
+            if (exeDir is null)
+                return null;
+
+            if (exeDir.Name.Equals("EAWX"))
+                return focExeFile;
+
+            if (exeDir.Name.Equals("corruption"))
+            {
+                var parentPath = exeDir.Parent?.FullName;
+                if (parentPath == null)
+                    return null;
+                var correctedPath = Path.Combine(parentPath, "EAWX", focExeFile.Name);
+                return new FileInfo(correctedPath);
+            }
+
+            return null;
         }
     }
 }
