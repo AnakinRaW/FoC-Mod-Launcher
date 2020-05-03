@@ -96,6 +96,7 @@ namespace FocLauncher.Mods
             _modNames.Add("1126880602", "Stargate - Empire at War: Pegasus Chronicles");
             _modNames.Add("1241979729", "FOC Alliance Rebellion");
             _modNames.Add("1976399102", "Fall of the Republic");
+            _modNames.Add("1770851727", "Empire At War Remake");
         }
 
         public static SteamModNamePersister CreateInstance()
