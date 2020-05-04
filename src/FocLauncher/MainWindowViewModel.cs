@@ -1,5 +1,7 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
@@ -42,6 +44,8 @@ namespace FocLauncher
         public PetroglyphInitialization PetroglyphInitialization { get; }
 
         public ObservableCollection<LauncherListItemModel> GameObjects { get; } = new ObservableCollection<LauncherListItemModel>();
+
+        public IReadOnlyCollection<IMod> Mods => GameObjects.Select(x => x.GameObject).OfType<IMod>().ToList(); 
 
         public IGame FoC
         {

@@ -1,4 +1,6 @@
-﻿using FocLauncher.Game;
+﻿using System.Collections.Generic;
+using FocLauncher.Game;
+using FocLauncher.Mods;
 
 namespace FocLauncher
 {
@@ -13,5 +15,7 @@ namespace FocLauncher
         bool NoArtProcess { get; set; }
 
         bool Windowed { get; set; }
+
+        IReadOnlyCollection<IMod> Mods { get; }
     }
 }

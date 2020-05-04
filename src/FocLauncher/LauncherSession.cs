@@ -52,7 +52,10 @@ namespace FocLauncher
 
             var args = new GameCommandArguments();
             if (gameableObject is IMod mod)
-                args.Mod = mod;
+            {
+                var modList = GetAllMods(mod);
+                args.Mods = modList;
+            }
             args.IgnoreAsserts = _mainWindowModel.IgnoreAsserts;
             args.NoArtProcess = _mainWindowModel.NoArtProcess;
             args.Windowed = _mainWindowModel.Windowed;
@@ -70,6 +73,20 @@ namespace FocLauncher
                 StartFailed?.Invoke(this, gameableObject);
 
             return started;
+        }
+
+        private IList<IMod> GetAllMods(IMod mod)
+        {
+            //if (!mod.ModInfoFile.HasValue)
+            //    return new List<IMod>{mod};
+
+            var mods = new List<IMod>();
+
+            // TODO: var mods = mod.Game.Mods;
+            var raw = _mainWindowModel.Mods.FirstOrDefault(x => x.Name.Equals("Republic at War"));
+            mods.Add(raw);
+            mods.Add(mod);
+            return mods;
         }
     }
 }

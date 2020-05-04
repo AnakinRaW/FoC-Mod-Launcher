@@ -83,6 +83,7 @@
     <Compile Include="Game\Detection\GameDetectionOptions.cs" />
     <Compile Include="Game\FocRegistryHelper.cs" />
     <Compile Include="Game\GameBuildType.cs" />
+    <Compile Include="Game\GameCommandArgumentsUtilities.cs" />
     <Compile Include="Game\GameStartingEventArgs.cs" />
     <Compile Include="Game\GameTypeHelper.cs" />
     <Compile Include="Game\IDebugable.cs" />
@@ -96,7 +97,7 @@
     <Compile Include="ILauncherWindowModel.cs" />
     <Compile Include="IsolatingLauncherBootstrapper.cs" />
     <Compile Include="Controls\LauncherStatusBar.cs" />
-    <Compile Include="Game\GameStartOptions.cs" />
+    <Compile Include="Game\GameCommandArguments.cs" />
     <Compile Include="Game\PetroglyphGame.cs" />
     <Compile Include="Game\PetroglyphGameManager.cs" />
     <Compile Include="LauncherApp.cs" />
