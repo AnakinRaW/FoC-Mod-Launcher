@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using FocLauncher.Game;
@@ -10,6 +11,8 @@ using FocLauncher.Input;
 using FocLauncher.Mods;
 using FocLauncher.Properties;
 using FocLauncher.Theming;
+using FocLauncher.Threading;
+using Microsoft.VisualStudio.Threading;
 
 namespace FocLauncher
 {
@@ -25,6 +28,8 @@ namespace FocLauncher
         private LauncherSession _session;
         private IGame _foC;
         private IGame _eaW;
+
+        private bool _initialized;
 
         internal LauncherSession LauncherSession
         {
@@ -46,6 +51,8 @@ namespace FocLauncher
         public ObservableCollection<LauncherListItemModel> GameObjects { get; } = new ObservableCollection<LauncherListItemModel>();
 
         public IReadOnlyCollection<IMod> Mods => GameObjects.Select(x => x.GameObject).OfType<IMod>().ToList(); 
+
+        public PetroglyphGameManager GameManager { get; private set; }
 
         public IGame FoC
         {
@@ -143,8 +150,22 @@ namespace FocLauncher
             FoC = initialization.FoC;
             EaW = initialization.EaW;
 
+            InitializeAsync().Forget();
+
             foreach (var gameObject in initialization.SearchGameObjects())
                 GameObjects.Add(new LauncherListItemModel(gameObject, LauncherSession));
+        }
+
+        private async Task InitializeAsync()
+        {
+            await ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
+            {
+                await Task.Delay(3000);
+            });
+
+
+            _initialized = true;
+            CommandManager.InvalidateRequerySuggested();
         }
         
         private static void OnGameStartFailed(object sender, IPetroglyhGameableObject e)
@@ -165,9 +186,9 @@ namespace FocLauncher
                 _session.Invoke(new[] { gameable });
         }
 
-        private static bool CanExecute(object obj)
+        private bool CanExecute(object obj)
         {
-            return obj is IPetroglyhGameableObject;
+            return _initialized && obj is IPetroglyhGameableObject;
         }
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)

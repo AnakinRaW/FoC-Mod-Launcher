@@ -89,6 +89,7 @@
     <Compile Include="Game\IDebugable.cs" />
     <Compile Include="Game\IPetroglyhLaunchable.cs" />
     <Compile Include="Game\LauncherSteamHelper.cs" />
+    <Compile Include="Game\PetroglyphGameException.cs" />
     <Compile Include="Game\PetroglyphGameRegistry.cs" />
     <Compile Include="Game\RegistryHelper.cs" />
     <Compile Include="Game\SteamClient.cs" />

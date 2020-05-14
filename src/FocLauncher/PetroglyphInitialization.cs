@@ -51,6 +51,8 @@ namespace FocLauncher
                 return;
             }
 
+            SteamModNamePersister.CreateInstance();
+
             Logger.Info(GetInstalledGameInfo);
             SearchGameObjects();
             RegisterThemes();
@@ -128,8 +130,6 @@ namespace FocLauncher
 
         private void InitAppDataDirectory()
         {
-            if (!Directory.Exists(LauncherConstants.ApplicationBasePath))
-                Directory.CreateDirectory(LauncherConstants.ApplicationBasePath);
             if (File.Exists(IconPath))
                 return;
             using var fs = new FileStream(IconPath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
@@ -155,5 +155,35 @@ namespace FocLauncher
         {
             Initialized?.Invoke(this, EventArgs.Empty);
         }
+    }
+
+    public class GameFactory
+    {
+        public static IGame CreateFocGame(DirectoryInfo directory, GameType type)
+        {
+            if (directory is null)
+                throw new ArgumentNullException(nameof(directory));
+            switch (type)
+            {
+                case GameType.SteamGold:
+                    return new SteamGame(directory.FullName);
+                case GameType.Disk:
+                case GameType.Origin:
+                case GameType.GoG:
+                case GameType.DiskGold:
+                    return new Foc(directory.FullName, type);
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(type));
+            }
+        }
+
+        public static IGame CreateEawGame(DirectoryInfo directory, GameType type)
+        {
+            if (directory is null)
+                throw new ArgumentNullException(nameof(directory));
+            // TODO: Consume type and create SteamGameEaw
+            return new Eaw(directory.FullName);
+        }
+        
     }
 }
