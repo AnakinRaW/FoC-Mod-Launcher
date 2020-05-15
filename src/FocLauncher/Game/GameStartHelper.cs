@@ -35,7 +35,7 @@ namespace FocLauncher.Game
             link.SetArguments(arguments);
 
             if (iconPath == null || !File.Exists(iconPath))
-                iconPath = PetroglyphInitialization.IconPath;
+                iconPath = LauncherApp.IconPath;
 
             link.SetIconLocation(iconPath, 0);
             var file = (IPersistFile)link;

@@ -25,17 +25,15 @@ namespace FocLauncher.Game
 
         private void Initialize(GameDetection gameDetection)
         {
+            if (gameDetection is null)
+                throw new ArgumentNullException(nameof(gameDetection));
             if (gameDetection.IsError)
                 throw new PetroglyphGameException();
 
-            EmpireAtWar = GameFactory.CreateEawGame(gameDetection.EawExe.Directory, gameDetection.FocType);
-            ForcesOfCorruption = GameFactory.CreateFocGame(gameDetection.FocExe.Directory, gameDetection.FocType);
+            EmpireAtWar = GameFactory.CreateEawGame(gameDetection.EawExe!.Directory, gameDetection.FocType);
+            ForcesOfCorruption = GameFactory.CreateFocGame(gameDetection.FocExe!.Directory, gameDetection.FocType);
         }
 
-        // TODO
-        //public void FindAndInitialize(GameDetectionOptions findOptions)
-        //{
-        //}
 
         private void RegisterEvents(IGame game)
         {

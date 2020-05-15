@@ -109,7 +109,7 @@
                 </Grid.ColumnDefinitions>
                 <DockPanel>
                     <TextBlock Margin="3,0" VerticalAlignment="Center" Text="Game: "/>
-                    <TextBlock VerticalAlignment="Center" Text="{Binding GameType, Converter={StaticResource GameTypeToStringConverter}}"/>
+                    <TextBlock VerticalAlignment="Center" Text="{Binding FoC.Type, Converter={StaticResource GameTypeToStringConverter}}"/>
                 </DockPanel>
                 <DockPanel Grid.Column="2" HorizontalAlignment="Stretch">
                     <controls:StatusBarButton Margin="0,0,12,0" Click="OpenChangeThemeDialog" Padding="5,2">

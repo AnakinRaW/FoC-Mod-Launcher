@@ -23,7 +23,7 @@ namespace FocLauncher.Game
 
         public override string Name => "Forces of Corruption (Steam)";
 
-        public override string? IconFile => PetroglyphInitialization.IconPath;
+        public override string? IconFile => LauncherApp.IconPath;
 
         public override string Description => string.Empty;
 
