@@ -13,7 +13,8 @@ namespace FocLauncher.Game
         {
         }
 
-        public override GameType Type => throw new NotImplementedException();
+        // TODO: From Ctor
+        public override GameType Type => GameType.Undefined;
         public override string Name => "Star Wars: Empire at War";
         public override string Description => string.Empty;
         protected override int DefaultXmlFileCount => 1;

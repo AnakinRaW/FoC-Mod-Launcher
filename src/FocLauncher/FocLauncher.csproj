@@ -124,7 +124,7 @@
     <Compile Include="ModInfo\ModInfoFileException.cs" />
     <Compile Include="ModInfo\SteamWorkshopVisibility.cs" />
     <Compile Include="NativeMethods\User32.cs" />
-    <Compile Include="PetroglyphInitialization.cs" />
+    <Compile Include="Game\GameFactory.cs" />
     <Compile Include="Theming\ThemeManager.cs" />
     <Compile Include="Utilities\HashCodeCombiner.cs" />
     <Compile Include="Utilities\HtmlDownloader.cs" />

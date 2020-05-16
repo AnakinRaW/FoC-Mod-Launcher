@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Windows;
+using FocLauncher.Game;
 using FocLauncher.Properties;
 using FocLauncher.Theming;
 using NLog;
@@ -31,7 +32,7 @@ namespace FocLauncher
             ThemeManager.Initialize(mainWindow);
             LauncherServiceProvider.Instance.RegisterService(ThemeManager.Instance, typeof(IThemeManager));
             ThemeManager.Instance.ApplySavedDefaultTheme();
-            
+
             var viewModel = new MainWindowViewModel();
 
             mainWindow.DataContext = viewModel;

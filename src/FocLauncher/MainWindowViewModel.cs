@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -19,15 +20,58 @@ using NLog;
 
 namespace FocLauncher
 {
+    /*
+    public class PetroglyphInitialization
+    {
+        private ICollection<IPetroglyhGameableObject> _gameObjects;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public event EventHandler Initialized;
+
+        public void Initialize()
+        {
+            SteamModNamePersister.CreateInstance();
+
+            SearchGameObjects();
+            RegisterThemes();
+            OnInitialized();
+        }
+
+        private void RegisterThemes()
+        {
+            foreach (var mod in _gameObjects.OfType<IMod>())
+                RegisterTheme(mod);
+        }
+
+        private static void RegisterTheme(IMod mod)
+        {
+            var custom = mod.ModInfoFile?.Custom;
+            if (custom == null || !custom.ContainsKey("launcherTheme"))
+                return;
+            var relativeThemePath = custom.Value<string>("launcherTheme");
+            var themePath = Path.Combine(mod.ModDirectory, relativeThemePath);
+            if (!File.Exists(themePath))
+                return;
+
+            var theme = ThemeManager.GetThemeFromFile(themePath);
+            if (theme == null)
+                return;
+
+            ThemeManager.Instance.RegisterTheme(theme);
+            ThemeManager.Instance.AssociateThemeToMod(mod, theme);
+        }
+    }
+    */
+
     public class MainWindowViewModel : ILauncherWindowModel
     {
+        internal event EventHandler<GameDetection> GamesDetected;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         private bool _windowed;
-        private GameType _gameType;
         private bool _useDebugBuild;
         private bool _ignoreAsserts = true;
         private bool _noArtProcess = true;
@@ -41,21 +85,24 @@ namespace FocLauncher
         {
             get
             {
-                if (_session == null){
+                if (_session == null)
+                {
                     // TODO: Remove game from ctor
                     _session = new LauncherSession(this, _foC);
                     _session.Started += OnGameStarted;
                     _session.StartFailed += OnGameStartFailed;
                 }
+
                 return _session;
             }
         }
-        
+
         public ICommand LaunchCommand => new UICommand(ExecutedLaunch, CanExecute);
 
-        public ObservableCollection<LauncherListItemModel> GameObjects { get; } = new ObservableCollection<LauncherListItemModel>();
+        public ObservableCollection<LauncherListItemModel> GameObjects { get; } =
+            new ObservableCollection<LauncherListItemModel>();
 
-        public IReadOnlyCollection<IMod> Mods => GameObjects.Select(x => x.GameObject).OfType<IMod>().ToList(); 
+        public IReadOnlyCollection<IMod> Mods => GameObjects.Select(x => x.GameObject).OfType<IMod>().ToList();
 
         public PetroglyphGameManager GameManager { get; private set; }
 
@@ -68,6 +115,8 @@ namespace FocLauncher
                     return;
                 _foC = value;
                 OnPropertyChanged();
+                FocType = _foC == null ? GameType.Undefined : value.Type;
+                OnPropertyChanged(nameof(FocType));
             }
         }
 
@@ -77,22 +126,17 @@ namespace FocLauncher
             set
             {
                 if (_eaW == value)
-                    _eaW = value;
+                    return;
+                _eaW = value;
                 OnPropertyChanged();
+                EaWType = _eaW == null ? GameType.Undefined : value.Type;
+                OnPropertyChanged(nameof(EaWType));
             }
         }
 
-        public GameType GameType
-        {
-            get => _gameType;
-            set
-            {
-                if (value == _gameType)
-                    return;
-                _gameType = value;
-                OnPropertyChanged();
-            }
-        }
+        public GameType FocType { get; private set; }
+
+        public GameType EaWType { get; private set; }
 
         public bool UseDebugBuild
         {
@@ -139,69 +183,79 @@ namespace FocLauncher
                 OnPropertyChanged();
             }
         }
-        
+
         public MainWindowViewModel()
         {
-            InitializeAsync().Forget();
+            GamesDetected += OnGameDetectionFinished;
+            // TODO: Add additional state so that FocType=undefined and not initialized will state this in UI! 
+            FindGamesAsync().ForgetButThrow();
         }
 
-        private async Task InitializeAsync()
+        private void OnGameDetectionFinished(object sender, GameDetection e)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            var gameManager = new PetroglyphGameManager(e);
+
+            GameManager = gameManager;
+            FoC = gameManager.ForcesOfCorruption;
+            EaW = gameManager.EmpireAtWar;
+            LogInstalledGames();
+
+            foreach (var gameObject in SearchGameObjects())
+                GameObjects.Add(new LauncherListItemModel(gameObject, LauncherSession));
+            _initialized = true;
+        }
+
+        private async Task FindGamesAsync()
         {
             await ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
             {
-                var gameDetection = await FindGamesAsync();
-                LogInstalledGames();
-                var gameManager = new PetroglyphGameManager(gameDetection);
-                
-                GameManager = gameManager;
-                FoC = gameManager.ForcesOfCorruption;
-                EaW = gameManager.EmpireAtWar;
+                var shuttingDown = false;
+                try
+                {
+                    await TaskScheduler.Default;
+                    var gameDetection = GameDetection.NotInstalled;
+                    await Task.Run(async () =>
+                    {
+                        await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                        gameDetection = GameDetectionHelper.GetGameInstallations();
+                    }).ConfigureAwait(false);
+                    
+                    if (gameDetection.IsError)
+                    {
+                        var message = string.Empty;
+                        if (gameDetection.EawExe == null || !gameDetection.EawExe.Exists)
+                            message = "Could not find Empire at War!\r\n";
+                        else if (gameDetection.FocExe == null || !gameDetection.FocExe.Exists)
+                            message += "Could not find Forces of Corruption\r\n";
 
+                        MessageBox.Show(message + "\r\nThe launcher will now be closed", "FoC Launcher",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Error);
+                        await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                        Application.Current.Shutdown();
+                    }
 
-                GameObjects.Add(new LauncherListItemModel(FoC, LauncherSession));
-
-
-                //foreach (var gameObject in initialization.SearchGameObjects())
-                //    GameObjects.Add(new LauncherListItemModel(gameObject, LauncherSession));
-
-                return Task.CompletedTask;
+                    shuttingDown = true;
+                    await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                    OnGamesDetected(gameDetection);
+                }
+                catch (Exception e)
+                {
+                    if (shuttingDown)
+                        return;
+                    Logger.Error(e, $"Failed to initialize MainWindow view model: {e.Message}");
+                    throw;
+                }
             });
-
-
-            _initialized = true;
-            CommandManager.InvalidateRequerySuggested();
-        }
-
-        private static async Task<GameDetection> FindGamesAsync()
-        {
-            await TaskScheduler.Default;
-            var gameDetection = GameDetectionHelper.GetGameInstallations();
-            if (gameDetection.IsError)
-            {
-                var message = string.Empty;
-                if (gameDetection.EawExe == null || !gameDetection.EawExe.Exists)
-                    message = "Could not find Empire at War!\r\n";
-                else if (gameDetection.FocExe == null || !gameDetection.FocExe.Exists)
-                    message += "Could not find Forces of Corruption\r\n";
-
-                MessageBox.Show(message + "\r\nThe launcher will now be closed", "FoC Launcher", MessageBoxButton.OK,
-                    MessageBoxImage.Error);
-                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(true);
-                Application.Current.Shutdown();
-            }
-
-            return gameDetection;
         }
 
         internal IReadOnlyCollection<IPetroglyhGameableObject> SearchGameObjects()
         {
-            if (_gameObjects == null)
-            {
-                _gameObjects = new HashSet<IPetroglyhGameableObject> { FoC };
-                foreach (var mod in ModHelper.FindMods(FoC))
-                    _gameObjects.Add(mod);
-            }
-            return _gameObjects.ToList();
+            var result = new HashSet<IPetroglyhGameableObject> {FoC};
+            foreach (var mod in ModHelper.FindMods(FoC))
+                result.Add(mod);
+            return result.ToList();
         }
 
         private void LogInstalledGames()
@@ -228,7 +282,7 @@ namespace FocLauncher
         private void ExecutedLaunch(object obj)
         {
             if (obj is IPetroglyhGameableObject gameable)
-                _session.Invoke(new[] { gameable });
+                _session.Invoke(new[] {gameable});
         }
 
         private bool CanExecute(object obj)
@@ -239,6 +293,11 @@ namespace FocLauncher
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        protected virtual void OnGamesDetected(GameDetection e)
+        {
+            GamesDetected?.Invoke(this, e);
         }
     }
 }

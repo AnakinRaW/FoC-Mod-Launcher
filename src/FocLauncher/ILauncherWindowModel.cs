@@ -1,13 +1,11 @@
 ﻿using System.Collections.Generic;
-using FocLauncher.Game;
+using System.ComponentModel;
 using FocLauncher.Mods;
 
 namespace FocLauncher
 {
-    internal interface ILauncherWindowModel
+    internal interface ILauncherWindowModel : INotifyPropertyChanged
     {
-        GameType GameType { get; set; }
-
         bool UseDebugBuild { get; set; }
 
         bool IgnoreAsserts { get; set; }
