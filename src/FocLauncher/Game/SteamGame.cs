@@ -27,13 +27,13 @@ namespace FocLauncher.Game
 
         public override string Description => string.Empty;
 
-        public SteamGame(string gameDirectory) : base(gameDirectory)
+        public SteamGame(DirectoryInfo gameDirectory) : base(gameDirectory)
         {
         }
 
         public override bool IsPatched()
         {
-            var gameConstantsFilePath = Path.Combine(GameDirectory, @"Data\XML\GAMECONSTANTS.XML");
+            var gameConstantsFilePath = Path.Combine(Directory.FullName, @"Data\XML\GAMECONSTANTS.XML");
             if (!File.Exists(gameConstantsFilePath))
                 return false;
             var hashProvider = new HashProvider();
@@ -62,7 +62,7 @@ namespace FocLauncher.Game
             base.OnGameStarting(args);
         }
         
-        public bool DebugBuildExists => File.Exists(Path.Combine(GameDirectory, DebugGameExeFileName));
+        public bool DebugBuildExists => File.Exists(Path.Combine(Directory.FullName, DebugGameExeFileName));
 
         public bool DebugGame(string? iconFile = null)
         {
@@ -74,12 +74,12 @@ namespace FocLauncher.Game
             GameStartInfo startInfo;
             if (DebugBuildExists)
             {
-                var exeFile = new FileInfo(Path.Combine(GameDirectory, DebugGameExeFileName));
+                var exeFile = new FileInfo(Path.Combine(Directory.FullName, DebugGameExeFileName));
                 startInfo = new GameStartInfo(exeFile, GameBuildType.Debug);
             }
             else
             {
-                var exeFile = new FileInfo(Path.Combine(GameDirectory, GameExeFileName));
+                var exeFile = new FileInfo(Path.Combine(Directory.FullName, GameExeFileName));
                 startInfo = new GameStartInfo(exeFile, GameBuildType.Release);
             }
             return StartGame(args, startInfo, iconFile);

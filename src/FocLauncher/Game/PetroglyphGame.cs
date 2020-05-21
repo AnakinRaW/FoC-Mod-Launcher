@@ -15,15 +15,22 @@ namespace FocLauncher.Game
         public event EventHandler GameClosed;
         public event EventHandler<ModCollectionChangedEventArgs> ModCollectionModified;
 
+        public DirectoryInfo Directory { get; }
+
+        public GameProcessWatcher GameProcessWatcher { get; } = new GameProcessWatcher();
+
+
+
         public abstract GameType Type { get; }
-        public string GameDirectory { get; }
 
         public abstract string Name { get; }
+
         public abstract string Description { get; }
+
         public virtual string? IconFile => string.Empty;
         public virtual ModVersion? Version => null;
 
-        public GameProcessWatcher GameProcessWatcher { get; } = new GameProcessWatcher();
+      
 
         protected abstract int DefaultXmlFileCount { get; }
 
@@ -35,9 +42,9 @@ namespace FocLauncher.Game
 
 
         // TODO: Change to DirectoryInfo
-        protected PetroglyphGame(string gameDirectory)
+        protected PetroglyphGame(DirectoryInfo gameDirectory)
         {
-            GameDirectory = gameDirectory;
+            Directory = gameDirectory;
             if (!ExistsGameDirectoryAndGameExecutable())
                 throw new Exception($"{GetType().Name} does not exists");
 
@@ -56,7 +63,7 @@ namespace FocLauncher.Game
 
         public bool PlayGame(GameCommandArguments args, string? iconFile = null)
         {
-            var exeFile = new FileInfo(Path.Combine(GameDirectory, GameExeFileName));
+            var exeFile = new FileInfo(Path.Combine(Directory.FullName, GameExeFileName));
             return StartGame(args, new GameStartInfo(exeFile, GameBuildType.Release), iconFile);
         }
 
@@ -64,15 +71,15 @@ namespace FocLauncher.Game
 
         public virtual bool IsGameAiClear()
         {
-            if (Directory.Exists(Path.Combine(GameDirectory, @"Data\Scripts\")))
+            if (System.IO.Directory.Exists(Path.Combine(Directory.FullName, @"Data\Scripts\")))
                 return false;
-            var xmlDir = Path.Combine(GameDirectory, @"Data\XML\");
-            if (!Directory.Exists(xmlDir))
+            var xmlDir = Path.Combine(Directory.FullName, @"Data\XML\");
+            if (!System.IO.Directory.Exists(xmlDir))
                 return false;
             var number = Directory.EnumerateFiles(xmlDir).Count();
             if (number != DefaultXmlFileCount)
                 return false;
-            return !Directory.Exists(Path.Combine(xmlDir, @"AI\"));
+            return !System.IO.Directory.Exists(Path.Combine(xmlDir, @"AI\"));
         }
         
         public virtual bool IsLanguageInstalled(string language)
@@ -158,7 +165,7 @@ namespace FocLauncher.Game
             var startInfo = new ProcessStartInfo(executable.FullName)
             {
                 Arguments = arguments,
-                WorkingDirectory = GameDirectory,
+                WorkingDirectory = Directory.FullName,
                 UseShellExecute = false
             };
             return startInfo;
@@ -166,7 +173,7 @@ namespace FocLauncher.Game
 
         private bool ExistsGameDirectoryAndGameExecutable()
         {
-            return Directory.Exists(GameDirectory) && File.Exists(Path.Combine(GameDirectory, GameExeFileName));
+            return Directory.Exists && File.Exists(Path.Combine(Directory.FullName, GameExeFileName));
         }
 
         private protected virtual void OnGameProcessExited(object sender, EventArgs e)

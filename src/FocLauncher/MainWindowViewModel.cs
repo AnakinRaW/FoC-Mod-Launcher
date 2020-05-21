@@ -261,8 +261,8 @@ namespace FocLauncher
         {
             var sb = new StringBuilder();
             sb.AppendLine("----------Installed Game Information----------");
-            sb.AppendLine(EaW == null ? "EaW is null" : $"EaW found at: {EaW.GameDirectory};");
-            sb.AppendLine(FoC == null ? "FoC is null" : $"FoC found at: {FoC.GameDirectory}; FoC Version: {FoC.Type}");
+            sb.AppendLine(EaW == null ? "EaW is null" : $"EaW found at: {EaW.Directory};");
+            sb.AppendLine(FoC == null ? "FoC is null" : $"FoC found at: {FoC.Directory}; FoC Version: {FoC.Type}");
             Logger.Info(sb.ToString());
         }
 

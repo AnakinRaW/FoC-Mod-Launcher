@@ -64,11 +64,4 @@ namespace FocLauncher.Mods
         /// <returns>A valid command line argument.</returns>
         string ToArgs(bool includeDependencies);
     }
-
-    public enum ModType
-    {
-        Default,
-        Workshops,
-        Virtual
-    }
 }

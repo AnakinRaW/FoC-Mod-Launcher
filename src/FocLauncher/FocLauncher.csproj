@@ -88,6 +88,7 @@
     <Compile Include="Game\GameStartingEventArgs.cs" />
     <Compile Include="Game\GameTypeHelper.cs" />
     <Compile Include="Game\IDebugable.cs" />
+    <Compile Include="Game\IHasDirectory.cs" />
     <Compile Include="Game\IModContainer.cs" />
     <Compile Include="Game\IPetroglyhLaunchable.cs" />
     <Compile Include="Game\LauncherSteamHelper.cs" />
@@ -100,7 +101,9 @@
     <Compile Include="ModInfo\ModFileDataUtilities.cs" />
     <Compile Include="ModInfo\ModInfoData.cs" />
     <Compile Include="ModInfo\ModInfoException.cs" />
+    <Compile Include="Mods\ModBase.cs" />
     <Compile Include="Mods\ModDependencyResolver.cs" />
+    <Compile Include="Mods\ModType.cs" />
     <Compile Include="Mods\PetroglyphModException.cs" />
     <Compile Include="Game\RegistryHelper.cs" />
     <Compile Include="Game\SteamClient.cs" />
@@ -133,6 +136,7 @@
     <Compile Include="Mods\Mod.cs" />
     <Compile Include="Mods\ModHelper.cs" />
     <Compile Include="ModInfo\SteamWorkshopVisibility.cs" />
+    <Compile Include="Mods\VirtualMod.cs" />
     <Compile Include="NativeMethods\User32.cs" />
     <Compile Include="Game\GameFactory.cs" />
     <Compile Include="Theming\ThemeManager.cs" />

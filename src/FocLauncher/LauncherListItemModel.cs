@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -40,7 +38,7 @@ namespace FocLauncher
 
         public IInvocationController InvocationController { get; }
 
-        public ICommand OpenExplorerCommand => new UICommand(OpenInExplorer, () => true);
+        public ICommand OpenExplorerCommand => new UICommand(OpenInExplorer, () => GameObject is IHasDirectory);
 
         public LauncherListItemModel(IPetroglyhGameableObject gameObject, IInvocationController controller)
         {
@@ -63,22 +61,10 @@ namespace FocLauncher
 
         private void OpenInExplorer()
         {
-            string directory;
-            switch (GameObject)
-            {
-                case IGame game:
-                    directory = game.GameDirectory;
-                    break;
-                //case IMod mod:
-                //    directory = mod.ModDirectory;
-                //    break;
-                default:
-                    throw new NotSupportedException("The game object type is not supported.");
-            }
-
-            if (!Directory.Exists(directory))
+            var directory = (GameObject as IHasDirectory)?.Directory;
+            if (directory == null || !directory.Exists)
                 return;
-            Process.Start("explorer.exe", directory);
+            Process.Start("explorer.exe", directory.FullName);
         }
 
 
@@ -91,11 +77,11 @@ namespace FocLauncher
             }
 
             var name = string.Empty;
-            var folderName = mod.ModDirectory.Name;
+            var folderName = mod.Directory.Name;
             switch (mod.Type)
             {
                 case ModType.Default:
-                    name = mod.ModDirectory.Name.Replace('_', ' ');
+                    name = mod.Directory.Name.Replace('_', ' ');
                     break;
                 case ModType.Workshops when SteamModNamePersister.Instance.TryFind(folderName, out var modName):
                     name = modName;

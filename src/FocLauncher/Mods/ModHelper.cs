@@ -21,7 +21,7 @@ namespace FocLauncher.Mods
 
         private static IEnumerable<IMod> SearchDiskMods(IGame game)
         {
-            var modsPath = Path.Combine(game.GameDirectory, "Mods");
+            var modsPath = Path.Combine(game.Directory.FullName, "Mods");
             if (!Directory.Exists(modsPath))
                 return new List<IMod>();
             var modDirs = Directory.EnumerateDirectories(modsPath);
@@ -36,7 +36,7 @@ namespace FocLauncher.Mods
             var mods = new List<IMod>();
             mods.AddRange(SearchDiskMods(game));
 
-            var workshopsPath = Path.Combine(game.GameDirectory, @"..\..\..\workshop\content\32470\");
+            var workshopsPath = Path.Combine(game.Directory.FullName, @"..\..\..\workshop\content\32470\");
             if (!Directory.Exists(workshopsPath))
                 return mods;
 
@@ -60,5 +60,22 @@ namespace FocLauncher.Mods
         {
             throw new NotImplementedException();
         }
+
+        //public ModInfoData? ModInfo
+        //{
+        //    get
+        //    {
+        //        //if (_modInfo == null && !_modfileWasLookedUp)
+        //        //{
+        //        //    if (ModInfo.ModInfoFile.TryParse(Path.Combine(ModDirectory, "modinfo.json"), out var modInfo))
+        //        //        _modInfo = modInfo;
+        //        //    else
+        //        //        _modInfo = null;
+        //        //    _modfileWasLookedUp = true;
+        //        //}
+
+        //        return _modInfo;
+        //    }
+        //}
     }
 }

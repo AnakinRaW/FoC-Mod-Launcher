@@ -20,15 +20,15 @@ namespace FocLauncher.Game
 
         public override string? IconFile => LauncherApp.IconPath;
 
-        public Foc(string gameDirectory, GameType type) : base(gameDirectory)
+        public Foc(DirectoryInfo gameDirectory, GameType type) : base(gameDirectory)
         {
             Type = type;
         }
 
         public override bool IsPatched()
         {
-            var constantsFilePath = Path.Combine(GameDirectory, @"Data\XML\GAMECONSTANTS.XML");
-            var graphicsFilePath = Path.Combine(GameDirectory, @"Data\XML\GRAPHICDETAILS.XML");
+            var constantsFilePath = Path.Combine(Directory.FullName, @"Data\XML\GAMECONSTANTS.XML");
+            var graphicsFilePath = Path.Combine(Directory.FullName, @"Data\XML\GRAPHICDETAILS.XML");
             if (!File.Exists(constantsFilePath) || !File.Exists(graphicsFilePath))
                 return false;
             var hashProvider = new HashProvider();

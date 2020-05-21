@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using FocLauncher.Mods;
 
 namespace FocLauncher.Game
 {
-    public interface IGame : IPetroglyhGameableObject, IModContainer
+    public interface IGame : IPetroglyhGameableObject, IModContainer, IHasDirectory
     {
         event EventHandler<Process> GameStarted;
 
@@ -15,12 +14,7 @@ namespace FocLauncher.Game
         event EventHandler GameClosed;
 
         GameType Type { get; }
-
-        /// <summary>
-        /// Returns the full Path of the Games Root Directory
-        /// </summary>
-        string GameDirectory { get; }
-
+        
         /// <summary>
         /// Contains Data of the Process
         /// </summary>
@@ -76,10 +70,5 @@ namespace FocLauncher.Game
         IMod CreateMod(ModCreationDelegate modCreation, bool shallAdd);
 
         bool TryCreateMod(ModCreationDelegate modCreation, bool shallAdd, out IMod mod);
-    }
-
-    public interface IHasDirectory
-    {
-        DirectoryInfo Directory { get; }
     }
 }
