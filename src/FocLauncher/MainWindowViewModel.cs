@@ -220,23 +220,22 @@ namespace FocLauncher
                         await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                         gameDetection = GameDetectionHelper.GetGameInstallations();
                     }).ConfigureAwait(false);
-                    
+
                     if (gameDetection.IsError)
                     {
+                        shuttingDown = true;
                         var message = string.Empty;
                         if (gameDetection.EawExe == null || !gameDetection.EawExe.Exists)
                             message = "Could not find Empire at War!\r\n";
                         else if (gameDetection.FocExe == null || !gameDetection.FocExe.Exists)
                             message += "Could not find Forces of Corruption\r\n";
-
+                        await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                         MessageBox.Show(message + "\r\nThe launcher will now be closed", "FoC Launcher",
                             MessageBoxButton.OK,
                             MessageBoxImage.Error);
-                        await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                         Application.Current.Shutdown();
                     }
 
-                    shuttingDown = true;
                     await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                     OnGamesDetected(gameDetection);
                 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using FocLauncher.Utilities;
 
@@ -42,8 +41,8 @@ namespace FocLauncher.Game
         {
             if (args.GameArguments.Mods is null || args.GameArguments.Mods.Any())
                 return;
-            if (!args.GameArguments.Mods.Any(x => x.ModDirectory.StartsWith(GameDirectory)))
-                throw new Exception("Mod is not compatible");
+            //if (!args.GameArguments.Mods.Any(x => x.ModDirectory.StartsWith(GameDirectory)))
+            //    throw new Exception("Mod is not compatible");
             base.OnGameStarting(args);
         }
     }

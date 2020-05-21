@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using FocLauncher.Mods;
 using FocLauncher.Versioning;
 
 namespace FocLauncher.Game
@@ -9,12 +11,9 @@ namespace FocLauncher.Game
     public abstract class PetroglyphGame : IGame
     {
         public event EventHandler<Process> GameStarted;
-
-
         public event EventHandler<GameStartingEventArgs> GameStarting;
-
-
         public event EventHandler GameClosed;
+        public event EventHandler<ModCollectionChangedEventArgs> ModCollectionModified;
 
         public abstract GameType Type { get; }
         public string GameDirectory { get; }
@@ -29,6 +28,10 @@ namespace FocLauncher.Game
         protected abstract int DefaultXmlFileCount { get; }
 
         protected abstract string GameExeFileName { get; }
+
+        public IReadOnlyCollection<IMod> Mods => ModsInternal.ToList();
+
+        protected internal HashSet<IMod> ModsInternal { get; } = new HashSet<IMod>();
 
 
         // TODO: Change to DirectoryInfo
@@ -77,15 +80,48 @@ namespace FocLauncher.Game
             throw new NotImplementedException();
         }
 
-        protected bool StartGame(GameCommandArguments args, GameStartInfo gameStartInfo, string? iconFile = null)
+        public IReadOnlyCollection<IMod> SearchMods(bool invalidateMods)
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual IMod CreateMod(ModCreationDelegate modCreation, bool shallAdd)
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual bool TryCreateMod(ModCreationDelegate modCreation, bool shallAdd, out IMod mod)
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual bool AddMod(IMod mod)
+        {
+            var result = ModsInternal.Add(mod);
+            if (result)
+                OnModCollectionModified(new ModCollectionChangedEventArgs(mod, ModCollectionChangedAction.Add));
+            return result;
+        }
+
+        public virtual bool RemoveMod(IMod mod)
+        {
+            var result = ModsInternal.Remove(mod);
+            if (result)
+                OnModCollectionModified(new ModCollectionChangedEventArgs(mod, ModCollectionChangedAction.Remove));
+            return result;
+        }
+
+        protected bool StartGame(GameCommandArguments gameArgs, GameStartInfo gameStartInfo, string? iconFile = null)
         {
             if (!Exists())
                 throw new Exception("Game was not found");
-            var startingArguments = new GameStartingEventArgs(args, gameStartInfo.BuildType);
+            var startingArguments = new GameStartingEventArgs(gameArgs, gameStartInfo.BuildType);
             OnGameStarting(startingArguments);
             if (startingArguments.Cancel)
                 return false;
-            var processStartInfo = CreateGameProcess(args, gameStartInfo.Executable);
+
+            gameArgs.Validate();
+            var processStartInfo = CreateGameProcess(gameArgs.ToArgs(), gameStartInfo.Executable);
 
             Process process;
             try
@@ -107,16 +143,21 @@ namespace FocLauncher.Game
             GameStarting?.Invoke(this, args);
         }
 
+        protected virtual void OnModCollectionModified(ModCollectionChangedEventArgs e)
+        {
+            ModCollectionModified?.Invoke(this, e);
+        }
+
         private Process StartGameProcess(ProcessStartInfo startInfo, string? iconFile)
         {
             return GameStartHelper.StartGameProcess(startInfo, iconFile);
         }
 
-        private ProcessStartInfo CreateGameProcess(GameCommandArguments options, FileInfo executable)
+        private ProcessStartInfo CreateGameProcess(string arguments, FileInfo executable)
         {
             var startInfo = new ProcessStartInfo(executable.FullName)
             {
-                Arguments = options.ToArgs(),
+                Arguments = arguments,
                 WorkingDirectory = GameDirectory,
                 UseShellExecute = false
             };

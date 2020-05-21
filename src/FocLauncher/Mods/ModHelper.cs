@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using FocLauncher.Game;
+using FocLauncher.ModInfo;
 
 namespace FocLauncher.Mods
 {
@@ -24,7 +25,10 @@ namespace FocLauncher.Mods
             if (!Directory.Exists(modsPath))
                 return new List<IMod>();
             var modDirs = Directory.EnumerateDirectories(modsPath);
-            return modDirs.Select(modDir => new Mod(modDir)).Cast<IMod>().ToList();
+            return modDirs.Select(modDir =>
+            {
+                return new Mod(game, new DirectoryInfo(modDir), false);
+            }).Cast<IMod>().ToList();
         }
 
         private static IEnumerable<IMod> SearchSteamMods(IGame game)
@@ -37,8 +41,24 @@ namespace FocLauncher.Mods
                 return mods;
 
             var modDirs = Directory.EnumerateDirectories(workshopsPath);
-            mods.AddRange(modDirs.Select(modDir => new Mod(modDir, true)));
+            mods.AddRange(modDirs.Select(modDir =>
+            {
+                return new Mod(game, new DirectoryInfo(modDir), true);
+            }));
             return mods;
+        }
+    }
+
+    public static class ModFactory
+    {
+        public static IMod CreateMod(IGame game, ModType type, DirectoryInfo directory, ModInfoData modInfo)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static IMod CreateMod(IGame game, ModType type, DirectoryInfo directory, bool searchModFileOnDisk)
+        {
+            throw new NotImplementedException();
         }
     }
 }

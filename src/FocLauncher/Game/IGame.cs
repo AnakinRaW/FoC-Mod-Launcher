@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using FocLauncher.Mods;
 
 namespace FocLauncher.Game
 {
-    public interface IGame : IPetroglyhGameableObject
+    public interface IGame : IPetroglyhGameableObject, IModContainer
     {
         event EventHandler<Process> GameStarted;
 
@@ -61,5 +64,22 @@ namespace FocLauncher.Game
         /// <param name="language">The english name of the language</param>
         /// <returns><see langword="true"/> if game is the language is available; otherwise, <see langword="false"/>.</returns>
         bool IsLanguageInstalled(string language);
+
+        /// <summary>
+        /// Searches for mods for this game on disk and creates a new instance of an <see cref="IMod" when necessary/>
+        /// </summary>
+        /// <param name="invalidateMods">When set to <c>true</c> the <see cref="IGame.Mods"/> collection
+        /// gets updated. This will raise the <see cref="IGame.ModCollectionModified"/> event </param>
+        /// <returns>An unsorted collection of all mods found.</returns>
+        IReadOnlyCollection<IMod> SearchMods(bool invalidateMods);
+
+        IMod CreateMod(ModCreationDelegate modCreation, bool shallAdd);
+
+        bool TryCreateMod(ModCreationDelegate modCreation, bool shallAdd, out IMod mod);
+    }
+
+    public interface IHasDirectory
+    {
+        DirectoryInfo Directory { get; }
     }
 }

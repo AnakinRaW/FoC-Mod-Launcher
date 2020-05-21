@@ -1,9 +1,6 @@
-﻿using System;
-
-namespace FocLauncher.Game
+﻿namespace FocLauncher.Game
 {
-    public class PetroglyphGameException : Exception
+    public class PetroglyphGameException : PetroglyphException
     {
-
     }
 }

@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Runtime.Serialization;
 using System.Windows;
 using FocLauncher.Game;
 using FocLauncher.Properties;
@@ -22,6 +24,8 @@ namespace FocLauncher
 
         protected override void OnStartup(StartupEventArgs e)
         {
+            DispatcherUnhandledException += LauncherApp_DispatcherUnhandledException;
+
             Logger.Trace("Starting LauncherApp");
             Exit += LauncherApp_Exit;
             base.OnStartup(e);
@@ -37,6 +41,16 @@ namespace FocLauncher
 
             mainWindow.DataContext = viewModel;
             mainWindow.Show();
+        }
+
+        private void LauncherApp_DispatcherUnhandledException(object sender,
+            System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        {
+            if (e.Exception is LauncherException)
+                return;
+            if (Attribute.GetCustomAttribute(e.Exception.GetType(),
+                typeof(SerializableAttribute)) == null)
+                throw new LauncherException(e.Exception.Message);
         }
 
         private void InstallFocIcon()

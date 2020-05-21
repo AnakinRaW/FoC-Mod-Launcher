@@ -78,15 +78,15 @@ namespace FocLauncher
         private IList<IMod> GetAllMods(IMod mod)
         {
             //if (!mod.ModInfoFile.HasValue)
-            //    return new List<IMod>{mod};
+                return new List<IMod>{mod};
 
-            var mods = new List<IMod>();
+            //var mods = new List<IMod>();
 
-            // TODO: var mods = mod.Game.Mods;
-            var raw = _mainWindowModel.Mods.FirstOrDefault(x => x.Name.Equals("Republic at War"));
-            mods.Add(raw);
-            mods.Add(mod);
-            return mods;
+            //// TODO: var mods = mod.Game.Mods;
+            //var raw = _mainWindowModel.Mods.FirstOrDefault(x => x.Name.Equals("Republic at War"));
+            //mods.Add(raw);
+            //mods.Add(mod);
+            //return mods;
         }
     }
 }

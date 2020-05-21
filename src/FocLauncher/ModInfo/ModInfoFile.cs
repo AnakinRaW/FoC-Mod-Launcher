@@ -1,52 +1,76 @@
-﻿using System.IO;
-using FocLauncher.Versioning;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using System;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace FocLauncher.ModInfo
 {
-    [JsonObject(MemberSerialization.OptIn)]
-    public struct ModInfoFile
+    public sealed class ModInfoFile
     {
-        [JsonProperty("name")]
-        public string Name { get; private set; }
+        private DateTime? _lastWriteTime;
+        private ModInfoData? _data;
 
-        [JsonProperty("description")]
-        public string Description { get; private set; }
-
-        [JsonProperty("icon")]
-        public string Icon { get; private set; }
-
-        [JsonProperty("version")]
-        private string StringVersion { get; set; }
-
-        public ModVersion Version => ModVersion.Parse(StringVersion);
-
-        [JsonProperty("custom")]
-        public JObject Custom { get; set; }
-
-        [JsonProperty("steamdata")]
-        public SteamData SteamData { get; private set; }
-
-        public static ModInfoFile Parse(string filePath)
+        public bool IsValid
         {
-            if (!File.Exists(filePath))
-                throw new FileNotFoundException();
-            if (Path.GetExtension(filePath) != ".json")
-                throw new ModInfoFileException("File must be a json");
-            var text = File.ReadAllText(filePath);
-            var modInfo = JsonConvert.DeserializeObject<ModInfoFile>(text);
-            if (string.IsNullOrWhiteSpace(modInfo.Name))
-                throw new ModInfoFileException("No mod name was specified");
-            return modInfo;
+            get
+            {
+                try
+                {
+                    Validate();
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
+            }
         }
 
-        public static bool TryParse(string filePath, out ModInfoFile modInfo)
+        public FileInfo File { get; }
+
+        public ModInfoFile(FileInfo modInfoFile)
         {
-            modInfo = default;
+            if (modInfoFile is null)
+                throw new ArgumentNullException(nameof(modInfoFile));
+            ModFileDataUtilities.CheckModInfoFile(modInfoFile);
+            File = modInfoFile;
+            _lastWriteTime = modInfoFile.LastWriteTime;
+        }
+
+        public void Validate()
+        {
+            ModFileDataUtilities.CheckModInfoFile(File);
+        }
+
+        public void Invalidate()
+        {
+            ModFileDataUtilities.CheckModInfoFile(File);
+            _lastWriteTime = null;
+        }
+
+        public async Task<ModInfoData> GetModInfoAsync()
+        {
+            ModFileDataUtilities.CheckModInfoFile(File);
+            if (_data != null && _lastWriteTime.HasValue && _lastWriteTime.Value.Equals(File.LastWriteTime))
+                return _data;
+            _data = await ModFileDataUtilities.ParseAsync(File);
+            return _data;
+        }
+
+        public ModInfoData GetModInfo()
+        {
+            ModFileDataUtilities.CheckModInfoFile(File);
+            if (_data != null && _lastWriteTime.HasValue && _lastWriteTime.Value.Equals(File.LastWriteTime))
+                return _data;
+            _data = ModFileDataUtilities.Parse(File);
+            return _data;
+        }
+
+        public bool TryGetModInfo(out ModInfoData modInfo)
+        {
+            modInfo = null;
             try
             {
-                modInfo = Parse(filePath);
+                modInfo = GetModInfo();
                 return true;
             }
             catch

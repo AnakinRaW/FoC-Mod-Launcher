@@ -7,6 +7,12 @@ namespace FocLauncher.Game
 {
     internal static class GameCommandArgumentsUtilities
     {
+        internal static void Validate(this GameCommandArguments args)
+        {
+            if (args.Mods != null && args.Mods.Any(x => x.Virtual))
+                throw new GameArgumentException("The mod list must not contain any virtual mods");
+        }
+
         internal static string ToArgs(this GameCommandArguments args)
         {
             var sb = new StringBuilder();
@@ -42,7 +48,7 @@ namespace FocLauncher.Game
 
         private static string ModToArg(IMod mod)
         {
-            return mod.WorkshopMod ? $"STEAMMOD={mod.FolderName}" : $"MODPATH=Mods/{mod.FolderName}";
+            return mod.ToArgs(false);
         }
     }
 }
