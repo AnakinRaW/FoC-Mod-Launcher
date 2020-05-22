@@ -60,15 +60,25 @@ namespace FocLauncher.Game
         bool IsLanguageInstalled(string language);
 
         /// <summary>
-        /// Searches for mods for this game on disk and creates a new instance of an <see cref="IMod" when necessary/>
+        /// Searches for mods for this game on disk and creates a new instance of an <see cref="IMod"/> when necessary
         /// </summary>
-        /// <param name="invalidateMods">When set to <c>true</c> the <see cref="IGame.Mods"/> collection
-        /// gets updated. This will raise the <see cref="IGame.ModCollectionModified"/> event </param>
+        /// <param name="add">When set to <c>true</c> the mods will get added to the <see cref="IGame.Mods"/> collection if not present already.
+        /// This will raise the <see cref="IGame.ModCollectionModified"/> event </param>
         /// <returns>An unsorted collection of all mods found.</returns>
-        IReadOnlyCollection<IMod> SearchMods(bool invalidateMods);
+        ICollection<IMod> SearchMods(bool add);
+
+        ///// <summary>
+        ///// Searches a specific mod and creates a new instance of an <see cref="IMod"/> when necessary
+        ///// </summary>
+        ///// <param name="add">When set to <c>true</c> the mods will get added to the <see cref="IGame.Mods"/> collection if not present already.
+        ///// This will raise the <see cref="IGame.ModCollectionModified"/> event </param>
+        ///// <returns>The mod found</returns>
+        //IMod? SearchMod(bool add);
 
         IMod CreateMod(ModCreationDelegate modCreation, bool shallAdd);
 
         bool TryCreateMod(ModCreationDelegate modCreation, bool shallAdd, out IMod mod);
+
+        void Setup(GameSetupMode setupMode);
     }
 }

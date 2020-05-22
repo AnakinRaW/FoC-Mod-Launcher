@@ -134,12 +134,13 @@
     <Compile Include="ModInfo\SteamData.cs" />
     <Compile Include="ModInfo\ModInfoFile.cs" />
     <Compile Include="Mods\Mod.cs" />
-    <Compile Include="Mods\ModHelper.cs" />
+    <Compile Include="Mods\ModFactory.cs" />
     <Compile Include="ModInfo\SteamWorkshopVisibility.cs" />
     <Compile Include="Mods\VirtualMod.cs" />
     <Compile Include="NativeMethods\User32.cs" />
     <Compile Include="Game\GameFactory.cs" />
     <Compile Include="Theming\ThemeManager.cs" />
+    <Compile Include="Utilities\FileUtilities.cs" />
     <Compile Include="Utilities\HashCodeCombiner.cs" />
     <Compile Include="Utilities\HtmlDownloader.cs" />
     <Compile Include="Utilities\ProcessCreationListener.cs" />

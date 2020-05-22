@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using FocLauncher.Game.Detection;
 
 namespace FocLauncher.Game
@@ -10,20 +9,16 @@ namespace FocLauncher.Game
 
         public event EventHandler<IGame> GameClosed;
 
-        public event EventHandler Initialized;
-        
         public IGame EmpireAtWar { get; private set; }
 
         public IGame ForcesOfCorruption { get; private set; }
         
-
-        // TODO: Make this a real instance
-        public PetroglyphGameManager(GameDetection gameDetection)
+        public PetroglyphGameManager(GameDetection gameDetection, GameSetupMode setupMode = GameSetupMode.NoSetup)
         {
-            Initialize(gameDetection);
+            Initialize(gameDetection, setupMode);
         }
 
-        private void Initialize(GameDetection gameDetection)
+        private void Initialize(GameDetection gameDetection, GameSetupMode setupMode)
         {
             if (gameDetection is null)
                 throw new ArgumentNullException(nameof(gameDetection));
@@ -32,8 +27,16 @@ namespace FocLauncher.Game
 
             EmpireAtWar = GameFactory.CreateEawGame(gameDetection.EawExe!.Directory, gameDetection.FocType);
             ForcesOfCorruption = GameFactory.CreateFocGame(gameDetection.FocExe!.Directory, gameDetection.FocType);
-        }
 
+            RegisterEvents(EmpireAtWar);
+            RegisterEvents(ForcesOfCorruption);
+
+            if (setupMode == GameSetupMode.NoSetup)
+                return;
+
+            EmpireAtWar.Setup(setupMode);
+            ForcesOfCorruption.Setup(setupMode);
+        }
 
         private void RegisterEvents(IGame game)
         {
@@ -54,10 +57,12 @@ namespace FocLauncher.Game
         {
             GameClosed?.Invoke(this, e);
         }
+    }
 
-        private void OnInitialized()
-        {
-            Initialized?.Invoke(this, EventArgs.Empty);
-        }
+    public enum GameSetupMode
+    {
+        NoSetup,
+        FindMods,
+        ResolveModDependencies
     }
 }

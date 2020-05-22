@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace FocLauncher.ModInfo
@@ -34,6 +35,19 @@ namespace FocLauncher.ModInfo
             ModFileDataUtilities.CheckModInfoFile(modInfoFile);
             File = modInfoFile;
             _lastWriteTime = modInfoFile.LastWriteTime;
+        }
+
+        public static bool Find(DirectoryInfo directory, out ModInfoFile? modInfoFile)
+        {
+            if (directory is null)
+                throw new ArgumentNullException(nameof(directory));
+            modInfoFile = default;
+
+            var file = directory.GetFiles().FirstOrDefault(x => x.Name.ToLower().Equals("modinfo.json"));
+            if (file is null)
+                return false;
+            modInfoFile = new ModInfoFile(file);
+            return true;
         }
 
         public void Validate()

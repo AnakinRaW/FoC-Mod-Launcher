@@ -201,7 +201,10 @@ namespace FocLauncher
             EaW = gameManager.EmpireAtWar;
             LogInstalledGames();
 
-            foreach (var gameObject in SearchGameObjects())
+            FoC.Setup(GameSetupMode.ResolveModDependencies);
+            
+            GameObjects.Add(new LauncherListItemModel(FoC, LauncherSession));
+            foreach (var gameObject in FoC.Mods)
                 GameObjects.Add(new LauncherListItemModel(gameObject, LauncherSession));
             _initialized = true;
         }
@@ -248,15 +251,7 @@ namespace FocLauncher
                 }
             });
         }
-
-        internal IReadOnlyCollection<IPetroglyhGameableObject> SearchGameObjects()
-        {
-            var result = new HashSet<IPetroglyhGameableObject> {FoC};
-            foreach (var mod in ModHelper.FindMods(FoC))
-                result.Add(mod);
-            return result.ToList();
-        }
-
+        
         private void LogInstalledGames()
         {
             var sb = new StringBuilder();

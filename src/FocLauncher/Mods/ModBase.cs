@@ -147,6 +147,9 @@ namespace FocLauncher.Mods
             return result;
         }
 
+        public abstract bool Equals(IMod other);
+
+
         public abstract string ToArgs(bool includeDependencies);
 
         protected abstract bool ResolveDependenciesCore();

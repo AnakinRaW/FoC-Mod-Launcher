@@ -21,6 +21,11 @@ namespace FocLauncher.Mods
             // TODO: dependencies must not be null or empty!
         }
 
+        public override bool Equals(IMod other)
+        {
+            throw new NotImplementedException();
+        }
+
         public override string ToArgs(bool includeDependencies)
         {
             if (Virtual && !includeDependencies)

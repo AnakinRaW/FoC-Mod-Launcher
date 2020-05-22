@@ -41,7 +41,6 @@ namespace FocLauncher.Game
         protected internal HashSet<IMod> ModsInternal { get; } = new HashSet<IMod>();
 
 
-        // TODO: Change to DirectoryInfo
         protected PetroglyphGame(DirectoryInfo gameDirectory)
         {
             Directory = gameDirectory;
@@ -87,9 +86,9 @@ namespace FocLauncher.Game
             throw new NotImplementedException();
         }
 
-        public IReadOnlyCollection<IMod> SearchMods(bool invalidateMods)
+        public ICollection<IMod> SearchMods(bool invalidateMods)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public virtual IMod CreateMod(ModCreationDelegate modCreation, bool shallAdd)
@@ -102,9 +101,32 @@ namespace FocLauncher.Game
             throw new NotImplementedException();
         }
 
+        public virtual void Setup(GameSetupMode setupMode)
+        {
+            if (setupMode == GameSetupMode.NoSetup)
+                return;
+
+
+            //var mods = SearchSteamMods(this);
+
+            //var raw = new Mod(this, new DirectoryInfo(@"C:\Program Files (x86)\Steam\steamapps\workshop\content\32470\1129810972"), true);
+
+            //var h = new HashSet<IMod>(ModEqualityComparer.Default);
+            //h.Add(raw);
+            //foreach (var mod in mods)
+            //{
+            //    h.Add(mod);
+            //}
+
+
+        }
+
         public virtual bool AddMod(IMod mod)
         {
-            var result = ModsInternal.Add(mod);
+            bool result;
+            lock (ModsInternal) 
+                result = ModsInternal.Add(mod);
+
             if (result)
                 OnModCollectionModified(new ModCollectionChangedEventArgs(mod, ModCollectionChangedAction.Add));
             return result;
@@ -112,7 +134,9 @@ namespace FocLauncher.Game
 
         public virtual bool RemoveMod(IMod mod)
         {
-            var result = ModsInternal.Remove(mod);
+            bool result;
+            lock (ModsInternal)
+                result = ModsInternal.Remove(mod);
             if (result)
                 OnModCollectionModified(new ModCollectionChangedEventArgs(mod, ModCollectionChangedAction.Remove));
             return result;
@@ -198,6 +222,36 @@ namespace FocLauncher.Game
                 Executable = executable;
                 BuildType = buildType;
             }
+        }
+
+
+        private static IEnumerable<IMod> SearchDiskMods(IGame game)
+        {
+            var modsPath = Path.Combine(game.Directory.FullName, "Mods");
+            if (!System.IO.Directory.Exists(modsPath))
+                return new List<IMod>();
+            var modDirs = System.IO.Directory.EnumerateDirectories(modsPath);
+            return modDirs.Select(modDir =>
+            {
+                return new Mod(game, new DirectoryInfo(modDir), false);
+            }).Cast<IMod>().ToList();
+        }
+
+        private static IEnumerable<IMod> SearchSteamMods(IGame game)
+        {
+            var mods = new List<IMod>();
+            mods.AddRange(SearchDiskMods(game));
+
+            var workshopsPath = Path.Combine(game.Directory.FullName, @"..\..\..\workshop\content\32470\");
+            if (!System.IO.Directory.Exists(workshopsPath))
+                return mods;
+
+            var modDirs = System.IO.Directory.EnumerateDirectories(workshopsPath);
+            mods.AddRange(modDirs.Select(modDir =>
+            {
+                return new Mod(game, new DirectoryInfo(modDir), true);
+            }));
+            return mods;
         }
     }
 }

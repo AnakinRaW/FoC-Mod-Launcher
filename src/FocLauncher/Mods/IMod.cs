@@ -1,19 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using FocLauncher.Game;
 using FocLauncher.ModInfo;
 
 namespace FocLauncher.Mods
 {
-    public interface IMod : IPetroglyhGameableObject, IModContainer
+    public interface IMod : IPetroglyhGameableObject, IModContainer, IEquatable<IMod>
     {
-        // TODO: This should be in a separate interface
-        /// <summary>
-        /// Returns the full Path of the Mods Root Directory
-        /// </summary>
-        //DirectoryInfo? ModDirectory { get; }
-
         /// <summary>
         /// The <see cref="IGame"/> this mod is associated with.
         /// </summary>
@@ -27,7 +20,7 @@ namespace FocLauncher.Mods
         /// <summary>
         /// Identifies whether the mod is a Steam Workshop instance
         /// </summary>
-        bool WorkshopMod { get; }
+        bool WorkshopMod { get; } 
 
         /// <summary>
         /// Returns <c>true</c> when this mod instance is not physically present; <c>false</c> otherwise
@@ -63,5 +56,36 @@ namespace FocLauncher.Mods
         /// <remarks>This method does not re-resolve dependencies but takes whatever there is in <see cref="Dependencies"/></remarks>
         /// <returns>A valid command line argument.</returns>
         string ToArgs(bool includeDependencies);
+    }
+
+    public class ModEqualityComparer : IEqualityComparer<IMod>
+    {
+        public static readonly ModEqualityComparer Default = new ModEqualityComparer();
+        //public static readonly ModEqualityComparer NamEqualityComparer = new ModEqualityComparer(true);
+
+        private readonly bool _default;
+
+        public ModEqualityComparer()
+        {
+            _default = true;
+        }
+
+        public bool Equals(IMod x, IMod y)
+        {
+            if (x is null || y is null)
+                return false;
+            if (x == y)
+                return true;
+            if (_default)
+                return x.Equals(y);
+            throw new NotImplementedException();
+        }
+
+        public int GetHashCode(IMod obj)
+        {
+            if (_default)
+                return obj.GetHashCode();
+            throw new NotImplementedException();
+        }
     }
 }
