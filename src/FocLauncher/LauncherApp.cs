@@ -37,7 +37,7 @@ namespace FocLauncher
             LauncherServiceProvider.Instance.RegisterService(ThemeManager.Instance, typeof(IThemeManager));
             ThemeManager.Instance.ApplySavedDefaultTheme();
 
-            var viewModel = new MainWindowViewModel();
+            var viewModel = new MainWindowViewModel(mainWindow);
 
             mainWindow.DataContext = viewModel;
             mainWindow.Show();

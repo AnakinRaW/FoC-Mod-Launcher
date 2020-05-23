@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using FocLauncher.Mods;
 using FocLauncher.Threading;
 using FocLauncher.Utilities;
 using FocLauncher.WaitDialog;
@@ -26,6 +29,8 @@ namespace FocLauncher.Game
         public override string? IconFile => LauncherApp.IconPath;
 
         public override string Description => string.Empty;
+
+        public bool DebugBuildExists => File.Exists(Path.Combine(Directory.FullName, DebugGameExeFileName));
 
         public SteamGame(DirectoryInfo gameDirectory) : base(gameDirectory)
         {
@@ -61,8 +66,6 @@ namespace FocLauncher.Game
             }
             base.OnGameStarting(args);
         }
-        
-        public bool DebugBuildExists => File.Exists(Path.Combine(Directory.FullName, DebugGameExeFileName));
 
         public bool DebugGame(string? iconFile = null)
         {
@@ -83,6 +86,26 @@ namespace FocLauncher.Game
                 startInfo = new GameStartInfo(exeFile, GameBuildType.Release);
             }
             return StartGame(args, startInfo, iconFile);
+        }
+
+        protected override ICollection<IMod> SearchModsCore()
+        {
+            return SearchSteamMods().ToList();
+        }
+
+        private IEnumerable<IMod> SearchSteamMods()
+        {
+            var mods = new List<IMod>();
+            mods.AddRange(SearchDiskMods());
+
+            var workshopsPath = FileUtilities.NormalizePath(Path.Combine(Directory.FullName, @"..\..\..\workshop\content\32470\"));
+            var workshopsDir = new DirectoryInfo(workshopsPath);
+            if (!workshopsDir.Exists)
+                return mods;
+
+            var modDirs = workshopsDir.EnumerateDirectories();
+            var workshopMods = modDirs.Select(modDir => ModFactory.CreateMod(this, ModType.Workshops, modDir, true));
+            return mods.Union(workshopMods);
         }
     }
 }

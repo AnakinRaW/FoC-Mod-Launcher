@@ -13,12 +13,12 @@ namespace FocLauncher.Game
 
         public IGame ForcesOfCorruption { get; private set; }
         
-        public PetroglyphGameManager(GameDetection gameDetection, GameSetupMode setupMode = GameSetupMode.NoSetup)
+        public PetroglyphGameManager(GameDetection gameDetection, GameSetupOptions setupMode = GameSetupOptions.NoSetup)
         {
             Initialize(gameDetection, setupMode);
         }
 
-        private void Initialize(GameDetection gameDetection, GameSetupMode setupMode)
+        private void Initialize(GameDetection gameDetection, GameSetupOptions setupMode)
         {
             if (gameDetection is null)
                 throw new ArgumentNullException(nameof(gameDetection));
@@ -31,7 +31,7 @@ namespace FocLauncher.Game
             RegisterEvents(EmpireAtWar);
             RegisterEvents(ForcesOfCorruption);
 
-            if (setupMode == GameSetupMode.NoSetup)
+            if (setupMode == GameSetupOptions.NoSetup)
                 return;
 
             EmpireAtWar.Setup(setupMode);
@@ -59,7 +59,7 @@ namespace FocLauncher.Game
         }
     }
 
-    public enum GameSetupMode
+    public enum GameSetupOptions
     {
         NoSetup,
         FindMods,

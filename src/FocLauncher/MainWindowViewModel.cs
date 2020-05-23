@@ -65,6 +65,7 @@ namespace FocLauncher
 
     public class MainWindowViewModel : ILauncherWindowModel
     {
+        private readonly MainWindow _window;
         internal event EventHandler<GameDetection> GamesDetected;
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -184,8 +185,9 @@ namespace FocLauncher
             }
         }
 
-        public MainWindowViewModel()
+        public MainWindowViewModel(MainWindow window)
         {
+            _window = window;
             GamesDetected += OnGameDetectionFinished;
             // TODO: Add additional state so that FocType=undefined and not initialized will state this in UI! 
             FindGamesAsync().ForgetButThrow();
@@ -201,11 +203,12 @@ namespace FocLauncher
             EaW = gameManager.EmpireAtWar;
             LogInstalledGames();
 
-            FoC.Setup(GameSetupMode.ResolveModDependencies);
+            FoC.Setup(GameSetupOptions.ResolveModDependencies);
             
             GameObjects.Add(new LauncherListItemModel(FoC, LauncherSession));
             foreach (var gameObject in FoC.Mods)
                 GameObjects.Add(new LauncherListItemModel(gameObject, LauncherSession));
+            _window.ListBox.FocusSelectedItem();
             _initialized = true;
         }
 

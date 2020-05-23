@@ -10,7 +10,6 @@ namespace FocLauncher
         public MainWindow()
         {
             InitializeComponent();
-            ListBox.Focus();
         }
 
         private void OpenAboutWindow(object sender, RoutedEventArgs e)

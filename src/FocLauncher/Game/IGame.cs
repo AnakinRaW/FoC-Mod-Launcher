@@ -79,6 +79,6 @@ namespace FocLauncher.Game
 
         bool TryCreateMod(ModCreationDelegate modCreation, bool shallAdd, out IMod mod);
 
-        void Setup(GameSetupMode setupMode);
+        void Setup(GameSetupOptions setupMode);
     }
 }

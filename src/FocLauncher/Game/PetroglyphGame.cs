@@ -15,6 +15,8 @@ namespace FocLauncher.Game
         public event EventHandler GameClosed;
         public event EventHandler<ModCollectionChangedEventArgs> ModCollectionModified;
 
+
+
         public DirectoryInfo Directory { get; }
 
         public GameProcessWatcher GameProcessWatcher { get; } = new GameProcessWatcher();
@@ -38,7 +40,7 @@ namespace FocLauncher.Game
 
         public IReadOnlyCollection<IMod> Mods => ModsInternal.ToList();
 
-        protected internal HashSet<IMod> ModsInternal { get; } = new HashSet<IMod>();
+        protected internal HashSet<IMod> ModsInternal { get; } = new HashSet<IMod>(ModEqualityComparer.Default);
 
 
         protected PetroglyphGame(DirectoryInfo gameDirectory)
@@ -88,7 +90,18 @@ namespace FocLauncher.Game
 
         public ICollection<IMod> SearchMods(bool invalidateMods)
         {
-            return null;
+            var mods = SearchModsCore().Distinct(ModEqualityComparer.Default).ToList();
+            if (invalidateMods)
+            {
+                foreach (var mod in mods)
+                    AddMod(mod);
+            }
+            return mods;
+        }
+
+        protected virtual ICollection<IMod> SearchModsCore()
+        {
+            return SearchDiskMods().ToList();
         }
 
         public virtual IMod CreateMod(ModCreationDelegate modCreation, bool shallAdd)
@@ -101,24 +114,13 @@ namespace FocLauncher.Game
             throw new NotImplementedException();
         }
 
-        public virtual void Setup(GameSetupMode setupMode)
+        public virtual void Setup(GameSetupOptions setupMode)
         {
-            if (setupMode == GameSetupMode.NoSetup)
+            if (setupMode == GameSetupOptions.NoSetup)
                 return;
-
-
-            //var mods = SearchSteamMods(this);
-
-            //var raw = new Mod(this, new DirectoryInfo(@"C:\Program Files (x86)\Steam\steamapps\workshop\content\32470\1129810972"), true);
-
-            //var h = new HashSet<IMod>(ModEqualityComparer.Default);
-            //h.Add(raw);
-            //foreach (var mod in mods)
-            //{
-            //    h.Add(mod);
-            //}
-
-
+            SearchMods(true);
+            if (setupMode != GameSetupOptions.ResolveModDependencies)
+                return;
         }
 
         public virtual bool AddMod(IMod mod)
@@ -184,7 +186,7 @@ namespace FocLauncher.Game
             return GameStartHelper.StartGameProcess(startInfo, iconFile);
         }
 
-        private ProcessStartInfo CreateGameProcess(string arguments, FileInfo executable)
+        private ProcessStartInfo CreateGameProcess(string arguments, FileSystemInfo executable)
         {
             var startInfo = new ProcessStartInfo(executable.FullName)
             {
@@ -224,34 +226,13 @@ namespace FocLauncher.Game
             }
         }
 
-
-        private static IEnumerable<IMod> SearchDiskMods(IGame game)
+        protected IEnumerable<IMod> SearchDiskMods()
         {
-            var modsPath = Path.Combine(game.Directory.FullName, "Mods");
-            if (!System.IO.Directory.Exists(modsPath))
-                return new List<IMod>();
-            var modDirs = System.IO.Directory.EnumerateDirectories(modsPath);
-            return modDirs.Select(modDir =>
-            {
-                return new Mod(game, new DirectoryInfo(modDir), false);
-            }).Cast<IMod>().ToList();
-        }
-
-        private static IEnumerable<IMod> SearchSteamMods(IGame game)
-        {
-            var mods = new List<IMod>();
-            mods.AddRange(SearchDiskMods(game));
-
-            var workshopsPath = Path.Combine(game.Directory.FullName, @"..\..\..\workshop\content\32470\");
-            if (!System.IO.Directory.Exists(workshopsPath))
-                return mods;
-
-            var modDirs = System.IO.Directory.EnumerateDirectories(workshopsPath);
-            mods.AddRange(modDirs.Select(modDir =>
-            {
-                return new Mod(game, new DirectoryInfo(modDir), true);
-            }));
-            return mods;
+            var modsDir = Directory.GetDirectories("Mods").FirstOrDefault();
+            if (modsDir is null || !modsDir.Exists)
+                return Enumerable.Empty<IMod>();
+            var modFolders = modsDir.EnumerateDirectories().ToList();
+            return modFolders.Select(folder => ModFactory.CreateMod(this, ModType.Default, folder, true));
         }
     }
 }
