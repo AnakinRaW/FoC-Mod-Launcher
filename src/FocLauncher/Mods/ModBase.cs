@@ -13,7 +13,7 @@ namespace FocLauncher.Mods
         private string _name;
         private string _description;
         private string? _iconFile;
-        private ModVersion _modVersion;
+        private ModVersion? _modVersion;
 
         public event EventHandler<ModCollectionChangedEventArgs> ModCollectionModified;
 
@@ -61,7 +61,7 @@ namespace FocLauncher.Mods
             }
         }
 
-        public ModVersion Version
+        public ModVersion? Version
         {
             get
             {
