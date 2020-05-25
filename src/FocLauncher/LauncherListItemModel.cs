@@ -76,29 +76,32 @@ namespace FocLauncher
                 return;
             }
 
-            var name = string.Empty;
-            var folderName = mod.Directory.Name;
-            switch (mod.Type)
+            var name = mod.ModInfo?.Name;
+            if (string.IsNullOrEmpty(name))
             {
-                case ModType.Default:
-                    name = mod.Directory.Name.Replace('_', ' ');
-                    break;
-                case ModType.Workshops when SteamModNamePersister.Instance.TryFind(folderName, out var modName):
-                    name = modName;
-                    break;
-                case ModType.Workshops:
+                var folderName = mod.Directory.Name;
+                switch (mod.Type)
+                {
+                    case ModType.Default:
+                        name = mod.Directory.Name.Replace('_', ' ');
+                        break;
+                    case ModType.Workshops when SteamModNamePersister.Instance.TryFind(folderName, out var modName):
+                        name = modName;
+                        break;
+                    case ModType.Workshops:
                     {
                         var doc = await HtmlDownloader.GetSteamModPageDocument(folderName);
                         name = new WorkshopNameResolver().GetName(doc, folderName);
                         SteamModNamePersister.Instance.AddModName(folderName, name);
                         break;
                     }
+                }
             }
-
+            
             if (string.IsNullOrEmpty(name))
                 name = "Unnamed (Failed to resolve)";
 
-            Name = name;
+            Name = name!;
         }
 
 
