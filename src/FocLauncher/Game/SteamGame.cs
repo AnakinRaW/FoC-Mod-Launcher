@@ -88,7 +88,7 @@ namespace FocLauncher.Game
             return StartGame(args, startInfo, iconFile);
         }
 
-        protected override ICollection<IMod> SearchModsCore()
+        protected override IEnumerable<IMod> GetPhysicalModsCore()
         {
             return SearchSteamMods().ToList();
         }

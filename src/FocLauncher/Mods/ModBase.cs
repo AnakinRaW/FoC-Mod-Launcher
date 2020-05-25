@@ -14,6 +14,9 @@ namespace FocLauncher.Mods
         private string _description;
         private string? _iconFile;
         private ModVersion? _modVersion;
+        private bool _expectedDependenciesCalculated;
+        private int _expectedDependencyCount;
+        private bool _isResolving;
 
         public event EventHandler<ModCollectionChangedEventArgs> ModCollectionModified;
 
@@ -71,11 +74,23 @@ namespace FocLauncher.Mods
                 return _modVersion;
             }
         }
-        
+
+        public int ExpectedDependencies
+        {
+            get
+            {
+                if (_expectedDependenciesCalculated)
+                    return _expectedDependencyCount;
+                _expectedDependencyCount = CalculateExpectedDependencyCount();
+                _expectedDependenciesCalculated = true;
+                return _expectedDependencyCount;
+            }
+        }
+
 
         public IReadOnlyCollection<IMod> Mods => ModsInternal.ToList();
 
-        public bool DependenciesResolved { get; private set; }
+        public bool DependenciesResolved { get; protected set; }
 
         public IReadOnlyList<IMod> Dependencies => DependenciesInternal.ToList();
 
@@ -139,16 +154,60 @@ namespace FocLauncher.Mods
                 OnModCollectionModified(new ModCollectionChangedEventArgs(mod, ModCollectionChangedAction.Remove));
             return result;
         }
-
-        public bool ResolveDependencies()
+        
+        public IMod? SearchMod(ModReference modReference, ModSearchOptions modSearchOptions, bool add)
         {
-            var result = ResolveDependenciesCore();
-            DependenciesResolved = true;
-            return result;
+            throw new NotImplementedException();
         }
 
         public abstract bool Equals(IMod other);
 
+        public abstract bool Equals(ModReference other);
+
+
+        public bool ResolveDependencies(ModDependencyResolveStrategy resolveStrategy)
+        {
+            if (_isResolving)
+                throw new NotImplementedException("Cycle?");
+
+            var result = true;
+            try
+            {
+                _isResolving = true;
+                if (ExpectedDependencies == 0 || DependenciesResolved)
+                    return true;
+
+
+                if (ModInfo is null)
+                    return true;
+
+                foreach (var dependency in ModInfo.Dependencies)
+                {
+                    if (dependency.ModType == ModType.Virtual)
+                        throw new NotImplementedException("Virtual linking not supported yet");
+
+                    var searchOptions = ModSearchOptions.Registered;
+                    if (resolveStrategy.IsCreative())
+                        searchOptions |= ModSearchOptions.FileSystem;
+
+                    var dm = Game.SearchMod(dependency, searchOptions, true);
+                    if (dm is null)
+                        return false;
+                    if (dm.Equals(this))
+                        throw new InvalidOperationException($"The mod '{Name}' can not be dependent on itself!");
+
+                    if (resolveStrategy.IsRecursive())
+                        dm.ResolveDependencies(resolveStrategy);
+                }
+            }
+            finally
+            {
+                _isResolving = false;
+                DependenciesResolved = true;
+            }
+
+            return result;
+        }
 
         public abstract string ToArgs(bool includeDependencies);
 
@@ -186,6 +245,16 @@ namespace FocLauncher.Mods
             if (ModInfo != null)
                 name = ModInfo.Icon;
             return name;
+        }
+
+        protected virtual int CalculateExpectedDependencyCount()
+        {
+            return ModInfo?.Dependencies.Count ?? 0;
+        }
+
+        protected virtual IEnumerable<IMod> SearchModsCore()
+        {
+            return Enumerable.Empty<IMod>();
         }
 
 

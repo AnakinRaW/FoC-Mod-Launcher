@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace FocLauncher.ModInfo
 {
-    public struct SteamData
+    public class SteamData
     {
         [JsonProperty("publishedfileid")]
         public string ID { get; private set; }

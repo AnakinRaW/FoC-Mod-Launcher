@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using FocLauncher.ModInfo;
 using FocLauncher.Mods;
 using FocLauncher.Versioning;
 
@@ -88,10 +89,10 @@ namespace FocLauncher.Game
             throw new NotImplementedException();
         }
 
-        public ICollection<IMod> SearchMods(bool invalidateMods)
+        public ICollection<IMod> GetPhysicalMods(bool add)
         {
-            var mods = SearchModsCore().Distinct(ModEqualityComparer.Default).ToList();
-            if (invalidateMods)
+            var mods = GetPhysicalModsCore().Distinct(ModEqualityComparer.Default).ToList();
+            if (add)
             {
                 foreach (var mod in mods)
                     AddMod(mod);
@@ -99,9 +100,32 @@ namespace FocLauncher.Game
             return mods;
         }
 
-        protected virtual ICollection<IMod> SearchModsCore()
+        public IMod? SearchMod(ModReference modReference, ModSearchOptions modSearchOptions, bool add)
         {
-            return SearchDiskMods().ToList();
+            IMod? mod = null;
+            try
+            {
+                if (modSearchOptions.HasFlag(ModSearchOptions.Registered))
+                {
+                    mod = ModsInternal.FirstOrDefault(x => x.Equals(modReference));
+                    if (mod != null)
+                        return mod;
+
+                }
+                if (modSearchOptions.HasFlag(ModSearchOptions.FileSystem))
+                    throw new NotImplementedException();
+                return mod;
+            }
+            finally
+            {
+                if (mod != null && add)
+                    AddMod(mod);
+            }
+        }
+
+        protected virtual IEnumerable<IMod> GetPhysicalModsCore()
+        {
+            return SearchDiskMods();
         }
 
         public virtual IMod CreateMod(ModCreationDelegate modCreation, bool shallAdd)
@@ -118,9 +142,15 @@ namespace FocLauncher.Game
         {
             if (setupMode == GameSetupOptions.NoSetup)
                 return;
-            SearchMods(true);
+            GetPhysicalMods(true);
             if (setupMode != GameSetupOptions.ResolveModDependencies)
                 return;
+            foreach (var mod in Mods)
+            {
+                if (mod.ExpectedDependencies == 0 || mod.DependenciesResolved)
+                    continue;
+                mod.ResolveDependencies(ModDependencyResolveStrategy.FromExistingModsRecursive);
+            }
         }
 
         public virtual bool AddMod(IMod mod)

@@ -51,6 +51,24 @@ namespace FocLauncher.Mods
             return FileUtilities.Comparer.Equals(InternalPath, otherPath);
         }
 
+        public override bool Equals(ModReference modReference)
+        {
+            if (modReference is null)
+                return false;
+            if (modReference.ModType != Type)
+                return false;
+            switch (Type)
+            {
+                case ModType.Default:
+                    var realLocation = FileUtilities.NormalizeForPathComparison(modReference.GetAbsolutePath(Game), true);
+                    return FileUtilities.Comparer.Equals(InternalPath, realLocation);
+                case ModType.Workshops:
+                    return Directory.Name.Equals(modReference.Location);
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
         public override int GetHashCode()
         {
             var hash = FileUtilities.Comparer.GetHashCode(InternalPath);

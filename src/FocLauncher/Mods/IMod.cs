@@ -5,7 +5,7 @@ using FocLauncher.ModInfo;
 
 namespace FocLauncher.Mods
 {
-    public interface IMod : IPetroglyhGameableObject, IModContainer, IEquatable<IMod>
+    public interface IMod : IPetroglyhGameableObject, IModContainer, IEquatable<IMod>, IEquatable<ModReference>
     {
         /// <summary>
         /// The <see cref="IGame"/> this mod is associated with.
@@ -36,6 +36,8 @@ namespace FocLauncher.Mods
 
         bool DependenciesResolved { get; }
 
+        int ExpectedDependencies { get; }
+
         /// <summary>
         /// Contains the direct dependencies of this mod.
         /// Thus it does not contain the dependencies of a dependency.
@@ -44,10 +46,11 @@ namespace FocLauncher.Mods
 
         /// <summary>
         /// Searches for direct <see cref="IMod"/> dependencies. It does not resolve recursively.
-        /// Updates <see cref="Dependencies"/> property. 
+        /// Updates <see cref="Dependencies"/> property.
+        /// <param name="resolveStrategy">Option how resolving should be handled.</param>
         /// </summary>
-        /// <returns><c>true</c> if this instance has dependencies; <c>false</c> otherwise</returns>
-        bool ResolveDependencies();
+        /// <returns><c>true</c> if all direct dependencies could be resolved; <c>false</c> otherwise</returns>
+        bool ResolveDependencies(ModDependencyResolveStrategy resolveStrategy);
 
         /// <summary>
         /// Converts this mod into a command line argument that can be used for starting the mod.
@@ -86,6 +89,29 @@ namespace FocLauncher.Mods
             if (_default)
                 return obj.GetHashCode();
             throw new NotImplementedException();
+        }
+    }
+
+    public enum ModDependencyResolveStrategy
+    {
+        FromExistingMods,
+        FromExistingModsRecursive,
+        Create,
+        CreateRecursive
+    }
+
+    internal static class ModDependencyUtilities
+    {
+        internal static bool IsRecursive(this ModDependencyResolveStrategy strategy)
+        {
+            return strategy == ModDependencyResolveStrategy.CreateRecursive ||
+                   strategy == ModDependencyResolveStrategy.FromExistingModsRecursive;
+        }
+
+        internal static bool IsCreative(this ModDependencyResolveStrategy strategy)
+        {
+            return strategy == ModDependencyResolveStrategy.Create ||
+                   strategy == ModDependencyResolveStrategy.CreateRecursive;
         }
     }
 }

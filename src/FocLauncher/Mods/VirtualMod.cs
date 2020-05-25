@@ -26,6 +26,11 @@ namespace FocLauncher.Mods
             throw new NotImplementedException();
         }
 
+        public override bool Equals(ModReference other)
+        {
+            throw new NotImplementedException();
+        }
+
         public override string ToArgs(bool includeDependencies)
         {
             if (Virtual && !includeDependencies)
