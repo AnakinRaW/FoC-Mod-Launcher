@@ -20,16 +20,16 @@ namespace FocLauncher.Game
             sb.Append(CreateModArgs(args.Mods));
             
             if (args.IgnoreAsserts)
-                sb.Append("IGNOREASSERTS ");
+                sb.Append(" IGNOREASSERTS");
             if (args.NoArtProcess)
-                sb.Append("NOARTPROCESS ");
+                sb.Append(" NOARTPROCESS");
             if (args.Windowed)
-                sb.Append("WINDOWED ");
+                sb.Append(" WINDOWED");
 
-            return sb.ToString().TrimEnd(' ');
+            return sb.ToString().Trim(' ');
         }
 
-        private static string CreateModArgs(IList<IMod> mods)
+        private static string CreateModArgs(IList<IMod>? mods)
         {
             if (mods is null || !mods.Any())
                 return string.Empty;
