@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using FocLauncher.Game;
 using FocLauncher.ModInfo;
@@ -7,6 +8,7 @@ using FocLauncher.Versioning;
 
 namespace FocLauncher.Mods
 {
+    [DebuggerDisplay("Mod:{Name};{Type}")]
     public abstract class ModBase : IMod
     {
         private ModInfoData? _modInfo;
@@ -168,7 +170,7 @@ namespace FocLauncher.Mods
         public bool ResolveDependencies(ModDependencyResolveStrategy resolveStrategy)
         {
             if (_isResolving)
-                throw new NotImplementedException("Cycle?");
+                throw new PetroglyphModException("Detected a cycle while resolving Mod dependencies.");
 
             var result = true;
             try
@@ -195,9 +197,13 @@ namespace FocLauncher.Mods
                         return false;
                     if (dm.Equals(this))
                         throw new InvalidOperationException($"The mod '{Name}' can not be dependent on itself!");
+                    
+                    DependenciesInternal.Add(dm);
 
                     if (resolveStrategy.IsRecursive())
+                    {
                         dm.ResolveDependencies(resolveStrategy);
+                    }
                 }
             }
             finally
