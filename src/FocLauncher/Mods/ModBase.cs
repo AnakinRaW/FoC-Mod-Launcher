@@ -22,6 +22,9 @@ namespace FocLauncher.Mods
 
         public event EventHandler<ModCollectionChangedEventArgs> ModCollectionModified;
 
+        public abstract string Identifier { get; }
+
+
         public ModInfoData? ModInfo
         {
             get
@@ -94,7 +97,9 @@ namespace FocLauncher.Mods
 
         public bool DependenciesResolved { get; protected set; }
 
-        public IReadOnlyList<IMod> Dependencies => DependenciesInternal.ToList();
+        public IReadOnlyList<IModReference> Dependencies => DependenciesInternal.ToList();
+
+        IList<IModReference> IModIdentity.Dependencies => new List<IModReference>(DependenciesInternal);
 
         public bool WorkshopMod => Type == ModType.Workshops;
 
@@ -157,14 +162,16 @@ namespace FocLauncher.Mods
             return result;
         }
         
-        public IMod? SearchMod(ModReference modReference, ModSearchOptions modSearchOptions, bool add)
+        public IMod? SearchMod(IModReference modReference, ModSearchOptions modSearchOptions, bool add)
         {
             throw new NotImplementedException();
         }
 
         public abstract bool Equals(IMod other);
 
-        public abstract bool Equals(ModReference other);
+        public abstract bool Equals(IModIdentity other);
+
+        public abstract bool Equals(IModReference other);
 
 
         public bool ResolveDependencies(ModDependencyResolveStrategy resolveStrategy)
@@ -185,7 +192,7 @@ namespace FocLauncher.Mods
 
                 foreach (var dependency in ModInfo.Dependencies)
                 {
-                    if (dependency.ModType == ModType.Virtual)
+                    if (dependency.Type == ModType.Virtual)
                         throw new NotImplementedException("Virtual linking not supported yet");
 
                     var searchOptions = ModSearchOptions.Registered;
@@ -216,6 +223,11 @@ namespace FocLauncher.Mods
         }
 
         public abstract string ToArgs(bool includeDependencies);
+
+        internal void SetModInfo(ModInfoData modInfo)
+        {
+            _modInfo = modInfo;
+        }
 
         protected abstract bool ResolveDependenciesCore();
 

@@ -35,6 +35,24 @@ namespace FocLauncher.Mods
             InternalPath = CreateInternalPath(modDirectory);
         }
 
+        public override string Identifier
+        {
+            get
+            {
+                switch (Type)
+                {
+                    case ModType.Default:
+                        return InternalPath;
+                    case ModType.Workshops: 
+                        return Directory.Name;
+                    case ModType.Virtual:
+                        throw new PetroglyphModException($"Instance of {typeof(Mod)} must not be virtual.");
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+        }
+
         public override bool Equals(IMod other)
         {
             if (other is null)
@@ -51,11 +69,16 @@ namespace FocLauncher.Mods
             return FileUtilities.Comparer.Equals(InternalPath, otherPath);
         }
 
-        public override bool Equals(ModReference modReference)
+        public override bool Equals(IModIdentity other)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool Equals(IModReference modReference)
         {
             if (modReference is null)
                 return false;
-            if (modReference.ModType != Type)
+            if (modReference.Type != Type)
                 return false;
             switch (Type)
             {
@@ -63,7 +86,7 @@ namespace FocLauncher.Mods
                     var realLocation = FileUtilities.NormalizeForPathComparison(modReference.GetAbsolutePath(Game), true);
                     return FileUtilities.Comparer.Equals(InternalPath, realLocation);
                 case ModType.Workshops:
-                    return Directory.Name.Equals(modReference.Location);
+                    return Directory.Name.Equals(modReference.Identifier);
                 default:
                     throw new ArgumentOutOfRangeException();
             }

@@ -5,17 +5,17 @@ using FocLauncher.ModInfo;
 
 namespace FocLauncher.Mods
 {
-    public interface IMod : IPetroglyhGameableObject, IModContainer, IEquatable<IMod>, IEquatable<ModReference>
+    public interface IMod : IModIdentity, IModReference, IPetroglyhGameableObject, IModContainer, IEquatable<IMod>
     {
         /// <summary>
         /// The <see cref="IGame"/> this mod is associated with.
         /// </summary>
         IGame Game { get; }
-
-        /// <summary>
-        /// The <see cref="ModType"/> of this mod.
-        /// </summary>
-        ModType Type { get; }
+        
+        ///// <summary>
+        ///// The <see cref="ModType"/> of this mod.
+        ///// </summary>
+        //ModType Type { get; }
 
         /// <summary>
         /// Identifies whether the mod is a Steam Workshop instance
@@ -38,11 +38,11 @@ namespace FocLauncher.Mods
 
         int ExpectedDependencies { get; }
 
-        /// <summary>
-        /// Contains the direct dependencies of this mod.
-        /// Thus it does not contain the dependencies of a dependency.
-        /// </summary>
-        IReadOnlyList<IMod> Dependencies { get; }
+        ///// <summary>
+        ///// Contains the direct dependencies of this mod.
+        ///// Thus it does not contain the dependencies of a dependency.
+        ///// </summary>
+        //IReadOnlyList<IModReference> Dependencies { get; }
 
         /// <summary>
         /// Searches for direct <see cref="IMod"/> dependencies. It does not resolve recursively.

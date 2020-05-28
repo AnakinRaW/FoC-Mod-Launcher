@@ -7,7 +7,7 @@ namespace FocLauncher.Mods
 {
     public sealed class VirtualMod : ModBase
     {
-        public VirtualMod(IGame game, ModInfoData modInfoData) : base(game, ModType.Virtual, modInfoData)
+        public VirtualMod(IGame game, ModInfoData? modInfoData) : base(game, ModType.Virtual, modInfoData)
         {
             // TODO: modinfo dependencies must not be null or empty!
         }
@@ -21,12 +21,19 @@ namespace FocLauncher.Mods
             // TODO: dependencies must not be null or empty!
         }
 
+        public override string Identifier => throw new NotImplementedException();
+
         public override bool Equals(IMod other)
         {
             throw new NotImplementedException();
         }
 
-        public override bool Equals(ModReference other)
+        public override bool Equals(IModIdentity other)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool Equals(IModReference other)
         {
             throw new NotImplementedException();
         }

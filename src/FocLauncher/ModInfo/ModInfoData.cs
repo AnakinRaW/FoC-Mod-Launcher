@@ -9,8 +9,15 @@ using Newtonsoft.Json.Linq;
 
 namespace FocLauncher.ModInfo
 {
+    public interface IModIdentity : IEquatable<IModIdentity>
+    {
+        string Name { get; }
+        ModVersion Version { get; }
+        IList<IModReference> Dependencies { get; }
+    }
+
     [JsonObject(MemberSerialization.OptIn)]
-    public class ModInfoData
+    public class ModInfoData : IModIdentity
     {
         [JsonProperty("name", Required = Required.Always)]
         public string Name { get; private set; }
@@ -32,8 +39,8 @@ namespace FocLauncher.ModInfo
         [JsonProperty("steamdata")]
         public SteamData SteamData { get; private set; }
 
-        [JsonProperty("dependencies")]
-        public IList<ModReference> Dependencies { get; private set; }
+        [JsonProperty("dependencies", ItemConverterType = typeof(ModReferenceTypeConverter))]
+        public IList<IModReference> Dependencies { get; private set; }
 
         public void Validate()
         {
@@ -41,14 +48,47 @@ namespace FocLauncher.ModInfo
                 throw new ModInfoException("Name must not be null or empty.");
         }
 
-        public ModInfoData()
+        internal ModInfoData()
         {
-            Dependencies = new List<ModReference>();
+            Dependencies = new List<IModReference>();
+        }
+
+        bool IEquatable<IModIdentity>.Equals(IModIdentity other)
+        {
+            throw new NotImplementedException();
         }
     }
 
-    public class ModReference
+    internal class ModReferenceTypeConverter : JsonConverter
     {
+        public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
+        {
+            serializer.Serialize(writer, value);
+        }
+
+        public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
+        {
+            return serializer.Deserialize<ModReference>(reader);
+        }
+
+        public override bool CanConvert(Type objectType)
+        {
+            return true;
+        }
+    }
+
+    public interface IModReference : IEquatable<IModReference>
+    {
+        string Identifier { get; }
+
+        ModType Type { get; }
+    }
+
+    public class ModReference : IModReference
+    {
+        public string Identifier => Location;
+
+        // TODO: Remove and only use identifier
         /// <summary>
         /// Holds either the SteamId or the absolute location or the relative location to the game.
         /// </summary>
@@ -56,24 +96,29 @@ namespace FocLauncher.ModInfo
         public string Location { get; private set; }
 
         [JsonProperty("modtype")]
-        public ModType ModType { get; private set; }
+        public ModType Type { get; private set; }
+
+        bool IEquatable<IModReference>.Equals(IModReference other)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     internal static class ModInfoExtension
     {
-        public static string GetAbsolutePath(this ModReference modReference, IGame game)
+        public static string GetAbsolutePath(this IModReference modReference, IGame game)
         {
             if (modReference is null)
                 throw new ArgumentNullException(nameof(modReference));
-            if (string.IsNullOrEmpty(modReference.Location))
+            if (string.IsNullOrEmpty(modReference.Identifier))
                 throw new InvalidOperationException("location must not be null or empty");
-            if (modReference.ModType == ModType.Virtual || modReference.ModType == ModType.Workshops)
+            if (modReference.Type == ModType.Virtual || modReference.Type == ModType.Workshops)
                 throw new InvalidOperationException("ModReference must be a ModType of 'Default'");
-            if (Path.IsPathRooted(modReference.Location))
-                return modReference.Location;
+            if (Path.IsPathRooted(modReference.Identifier))
+                return modReference.Identifier;
             if (game is null)
                 throw new ArgumentNullException(nameof(game));
-            return Path.Combine(game.Directory.FullName, modReference.Location);
+            return Path.Combine(game.Directory.FullName, modReference.Identifier);
         }
     }
 }

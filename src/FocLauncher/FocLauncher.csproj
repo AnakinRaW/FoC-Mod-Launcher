@@ -119,7 +119,6 @@
     <Compile Include="Game\PetroglyphGameManager.cs" />
     <Compile Include="LauncherApp.cs" />
     <Compile Include="Converters\GameTypeToStringConverter.cs" />
-    <Compile Include="Converters\ModNameConverter.cs" />
     <Compile Include="Converters\SteamToVisibilityConverter.cs" />
     <Compile Include="Converters\ThemeSelectedConverter.cs" />
     <Compile Include="Dialogs\ChangeThemeDialog.xaml.cs">

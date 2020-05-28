@@ -23,7 +23,7 @@ namespace FocLauncher.Game
         /// <param name="add">When set to <c>true</c> the mod will get added to the <see cref="IGame.Mods"/> collection if not present already.
         /// This will raise the <see cref="IGame.ModCollectionModified"/> event </param>
         /// <returns>The mod found</returns>
-        IMod? SearchMod(ModReference modReference, ModSearchOptions modSearchOptions, bool add);
+        IMod? SearchMod(IModReference modReference, ModSearchOptions modSearchOptions, bool add);
     }
 
     [Flags]

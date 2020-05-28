@@ -100,7 +100,7 @@ namespace FocLauncher.Game
             return mods;
         }
 
-        public IMod? SearchMod(ModReference modReference, ModSearchOptions modSearchOptions, bool add)
+        public IMod? SearchMod(IModReference modReference, ModSearchOptions modSearchOptions, bool add)
         {
             IMod? mod = null;
             try
