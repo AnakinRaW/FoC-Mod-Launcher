@@ -5,6 +5,18 @@ namespace FocLauncher.Mods
 {
     public class ModDependencyTraverser
     {
+        public enum TraverseDirection
+        {
+            /// <summary>
+            /// The first item in the list is the most base dependency.
+            /// </summary>
+            BaseToSub,
+            /// <summary>
+            /// The first item in the list is the closest dependency.
+            /// </summary>
+            SubToBase
+        }
+
         private readonly IMod _mod;
 
         public ModDependencyTraverser(IMod mod)
@@ -25,11 +37,15 @@ namespace FocLauncher.Mods
             return false;
         }
 
-        public IList<IMod> Traverse(bool throwOnCycle = true)
+        public IList<IMod> Traverse(TraverseDirection direction = TraverseDirection.SubToBase, bool throwOnCycle = true)
         {
             if (throwOnCycle)
                 CheckForCycles();
-            return TraverseCore().Distinct().ToList();
+
+            var result = TraverseCore().Distinct();
+            if (direction == TraverseDirection.BaseToSub)
+                result = result.Reverse();
+            return result.ToList();
         }
 
         private void CheckForCycles()

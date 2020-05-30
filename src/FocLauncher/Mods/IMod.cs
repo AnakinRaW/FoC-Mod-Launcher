@@ -58,10 +58,10 @@ namespace FocLauncher.Mods
         /// <summary>
         /// Converts this mod into a command line argument that can be used for starting the mod.
         /// </summary>
-        /// <param name="includeDependencies">When <c>true</c> this methods returns a valid argument that contains the whole dependency chain.</param>
+        /// <param name="traverseDependencies">When <c>true</c> this methods returns a valid argument that contains the whole dependency chain.</param>
         /// <remarks>This method does not re-resolve dependencies but takes whatever there is in <see cref="Dependencies"/></remarks>
         /// <returns>A valid command line argument.</returns>
-        string ToArgs(bool includeDependencies);
+        string ToArgs(bool traverseDependencies);
     }
 
     public class ModEqualityComparer : IEqualityComparer<IMod>

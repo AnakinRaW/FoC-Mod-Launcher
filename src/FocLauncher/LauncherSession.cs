@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 using FocLauncher.Controls.Controllers;
 using FocLauncher.Game;
 using FocLauncher.Mods;
@@ -54,6 +55,8 @@ namespace FocLauncher
             if (gameableObject is IMod mod)
             {
                 var modList = GetAllMods(mod);
+                if (!modList.Any())
+                    return false;
                 args.Mods = modList;
             }
             args.IgnoreAsserts = _mainWindowModel.IgnoreAsserts;
@@ -75,18 +78,15 @@ namespace FocLauncher
             return started;
         }
 
-        private IList<IMod> GetAllMods(IMod mod)
+        private static IList<IMod> GetAllMods(IMod mod)
         {
-            //if (!mod.ModInfoFile.HasValue)
-                return new List<IMod>{mod};
-
-            //var mods = new List<IMod>();
-
-            //// TODO: var mods = mod.Game.Mods;
-            //var raw = _mainWindowModel.Mods.FirstOrDefault(x => x.Name.Equals("Republic at War"));
-            //mods.Add(raw);
-            //mods.Add(mod);
-            //return mods;
+            var traverser = new ModDependencyTraverser(mod);
+            if (traverser.HasDependencyCycles())
+            {
+                MessageBox.Show("The Mod's dependencies result in a cycles. Cannot Start the Mod!");
+                return new List<IMod>(0);
+            }
+            return traverser.Traverse();
         }
     }
 }

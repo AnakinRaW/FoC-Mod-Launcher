@@ -34,21 +34,17 @@ namespace FocLauncher.Game
             if (mods is null || !mods.Any())
                 return string.Empty;
             if (mods.Count == 1)
-                return ModToArg(mods[0]);
+                return mods[0].ToArgs(false);
 
             var sb = new StringBuilder();
-            foreach (var mod in mods.Reverse())
+            foreach (var mod in mods)
             {
-                sb.Append(ModToArg(mod));
+                sb.Append(mod.ToArgs(false));
                 sb.Append(' ');
             }
 
             return sb.ToString();
         }
 
-        private static string ModToArg(IMod mod)
-        {
-            return mod.ToArgs(false);
-        }
     }
 }
