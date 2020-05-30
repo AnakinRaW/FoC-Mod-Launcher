@@ -32,6 +32,8 @@ namespace FocLauncher.Mods
         /// </summary>
         ModInfoData? ModInfo { get; }
 
+        new IReadOnlyList<IMod> Dependencies { get; }
+
         bool HasDependencies { get; }
 
         bool DependenciesResolved { get; }
@@ -50,6 +52,7 @@ namespace FocLauncher.Mods
         /// <param name="resolveStrategy">Option how resolving should be handled.</param>
         /// </summary>
         /// <returns><c>true</c> if all direct dependencies could be resolved; <c>false</c> otherwise</returns>
+        /// <exception cref="PetroglyphModException">Throws exception if a dependency cycle was found.</exception>
         bool ResolveDependencies(ModDependencyResolveStrategy resolveStrategy);
 
         /// <summary>

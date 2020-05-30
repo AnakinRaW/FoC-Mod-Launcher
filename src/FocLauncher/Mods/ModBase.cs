@@ -97,7 +97,7 @@ namespace FocLauncher.Mods
 
         public bool DependenciesResolved { get; protected set; }
 
-        public IReadOnlyList<IModReference> Dependencies => DependenciesInternal.ToList();
+        public IReadOnlyList<IMod> Dependencies => DependenciesInternal.ToList();
 
         IList<IModReference> IModIdentity.Dependencies => new List<IModReference>(DependenciesInternal);
 
@@ -203,7 +203,7 @@ namespace FocLauncher.Mods
                     if (dm is null)
                         return false;
                     if (dm.Equals(this))
-                        throw new InvalidOperationException($"The mod '{Name}' can not be dependent on itself!");
+                        throw new PetroglyphModException($"The mod '{Name}' can not be dependent on itself!");
                     
                     DependenciesInternal.Add(dm);
 
@@ -227,6 +227,12 @@ namespace FocLauncher.Mods
         internal void SetModInfo(ModInfoData modInfo)
         {
             _modInfo = modInfo;
+        }
+
+        internal void ResetDependencies()
+        {
+            DependenciesInternal.Clear();
+            DependenciesResolved = false;
         }
 
         protected abstract bool ResolveDependenciesCore();
