@@ -86,14 +86,11 @@ namespace FocLauncher.ModInfo
 
     public class ModReference : IModReference
     {
-        public string Identifier => Location;
-
-        // TODO: Remove and only use identifier
         /// <summary>
         /// Holds either the SteamId or the absolute location or the relative location to the game.
         /// </summary>
-        [JsonProperty("location")]
-        public string Location { get; private set; }
+        [JsonProperty("identifier")]
+        public string Identifier { get; private set; }
 
         [JsonProperty("modtype")]
         public ModType Type { get; private set; }

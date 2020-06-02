@@ -100,8 +100,8 @@
     <Compile Include="Game\PetroglyphException.cs" />
     <Compile Include="Game\PetroglyphGameException.cs" />
     <Compile Include="Game\PetroglyphGameRegistry.cs" />
-    <Compile Include="ModInfo\ModFileDataUtilities.cs" />
     <Compile Include="ModInfo\ModInfoData.cs" />
+    <Compile Include="ModInfo\ModInfoDataUtilities.cs" />
     <Compile Include="ModInfo\ModInfoException.cs" />
     <Compile Include="Mods\ModBase.cs" />
     <Compile Include="Mods\ModDependencyTraverser.cs" />

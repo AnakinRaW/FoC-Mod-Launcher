@@ -12,7 +12,7 @@ namespace FocLauncher.Game
         public bool Windowed { get; set; }
 
         /// <summary>
-        /// An ordered collection of Mod that shall get executed.
+        /// An ordered list of Mod that shall get executed.
         /// The first mod in the list resembles the mod you actually want to launch, and the last mod in the list resembles the most base mod.
         /// <remarks>The order of this list is equal to the order of CLI arguments.</remarks>
         /// </summary>

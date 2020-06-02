@@ -9,7 +9,8 @@ namespace FocLauncher.Utilities
     {
         internal static readonly char[] Slashes = { '/', '\\' };
 
-        internal static readonly IEqualityComparer<string> Comparer = new PathComparer();
+        internal static readonly IEqualityComparer<string> Comparer = new PathComparer(false);
+        internal static readonly IEqualityComparer<string> NormalizedComparer = new PathComparer(true);
 
         internal static bool IsDirectorySeparator(char c)
         {
@@ -91,6 +92,13 @@ namespace FocLauncher.Utilities
 
         private class PathComparer : IEqualityComparer<string?>
         {
+            private readonly bool _applyNormalization;
+
+            internal PathComparer(bool applyNormalization)
+            {
+                _applyNormalization = applyNormalization;
+            }
+            
             public bool Equals(string? x, string? y)
             {
                 if (x == null && y == null)
@@ -99,6 +107,12 @@ namespace FocLauncher.Utilities
                 if (x == null || y == null)
                     return false;
 
+                if (_applyNormalization)
+                {
+                    x = NormalizeForPathComparison(x, true);
+                    y = NormalizeForPathComparison(y, true);
+                }
+                
                 return PathsEqual(x, y);
             }
 

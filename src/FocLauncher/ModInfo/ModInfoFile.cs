@@ -1,12 +1,61 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace FocLauncher.ModInfo
 {
-    public sealed class ModInfoFile
+    public sealed class ModInfoVariantFile : ModInfoFile
     {
+        private const string VariantModInfoFileEnding = "-modinfo.json";
+
+        private readonly ModInfoFile? _mainModInfoFile;
+        private ModInfoData? _mainModInfoData;
+
+        public ModInfoVariantFile(FileInfo variant) : base(variant)
+        {
+        }
+
+        public ModInfoVariantFile(FileInfo variant, ModInfoFile? mainModInfoFile) : base(variant)
+        {
+            if (mainModInfoFile is ModInfoVariantFile)
+                throw new ModInfoException("A ModInfoFile's base must not be a variant file too.");
+            _mainModInfoFile = mainModInfoFile;
+        }
+
+        public ModInfoVariantFile(FileInfo variant, ModInfoData? mainModInfoData) : base(variant)
+        {
+            _mainModInfoData = mainModInfoData;
+        }
+
+        public override void Validate()
+        {
+            if (!File.Name.ToUpperInvariant().EndsWith(VariantModInfoFileEnding.ToUpperInvariant(), StringComparison.InvariantCultureIgnoreCase))
+                throw new ModInfoException("The file's name must end with '-modinfo.json'.");
+        }
+
+        protected override async Task<ModInfoData> GetModInfoCoreAsync()
+        {
+            var data = await ParseAsync();
+            if (_mainModInfoData is null && _mainModInfoFile != null)
+                _mainModInfoData = await _mainModInfoFile.GetModInfoAsync().ConfigureAwait(false);
+            return data.Merge(_mainModInfoData);
+        }
+
+        protected override ModInfoData GetModInfoCore()
+        {
+            var data = Parse();
+            if (_mainModInfoData is null && _mainModInfoFile != null)
+                _mainModInfoData = _mainModInfoFile.GetModInfo();
+            return data;
+        }
+    }
+
+    public class ModInfoFile
+    {
+        private const string ModInfoFileName = "modinfo.json";
+
         private DateTime? _lastWriteTime;
         private ModInfoData? _data;
 
@@ -32,54 +81,55 @@ namespace FocLauncher.ModInfo
         {
             if (modInfoFile is null)
                 throw new ArgumentNullException(nameof(modInfoFile));
-            ModFileDataUtilities.CheckModInfoFile(modInfoFile);
+            if (!modInfoFile.Exists)
+                throw new FileNotFoundException("The file was not found!", modInfoFile.FullName);
             File = modInfoFile;
             _lastWriteTime = modInfoFile.LastWriteTime;
         }
-
-        public static bool Find(DirectoryInfo directory, out ModInfoFile? modInfoFile)
+        
+        public virtual void Validate()
         {
-            if (directory is null)
-                throw new ArgumentNullException(nameof(directory));
-            modInfoFile = default;
-
-            var file = directory.GetFiles().FirstOrDefault(x => x.Name.ToLower().Equals("modinfo.json"));
-            if (file is null)
-                return false;
-            modInfoFile = new ModInfoFile(file);
-            return true;
-        }
-
-        public void Validate()
-        {
-            ModFileDataUtilities.CheckModInfoFile(File);
+            if (!File.Name.ToUpperInvariant().Equals(ModInfoFileName.ToUpperInvariant()))
+                throw new ModInfoException("The file's name must be 'modinfo.json'.");
         }
 
         public void Invalidate()
         {
-            ModFileDataUtilities.CheckModInfoFile(File);
+            Validate();
             _lastWriteTime = null;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="ModInfoException">Throws if it was not possible to get the <see cref="ModInfoData"/> or the result was not valid.</exception>
         public async Task<ModInfoData> GetModInfoAsync()
         {
-            ModFileDataUtilities.CheckModInfoFile(File);
+            Validate();
             if (_data != null && _lastWriteTime.HasValue && _lastWriteTime.Value.Equals(File.LastWriteTime))
                 return _data;
-            _data = await ModFileDataUtilities.ParseAsync(File);
+            _data = await GetModInfoCoreAsync().ConfigureAwait(false);
+            _data.Validate();
             return _data;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="ModInfoException">Throws if it was not possible to get the <see cref="ModInfoData"/> or the result was not valid.</exception>
         public ModInfoData GetModInfo()
         {
-            ModFileDataUtilities.CheckModInfoFile(File);
+            Validate();
             if (_data != null && _lastWriteTime.HasValue && _lastWriteTime.Value.Equals(File.LastWriteTime))
                 return _data;
-            _data = ModFileDataUtilities.Parse(File);
+            _data = GetModInfoCore();
+            _data.Validate();
             return _data;
         }
 
-        public bool TryGetModInfo(out ModInfoData modInfo)
+        public bool TryGetModInfo(out ModInfoData? modInfo)
         {
             modInfo = null;
             try
@@ -91,6 +141,43 @@ namespace FocLauncher.ModInfo
             {
                 return false;
             }
+        }
+
+        protected virtual Task<ModInfoData> GetModInfoCoreAsync()
+        {
+            return ParseAsync();
+        }
+
+        protected virtual ModInfoData GetModInfoCore()
+        {
+            return Parse();
+        }
+
+        protected async Task<ModInfoData> ParseAsync()
+        {
+            var text = await ReadTextAsync(File).ConfigureAwait(false);
+            return await Task.Run(() => JsonConvert.DeserializeObject<ModInfoData>(text)).ConfigureAwait(false);
+        }
+
+        protected ModInfoData Parse()
+        {
+            var text = System.IO.File.ReadAllText(File.FullName);
+            return JsonConvert.DeserializeObject<ModInfoData>(text);
+        }
+
+        private static async Task<string> ReadTextAsync(FileSystemInfo fileInfo)
+        {
+            using var sourceStream = new FileStream(fileInfo.FullName, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, true);
+            var sb = new StringBuilder();
+
+            var buffer = new byte[0x1000];
+            int numRead;
+            while ((numRead = await sourceStream.ReadAsync(buffer, 0, buffer.Length).ConfigureAwait(false)) != 0)
+            {
+                var text = Encoding.Unicode.GetString(buffer, 0, numRead);
+                sb.Append(text);
+            }
+            return sb.ToString();
         }
     }
 }
