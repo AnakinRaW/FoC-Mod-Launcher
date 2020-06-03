@@ -40,6 +40,9 @@ namespace FocLauncher
 
         public ICommand OpenExplorerCommand => new UICommand(OpenInExplorer, () => GameObject is IHasDirectory);
 
+        public ICommand ShowArgsCommand => new UICommand(ShowArgs, () => GameObject is IMod);
+
+
         public LauncherListItemModel(IPetroglyhGameableObject gameObject, IInvocationController controller)
         {
             GameObject = gameObject;
@@ -55,6 +58,9 @@ namespace FocLauncher
             var items = new HashSet<MenuItem>();
             var openExplorerItem = new MenuItem {Header = "Show in Explorer", Command = OpenExplorerCommand};
             items.Add(openExplorerItem);
+            // TODO: Remove from Release
+            var showArgs = new MenuItem {Header = "Show Launch Args", Command = ShowArgsCommand};
+            items.Add(showArgs);
             return items;
         }
 
@@ -65,6 +71,18 @@ namespace FocLauncher
             if (directory == null || !directory.Exists)
                 return;
             Process.Start("explorer.exe", directory.FullName);
+        }
+
+        private void ShowArgs()
+        {
+            if (!(GameObject is IMod mod))
+                return;
+            var traverser = new ModDependencyTraverser(mod);
+            var gameArgs = new GameCommandArguments {Mods = traverser.Traverse()};
+            var args = gameArgs.ToArgs();
+            var message = $"Launch Arguments for Mod {GameObject.Name}:\r\n\r\n{args}\r\n\r\nMod's location: '{mod.Identifier}'";
+
+            Task.Run(() => MessageBox.Show(message, "FoC Launcher", MessageBoxButton.OK));
         }
 
 

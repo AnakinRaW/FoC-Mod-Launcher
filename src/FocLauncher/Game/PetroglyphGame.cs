@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Windows.Documents;
-using System.Windows.Navigation;
 using FocLauncher.ModInfo;
 using FocLauncher.Mods;
 using FocLauncher.Versioning;
