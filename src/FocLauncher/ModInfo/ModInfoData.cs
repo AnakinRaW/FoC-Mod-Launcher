@@ -31,6 +31,7 @@ namespace FocLauncher.ModInfo
         [JsonProperty("version")]
         private string StringVersion { get; set; }
 
+        // TODO: Make nullable
         public ModVersion Version => ModVersion.Parse(StringVersion);
 
         [JsonProperty("custom")]

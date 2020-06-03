@@ -29,20 +29,24 @@ namespace FocLauncher.Mods
             return CreateMod(game, type, new DirectoryInfo(modPath), searchModFileOnDisk);
         }
 
-        public static IEnumerable<IMod> CreateModAndVariants(IGame game, ModType type, DirectoryInfo directory)
+        public static IEnumerable<IMod> CreateModAndVariants(IGame game, ModType type, DirectoryInfo directory, bool onlyVariantsIfPresent)
         {
             if (game is null)
                 throw new ArgumentNullException(nameof(game));
             if (directory is null)
                 throw new ArgumentNullException(nameof(directory));
 
-            if (!ModInfoFileFinder.TryFind(directory, ModInfoFileFinder.FindOptions.FindAny, out var modInfoCollection))
-                return new List<IMod> {CreateModInstance(game, type, directory)};
+            if (!ModInfoFileFinder.TryFind(directory, ModInfoFileFinder.FindOptions.FindAny, out var modInfoCollection) || !modInfoCollection!.Variants.Any())
+                yield return CreateModInstance(game, type, directory, modInfoCollection?.MainModInfo?.GetModInfo());
 
-            var result = new List<IMod>();
-            result.Add(CreateModInstance(game, type, directory, modInfoCollection?.MainModInfo?.GetModInfo()));
-            result.AddRange(modInfoCollection!.Variants.Select(variant => CreateModInstance(game, type, directory, variant.GetModInfo())));
-            return result;
+            if (modInfoCollection is null)
+                yield break;
+
+            if (!onlyVariantsIfPresent) 
+                yield return CreateModInstance(game, type, directory, modInfoCollection.MainModInfo?.GetModInfo());
+
+            foreach (var variant in modInfoCollection!.Variants)
+                yield return CreateModInstance(game, type, directory, variant.GetModInfo());
         }
 
         private static IMod CreateMod(IGame game, ModType type, DirectoryInfo directory, ModInfoData? modInfo, bool searchModFileOnDisk) 

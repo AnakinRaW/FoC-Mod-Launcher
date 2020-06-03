@@ -43,7 +43,7 @@ namespace FocLauncher.Game
 
         public IReadOnlyCollection<IMod> Mods => ModsInternal.ToList();
 
-        protected internal HashSet<IMod> ModsInternal { get; } = new HashSet<IMod>(ModEqualityComparer.Default);
+        protected internal HashSet<IMod> ModsInternal { get; } = new HashSet<IMod>(ModEqualityComparer.NameAndIdentifier);
 
 
         protected PetroglyphGame(DirectoryInfo gameDirectory)
@@ -93,13 +93,14 @@ namespace FocLauncher.Game
 
         public ICollection<IMod> GetPhysicalMods(bool add)
         {
-            var mods = GetPhysicalModsCore().Distinct(ModEqualityComparer.Default).ToList();
+            var mods = GetPhysicalModsCore();
+                mods = mods.Distinct(ModEqualityComparer.NameAndIdentifier).ToList();
             if (add)
             {
                 foreach (var mod in mods)
                     AddMod(mod);
             }
-            return mods;
+            return mods.ToList();
         }
 
         public IMod? SearchMod(IModReference modReference, ModSearchOptions modSearchOptions, bool add)
@@ -264,7 +265,7 @@ namespace FocLauncher.Game
             if (modsDir is null || !modsDir.Exists)
                 return Enumerable.Empty<IMod>();
             var modFolders = modsDir.EnumerateDirectories().ToList();
-            return modFolders.SelectMany(folder => ModFactory.CreateModAndVariants(this, ModType.Default, folder));
+            return modFolders.SelectMany(folder => ModFactory.CreateModAndVariants(this, ModType.Default, folder, true));
         }
     }
 }
