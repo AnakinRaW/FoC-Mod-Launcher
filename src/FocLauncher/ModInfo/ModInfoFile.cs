@@ -8,7 +8,7 @@ namespace FocLauncher.ModInfo
 {
     public sealed class ModInfoVariantFile : ModInfoFile
     {
-        private const string VariantModInfoFileEnding = "-modinfo.json";
+        public const string VariantModInfoFileEnding = "-modinfo.json";
 
         private readonly ModInfoFile? _mainModInfoFile;
         private ModInfoData? _mainModInfoData;
@@ -31,6 +31,8 @@ namespace FocLauncher.ModInfo
 
         public override void Validate()
         {
+            if (!File.Exists)
+                throw new ModInfoException($"ModInfo variant file does not exists at '{File.FullName}'.");
             if (!File.Name.ToUpperInvariant().EndsWith(VariantModInfoFileEnding.ToUpperInvariant(), StringComparison.InvariantCultureIgnoreCase))
                 throw new ModInfoException("The file's name must end with '-modinfo.json'.");
         }
@@ -48,13 +50,13 @@ namespace FocLauncher.ModInfo
             var data = Parse();
             if (_mainModInfoData is null && _mainModInfoFile != null)
                 _mainModInfoData = _mainModInfoFile.GetModInfo();
-            return data;
+            return data.Merge(_mainModInfoData);
         }
     }
 
     public class ModInfoFile
     {
-        private const string ModInfoFileName = "modinfo.json";
+        public const string ModInfoFileName = "modinfo.json";
 
         private DateTime? _lastWriteTime;
         private ModInfoData? _data;
@@ -79,16 +81,14 @@ namespace FocLauncher.ModInfo
 
         public ModInfoFile(FileInfo modInfoFile)
         {
-            if (modInfoFile is null)
-                throw new ArgumentNullException(nameof(modInfoFile));
-            if (!modInfoFile.Exists)
-                throw new FileNotFoundException("The file was not found!", modInfoFile.FullName);
-            File = modInfoFile;
+            File = modInfoFile ?? throw new ArgumentNullException(nameof(modInfoFile));
             _lastWriteTime = modInfoFile.LastWriteTime;
         }
         
         public virtual void Validate()
         {
+            if (!File.Exists)
+                throw new ModInfoException($"ModInfo file does not exists at '{File.FullName}'.");
             if (!File.Name.ToUpperInvariant().Equals(ModInfoFileName.ToUpperInvariant()))
                 throw new ModInfoException("The file's name must be 'modinfo.json'.");
         }

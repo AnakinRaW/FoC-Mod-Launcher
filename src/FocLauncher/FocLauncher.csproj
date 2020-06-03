@@ -105,6 +105,8 @@
     <Compile Include="ModInfo\ModInfoException.cs" />
     <Compile Include="Mods\ModBase.cs" />
     <Compile Include="Mods\ModDependencyTraverser.cs" />
+    <Compile Include="ModInfo\ModInfoFileFinder.cs" />
+    <Compile Include="ModInfo\ModInfoFinderCollection.cs" />
     <Compile Include="Mods\ModType.cs" />
     <Compile Include="Mods\PetroglyphModException.cs" />
     <Compile Include="Game\RegistryHelper.cs" />

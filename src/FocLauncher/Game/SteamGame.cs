@@ -104,7 +104,7 @@ namespace FocLauncher.Game
                 return mods;
 
             var modDirs = workshopsDir.EnumerateDirectories();
-            var workshopMods = modDirs.Select(modDir => ModFactory.CreateMod(this, ModType.Workshops, modDir, true));
+            var workshopMods = modDirs.SelectMany(folder => ModFactory.CreateModAndVariants(this, ModType.Workshops, folder));
             return mods.Union(workshopMods);
         }
     }

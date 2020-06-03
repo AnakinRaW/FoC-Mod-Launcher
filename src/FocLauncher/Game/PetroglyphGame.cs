@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Windows.Documents;
+using System.Windows.Navigation;
 using FocLauncher.ModInfo;
 using FocLauncher.Mods;
 using FocLauncher.Versioning;
@@ -262,7 +264,7 @@ namespace FocLauncher.Game
             if (modsDir is null || !modsDir.Exists)
                 return Enumerable.Empty<IMod>();
             var modFolders = modsDir.EnumerateDirectories().ToList();
-            return modFolders.Select(folder => ModFactory.CreateMod(this, ModType.Default, folder, true));
+            return modFolders.SelectMany(folder => ModFactory.CreateModAndVariants(this, ModType.Default, folder));
         }
     }
 }
