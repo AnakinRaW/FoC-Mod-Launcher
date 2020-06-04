@@ -45,7 +45,10 @@ namespace FocLauncher.ModInfo
             get
             {
                 if (_modVersion is null && !_versionDetermined)
+                {
                     _modVersion = string.IsNullOrEmpty(StringVersion) ? null : ModVersion.Parse(StringVersion);
+                    _versionDetermined = true;
+                }
                 return _modVersion;
             }
             internal set => _modVersion = value;

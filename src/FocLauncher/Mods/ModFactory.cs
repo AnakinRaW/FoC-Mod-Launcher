@@ -49,6 +49,37 @@ namespace FocLauncher.Mods
                 yield return CreateModInstance(game, type, directory, variant.GetModInfo());
         }
 
+        public static IEnumerable<IMod> CreateModAndVariants(IGame game, ModType type, DirectoryInfo directory,
+            bool onlyVariantsIfPresent, bool throwOnError)
+        {
+            if (game is null)
+                throw new ArgumentNullException(nameof(game));
+            if (directory is null)
+                throw new ArgumentNullException(nameof(directory));
+
+            if (!ModInfoFileFinder.TryFind(directory, ModInfoFileFinder.FindOptions.FindAny, out var modInfoCollection))
+            {
+                // modInfoCollection is null: Just create a normal mod
+                if (TryCreateModInstance(game, type, directory, null, out var mod))
+                    yield return mod!;
+            }
+
+            if (!modInfoCollection!.Variants.Any())
+            {
+
+            }
+                
+
+            if (modInfoCollection is null)
+                yield break;
+
+            if (!onlyVariantsIfPresent)
+                yield return CreateModInstance(game, type, directory, modInfoCollection.MainModInfo?.GetModInfo());
+
+            foreach (var variant in modInfoCollection!.Variants)
+                yield return CreateModInstance(game, type, directory, variant.GetModInfo());
+        }
+
         private static IMod CreateMod(IGame game, ModType type, DirectoryInfo directory, ModInfoData? modInfo, bool searchModFileOnDisk) 
         {
             if (game is null)
@@ -64,6 +95,21 @@ namespace FocLauncher.Mods
 
 
             return CreateModInstance(game, type, directory, modInfo);
+        }
+
+
+        private static bool TryCreateModInstance(IGame game, ModType type, DirectoryInfo directory, ModInfoData? modInfo, out IMod? mod)
+        {
+            mod = default;
+            try
+            {
+                mod = CreateModInstance(game, type, directory, modInfo);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         private static IMod CreateModInstance(IGame game, ModType type, DirectoryInfo directory, ModInfoData? modInfo = null)

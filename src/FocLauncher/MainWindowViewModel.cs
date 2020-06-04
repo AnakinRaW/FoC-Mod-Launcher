@@ -23,18 +23,9 @@ namespace FocLauncher
     /*
     public class PetroglyphInitialization
     {
-        private ICollection<IPetroglyhGameableObject> _gameObjects;
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        public event EventHandler Initialized;
-
         public void Initialize()
         {
-            SteamModNamePersister.CreateInstance();
-
-            SearchGameObjects();
             RegisterThemes();
-            OnInitialized();
         }
 
         private void RegisterThemes()

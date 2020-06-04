@@ -127,7 +127,9 @@ namespace FocLauncher.Mods
 
         protected ModBase(string name, IGame game, ModType type) : this(game, type)
         {
-            _name = name ?? throw new ArgumentNullException(nameof(name));
+            if (string.IsNullOrEmpty(name))
+                throw new PetroglyphModException("The mod's name must not be null or empty!");
+            _name = name;
         }
 
         protected ModBase(IGame game, ModType type, ModInfoData? modInfoData) : this(game, type)
@@ -137,12 +139,12 @@ namespace FocLauncher.Mods
                 try
                 {
                     modInfoData.Validate();
+                    _modInfo = modInfoData;
                 }
-                catch (Exception e)
+                catch (ModInfoException)
                 {
-                    throw new PetroglyphModException($"When given a modInfoFile parameter it be valid: {e.Message}", e);
+                    _modInfo = null;
                 }
-                _modInfo = modInfoData;
             }
         }
 
