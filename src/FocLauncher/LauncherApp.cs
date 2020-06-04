@@ -1,8 +1,6 @@
 ﻿using System;
 using System.IO;
-using System.Runtime.Serialization;
 using System.Windows;
-using FocLauncher.Game;
 using FocLauncher.Properties;
 using FocLauncher.Theming;
 using NLog;
@@ -49,7 +47,7 @@ namespace FocLauncher
             if (e.Exception is LauncherException)
                 return;
             if (Attribute.GetCustomAttribute(e.Exception.GetType(),
-                typeof(SerializableAttribute)) == null)
+                    typeof(SerializableAttribute)) == null)
                 throw new LauncherException(e.Exception.Message);
         }
 

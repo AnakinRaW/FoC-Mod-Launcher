@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 
 namespace FocLauncher.ModInfo
 {
@@ -11,9 +10,11 @@ namespace FocLauncher.ModInfo
                 throw new ArgumentNullException(nameof(target));
             if (baseModInfo is null)
                 return target;
-            // TODO:
-            Debugger.Break();
-            return null;
+            target.Validate();
+            baseModInfo.Validate();
+            var newModInfo = new ModInfoData(baseModInfo);
+            newModInfo.MergeFrom(target);
+            return newModInfo;
         }
     }
 }
