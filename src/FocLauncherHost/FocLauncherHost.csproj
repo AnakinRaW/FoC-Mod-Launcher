@@ -95,6 +95,7 @@
     <Compile Include="Dialogs\WindowHost.cs" />
     <Compile Include="LauncherInitializer.cs" />
     <Compile Include="LauncherRestartManager.cs" />
+    <Compile Include="Controls\OutlinedTextBlock.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="HostApplication.cs" />
     <Compile Include="ExceptionHandling\ExceptionToTextConverter.cs" />
