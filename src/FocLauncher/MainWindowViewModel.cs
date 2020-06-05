@@ -20,39 +20,39 @@ using NLog;
 
 namespace FocLauncher
 {
-    /*
-    public class PetroglyphInitialization
-    {
-        public void Initialize()
-        {
-            RegisterThemes();
-        }
+    
+    //public class PetroglyphInitialization
+    //{
+    //    public void Initialize()
+    //    {
+    //        RegisterThemes();
+    //    }
 
-        private void RegisterThemes()
-        {
-            foreach (var mod in _gameObjects.OfType<IMod>())
-                RegisterTheme(mod);
-        }
+    //    private void RegisterThemes()
+    //    {
+    //        foreach (var mod in _gameObjects.OfType<IMod>())
+    //            RegisterTheme(mod);
+    //    }
 
-        private static void RegisterTheme(IMod mod)
-        {
-            var custom = mod.ModInfoFile?.Custom;
-            if (custom == null || !custom.ContainsKey("launcherTheme"))
-                return;
-            var relativeThemePath = custom.Value<string>("launcherTheme");
-            var themePath = Path.Combine(mod.ModDirectory, relativeThemePath);
-            if (!File.Exists(themePath))
-                return;
+    //    private static void RegisterTheme(IMod mod)
+    //    {
+    //        var custom = mod.ModInfo?.Custom;
+    //        if (custom == null || !custom.ContainsKey("launcherTheme"))
+    //            return;
+    //        var relativeThemePath = custom.Value<string>("launcherTheme");
+    //        var themePath = Path.Combine(mod.ModDirectory, relativeThemePath);
+    //        if (!File.Exists(themePath))
+    //            return;
 
-            var theme = ThemeManager.GetThemeFromFile(themePath);
-            if (theme == null)
-                return;
+    //        var theme = ThemeManager.GetThemeFromFile(themePath);
+    //        if (theme == null)
+    //            return;
 
-            ThemeManager.Instance.RegisterTheme(theme);
-            ThemeManager.Instance.AssociateThemeToMod(mod, theme);
-        }
-    }
-    */
+    //        ThemeManager.Instance.RegisterTheme(theme);
+    //        ThemeManager.Instance.AssociateThemeToMod(mod, theme);
+    //    }
+    //}
+    
 
     public class MainWindowViewModel : ILauncherWindowModel
     {

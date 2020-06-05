@@ -129,17 +129,15 @@ namespace FocLauncher.ModInfo
             return _data;
         }
 
-        public bool TryGetModInfo(out ModInfoData? modInfo)
+        public ModInfoData? TryGetModInfo()
         {
-            modInfo = null;
             try
-            {
-                modInfo = GetModInfo();
-                return true;
+            { 
+                return GetModInfo();
             }
             catch
             {
-                return false;
+                return null;
             }
         }
 

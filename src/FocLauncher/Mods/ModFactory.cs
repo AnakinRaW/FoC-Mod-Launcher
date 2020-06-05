@@ -4,11 +4,14 @@ using System.IO;
 using System.Linq;
 using FocLauncher.Game;
 using FocLauncher.ModInfo;
+using NLog;
 
 namespace FocLauncher.Mods
 {
     public static class ModFactory
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         public static IMod CreateMod(IGame game, ModType type, DirectoryInfo directory, ModInfoData modInfo)
         {
             return CreateMod(game, type, directory, modInfo, false);
@@ -29,55 +32,73 @@ namespace FocLauncher.Mods
             return CreateMod(game, type, new DirectoryInfo(modPath), searchModFileOnDisk);
         }
 
-        public static IEnumerable<IMod> CreateModAndVariants(IGame game, ModType type, DirectoryInfo directory, bool onlyVariantsIfPresent)
-        {
-            if (game is null)
-                throw new ArgumentNullException(nameof(game));
-            if (directory is null)
-                throw new ArgumentNullException(nameof(directory));
+        //public static IEnumerable<IMod> CreateModAndVariants(IGame game, ModType type, DirectoryInfo directory, bool onlyVariantsIfPresent)
+        //{
+        //    if (game is null)
+        //        throw new ArgumentNullException(nameof(game));
+        //    if (directory is null)
+        //        throw new ArgumentNullException(nameof(directory));
 
-            if (!ModInfoFileFinder.TryFind(directory, ModInfoFileFinder.FindOptions.FindAny, out var modInfoCollection) || !modInfoCollection!.Variants.Any())
-                yield return CreateModInstance(game, type, directory, modInfoCollection?.MainModInfo?.GetModInfo());
+        //    if (!ModInfoFileFinder.TryFind(directory, ModInfoFileFinder.FindOptions.FindAny, out var modInfoCollection) || !modInfoCollection!.Variants.Any())
+        //        yield return CreateModInstance(game, type, directory, modInfoCollection?.MainModInfo?.GetModInfo());
 
-            if (modInfoCollection is null)
-                yield break;
+        //    if (modInfoCollection is null)
+        //        yield break;
 
-            if (!onlyVariantsIfPresent) 
-                yield return CreateModInstance(game, type, directory, modInfoCollection.MainModInfo?.GetModInfo());
+        //    if (!onlyVariantsIfPresent) 
+        //        yield return CreateModInstance(game, type, directory, modInfoCollection.MainModInfo?.GetModInfo());
 
-            foreach (var variant in modInfoCollection!.Variants)
-                yield return CreateModInstance(game, type, directory, variant.GetModInfo());
-        }
+        //    foreach (var variant in modInfoCollection!.Variants)
+        //        yield return CreateModInstance(game, type, directory, variant.GetModInfo());
+        //}
 
         public static IEnumerable<IMod> CreateModAndVariants(IGame game, ModType type, DirectoryInfo directory,
-            bool onlyVariantsIfPresent, bool throwOnError)
+            bool onlyVariantsIfPresent)
         {
             if (game is null)
                 throw new ArgumentNullException(nameof(game));
             if (directory is null)
                 throw new ArgumentNullException(nameof(directory));
 
-            if (!ModInfoFileFinder.TryFind(directory, ModInfoFileFinder.FindOptions.FindAny, out var modInfoCollection))
+            ModInfoFinderCollection? modInfoCollection = default;
+            try
             {
-                // modInfoCollection is null: Just create a normal mod
-                if (TryCreateModInstance(game, type, directory, null, out var mod))
-                    yield return mod!;
+                if (!ModInfoFileFinder.TryFind(directory, ModInfoFileFinder.FindOptions.FindAny, out modInfoCollection))
+                {
+                    var mod = CreateModInstanceOrNull(game, type, directory, null);
+                    if (mod != null)
+                        return new []{mod};
+                }
             }
-
-            if (!modInfoCollection!.Variants.Any())
+            catch (Exception e)
             {
-
+                Logger.Info(e, e.Message);
             }
-                
 
             if (modInfoCollection is null)
-                yield break;
+                return Enumerable.Empty<IMod>();
 
-            if (!onlyVariantsIfPresent)
-                yield return CreateModInstance(game, type, directory, modInfoCollection.MainModInfo?.GetModInfo());
+            if (!modInfoCollection.Variants.Any())
+            {
+                var mod = CreateModInstanceOrNull(game, type, directory, null);
+                if (mod != null)
+                    return new[] { mod };
+            } 
+
+
+
+            var result = new List<IMod>();
+
+            if (!onlyVariantsIfPresent && TryCreateModInstance(game, type, directory, modInfoCollection.MainModInfo?.TryGetModInfo(), out var baseMod))
+                result.Add(baseMod!);
 
             foreach (var variant in modInfoCollection!.Variants)
-                yield return CreateModInstance(game, type, directory, variant.GetModInfo());
+            {
+                if (TryCreateModInstance(game, type, directory, variant.TryGetModInfo(), out var variantMod))
+                    result.Add(variantMod!);
+            }
+
+            return result;
         }
 
         private static IMod CreateMod(IGame game, ModType type, DirectoryInfo directory, ModInfoData? modInfo, bool searchModFileOnDisk) 
@@ -97,7 +118,6 @@ namespace FocLauncher.Mods
             return CreateModInstance(game, type, directory, modInfo);
         }
 
-
         private static bool TryCreateModInstance(IGame game, ModType type, DirectoryInfo directory, ModInfoData? modInfo, out IMod? mod)
         {
             mod = default;
@@ -110,6 +130,12 @@ namespace FocLauncher.Mods
             {
                 return false;
             }
+        }
+
+        private static IMod? CreateModInstanceOrNull(IGame game, ModType type, DirectoryInfo directory, ModInfoData? modInfo)
+        {
+            TryCreateModInstance(game, type, directory, modInfo, out var mod);
+            return mod;
         }
 
         private static IMod CreateModInstance(IGame game, ModType type, DirectoryInfo directory, ModInfoData? modInfo = null)
