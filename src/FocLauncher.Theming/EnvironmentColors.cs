@@ -9,7 +9,6 @@ namespace FocLauncher.Theming
 
         private static ComponentResourceKey _captionText;
         private static ComponentResourceKey _windowText;
-        private static ComponentResourceKey _checkBoxText;
 
 
         private static ComponentResourceKey _listBoxBackground;
@@ -77,6 +76,23 @@ namespace FocLauncher.Theming
         private static ComponentResourceKey _playButtonBorderDisabled;
         private static ComponentResourceKey _playButtonTextDisabled;
 
+        private static ComponentResourceKey _checkBoxBackground;
+        private static ComponentResourceKey _checkBoxBorder;
+        private static ComponentResourceKey _checkBoxGlyph;
+        private static ComponentResourceKey _checkBoxText;
+        private static ComponentResourceKey _checkBoxBackgroundHover;
+        private static ComponentResourceKey _checkBoxBorderHover;
+        private static ComponentResourceKey _checkBoxGlyphHover;
+        private static ComponentResourceKey _checkBoxTextHover;
+        private static ComponentResourceKey _checkBoxBackgroundDown;
+        private static ComponentResourceKey _checkBoxBorderDown;
+        private static ComponentResourceKey _checkBoxGlyphDown;
+        private static ComponentResourceKey _checkBoxTextDown;
+        private static ComponentResourceKey _checkBoxBackgroundFocused;
+        private static ComponentResourceKey _checkBoxBorderFocused;
+        private static ComponentResourceKey _checkBoxGlyphFocused;
+        private static ComponentResourceKey _checkBoxTextFocused;
+
 
         public static ComponentResourceKey BackgroundColor =>
             _backgroundColor ??= new ComponentResourceKey(typeof(EnvironmentColors), nameof(BackgroundColor));
@@ -89,9 +105,6 @@ namespace FocLauncher.Theming
 
         public static ComponentResourceKey WindowText =>
             _windowText ??= new ComponentResourceKey(typeof(EnvironmentColors), nameof(WindowText));
-
-        public static ComponentResourceKey CheckBoxText =>
-            _checkBoxText ??= new ComponentResourceKey(typeof(EnvironmentColors), nameof(CheckBoxText));
 
 
         public static ComponentResourceKey ListBoxBackground =>
@@ -296,6 +309,56 @@ namespace FocLauncher.Theming
         public static ComponentResourceKey PlayButtonTextDisabled =>
             _playButtonTextDisabled ??=
                 new ComponentResourceKey(typeof(EnvironmentColors), nameof(PlayButtonTextDisabled));
+
+
+
+        public static ComponentResourceKey CheckBoxBackground => _checkBoxBackground ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), nameof(CheckBoxBackground));
+
+        public static ComponentResourceKey CheckBoxBorder =>
+            _checkBoxBorder ??= new ComponentResourceKey(typeof(EnvironmentColors), nameof(CheckBoxBorder));
+
+        public static ComponentResourceKey CheckBoxGlyph =>
+            _checkBoxGlyph ??= new ComponentResourceKey(typeof(EnvironmentColors), nameof(CheckBoxGlyph));
+
+        public static ComponentResourceKey CheckBoxText =>
+            _checkBoxText ??= new ComponentResourceKey(typeof(EnvironmentColors), nameof(CheckBoxText));
+
+        public static ComponentResourceKey CheckBoxBackgroundHover => _checkBoxBackgroundHover ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), nameof(CheckBoxBackgroundHover));
+
+        public static ComponentResourceKey CheckBoxBorderHover => _checkBoxBorderHover ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), nameof(CheckBoxBorderHover));
+
+        public static ComponentResourceKey CheckBoxGlyphHover => _checkBoxGlyphHover ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), nameof(CheckBoxGlyphHover));
+
+        public static ComponentResourceKey CheckBoxTextHover => _checkBoxTextHover ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), nameof(CheckBoxTextHover));
+
+        public static ComponentResourceKey CheckBoxBackgroundDown => _checkBoxBackgroundDown ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), nameof(CheckBoxBackgroundDown));
+
+        public static ComponentResourceKey CheckBoxBorderDown => _checkBoxBorderDown ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), nameof(CheckBoxBorderDown));
+
+        public static ComponentResourceKey CheckBoxGlyphDown => _checkBoxGlyphDown ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), nameof(CheckBoxGlyphDown));
+
+        public static ComponentResourceKey CheckBoxTextDown => _checkBoxTextDown ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), nameof(CheckBoxTextDown));
+
+        public static ComponentResourceKey CheckBoxBackgroundFocused => _checkBoxBackgroundFocused ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), nameof(CheckBoxBackgroundFocused));
+
+        public static ComponentResourceKey CheckBoxBorderFocused => _checkBoxBorderFocused ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), nameof(CheckBoxBorderFocused));
+
+        public static ComponentResourceKey CheckBoxGlyphFocused => _checkBoxGlyphFocused ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), nameof(CheckBoxGlyphFocused));
+
+        public static ComponentResourceKey CheckBoxTextFocused => _checkBoxTextFocused ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), nameof(CheckBoxTextFocused));
 
     }
 }

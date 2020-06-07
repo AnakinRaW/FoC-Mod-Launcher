@@ -6,5 +6,6 @@
         <ResourceDictionary Source="/FocLauncher;component/Themes/Generic/LauncherListBoxItem.xaml" />
         <ResourceDictionary Source="/FocLauncher;component/Themes/Generic/ScrollBar.xaml" />
         <ResourceDictionary Source="/FocLauncher;component/Themes/Generic/PlayButton.xaml" />
+        <ResourceDictionary Source="/FocLauncher;component/Themes/Generic/LauncherCheckBox.xaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

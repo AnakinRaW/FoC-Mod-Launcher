@@ -89,16 +89,16 @@
             <controls:PlayButton HorizontalAlignment="Center" Margin="8" Padding="8,3,8,3" Width="120" Height="40" IsDefault="True"
                         Command="{Binding LaunchCommand}" CommandParameter="{Binding SelectedItem.GameObject, ElementName=ListBox}"
                         Text="PLAY"/>
-            <CheckBox x:Name="DebugCheckBox" Content="Use Debug Build" IsChecked="{Binding UseDebugBuild, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                      Visibility="{Binding FoC, Converter={StaticResource DebugBuildToVisibilityConverter}}"
-                      Style="{StaticResource StyledCheckBox}" HorizontalAlignment="Center"/>
+            <controls:LauncherCheckBox x:Name="DebugCheckBox" Content="Use Debug Build" IsChecked="{Binding UseDebugBuild, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              Visibility="{Binding FoC, Converter={StaticResource DebugBuildToVisibilityConverter}}"
+                              Style="{StaticResource StyledCheckBox}" HorizontalAlignment="Center"/>
             <DockPanel HorizontalAlignment="Center">
-                    <CheckBox Content="IgnoreAsserts" IsChecked="{Binding IgnoreAsserts, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
-                              Style="{StaticResource ArgumentCheckBox}"/>
-                    <CheckBox Content="No art process" IsChecked="{Binding NoArtProcess, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                              Style="{StaticResource ArgumentCheckBox}"/>
-                    <CheckBox Content="Windowed" IsChecked="{Binding Windowed, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                              Style="{StaticResource ArgumentCheckBox}"/>
+                <controls:LauncherCheckBox Content="IgnoreAsserts" IsChecked="{Binding IgnoreAsserts, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+                                  Style="{StaticResource ArgumentCheckBox}"/>
+                <controls:LauncherCheckBox Content="No art process" IsChecked="{Binding NoArtProcess, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                  Style="{StaticResource ArgumentCheckBox}"/>
+                <controls:LauncherCheckBox Content="Windowed" IsChecked="{Binding Windowed, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                  Style="{StaticResource ArgumentCheckBox}"/>
                 </DockPanel>
             </StackPanel>
 

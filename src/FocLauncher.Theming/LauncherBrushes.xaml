@@ -13,11 +13,7 @@
 
     <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type themes:EnvironmentColors},
                      ResourceId=WindowText}" Color="#FFF1F1F1"/>
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type themes:EnvironmentColors},
-                     ResourceId=CheckBoxText}" Color="#FFF1F1F1"/>
-
-
+    
 
 
     <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type themes:EnvironmentColors},
@@ -177,6 +173,56 @@
 
     <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type themes:EnvironmentColors}, 
         ResourceId=PlayButtonTextDisabled}" Color="#FF656565"/>
+
+
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type themes:EnvironmentColors}, 
+        ResourceId=CheckBoxBackground}" Color="#FF252526" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type themes:EnvironmentColors}, 
+        ResourceId=CheckBoxGlyph}" Color="#FFF1F1F1" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type themes:EnvironmentColors},
+        ResourceId=CheckBoxText}" Color="#FFF1F1F1" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type themes:EnvironmentColors}, 
+        ResourceId=CheckBoxBorder}" Color="#FF999999" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type themes:EnvironmentColors},
+        ResourceId=CheckBoxBackgroundHover}" Color="#FF1F1F20" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type themes:EnvironmentColors}, 
+        ResourceId=CheckBoxGlyphHover}" Color="#FFF1F1F1" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type themes:EnvironmentColors}, 
+        ResourceId=CheckBoxTextHover}" Color="#FFF1F1F1" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type themes:EnvironmentColors}, 
+        ResourceId=CheckBoxBorderHover}" Color="#FF007ACC" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type themes:EnvironmentColors}, 
+        ResourceId=CheckBoxBackgroundDown}" Color="#FF1F1F20" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type themes:EnvironmentColors}, 
+        ResourceId=CheckBoxGlyphDown}" Color="#FFF1F1F1" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type themes:EnvironmentColors}, 
+        ResourceId=CheckBoxTextDown}" Color="#FFF1F1F1" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type themes:EnvironmentColors}, 
+        ResourceId=CheckBoxBorderDown}" Color="#FF007ACC" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type themes:EnvironmentColors}, 
+        ResourceId=CheckBoxBackgroundFocused}" Color="#FF2D2D30" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type themes:EnvironmentColors}, 
+        ResourceId=CheckBoxGlyphFocused}" Color="#FFF1F1F1" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type themes:EnvironmentColors}, 
+        ResourceId=CheckBoxTextFocused}" Color="#FFF1F1F1" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type themes:EnvironmentColors}, 
+        ResourceId=CheckBoxBorderFocused}" Color="#FF007ACC" />
 
 
 
