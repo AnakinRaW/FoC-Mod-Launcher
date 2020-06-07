@@ -64,6 +64,20 @@ namespace FocLauncher.Theming
         private static ComponentResourceKey _scrollBarThumbPressedBorder;
         private static ComponentResourceKey _autoHideResizeGrip;
 
+        private static ComponentResourceKey _playButtonBackground;
+        private static ComponentResourceKey _playButtonBorder;
+        private static ComponentResourceKey _playButtonText;
+        private static ComponentResourceKey _playButtonBackgroundHover;
+        private static ComponentResourceKey _playButtonBorderHover;
+        private static ComponentResourceKey _playButtonTextHover;
+        private static ComponentResourceKey _playButtonBackgroundPressed;
+        private static ComponentResourceKey _playButtonBorderPressed;
+        private static ComponentResourceKey _playButtonTextPressed;
+        private static ComponentResourceKey _playButtonBackgroundDisabled;
+        private static ComponentResourceKey _playButtonBorderDisabled;
+        private static ComponentResourceKey _playButtonTextDisabled;
+
+
         public static ComponentResourceKey BackgroundColor =>
             _backgroundColor ??= new ComponentResourceKey(typeof(EnvironmentColors), nameof(BackgroundColor));
 
@@ -82,14 +96,15 @@ namespace FocLauncher.Theming
 
         public static ComponentResourceKey ListBoxBackground =>
             _listBoxBackground ??= new ComponentResourceKey(typeof(EnvironmentColors), nameof(ListBoxBackground));
-        
+
         public static ComponentResourceKey ListBoxBorder =>
             _listBoxBorder ??= new ComponentResourceKey(typeof(EnvironmentColors), nameof(ListBoxBorder));
 
 
 
         public static ComponentResourceKey ListBoxItemBackground =>
-            _listBoxItemBackground ??= new ComponentResourceKey(typeof(EnvironmentColors), nameof(ListBoxItemBackground));
+            _listBoxItemBackground ??=
+                new ComponentResourceKey(typeof(EnvironmentColors), nameof(ListBoxItemBackground));
 
         public static ComponentResourceKey ListBoxItemBorder =>
             _listBoxItemBorder ??= new ComponentResourceKey(typeof(EnvironmentColors), nameof(ListBoxItemBorder));
@@ -98,44 +113,54 @@ namespace FocLauncher.Theming
             _listBoxItemText ??= new ComponentResourceKey(typeof(EnvironmentColors), nameof(ListBoxItemText));
 
         public static ComponentResourceKey ListBoxItemHoverBackground =>
-            _listBoxItemHoverBackground ??= new ComponentResourceKey(typeof(EnvironmentColors), nameof(ListBoxItemHoverBackground));
+            _listBoxItemHoverBackground ??=
+                new ComponentResourceKey(typeof(EnvironmentColors), nameof(ListBoxItemHoverBackground));
 
         public static ComponentResourceKey ListBoxItemHoverBorder =>
-            _listBoxItemHoverBorder ??= new ComponentResourceKey(typeof(EnvironmentColors), nameof(ListBoxItemHoverBorder));
+            _listBoxItemHoverBorder ??=
+                new ComponentResourceKey(typeof(EnvironmentColors), nameof(ListBoxItemHoverBorder));
 
         public static ComponentResourceKey ListBoxItemHoverText =>
             _listBoxItemHoverText ??= new ComponentResourceKey(typeof(EnvironmentColors), nameof(ListBoxItemHoverText));
 
         public static ComponentResourceKey ListBoxItemSelectedBackground =>
-            _listBoxItemSelectedBackground ??= new ComponentResourceKey(typeof(EnvironmentColors), nameof(ListBoxItemSelectedBackground));
+            _listBoxItemSelectedBackground ??=
+                new ComponentResourceKey(typeof(EnvironmentColors), nameof(ListBoxItemSelectedBackground));
 
         public static ComponentResourceKey ListBoxItemSelectedBorder =>
-            _listBoxItemSelectedBorder ??= new ComponentResourceKey(typeof(EnvironmentColors), nameof(ListBoxItemSelectedBorder));
+            _listBoxItemSelectedBorder ??=
+                new ComponentResourceKey(typeof(EnvironmentColors), nameof(ListBoxItemSelectedBorder));
 
         public static ComponentResourceKey ListBoxItemSelectedText =>
-            _listBoxItemSelectedText ??= new ComponentResourceKey(typeof(EnvironmentColors), nameof(ListBoxItemSelectedText));
+            _listBoxItemSelectedText ??=
+                new ComponentResourceKey(typeof(EnvironmentColors), nameof(ListBoxItemSelectedText));
 
         public static ComponentResourceKey ListBoxItemInactiveBackground =>
-            _listBoxItemInactiveBackground ??= new ComponentResourceKey(typeof(EnvironmentColors), nameof(ListBoxItemInactiveBackground));
+            _listBoxItemInactiveBackground ??=
+                new ComponentResourceKey(typeof(EnvironmentColors), nameof(ListBoxItemInactiveBackground));
 
         public static ComponentResourceKey ListBoxItemInactiveBorder =>
-            _listBoxItemInactiveBorder ??= new ComponentResourceKey(typeof(EnvironmentColors), nameof(ListBoxItemInactiveBorder));
+            _listBoxItemInactiveBorder ??=
+                new ComponentResourceKey(typeof(EnvironmentColors), nameof(ListBoxItemInactiveBorder));
 
         public static ComponentResourceKey ListBoxItemInactiveText =>
-            _listBoxItemInactiveText ??= new ComponentResourceKey(typeof(EnvironmentColors), nameof(ListBoxItemInactiveText));
+            _listBoxItemInactiveText ??=
+                new ComponentResourceKey(typeof(EnvironmentColors), nameof(ListBoxItemInactiveText));
 
 
 
 
 
         public static ComponentResourceKey StatusBarDefaultBackground =>
-            _statusBarDefaultBackground ??= new ComponentResourceKey(typeof(EnvironmentColors), nameof(StatusBarDefaultBackground));
+            _statusBarDefaultBackground ??=
+                new ComponentResourceKey(typeof(EnvironmentColors), nameof(StatusBarDefaultBackground));
 
         public static ComponentResourceKey StatusBarDefaultText =>
             _statusBarDefaultText ??= new ComponentResourceKey(typeof(EnvironmentColors), nameof(StatusBarDefaultText));
 
         public static ComponentResourceKey StatusBarRunningBackground =>
-            _statusBarRunningBackground ??= new ComponentResourceKey(typeof(EnvironmentColors), nameof(StatusBarRunningBackground));
+            _statusBarRunningBackground ??=
+                new ComponentResourceKey(typeof(EnvironmentColors), nameof(StatusBarRunningBackground));
 
         public static ComponentResourceKey StatusBarRunningText =>
             _statusBarRunningText ??= new ComponentResourceKey(typeof(EnvironmentColors), nameof(StatusBarRunningText));
@@ -226,6 +251,51 @@ namespace FocLauncher.Theming
 
         public static ComponentResourceKey AutoHideResizeGrip => _autoHideResizeGrip ??=
             new ComponentResourceKey(typeof(EnvironmentColors), nameof(AutoHideResizeGrip));
+
+
+        public static ComponentResourceKey PlayButtonBackground =>
+            _playButtonBackground ??= new ComponentResourceKey(typeof(EnvironmentColors), nameof(PlayButtonBackground));
+
+        public static ComponentResourceKey PlayButtonBorder =>
+            _playButtonBorder ??= new ComponentResourceKey(typeof(EnvironmentColors), nameof(PlayButtonBorder));
+
+        public static ComponentResourceKey PlayButtonText =>
+            _playButtonText ??= new ComponentResourceKey(typeof(EnvironmentColors), nameof(PlayButtonText));
+
+        public static ComponentResourceKey PlayButtonBackgroundHover =>
+            _playButtonBackgroundHover ??=
+                new ComponentResourceKey(typeof(EnvironmentColors), nameof(PlayButtonBackgroundHover));
+
+        public static ComponentResourceKey PlayButtonBorderHover =>
+            _playButtonBorderHover ??=
+                new ComponentResourceKey(typeof(EnvironmentColors), nameof(PlayButtonBorderHover));
+
+        public static ComponentResourceKey PlayButtonTextHover =>
+            _playButtonTextHover ??= new ComponentResourceKey(typeof(EnvironmentColors), nameof(PlayButtonTextHover));
+
+        public static ComponentResourceKey PlayButtonBackgroundPressed =>
+            _playButtonBackgroundPressed ??=
+                new ComponentResourceKey(typeof(EnvironmentColors), nameof(PlayButtonBackgroundPressed));
+
+        public static ComponentResourceKey PlayButtonBorderPressed =>
+            _playButtonBorderPressed ??=
+                new ComponentResourceKey(typeof(EnvironmentColors), nameof(PlayButtonBorderPressed));
+
+        public static ComponentResourceKey PlayButtonTextPressed =>
+            _playButtonTextPressed ??=
+                new ComponentResourceKey(typeof(EnvironmentColors), nameof(PlayButtonTextPressed));
+
+        public static ComponentResourceKey PlayButtonBackgroundDisabled =>
+            _playButtonBackgroundDisabled ??=
+                new ComponentResourceKey(typeof(EnvironmentColors), nameof(PlayButtonBackgroundDisabled));
+
+        public static ComponentResourceKey PlayButtonBorderDisabled =>
+            _playButtonBorderDisabled ??=
+                new ComponentResourceKey(typeof(EnvironmentColors), nameof(PlayButtonBorderDisabled));
+
+        public static ComponentResourceKey PlayButtonTextDisabled =>
+            _playButtonTextDisabled ??=
+                new ComponentResourceKey(typeof(EnvironmentColors), nameof(PlayButtonTextDisabled));
 
     }
 }

@@ -70,6 +70,7 @@
     <Compile Include="Controls\Controllers\IHasContextMenuController.cs" />
     <Compile Include="Controls\LauncherListBox.cs" />
     <Compile Include="Controls\LauncherListBoxItem.cs" />
+    <Compile Include="Controls\PlayButton.cs" />
     <Compile Include="Controls\StatusBarButton.cs" />
     <Compile Include="Converters\DebugBuildToVisibilityConverter.cs" />
     <Compile Include="Dialogs\SettingsWindow.xaml.cs">
@@ -195,6 +196,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Themes\Generic\LauncherStatusBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Generic\PlayButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
