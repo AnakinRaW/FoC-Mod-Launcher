@@ -4,5 +4,6 @@
         <ResourceDictionary Source="/FocLauncher;component/Themes/Generic/StatusBarButton.xaml" />
         <ResourceDictionary Source="/FocLauncher;component/Themes/Generic/LauncherListBox.xaml" />
         <ResourceDictionary Source="/FocLauncher;component/Themes/Generic/LauncherListBoxItem.xaml" />
+        <ResourceDictionary Source="/FocLauncher;component/Themes/Generic/ScrollBar.xaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

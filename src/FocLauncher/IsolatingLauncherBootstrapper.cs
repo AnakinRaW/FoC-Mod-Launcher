@@ -26,6 +26,11 @@ namespace FocLauncher
             Dispose(true);
         }
 
+        public override object InitializeLifetimeService()
+        {
+            return null;
+        }
+
         private void Dispose(bool disposing)
         {
             if (!disposing)

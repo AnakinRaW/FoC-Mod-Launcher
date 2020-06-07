@@ -41,96 +41,191 @@ namespace FocLauncher.Theming
         private static ComponentResourceKey _waitWindowCaptionBackground;
         private static ComponentResourceKey _waitWindowCaptionText;
 
+        private static ComponentResourceKey _scrollBarArrowBackground;
+        private static ComponentResourceKey _scrollBarArrowDisabledBackground;
+        private static ComponentResourceKey _scrollBarArrowGlyph;
+        private static ComponentResourceKey _scrollBarArrowGlyphDisabled;
+        private static ComponentResourceKey _scrollBarArrowGlyphMouseOver;
+        private static ComponentResourceKey _scrollBarArrowGlyphPressed;
+        private static ComponentResourceKey _scrollBarArrowMouseOverBackground;
+        private static ComponentResourceKey _scrollBarArrowPressedBackground;
+        private static ComponentResourceKey _scrollBarBackground;
+        private static ComponentResourceKey _scrollBarBorder;
+        private static ComponentResourceKey _scrollBarDisabledBackground;
+        private static ComponentResourceKey _scrollBarThumbBackground;
+        private static ComponentResourceKey _scrollBarThumbBorder;
+        private static ComponentResourceKey _scrollBarThumbDisabled;
+        private static ComponentResourceKey _scrollBarThumbGlyph;
+        private static ComponentResourceKey _scrollBarThumbGlyphMouseOverBorder;
+        private static ComponentResourceKey _scrollBarThumbGlyphPressedBorder;
+        private static ComponentResourceKey _scrollBarThumbMouseOverBackground;
+        private static ComponentResourceKey _scrollBarThumbMouseOverBorder;
+        private static ComponentResourceKey _scrollBarThumbPressedBackground;
+        private static ComponentResourceKey _scrollBarThumbPressedBorder;
+        private static ComponentResourceKey _autoHideResizeGrip;
+
         public static ComponentResourceKey BackgroundColor =>
-            _backgroundColor ?? (_backgroundColor = new ComponentResourceKey(typeof(EnvironmentColors), nameof(BackgroundColor)));
+            _backgroundColor ??= new ComponentResourceKey(typeof(EnvironmentColors), nameof(BackgroundColor));
 
         public static ComponentResourceKey BackgroundImage =>
-            _backgroundImage ?? (_backgroundImage = new ComponentResourceKey(typeof(EnvironmentColors), nameof(BackgroundImage)));
+            _backgroundImage ??= new ComponentResourceKey(typeof(EnvironmentColors), nameof(BackgroundImage));
 
         public static ComponentResourceKey CaptionText =>
-            _captionText ?? (_captionText = new ComponentResourceKey(typeof(EnvironmentColors), nameof(CaptionText)));
+            _captionText ??= new ComponentResourceKey(typeof(EnvironmentColors), nameof(CaptionText));
 
         public static ComponentResourceKey WindowText =>
-            _windowText ?? (_windowText = new ComponentResourceKey(typeof(EnvironmentColors), nameof(WindowText)));
+            _windowText ??= new ComponentResourceKey(typeof(EnvironmentColors), nameof(WindowText));
 
         public static ComponentResourceKey CheckBoxText =>
-            _checkBoxText ?? (_checkBoxText = new ComponentResourceKey(typeof(EnvironmentColors), nameof(CheckBoxText)));
+            _checkBoxText ??= new ComponentResourceKey(typeof(EnvironmentColors), nameof(CheckBoxText));
 
 
         public static ComponentResourceKey ListBoxBackground =>
-            _listBoxBackground ?? (_listBoxBackground = new ComponentResourceKey(typeof(EnvironmentColors), nameof(ListBoxBackground)));
+            _listBoxBackground ??= new ComponentResourceKey(typeof(EnvironmentColors), nameof(ListBoxBackground));
         
         public static ComponentResourceKey ListBoxBorder =>
-            _listBoxBorder ?? (_listBoxBorder = new ComponentResourceKey(typeof(EnvironmentColors), nameof(ListBoxBorder)));
+            _listBoxBorder ??= new ComponentResourceKey(typeof(EnvironmentColors), nameof(ListBoxBorder));
 
 
 
         public static ComponentResourceKey ListBoxItemBackground =>
-            _listBoxItemBackground ?? (_listBoxItemBackground = new ComponentResourceKey(typeof(EnvironmentColors), nameof(ListBoxItemBackground)));
+            _listBoxItemBackground ??= new ComponentResourceKey(typeof(EnvironmentColors), nameof(ListBoxItemBackground));
 
         public static ComponentResourceKey ListBoxItemBorder =>
-            _listBoxItemBorder ?? (_listBoxItemBorder = new ComponentResourceKey(typeof(EnvironmentColors), nameof(ListBoxItemBorder)));
+            _listBoxItemBorder ??= new ComponentResourceKey(typeof(EnvironmentColors), nameof(ListBoxItemBorder));
 
         public static ComponentResourceKey ListBoxItemText =>
-            _listBoxItemText ?? (_listBoxItemText = new ComponentResourceKey(typeof(EnvironmentColors), nameof(ListBoxItemText)));
+            _listBoxItemText ??= new ComponentResourceKey(typeof(EnvironmentColors), nameof(ListBoxItemText));
 
         public static ComponentResourceKey ListBoxItemHoverBackground =>
-            _listBoxItemHoverBackground ?? (_listBoxItemHoverBackground = new ComponentResourceKey(typeof(EnvironmentColors), nameof(ListBoxItemHoverBackground)));
+            _listBoxItemHoverBackground ??= new ComponentResourceKey(typeof(EnvironmentColors), nameof(ListBoxItemHoverBackground));
 
         public static ComponentResourceKey ListBoxItemHoverBorder =>
-            _listBoxItemHoverBorder ?? (_listBoxItemHoverBorder = new ComponentResourceKey(typeof(EnvironmentColors), nameof(ListBoxItemHoverBorder)));
+            _listBoxItemHoverBorder ??= new ComponentResourceKey(typeof(EnvironmentColors), nameof(ListBoxItemHoverBorder));
 
         public static ComponentResourceKey ListBoxItemHoverText =>
-            _listBoxItemHoverText ?? (_listBoxItemHoverText = new ComponentResourceKey(typeof(EnvironmentColors), nameof(ListBoxItemHoverText)));
+            _listBoxItemHoverText ??= new ComponentResourceKey(typeof(EnvironmentColors), nameof(ListBoxItemHoverText));
 
         public static ComponentResourceKey ListBoxItemSelectedBackground =>
-            _listBoxItemSelectedBackground ?? (_listBoxItemSelectedBackground = new ComponentResourceKey(typeof(EnvironmentColors), nameof(ListBoxItemSelectedBackground)));
+            _listBoxItemSelectedBackground ??= new ComponentResourceKey(typeof(EnvironmentColors), nameof(ListBoxItemSelectedBackground));
 
         public static ComponentResourceKey ListBoxItemSelectedBorder =>
-            _listBoxItemSelectedBorder ?? (_listBoxItemSelectedBorder = new ComponentResourceKey(typeof(EnvironmentColors), nameof(ListBoxItemSelectedBorder)));
+            _listBoxItemSelectedBorder ??= new ComponentResourceKey(typeof(EnvironmentColors), nameof(ListBoxItemSelectedBorder));
 
         public static ComponentResourceKey ListBoxItemSelectedText =>
-            _listBoxItemSelectedText ?? (_listBoxItemSelectedText = new ComponentResourceKey(typeof(EnvironmentColors), nameof(ListBoxItemSelectedText)));
+            _listBoxItemSelectedText ??= new ComponentResourceKey(typeof(EnvironmentColors), nameof(ListBoxItemSelectedText));
 
         public static ComponentResourceKey ListBoxItemInactiveBackground =>
-            _listBoxItemInactiveBackground ?? (_listBoxItemInactiveBackground = new ComponentResourceKey(typeof(EnvironmentColors), nameof(ListBoxItemInactiveBackground)));
+            _listBoxItemInactiveBackground ??= new ComponentResourceKey(typeof(EnvironmentColors), nameof(ListBoxItemInactiveBackground));
 
         public static ComponentResourceKey ListBoxItemInactiveBorder =>
-            _listBoxItemInactiveBorder ?? (_listBoxItemInactiveBorder = new ComponentResourceKey(typeof(EnvironmentColors), nameof(ListBoxItemInactiveBorder)));
+            _listBoxItemInactiveBorder ??= new ComponentResourceKey(typeof(EnvironmentColors), nameof(ListBoxItemInactiveBorder));
 
         public static ComponentResourceKey ListBoxItemInactiveText =>
-            _listBoxItemInactiveText ?? (_listBoxItemInactiveText = new ComponentResourceKey(typeof(EnvironmentColors), nameof(ListBoxItemInactiveText)));
+            _listBoxItemInactiveText ??= new ComponentResourceKey(typeof(EnvironmentColors), nameof(ListBoxItemInactiveText));
 
 
 
 
 
         public static ComponentResourceKey StatusBarDefaultBackground =>
-            _statusBarDefaultBackground ?? (_statusBarDefaultBackground = new ComponentResourceKey(typeof(EnvironmentColors), nameof(StatusBarDefaultBackground)));
+            _statusBarDefaultBackground ??= new ComponentResourceKey(typeof(EnvironmentColors), nameof(StatusBarDefaultBackground));
 
         public static ComponentResourceKey StatusBarDefaultText =>
-            _statusBarDefaultText ?? (_statusBarDefaultText = new ComponentResourceKey(typeof(EnvironmentColors), nameof(StatusBarDefaultText)));
+            _statusBarDefaultText ??= new ComponentResourceKey(typeof(EnvironmentColors), nameof(StatusBarDefaultText));
 
         public static ComponentResourceKey StatusBarRunningBackground =>
-            _statusBarRunningBackground ?? (_statusBarRunningBackground = new ComponentResourceKey(typeof(EnvironmentColors), nameof(StatusBarRunningBackground)));
+            _statusBarRunningBackground ??= new ComponentResourceKey(typeof(EnvironmentColors), nameof(StatusBarRunningBackground));
 
         public static ComponentResourceKey StatusBarRunningText =>
-            _statusBarRunningText ?? (_statusBarRunningText = new ComponentResourceKey(typeof(EnvironmentColors), nameof(StatusBarRunningText)));
+            _statusBarRunningText ??= new ComponentResourceKey(typeof(EnvironmentColors), nameof(StatusBarRunningText));
 
 
         public static ComponentResourceKey WaitWindowBackground =>
-            _waitWindowBackground ?? (_waitWindowBackground = new ComponentResourceKey(typeof(EnvironmentColors), nameof(WaitWindowBackground)));
+            _waitWindowBackground ??= new ComponentResourceKey(typeof(EnvironmentColors), nameof(WaitWindowBackground));
 
         public static ComponentResourceKey WaitWindowBorder =>
-            _waitWindowBorder ?? (_waitWindowBorder = new ComponentResourceKey(typeof(EnvironmentColors), nameof(WaitWindowBorder)));
+            _waitWindowBorder ??= new ComponentResourceKey(typeof(EnvironmentColors), nameof(WaitWindowBorder));
 
         public static ComponentResourceKey WaitWindowText =>
-            _waitWindowText ?? (_waitWindowText = new ComponentResourceKey(typeof(EnvironmentColors), nameof(WaitWindowText)));
+            _waitWindowText ??= new ComponentResourceKey(typeof(EnvironmentColors), nameof(WaitWindowText));
 
         public static ComponentResourceKey WaitWindowCaptionBackground =>
-            _waitWindowCaptionBackground ?? (_waitWindowCaptionBackground = new ComponentResourceKey(typeof(EnvironmentColors), nameof(WaitWindowCaptionBackground)));
+            _waitWindowCaptionBackground ??=
+                new ComponentResourceKey(typeof(EnvironmentColors), nameof(WaitWindowCaptionBackground));
 
         public static ComponentResourceKey WaitWindowCaptionText =>
-            _waitWindowCaptionText ?? (_waitWindowCaptionText = new ComponentResourceKey(typeof(EnvironmentColors), nameof(WaitWindowCaptionText)));
+            _waitWindowCaptionText ??=
+                new ComponentResourceKey(typeof(EnvironmentColors), nameof(WaitWindowCaptionText));
+
+
+
+        public static ComponentResourceKey ScrollBarArrowBackground => _scrollBarArrowBackground ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), nameof(ScrollBarArrowBackground));
+
+        public static ComponentResourceKey ScrollBarArrowDisabledBackground => _scrollBarArrowDisabledBackground ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), nameof(ScrollBarArrowDisabledBackground));
+
+        public static ComponentResourceKey ScrollBarArrowGlyph => _scrollBarArrowGlyph ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), nameof(ScrollBarArrowGlyph));
+
+        public static ComponentResourceKey ScrollBarArrowGlyphDisabled => _scrollBarArrowGlyphDisabled ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), nameof(ScrollBarArrowGlyphDisabled));
+
+        public static ComponentResourceKey ScrollBarArrowGlyphMouseOver => _scrollBarArrowGlyphMouseOver ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), nameof(ScrollBarArrowGlyphMouseOver));
+
+        public static ComponentResourceKey ScrollBarArrowGlyphPressed => _scrollBarArrowGlyphPressed ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), nameof(ScrollBarArrowGlyphPressed));
+
+        public static ComponentResourceKey ScrollBarArrowMouseOverBackground => _scrollBarArrowMouseOverBackground ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), nameof(ScrollBarArrowMouseOverBackground));
+
+        public static ComponentResourceKey ScrollBarArrowPressedBackground => _scrollBarArrowPressedBackground ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), nameof(ScrollBarArrowPressedBackground));
+
+        public static ComponentResourceKey ScrollBarBackground => _scrollBarBackground ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), nameof(ScrollBarBackground));
+
+        public static ComponentResourceKey ScrollBarBorder => _scrollBarBorder ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), nameof(ScrollBarBorder));
+
+        public static ComponentResourceKey ScrollBarDisabledBackground => _scrollBarDisabledBackground ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), nameof(ScrollBarDisabledBackground));
+
+
+        public static ComponentResourceKey ScrollBarThumbBackground => _scrollBarThumbBackground ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), nameof(ScrollBarThumbBackground));
+
+        public static ComponentResourceKey ScrollBarThumbBorder => _scrollBarThumbBorder ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), nameof(ScrollBarThumbBorder));
+
+        public static ComponentResourceKey ScrollBarThumbDisabled => _scrollBarThumbDisabled ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), nameof(ScrollBarThumbDisabled));
+
+        public static ComponentResourceKey ScrollBarThumbGlyph => _scrollBarThumbGlyph ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), nameof(ScrollBarThumbGlyph));
+
+        public static ComponentResourceKey ScrollBarThumbGlyphMouseOverBorder => _scrollBarThumbGlyphMouseOverBorder ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), nameof(ScrollBarThumbGlyphMouseOverBorder));
+
+        public static ComponentResourceKey ScrollBarThumbGlyphPressedBorder => _scrollBarThumbGlyphPressedBorder ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), nameof(ScrollBarThumbGlyphPressedBorder));
+
+        public static ComponentResourceKey ScrollBarThumbMouseOverBackground => _scrollBarThumbMouseOverBackground ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), nameof(ScrollBarThumbMouseOverBackground));
+
+        public static ComponentResourceKey ScrollBarThumbMouseOverBorder => _scrollBarThumbMouseOverBorder ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), nameof(ScrollBarThumbMouseOverBorder));
+
+        public static ComponentResourceKey ScrollBarThumbPressedBackground => _scrollBarThumbPressedBackground ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), nameof(ScrollBarThumbPressedBackground));
+
+        public static ComponentResourceKey ScrollBarThumbPressedBorder => _scrollBarThumbPressedBorder ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), nameof(ScrollBarThumbPressedBorder));
+
+        public static ComponentResourceKey AutoHideResizeGrip => _autoHideResizeGrip ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), nameof(AutoHideResizeGrip));
+
     }
 }

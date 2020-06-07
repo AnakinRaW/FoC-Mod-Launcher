@@ -123,12 +123,15 @@
     <Compile Include="ModInfo\SteamWorkshopVisibility.cs" />
     <Compile Include="NativeMethods\User32.cs" />
     <Compile Include="PetroglyphInitialization.cs" />
+    <Compile Include="Theming\ScrollBarResourceKeys.cs" />
+    <Compile Include="Theming\ScrollBarThemingUtilities.cs" />
     <Compile Include="Theming\ThemeManager.cs" />
     <Compile Include="Utilities\HashCodeCombiner.cs" />
     <Compile Include="Utilities\HtmlDownloader.cs" />
     <Compile Include="Utilities\ProcessCreationListener.cs" />
     <Compile Include="Utilities\StreamUtilities.cs" />
     <Compile Include="Utilities\VisualUtilities.cs" />
+    <Compile Include="Utilities\WeakCollection.cs" />
     <Compile Include="Utilities\XmlTools.cs" />
     <Compile Include="Versioning\IVersionComparer.cs" />
     <Compile Include="Versioning\ModVersion.cs" />
@@ -192,6 +195,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Themes\Generic\LauncherStatusBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Generic\ScrollBar.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -2,6 +2,7 @@
 using System.Windows;
 using FocLauncher.Dialogs;
 using FocLauncher.Mods;
+using FocLauncher.Theming;
 
 namespace FocLauncher
 {
@@ -10,6 +11,7 @@ namespace FocLauncher
         public MainWindow()
         {
             InitializeComponent();
+            ScrollBarThemingUtilities.SetThemeScrollBars(this, true);
             ListBox.Focus();
         }
 
