@@ -62,9 +62,6 @@
     <ApplicationIcon>Resources\icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Resource Include="Resources\Fonts\EaW-bold.ttf" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="..\FocLauncher.Shared\ExternalUpdaterResult.cs">
       <Link>Shared\ExternalUpdaterResult.cs</Link>
     </Compile>
