@@ -26,6 +26,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <LangVersion>8</LangVersion>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -36,6 +37,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <LangVersion>8</LangVersion>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Resources\launcherIcon.ico</ApplicationIcon>
@@ -65,6 +67,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationResourceLoader.cs" />
     <Compile Include="Controls\Controllers\ContextMenuController.cs" />
     <Compile Include="Controls\Controllers\IContextMenuController.cs" />
     <Compile Include="Controls\Controllers\IHasContextMenuController.cs" />
@@ -76,6 +79,7 @@
     <Compile Include="Controls\SystemMenu.cs" />
     <Compile Include="Controls\WindowTitleBarButton.cs" />
     <Compile Include="Converters\BooleanOrConverter.cs" />
+    <Compile Include="Utilities\IconHelper.cs" />
     <Compile Include="NativeMethods\AbEdge.cs" />
     <Compile Include="NativeMethods\AbMsg.cs" />
     <Compile Include="NativeMethods\AppBarData.cs" />
@@ -100,6 +104,8 @@
     <Compile Include="NativeMethods\WindowPlacement.cs" />
     <Compile Include="NativeMethods\WindowPos.cs" />
     <Compile Include="NativeMethods\WndClass.cs" />
+    <Compile Include="Theming\ScrollBarResourceKeys.cs" />
+    <Compile Include="Theming\ScrollBarThemingUtilities.cs" />
     <Compile Include="Utilities\DisposableObject.cs" />
     <Compile Include="Controls\LauncherCheckBox.cs" />
     <Compile Include="Controls\LauncherListBox.cs" />
@@ -118,13 +124,31 @@
     <Compile Include="Game\EawSteamGameSlim.cs" />
     <Compile Include="Game\Detection\GameDetectionOptions.cs" />
     <Compile Include="Game\FocRegistryHelper.cs" />
+    <Compile Include="Game\GameArgumentException.cs" />
     <Compile Include="Game\GameBuildType.cs" />
+    <Compile Include="Game\GameCommandArgumentsUtilities.cs" />
     <Compile Include="Game\GameStartingEventArgs.cs" />
     <Compile Include="Game\GameTypeHelper.cs" />
     <Compile Include="Game\IDebugable.cs" />
+    <Compile Include="Game\IHasDirectory.cs" />
+    <Compile Include="Game\IModContainer.cs" />
     <Compile Include="Game\IPetroglyhLaunchable.cs" />
     <Compile Include="Game\LauncherSteamHelper.cs" />
+    <Compile Include="Game\ModCollectionChangedAction.cs" />
+    <Compile Include="Game\ModCollectionChangedEventArgs.cs" />
+    <Compile Include="Game\ModCreationDelegate.cs" />
+    <Compile Include="Game\PetroglyphException.cs" />
+    <Compile Include="Game\PetroglyphGameException.cs" />
     <Compile Include="Game\PetroglyphGameRegistry.cs" />
+    <Compile Include="ModInfo\ModInfoData.cs" />
+    <Compile Include="ModInfo\ModInfoDataUtilities.cs" />
+    <Compile Include="ModInfo\ModInfoException.cs" />
+    <Compile Include="Mods\ModBase.cs" />
+    <Compile Include="Mods\ModDependencyTraverser.cs" />
+    <Compile Include="ModInfo\ModInfoFileFinder.cs" />
+    <Compile Include="ModInfo\ModInfoFinderCollection.cs" />
+    <Compile Include="Mods\ModType.cs" />
+    <Compile Include="Mods\PetroglyphModException.cs" />
     <Compile Include="Game\RegistryHelper.cs" />
     <Compile Include="Game\SteamClient.cs" />
     <Compile Include="Controls\Controllers\IHasInvocationController.cs" />
@@ -132,12 +156,11 @@
     <Compile Include="ILauncherWindowModel.cs" />
     <Compile Include="IsolatingLauncherBootstrapper.cs" />
     <Compile Include="Controls\LauncherStatusBar.cs" />
-    <Compile Include="Game\GameStartOptions.cs" />
+    <Compile Include="Game\GameCommandArguments.cs" />
     <Compile Include="Game\PetroglyphGame.cs" />
     <Compile Include="Game\PetroglyphGameManager.cs" />
     <Compile Include="LauncherApp.cs" />
     <Compile Include="Converters\GameTypeToStringConverter.cs" />
-    <Compile Include="Converters\ModNameConverter.cs" />
     <Compile Include="Converters\SteamToVisibilityConverter.cs" />
     <Compile Include="Converters\ThemeSelectedConverter.cs" />
     <Compile Include="Dialogs\ChangeThemeDialog.xaml.cs">
@@ -154,14 +177,13 @@
     <Compile Include="ModInfo\SteamData.cs" />
     <Compile Include="ModInfo\ModInfoFile.cs" />
     <Compile Include="Mods\Mod.cs" />
-    <Compile Include="Mods\ModHelper.cs" />
-    <Compile Include="ModInfo\ModInfoFileException.cs" />
+    <Compile Include="Mods\ModFactory.cs" />
     <Compile Include="ModInfo\SteamWorkshopVisibility.cs" />
+    <Compile Include="Mods\VirtualMod.cs" />
     <Compile Include="NativeMethods\User32.cs" />
-    <Compile Include="PetroglyphInitialization.cs" />
-    <Compile Include="Theming\ScrollBarResourceKeys.cs" />
-    <Compile Include="Theming\ScrollBarThemingUtilities.cs" />
+    <Compile Include="Game\GameFactory.cs" />
     <Compile Include="Theming\ThemeManager.cs" />
+    <Compile Include="Utilities\FileUtilities.cs" />
     <Compile Include="Utilities\HashCodeCombiner.cs" />
     <Compile Include="Utilities\HtmlDownloader.cs" />
     <Compile Include="Utilities\ProcessCreationListener.cs" />

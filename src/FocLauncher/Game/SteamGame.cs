@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using FocLauncher.Mods;
 using FocLauncher.Threading;
 using FocLauncher.Utilities;
 using FocLauncher.WaitDialog;
@@ -23,17 +26,19 @@ namespace FocLauncher.Game
 
         public override string Name => "Forces of Corruption (Steam)";
 
-        public override string? IconFile => PetroglyphInitialization.IconPath;
+        public override string? IconFile => LauncherApp.IconPath;
 
         public override string Description => string.Empty;
 
-        public SteamGame(string gameDirectory) : base(gameDirectory)
+        public bool DebugBuildExists => File.Exists(Path.Combine(Directory.FullName, DebugGameExeFileName));
+
+        public SteamGame(DirectoryInfo gameDirectory) : base(gameDirectory)
         {
         }
 
         public override bool IsPatched()
         {
-            var gameConstantsFilePath = Path.Combine(GameDirectory, @"Data\XML\GAMECONSTANTS.XML");
+            var gameConstantsFilePath = Path.Combine(Directory.FullName, @"Data\XML\GAMECONSTANTS.XML");
             if (!File.Exists(gameConstantsFilePath))
                 return false;
             var hashProvider = new HashProvider();
@@ -61,8 +66,6 @@ namespace FocLauncher.Game
             }
             base.OnGameStarting(args);
         }
-        
-        public bool DebugBuildExists => File.Exists(Path.Combine(GameDirectory, DebugGameExeFileName));
 
         public bool DebugGame(string? iconFile = null)
         {
@@ -74,15 +77,37 @@ namespace FocLauncher.Game
             GameStartInfo startInfo;
             if (DebugBuildExists)
             {
-                var exeFile = new FileInfo(Path.Combine(GameDirectory, DebugGameExeFileName));
+                var exeFile = new FileInfo(Path.Combine(Directory.FullName, DebugGameExeFileName));
                 startInfo = new GameStartInfo(exeFile, GameBuildType.Debug);
             }
             else
             {
-                var exeFile = new FileInfo(Path.Combine(GameDirectory, GameExeFileName));
+                var exeFile = new FileInfo(Path.Combine(Directory.FullName, GameExeFileName));
                 startInfo = new GameStartInfo(exeFile, GameBuildType.Release);
             }
             return StartGame(args, startInfo, iconFile);
+        }
+
+        protected override IEnumerable<IMod> GetPhysicalModsCore()
+        {
+            return SearchSteamMods().ToList();
+        }
+
+        private IEnumerable<IMod> SearchSteamMods()
+        {
+            var mods = new List<IMod>();
+            mods.AddRange(SearchDiskMods());
+
+            var workshopsPath = FileUtilities.NormalizePath(Path.Combine(Directory.FullName, @"..\..\..\workshop\content\32470\"));
+            var workshopsDir = new DirectoryInfo(workshopsPath);
+            if (!workshopsDir.Exists)
+                return mods;
+
+            var modDirs = workshopsDir.EnumerateDirectories();
+            var workshopMods = modDirs.SelectMany(folder => ModFactory.CreateModAndVariants(this, ModType.Workshops, folder, true));
+
+            mods.AddRange(workshopMods);
+            return mods;
         }
     }
 }

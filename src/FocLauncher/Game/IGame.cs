@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using FocLauncher.Mods;
 
 namespace FocLauncher.Game
 {
-    public interface IGame : IPetroglyhGameableObject
+    public interface IGame : IPetroglyhGameableObject, IModContainer, IHasDirectory
     {
         event EventHandler<Process> GameStarted;
 
@@ -12,12 +14,7 @@ namespace FocLauncher.Game
         event EventHandler GameClosed;
 
         GameType Type { get; }
-
-        /// <summary>
-        /// Returns the full Path of the Games Root Directory
-        /// </summary>
-        string GameDirectory { get; }
-
+        
         /// <summary>
         /// Contains Data of the Process
         /// </summary>
@@ -61,5 +58,19 @@ namespace FocLauncher.Game
         /// <param name="language">The english name of the language</param>
         /// <returns><see langword="true"/> if game is the language is available; otherwise, <see langword="false"/>.</returns>
         bool IsLanguageInstalled(string language);
+
+        /// <summary>
+        /// Searches for mods for this game on disk and creates a new instance of an <see cref="IMod"/> when necessary
+        /// </summary>
+        /// <param name="add">When set to <c>true</c> the mods will get added to the <see cref="IGame.Mods"/> collection if not present already.
+        /// This will raise the <see cref="IGame.ModCollectionModified"/> event </param>
+        /// <returns>An unsorted collection of all mods found.</returns>
+        ICollection<IMod> GetPhysicalMods(bool add);
+
+        IMod CreateMod(ModCreationDelegate modCreation, bool add);
+
+        bool TryCreateMod(ModCreationDelegate modCreation, bool add, out IMod mod);
+
+        void Setup(GameSetupOptions setupMode);
     }
 }
