@@ -8,7 +8,7 @@ using Microsoft.Win32;
 
 namespace FocLauncher.ScreenUtilities
 {
-    internal static class Screen
+    public static class Screen
     {
         public static event EventHandler DisplayConfigChanged;
 
@@ -100,7 +100,96 @@ namespace FocLauncher.ScreenUtilities
             }
             return num1;
         }
-        
+
+        public static void FindMonitorRectsFromPoint(Point point, out Rect monitorRect, out Rect workAreaRect)
+        {
+            var absolutePosition = FindDisplayForAbsolutePosition(point);
+            var  monitorInfo = new MonitorInfo();
+            if (absolutePosition == -1)
+                GetMonitorInfo(User32.MonitorFromPoint(POINT.FromPoint(point), 2), ref monitorInfo);
+            else
+                monitorInfo = Displays[absolutePosition].MonitorInfo;
+            GetMonitorRects(monitorInfo, out monitorRect, out workAreaRect);
+        }
+
+        public static Point RelativePositionToAbsolutePosition(int display, double left, double top)
+        {
+            if (display < 0)
+                throw new ArgumentOutOfRangeException(nameof(display));
+            RECT rect1;
+            if (display >= Displays.Count)
+            {
+                var rect2 = Displays[Displays.Count - 1].Rect;
+                rect1 = new RECT(rect2.Left + rect2.Width, rect2.Top, rect2.Right + rect2.Width, rect2.Bottom);
+            }
+            else
+                rect1 = Displays[display].Rect;
+            return new Point(rect1.Left + left, rect1.Top + top);
+        }
+
+        public static Rect GetOnScreenPosition(Rect floatRect, int fallbackDisplay = -1, bool forceOnScreen = false, bool topOnly = false)
+        {
+            var windowRect = floatRect;
+            FindMaximumSingleMonitorRectangle(windowRect, out var screenSubRect, out _);
+            if (((screenSubRect.Width == 0.0 ? 1 : (screenSubRect.Height == 0.0 ? 1 : 0)) | (forceOnScreen ? 1 : 0)) != 0)
+            {
+                Rect workAreaRect;
+                if (fallbackDisplay == -1)
+                    FindMonitorRectsFromPoint(User32.GetCursorPos(), out _, out workAreaRect);
+                else
+                    FindMonitorRectsFromPoint(RelativePositionToAbsolutePosition(fallbackDisplay, 0.0, 0.0), out _, out workAreaRect);
+                if (windowRect.Width > workAreaRect.Width)
+                    windowRect.Width = workAreaRect.Width;
+                if (windowRect.Height > workAreaRect.Height)
+                    windowRect.Height = workAreaRect.Height;
+                if (!topOnly)
+                {
+                    if (windowRect.Right > workAreaRect.Right)
+                        windowRect.X = workAreaRect.Right - windowRect.Width;
+                    if (windowRect.Left < workAreaRect.Left)
+                        windowRect.X = workAreaRect.Left;
+                    if (windowRect.Bottom > workAreaRect.Bottom)
+                        windowRect.Y = workAreaRect.Bottom - windowRect.Height;
+                }
+                if (windowRect.Top < workAreaRect.Top)
+                    windowRect.Y = workAreaRect.Top;
+            }
+            return windowRect;
+        }
+
+        internal static void FindMaximumSingleMonitorRectangle(Rect windowRect, out Rect screenSubRect, out Rect monitorRect)
+        {
+            FindMaximumSingleMonitorRectangle(new RECT(windowRect), out var screenSubRect1, out var monitorRect1);
+            screenSubRect = new Rect(screenSubRect1.Position, screenSubRect1.Size);
+            monitorRect = new Rect(monitorRect1.Position, monitorRect1.Size);
+        }
+
+        internal static void FindMaximumSingleMonitorRectangle(RECT windowRect, out RECT screenSubRect, out RECT monitorRect)
+        {
+            var displayForWindowRect = FindDisplayForWindowRect(windowRect.ToRect());
+            screenSubRect = new RECT
+            {
+                Left = 0,
+                Right = 0,
+                Top = 0,
+                Bottom = 0
+            };
+            monitorRect = new RECT
+            {
+                Left = 0,
+                Right = 0,
+                Top = 0,
+                Bottom = 0
+            };
+            if (-1 == displayForWindowRect)
+                return;
+            var monitorInfo = Displays[displayForWindowRect].MonitorInfo;
+            var rcWork = monitorInfo.RcWork;
+            User32.IntersectRect(out var lprcDst, ref rcWork, ref windowRect);
+            screenSubRect = lprcDst;
+            monitorRect = monitorInfo.RcWork;
+        }
+
         private static double ScaleLogicalToDevice(double dpi, double value)
         {
             return value * dpi / 96.0;
@@ -124,6 +213,28 @@ namespace FocLauncher.ScreenUtilities
         private static Point GetRectCenter(RECT rect)
         {
             return new Point(rect.Left + rect.Width / 2, rect.Top + rect.Height / 2);
+        }
+
+        private static void GetMonitorInfo(IntPtr monitor, ref MonitorInfo monitorInfo)
+        {
+            if (!(monitor != IntPtr.Zero))
+                return;
+            monitorInfo.CbSize = (uint)Marshal.SizeOf(typeof(MonitorInfo));
+            User32.GetMonitorInfo(monitor, ref monitorInfo);
+        }
+
+        private static void GetMonitorRects(MonitorInfo monitorInfo, out Rect monitorRect, out Rect workAreaRect)
+        {
+            if (monitorInfo.CbSize != 0U)
+            {
+                monitorRect = new Rect(monitorInfo.RcMonitor.Position, monitorInfo.RcMonitor.Size);
+                workAreaRect = new Rect(monitorInfo.RcWork.Position, monitorInfo.RcWork.Size);
+            }
+            else
+            {
+                monitorRect = new Rect(0.0, 0.0, 0.0, 0.0);
+                workAreaRect = new Rect(0.0, 0.0, 0.0, 0.0);
+            }
         }
 
         private static void UpdateDisplays()
@@ -185,6 +296,8 @@ namespace FocLauncher.ScreenUtilities
             public IntPtr MonitorHandle { get; }
 
             public MonitorInfo MonitorInfo { get; }
+
+            public RECT Rect => MonitorInfo.RcMonitor;
 
             public DisplayInfo(IntPtr hMonitor, MonitorInfo monitorInfo)
             {

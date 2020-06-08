@@ -60,6 +60,7 @@
     <Compile Include="NativeMethods\Gwl.cs" />
     <Compile Include="NativeMethods\MonitorInfo.cs" />
     <Compile Include="NativeMethods\NativeMethods.cs" />
+    <Compile Include="NativeMethods\POINT.cs" />
     <Compile Include="NativeMethods\RECT.cs" />
     <Compile Include="NativeMethods\UnsafeHelpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

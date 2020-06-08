@@ -8,6 +8,12 @@ namespace FocLauncher
 {
     public partial class MainWindow
     {
+
+        static MainWindow()
+        {
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(MainWindow), new FrameworkPropertyMetadata(typeof(MainWindow)));
+        }
+
         public MainWindow()
         {
             InitializeComponent();

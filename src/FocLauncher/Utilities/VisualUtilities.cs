@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Media;
+using FocLauncher.NativeMethods;
 
 namespace FocLauncher.Utilities
 {
@@ -52,5 +53,31 @@ namespace FocLauncher.Utilities
             }
             return null;
         }
+
+        public static void HitTestVisibleElements(Visual visual, HitTestResultCallback resultCallback,
+            HitTestParameters parameters)
+        {
+            VisualTreeHelper.HitTest(visual, ExcludeNonVisualElements, resultCallback, parameters);
+        }
+
+        private static HitTestFilterBehavior ExcludeNonVisualElements(DependencyObject potentialHitTestTarget)
+        {
+            if (!(potentialHitTestTarget is Visual))
+                return HitTestFilterBehavior.ContinueSkipSelfAndChildren;
+            return !(potentialHitTestTarget is UIElement uiElement) || uiElement.IsVisible && uiElement.IsEnabled
+                ? HitTestFilterBehavior.Continue
+                : HitTestFilterBehavior.ContinueSkipSelfAndChildren;
+        }
+
+        internal static bool ModifyStyle(IntPtr hWnd, int styleToRemove, int styleToAdd)
+        {
+            var windowLong = User32.GetWindowLong(hWnd, -16);
+            var dwNewLong = windowLong & ~styleToRemove | styleToAdd;
+            if (dwNewLong == windowLong)
+                return false;
+            User32.SetWindowLong(hWnd, -16, dwNewLong);
+            return true;
+        }
+
     }
 }
