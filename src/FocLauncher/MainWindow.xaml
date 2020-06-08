@@ -9,7 +9,7 @@
         xmlns:controls="clr-namespace:FocLauncher.Controls"
         xmlns:focLauncher="clr-namespace:FocLauncher"
         mc:Ignorable="d"
-        Title="FoC Launcher by Anakin" Width="400" 
+        Title="FoC Mod Launcher" Width="400" 
         Height="600" 
         Foreground="White"
         UseLayoutRounding="True"
@@ -63,11 +63,8 @@
         <Grid Margin="6,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="6"/>
-                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" Text="Forces of Corruption Launcher" FontSize="18" TextWrapping="Wrap" FontFamily="{StaticResource EaWFont}"/>
-            <TextBlock Grid.Row="2" Text="Choose the mod you want to play:"/>
+            <TextBlock Text="Choose the mod you want to play:"/>
         </Grid>
 
         <controls:LauncherListBox x:Name="ListBox" Grid.Row="1" Margin="6,0" ItemsSource="{Binding GameObjects}" ItemTemplate="{StaticResource ItemDataTemplate}"

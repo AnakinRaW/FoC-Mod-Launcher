@@ -9,7 +9,6 @@ using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Threading;
 using FocLauncher.NativeMethods;
 using FocLauncher.ScreenUtilities;
 using FocLauncher.Utilities;
@@ -21,6 +20,15 @@ namespace FocLauncher.Controls
     {
         private readonly GlowWindow[] _glowWindows = new GlowWindow[4];
         private Rect _logicalSizeForRestore = Rect.Empty;
+        private int _lastWindowPlacement;
+        private int _deferGlowChangesCount;
+        private bool _isGlowVisible;
+        private IntPtr _ownerForActivate;
+        private bool _isDragging;
+        private WindowInteropHelper _windowInteropHelper;
+        private bool _useLogicalSizeForRestore;
+        private bool _updatingZOrder;
+
 
         public static readonly DependencyProperty ActiveGlowColorProperty =
             DependencyProperty.Register(nameof(ActiveGlowColor), typeof(Color), typeof(ShadowChromeWindow),
@@ -34,17 +42,12 @@ namespace FocLauncher.Controls
             DependencyProperty.Register(nameof(NonClientFillColor), typeof(Color), typeof(ShadowChromeWindow),
                 new FrameworkPropertyMetadata(Colors.Black));
 
-        private int _lastWindowPlacement;
-        private int _deferGlowChangesCount;
-        private bool _isGlowVisible;
-        private DispatcherTimer _makeGlowVisibleTimer;
-        private bool _isNonClientStripVisible;
-        private IntPtr _ownerForActivate;
-        private Dock _taskbarDirection;
-        private bool _isDragging;
-        private WindowInteropHelper _windowInteropHelper;
-        private bool _useLogicalSizeForRestore;
-        private bool _updatingZOrder;
+        public static readonly DependencyProperty HasMaximizeButtonProperty = DependencyProperty.Register(
+            nameof(HasMaximizeButton), typeof(bool), typeof(ShadowChromeWindow), new FrameworkPropertyMetadata(default(bool), OnWindowStyleChanged));
+
+        public static readonly DependencyProperty HasMinimizeButtonProperty = DependencyProperty.Register(
+            nameof(HasMinimizeButton), typeof(bool), typeof(ShadowChromeWindow), new FrameworkPropertyMetadata(default(bool), OnWindowStyleChanged));
+        
 
         static ShadowChromeWindow()
         {
@@ -70,6 +73,48 @@ namespace FocLauncher.Controls
             set => SetValue(NonClientFillColorProperty, value);
         }
 
+        public bool HasMinimizeButton
+        {
+            get => (bool)GetValue(HasMinimizeButtonProperty);
+            set => SetValue(HasMinimizeButtonProperty, value);
+        }
+
+        public bool HasMaximizeButton
+        {
+            get => (bool)GetValue(HasMaximizeButtonProperty);
+            set => SetValue(HasMaximizeButtonProperty, value);
+        }
+
+        protected virtual bool ShouldShowGlow
+        {
+            get
+            {
+                var handle = WindowHelper.Handle;
+                return User32.IsWindowVisible(handle) && !User32.IsIconic(handle) && !User32.IsZoomed(handle) &&
+                       (uint)ResizeMode > 0U;
+            }
+        }
+
+        private bool IsGlowVisible
+        {
+            get => _isGlowVisible;
+            set
+            {
+                if (_isGlowVisible == value)
+                    return;
+                _isGlowVisible = value;
+                for (var direction = 0; direction < _glowWindows.Length; ++direction)
+                    GetOrCreateGlowWindow(direction).IsVisible = value;
+            }
+        }
+
+        private IEnumerable<GlowWindow> LoadedGlowWindows
+        {
+            get { return _glowWindows.Where(w => w != null); }
+        }
+
+
+
         private WindowInteropHelper WindowHelper => _windowInteropHelper ??= new WindowInteropHelper(this);
 
         protected override void OnActivated(EventArgs e)
@@ -88,7 +133,7 @@ namespace FocLauncher.Controls
         {
             ((ShadowChromeWindow)obj).DestroyGlowWindows();
             ((ShadowChromeWindow)obj).CreateGlowWindowHandlesNoResize();
-            ((ShadowChromeWindow)obj).UpdateGlowVisibility(false);
+            ((ShadowChromeWindow)obj).UpdateGlowVisibility();
         }
 
         private void CreateGlowWindowHandlesNoResize()
@@ -100,6 +145,22 @@ namespace FocLauncher.Controls
         private static void OnGlowColorChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
         {
             ((ShadowChromeWindow) obj).UpdateGlowColors();
+        }
+
+        private static void OnWindowStyleChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
+        {
+            var window = (ShadowChromeWindow)obj;
+            if (!(PresentationSource.FromVisual(window) is HwndSource hwndSource))
+                return;
+            window.UpdateWindowStyle(hwndSource.Handle);
+        }
+
+        private void UpdateWindowStyle(IntPtr hwnd)
+        {
+            var windowLong = User32.GetWindowLong(hwnd, -16);
+            var num1 = !HasMaximizeButton ? windowLong & -65537 : windowLong | 65536;
+            var num2 = !HasMinimizeButton ? num1 & -131073 : num1 | 131072;
+            User32.SetWindowLong(hwnd, -16, num2);
         }
 
         protected override void OnSourceInitialized(EventArgs e)
@@ -119,7 +180,7 @@ namespace FocLauncher.Controls
         {
             var deviceRect = this.LogicalToDeviceRect();
             var displayForWindowRect = Screen.FindDisplayForWindowRect(deviceRect);
-            var onScreenPosition = Screen.GetOnScreenPosition(deviceRect, displayForWindowRect, true, false);
+            var onScreenPosition = Screen.GetOnScreenPosition(deviceRect, displayForWindowRect, true);
             User32.SetWindowPos(WindowHelper.Handle, IntPtr.Zero, (int) onScreenPosition.Left,
                 (int) onScreenPosition.Top, (int) onScreenPosition.Width, (int) onScreenPosition.Height, 20);
         }
@@ -141,17 +202,17 @@ namespace FocLauncher.Controls
                     WmWindowPosChanged(hWnd, lParam);
                     break;
                 case 131:
-                    return WmNcCalcSize(hWnd, wParam, lParam, ref handled);
+                    return WmNcCalcSize(ref handled);
                 case 132:
-                    return WmNcHitTest(hWnd, lParam, ref handled);
+                    return WmNcHitTest(lParam, ref handled);
                 case 133:
-                    return WmNcPaint(hWnd, wParam, lParam, ref handled);
+                    return WmNcPaint(ref handled);
                 case 134:
-                    return WmNcActivate(hWnd, wParam, lParam, ref handled);
+                    return WmNcActivate(hWnd, wParam, ref handled);
                 case 164:
                 case 165:
                 case 166:
-                    RaiseNonClientMouseMessageAsClient(hWnd, msg, wParam, lParam);
+                    RaiseNonClientMouseMessageAsClient(hWnd, msg, lParam);
                     handled = true;
                     break;
                 case 174:
@@ -159,7 +220,7 @@ namespace FocLauncher.Controls
                     handled = true;
                     break;
                 case 274:
-                    WmSysCommand(hWnd, wParam, lParam);
+                    WmSysCommand(hWnd, wParam);
                     break;
                 case 561:
                     _isDragging = true;
@@ -172,11 +233,7 @@ namespace FocLauncher.Controls
             return IntPtr.Zero;
         }
 
-        private static void RaiseNonClientMouseMessageAsClient(
-            IntPtr hWnd,
-            int msg,
-            IntPtr wParam,
-            IntPtr lParam)
+        private static void RaiseNonClientMouseMessageAsClient(IntPtr hWnd, int msg, IntPtr lParam)
         {
             var point = new POINT
             {
@@ -207,12 +264,7 @@ namespace FocLauncher.Controls
             }
         }
 
-        private IntPtr CallDefWindowProcWithoutRedraw(
-            IntPtr hWnd,
-            int msg,
-            IntPtr wParam,
-            IntPtr lParam,
-            ref bool handled)
+        private static IntPtr CallDefWindowProcWithoutRedraw(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
             using (new SuppressRedrawScope(hWnd))
             {
@@ -228,125 +280,25 @@ namespace FocLauncher.Controls
             User32.SendMessage(_ownerForActivate, NativeMethods.NativeMethods.NotifyOwnerActive, wParam, lParam);
         }
 
-        private IntPtr WmNcActivate(IntPtr hWnd, IntPtr wParam, IntPtr lParam, ref bool handled)
+        private static IntPtr WmNcActivate(IntPtr hWnd, IntPtr wParam, ref bool handled)
         {
             handled = true;
             return User32.DefWindowProc(hWnd, 134, wParam, new IntPtr(-1));
         }
 
-        private IntPtr WmNcPaint(IntPtr hWnd, IntPtr wParam, IntPtr lParam, ref bool handled)
+        private static IntPtr WmNcPaint(ref bool handled)
         {
-            if (_isNonClientStripVisible)
-            {
-                var hrgnClip = wParam == new IntPtr(1) ? IntPtr.Zero : wParam;
-                var dcEx = User32.GetDCEx(hWnd, hrgnClip, 155);
-                if (dcEx != IntPtr.Zero)
-                {
-                    try
-                    {
-                        var nonClientFillColor = NonClientFillColor;
-                        var solidBrush =
-                            Gdi32.CreateSolidBrush(nonClientFillColor.B << 16 | nonClientFillColor.G << 8 |
-                                                   nonClientFillColor.R);
-                        try
-                        {
-                            var relativeToWindowRect = GetClientRectRelativeToWindowRect(hWnd);
-                            switch (_taskbarDirection)
-                            {
-                                case Dock.Left:
-                                    relativeToWindowRect.Right = relativeToWindowRect.Left;
-                                    relativeToWindowRect.Left = relativeToWindowRect.Right - 1;
-                                    break;
-                                case Dock.Top:
-                                    relativeToWindowRect.Bottom = relativeToWindowRect.Top;
-                                    relativeToWindowRect.Top = relativeToWindowRect.Bottom - 1;
-                                    break;
-                                case Dock.Right:
-                                    relativeToWindowRect.Left = relativeToWindowRect.Right;
-                                    relativeToWindowRect.Right = relativeToWindowRect.Left + 1;
-                                    break;
-                                case Dock.Bottom:
-                                    relativeToWindowRect.Top = relativeToWindowRect.Bottom;
-                                    relativeToWindowRect.Bottom = relativeToWindowRect.Top + 1;
-                                    break;
-                            }
-
-                            User32.FillRect(dcEx, ref relativeToWindowRect, solidBrush);
-                        }
-                        finally
-                        {
-                            Gdi32.DeleteObject(solidBrush);
-                        }
-                    }
-                    finally
-                    {
-                        User32.ReleaseDC(hWnd, dcEx);
-                    }
-                }
-            }
-
             handled = true;
             return IntPtr.Zero;
         }
 
-        private static RECT GetClientRectRelativeToWindowRect(
-            IntPtr hWnd)
+        private static IntPtr WmNcCalcSize(ref bool handled)
         {
-            User32.GetWindowRect(hWnd, out var lpRect1);
-            User32.GetClientRect(hWnd, out var lpRect2);
-            var point = new POINT
-            {
-                X = 0,
-                Y = 0
-            };
-            User32.ClientToScreen(hWnd, ref point);
-            lpRect2.Offset(point.X - lpRect1.Left, point.Y - lpRect1.Top);
-            return lpRect2;
-        }
-
-        private IntPtr WmNcCalcSize(IntPtr hWnd, IntPtr wParam, IntPtr lParam, ref bool handled)
-        {
-            _isNonClientStripVisible = false;
-            if (NativeMethods.NativeMethods.GetWindowPlacement(hWnd).showCmd == 3)
-            {
-                var structure1 = (RECT) Marshal.PtrToStructure(lParam, typeof(RECT));
-                User32.DefWindowProc(hWnd, 131, wParam, lParam);
-                var structure2 = (RECT) Marshal.PtrToStructure(lParam, typeof(RECT));
-                structure2.Top -= (int) Math.Ceiling(this.LogicalToDeviceUnitsY(SystemParameters.CaptionHeight) + 1.0);
-                var monitorinfo = MonitorInfoFromWindow(hWnd);
-                if (monitorinfo.RcMonitor.Height == monitorinfo.RcWork.Height &&
-                    monitorinfo.RcMonitor.Width == monitorinfo.RcWork.Width)
-                {
-                    _isNonClientStripVisible = true;
-                    var pData = new AppBarData {cbSize = Marshal.SizeOf(typeof(AppBarData))};
-                    _taskbarDirection = !Convert.ToBoolean(Shell32.SHAppBarMessage(5U, ref pData))
-                        ? ~Dock.Left
-                        : (Dock) pData.uEdge;
-                    switch (_taskbarDirection)
-                    {
-                        case Dock.Left:
-                            ++structure2.Left;
-                            break;
-                        case Dock.Top:
-                            ++structure2.Top;
-                            break;
-                        case Dock.Right:
-                            --structure2.Right;
-                            break;
-                        case Dock.Bottom:
-                            --structure2.Bottom;
-                            break;
-                    }
-                }
-
-                Marshal.StructureToPtr(structure2, lParam, true);
-            }
-
             handled = true;
             return IntPtr.Zero;
         }
 
-        private IntPtr WmNcHitTest(IntPtr hWnd, IntPtr lParam, ref bool handled)
+        private IntPtr WmNcHitTest(IntPtr lParam, ref bool handled)
         {
             if (PresentationSource.FromDependencyObject(this) == null)
                 return new IntPtr(0);
@@ -376,7 +328,7 @@ namespace FocLauncher.Controls
             return new IntPtr(num);
         }
 
-        private void WmSysCommand(IntPtr hWnd, IntPtr wParam, IntPtr lParam)
+        private void WmSysCommand(IntPtr hWnd, IntPtr wParam)
         {
             var scWparam = NativeMethods.NativeMethods.GetScWparam(wParam);
             if (scWparam == 61456)
@@ -419,7 +371,7 @@ namespace FocLauncher.Controls
                 _useLogicalSizeForRestore = false;
             }
 
-            var rect = _isDragging ? floatRect : Screen.GetOnScreenPosition(floatRect, -1, false, false);
+            var rect = _isDragging ? floatRect : Screen.GetOnScreenPosition(floatRect);
             structure.x = (int) rect.X;
             structure.y = (int) rect.Y;
             structure.cx = (int) rect.Width;
@@ -439,8 +391,7 @@ namespace FocLauncher.Controls
                     UpdateClipRegion(hWnd, windowPlacement, ClipRegionChangeType.FromSize, currentBounds);
                 else if (((int) structure.flags & 2) != 2)
                     UpdateClipRegion(hWnd, windowPlacement, ClipRegionChangeType.FromPosition, currentBounds);
-                OnWindowPosChanged(hWnd, windowPlacement.showCmd, windowPlacement.rcNormalPosition.ToInt32Rect());
-                UpdateGlowWindowPositions(((int) structure.flags & 64) == 0);
+                UpdateGlowWindowPositions();
                 UpdateZOrderOfThisAndOwner();
             }
             catch (Win32Exception)
@@ -490,12 +441,7 @@ namespace FocLauncher.Controls
             User32.SetWindowPos(hwndOwner, lastOwnedWindow, 0, 0, 0, 0, 19);
         }
 
-        protected virtual void OnWindowPosChanged(IntPtr hWnd, int showCmd, Int32Rect rcNormalPosition)
-        {
-        }
-
-        protected void UpdateClipRegion(
-            ClipRegionChangeType regionChangeType = ClipRegionChangeType.FromPropertyChange)
+        protected void UpdateClipRegion(ClipRegionChangeType regionChangeType = ClipRegionChangeType.FromPropertyChange)
         {
             var hwndSource = (HwndSource) PresentationSource.FromVisual(this);
             if (hwndSource == null)
@@ -505,25 +451,14 @@ namespace FocLauncher.Controls
             UpdateClipRegion(hwndSource.Handle, windowPlacement, regionChangeType, lpRect);
         }
 
-        private void UpdateClipRegion(IntPtr hWnd, WindowPlacement placement, ClipRegionChangeType changeType,
-            RECT currentBounds)
+        private void UpdateClipRegion(IntPtr hWnd, WindowPlacement placement, ClipRegionChangeType changeType, RECT currentBounds)
         {
             UpdateClipRegionCore(hWnd, placement.showCmd, changeType, currentBounds.ToInt32Rect());
             _lastWindowPlacement = placement.showCmd;
         }
 
-        protected virtual bool UpdateClipRegionCore(
-            IntPtr hWnd,
-            int showCmd,
-            ClipRegionChangeType changeType,
-            Int32Rect currentBounds)
+        protected virtual bool UpdateClipRegionCore(IntPtr hWnd, int showCmd, ClipRegionChangeType changeType, Int32Rect currentBounds)
         {
-            if (showCmd == 3)
-            {
-                UpdateMaximizedClipRegion(hWnd);
-                return true;
-            }
-
             if (changeType != ClipRegionChangeType.FromSize && changeType != ClipRegionChangeType.FromPropertyChange &&
                 _lastWindowPlacement == showCmd)
                 return false;
@@ -531,42 +466,7 @@ namespace FocLauncher.Controls
             return true;
         }
 
-        private Windowinfo GetWindowInfo(IntPtr hWnd)
-        {
-            var pwi = new Windowinfo();
-            pwi.CbSize = Marshal.SizeOf(pwi);
-            User32.GetWindowInfo(hWnd, ref pwi);
-            return pwi;
-        }
-
-        private void UpdateMaximizedClipRegion(IntPtr hWnd)
-        {
-            var relativeToWindowRect = GetClientRectRelativeToWindowRect(hWnd);
-            if (_isNonClientStripVisible)
-            {
-                switch (_taskbarDirection)
-                {
-                    case Dock.Left:
-                        --relativeToWindowRect.Left;
-                        break;
-                    case Dock.Top:
-                        --relativeToWindowRect.Top;
-                        break;
-                    case Dock.Right:
-                        ++relativeToWindowRect.Right;
-                        break;
-                    case Dock.Bottom:
-                        ++relativeToWindowRect.Bottom;
-                        break;
-                }
-            }
-
-            var rectRgnIndirect = Gdi32.CreateRectRgnIndirect(ref relativeToWindowRect);
-            User32.SetWindowRgn(hWnd, rectRgnIndirect, User32.IsWindowVisible(hWnd));
-        }
-
-        private static Monitorinfo MonitorInfoFromWindow(
-            IntPtr hWnd)
+        private static Monitorinfo MonitorInfoFromWindow(IntPtr hWnd)
         {
             var hMonitor = User32.MonitorFromWindow(hWnd, 2);
             var monitorInfo = new Monitorinfo();
@@ -581,7 +481,7 @@ namespace FocLauncher.Controls
             User32.SetWindowRgn(hWnd, roundRectRegion, User32.IsWindowVisible(hWnd));
         }
 
-        private IntPtr ComputeRoundRectRegion(IntPtr hwnd, int left, int top, int width, int height)
+        private static IntPtr ComputeRoundRectRegion(IntPtr hwnd, int left, int top, int width, int height)
         {
             var deviceUnits1 = hwnd.LogicalToDeviceUnits(0);
             var deviceUnits2 = hwnd.LogicalToDeviceUnits(0);
@@ -635,40 +535,17 @@ namespace FocLauncher.Controls
 
         protected override void OnClosed(EventArgs e)
         {
-            StopTimer();
             DestroyGlowWindows();
             base.OnClosed(e);
         }
-
-        private bool IsGlowVisible
-        {
-            get => _isGlowVisible;
-            set
-            {
-                if (_isGlowVisible == value)
-                    return;
-                _isGlowVisible = value;
-                for (var direction = 0; direction < _glowWindows.Length; ++direction)
-                    GetOrCreateGlowWindow(direction).IsVisible = value;
-            }
-        }
-
+        
         private GlowWindow GetOrCreateGlowWindow(int direction, bool isSubclass = true)
         {
-            if (_glowWindows[direction] == null)
-            {
-                _glowWindows[direction] = new GlowWindow(this, (Dock) direction, isSubclass);
-                _glowWindows[direction].ActiveGlowColor = ActiveGlowColor;
-                _glowWindows[direction].InactiveGlowColor = InactiveGlowColor;
-                _glowWindows[direction].IsActive = IsActive;
-            }
-
-            return _glowWindows[direction];
-        }
-
-        private IEnumerable<GlowWindow> LoadedGlowWindows
-        {
-            get { return _glowWindows.Where(w => w != null); }
+            return _glowWindows[direction] ?? (_glowWindows[direction] =
+                new GlowWindow(this, (Dock) direction, isSubclass)
+                {
+                    ActiveGlowColor = ActiveGlowColor, InactiveGlowColor = InactiveGlowColor, IsActive = IsActive
+                });
         }
 
         private void DestroyGlowWindows()
@@ -680,11 +557,11 @@ namespace FocLauncher.Controls
             }
         }
 
-        private void UpdateGlowWindowPositions(bool delayIfNecessary)
+        private void UpdateGlowWindowPositions()
         {
             using (DeferGlowChanges())
             {
-                UpdateGlowVisibility(delayIfNecessary);
+                UpdateGlowVisibility();
                 foreach (var loadedGlowWindow in LoadedGlowWindows)
                     loadedGlowWindow.UpdateWindowPos();
             }
@@ -712,56 +589,12 @@ namespace FocLauncher.Controls
             UpdateZOrderOfThisAndOwner();
         }
 
-        private void UpdateGlowVisibility(bool delayIfNecessary)
+        private void UpdateGlowVisibility()
         {
             var shouldShowGlow = ShouldShowGlow;
             if (shouldShowGlow == IsGlowVisible)
                 return;
-            if (SystemParameters.MinimizeAnimation & shouldShowGlow & delayIfNecessary)
-            {
-                if (_makeGlowVisibleTimer != null)
-                {
-                    _makeGlowVisibleTimer.Stop();
-                }
-                else
-                {
-                    _makeGlowVisibleTimer = new DispatcherTimer();
-                    _makeGlowVisibleTimer.Interval = TimeSpan.FromMilliseconds(200.0);
-                    _makeGlowVisibleTimer.Tick += OnDelayedVisibilityTimerTick;
-                }
-
-                _makeGlowVisibleTimer.Start();
-            }
-            else
-            {
-                StopTimer();
-                IsGlowVisible = shouldShowGlow;
-            }
-        }
-
-        protected virtual bool ShouldShowGlow
-        {
-            get
-            {
-                var handle = WindowHelper.Handle;
-                return User32.IsWindowVisible(handle) && !User32.IsIconic(handle) && !User32.IsZoomed(handle) &&
-                       (uint) ResizeMode > 0U;
-            }
-        }
-
-        private void StopTimer()
-        {
-            if (_makeGlowVisibleTimer == null)
-                return;
-            _makeGlowVisibleTimer.Stop();
-            _makeGlowVisibleTimer.Tick -= OnDelayedVisibilityTimerTick;
-            _makeGlowVisibleTimer = null;
-        }
-
-        private void OnDelayedVisibilityTimerTick(object sender, EventArgs e)
-        {
-            StopTimer();
-            UpdateGlowWindowPositions(false);
+            IsGlowVisible = shouldShowGlow;
         }
 
         private void UpdateGlowColors()
@@ -791,8 +624,7 @@ namespace FocLauncher.Controls
         {
             FromSize,
             FromPosition,
-            FromPropertyChange,
-            FromUndockSingleTab,
+            FromPropertyChange
         }
 
         private class SuppressRedrawScope : IDisposable
@@ -849,6 +681,14 @@ namespace FocLauncher.Controls
             private readonly IntPtr _pbits;
             private readonly BitmapInfo _bitmapInfo;
 
+            public IntPtr Handle { get; }
+
+            public IntPtr DiBits => _pbits;
+
+            public int Width => _bitmapInfo.BiWidth;
+
+            public int Height => -_bitmapInfo.BiHeight;
+
             public GlowBitmap(IntPtr hdcScreen, int width, int height)
             {
                 _bitmapInfo.BiSize = Marshal.SizeOf(typeof(BitmapInfoHeader));
@@ -862,14 +702,7 @@ namespace FocLauncher.Controls
                 Handle = Gdi32.CreateDIBSection(hdcScreen, ref _bitmapInfo, 0U, out _pbits, IntPtr.Zero, 0U);
             }
 
-            public IntPtr Handle { get; }
-
-            public IntPtr DiBits => _pbits;
-
-            public int Width => _bitmapInfo.BiWidth;
-
-            public int Height => -_bitmapInfo.BiHeight;
-
+            
             protected override void DisposeNativeResources()
             {
                 Gdi32.DeleteObject(Handle);
@@ -962,25 +795,6 @@ namespace FocLauncher.Controls
             public BlendFunction Blend;
             private readonly GlowBitmap _windowBitmap;
 
-            public GlowDrawingContext(int width, int height)
-            {
-                ScreenDc = User32.GetDC(IntPtr.Zero);
-                if (ScreenDc == IntPtr.Zero)
-                    return;
-                WindowDc = Gdi32.CreateCompatibleDC(ScreenDc);
-                if (WindowDc == IntPtr.Zero)
-                    return;
-                BackgroundDc = Gdi32.CreateCompatibleDC(ScreenDc);
-                if (BackgroundDc == IntPtr.Zero)
-                    return;
-                Blend.BlendOp = 0;
-                Blend.BlendFlags = 0;
-                Blend.SourceConstantAlpha = byte.MaxValue;
-                Blend.AlphaFormat = 1;
-                _windowBitmap = new GlowBitmap(ScreenDc, width, height);
-                Gdi32.SelectObject(WindowDc, _windowBitmap.Handle);
-            }
-
             public bool IsInitialized => ScreenDc != IntPtr.Zero && WindowDc != IntPtr.Zero &&
                                          BackgroundDc != IntPtr.Zero && _windowBitmap != null;
 
@@ -1006,6 +820,25 @@ namespace FocLauncher.Controls
                     var windowBitmap = _windowBitmap;
                     return windowBitmap?.Height ?? 0;
                 }
+            }
+
+            public GlowDrawingContext(int width, int height)
+            {
+                ScreenDc = User32.GetDC(IntPtr.Zero);
+                if (ScreenDc == IntPtr.Zero)
+                    return;
+                WindowDc = Gdi32.CreateCompatibleDC(ScreenDc);
+                if (WindowDc == IntPtr.Zero)
+                    return;
+                BackgroundDc = Gdi32.CreateCompatibleDC(ScreenDc);
+                if (BackgroundDc == IntPtr.Zero)
+                    return;
+                Blend.BlendOp = 0;
+                Blend.BlendFlags = 0;
+                Blend.SourceConstantAlpha = byte.MaxValue;
+                Blend.AlphaFormat = 1;
+                _windowBitmap = new GlowBitmap(ScreenDc, width, height);
+                Gdi32.SelectObject(WindowDc, _windowBitmap.Handle);
             }
 
             protected override void DisposeManagedResources()
@@ -1044,15 +877,7 @@ namespace FocLauncher.Controls
             private bool _isActive;
             private FieldInvalidationTypes _invalidatedValues;
             private bool _pendingDelayRender;
-
-            public GlowWindow(ShadowChromeWindow owner, Dock orientation, bool isWindowSubclass)
-            {
-                _targetWindow = owner;
-                _orientation = orientation;
-                ++_createdGlowWindows;
-                IsWindowSubclassed = isWindowSubclass;
-            }
-
+            
             private bool IsDeferringChanges => _targetWindow._deferGlowChangesCount > 0;
 
             private static ushort SharedWindowClassAtom
@@ -1082,21 +907,6 @@ namespace FocLauncher.Controls
             }
 
             protected override bool IsWindowSubclassed { get; }
-
-            private void UpdateProperty<T>(
-                ref T field,
-                T value,
-                FieldInvalidationTypes invalidatedValues)
-                where T : struct
-            {
-                if (field.Equals(value))
-                    return;
-                field = value;
-                _invalidatedValues |= invalidatedValues;
-                if (IsDeferringChanges)
-                    return;
-                CommitChanges();
-            }
 
             public bool IsVisible
             {
@@ -1153,6 +963,29 @@ namespace FocLauncher.Controls
 
             private IntPtr TargetWindowHandle => new WindowInteropHelper(_targetWindow).Handle;
 
+            public GlowWindow(ShadowChromeWindow owner, Dock orientation, bool isWindowSubclass)
+            {
+                _targetWindow = owner;
+                _orientation = orientation;
+                ++_createdGlowWindows;
+                IsWindowSubclassed = isWindowSubclass;
+            }
+
+            private void UpdateProperty<T>(
+                ref T field,
+                T value,
+                FieldInvalidationTypes invalidatedValues)
+                where T : struct
+            {
+                if (field.Equals(value))
+                    return;
+                field = value;
+                _invalidatedValues |= invalidatedValues;
+                if (IsDeferringChanges)
+                    return;
+                CommitChanges();
+            }
+            
             protected override ushort CreateWindowClassCore()
             {
                 return SharedWindowClassAtom;
@@ -1558,8 +1391,8 @@ namespace FocLauncher.Controls
                 Size = 2,
                 ActiveColor = 4,
                 InactiveColor = 8,
-                Render = 16, // 0x00000010
-                Visibility = 32, // 0x00000020
+                Render = 16,
+                Visibility = 32
             }
         }
     }

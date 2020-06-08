@@ -93,6 +93,28 @@ namespace FocLauncher.Theming
         private static ComponentResourceKey _checkBoxGlyphFocused;
         private static ComponentResourceKey _checkBoxTextFocused;
 
+        private static ComponentResourceKey _mainWindowActiveShadowAndBorderColor;
+        private static ComponentResourceKey _mainWindowInactiveShadowAndBorderColor;
+        private static ComponentResourceKey _mainWindowTitleBarBackground;
+        private static ComponentResourceKey _mainWindowTitleBarForeground;
+        private static ComponentResourceKey _mainWindowTitleBarForegroundInactive;
+
+        private static ComponentResourceKey _windowTitleBarButtonBackground;
+        private static ComponentResourceKey _windowTitleBarButtonBorder;
+        private static ComponentResourceKey _windowTitleBarButtonForeground;
+        private static ComponentResourceKey _windowTitleBarButtonHoverBackground;
+        private static ComponentResourceKey _windowTitleBarButtonHoverBorder;
+        private static ComponentResourceKey _windowTitleBarButtonHoverForeground;
+        private static ComponentResourceKey _windowTitleBarButtonDownBackground;
+        private static ComponentResourceKey _windowTitleBarButtonDownBorder;
+        private static ComponentResourceKey _windowTitleBarButtonDownForeground;
+        private static ComponentResourceKey _windowTitleBarButtonInactiveBackground;
+        private static ComponentResourceKey _windowTitleBarButtonInactiveBorder;
+        private static ComponentResourceKey _windowTitleBarButtonInactiveForeground;
+        private static ComponentResourceKey _windowTitleBarButtonInactiveHoverBackground;
+        private static ComponentResourceKey _windowTitleBarButtonInactiveHoverBorder;
+        private static ComponentResourceKey _windowTitleBarButtonInactiveHoverForeground;
+
 
         public static ComponentResourceKey BackgroundColor =>
             _backgroundColor ??= new ComponentResourceKey(typeof(EnvironmentColors), nameof(BackgroundColor));
@@ -359,6 +381,74 @@ namespace FocLauncher.Theming
 
         public static ComponentResourceKey CheckBoxTextFocused => _checkBoxTextFocused ??=
             new ComponentResourceKey(typeof(EnvironmentColors), nameof(CheckBoxTextFocused));
+
+
+        public static ComponentResourceKey MainWindowActiveShadowAndBorderColor =>
+            _mainWindowActiveShadowAndBorderColor ??=
+                new ComponentResourceKey(typeof(EnvironmentColors), "MainWindowActiveShadowAndBorderColor");
+
+        public static ComponentResourceKey MainWindowInactiveShadowAndBorderColor =>
+            _mainWindowInactiveShadowAndBorderColor ??= new ComponentResourceKey(typeof(EnvironmentColors),
+                "MainWindowInactiveShadowAndBorderColor");
+
+        public static ComponentResourceKey MainWindowTitleBarBackground => _mainWindowTitleBarBackground ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), "MainWindowTitleBarBackground");
+
+        public static ComponentResourceKey MainWindowTitleBarForeground => _mainWindowTitleBarForeground ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), "MainWindowTitleBarForeground");
+
+        public static ComponentResourceKey MainWindowTitleBarForegroundInactive =>
+            _mainWindowTitleBarForegroundInactive ??=
+                new ComponentResourceKey(typeof(EnvironmentColors), "MainWindowTitleBarForegroundInactive");
+
+
+
+        public static ComponentResourceKey WindowTitleBarButtonBackground => _windowTitleBarButtonBackground ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), "WindowTitleBarButtonBackground");
+
+        public static ComponentResourceKey WindowTitleBarButtonBorder => _windowTitleBarButtonBorder ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), "WindowTitleBarButtonBorder");
+
+        public static ComponentResourceKey WindowTitleBarButtonForeground => _windowTitleBarButtonForeground ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), "WindowTitleBarButtonForeground");
+
+        public static ComponentResourceKey WindowTitleBarButtonHoverBackground =>
+            _windowTitleBarButtonHoverBackground ??=
+                new ComponentResourceKey(typeof(EnvironmentColors), "WindowTitleBarButtonHoverBackground");
+
+        public static ComponentResourceKey WindowTitleBarButtonHoverBorder => _windowTitleBarButtonHoverBorder ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), "WindowTitleBarButtonHoverBorder");
+
+        public static ComponentResourceKey WindowTitleBarButtonHoverForeground =>
+            _windowTitleBarButtonHoverForeground ??=
+                new ComponentResourceKey(typeof(EnvironmentColors), "WindowTitleBarButtonHoverForeground");
+
+        public static ComponentResourceKey WindowTitleBarButtonDownBackground => _windowTitleBarButtonDownBackground ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), "WindowTitleBarButtonDownBackground");
+
+        public static ComponentResourceKey WindowTitleBarButtonDownBorder => _windowTitleBarButtonDownBorder ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), "WindowTitleBarButtonDownBorder");
+
+        public static ComponentResourceKey WindowTitleBarButtonDownForeground => _windowTitleBarButtonDownForeground ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), "WindowTitleBarButtonDownForeground");
+
+        public static ComponentResourceKey WindowTitleBarButtonInactiveBackground => _windowTitleBarButtonInactiveBackground ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), "WindowTitleBarButtonInactiveBackground");
+
+        public static ComponentResourceKey WindowTitleBarButtonInactiveBorder => _windowTitleBarButtonInactiveBorder ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), "WindowTitleBarButtonInactiveBorder");
+
+        public static ComponentResourceKey WindowTitleBarButtonInactiveForeground => _windowTitleBarButtonInactiveForeground ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), "WindowTitleBarButtonInactiveForeground");
+
+        public static ComponentResourceKey WindowTitleBarButtonInactiveHoverBackground => _windowTitleBarButtonInactiveHoverBackground ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), "WindowTitleBarButtonInactiveHoverBackground");
+
+        public static ComponentResourceKey WindowTitleBarButtonInactiveHoverBorder => _windowTitleBarButtonInactiveHoverBorder ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), "WindowTitleBarButtonInactiveHoverBorder");
+
+        public static ComponentResourceKey WindowTitleBarButtonInactiveHoverForeground => _windowTitleBarButtonInactiveHoverForeground ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), "WindowTitleBarButtonInactiveHoverForeground");
 
     }
 }

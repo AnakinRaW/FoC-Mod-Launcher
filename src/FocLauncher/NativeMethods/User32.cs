@@ -111,42 +111,20 @@ namespace FocLauncher.NativeMethods
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         internal static extern bool GetMonitorInfo(IntPtr hMonitor, ref Monitorinfo monitorInfo);
-
-        [DllImport("user32", SetLastError = true, CharSet = CharSet.Unicode)]
-        internal static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
-
+        
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         internal static extern bool ScreenToClient(IntPtr hWnd, ref POINT point);
 
         [DllImport("user32.dll", CharSet = CharSet.Unicode)]
         internal static extern int RegisterWindowMessage(string lpString);
-
-        [DllImport("User32.dll")]
-        internal static extern IntPtr GetDCEx(IntPtr hWnd, IntPtr hrgnClip, int dwFlags);
-
-        [DllImport("user32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        internal static extern bool FillRect(IntPtr hDc, ref RECT rect, IntPtr hbrush);
-
-        [DllImport("user32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        internal static extern bool GetClientRect(IntPtr hwnd, out RECT lpRect);
-
-        [DllImport("user32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        internal static extern bool ClientToScreen(IntPtr hWnd, ref POINT point);
-
+        
         [DllImport("user32.dll")]
         internal static extern IntPtr GetWindow(IntPtr hwnd, int nCmd);
 
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         internal static extern bool EnumThreadWindows(uint dwThreadId, EnumWindowsProc lpfn, IntPtr lParam);
-
-        [DllImport("user32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        internal static extern bool GetWindowInfo(IntPtr hwnd, ref Windowinfo pwi);
 
         [DllImport("User32.dll", CallingConvention = CallingConvention.StdCall)]
         internal static extern int SetWindowRgn(IntPtr hWnd, IntPtr hRgn, [MarshalAs(UnmanagedType.Bool)] bool redraw);
@@ -156,8 +134,7 @@ namespace FocLauncher.NativeMethods
         internal static extern bool EnableMenuItem(IntPtr menu, uint uIdEnableItem, uint uEnable);
 
         [DllImport("user32.dll")]
-        internal static extern int TrackPopupMenuEx(IntPtr hmenu, uint fuFlags, int x, int y, IntPtr hwnd,
-            IntPtr lptpm);
+        internal static extern int TrackPopupMenuEx(IntPtr hmenu, uint fuFlags, int x, int y, IntPtr hwnd, IntPtr lptpm);
 
         [DllImport("user32.dll")]
         internal static extern IntPtr GetSystemMenu(IntPtr hwnd, bool bRevert);
@@ -168,16 +145,9 @@ namespace FocLauncher.NativeMethods
         [DllImport("user32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool PostMessage(IntPtr hWnd, int nMsg, IntPtr wParam, IntPtr lParam);
-    }
 
-    internal enum CombineMode
-    {
-        RgnAnd = 1,
-        RgnMin = 1,
-        RgnOr = 2,
-        RgnXor = 3,
-        RgnDiff = 4,
-        RgnCopy = 5,
-        RgnMax = 5
+        [DllImport("user32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool DestroyIcon(IntPtr hIcon);
     }
 }

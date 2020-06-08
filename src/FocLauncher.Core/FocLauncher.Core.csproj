@@ -47,6 +47,7 @@
     <Compile Include="Information\UpdateMode.cs" />
     <Compile Include="LauncherConstants.cs" />
     <Compile Include="Information\ApplicationType.cs" />
+    <Compile Include="LauncherFonts.cs" />
     <Compile Include="LauncherServiceLocator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">

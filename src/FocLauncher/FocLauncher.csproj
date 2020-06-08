@@ -68,15 +68,21 @@
     <Compile Include="Controls\Controllers\ContextMenuController.cs" />
     <Compile Include="Controls\Controllers\IContextMenuController.cs" />
     <Compile Include="Controls\Controllers\IHasContextMenuController.cs" />
+    <Compile Include="Controls\GlyphButton.cs" />
     <Compile Include="Controls\HwndWrapper.cs" />
     <Compile Include="Controls\INonClientArea.cs" />
     <Compile Include="Controls\MainWindowTitleBar.cs" />
+    <Compile Include="Controls\RoutedCommandButton.cs" />
+    <Compile Include="Controls\SystemMenu.cs" />
+    <Compile Include="Controls\WindowTitleBarButton.cs" />
+    <Compile Include="Converters\BooleanOrConverter.cs" />
     <Compile Include="NativeMethods\AbEdge.cs" />
     <Compile Include="NativeMethods\AbMsg.cs" />
     <Compile Include="NativeMethods\AppBarData.cs" />
     <Compile Include="NativeMethods\BitmapInfo.cs" />
     <Compile Include="NativeMethods\BitmapInfoHeader.cs" />
     <Compile Include="NativeMethods\BlendFunction.cs" />
+    <Compile Include="NativeMethods\CombineMode.cs" />
     <Compile Include="NativeMethods\EnumWindowsProc.cs" />
     <Compile Include="NativeMethods\Gdi32.cs" />
     <Compile Include="NativeMethods\GWL.cs" />
@@ -216,6 +222,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Themes\Generic\GlyphButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Themes\Generic\LauncherCheckBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -245,6 +255,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Themes\Generic\MainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Generic\SystemMenu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Generic\WindowTitleBarButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
