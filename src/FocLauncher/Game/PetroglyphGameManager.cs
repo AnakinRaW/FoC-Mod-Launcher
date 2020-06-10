@@ -1,42 +1,41 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using FocLauncher.Game.Detection;
 
 namespace FocLauncher.Game
 {
-    public sealed class PetroglyphGameManager : INotifyPropertyChanged
+    public sealed class PetroglyphGameManager
     {
         public event EventHandler<IGame> GameStarted;
 
         public event EventHandler<IGame> GameClosed;
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private static readonly Lazy<PetroglyphGameManager> Lazy =
-            new Lazy<PetroglyphGameManager>(() => new PetroglyphGameManager());
-
-        public static PetroglyphGameManager Instance => Lazy.Value;
-
         public IGame EmpireAtWar { get; private set; }
 
         public IGame ForcesOfCorruption { get; private set; }
         
-
-        // TODO: Make this a real instance
-        private PetroglyphGameManager()
+        public PetroglyphGameManager(GameDetection gameDetection, GameSetupOptions setupMode = GameSetupOptions.NoSetup)
         {
+            Initialize(gameDetection, setupMode);
         }
 
-        // TODO: Consume GameDetection
-        public void Initialize(GameDetection gameDetection)
+        private void Initialize(GameDetection gameDetection, GameSetupOptions setupMode)
         {
+            if (gameDetection is null)
+                throw new ArgumentNullException(nameof(gameDetection));
+            if (gameDetection.IsError)
+                throw new PetroglyphGameException();
 
-        }
+            EmpireAtWar = GameFactory.CreateEawGame(gameDetection.EawExe!.Directory, gameDetection.FocType);
+            ForcesOfCorruption = GameFactory.CreateFocGame(gameDetection.FocExe!.Directory, gameDetection.FocType);
 
-        public void FindAndInitialize(GameDetectionOptions findOptions)
-        {
+            RegisterEvents(EmpireAtWar);
+            RegisterEvents(ForcesOfCorruption);
 
+            if (setupMode == GameSetupOptions.NoSetup)
+                return;
+
+            EmpireAtWar.Setup(setupMode);
+            ForcesOfCorruption.Setup(setupMode);
         }
 
         private void RegisterEvents(IGame game)
@@ -48,12 +47,7 @@ namespace FocLauncher.Game
         {
 
         }
-
-        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
+        
         private void OnGameStarted(IGame e)
         {
             GameStarted?.Invoke(this, e);
@@ -63,5 +57,12 @@ namespace FocLauncher.Game
         {
             GameClosed?.Invoke(this, e);
         }
+    }
+
+    public enum GameSetupOptions
+    {
+        NoSetup,
+        FindMods,
+        ResolveModDependencies
     }
 }

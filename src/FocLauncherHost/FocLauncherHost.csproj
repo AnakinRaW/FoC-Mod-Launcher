@@ -62,9 +62,6 @@
     <ApplicationIcon>Resources\icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Resource Include="Resources\Fonts\EaW-bold.ttf" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="..\FocLauncher.Shared\ExternalUpdaterResult.cs">
       <Link>Shared\ExternalUpdaterResult.cs</Link>
     </Compile>
@@ -95,6 +92,7 @@
     <Compile Include="Dialogs\WindowHost.cs" />
     <Compile Include="LauncherInitializer.cs" />
     <Compile Include="LauncherRestartManager.cs" />
+    <Compile Include="Controls\OutlinedTextBlock.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="HostApplication.cs" />
     <Compile Include="ExceptionHandling\ExceptionToTextConverter.cs" />

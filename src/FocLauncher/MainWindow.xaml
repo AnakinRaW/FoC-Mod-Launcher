@@ -1,4 +1,4 @@
-﻿<Window x:Class="FocLauncher.MainWindow"
+﻿<controls:ShadowChromeWindow x:Class="FocLauncher.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -7,16 +7,16 @@
         xmlns:converters="clr-namespace:FocLauncher.Converters"
         xmlns:mods="clr-namespace:FocLauncher.Mods"
         xmlns:controls="clr-namespace:FocLauncher.Controls"
-        xmlns:game="clr-namespace:FocLauncher.Game"
         xmlns:focLauncher="clr-namespace:FocLauncher"
         mc:Ignorable="d"
-        Title="FoC Launcher by Anakin" Width="400" ResizeMode="CanMinimize" Height="600" 
-        Background="{DynamicResource {x:Static theming:EnvironmentColors.BackgroundImage}}"
+        Title="FoC Mod Launcher" Width="400" 
+        Height="600" 
         Foreground="White"
         UseLayoutRounding="True"
-        TextOptions.TextFormattingMode="Display"
         Closing="MainWindow_OnClosing">
     <Window.Resources>
+
+        <FontFamily x:Key="EaWFont">/FocLauncher.Core;component/Resources/Fonts/#Empire At War Bold</FontFamily>
         <converters:GameTypeToStringConverter x:Key="GameTypeToStringConverter"/>
         <converters:SteamToVisibilityConverter x:Key="SteamToVisibilityConverter"/>
         <converters:DebugBuildToVisibilityConverter x:Key="DebugBuildToVisibilityConverter"/>
@@ -40,7 +40,7 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <Image Grid.Column="0" Source="{Binding GameObject.IconFile}" Width="32" Height="32" Margin="0,2,4,2"/>
-                <TextBlock Grid.Column="2" VerticalAlignment="Center" Text="{Binding GameObject.Name}"/>
+                <TextBlock Grid.Column="2" VerticalAlignment="Center" Text="{Binding Name}"/>
                 <TextBlock Grid.Column="3" Margin="12,0" VerticalAlignment="Center" HorizontalAlignment="Right" Text="{Binding GameObject.Version}"/>
                 <Image Grid.Column="4" Height="16" Width="16" Source="Resources/steam.png" 
                        RenderOptions.BitmapScalingMode="Fant"
@@ -63,11 +63,8 @@
         <Grid Margin="6,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="6"/>
-                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" Text="Forces of Corruption Launcher" FontSize="18" FontWeight="Bold"/>
-            <TextBlock Grid.Row="2" Text="Choose the mod you want to play:"/>
+            <TextBlock Text="Choose the mod you want to play:"/>
         </Grid>
 
         <controls:LauncherListBox x:Name="ListBox" Grid.Row="1" Margin="6,0" ItemsSource="{Binding GameObjects}" ItemTemplate="{StaticResource ItemDataTemplate}"
@@ -84,19 +81,19 @@
             <TextBlock Grid.Column="1" Margin="6,0" Text="Steam Workshops"/>
         </Grid>
         <StackPanel Grid.Row="3" Margin="0,12,0,12">
-            <Button HorizontalAlignment="Center" Margin="8" Padding="8,3,8,3" Width="100" Height="30" IsDefault="True"
-                    Content="Play"
-                    Command="{Binding LaunchCommand}" CommandParameter="{Binding SelectedItem.GameObject, ElementName=ListBox}"/>
-            <CheckBox x:Name="DebugCheckBox" Content="Use Debug Build" IsChecked="{Binding UseDebugBuild, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                      Visibility="{Binding FoC, Converter={StaticResource DebugBuildToVisibilityConverter}}"
-                      Style="{StaticResource StyledCheckBox}" HorizontalAlignment="Center"/>
+            <controls:PlayButton HorizontalAlignment="Center" Margin="8" Padding="8,3,8,3" Width="120" Height="40" IsDefault="True"
+                        Command="{Binding LaunchCommand}" CommandParameter="{Binding SelectedItem.GameObject, ElementName=ListBox}"
+                        Text="PLAY"/>
+            <controls:LauncherCheckBox x:Name="DebugCheckBox" Content="Use Debug Build" IsChecked="{Binding UseDebugBuild, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              Visibility="{Binding FoC, Converter={StaticResource DebugBuildToVisibilityConverter}}"
+                              Style="{StaticResource StyledCheckBox}" HorizontalAlignment="Center"/>
             <DockPanel HorizontalAlignment="Center">
-                    <CheckBox Content="IgnoreAsserts" IsChecked="{Binding IgnoreAsserts, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
-                              Style="{StaticResource ArgumentCheckBox}"/>
-                    <CheckBox Content="No art process" IsChecked="{Binding NoArtProcess, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                              Style="{StaticResource ArgumentCheckBox}"/>
-                    <CheckBox Content="Windowed" IsChecked="{Binding Windowed, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                              Style="{StaticResource ArgumentCheckBox}"/>
+                <controls:LauncherCheckBox Content="IgnoreAsserts" IsChecked="{Binding IgnoreAsserts, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+                                  Style="{StaticResource ArgumentCheckBox}"/>
+                <controls:LauncherCheckBox Content="No art process" IsChecked="{Binding NoArtProcess, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                  Style="{StaticResource ArgumentCheckBox}"/>
+                <controls:LauncherCheckBox Content="Windowed" IsChecked="{Binding Windowed, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                  Style="{StaticResource ArgumentCheckBox}"/>
                 </DockPanel>
             </StackPanel>
 
@@ -109,12 +106,12 @@
                 </Grid.ColumnDefinitions>
                 <DockPanel>
                     <TextBlock Margin="3,0" VerticalAlignment="Center" Text="Game: "/>
-                    <TextBlock VerticalAlignment="Center" Text="{Binding GameType, Converter={StaticResource GameTypeToStringConverter}}"/>
+                    <TextBlock VerticalAlignment="Center" Text="{Binding Path=FocType, Converter={StaticResource GameTypeToStringConverter}}"/>
                 </DockPanel>
                 <DockPanel Grid.Column="2" HorizontalAlignment="Stretch">
-                    <controls:StatusBarButton Margin="0,0,12,0" Click="OpenChangeThemeDialog" Padding="5,2">
+                    <!--<controls:StatusBarButton Margin="0,0,12,0" Click="OpenChangeThemeDialog" Padding="5,2">
                         <AccessText VerticalAlignment="Center" Text="Change _Theme" TextDecorations="Underline"/>
-                    </controls:StatusBarButton>
+                    </controls:StatusBarButton>-->
                     <controls:StatusBarButton Margin="0,0,3,0" Click="OpenSettingsWindow" Padding="5,2">
                         <Image Source="Resources/SettingsOutline_16x.png"/>
                     </controls:StatusBarButton>
@@ -125,4 +122,4 @@
             </Grid>
         </controls:LauncherStatusBar>
     </Grid>
-</Window>
+</controls:ShadowChromeWindow>

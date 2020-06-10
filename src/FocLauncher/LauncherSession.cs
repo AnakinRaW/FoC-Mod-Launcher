@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 using FocLauncher.Controls.Controllers;
 using FocLauncher.Game;
 using FocLauncher.Mods;
@@ -52,7 +53,12 @@ namespace FocLauncher
 
             var args = new GameCommandArguments();
             if (gameableObject is IMod mod)
-                args.Mod = mod;
+            {
+                var modList = GetAllMods(mod);
+                if (!modList.Any())
+                    return false;
+                args.Mods = modList;
+            }
             args.IgnoreAsserts = _mainWindowModel.IgnoreAsserts;
             args.NoArtProcess = _mainWindowModel.NoArtProcess;
             args.Windowed = _mainWindowModel.Windowed;
@@ -70,6 +76,17 @@ namespace FocLauncher
                 StartFailed?.Invoke(this, gameableObject);
 
             return started;
+        }
+
+        private static IList<IMod> GetAllMods(IMod mod)
+        {
+            var traverser = new ModDependencyTraverser(mod);
+            if (traverser.HasDependencyCycles())
+            {
+                MessageBox.Show("The Mod's dependencies result in a cycles. Cannot Start the Mod!");
+                return new List<IMod>(0);
+            }
+            return traverser.Traverse();
         }
     }
 }

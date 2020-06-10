@@ -11,7 +11,7 @@ using FocLauncher.Utilities;
 
 namespace FocLauncher.Controls
 {
-    class LauncherListBox : ListBox
+    internal class LauncherListBox : ListBox
     {
         private static readonly DependencyPropertyKey IsContextMenuOpenPropertyKey =
             DependencyProperty.RegisterAttachedReadOnly("IsContextMenuOpen", typeof(bool), typeof(LauncherListBox),
@@ -46,7 +46,7 @@ namespace FocLauncher.Controls
             AddHandler(Mouse.MouseDownEvent, new MouseButtonEventHandler(OnMouseDown), true);
             SetValue(VirtualizingStackPanel.VirtualizationModeProperty, VirtualizationMode.Recycling);
         }
-
+        
         protected override void OnContextMenuOpening(ContextMenuEventArgs e)
         {
             if (e.OriginalSource is DependencyObject originalSource && DescendantHasContextMenu(originalSource))

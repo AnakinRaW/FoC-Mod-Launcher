@@ -26,6 +26,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <LangVersion>8</LangVersion>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -36,6 +37,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <LangVersion>8</LangVersion>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Resources\launcherIcon.ico</ApplicationIcon>
@@ -65,11 +67,51 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationResourceLoader.cs" />
     <Compile Include="Controls\Controllers\ContextMenuController.cs" />
     <Compile Include="Controls\Controllers\IContextMenuController.cs" />
     <Compile Include="Controls\Controllers\IHasContextMenuController.cs" />
+    <Compile Include="Controls\GlyphButton.cs" />
+    <Compile Include="Controls\HwndWrapper.cs" />
+    <Compile Include="Controls\INonClientArea.cs" />
+    <Compile Include="Controls\MainWindowTitleBar.cs" />
+    <Compile Include="Controls\RoutedCommandButton.cs" />
+    <Compile Include="Controls\SystemMenu.cs" />
+    <Compile Include="Controls\WindowTitleBarButton.cs" />
+    <Compile Include="Converters\BooleanOrConverter.cs" />
+    <Compile Include="Utilities\IconHelper.cs" />
+    <Compile Include="NativeMethods\AbEdge.cs" />
+    <Compile Include="NativeMethods\AbMsg.cs" />
+    <Compile Include="NativeMethods\AppBarData.cs" />
+    <Compile Include="NativeMethods\BitmapInfo.cs" />
+    <Compile Include="NativeMethods\BitmapInfoHeader.cs" />
+    <Compile Include="NativeMethods\BlendFunction.cs" />
+    <Compile Include="NativeMethods\CombineMode.cs" />
+    <Compile Include="NativeMethods\EnumWindowsProc.cs" />
+    <Compile Include="NativeMethods\Gdi32.cs" />
+    <Compile Include="NativeMethods\GWL.cs" />
+    <Compile Include="NativeMethods\Gwlp.cs" />
+    <Compile Include="NativeMethods\Kernel32.cs" />
+    <Compile Include="NativeMethods\MinMaxInfo.cs" />
+    <Compile Include="NativeMethods\MonitorInfo.cs" />
+    <Compile Include="NativeMethods\Msimg32.cs" />
+    <Compile Include="NativeMethods\Point.cs" />
+    <Compile Include="NativeMethods\RECT.cs" />
+    <Compile Include="NativeMethods\RedrawWindowFlags.cs" />
+    <Compile Include="NativeMethods\Shell32.cs" />
+    <Compile Include="NativeMethods\Win32Size.cs" />
+    <Compile Include="NativeMethods\Windowinfo.cs" />
+    <Compile Include="NativeMethods\WindowPlacement.cs" />
+    <Compile Include="NativeMethods\WindowPos.cs" />
+    <Compile Include="NativeMethods\WndClass.cs" />
+    <Compile Include="Theming\ScrollBarResourceKeys.cs" />
+    <Compile Include="Theming\ScrollBarThemingUtilities.cs" />
+    <Compile Include="Utilities\DisposableObject.cs" />
+    <Compile Include="Controls\LauncherCheckBox.cs" />
     <Compile Include="Controls\LauncherListBox.cs" />
     <Compile Include="Controls\LauncherListBoxItem.cs" />
+    <Compile Include="Controls\PlayButton.cs" />
+    <Compile Include="Controls\ShadowChromeWindow.cs" />
     <Compile Include="Controls\StatusBarButton.cs" />
     <Compile Include="Converters\DebugBuildToVisibilityConverter.cs" />
     <Compile Include="Dialogs\SettingsWindow.xaml.cs">
@@ -82,13 +124,31 @@
     <Compile Include="Game\EawSteamGameSlim.cs" />
     <Compile Include="Game\Detection\GameDetectionOptions.cs" />
     <Compile Include="Game\FocRegistryHelper.cs" />
+    <Compile Include="Game\GameArgumentException.cs" />
     <Compile Include="Game\GameBuildType.cs" />
+    <Compile Include="Game\GameCommandArgumentsUtilities.cs" />
     <Compile Include="Game\GameStartingEventArgs.cs" />
     <Compile Include="Game\GameTypeHelper.cs" />
     <Compile Include="Game\IDebugable.cs" />
+    <Compile Include="Game\IHasDirectory.cs" />
+    <Compile Include="Game\IModContainer.cs" />
     <Compile Include="Game\IPetroglyhLaunchable.cs" />
     <Compile Include="Game\LauncherSteamHelper.cs" />
+    <Compile Include="Game\ModCollectionChangedAction.cs" />
+    <Compile Include="Game\ModCollectionChangedEventArgs.cs" />
+    <Compile Include="Game\ModCreationDelegate.cs" />
+    <Compile Include="Game\PetroglyphException.cs" />
+    <Compile Include="Game\PetroglyphGameException.cs" />
     <Compile Include="Game\PetroglyphGameRegistry.cs" />
+    <Compile Include="ModInfo\ModInfoData.cs" />
+    <Compile Include="ModInfo\ModInfoDataUtilities.cs" />
+    <Compile Include="ModInfo\ModInfoException.cs" />
+    <Compile Include="Mods\ModBase.cs" />
+    <Compile Include="Mods\ModDependencyTraverser.cs" />
+    <Compile Include="ModInfo\ModInfoFileFinder.cs" />
+    <Compile Include="ModInfo\ModInfoFinderCollection.cs" />
+    <Compile Include="Mods\ModType.cs" />
+    <Compile Include="Mods\PetroglyphModException.cs" />
     <Compile Include="Game\RegistryHelper.cs" />
     <Compile Include="Game\SteamClient.cs" />
     <Compile Include="Controls\Controllers\IHasInvocationController.cs" />
@@ -96,12 +156,11 @@
     <Compile Include="ILauncherWindowModel.cs" />
     <Compile Include="IsolatingLauncherBootstrapper.cs" />
     <Compile Include="Controls\LauncherStatusBar.cs" />
-    <Compile Include="Game\GameStartOptions.cs" />
+    <Compile Include="Game\GameCommandArguments.cs" />
     <Compile Include="Game\PetroglyphGame.cs" />
     <Compile Include="Game\PetroglyphGameManager.cs" />
     <Compile Include="LauncherApp.cs" />
     <Compile Include="Converters\GameTypeToStringConverter.cs" />
-    <Compile Include="Converters\ModNameConverter.cs" />
     <Compile Include="Converters\SteamToVisibilityConverter.cs" />
     <Compile Include="Converters\ThemeSelectedConverter.cs" />
     <Compile Include="Dialogs\ChangeThemeDialog.xaml.cs">
@@ -118,17 +177,19 @@
     <Compile Include="ModInfo\SteamData.cs" />
     <Compile Include="ModInfo\ModInfoFile.cs" />
     <Compile Include="Mods\Mod.cs" />
-    <Compile Include="Mods\ModHelper.cs" />
-    <Compile Include="ModInfo\ModInfoFileException.cs" />
+    <Compile Include="Mods\ModFactory.cs" />
     <Compile Include="ModInfo\SteamWorkshopVisibility.cs" />
+    <Compile Include="Mods\VirtualMod.cs" />
     <Compile Include="NativeMethods\User32.cs" />
-    <Compile Include="PetroglyphInitialization.cs" />
+    <Compile Include="Game\GameFactory.cs" />
     <Compile Include="Theming\ThemeManager.cs" />
+    <Compile Include="Utilities\FileUtilities.cs" />
     <Compile Include="Utilities\HashCodeCombiner.cs" />
     <Compile Include="Utilities\HtmlDownloader.cs" />
     <Compile Include="Utilities\ProcessCreationListener.cs" />
     <Compile Include="Utilities\StreamUtilities.cs" />
     <Compile Include="Utilities\VisualUtilities.cs" />
+    <Compile Include="Utilities\WeakCollection.cs" />
     <Compile Include="Utilities\XmlTools.cs" />
     <Compile Include="Versioning\IVersionComparer.cs" />
     <Compile Include="Versioning\ModVersion.cs" />
@@ -183,6 +244,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Themes\Generic\GlyphButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Generic\LauncherCheckBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Themes\Generic\LauncherListBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -195,7 +264,27 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Themes\Generic\PlayButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Generic\ScrollBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Themes\Generic\StatusBarButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Generic\MainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Generic\SystemMenu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Generic\WindowTitleBarButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -285,5 +374,23 @@
     <Resource Include="Resources\StatusHelp_grey_disabled_16x.png" />
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\ShadowImages\bottom.png" />
+    <Resource Include="Resources\ShadowImages\bottomleft.png" />
+    <Resource Include="Resources\ShadowImages\bottomright.png" />
+    <Resource Include="Resources\ShadowImages\cornerbottomleft.png" />
+    <Resource Include="Resources\ShadowImages\cornerbottomright.png" />
+    <Resource Include="Resources\ShadowImages\cornertopleft.png" />
+    <Resource Include="Resources\ShadowImages\cornertopright.png" />
+    <Resource Include="Resources\ShadowImages\left.png" />
+    <Resource Include="Resources\ShadowImages\leftbottom.png" />
+    <Resource Include="Resources\ShadowImages\lefttop.png" />
+    <Resource Include="Resources\ShadowImages\right.png" />
+    <Resource Include="Resources\ShadowImages\rightbottom.png" />
+    <Resource Include="Resources\ShadowImages\righttop.png" />
+    <Resource Include="Resources\ShadowImages\top.png" />
+    <Resource Include="Resources\ShadowImages\topleft.png" />
+    <Resource Include="Resources\ShadowImages\topright.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

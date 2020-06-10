@@ -28,11 +28,71 @@ namespace FocLauncher.ScreenUtilities
             return dpi;
         }
 
+        public static Dpi GetWindowDpi(this IntPtr hwnd)
+        {
+            Dpi dpi;
+            if (!IsPerMonitorAwarenessEnabled)
+                dpi = SystemDpiLazy.Value;
+            else
+            {
+                var dpiValue = User32.GetDpiForWindow(hwnd);
+                dpi = new Dpi(dpiValue, dpiValue);
+            }
+               
+            if (!dpi.IsValid)
+                throw new DpiErrorException(dpi, "Invalid Dpi");
+            return dpi;
+        }
+
         internal static Dpi GetMonitorDpiCore(IntPtr monitorHandle)
         {
             return ShCore.GetDpiForMonitor(monitorHandle, MonitorDpiType.MdtEffectiveDpi, out var x, out var y) != 0
                 ? Dpi.Default
                 : new Dpi(x, y);
+        }
+
+        public static Rect LogicalToDeviceRect(this Window window)
+        {
+            return new Rect
+            {
+                X = window.LogicalToDeviceUnitsX(window.Left),
+                Y = window.LogicalToDeviceUnitsY(window.Top),
+                Width = window.LogicalToDeviceUnitsX(window.Width),
+                Height = window.LogicalToDeviceUnitsY(window.Height)
+            };
+        }
+
+        public static Rect LogicalToDeviceRect(this IntPtr hwnd, Rect rect)
+        {
+            if (rect == Rect.Empty)
+                return rect;
+            return new Rect
+            {
+                X = hwnd.LogicalToDeviceUnits(rect.X),
+                Y = hwnd.LogicalToDeviceUnits(rect.Y),
+                Width = hwnd.LogicalToDeviceUnits(rect.Width),
+                Height = hwnd.LogicalToDeviceUnits(rect.Height)
+            };
+        }
+
+        public static double LogicalToDeviceUnits(this IntPtr hwnd, double value)
+        {
+            return hwnd.LogicalToDeviceUnits<double>(value);
+        }
+
+        public static int LogicalToDeviceUnits(this IntPtr hwnd, int value)
+        {
+            return hwnd.LogicalToDeviceUnits<int>(value);
+        }
+
+        public static double LogicalToDeviceUnitsX(this Visual visual, double value)
+        {
+            return visual.LogicalToDeviceUnitsX<double>(value);
+        }
+
+        public static double LogicalToDeviceUnitsY(this Visual visual, double value)
+        {
+            return visual.LogicalToDeviceUnitsY<double>(value);
         }
 
         public static int DeviceToLogicalUnitsY(this Visual visual, int value)
@@ -53,6 +113,30 @@ namespace FocLauncher.ScreenUtilities
         public static double DeviceToLogicalUnitsY(this Visual visual, double value)
         {
             return visual.DeviceToLogicalUnitsY<double>(value);
+        }
+
+        private static T LogicalToDeviceUnitsX<T>(this Visual visual, T value) where T : IConvertible
+        {
+            return visual.LogicalToDeviceUnits<T>(value, true);
+        }
+
+        private static T LogicalToDeviceUnitsY<T>(this Visual visual, T value) where T : IConvertible
+        {
+            return visual.LogicalToDeviceUnits<T>(value, false);
+        }
+
+        private static T LogicalToDeviceUnits<T>(this IntPtr hwnd, T value) where T : IConvertible
+        {
+            var windowDpi = hwnd.GetWindowDpi();
+            var windowDpiScale = new DpiScale(windowDpi.X / 96.0, windowDpi.Y / 96.0);
+            return (T)Convert.ChangeType((value.ToDouble(null) * windowDpiScale.DpiScaleX), typeof(T));
+        }
+
+        private static T LogicalToDeviceUnits<T>(this Visual visual, T value, bool getX) where T : IConvertible
+        {
+            var dpiScale = GetDpiScale(visual);
+            var scaleValue = getX ? dpiScale.DpiScaleX : dpiScale.DpiScaleY;
+            return (T) Convert.ChangeType(value.ToDouble(null) * scaleValue, typeof(T));
         }
 
         private static T DeviceToLogicalUnitsX<T>(this Visual visual, T value) where T : IConvertible

@@ -60,6 +60,7 @@
     <Compile Include="NativeMethods\Gwl.cs" />
     <Compile Include="NativeMethods\MonitorInfo.cs" />
     <Compile Include="NativeMethods\NativeMethods.cs" />
+    <Compile Include="NativeMethods\POINT.cs" />
     <Compile Include="NativeMethods\RECT.cs" />
     <Compile Include="NativeMethods\UnsafeHelpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -77,6 +78,7 @@
     <Compile Include="Threading\Extensions.cs" />
     <Compile Include="Threading\GenericThreadHelper.cs" />
     <Compile Include="Threading\JoinableTaskFactoryExtensions.cs" />
+    <Compile Include="Threading\TaskExtensions.cs" />
     <Compile Include="Threading\ThreadHelper.cs" />
     <Compile Include="Utilities\DisposableObject.cs" />
     <Compile Include="Utilities\ObservableObject.cs" />

@@ -31,7 +31,7 @@ namespace FocLauncher.Game
                 progress.Report(new WaitDialogProgressData(WaitMessage, "Waiting until Steam is started...", isCancelable:true));
                 if (!SteamClient.Instance.IsRunning)
                     SteamClient.Instance.StartSteam();
-                await SteamClient.Instance.WaitSteamRunningAndLoggedInAsync(token);
+                await SteamClient.Instance.WaitSteamRunningAndLoggedInAsync(token).ConfigureAwait(false);
                 eawSlim.Close();
                 eawSlim.StartGame();
                 using var processWaitTokenSource = CancellationTokenSource.CreateLinkedTokenSource(token);
@@ -39,12 +39,12 @@ namespace FocLauncher.Game
 
                 Logger.Trace("Waiting max. two minutes for the game to be started");
                 progress.Report(new WaitDialogProgressData(WaitMessage, "Waiting until EaW is started...", isCancelable: true));
-                await ProcessCreationListener.WaitProcessCreatedAsync(EawSteamGameSlim.Executable, processWaitTokenSource.Token);
+                await ProcessCreationListener.WaitProcessCreatedAsync(EawSteamGameSlim.Executable, processWaitTokenSource.Token).ConfigureAwait(false);
                 progress.Report(new WaitDialogProgressData(WaitMessage, "Waiting until EaW is closed..."));
                 if (!processWaitTokenSource.IsCancellationRequested)
                 {
                     Logger.Trace($"{EawSteamGameSlim.Executable} was started. Waiting another second. Just to be sure");
-                    await Task.Delay(1000, token);
+                    await Task.Delay(1000, token).ConfigureAwait(false);
                 }
                 processWaitTokenSource.Dispose();
             }

@@ -1,5 +1,5 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
+using System.Linq;
 using FocLauncher.Utilities;
 
 namespace FocLauncher.Game
@@ -18,17 +18,17 @@ namespace FocLauncher.Game
         public override string Name => "Forces of Corruption";
         public override string Description => string.Empty;
 
-        public override string? IconFile => PetroglyphInitialization.IconPath;
+        public override string? IconFile => LauncherApp.IconPath;
 
-        public Foc(string gameDirectory, GameType type) : base(gameDirectory)
+        public Foc(DirectoryInfo gameDirectory, GameType type) : base(gameDirectory)
         {
             Type = type;
         }
 
         public override bool IsPatched()
         {
-            var constantsFilePath = Path.Combine(GameDirectory, @"Data\XML\GAMECONSTANTS.XML");
-            var graphicsFilePath = Path.Combine(GameDirectory, @"Data\XML\GRAPHICDETAILS.XML");
+            var constantsFilePath = Path.Combine(Directory.FullName, @"Data\XML\GAMECONSTANTS.XML");
+            var graphicsFilePath = Path.Combine(Directory.FullName, @"Data\XML\GRAPHICDETAILS.XML");
             if (!File.Exists(constantsFilePath) || !File.Exists(graphicsFilePath))
                 return false;
             var hashProvider = new HashProvider();
@@ -39,10 +39,10 @@ namespace FocLauncher.Game
 
         protected override void OnGameStarting(GameStartingEventArgs args)
         {
-            if (args.GameArguments.Mod is null)
+            if (args.GameArguments.Mods is null || args.GameArguments.Mods.Any())
                 return;
-            if (!args.GameArguments.Mod.ModDirectory.StartsWith(GameDirectory))
-                throw new Exception("Mod is not compatible");
+            //if (!args.GameArguments.Mods.Any(x => x.ModDirectory.StartsWith(GameDirectory)))
+            //    throw new Exception("Mod is not compatible");
             base.OnGameStarting(args);
         }
     }
