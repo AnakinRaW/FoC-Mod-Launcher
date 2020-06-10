@@ -67,7 +67,7 @@ namespace FocLauncherHost
                     }
                     finally
                     {
-                        await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(cts.Token);
+                        await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                         cts.Dispose();
                     }
 
