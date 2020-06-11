@@ -78,7 +78,7 @@ IF %ERRORLEVEL% EQU 4 set INTEGRATION_MODE=3
 
 
 :createMetadata
-MetadataCreator.exe -o %METADATA_OUTPUT% -b %BUILD_CONFIG% -f %CURRENT_METADATA_LOCATION% -t %APPLICATION_TYPE% -m %INTEGRATION_MODE% -l %COPY_FILES_LOCATION% -r "https://republicatwar.com/downloads/FocLauncher/Builds/TestLinkedMods"
+MetadataCreator.exe -o %METADATA_OUTPUT% -b %BUILD_CONFIG% -f %CURRENT_METADATA_LOCATION% -t %APPLICATION_TYPE% -m %INTEGRATION_MODE% -l %COPY_FILES_LOCATION%
 set CREATOR_STATUS=%ERRORLEVEL% 
 if %BUILD_STATUS%==0 goto createSuccess
 if not %CREATOR_STATUS%==0 goto fail
