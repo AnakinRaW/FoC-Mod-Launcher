@@ -80,7 +80,7 @@ namespace FocLauncher.Mods
 
             if (!modInfoCollection.Variants.Any())
             {
-                var mod = CreateModInstanceOrNull(game, type, directory, null);
+                var mod = CreateModInstanceOrNull(game, type, directory, modInfoCollection.MainModInfo?.TryGetModInfo());
                 if (mod != null)
                     return new[] { mod };
             } 
