@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Media;
 using FocLauncher.NativeMethods;
+using Microsoft;
 
 namespace FocLauncher.ScreenUtilities
 {
@@ -113,6 +114,16 @@ namespace FocLauncher.ScreenUtilities
         public static double DeviceToLogicalUnitsY(this Visual visual, double value)
         {
             return visual.DeviceToLogicalUnitsY<double>(value);
+        }
+
+        public static Point DeviceToLogicalPoint(this Visual visual, Point point)
+        {
+            Requires.NotNull(visual, nameof(visual));
+            return new Point
+            {
+                X = visual.DeviceToLogicalUnitsX(point.X),
+                Y = visual.DeviceToLogicalUnitsY(point.Y)
+            };
         }
 
         private static T LogicalToDeviceUnitsX<T>(this Visual visual, T value) where T : IConvertible
