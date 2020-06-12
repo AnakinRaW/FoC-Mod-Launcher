@@ -131,7 +131,7 @@ namespace FocLauncher.ScreenUtilities
         {
             var windowRect = floatRect;
             FindMaximumSingleMonitorRectangle(windowRect, out var screenSubRect, out _);
-            if (((screenSubRect.Width == 0.0 ? 1 : (screenSubRect.Height == 0.0 ? 1 : 0)) | (forceOnScreen ? 1 : 0)) != 0)
+            if ((screenSubRect.Width == 0.0 || screenSubRect.Height == 0.0) | forceOnScreen)
             {
                 Rect workAreaRect;
                 if (fallbackDisplay == -1)

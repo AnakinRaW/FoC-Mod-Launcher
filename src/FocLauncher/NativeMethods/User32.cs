@@ -43,13 +43,6 @@ namespace FocLauncher.NativeMethods
         [DllImport("user32.dll", CharSet = CharSet.Unicode)]
         internal static extern IntPtr SetWindowLongPtr(IntPtr hWnd, int nIndex, IntPtr dwNewLong);
 
-        public static IntPtr SetWindowLongPtr(IntPtr hWnd, Gwlp nIndex, IntPtr dwNewLong)
-        {
-            if (IntPtr.Size == 8)
-                return SetWindowLongPtr(hWnd, (int)nIndex, dwNewLong);
-            return new IntPtr(SetWindowLong(hWnd, (int)nIndex, dwNewLong.ToInt32()));
-        }
-
         [DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         internal static extern IntPtr SendMessage(IntPtr hWnd, int nMsg, IntPtr wParam, IntPtr lParam);
 
@@ -111,7 +104,7 @@ namespace FocLauncher.NativeMethods
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         internal static extern bool GetMonitorInfo(IntPtr hMonitor, ref Monitorinfo monitorInfo);
-        
+
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         internal static extern bool ScreenToClient(IntPtr hWnd, ref POINT point);
@@ -149,5 +142,17 @@ namespace FocLauncher.NativeMethods
         [DllImport("user32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool DestroyIcon(IntPtr hIcon);
+        
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool GetWindowInfo(IntPtr hwnd, ref Windowinfo pwi);
+
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        internal static extern bool ClientToScreen(IntPtr hWnd, ref POINT point);
+
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool GetClientRect(IntPtr hwnd, out RECT lpRect);
     }
 }
