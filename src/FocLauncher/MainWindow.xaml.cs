@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
-using System.Windows.Input;
 using FocLauncher.Dialogs;
 using FocLauncher.Mods;
 using FocLauncher.Theming;
@@ -13,16 +12,10 @@ namespace FocLauncher
 {
     public partial class MainWindow
     {
-        public static RoutedCommand MinimizeWindow = new RoutedCommand(nameof(MinimizeWindow), typeof(MainWindow));
-        public static RoutedCommand CloseWindow = new RoutedCommand(nameof(CloseWindow), typeof(MainWindow));
-
-
         static MainWindow()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(MainWindow), new FrameworkPropertyMetadata(typeof(MainWindow)));
             RuntimeHelpers.RunClassConstructor(typeof(ScrollBarThemingUtilities).TypeHandle);
-            CommandManager.RegisterClassCommandBinding(typeof(UIElement), new CommandBinding(MinimizeWindow, OnMinimizeWindow));
-            CommandManager.RegisterClassCommandBinding(typeof(UIElement), new CommandBinding(CloseWindow, OnCloseWindow));
         }
 
         public MainWindow()
@@ -59,30 +52,6 @@ namespace FocLauncher
         private void MainWindow_OnClosing(object sender, CancelEventArgs e)
         {
             SteamModNamePersister.Instance.Save();
-        }
-
-        private static bool CanMinimizeWindow(ExecutedRoutedEventArgs args)
-        {
-            return args.Parameter is Window;
-        }
-
-        private static void OnMinimizeWindow(object sender, ExecutedRoutedEventArgs args)
-        {
-            if (!CanMinimizeWindow(args))
-                return;
-            ((Window)args.Parameter).WindowState = WindowState.Minimized;
-        }
-
-        private static bool CanCloseWindow(ExecutedRoutedEventArgs args)
-        {
-            return args.Parameter is Window;
-        }
-
-        private static void OnCloseWindow(object sender, ExecutedRoutedEventArgs args)
-        {
-            if (!CanCloseWindow(args))
-                return;
-            ((Window)args.Parameter).Close();
         }
     }
 }

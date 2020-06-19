@@ -55,7 +55,7 @@ namespace FocLauncher.Controls
                 if (e.ClickCount != 2)
                     return;
                 var ancestor = this.FindAncestor<Window>();
-                MainWindow.CloseWindow.Execute(ancestor, this);
+                WindowCommands.CloseWindow.Execute(ancestor, this);
             }
             e.Handled = true;
         }
@@ -80,7 +80,7 @@ namespace FocLauncher.Controls
             if (_optimalImageForSize != null)
                 return;
             var source = Source as BitmapFrame;
-            var deviceUnitsX = (int)this.LogicalToDeviceUnitsX(targetSize.Width);
+            var deviceUnitsX = (int) this.LogicalToDeviceUnitsX(targetSize.Width);
             var num = -1;
             if (source != null)
             {

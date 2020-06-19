@@ -2,9 +2,9 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:window="clr-namespace:FocLauncher"
                     xmlns:core="clr-namespace:FocLauncher.Theming;assembly=FocLauncher.Theming"
-                    xmlns:controls="clr-namespace:FocLauncher.Controls"
                     xmlns:theming="clr-namespace:FocLauncher.Theming"
-                    xmlns:focLauncher="clr-namespace:FocLauncher;assembly=FocLauncher.Core">
+                    xmlns:focLauncher="clr-namespace:FocLauncher;assembly=FocLauncher.Core"
+                    xmlns:baseControls="clr-namespace:FocLauncher.Controls;assembly=FocLauncher.BaseControls">
 
     <Style TargetType="{x:Type window:MainWindow}">
         <Setter Property="WindowStyle" Value="None" />
@@ -33,18 +33,18 @@
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
-                        <controls:MainWindowTitleBar x:Name="MainWindowTitleBar" Grid.Row="0" Height="32" 
-                                                     Background="{DynamicResource {x:Static core:EnvironmentColors.MainWindowTitleBarBackground}}"
-                                                     TextElement.Foreground="{DynamicResource {x:Static core:EnvironmentColors.MainWindowTitleBarForeground}}">
+                        <baseControls:MainWindowTitleBar x:Name="MainWindowTitleBar" Grid.Row="0" Height="32" 
+                                                         Background="{DynamicResource {x:Static core:EnvironmentColors.MainWindowTitleBarBackground}}"
+                                                         TextElement.Foreground="{DynamicResource {x:Static core:EnvironmentColors.MainWindowTitleBarForeground}}">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto" SharedSizeGroup="AppIcon"/>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="Auto" SharedSizeGroup="Buttons"/>
                                 </Grid.ColumnDefinitions>
-                                <controls:SystemMenu x:Name="SystemMenu" Width="32" Height="27" Margin="0,0,12,4" Padding="12,7,0,0" 
-                                                     VerticalAlignment="Top" Source="{TemplateBinding Icon}">
-                                </controls:SystemMenu>
+                                <baseControls:SystemMenu x:Name="SystemMenu" Width="32" Height="27" Margin="0,0,12,4" Padding="12,7,0,0" 
+                                                         VerticalAlignment="Top" Source="{TemplateBinding Icon}">
+                                </baseControls:SystemMenu>
                                 <TextBlock Text="{TemplateBinding Window.Title}"
                                            TextTrimming="CharacterEllipsis"
                                            FontFamily="{DynamicResource {x:Static focLauncher:LauncherFonts.EaWBoldFontFamilyKey}}"
@@ -52,17 +52,17 @@
                                            VerticalAlignment="Center" Margin="0,7,0,4" Grid.Column="1">
                                 </TextBlock>
                                 <StackPanel Orientation="Horizontal" Grid.Column="2">
-                                    <controls:WindowTitleBarButton x:Name="MinimizeButton" VerticalAlignment="Top"
-                                                                   Command="{x:Static window:MainWindow.MinimizeWindow}"
-                                                                   BorderThickness="1,0,1,1" HoverBorderThickness="1,0,1,1"
-                                                                   PressedBorderThickness="1,0,1,1" Padding="0,3,0,0" Width="46" Height="32"
-                                                                   GlyphForeground="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonForeground}}"
-                                                                   HoverBackground="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonHoverBackground}}"
-                                                                   HoverBorderBrush="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonHoverBorder}}"
-                                                                   HoverForeground="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonHoverForeground}}"
-                                                                   PressedBackground="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonDownBackground}}"
-                                                                   PressedBorderBrush="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonDownBorder}}"
-                                                                   PressedForeground="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonDownForeground}}">
+                                    <baseControls:WindowTitleBarButton x:Name="MinimizeButton" VerticalAlignment="Top"
+                                                                       Command="{x:Static baseControls:WindowCommands.MinimizeWindow}"
+                                                                       BorderThickness="1,0,1,1" HoverBorderThickness="1,0,1,1"
+                                                                       PressedBorderThickness="1,0,1,1" Padding="0,3,0,0" Width="46" Height="32"
+                                                                       GlyphForeground="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonForeground}}"
+                                                                       HoverBackground="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonHoverBackground}}"
+                                                                       HoverBorderBrush="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonHoverBorder}}"
+                                                                       HoverForeground="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonHoverForeground}}"
+                                                                       PressedBackground="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonDownBackground}}"
+                                                                       PressedBorderBrush="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonDownBorder}}"
+                                                                       PressedForeground="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonDownForeground}}">
                                         <ButtonBase.CommandParameter>
                                             <Binding RelativeSource="{RelativeSource TemplatedParent}"/>
                                         </ButtonBase.CommandParameter>
@@ -72,18 +72,18 @@
                                                 <Binding Path="(TextElement.Foreground)" RelativeSource="{RelativeSource Self}"/>
                                             </Shape.Fill>
                                         </Path>
-                                    </controls:WindowTitleBarButton>
-                                    <controls:WindowTitleBarButton x:Name="CloseButton" VerticalAlignment="Top"
-                                                                   Command="{x:Static window:MainWindow.CloseWindow}"
-                                                                   BorderThickness="1,0,1,1" HoverBorderThickness="1,0,1,1"
-                                                                   PressedBorderThickness="1,0,1,1" Padding="0,3,0,0" Width="46" Height="32"
-                                                                   GlyphForeground="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonForeground}}"
-                                                                   HoverBackground="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonHoverBackground}}"
-                                                                   HoverBorderBrush="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonHoverBorder}}"
-                                                                   HoverForeground="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonHoverForeground}}"
-                                                                   PressedBackground="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonDownBackground}}"
-                                                                   PressedBorderBrush="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonDownBorder}}"
-                                                                   PressedForeground="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonDownForeground}}">
+                                    </baseControls:WindowTitleBarButton>
+                                    <baseControls:WindowTitleBarButton x:Name="CloseButton" VerticalAlignment="Top"
+                                                                       Command="{x:Static baseControls:WindowCommands.CloseWindow}"
+                                                                       BorderThickness="1,0,1,1" HoverBorderThickness="1,0,1,1"
+                                                                       PressedBorderThickness="1,0,1,1" Padding="0,3,0,0" Width="46" Height="32"
+                                                                       GlyphForeground="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonForeground}}"
+                                                                       HoverBackground="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonHoverBackground}}"
+                                                                       HoverBorderBrush="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonHoverBorder}}"
+                                                                       HoverForeground="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonHoverForeground}}"
+                                                                       PressedBackground="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonDownBackground}}"
+                                                                       PressedBorderBrush="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonDownBorder}}"
+                                                                       PressedForeground="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonDownForeground}}">
                                         <ButtonBase.CommandParameter>
                                             <Binding>
                                                 <Binding.RelativeSource>
@@ -97,10 +97,10 @@
                                                 <Binding Path="(TextElement.Foreground)" RelativeSource="{RelativeSource Self}"/>
                                             </Shape.Fill>
                                         </Path>
-                                    </controls:WindowTitleBarButton>
+                                    </baseControls:WindowTitleBarButton>
                                 </StackPanel>
                             </Grid>
-                        </controls:MainWindowTitleBar>
+                        </baseControls:MainWindowTitleBar>
                         <AdornerDecorator Grid.Row="1">
                             <ContentPresenter/>
                         </AdornerDecorator>
@@ -115,31 +115,31 @@
                                     Property="Border.BorderBrush"/>
                             <Setter TargetName="MinimizeButton"
                                     Value="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonInactiveForeground}}"
-                                    Property="controls:GlyphButton.GlyphForeground"/>
+                                    Property="baseControls:GlyphButton.GlyphForeground"/>
                             <Setter TargetName="MinimizeButton"
                                     Value="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonInactiveHoverBackground}}"
-                                    Property="controls:GlyphButton.HoverBackground"/>
+                                    Property="baseControls:GlyphButton.HoverBackground"/>
                             <Setter TargetName="MinimizeButton"
                                     Value="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonInactiveHoverBorder}}"
-                                    Property="controls:GlyphButton.HoverBorderBrush"/>
+                                    Property="baseControls:GlyphButton.HoverBorderBrush"/>
                             <Setter TargetName="MinimizeButton"
                                     Value="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonInactiveHoverForeground}}"
-                                    Property="controls:GlyphButton.HoverForeground"/>
+                                    Property="baseControls:GlyphButton.HoverForeground"/>
                             <Setter TargetName="CloseButton"
                                     Value="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonInactiveBorder}}"
                                     Property="Border.BorderBrush"/>
                             <Setter TargetName="CloseButton"
                                     Value="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonInactiveForeground}}"
-                                    Property="controls:GlyphButton.GlyphForeground"/>
+                                    Property="baseControls:GlyphButton.GlyphForeground"/>
                             <Setter TargetName="CloseButton"
                                     Value="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonInactiveHoverBackground}}"
-                                    Property="controls:GlyphButton.HoverBackground"/>
+                                    Property="baseControls:GlyphButton.HoverBackground"/>
                             <Setter TargetName="CloseButton"
                                     Value="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonInactiveHoverBorder}}"
-                                    Property="controls:GlyphButton.HoverBorderBrush"/>
+                                    Property="baseControls:GlyphButton.HoverBorderBrush"/>
                             <Setter TargetName="CloseButton"
                                     Value="{DynamicResource {x:Static core:EnvironmentColors.WindowTitleBarButtonInactiveHoverForeground}}"
-                                    Property="controls:GlyphButton.HoverForeground"/>
+                                    Property="baseControls:GlyphButton.HoverForeground"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

@@ -1,4 +1,4 @@
-﻿<controls:ShadowChromeWindow x:Class="FocLauncher.MainWindow"
+﻿<baseControls:ShadowChromeWindow x:Class="FocLauncher.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -8,6 +8,7 @@
         xmlns:mods="clr-namespace:FocLauncher.Mods"
         xmlns:controls="clr-namespace:FocLauncher.Controls"
         xmlns:focLauncher="clr-namespace:FocLauncher"
+        xmlns:baseControls="clr-namespace:FocLauncher.Controls;assembly=FocLauncher.BaseControls"
         mc:Ignorable="d"
         Title="FoC Mod Launcher" Width="400" 
         Height="600" 
@@ -122,4 +123,4 @@
             </Grid>
         </controls:LauncherStatusBar>
     </Grid>
-</controls:ShadowChromeWindow>
+</baseControls:ShadowChromeWindow>

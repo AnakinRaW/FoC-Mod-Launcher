@@ -4,7 +4,7 @@ using System.Windows.Controls;
 
 namespace FocLauncher.Controls
 {
-    internal class RoutedCommandButton : Button
+    public class RoutedCommandButton : Button
     {
         static RoutedCommandButton()
         {

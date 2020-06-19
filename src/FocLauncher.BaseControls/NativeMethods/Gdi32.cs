@@ -23,21 +23,11 @@ namespace FocLauncher.NativeMethods
         [return: MarshalAs(UnmanagedType.Bool)]
         internal static extern bool DeleteObject(IntPtr hObject);
 
-        [DllImport("gdi32.dll")]
-        internal static extern IntPtr CreateSolidBrush(int colorRef);
-
         [DllImport("Gdi32.dll", CallingConvention = CallingConvention.StdCall)]
         internal static extern IntPtr CreateRectRgnIndirect(ref RECT lprc);
 
         [DllImport("Gdi32.dll", CallingConvention = CallingConvention.StdCall)]
         internal static extern IntPtr CreateRoundRectRgn(int nLeftRect, int nTopRect, int nRightRect, int nBottomRect,
             int nWidthEllipse, int nHeightEllipse);
-
-        [DllImport("Gdi32.dll", CallingConvention = CallingConvention.StdCall)]
-        internal static extern int CombineRgn(IntPtr hrngDest, IntPtr hrgnSrc1, IntPtr hrgnSrc2, int fnCombineMode);
-
-        [DllImport("Gdi32.dll", CallingConvention = CallingConvention.StdCall)]
-        internal static extern IntPtr CreateRectRgn(int nLeftRect, int nTopRect, int nRightRect, int nBottomRect);
-
     }
 }

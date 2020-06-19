@@ -71,36 +71,12 @@
     <Compile Include="Controls\Controllers\ContextMenuController.cs" />
     <Compile Include="Controls\Controllers\IContextMenuController.cs" />
     <Compile Include="Controls\Controllers\IHasContextMenuController.cs" />
-    <Compile Include="Controls\MainWindowTitleBar.cs" />
-    <Compile Include="Converters\BooleanOrConverter.cs" />
-    <Compile Include="Utilities\IconHelper.cs" />
-    <Compile Include="NativeMethods\AbEdge.cs" />
-    <Compile Include="NativeMethods\AbMsg.cs" />
     <Compile Include="NativeMethods\AppBarData.cs" />
-    <Compile Include="NativeMethods\BitmapInfo.cs" />
-    <Compile Include="NativeMethods\BitmapInfoHeader.cs" />
-    <Compile Include="NativeMethods\BlendFunction.cs" />
-    <Compile Include="NativeMethods\CombineMode.cs" />
-    <Compile Include="NativeMethods\EnumWindowsProc.cs" />
-    <Compile Include="NativeMethods\Gdi32.cs" />
-    <Compile Include="NativeMethods\GWL.cs" />
-    <Compile Include="NativeMethods\Gwlp.cs" />
-    <Compile Include="NativeMethods\Kernel32.cs" />
-    <Compile Include="NativeMethods\MinMaxInfo.cs" />
-    <Compile Include="NativeMethods\MonitorInfo.cs" />
-    <Compile Include="NativeMethods\Msimg32.cs" />
-    <Compile Include="NativeMethods\Point.cs" />
     <Compile Include="NativeMethods\RECT.cs" />
-    <Compile Include="NativeMethods\RedrawWindowFlags.cs" />
     <Compile Include="NativeMethods\Shell32.cs" />
-    <Compile Include="NativeMethods\Win32Size.cs" />
-    <Compile Include="NativeMethods\Windowinfo.cs" />
-    <Compile Include="NativeMethods\WindowPlacement.cs" />
-    <Compile Include="NativeMethods\WindowPos.cs" />
-    <Compile Include="NativeMethods\WndClass.cs" />
+    <Compile Include="Utilities\IconHelper.cs" />
     <Compile Include="Theming\ScrollBarResourceKeys.cs" />
     <Compile Include="Theming\ScrollBarThemingUtilities.cs" />
-    <Compile Include="Utilities\DisposableObject.cs" />
     <Compile Include="Controls\LauncherCheckBox.cs" />
     <Compile Include="Controls\LauncherListBox.cs" />
     <Compile Include="Controls\LauncherListBoxItem.cs" />
@@ -237,10 +213,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Themes\Generic\GlyphButton.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Themes\Generic\LauncherCheckBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -270,14 +242,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Themes\Generic\MainWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\Generic\SystemMenu.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\Generic\WindowTitleBarButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -317,6 +281,10 @@
     <Resource Include="Resources\foc.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FocLauncher.BaseControls\FocLauncher.BaseControls.csproj">
+      <Project>{c63e6a07-4f18-4edf-988e-45ee120b014f}</Project>
+      <Name>FocLauncher.BaseControls</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FocLauncher.Core\FocLauncher.Core.csproj">
       <Project>{93cdc38a-d74a-4cd5-a5aa-9ce8d953519a}</Project>
       <Name>FocLauncher.Core</Name>
@@ -367,23 +335,5 @@
     <Resource Include="Resources\StatusHelp_grey_disabled_16x.png" />
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <Resource Include="Resources\ShadowImages\bottom.png" />
-    <Resource Include="Resources\ShadowImages\bottomleft.png" />
-    <Resource Include="Resources\ShadowImages\bottomright.png" />
-    <Resource Include="Resources\ShadowImages\cornerbottomleft.png" />
-    <Resource Include="Resources\ShadowImages\cornerbottomright.png" />
-    <Resource Include="Resources\ShadowImages\cornertopleft.png" />
-    <Resource Include="Resources\ShadowImages\cornertopright.png" />
-    <Resource Include="Resources\ShadowImages\left.png" />
-    <Resource Include="Resources\ShadowImages\leftbottom.png" />
-    <Resource Include="Resources\ShadowImages\lefttop.png" />
-    <Resource Include="Resources\ShadowImages\right.png" />
-    <Resource Include="Resources\ShadowImages\rightbottom.png" />
-    <Resource Include="Resources\ShadowImages\righttop.png" />
-    <Resource Include="Resources\ShadowImages\top.png" />
-    <Resource Include="Resources\ShadowImages\topleft.png" />
-    <Resource Include="Resources\ShadowImages\topright.png" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

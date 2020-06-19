@@ -3,7 +3,7 @@ using System.Windows.Media;
 
 namespace FocLauncher.Controls
 {
-    internal class GlyphButton : RoutedCommandButton
+    public class GlyphButton : RoutedCommandButton
     {
         public static readonly DependencyProperty PressedBackgroundProperty = DependencyProperty.Register(nameof(PressedBackground), typeof(Brush), typeof(GlyphButton));
         public static readonly DependencyProperty PressedBorderBrushProperty = DependencyProperty.Register(nameof(PressedBorderBrush), typeof(Brush), typeof(GlyphButton));

@@ -1,108 +1,19 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Windows;
-using System.Windows.Interop;
 
 namespace FocLauncher.NativeMethods
 {
     internal class NativeMethods
     {
-        private static int _vsmNotifyOwnerActivate;
-
-        public static int NotifyOwnerActive
-        {
-            get
-            {
-                if (_vsmNotifyOwnerActivate == 0)
-                    _vsmNotifyOwnerActivate = User32.RegisterWindowMessage("NOTIFYOWNERACTIVATE{A982313C-756C-4da9-8BD0-0C375A45784B}");
-                return _vsmNotifyOwnerActivate;
-            }
-        }
-
-        internal static int GetXlParam(int lParam)
-        {
-            return LoWord(lParam);
-        }
-
-        internal static int GetYlParam(int lParam)
-        {
-            return HiWord(lParam);
-        }
-
-        internal static int HiWord(int value)
-        {
-            return (short)(value >> 16);
-        }
-
-        internal static int LoWord(int value)
-        {
-            return (short)(value & ushort.MaxValue);
-        }
-
         public static int SignedHigh(int n)
         {
-            return (short)(n >> 16 & ushort.MaxValue);
+            return (short) (n >> 16 & ushort.MaxValue);
         }
 
         public static int SignedLow(int n)
         {
-            return (short)(n & ushort.MaxValue);
-        }
-
-        internal static IntPtr MakeParam(int lowWord, int highWord)
-        {
-            return new IntPtr((lowWord & ushort.MaxValue) | (highWord << 16));
-        }
-
-        internal static IntPtr SetWindowLong(IntPtr hWnd, int nIndex, IntPtr dwNewLong)
-        {
-            return IntPtr.Size == 4
-                ? User32.SetWindowLongPtr32(hWnd, nIndex, dwNewLong)
-                : User32.SetWindowLongPtr64(hWnd, nIndex, dwNewLong);
-        }
-
-        internal static bool IsKeyPressed(int vKey)
-        {
-            return User32.GetKeyState(vKey) < 0;
-        }
-
-        internal static int GetScWparam(IntPtr wParam)
-        {
-            return (int) wParam & 65520;
-        }
-
-        internal static Monitorinfo MonitorInfoFromWindow(Window window)
-        {
-            var interop = new WindowInteropHelper(window);
-            interop.EnsureHandle();
-            var handle = interop.Handle;
-            var hMonitor = User32.MonitorFromWindow(handle, 2);
-            var monitorInfo = new Monitorinfo { CbSize = (uint)Marshal.SizeOf(typeof(Monitorinfo)) };
-            User32.GetMonitorInfo(hMonitor, ref monitorInfo);
-            return monitorInfo;
-        }
-
-        internal static WindowPlacement GetWindowPlacement(IntPtr hwnd)
-        {
-            var lpwndpl = new WindowPlacement();
-            if (User32.GetWindowPlacement(hwnd, lpwndpl))
-                return lpwndpl;
-            throw new Win32Exception(Marshal.GetLastWin32Error());
-        }
-
-        internal static Monitorinfo MonitorInfoFromWindow(IntPtr hWnd)
-        {
-            var hMonitor = User32.MonitorFromWindow(hWnd, 2);
-            var monitorInfo = new Monitorinfo { CbSize = (uint)Marshal.SizeOf(typeof(Monitorinfo)) };
-            User32.GetMonitorInfo(hMonitor, ref monitorInfo);
-            return monitorInfo;
-        }
-
-        internal static int CombineRgn(IntPtr hrnDest, IntPtr hrgnSrc1, IntPtr hrgnSrc2, CombineMode combineMode)
-        {
-            return Gdi32.CombineRgn(hrnDest, hrgnSrc1, hrgnSrc2, (int)combineMode);
+            return (short) (n & ushort.MaxValue);
         }
 
         [ComImport]

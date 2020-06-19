@@ -2,7 +2,7 @@
 
 namespace FocLauncher.Controls
 {
-    internal class WindowTitleBarButton : GlyphButton, INonClientArea
+    public class WindowTitleBarButton : GlyphButton, INonClientArea
     { 
         static WindowTitleBarButton()
         {
