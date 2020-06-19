@@ -7,6 +7,7 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using FocLauncher.Controls.Controllers;
 using FocLauncher.NativeMethods;
+using FocLauncher.ScreenUtilities;
 using FocLauncher.Utilities;
 
 namespace FocLauncher.Controls
@@ -58,12 +59,12 @@ namespace FocLauncher.Controls
             }
         }
 
-        private static Point GetContextMenuLocation()
+        private Point GetContextMenuLocation()
         {
             if (InputManager.Current.MostRecentInputDevice is KeyboardDevice && Keyboard.FocusedElement is UIElement focusedElement)
                 return focusedElement.PointToScreen(new Point(0.0, focusedElement.RenderSize.Height));
             var messagePos = User32.GetMessagePos();
-            return new Point(NativeMethods.NativeMethods.SignedLow(messagePos), NativeMethods.NativeMethods.SignedHigh(messagePos));
+            return this.DeviceToLogicalPoint(new Point(NativeMethods.NativeMethods.SignedLow(messagePos), NativeMethods.NativeMethods.SignedHigh(messagePos)));
         }
 
 
