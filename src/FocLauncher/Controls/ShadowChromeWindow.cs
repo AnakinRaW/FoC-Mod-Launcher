@@ -122,7 +122,7 @@ namespace FocLauncher.Controls
             get { return _glowWindows.Where(w => w != null); }
         }
 
-        protected virtual bool ShouldShowGlow
+        protected bool ShouldShowGlow
         {
             get
             {
@@ -133,6 +133,22 @@ namespace FocLauncher.Controls
                 return false;
             }
         }
+
+        public static void ShowWindowMenu(HwndSource source, Visual element, Point elementPoint, Size elementSize)
+        {
+            if (elementPoint.X < 0.0 || elementPoint.X > elementSize.Width || elementPoint.Y < 0.0 ||
+                elementPoint.Y > elementSize.Height)
+                return;
+            var screen = element.PointToScreen(elementPoint);
+            ShowWindowMenu(source, screen, true);
+        }
+
+        internal void EndDeferGlowChanges()
+        {
+            foreach (var loadedGlowWindow in LoadedGlowWindows)
+                loadedGlowWindow.CommitChanges();
+        }
+
 
         protected override void OnActivated(EventArgs e)
         {
@@ -145,33 +161,7 @@ namespace FocLauncher.Controls
             UpdateGlowActiveState();
             base.OnDeactivated(e);
         }
-
-        private static void OnResizeModeChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
-        {
-            ((ShadowChromeWindow) obj).UpdateGlowVisibility(false);
-        }
-
-        private static void OnGlowColorChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
-        {
-            ((ShadowChromeWindow) obj).UpdateGlowColors();
-        }
-
-        private static void OnWindowStyleChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
-        {
-            var window = (ShadowChromeWindow) obj;
-            if (!(PresentationSource.FromVisual(window) is HwndSource hwndSource))
-                return;
-            window.UpdateWindowStyle(hwndSource.Handle);
-        }
-
-        private void UpdateWindowStyle(IntPtr hwnd)
-        {
-            var windowLong = User32.GetWindowLong(hwnd, -16);
-            var num1 = !HasMaximizeButton ? windowLong & -65537 : windowLong | 65536;
-            var num2 = !HasMinimizeButton ? num1 & -131073 : num1 | 131072;
-            User32.SetWindowLong(hwnd, -16, num2);
-        }
-
+        
         protected override void OnSourceInitialized(EventArgs e)
         {
             var hwndSource = HwndSource.FromHwnd(new WindowInteropHelper(this).Handle);
@@ -179,14 +169,15 @@ namespace FocLauncher.Controls
             CreateGlowWindowHandles();
             base.OnSourceInitialized(e);
         }
-
-        private void CreateGlowWindowHandles()
+        
+        protected override void OnClosed(EventArgs e)
         {
-            for (var direction = 0; direction < _glowWindows.Length; ++direction)
-                GetOrCreateGlowWindow(direction).EnsureHandle();
+            StopTimer();
+            DestroyGlowWindows();
+            base.OnClosed(e);
         }
 
-        protected virtual IntPtr HwndSourceHook(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+        protected IntPtr HwndSourceHook(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
             switch (msg)
             {
@@ -230,8 +221,76 @@ namespace FocLauncher.Controls
             return IntPtr.Zero;
         }
 
-        private static IntPtr CallDefWindowProcWithoutRedraw(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam,
-            ref bool handled)
+        protected bool UpdateClipRegionCore(IntPtr hWnd, int showCmd, ClipRegionChangeType changeType, Int32Rect currentBounds)
+        {
+            if (changeType != ClipRegionChangeType.FromSize && changeType != ClipRegionChangeType.FromPropertyChange 
+                                                            && _lastWindowPlacement == showCmd)
+                return false;
+            SetRoundRect(hWnd, currentBounds.Width, currentBounds.Height);
+            return true;
+        }
+        
+        protected void SetRoundRect(IntPtr hWnd, int width, int height)
+        {
+            var roundRectRegion = ComputeRoundRectRegion(0, 0, width, height);
+            User32.SetWindowRgn(hWnd, roundRectRegion, User32.IsWindowVisible(hWnd));
+        }
+
+        private static void ShowWindowMenu(HwndSource source, Point screenPoint, bool canMinimize)
+        {
+            var systemMetrics = User32.GetSystemMetrics(40);
+            var systemMenu = User32.GetSystemMenu(source.Handle, false);
+            var windowPlacement = NativeMethods.NativeMethods.GetWindowPlacement(source.Handle);
+            var flag = VisualUtilities.ModifyStyle(source.Handle, 268435456, 0);
+            var num1 = canMinimize ? 0U : 1U;
+            if (windowPlacement.showCmd == 1)
+            {
+                User32.EnableMenuItem(systemMenu, 61728U, 1U);
+                User32.EnableMenuItem(systemMenu, 61456U, 0U);
+                User32.EnableMenuItem(systemMenu, 61440U, 0U);
+                User32.EnableMenuItem(systemMenu, 61488U, 0U);
+                User32.EnableMenuItem(systemMenu, 61472U, 0U | num1);
+                User32.EnableMenuItem(systemMenu, 61536U, 0U);
+            }
+            else if (windowPlacement.showCmd == 3)
+            {
+                User32.EnableMenuItem(systemMenu, 61728U, 0U);
+                User32.EnableMenuItem(systemMenu, 61456U, 1U);
+                User32.EnableMenuItem(systemMenu, 61440U, 1U);
+                User32.EnableMenuItem(systemMenu, 61488U, 1U);
+                User32.EnableMenuItem(systemMenu, 61472U, 0U | num1);
+                User32.EnableMenuItem(systemMenu, 61536U, 0U);
+            }
+
+            if (flag)
+                VisualUtilities.ModifyStyle(source.Handle, 0, 268435456);
+            var fuFlags = (uint)(systemMetrics | 256 | 128 | 2);
+            var num2 = User32.TrackPopupMenuEx(systemMenu, fuFlags, (int)screenPoint.X, (int)screenPoint.Y,
+                source.Handle, IntPtr.Zero);
+            if (num2 == 0)
+                return;
+            User32.PostMessage(source.Handle, 274, new IntPtr(num2), IntPtr.Zero);
+        }
+
+        private static void OnResizeModeChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
+        {
+            ((ShadowChromeWindow)obj).UpdateGlowVisibility(false);
+        }
+
+        private static void OnGlowColorChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
+        {
+            ((ShadowChromeWindow)obj).UpdateGlowColors();
+        }
+
+        private static void OnWindowStyleChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
+        {
+            var window = (ShadowChromeWindow)obj;
+            if (!(PresentationSource.FromVisual(window) is HwndSource hwndSource))
+                return;
+            window.UpdateWindowStyle(hwndSource.Handle);
+        }
+
+        private static IntPtr CallDefWindowProcWithoutRedraw(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
             using (new SuppressRedrawScope(hWnd))
             {
@@ -252,22 +311,62 @@ namespace FocLauncher.Controls
                 NativeMethods.NativeMethods.MakeParam(point.X, point.Y));
         }
 
-        private IntPtr WmNcActivate(IntPtr hWnd, IntPtr wParam, ref bool handled)
-        {
-            handled = true;
-            return User32.DefWindowProc(hWnd, 134, wParam, new IntPtr(-1));
-        }
-
         private static RECT GetClientRectRelativeToWindowRect(IntPtr hWnd)
         {
             User32.GetWindowRect(hWnd, out var lpRect1);
             User32.GetClientRect(hWnd, out var lpRect2);
-            var point = new POINT {X = 0, Y = 0};
+            var point = new POINT { X = 0, Y = 0 };
             User32.ClientToScreen(hWnd, ref point);
             lpRect2.Offset(point.X - lpRect1.Left, point.Y - lpRect1.Top);
             return lpRect2;
         }
 
+        private static IntPtr WmNcActivate(IntPtr hWnd, IntPtr wParam, ref bool handled)
+        {
+            handled = true;
+            return User32.DefWindowProc(hWnd, 134, wParam, new IntPtr(-1));
+        }
+
+        private static void UpdateMaximizedClipRegion(IntPtr hWnd)
+        {
+            var relativeToWindowRect = GetClientRectRelativeToWindowRect(hWnd);
+            var rectRgnIndirect = Gdi32.CreateRectRgnIndirect(ref relativeToWindowRect);
+            User32.SetWindowRgn(hWnd, rectRgnIndirect, User32.IsWindowVisible(hWnd));
+        }
+
+        private static IntPtr ComputeRoundRectRegion(int left, int top, int width, int height)
+        {
+            return Gdi32.CreateRoundRectRgn(left, top, left + width + 1, top + height + 1, 0, 0);
+        }
+
+        private static void UpdateZOrderOfOwner(IntPtr hwndOwner)
+        {
+            var lastOwnedWindow = IntPtr.Zero;
+            User32.EnumThreadWindows(Kernel32.GetCurrentThreadId(), (hwnd, lParam) =>
+            {
+                if (User32.GetWindow(hwnd, 4) == hwndOwner)
+                    lastOwnedWindow = hwnd;
+                return true;
+            }, IntPtr.Zero);
+            if (!(lastOwnedWindow != IntPtr.Zero) || !(User32.GetWindow(hwndOwner, 3) != lastOwnedWindow))
+                return;
+            User32.SetWindowPos(hwndOwner, lastOwnedWindow, 0, 0, 0, 0, 19);
+        }
+
+        private void UpdateWindowStyle(IntPtr hwnd)
+        {
+            var windowLong = User32.GetWindowLong(hwnd, -16);
+            var num1 = !HasMaximizeButton ? windowLong & -65537 : windowLong | 65536;
+            var num2 = !HasMinimizeButton ? num1 & -131073 : num1 | 131072;
+            User32.SetWindowLong(hwnd, -16, num2);
+        }
+
+        private void CreateGlowWindowHandles()
+        {
+            for (var direction = 0; direction < _glowWindows.Length; ++direction)
+                GetOrCreateGlowWindow(direction).EnsureHandle();
+        }
+        
         private IntPtr WmNcHitTest(IntPtr lParam, ref bool handled)
         {
             if (PresentationSource.FromDependencyObject(this) == null)
@@ -369,7 +468,6 @@ namespace FocLauncher.Controls
                     UpdateClipRegion(hWnd, windowPlacement, ClipRegionChangeType.FromSize, currentBounds);
                 else if (((int) structure.flags & 2) != 2)
                     UpdateClipRegion(hWnd, windowPlacement, ClipRegionChangeType.FromPosition, currentBounds);
-                OnWindowPosChanged(hWnd, windowPlacement.showCmd, windowPlacement.rcNormalPosition.ToInt32Rect());
                 UpdateGlowWindowPositions(((int) structure.flags & 64) == 0);
                 UpdateZOrderOfThisAndOwner();
             }
@@ -404,134 +502,11 @@ namespace FocLauncher.Controls
                 _updatingZOrder = false;
             }
         }
-
-        private void UpdateZOrderOfOwner(IntPtr hwndOwner)
-        {
-            var lastOwnedWindow = IntPtr.Zero;
-            User32.EnumThreadWindows(Kernel32.GetCurrentThreadId(), (hwnd, lParam) =>
-            {
-                if (User32.GetWindow(hwnd, 4) == hwndOwner)
-                    lastOwnedWindow = hwnd;
-                return true;
-            }, IntPtr.Zero);
-            if (!(lastOwnedWindow != IntPtr.Zero) || !(User32.GetWindow(hwndOwner, 3) != lastOwnedWindow))
-                return;
-            User32.SetWindowPos(hwndOwner, lastOwnedWindow, 0, 0, 0, 0, 19);
-        }
-
-        protected virtual void OnWindowPosChanged(IntPtr hWnd, int showCmd, Int32Rect rcNormalPosition)
-        {
-        }
-
-        protected void UpdateClipRegion(ClipRegionChangeType regionChangeType = ClipRegionChangeType.FromPropertyChange)
-        {
-            var hwndSource = (HwndSource) PresentationSource.FromVisual(this);
-            if (hwndSource == null)
-                return;
-            User32.GetWindowRect(hwndSource.Handle, out var lpRect);
-            var windowPlacement = NativeMethods.NativeMethods.GetWindowPlacement(hwndSource.Handle);
-            UpdateClipRegion(hwndSource.Handle, windowPlacement, regionChangeType, lpRect);
-        }
-
-        private void UpdateClipRegion(IntPtr hWnd, WindowPlacement placement, ClipRegionChangeType changeType,
-            RECT currentBounds)
+        
+        private void UpdateClipRegion(IntPtr hWnd, WindowPlacement placement, ClipRegionChangeType changeType, RECT currentBounds)
         {
             UpdateClipRegionCore(hWnd, placement.showCmd, changeType, currentBounds.ToInt32Rect());
             _lastWindowPlacement = placement.showCmd;
-        }
-
-        protected virtual bool UpdateClipRegionCore(IntPtr hWnd, int showCmd, ClipRegionChangeType changeType,
-            Int32Rect currentBounds)
-        {
-            if (showCmd == 3)
-            {
-                UpdateMaximizedClipRegion(hWnd);
-                return true;
-            }
-
-            if (changeType != ClipRegionChangeType.FromSize && changeType != ClipRegionChangeType.FromPropertyChange &&
-                _lastWindowPlacement == showCmd)
-                return false;
-            SetRoundRect(hWnd, currentBounds.Width, currentBounds.Height);
-            return true;
-        }
-
-        private static Windowinfo GetWindowInfo(IntPtr hWnd)
-        {
-            var pwi = new Windowinfo();
-            pwi.CbSize = Marshal.SizeOf((object) pwi);
-            User32.GetWindowInfo(hWnd, ref pwi);
-            return pwi;
-        }
-
-        private void UpdateMaximizedClipRegion(IntPtr hWnd)
-        {
-            var relativeToWindowRect = GetClientRectRelativeToWindowRect(hWnd);
-            var rectRgnIndirect = Gdi32.CreateRectRgnIndirect(ref relativeToWindowRect);
-            User32.SetWindowRgn(hWnd, rectRgnIndirect, User32.IsWindowVisible(hWnd));
-        }
-
-        protected void SetRoundRect(IntPtr hWnd, int width, int height)
-        {
-            var roundRectRegion = ComputeRoundRectRegion(0, 0, width, height);
-            User32.SetWindowRgn(hWnd, roundRectRegion, User32.IsWindowVisible(hWnd));
-        }
-
-        private static IntPtr ComputeRoundRectRegion(int left, int top, int width, int height)
-        {
-            return Gdi32.CreateRoundRectRgn(left, top, left + width + 1, top + height + 1, 0, 0);
-        }
-
-        public static void ShowWindowMenu(HwndSource source, Visual element, Point elementPoint, Size elementSize)
-        {
-            if (elementPoint.X < 0.0 || elementPoint.X > elementSize.Width || elementPoint.Y < 0.0 ||
-                elementPoint.Y > elementSize.Height)
-                return;
-            var screen = element.PointToScreen(elementPoint);
-            ShowWindowMenu(source, screen, true);
-        }
-
-        protected static void ShowWindowMenu(HwndSource source, Point screenPoint, bool canMinimize)
-        {
-            var systemMetrics = User32.GetSystemMetrics(40);
-            var systemMenu = User32.GetSystemMenu(source.Handle, false);
-            var windowPlacement = NativeMethods.NativeMethods.GetWindowPlacement(source.Handle);
-            var flag = VisualUtilities.ModifyStyle(source.Handle, 268435456, 0);
-            var num1 = canMinimize ? 0U : 1U;
-            if (windowPlacement.showCmd == 1)
-            {
-                User32.EnableMenuItem(systemMenu, 61728U, 1U);
-                User32.EnableMenuItem(systemMenu, 61456U, 0U);
-                User32.EnableMenuItem(systemMenu, 61440U, 0U);
-                User32.EnableMenuItem(systemMenu, 61488U, 0U);
-                User32.EnableMenuItem(systemMenu, 61472U, 0U | num1);
-                User32.EnableMenuItem(systemMenu, 61536U, 0U);
-            }
-            else if (windowPlacement.showCmd == 3)
-            {
-                User32.EnableMenuItem(systemMenu, 61728U, 0U);
-                User32.EnableMenuItem(systemMenu, 61456U, 1U);
-                User32.EnableMenuItem(systemMenu, 61440U, 1U);
-                User32.EnableMenuItem(systemMenu, 61488U, 1U);
-                User32.EnableMenuItem(systemMenu, 61472U, 0U | num1);
-                User32.EnableMenuItem(systemMenu, 61536U, 0U);
-            }
-
-            if (flag)
-                VisualUtilities.ModifyStyle(source.Handle, 0, 268435456);
-            var fuFlags = (uint) (systemMetrics | 256 | 128 | 2);
-            var num2 = User32.TrackPopupMenuEx(systemMenu, fuFlags, (int) screenPoint.X, (int) screenPoint.Y,
-                source.Handle, IntPtr.Zero);
-            if (num2 == 0)
-                return;
-            User32.PostMessage(source.Handle, 274, new IntPtr(num2), IntPtr.Zero);
-        }
-
-        protected override void OnClosed(EventArgs e)
-        {
-            StopTimer();
-            DestroyGlowWindows();
-            base.OnClosed(e);
         }
 
         private GlowWindow GetOrCreateGlowWindow(int direction)
@@ -629,12 +604,6 @@ namespace FocLauncher.Controls
         private IDisposable DeferGlowChanges()
         {
             return new ChangeScope(this);
-        }
-
-        internal void EndDeferGlowChanges()
-        {
-            foreach (var loadedGlowWindow in LoadedGlowWindows)
-                loadedGlowWindow.CommitChanges();
         }
 
         protected enum ClipRegionChangeType

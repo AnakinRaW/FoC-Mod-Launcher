@@ -40,9 +40,6 @@ namespace FocLauncher.NativeMethods
         [DllImport("user32.dll", CharSet = CharSet.Unicode)]
         internal static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
 
-        [DllImport("user32.dll", CharSet = CharSet.Unicode)]
-        internal static extern IntPtr SetWindowLongPtr(IntPtr hWnd, int nIndex, IntPtr dwNewLong);
-
         [DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         internal static extern IntPtr SendMessage(IntPtr hWnd, int nMsg, IntPtr wParam, IntPtr lParam);
 
@@ -142,10 +139,6 @@ namespace FocLauncher.NativeMethods
         [DllImport("user32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool DestroyIcon(IntPtr hIcon);
-        
-        [DllImport("user32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool GetWindowInfo(IntPtr hwnd, ref Windowinfo pwi);
 
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
