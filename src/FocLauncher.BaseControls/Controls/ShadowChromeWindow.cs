@@ -122,7 +122,7 @@ namespace FocLauncher.Controls
             get { return _glowWindows.Where(w => w != null); }
         }
 
-        protected bool ShouldShowGlow
+        protected virtual bool ShouldShowGlow
         {
             get
             {
@@ -229,7 +229,18 @@ namespace FocLauncher.Controls
             SetRoundRect(hWnd, currentBounds.Width, currentBounds.Height);
             return true;
         }
-        
+
+        protected void UpdateClipRegion(ClipRegionChangeType regionChangeType = ClipRegionChangeType.FromPropertyChange)
+        {
+            var hwndSource = (HwndSource)PresentationSource.FromVisual(this);
+            if (hwndSource == null)
+                return;
+            User32.GetWindowRect(hwndSource.Handle, out var lpRect);
+            var windowPlacement = NativeMethods.NativeMethods.GetWindowPlacement(hwndSource.Handle);
+            UpdateClipRegion(hwndSource.Handle, windowPlacement, regionChangeType, lpRect);
+        }
+
+
         protected void SetRoundRect(IntPtr hWnd, int width, int height)
         {
             var roundRectRegion = ComputeRoundRectRegion(0, 0, width, height);

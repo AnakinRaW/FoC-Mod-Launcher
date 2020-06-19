@@ -71,13 +71,7 @@
     <Compile Include="Controls\Controllers\ContextMenuController.cs" />
     <Compile Include="Controls\Controllers\IContextMenuController.cs" />
     <Compile Include="Controls\Controllers\IHasContextMenuController.cs" />
-    <Compile Include="Controls\GlyphButton.cs" />
-    <Compile Include="Controls\HwndWrapper.cs" />
-    <Compile Include="Controls\INonClientArea.cs" />
     <Compile Include="Controls\MainWindowTitleBar.cs" />
-    <Compile Include="Controls\RoutedCommandButton.cs" />
-    <Compile Include="Controls\SystemMenu.cs" />
-    <Compile Include="Controls\WindowTitleBarButton.cs" />
     <Compile Include="Converters\BooleanOrConverter.cs" />
     <Compile Include="Utilities\IconHelper.cs" />
     <Compile Include="NativeMethods\AbEdge.cs" />
@@ -111,7 +105,6 @@
     <Compile Include="Controls\LauncherListBox.cs" />
     <Compile Include="Controls\LauncherListBoxItem.cs" />
     <Compile Include="Controls\PlayButton.cs" />
-    <Compile Include="Controls\ShadowChromeWindow.cs" />
     <Compile Include="Controls\StatusBarButton.cs" />
     <Compile Include="Converters\DebugBuildToVisibilityConverter.cs" />
     <Compile Include="Dialogs\SettingsWindow.xaml.cs">
