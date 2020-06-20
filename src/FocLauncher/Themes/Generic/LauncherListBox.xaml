@@ -6,7 +6,7 @@
     <ControlTemplate x:Key="ListBoxTemplate" TargetType="{x:Type controls:LauncherListBox}">
         <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
             <ScrollViewer x:Name="PART_ScrollViewer" Background="{TemplateBinding Background}" Focusable="False"
-                          CanContentScroll="True" FocusVisualStyle="{x:Null}">
+                          CanContentScroll="True" FocusVisualStyle="{x:Null}" HorizontalScrollBarVisibility="Disabled">
                 <ItemsPresenter/>
             </ScrollViewer>
         </Border>
