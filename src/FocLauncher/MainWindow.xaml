@@ -36,8 +36,8 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="12"/>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto" MinWidth="12"/>
+                    <ColumnDefinition Width="Auto" MinWidth="16"/>
                     <ColumnDefinition Width="6"/>
                 </Grid.ColumnDefinitions>
                 <Image Grid.Column="0" Source="{Binding GameObject.IconFile}" Width="32" Height="32" Margin="0,2,4,2"/>
@@ -64,7 +64,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="6"/>
+            <RowDefinition Height="0"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
