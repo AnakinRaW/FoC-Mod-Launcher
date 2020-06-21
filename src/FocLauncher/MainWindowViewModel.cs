@@ -218,22 +218,14 @@ namespace FocLauncher
                         gameDetection = GameDetectionHelper.GetGameInstallations();
                     }).ConfigureAwait(false);
 
+                    await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
                     if (gameDetection.IsError)
                     {
                         shuttingDown = true;
-                        var message = string.Empty;
-                        if (gameDetection.EawExe == null || !gameDetection.EawExe.Exists)
-                            message = "Could not find Empire at War!\r\n";
-                        else if (gameDetection.FocExe == null || !gameDetection.FocExe.Exists)
-                            message += "Could not find Forces of Corruption\r\n";
-                        await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                        MessageBox.Show(message + "\r\nThe launcher will now be closed", "FoC Launcher",
-                            MessageBoxButton.OK,
-                            MessageBoxImage.Error);
-                        Application.Current.Shutdown();
+                        CloseApplication(gameDetection);
+                        return;
                     }
-
-                    await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                     OnGamesDetected(gameDetection);
                 }
                 catch (Exception e)
@@ -276,6 +268,19 @@ namespace FocLauncher
         private bool CanExecute(object obj)
         {
             return _initialized && obj is IPetroglyhGameableObject;
+        }
+
+        private static void CloseApplication(GameDetection gameDetection)
+        {
+            var message = string.Empty;
+            if (gameDetection.EawExe == null || !gameDetection.EawExe.Exists)
+                message = "Could not find Empire at War!\r\n";
+            else if (gameDetection.FocExe == null || !gameDetection.FocExe.Exists)
+                message += "Could not find Forces of Corruption\r\n";
+            MessageBox.Show(message + "\r\nThe launcher will now be closed", "FoC Launcher",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+            Application.Current.Shutdown();
         }
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
