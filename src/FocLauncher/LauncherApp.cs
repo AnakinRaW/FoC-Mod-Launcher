@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Windows;
+using System.Windows.Threading;
 using FocLauncher.Properties;
 using FocLauncher.Theming;
 using NLog;
@@ -43,8 +44,7 @@ namespace FocLauncher
             mainWindow.Show();
         }
         
-        private static void LauncherApp_DispatcherUnhandledException(object sender,
-            System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        private static void LauncherApp_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
             if (e.Exception is LauncherException)
                 return;

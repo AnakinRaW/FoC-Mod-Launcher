@@ -66,13 +66,8 @@ namespace FocLauncher.Game
             }
             base.OnGameStarting(args);
         }
-
-        public bool DebugGame(string? iconFile = null)
-        {
-            return DebugGame(new GameCommandArguments(), iconFile);
-        }
-
-        public bool DebugGame(GameCommandArguments args, string? iconFile = null)
+        
+        public bool DebugGame(GameCommandArguments? args = null, string? iconFile = null)
         {
             GameStartInfo startInfo;
             if (DebugBuildExists)
@@ -85,6 +80,7 @@ namespace FocLauncher.Game
                 var exeFile = new FileInfo(Path.Combine(Directory.FullName, GameExeFileName));
                 startInfo = new GameStartInfo(exeFile, GameBuildType.Release);
             }
+            args ??= new GameCommandArguments();
             return StartGame(args, startInfo, iconFile);
         }
 

@@ -7,8 +7,8 @@
         xmlns:converters="clr-namespace:FocLauncher.Converters"
         xmlns:mods="clr-namespace:FocLauncher.Mods"
         xmlns:controls="clr-namespace:FocLauncher.Controls"
-        xmlns:focLauncher="clr-namespace:FocLauncher"
         xmlns:baseControls="clr-namespace:FocLauncher.Controls;assembly=FocLauncher.BaseControls"
+        xmlns:items="clr-namespace:FocLauncher.Items"
         mc:Ignorable="d"
         Title="FoC Mod Launcher" Width="400" 
         Height="600" 
@@ -30,7 +30,7 @@
             <Setter Property="Margin" Value="0,6,24,0"/>
         </Style>
 
-        <DataTemplate x:Key="ItemDataTemplate" DataType="{x:Type focLauncher:LauncherListItemModel}">
+        <DataTemplate x:Key="ItemDataTemplate" DataType="{x:Type items:LauncherItem}">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
@@ -40,8 +40,8 @@
                     <ColumnDefinition Width="Auto" MinWidth="16"/>
                     <ColumnDefinition Width="6"/>
                 </Grid.ColumnDefinitions>
-                <Image Grid.Column="0" Source="{Binding GameObject.IconFile}" Width="32" Height="32" Margin="0,2,4,2"/>
-                <TextBlock Grid.Column="2" VerticalAlignment="Center" Text="{Binding Name}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
+                <Image Grid.Column="0" Source="{Binding GameObject.IconFile, IsAsync=True}" Width="32" Height="32" Margin="0,2,4,2"/>
+                <TextBlock Grid.Column="2" VerticalAlignment="Center" Text="{Binding Text, IsAsync=True}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
                 <TextBlock Grid.Column="3" Margin="12,0" VerticalAlignment="Center" HorizontalAlignment="Right" Text="{Binding GameObject.Version}"/>
                 <Image Grid.Column="4" Height="16" Width="16" Source="Resources/steam.png" 
                        RenderOptions.BitmapScalingMode="Fant"
@@ -52,7 +52,7 @@
                     </Image.ToolTip>
                 </Image>
                 <Grid.ToolTip>
-                    <TextBlock TextWrapping="Wrap" MaxWidth="300" Text="{Binding Name}"/>
+                    <TextBlock TextWrapping="Wrap" MaxWidth="300" Text="{Binding Text}"/>
                 </Grid.ToolTip>
             </Grid>
         </DataTemplate>

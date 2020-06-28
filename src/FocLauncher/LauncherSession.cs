@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows;
 using FocLauncher.Controls.Controllers;
 using FocLauncher.Game;
+using FocLauncher.Items;
 using FocLauncher.Mods;
 
 namespace FocLauncher
@@ -36,7 +37,7 @@ namespace FocLauncher
                 case IPetroglyhGameableObject petroglyhGameableObject:
                     gameableObject = petroglyhGameableObject;
                     break;
-                case LauncherListItemModel model:
+                case LauncherItem model:
                     gameableObject = model.GameObject;
                     break;
                 default:
@@ -45,7 +46,7 @@ namespace FocLauncher
 
             return RunGame(gameableObject);
         }
-
+        
         private bool RunGame(IPetroglyhGameableObject gameableObject)
         {
             if (_game is null)

@@ -34,14 +34,8 @@ namespace FocLauncher.Utilities
         private static BitmapSource ExtractIconsFromExecutable(ref BitmapSource smallIcon, ref BitmapSource largeIcon)
         {
             var executablePath = Assembly.GetExecutingAssembly().Location;
-            var phiconLarge = new IntPtr[1]
-            {
-                IntPtr.Zero
-            };
-            var phiconSmall = new IntPtr[1]
-            {
-                IntPtr.Zero
-            };
+            var phiconLarge = new[] {IntPtr.Zero};
+            var phiconSmall = new[] {IntPtr.Zero};
             if (Shell32.ExtractIconEx(executablePath.Trim('"'), 0, phiconLarge, phiconSmall, 1) > 0)
             {
                 smallIcon = BitmapSourceFromHIcon(phiconSmall[0]);

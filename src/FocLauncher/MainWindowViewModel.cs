@@ -11,6 +11,7 @@ using System.Windows.Input;
 using FocLauncher.Game;
 using FocLauncher.Game.Detection;
 using FocLauncher.Input;
+using FocLauncher.Items;
 using FocLauncher.Mods;
 using FocLauncher.Properties;
 using FocLauncher.Theming;
@@ -91,12 +92,12 @@ namespace FocLauncher
 
         public ICommand LaunchCommand => new UICommand(ExecutedLaunch, CanExecute);
 
-        public ObservableCollection<LauncherListItemModel> GameObjects { get; } =
-            new ObservableCollection<LauncherListItemModel>();
+        public ObservableCollection<LauncherItem> GameObjects { get; } =
+            new ObservableCollection<LauncherItem>();
 
         public IReadOnlyCollection<IMod> Mods => GameObjects.Select(x => x.GameObject).OfType<IMod>().ToList();
 
-        public PetroglyphGameManager GameManager { get; private set; }
+        public LauncherGameManager GameManager { get; private set; }
 
         public IGame FoC
         {
@@ -187,7 +188,7 @@ namespace FocLauncher
         private void OnGameDetectionFinished(object sender, GameDetection e)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            var gameManager = new PetroglyphGameManager(e);
+            var gameManager = new LauncherGameManager(e);
 
             GameManager = gameManager;
             FoC = gameManager.ForcesOfCorruption;
@@ -196,9 +197,9 @@ namespace FocLauncher
 
             FoC.Setup(GameSetupOptions.ResolveModDependencies);
             
-            GameObjects.Add(new LauncherListItemModel(FoC, LauncherSession));
+            GameObjects.Add(new LauncherItem(FoC));
             foreach (var gameObject in FoC.Mods)
-                GameObjects.Add(new LauncherListItemModel(gameObject, LauncherSession));
+                GameObjects.Add(new LauncherItem(gameObject));
             _window.ListBox.FocusSelectedItem();
             _initialized = true;
         }
@@ -259,10 +260,12 @@ namespace FocLauncher
                 ThemeManager.Instance.Theme = theme;
         }
 
-        private void ExecutedLaunch(object obj)
+        private static void ExecutedLaunch(object obj)
         {
-            if (obj is IPetroglyhGameableObject gameable)
-                _session.Invoke(new[] {gameable});
+            if (!(obj is IPetroglyhGameableObject gameObject))
+                return;
+            LauncherGameObjectCommandHandler.Launch(gameObject);
+
         }
 
         private bool CanExecute(object obj)

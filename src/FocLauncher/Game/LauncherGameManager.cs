@@ -3,7 +3,7 @@ using FocLauncher.Game.Detection;
 
 namespace FocLauncher.Game
 {
-    public sealed class PetroglyphGameManager
+    public sealed class LauncherGameManager
     {
         public event EventHandler<IGame> GameStarted;
 
@@ -13,12 +13,12 @@ namespace FocLauncher.Game
 
         public IGame ForcesOfCorruption { get; private set; }
         
-        public PetroglyphGameManager(GameDetection gameDetection, GameSetupOptions setupMode = GameSetupOptions.NoSetup)
+        public LauncherGameManager(GameDetection gameDetection)
         {
-            Initialize(gameDetection, setupMode);
+            Initialize(gameDetection);
         }
 
-        private void Initialize(GameDetection gameDetection, GameSetupOptions setupMode)
+        private void Initialize(GameDetection gameDetection)
         {
             if (gameDetection is null)
                 throw new ArgumentNullException(nameof(gameDetection));
@@ -30,12 +30,6 @@ namespace FocLauncher.Game
 
             RegisterEvents(EmpireAtWar);
             RegisterEvents(ForcesOfCorruption);
-
-            if (setupMode == GameSetupOptions.NoSetup)
-                return;
-
-            EmpireAtWar.Setup(setupMode);
-            ForcesOfCorruption.Setup(setupMode);
         }
 
         private void RegisterEvents(IGame game)

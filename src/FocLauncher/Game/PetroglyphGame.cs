@@ -58,14 +58,10 @@ namespace FocLauncher.Game
             return ExistsGameDirectoryAndGameExecutable();
         }
 
-        public bool PlayGame(string? iconFile = null)
-        {
-            return PlayGame(new GameCommandArguments());
-        }
-
-        public bool PlayGame(GameCommandArguments args, string? iconFile = null)
+        public bool PlayGame(GameCommandArguments? args, string? iconFile = null)
         {
             var exeFile = new FileInfo(Path.Combine(Directory.FullName, GameExeFileName));
+            args ??= new GameCommandArguments();
             return StartGame(args, new GameStartInfo(exeFile, GameBuildType.Release), iconFile);
         }
 

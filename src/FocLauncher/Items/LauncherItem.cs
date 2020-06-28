@@ -1,96 +1,70 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Input;
+using System.Windows.Media;
 using FocLauncher.Controls.Controllers;
 using FocLauncher.Game;
-using FocLauncher.Input;
 using FocLauncher.Mods;
 using FocLauncher.Utilities;
 using Microsoft.VisualStudio.Threading;
 
-namespace FocLauncher
+namespace FocLauncher.Items
 {
-    public class LauncherListItemModel : IHasInvocationController, IHasContextMenuController, INotifyPropertyChanged
+    public class LauncherItem : ILauncherItem, IHasInvocationController, IHasContextMenuController
     {
-        private string _name = "Resolving name...";
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private readonly LauncherGameObjectCommandHandler _commandHandler;
+
         internal IEnumerable<MenuItem> MenuItems => CreateMenuItems();
 
-        public string Name
-        {
-            get => _name;
-            set
-            {
-                if (_name == value)
-                    return;
-                _name = value;
-                OnPropertyChanged();
-            }
-        }
+        public string Text { get; private set; } = "Resolving name...";
+
+        // TODO: Get async from GameObject
+        public ImageSource ImageSource { get; }
+
+        public LauncherItemManager Manager { get; }
 
         public IPetroglyhGameableObject GameObject { get; }
 
-        public IInvocationController InvocationController { get; }
-
-        public ICommand OpenExplorerCommand => new UICommand(OpenInExplorer, () => GameObject is IHasDirectory);
-
-        public ICommand ShowArgsCommand => new UICommand(ShowArgs, () => GameObject is IMod);
-
-
-        public LauncherListItemModel(IPetroglyhGameableObject gameObject, IInvocationController controller)
-        {
-            GameObject = gameObject;
-            InvocationController = controller;
-            SetNameAsync().Forget();
-        }
+        IInvocationController IHasInvocationController.InvocationController => LauncherItemInvocationController.Instance;
 
         IContextMenuController IHasContextMenuController.ContextMenuController => LauncherItemContextMenuController.Instance;
 
 
+        public LauncherItem(IPetroglyhGameableObject gameObject)
+        {
+            GameObject = gameObject;
+            _commandHandler = new LauncherGameObjectCommandHandler(GameObject);
+            SetNameAsync().Forget();
+        }
+
+        public override string ToString()
+        {
+            return Text;
+        }
+
         private IEnumerable<MenuItem> CreateMenuItems()
         {
             var items = new HashSet<MenuItem>();
-            var openExplorerItem = new MenuItem {Header = "Show in Explorer", Command = OpenExplorerCommand};
+            var openExplorerItem = new MenuItem {Header = "Show in Explorer", Command = _commandHandler.OpenExplorerCommand};
             items.Add(openExplorerItem);
             // TODO: Remove from Release
-            var showArgs = new MenuItem {Header = "Show Launch Args", Command = ShowArgsCommand};
+            var showArgs = new MenuItem {Header = "Show Launch Args", Command = _commandHandler.ShowArgsCommand };
             items.Add(showArgs);
             return items;
         }
-
-
-        private void OpenInExplorer()
-        {
-            var directory = (GameObject as IHasDirectory)?.Directory;
-            if (directory == null || !directory.Exists)
-                return;
-            Process.Start("explorer.exe", directory.FullName);
-        }
-
-        private void ShowArgs()
-        {
-            if (!(GameObject is IMod mod))
-                return;
-            var traverser = new ModDependencyTraverser(mod);
-            var gameArgs = new GameCommandArguments {Mods = traverser.Traverse()};
-            var args = gameArgs.ToArgs();
-            var message = $"Launch Arguments for Mod {GameObject.Name}:\r\n\r\n{args}\r\n\r\nMod's location: '{mod.Identifier}'";
-
-            Task.Run(() => MessageBox.Show(message, "FoC Launcher", MessageBoxButton.OK));
-        }
-
 
         private async Task SetNameAsync()
         {
             if (!(GameObject is Mod mod))
             {
-                Name = GameObject.Name;
+                Text = GameObject.Name;
                 return;
             }
 
@@ -119,13 +93,49 @@ namespace FocLauncher
             if (string.IsNullOrEmpty(name))
                 name = "Unnamed (Failed to resolve)";
 
-            Name = name!;
+            Text = name!;
+            OnPropertyChanged(nameof(Text));
+        }
+        
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        private static IReadOnlyList<IPetroglyhGameableObject> GetSelectionGameObject(IEnumerable<object> items)
+        {
+            return items.OfType<LauncherItem>().Select(x => x.GameObject).ToList();
+        }
+
+        private class LauncherItemInvocationController  : IInvocationController
+        {
+            private static IInvocationController? _instance;
+
+            public static IInvocationController Instance
+            {
+                get
+                {
+                    return _instance ??= new LauncherItemInvocationController();
+                }
+            }
+
+            public bool Invoke(IEnumerable<object> items)
+            {
+                var itemsList = GetSelectionGameObject(items);
+
+                if (itemsList.Count == 0)
+                    return false;
+
+                if (itemsList.Count != 1)
+                    return false;
+
+                return LauncherGameObjectCommandHandler.Launch(itemsList[0]);
+            }
+        }
 
         private class LauncherItemContextMenuController : IContextMenuController
         {
-            private static IContextMenuController _instance;
+            private static IContextMenuController? _instance;
 
             public static IContextMenuController Instance => _instance ??= new LauncherItemContextMenuController();
 
@@ -138,7 +148,7 @@ namespace FocLauncher
                 if (itemsList.Count != 1)
                     return false;
 
-                if (!(itemsList[0] is LauncherListItemModel item))
+                if (!(itemsList[0] is LauncherItem item))
                     return false;
 
                 var contextMenu = BuildContextMenu(item);
@@ -152,19 +162,14 @@ namespace FocLauncher
                 return true;
             }
 
-            private static ContextMenu BuildContextMenu(LauncherListItemModel item)
+            private static ContextMenu BuildContextMenu(LauncherItem item)
             {
                 var c = new ContextMenu();
-                foreach (var menuItem in item.MenuItems) c.Items.Add(menuItem);
+                foreach (var menuItem in item.MenuItems) 
+                    c.Items.Add(menuItem);
                 return c;
             }
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
     }
+
 }
