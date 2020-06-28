@@ -71,10 +71,10 @@
     <Compile Include="Controls\Controllers\ContextMenuController.cs" />
     <Compile Include="Controls\Controllers\IContextMenuController.cs" />
     <Compile Include="Controls\Controllers\IHasContextMenuController.cs" />
-    <Compile Include="Game\GameRunHelper.cs" />
     <Compile Include="Items\ILauncherItem.cs" />
     <Compile Include="Items\LauncherGameObjectCommandHandler.cs" />
     <Compile Include="Items\LauncherItemManager.cs" />
+    <Compile Include="LauncherGameOptions.cs" />
     <Compile Include="NativeMethods\AppBarData.cs" />
     <Compile Include="NativeMethods\RECT.cs" />
     <Compile Include="NativeMethods\Shell32.cs" />
@@ -126,7 +126,6 @@
     <Compile Include="Game\SteamClient.cs" />
     <Compile Include="Controls\Controllers\IHasInvocationController.cs" />
     <Compile Include="Controls\Controllers\IInvocationController.cs" />
-    <Compile Include="ILauncherWindowModel.cs" />
     <Compile Include="IsolatingLauncherBootstrapper.cs" />
     <Compile Include="Controls\LauncherStatusBar.cs" />
     <Compile Include="Game\GameCommandArguments.cs" />
@@ -146,7 +145,6 @@
     <Compile Include="Game\WorkshopNameResolver.cs" />
     <Compile Include="LauncherException.cs" />
     <Compile Include="Items\LauncherItem.cs" />
-    <Compile Include="LauncherSession.cs" />
     <Compile Include="ModInfo\SteamData.cs" />
     <Compile Include="ModInfo\ModInfoFile.cs" />
     <Compile Include="Mods\Mod.cs" />

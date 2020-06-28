@@ -55,7 +55,7 @@ namespace FocLauncher
     //}
     
 
-    public class MainWindowViewModel : ILauncherWindowModel
+    public class MainWindowViewModel
     {
         private readonly MainWindow _window;
         internal event EventHandler<GameDetection> GamesDetected;
@@ -64,31 +64,10 @@ namespace FocLauncher
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        private bool _windowed;
-        private bool _useDebugBuild;
-        private bool _ignoreAsserts = true;
-        private bool _noArtProcess = true;
-        private LauncherSession _session;
         private IGame _foC;
         private IGame _eaW;
 
         private bool _initialized;
-
-        internal LauncherSession LauncherSession
-        {
-            get
-            {
-                if (_session == null)
-                {
-                    // TODO: Remove game from ctor
-                    _session = new LauncherSession(this, _foC);
-                    _session.Started += OnGameStarted;
-                    _session.StartFailed += OnGameStartFailed;
-                }
-
-                return _session;
-            }
-        }
 
         public ICommand LaunchCommand => new UICommand(ExecutedLaunch, CanExecute);
 
@@ -130,52 +109,6 @@ namespace FocLauncher
         public GameType FocType { get; private set; }
 
         public GameType EaWType { get; private set; }
-
-        public bool UseDebugBuild
-        {
-            get => _useDebugBuild;
-            set
-            {
-                if (value == _useDebugBuild) return;
-                _useDebugBuild = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public bool IgnoreAsserts
-        {
-            get => _ignoreAsserts;
-            set
-            {
-                if (value == _ignoreAsserts)
-                    return;
-                _ignoreAsserts = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public bool NoArtProcess
-        {
-            get => _noArtProcess;
-            set
-            {
-                if (value == _noArtProcess) return;
-                _noArtProcess = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public bool Windowed
-        {
-            get => _windowed;
-            set
-            {
-                if (value == _windowed)
-                    return;
-                _windowed = value;
-                OnPropertyChanged();
-            }
-        }
 
         public MainWindowViewModel(MainWindow window)
         {
@@ -265,7 +198,6 @@ namespace FocLauncher
             if (!(obj is IPetroglyhGameableObject gameObject))
                 return;
             LauncherGameObjectCommandHandler.Launch(gameObject);
-
         }
 
         private bool CanExecute(object obj)

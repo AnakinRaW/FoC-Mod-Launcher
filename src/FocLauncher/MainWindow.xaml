@@ -9,6 +9,7 @@
         xmlns:controls="clr-namespace:FocLauncher.Controls"
         xmlns:baseControls="clr-namespace:FocLauncher.Controls;assembly=FocLauncher.BaseControls"
         xmlns:items="clr-namespace:FocLauncher.Items"
+        xmlns:focLauncher="clr-namespace:FocLauncher"
         mc:Ignorable="d"
         Title="FoC Mod Launcher" Width="400" 
         Height="600" 
@@ -22,11 +23,7 @@
         <converters:DebugBuildToVisibilityConverter x:Key="DebugBuildToVisibilityConverter"/>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
 
-        <Style x:Key="StyledCheckBox" TargetType="{x:Type CheckBox}">
-            <Setter Property="Foreground" Value="White"/>
-        </Style>
-
-        <Style x:Key="ArgumentCheckBox" TargetType="{x:Type CheckBox}" BasedOn="{StaticResource StyledCheckBox}">
+        <Style x:Key="ArgumentCheckBox" TargetType="{x:Type CheckBox}">
             <Setter Property="Margin" Value="0,6,24,0"/>
         </Style>
 
@@ -83,15 +80,16 @@
             <controls:PlayButton HorizontalAlignment="Center" Margin="8" Padding="8,3,8,3" Width="120" Height="40" IsDefault="True"
                         Command="{Binding LaunchCommand}" CommandParameter="{Binding SelectedItem.GameObject, ElementName=ListBox}"
                         Text="PLAY"/>
-            <controls:LauncherCheckBox x:Name="DebugCheckBox" Content="Use Debug Build" IsChecked="{Binding UseDebugBuild, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                              Visibility="{Binding FoC, Converter={StaticResource DebugBuildToVisibilityConverter}}"
-                              Style="{StaticResource StyledCheckBox}" HorizontalAlignment="Center"/>
+            <controls:LauncherCheckBox x:Name="DebugCheckBox" Content="Use Debug Build" HorizontalAlignment="Center"
+                                       IsChecked="{Binding Source={x:Static focLauncher:LauncherGameOptions.Instance}, Path=UseDebugBuild, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                              Visibility="{Binding FoC, Converter={StaticResource DebugBuildToVisibilityConverter}}"/>
             <DockPanel HorizontalAlignment="Center">
-                <controls:LauncherCheckBox Content="IgnoreAsserts" IsChecked="{Binding IgnoreAsserts, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+                <controls:LauncherCheckBox Content="IgnoreAsserts"
+                                           IsChecked="{Binding Source={x:Static focLauncher:LauncherGameOptions.Instance}, Path=IgnoreAsserts, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                   Style="{StaticResource ArgumentCheckBox}"/>
-                <controls:LauncherCheckBox Content="No art process" IsChecked="{Binding NoArtProcess, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                <controls:LauncherCheckBox Content="No art process" IsChecked="{Binding Source={x:Static focLauncher:LauncherGameOptions.Instance}, Path=NoArtProcess, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                   Style="{StaticResource ArgumentCheckBox}"/>
-                <controls:LauncherCheckBox Content="Windowed" IsChecked="{Binding Windowed, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                <controls:LauncherCheckBox Content="Windowed" IsChecked="{Binding Source={x:Static focLauncher:LauncherGameOptions.Instance}, Path=Windowed, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                   Style="{StaticResource ArgumentCheckBox}"/>
                 </DockPanel>
             </StackPanel>
