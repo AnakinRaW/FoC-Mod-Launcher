@@ -52,11 +52,4 @@ namespace FocLauncher.Game
             GameClosed?.Invoke(this, e);
         }
     }
-
-    public enum GameSetupOptions
-    {
-        NoSetup,
-        FindMods,
-        ResolveModDependencies
-    }
 }

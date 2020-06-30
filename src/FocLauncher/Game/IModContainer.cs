@@ -25,11 +25,4 @@ namespace FocLauncher.Game
         /// <returns>The mod found</returns>
         IMod? SearchMod(IModReference modReference, ModSearchOptions modSearchOptions, bool add);
     }
-
-    [Flags]
-    public enum ModSearchOptions
-    {
-        Registered = 1,
-        FileSystem = 2,
-    }
 }
