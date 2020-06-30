@@ -58,11 +58,11 @@ namespace FocLauncher.Game
             return ExistsGameDirectoryAndGameExecutable();
         }
 
-        public bool PlayGame(GameCommandArguments? args, string? iconFile = null)
+        public void PlayGame(GameCommandArguments? args, string? iconFile = null)
         {
             var exeFile = new FileInfo(Path.Combine(Directory.FullName, GameExeFileName));
             args ??= new GameCommandArguments();
-            return StartGame(args, new GameStartInfo(exeFile, GameBuildType.Release), iconFile);
+            StartGame(args, new GameStartInfo(exeFile, GameBuildType.Release), iconFile);
         }
 
         public abstract bool IsPatched();
@@ -171,14 +171,14 @@ namespace FocLauncher.Game
             return result;
         }
 
-        protected bool StartGame(GameCommandArguments gameArgs, GameStartInfo gameStartInfo, string? iconFile = null)
+        protected void StartGame(GameCommandArguments gameArgs, GameStartInfo gameStartInfo, string? iconFile = null)
         {
             if (!Exists())
                 throw new Exception("Game was not found");
             var startingArguments = new GameStartingEventArgs(gameArgs, gameStartInfo.BuildType);
             OnGameStarting(startingArguments);
             if (startingArguments.Cancel)
-                return false;
+                return;
 
             gameArgs.Validate();
             var processStartInfo = CreateGameProcess(gameArgs.ToArgs(), gameStartInfo.Executable);
@@ -188,14 +188,13 @@ namespace FocLauncher.Game
             {
                 process = StartGameProcess(processStartInfo, iconFile);
             }
-            catch
+            catch (Exception e)
             {
-                return false;
+                throw new GameStartException(e.Message, e);
             }
 
             if (process != null)
                 OnGameStarted(process);
-            return true;
         }
         
         protected virtual void OnGameStarting(GameStartingEventArgs args)

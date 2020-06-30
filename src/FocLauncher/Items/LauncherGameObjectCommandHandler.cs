@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -47,8 +48,25 @@ namespace FocLauncher.Items
 
         internal static bool Launch(IPetroglyhGameableObject gameObject, IReadOnlyList<IPetroglyhGameableObject>? linkedGameObjects = null)
         {
-            if (gameObject is null)
+            try
+            {
+                LaunchCore(gameObject, linkedGameObjects);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show($"Unable to start {gameObject.Name}:\r\n" +
+                                e.Message, "FoC Launcher", MessageBoxButton.OK, MessageBoxImage.Error);
                 return false;
+            }
+
+            return true;
+
+        }
+
+        private static void LaunchCore(IPetroglyhGameableObject gameObject, IReadOnlyList<IPetroglyhGameableObject>? linkedGameObjects = null)
+        {
+            if (gameObject is null)
+                throw new InvalidOperationException("No object to launch selected");
 
             IGame game;
             IMod? mod = null;
@@ -62,11 +80,11 @@ namespace FocLauncher.Items
                     game = mod.Game;
                     break;
                 default:
-                    return false;
+                    throw new NotSupportedException("Selected object is not supported");
             }
 
             if (game is null)
-                return false;
+                throw new InvalidOperationException("No game to launch.");
 
             var gameOptions = LauncherGameOptions.Instance;
             var args = new GameCommandArguments();
@@ -75,13 +93,12 @@ namespace FocLauncher.Items
             if (mod != null)
             {
                 var modList = GetAllMods(mod);
-                if (!modList.Any())
-                    return false;
+                if (!modList.Any()) 
+                    throw new InvalidOperationException("The selected mod object seems to be invalid.");
                 args.Mods = modList;
             }
-            
+
             RunGame(game, args, gameObject.IconFile, gameOptions.UseDebugBuild);
-            return true;
         }
 
         private static void RunGame(IGame game, GameCommandArguments arguments, string? iconFile, bool debug)

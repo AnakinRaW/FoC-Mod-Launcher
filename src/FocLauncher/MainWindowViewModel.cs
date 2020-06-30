@@ -129,12 +129,27 @@ namespace FocLauncher
             LogInstalledGames();
 
             FoC.Setup(GameSetupOptions.ResolveModDependencies);
+
+            RegisterEvents();
             
             GameObjects.Add(new LauncherItem(FoC));
             foreach (var gameObject in FoC.Mods)
                 GameObjects.Add(new LauncherItem(gameObject));
             _window.ListBox.FocusSelectedItem();
             _initialized = true;
+        }
+
+        private void RegisterEvents()
+        {
+            FoC.GameStarted += OnGameStarted;
+            EaW.GameStarted += OnGameStarted;
+        }
+
+        private static void OnGameStarted(object sender, System.Diagnostics.Process e)
+        {
+            if (Settings.Default.AutoSwitchTheme &&
+                ThemeManager.Instance.TryGetThemeByMod(e as IMod, out var theme))
+                ThemeManager.Instance.Theme = theme;
         }
 
         private async Task FindGamesAsync()
@@ -180,19 +195,7 @@ namespace FocLauncher
             sb.AppendLine(FoC == null ? "FoC is null" : $"FoC found at: {FoC.Directory}; FoC Version: {FoC.Type}");
             Logger.Info(sb.ToString());
         }
-
-        private static void OnGameStartFailed(object sender, IPetroglyhGameableObject e)
-        {
-            MessageBox.Show($"Unable to start {e.Name}", "FoC Launcher", MessageBoxButton.OK, MessageBoxImage.Error);
-        }
-
-        private static void OnGameStarted(object sender, IPetroglyhGameableObject e)
-        {
-            if (Settings.Default.AutoSwitchTheme &&
-                ThemeManager.Instance.TryGetThemeByMod(e as IMod, out var theme))
-                ThemeManager.Instance.Theme = theme;
-        }
-
+        
         private static void ExecutedLaunch(object obj)
         {
             if (!(obj is IPetroglyhGameableObject gameObject))

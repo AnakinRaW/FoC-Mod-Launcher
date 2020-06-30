@@ -4,12 +4,13 @@
     {
         bool DebugBuildExists { get; }
 
-        // TODO: Add default bool option that allows to throw if no debug build found.
         /// <summary>
-        /// Plays the game with the mod
+        /// Plays the game using the debug executable. 
         /// </summary>
         /// <param name="args">Arguments which specify more options, including the mod, that shall get used.</param>
-        /// <returns><c>true</c> when the game process was invoked; <c>false</c> otherwise. E.g. when the procedure was cancelled.</returns>
-        bool DebugGame(GameCommandArguments? args = null, string? iconFile = null);
+        /// <param name="iconFile">Path to the icon file that shall get used.</param>
+        /// <param name="fallbackToNormal">When no debug executable was found, the method falls back using the normal executable.</param>
+        /// <exception cref="GameStartException">When the game instance could not get started due to an error.</exception>
+        void DebugGame(GameCommandArguments? args = null, string? iconFile = null, bool fallbackToNormal = true);
     }
 }

@@ -31,7 +31,7 @@ namespace FocLauncher.Game
         public override string Description => string.Empty;
 
         public bool DebugBuildExists => File.Exists(Path.Combine(Directory.FullName, DebugGameExeFileName));
-
+        
         public SteamGame(DirectoryInfo gameDirectory) : base(gameDirectory)
         {
         }
@@ -66,8 +66,8 @@ namespace FocLauncher.Game
             }
             base.OnGameStarting(args);
         }
-        
-        public bool DebugGame(GameCommandArguments? args = null, string? iconFile = null)
+
+        public void DebugGame(GameCommandArguments? args = null, string? iconFile = null, bool fallbackToNormal = true)
         {
             GameStartInfo startInfo;
             if (DebugBuildExists)
@@ -77,12 +77,16 @@ namespace FocLauncher.Game
             }
             else
             {
+                if (!fallbackToNormal)
+                    throw new GameStartException($"Unable to find debug executable {DebugGameExeFileName}");
+
                 var exeFile = new FileInfo(Path.Combine(Directory.FullName, GameExeFileName));
                 startInfo = new GameStartInfo(exeFile, GameBuildType.Release);
             }
             args ??= new GameCommandArguments();
-            return StartGame(args, startInfo, iconFile);
+            StartGame(args, startInfo, iconFile);
         }
+
 
         protected override IEnumerable<IMod> GetPhysicalModsCore()
         {

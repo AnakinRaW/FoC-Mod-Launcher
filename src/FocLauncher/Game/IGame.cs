@@ -25,13 +25,15 @@ namespace FocLauncher.Game
         /// </summary>
         /// <returns></returns>
         bool Exists();
-        
+
         /// <summary>
         /// Plays the game with the mod
         /// </summary>
         /// <param name="args">Arguments which specify more options, including the mod, that shall get used.</param>
-        /// <returns><c>true</c> when the game process was invoked; <c>false</c> otherwise. E.g. when the procedure was cancelled.</returns>
-        bool PlayGame(GameCommandArguments? args = null, string? iconFile = null);
+        /// <param name="iconFile">Path to the icon file that shall get used.</param>
+        /// <exception cref="GameStartException">When the game instance could not get started due to an error.
+        /// If the operation was cancelled by an handler of <see cref="GameStarting"/> no exception will be thrown.</exception>
+        void PlayGame(GameCommandArguments? args = null, string? iconFile = null);
 
         /// <summary>
         /// Checks if the patch is installed
