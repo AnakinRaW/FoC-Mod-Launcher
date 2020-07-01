@@ -75,7 +75,9 @@
     <Compile Include="Game\GameStartException.cs" />
     <Compile Include="Game\ModSearchOptions.cs" />
     <Compile Include="Items\ILauncherItem.cs" />
+    <Compile Include="Items\ILauncherItemManager.cs" />
     <Compile Include="Items\LauncherGameObjectCommandHandler.cs" />
+    <Compile Include="Items\LauncherItemEventArgs.cs" />
     <Compile Include="Items\LauncherItemManager.cs" />
     <Compile Include="LauncherGameOptions.cs" />
     <Compile Include="ModInfo\IModIdentity.cs" />

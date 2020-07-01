@@ -37,8 +37,9 @@ namespace FocLauncher.Items
         IContextMenuController IHasContextMenuController.ContextMenuController => LauncherItemContextMenuController.Instance;
 
 
-        public LauncherItem(IPetroglyhGameableObject gameObject)
+        public LauncherItem(LauncherItemManager manager, IPetroglyhGameableObject gameObject)
         {
+            Manager = manager;
             GameObject = gameObject;
             _commandHandler = new LauncherGameObjectCommandHandler(GameObject);
             SetNameAsync().Forget();
@@ -48,7 +49,7 @@ namespace FocLauncher.Items
         {
             return Text;
         }
-
+        
         private IEnumerable<MenuItem> CreateMenuItems()
         {
             var items = new HashSet<MenuItem>();

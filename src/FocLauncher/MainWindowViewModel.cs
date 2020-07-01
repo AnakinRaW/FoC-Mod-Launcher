@@ -76,7 +76,7 @@ namespace FocLauncher
 
         public IReadOnlyCollection<IMod> Mods => GameObjects.Select(x => x.GameObject).OfType<IMod>().ToList();
 
-        public LauncherGameManager GameManager { get; private set; }
+        public LauncherItemManager ItemManager { get; }
 
         public IGame FoC
         {
@@ -121,28 +121,22 @@ namespace FocLauncher
         private void OnGameDetectionFinished(object sender, GameDetection e)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            var gameManager = new LauncherGameManager(e);
-
-            GameManager = gameManager;
-            FoC = gameManager.ForcesOfCorruption;
-            EaW = gameManager.EmpireAtWar;
+            //var gameManager = new LauncherGameManager(e);
+            //FoC = gameManager.ForcesOfCorruption;
+            //EaW = gameManager.EmpireAtWar;
             LogInstalledGames();
 
-            FoC.Setup(GameSetupOptions.ResolveModDependencies);
+            //FoC.Setup(GameSetupOptions.ResolveModDependencies);
 
             RegisterEvents();
             
-            GameObjects.Add(new LauncherItem(FoC));
-            foreach (var gameObject in FoC.Mods)
-                GameObjects.Add(new LauncherItem(gameObject));
-            _window.ListBox.FocusSelectedItem();
             _initialized = true;
         }
 
         private void RegisterEvents()
         {
-            FoC.GameStarted += OnGameStarted;
-            EaW.GameStarted += OnGameStarted;
+            //FoC.GameStarted += OnGameStarted;
+            //EaW.GameStarted += OnGameStarted;
         }
 
         private static void OnGameStarted(object sender, System.Diagnostics.Process e)
