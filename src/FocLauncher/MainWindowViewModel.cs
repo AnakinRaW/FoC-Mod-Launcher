@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using FocLauncher.Controls;
 using FocLauncher.Game;
 using FocLauncher.Game.Detection;
 using FocLauncher.Input;
@@ -55,88 +52,81 @@ namespace FocLauncher
     //}
     
 
-    public class MainWindowViewModel
+    public class MainWindowViewModel : INotifyPropertyChanged
     {
-        private readonly MainWindow _window;
-        internal event EventHandler<GameDetection> GamesDetected;
-
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        private IGame _foC;
-        private IGame _eaW;
-
-        private bool _initialized;
-
         public ICommand LaunchCommand => new UICommand(ExecutedLaunch, CanExecute);
-
-        public ObservableCollection<LauncherItem> GameObjects { get; } =
-            new ObservableCollection<LauncherItem>();
-
-        public IReadOnlyCollection<IMod> Mods => GameObjects.Select(x => x.GameObject).OfType<IMod>().ToList();
-
-        public LauncherItemManager ItemManager { get; }
-
-        public IGame FoC
-        {
-            get => _foC;
-            set
-            {
-                if (_foC == value)
-                    return;
-                _foC = value;
-                OnPropertyChanged();
-                FocType = _foC == null ? GameType.Undefined : value.Type;
-                OnPropertyChanged(nameof(FocType));
-            }
-        }
-
-        public IGame EaW
-        {
-            get => _eaW;
-            set
-            {
-                if (_eaW == value)
-                    return;
-                _eaW = value;
-                OnPropertyChanged();
-                EaWType = _eaW == null ? GameType.Undefined : value.Type;
-                OnPropertyChanged(nameof(EaWType));
-            }
-        }
-
-        public GameType FocType { get; private set; }
-
-        public GameType EaWType { get; private set; }
+        
+        private LauncherListBoxPane ListBoxPane { get; }
 
         public MainWindowViewModel(MainWindow window)
         {
-            _window = window;
-            GamesDetected += OnGameDetectionFinished;
-            // TODO: Add additional state so that FocType=undefined and not initialized will state this in UI! 
-            FindGamesAsync().ForgetButThrow();
+            ListBoxPane = window.ListBoxPane;
+            ListBoxPane.Focus();
+            InitializeLauncherWindowAsync().ForgetButThrow();
         }
 
-        private void OnGameDetectionFinished(object sender, GameDetection e)
+        private async Task InitializeLauncherWindowAsync()
         {
-            ThreadHelper.ThrowIfNotOnUIThread();
-            //var gameManager = new LauncherGameManager(e);
-            //FoC = gameManager.ForcesOfCorruption;
-            //EaW = gameManager.EmpireAtWar;
-            LogInstalledGames();
+            await ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
+            {
+                await TaskScheduler.Default;
+                var gameDetection = await FindGamesAsync();
 
-            //FoC.Setup(GameSetupOptions.ResolveModDependencies);
 
-            RegisterEvents();
-            
-            _initialized = true;
+                if (gameDetection.IsError)
+                {
+                    await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                    CloseApplication(gameDetection);
+                }
+
+                await AddToListBoxAndSetupAsync(gameDetection);
+
+                await ListBoxPane.AddGameAsync(LauncherGameManager.Instance.ForcesOfCorruption!);
+            });
+            ListBoxPane.Focus();
         }
 
+        private static async Task<GameDetection> FindGamesAsync()
+        {
+            try
+            {
+                var gameDetection = GameDetection.NotInstalled;
+                await Task.Run(async () =>
+                {
+                    await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                    gameDetection = GameDetectionHelper.GetGameInstallations();
+                }).ConfigureAwait(false);
+                return gameDetection;
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e, $"Failed to initialize MainWindow view model: {e.Message}");
+                throw;
+            }
+        }
+
+        private async Task AddToListBoxAndSetupAsync(GameDetection e)
+        {
+            var gameManager = LauncherGameManager.Instance;
+            gameManager.Initialize(e);
+            var foc = gameManager.ForcesOfCorruption;
+            var eaw = gameManager.EmpireAtWar;
+            RegisterEvents();
+
+            new TaskFactory().StartNew(() =>
+            {
+                foc!.Setup(GameSetupOptions.ResolveModDependencies);
+            }).Forget();
+        }
+       
+        
         private void RegisterEvents()
         {
-            //FoC.GameStarted += OnGameStarted;
-            //EaW.GameStarted += OnGameStarted;
+
         }
 
         private static void OnGameStarted(object sender, System.Diagnostics.Process e)
@@ -144,50 +134,6 @@ namespace FocLauncher
             if (Settings.Default.AutoSwitchTheme &&
                 ThemeManager.Instance.TryGetThemeByMod(e as IMod, out var theme))
                 ThemeManager.Instance.Theme = theme;
-        }
-
-        private async Task FindGamesAsync()
-        {
-            await ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
-            {
-                var shuttingDown = false;
-                try
-                {
-                    await TaskScheduler.Default;
-                    var gameDetection = GameDetection.NotInstalled;
-                    await Task.Run(async () =>
-                    {
-                        await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                        gameDetection = GameDetectionHelper.GetGameInstallations();
-                    }).ConfigureAwait(false);
-
-                    await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-
-                    if (gameDetection.IsError)
-                    {
-                        shuttingDown = true;
-                        CloseApplication(gameDetection);
-                        return;
-                    }
-                    OnGamesDetected(gameDetection);
-                }
-                catch (Exception e)
-                {
-                    if (shuttingDown)
-                        return;
-                    Logger.Error(e, $"Failed to initialize MainWindow view model: {e.Message}");
-                    throw;
-                }
-            });
-        }
-        
-        private void LogInstalledGames()
-        {
-            var sb = new StringBuilder();
-            sb.AppendLine("----------Installed Game Information----------");
-            sb.AppendLine(EaW == null ? "EaW is null" : $"EaW found at: {EaW.Directory};");
-            sb.AppendLine(FoC == null ? "FoC is null" : $"FoC found at: {FoC.Directory}; FoC Version: {FoC.Type}");
-            Logger.Info(sb.ToString());
         }
         
         private static void ExecutedLaunch(object obj)
@@ -197,9 +143,9 @@ namespace FocLauncher
             LauncherGameObjectCommandHandler.Launch(gameObject);
         }
 
-        private bool CanExecute(object obj)
+        private static bool CanExecute(object obj)
         {
-            return _initialized && obj is IPetroglyhGameableObject;
+            return obj is IPetroglyhGameableObject;
         }
 
         private static void CloseApplication(GameDetection gameDetection)
@@ -218,11 +164,6 @@ namespace FocLauncher
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        protected virtual void OnGamesDetected(GameDetection e)
-        {
-            GamesDetected?.Invoke(this, e);
         }
     }
 }

@@ -5,9 +5,9 @@ namespace FocLauncher.Items
 {
     internal interface ILauncherItemManager
     {
-        ILauncherItem GetGameObjectItem(IPetroglyhGameableObject gameObject, uint itemid);
+        ILauncherItem GetGameObjectItem(IPetroglyhGameableObject gameObject);
 
-        bool TryGetHierarchyItem(IPetroglyhGameableObject gameObject, uint itemid, out ILauncherItem item);
+        bool TryGetItem(IPetroglyhGameableObject gameObject, out ILauncherItem? item);
 
         bool IsChangingItems { get; }
 

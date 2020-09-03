@@ -71,6 +71,10 @@
     <Compile Include="Controls\Controllers\ContextMenuController.cs" />
     <Compile Include="Controls\Controllers\IContextMenuController.cs" />
     <Compile Include="Controls\Controllers\IHasContextMenuController.cs" />
+    <Compile Include="Controls\LauncherListBoxPane.cs" />
+    <Compile Include="Utilities\DisposableObject.cs" />
+    <Compile Include="Utilities\ExtensionMethods.cs" />
+    <Compile Include="Utilities\FocusHelper.cs" />
     <Compile Include="Game\GameSetupOptions.cs" />
     <Compile Include="Game\GameStartException.cs" />
     <Compile Include="Game\ModSearchOptions.cs" />
@@ -141,7 +145,7 @@
     <Compile Include="Controls\LauncherStatusBar.cs" />
     <Compile Include="Game\GameCommandArguments.cs" />
     <Compile Include="Game\PetroglyphGame.cs" />
-    <Compile Include="Game\LauncherGameManager.cs" />
+    <Compile Include="LauncherGameManager.cs" />
     <Compile Include="LauncherApp.cs" />
     <Compile Include="Converters\GameTypeToStringConverter.cs" />
     <Compile Include="Converters\SteamToVisibilityConverter.cs" />
@@ -222,6 +226,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Templates\LauncherItemTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Themes\Generic.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

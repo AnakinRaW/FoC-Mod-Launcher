@@ -19,40 +19,12 @@
     <Window.Resources>
         
         <converters:GameTypeToStringConverter x:Key="GameTypeToStringConverter"/>
-        <converters:SteamToVisibilityConverter x:Key="SteamToVisibilityConverter"/>
         <converters:DebugBuildToVisibilityConverter x:Key="DebugBuildToVisibilityConverter"/>
-        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
 
         <Style x:Key="ArgumentCheckBox" TargetType="{x:Type CheckBox}">
             <Setter Property="Margin" Value="0,6,24,0"/>
         </Style>
 
-        <DataTemplate x:Key="ItemDataTemplate" DataType="{x:Type items:LauncherItem}">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="12"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto" MinWidth="12"/>
-                    <ColumnDefinition Width="Auto" MinWidth="16"/>
-                    <ColumnDefinition Width="6"/>
-                </Grid.ColumnDefinitions>
-                <Image Grid.Column="0" Source="{Binding GameObject.IconFile, IsAsync=True}" Width="32" Height="32" Margin="0,2,4,2"/>
-                <TextBlock Grid.Column="2" VerticalAlignment="Center" Text="{Binding Text, IsAsync=True}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
-                <TextBlock Grid.Column="3" Margin="12,0" VerticalAlignment="Center" HorizontalAlignment="Right" Text="{Binding GameObject.Version}"/>
-                <Image Grid.Column="4" Height="16" Width="16" Source="Resources/steam.png" 
-                       RenderOptions.BitmapScalingMode="Fant"
-                       RenderOptions.EdgeMode="Aliased"
-                       Visibility="{Binding GameObject.WorkshopMod, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
-                    <Image.ToolTip>
-                        <TextBlock Text="Steam Workshops Mod"></TextBlock>
-                    </Image.ToolTip>
-                </Image>
-                <Grid.ToolTip>
-                    <TextBlock TextWrapping="Wrap" MaxWidth="300" Text="{Binding Text}"/>
-                </Grid.ToolTip>
-            </Grid>
-        </DataTemplate>
 
         <DataTemplate x:Key="Test" DataType="{x:Type mods:IMod}"></DataTemplate>
 
@@ -72,13 +44,15 @@
             <TextBlock Text="Choose the mod you want to play:"/>
         </Grid>
 
-        <controls:LauncherListBox x:Name="ListBox" Grid.Row="1" Margin="6,0" ItemsSource="{Binding GameObjects}" ItemTemplate="{StaticResource ItemDataTemplate}"
+        <!--<controls:LauncherListBox x:Name="ListBox" Grid.Row="1" Margin="6,0" ItemsSource="{Binding GameObjects}" ItemTemplate="{StaticResource ItemDataTemplate}"
                                   HorizontalContentAlignment="Stretch">
-        </controls:LauncherListBox>
+        </controls:LauncherListBox>-->  
+
+        <controls:LauncherListBoxPane x:Name="ListBoxPane" Grid.Row="1" Margin="6,0"/>
         
         <StackPanel Grid.Row="3" Margin="0,12,0,12">
             <controls:PlayButton HorizontalAlignment="Center" Margin="8" Padding="8,3,8,3" Width="120" Height="40" IsDefault="True"
-                        Command="{Binding LaunchCommand}" CommandParameter="{Binding SelectedItem.GameObject, ElementName=ListBox}"
+                        Command="{Binding LaunchCommand}" CommandParameter="{Binding SelectedItem.GameObject, ElementName=ListBoxPane}"
                         Text="PLAY"/>
             <controls:LauncherCheckBox x:Name="DebugCheckBox" Content="Use Debug Build" HorizontalAlignment="Center"
                                        IsChecked="{Binding Source={x:Static focLauncher:LauncherGameOptions.Instance}, Path=UseDebugBuild, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
@@ -103,7 +77,9 @@
                 </Grid.ColumnDefinitions>
                 <DockPanel>
                     <TextBlock Margin="3,0" VerticalAlignment="Center" Text="Game: "/>
-                    <TextBlock VerticalAlignment="Center" Text="{Binding Path=FocType, Converter={StaticResource GameTypeToStringConverter}}"/>
+                    <TextBlock VerticalAlignment="Center" 
+                               Text="{Binding Path=ForcesOfCorruption, Source={x:Static focLauncher:LauncherGameManager.Instance}, 
+                        Converter={StaticResource GameTypeToStringConverter}}"/>
                 </DockPanel>
                 <DockPanel Grid.Column="2" HorizontalAlignment="Stretch">
                     <!--<controls:StatusBarButton Margin="0,0,12,0" Click="OpenChangeThemeDialog" Padding="5,2">

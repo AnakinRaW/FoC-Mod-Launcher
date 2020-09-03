@@ -3,6 +3,10 @@
                     xmlns:controls="clr-namespace:FocLauncher.Controls"
                     xmlns:theming="clr-namespace:FocLauncher.Theming;assembly=FocLauncher.Theming">
 
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/FocLauncher;component/Templates/LauncherItemTemplate.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+
     <Style TargetType="{x:Type controls:LauncherListBoxItem}">
         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
         <Setter Property="Background" Value="{DynamicResource {x:Static theming:EnvironmentColors.ListBoxItemBackground}}"/>
@@ -18,7 +22,8 @@
                              TextBlock.Foreground="{DynamicResource {x:Static theming:EnvironmentColors.ListBoxItemText}}">
                         <Grid>
                             <ContentPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                              SnapsToDevicePixels="True" Margin="5,0,2,0"/>
+                                              SnapsToDevicePixels="True" Margin="5,0,2,0" 
+                                              ContentTemplate="{StaticResource ItemDataTemplate}"/>
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>

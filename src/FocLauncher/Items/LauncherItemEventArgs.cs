@@ -1,13 +1,12 @@
 ﻿using System;
-using FocLauncher.Game;
 
 namespace FocLauncher.Items
 {
     public class LauncherItemEventArgs : EventArgs
     {
-        public IPetroglyhGameableObject Item { get; }
+        public ILauncherItem Item { get; }
 
-        public LauncherItemEventArgs(IPetroglyhGameableObject item)
+        public LauncherItemEventArgs(ILauncherItem item)
         {
             Item = item;
         }

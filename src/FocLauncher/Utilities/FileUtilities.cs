@@ -5,6 +5,8 @@ using System.Linq;
 
 namespace FocLauncher.Utilities
 {
+    // From https://github.com/microsoft/SEAL/blob/master/dotnet/src/tools/DisposableObject.cs (MIT License)
+
     internal static class FileUtilities
     {
         internal static readonly char[] Slashes = { '/', '\\' };
