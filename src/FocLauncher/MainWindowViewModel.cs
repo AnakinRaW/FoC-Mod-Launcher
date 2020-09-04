@@ -79,7 +79,7 @@ namespace FocLauncher
                 await SetupGamesAsync(gameDetection);
 
                 await ListBoxPane.AddGameAsync(LauncherGameManager.Instance.ForcesOfCorruption!);
-                //await ListBoxPane.AddGameAsync(LauncherGameManager.Instance.EmpireAtWar!, false);
+                await ListBoxPane.AddGameAsync(LauncherGameManager.Instance.EmpireAtWar!, false);
             });
             ListBoxPane.Focus();
         }

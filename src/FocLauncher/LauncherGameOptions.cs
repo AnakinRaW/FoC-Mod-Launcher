@@ -8,7 +8,7 @@ namespace FocLauncher
     {
         private static LauncherGameOptions? _instance;
         private bool _windowed;
-        private bool _noArtProcess;
+        private bool _noArtProcess = true;
         private bool _ignoreAsserts;
         private bool _useDebugBuild;
         public event PropertyChangedEventHandler PropertyChanged;
