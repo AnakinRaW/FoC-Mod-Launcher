@@ -10,7 +10,7 @@ namespace FocLauncher.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is SteamGame)
+            if (value is SteamGameFoc)
                 return Visibility.Visible;
             return Visibility.Collapsed;
         }

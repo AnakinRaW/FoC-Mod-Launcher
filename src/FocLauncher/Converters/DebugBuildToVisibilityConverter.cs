@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 using FocLauncher.Game;
+using FocLauncher.Mods;
 
 namespace FocLauncher.Converters
 {
@@ -10,7 +11,19 @@ namespace FocLauncher.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is IDebugable debugable && debugable.DebugBuildExists)
+            IGame game;
+            switch (value)
+            {
+                case IMod mod:
+                    game = mod.Game;
+                    break;
+                case IGame game1:
+                    game = game1;
+                    break;
+                default:
+                    return Visibility.Collapsed;
+            }
+            if (game is IDebugable debugable && debugable.DebugBuildExists)
                 return Visibility.Visible;
             return Visibility.Collapsed;
         }

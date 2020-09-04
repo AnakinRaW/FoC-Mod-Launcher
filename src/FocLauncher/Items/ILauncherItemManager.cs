@@ -5,14 +5,12 @@ namespace FocLauncher.Items
 {
     internal interface ILauncherItemManager
     {
-        ILauncherItem GetGameObjectItem(IPetroglyhGameableObject gameObject);
-
-        bool TryGetItem(IPetroglyhGameableObject gameObject, out ILauncherItem? item);
+        event EventHandler<LauncherItemEventArgs>? OnItemAdded;
 
         bool IsChangingItems { get; }
 
-        event EventHandler<LauncherItemEventArgs> AfterInvalidateItems;
+        ILauncherItem GetGameObjectItem(IPetroglyhGameableObject gameObject);
 
-        event EventHandler<LauncherItemEventArgs> OnItemAdded;
+        bool TryGetItem(IPetroglyhGameableObject gameObject, out ILauncherItem? item);
     }
 }

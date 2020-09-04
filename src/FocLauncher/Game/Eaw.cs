@@ -1,31 +1,33 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using FocLauncher.Utilities;
 
 namespace FocLauncher.Game
 {
     public class Eaw : PetroglyphGame
     {
         public const string GameconstantsUpdateHashEaW = "1d44b0797c8becbe240adc0098c2302a";
+        
+        public override GameType Type { get; }
 
-        public Eaw(DirectoryInfo gameDirectory) : base(gameDirectory)
+        public override string Name => "Star Wars: Empire at War";
+
+        public override string Description => string.Empty;
+
+        protected override int DefaultXmlFileCount => 1;
+
+        protected override string GameExeFileName => "sweaw.exe";
+
+        protected override string GameConstantsMd5Hash => GameconstantsUpdateHashEaW;
+
+        public Eaw(DirectoryInfo gameDirectory, GameType gameType) : base(gameDirectory)
         {
+            Type = gameType;
         }
 
-        // TODO: From Ctor
-        public override GameType Type => GameType.Undefined;
-        public override string Name => "Star Wars: Empire at War";
-        public override string Description => string.Empty;
-        protected override int DefaultXmlFileCount => 1;
-        protected override string GameExeFileName => "sweaw.exe";
         public override bool IsPatched()
         {
-            var constantsFilePath = Path.Combine(Directory.FullName, @"Data\XML\GAMECONSTANTS.xml");
-            if (!File.Exists(constantsFilePath))
-                return false;
-            var hashProvider = new HashProvider();
-            if (hashProvider.GetFileHash(constantsFilePath) != GameconstantsUpdateHashEaW)
+            if (!base.IsPatched())
                 return false;
             return Directory.GetFiles(Path.Combine(Directory.FullName, @"Data\XML\")).Length == 1;
         }

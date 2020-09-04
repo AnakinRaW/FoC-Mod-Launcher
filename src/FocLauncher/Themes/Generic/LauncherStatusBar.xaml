@@ -1,14 +1,15 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:theming="clr-namespace:FocLauncher.Theming;assembly=FocLauncher.Theming"
-                    xmlns:controls="clr-namespace:FocLauncher.Controls">
+                    xmlns:controls="clr-namespace:FocLauncher.Controls"
+                    xmlns:focLauncher="clr-namespace:FocLauncher">
 
     <Style TargetType="{x:Type controls:LauncherStatusBar}">
         <Setter Property="MinHeight" Value="22"/>
         <Setter Property="Background" Value="{DynamicResource {x:Static theming:EnvironmentColors.StatusBarDefaultBackground}}"/>
         <Setter Property="TextElement.Foreground" Value="{DynamicResource {x:Static theming:EnvironmentColors.StatusBarDefaultText}}"/>
         <Style.Triggers>
-            <DataTrigger Binding="{Binding FoC.GameProcessWatcher.IsProcessRunning}" Value="true">
+            <DataTrigger Binding="{Binding AnyGameRunning, Source={x:Static focLauncher:LauncherGameManager.Instance}}" Value="true">
                 <Setter Property="Background" Value="{DynamicResource {x:Static theming:EnvironmentColors.StatusBarRunningBackground}}"/>
                 <Setter Property="TextElement.Foreground" Value="{DynamicResource {x:Static theming:EnvironmentColors.StatusBarRunningText}}"/>
             </DataTrigger>

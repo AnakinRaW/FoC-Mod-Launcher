@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using FocLauncher.Mods;
 
 namespace FocLauncher.Game
 {
     public interface IGame : IPetroglyhGameableObject, IModContainer, IHasDirectory
     {
-        event EventHandler<Process> GameStarted;
+        event EventHandler<GameStartedEventArgs> GameStarted;
 
         event EventHandler<GameStartingEventArgs> GameStarting;
 

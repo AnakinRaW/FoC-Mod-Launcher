@@ -70,17 +70,7 @@ namespace FocLauncher.Controls
                 return;
             FocusHelper.MoveFocusInto(content);
         }
-
-        public bool AddGame(IGame game, bool changeSelection = true)
-        {
-            var result = false;
-            ThreadHelper.JoinableTaskFactory.Run(async () =>
-            {
-                result = await AddGameAsync(game, changeSelection);
-            });
-            return result;
-        }
-
+        
         public async Task<bool> AddGameAsync(IGame game, bool changeSelection = true)
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
@@ -106,7 +96,6 @@ namespace FocLauncher.Controls
             {
                 _initializedItemManagerEvents = true;
                 var itemManager = ItemManager;
-                itemManager.AfterInvalidateItems += OnAfterInvalidateItems;
                 itemManager.OnItemAdded += OnItemAdded;
             }
         }
@@ -114,11 +103,6 @@ namespace FocLauncher.Controls
         private void OnItemAdded(object sender, LauncherItemEventArgs e)
         {
             _itemCollection.Add(e.Item);
-        }
-
-        private void OnAfterInvalidateItems(object sender, LauncherItemEventArgs e)
-        {
-            
         }
     }
 }

@@ -71,8 +71,8 @@ namespace FocLauncher.Game.Detection
         {
             Logger.Trace("The games are not setted up. Trying to set them up by running the game once (Steam only)");
             var steamClient = SteamClient.Instance;
-            if (!steamClient.Installed || !SteamClient.Instance.IsGameInstalled(SteamGame.EmpireAtWarSteamId) &&
-                !SteamClient.Instance.IsGameInstalled(SteamGame.ForcesOfCorruptionSteamId))
+            if (!steamClient.Installed || !SteamClient.Instance.IsGameInstalled(SteamGameEaw.EmpireAtWarSteamId) &&
+                !SteamClient.Instance.IsGameInstalled(SteamGameFoc.ForcesOfCorruptionSteamId))
                 return false;
             Logger.Trace("Steam and the games are installed. Asing the user whether to run setup now.");
             if (!PromptGameSetupDialog())

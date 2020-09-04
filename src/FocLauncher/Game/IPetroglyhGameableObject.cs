@@ -2,7 +2,6 @@
 
 namespace FocLauncher.Game
 {
-    // TODO: Rename as file name
     public interface IPetroglyhGameableObject
     {
         string Name { get; }

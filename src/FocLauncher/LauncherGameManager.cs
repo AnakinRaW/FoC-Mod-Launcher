@@ -10,14 +10,31 @@ namespace FocLauncher
 {
     public sealed class LauncherGameManager : INotifyPropertyChanged
     {
-        public event EventHandler<IGame> GameStarted;
+        public event EventHandler<GameStartedEventArgs> GameStarted;
         public event EventHandler<IGame> GameClosed;
+        public event PropertyChangedEventHandler PropertyChanged;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         private static LauncherGameManager? _instance;
         private IGame? _eaW;
         private IGame? _foC;
+        private bool _anyGameRunning;
+        private readonly GameRunningTracker _tracker;
+
+
+        public bool AnyGameRunning
+        {
+            get => _anyGameRunning;
+            private set
+            {
+                if (value == _anyGameRunning)
+                    return;
+                _anyGameRunning = value;
+                OnPropertyChanged();
+            }
+        }
+
 
         public IGame? EmpireAtWar
         {
@@ -43,10 +60,13 @@ namespace FocLauncher
             }
         }
 
+        public bool Initialized { get; private set; }
+
         public static LauncherGameManager Instance => _instance ??= new LauncherGameManager();
 
         private LauncherGameManager()
         {
+            _tracker = new GameRunningTracker(this);
         }
 
         public void Initialize(GameDetection gameDetection)
@@ -56,8 +76,10 @@ namespace FocLauncher
             if (gameDetection.IsError)
                 throw new PetroglyphGameException();
 
-            EmpireAtWar = GameFactory.CreateEawGame(gameDetection.EawExe!.Directory, gameDetection.FocType);
-            ForcesOfCorruption = GameFactory.CreateFocGame(gameDetection.FocExe!.Directory, gameDetection.FocType);
+            EmpireAtWar = GameFactory.CreateEawGame(gameDetection.EawExe!.Directory!, gameDetection.EawType);
+            ForcesOfCorruption = GameFactory.CreateFocGame(gameDetection.FocExe!.Directory!, gameDetection.FocType);
+
+            Initialized = true;
 
             LogInstalledGames();
 
@@ -76,29 +98,63 @@ namespace FocLauncher
 
         private void RegisterEvents(IGame game)
         {
-
+            if (!Initialized)
+                return;
+            EmpireAtWar!.GameStarted += OnGameStarted;
+            EmpireAtWar!.GameClosed += OnGameClosed;
+            ForcesOfCorruption!.GameStarted += OnGameStarted;
+            ForcesOfCorruption!.GameClosed += OnGameClosed;
         }
 
-        private void UnRegisterEvent(IGame game)
-        {
-
-        }
-        
-        private void OnGameStarted(IGame e)
+        private void OnGameStarted(object sender, GameStartedEventArgs e)
         {
             GameStarted?.Invoke(this, e);
+            _tracker.GameStarted();
         }
 
-        private void OnGameClosed(IGame e)
+        private void OnGameClosed(object sender, EventArgs e)
         {
-            GameClosed?.Invoke(this, e);
+            if (!(sender is IGame game))
+                return;
+            GameClosed?.Invoke(this, game);
+            _tracker.GameClosed();
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         private void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private class GameRunningTracker
+        {
+            private readonly LauncherGameManager _manager;
+
+            private int _numberOfRunningGames;
+
+
+            public GameRunningTracker(LauncherGameManager manager)
+            {
+                _manager = manager;
+            }
+
+            public void GameStarted()
+            {
+                lock (this)
+                {
+                    if (_numberOfRunningGames == 0)
+                        _manager.AnyGameRunning = true;
+                    _numberOfRunningGames++;
+                }
+            }
+
+            public void GameClosed()
+            {
+                if (_numberOfRunningGames == 0)
+                    return;
+                _numberOfRunningGames--;
+                if (_numberOfRunningGames == 0)
+                    _manager.AnyGameRunning = false;
+            }
         }
     }
 }

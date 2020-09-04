@@ -5,24 +5,21 @@ using System.IO;
 using System.Linq;
 using FocLauncher.ModInfo;
 using FocLauncher.Mods;
+using FocLauncher.Utilities;
 using FocLauncher.Versioning;
 
 namespace FocLauncher.Game
 {
     public abstract class PetroglyphGame : IGame
     {
-        public event EventHandler<Process> GameStarted;
+        public event EventHandler<GameStartedEventArgs> GameStarted;
         public event EventHandler<GameStartingEventArgs> GameStarting;
         public event EventHandler GameClosed;
         public event EventHandler<ModCollectionChangedEventArgs> ModCollectionModified;
-
-
-
+        
         public DirectoryInfo Directory { get; }
 
         public GameProcessWatcher GameProcessWatcher { get; } = new GameProcessWatcher();
-
-
 
         public abstract GameType Type { get; }
 
@@ -33,11 +30,14 @@ namespace FocLauncher.Game
         public virtual string? IconFile => string.Empty;
         public virtual ModVersion? Version => null;
 
-      
-
+        
         protected abstract int DefaultXmlFileCount { get; }
 
         protected abstract string GameExeFileName { get; }
+
+        protected abstract string GameConstantsMd5Hash { get; }
+
+        protected string GameConstantsFilePath => Path.Combine(Directory.FullName, @"Data\XML\GAMECONSTANTS.XML");
 
         public IReadOnlyCollection<IMod> Mods => ModsInternal.ToList();
 
@@ -65,7 +65,14 @@ namespace FocLauncher.Game
             StartGame(args, new GameStartInfo(exeFile, GameBuildType.Release), iconFile);
         }
 
-        public abstract bool IsPatched();
+        public virtual bool IsPatched()
+        {
+            var gameConstantsFilePath = Path.Combine(Directory.FullName, @"Data\XML\GAMECONSTANTS.XML");
+            if (!File.Exists(gameConstantsFilePath))
+                return false;
+            var hashProvider = new HashProvider();
+            return hashProvider.GetFileHash(gameConstantsFilePath) == GameConstantsMd5Hash;
+        }
 
         public virtual bool IsGameAiClear()
         {
@@ -175,7 +182,7 @@ namespace FocLauncher.Game
         {
             if (!Exists())
                 throw new Exception("Game was not found");
-            var startingArguments = new GameStartingEventArgs(gameArgs, gameStartInfo.BuildType);
+            var startingArguments = new GameStartingEventArgs(this, gameArgs, gameStartInfo.BuildType);
             OnGameStarting(startingArguments);
             if (startingArguments.Cancel)
                 return;
@@ -193,8 +200,7 @@ namespace FocLauncher.Game
                 throw new GameStartException(e.Message, e);
             }
 
-            if (process != null)
-                OnGameStarted(process);
+            OnGameStarted(new GameStartedEventArgs(this, gameArgs, gameStartInfo.BuildType, process));
         }
         
         protected virtual void OnGameStarting(GameStartingEventArgs args)
@@ -233,10 +239,10 @@ namespace FocLauncher.Game
             GameClosed?.Invoke(this, EventArgs.Empty);
         }
 
-        private protected virtual void OnGameStarted(Process process)
+        private protected virtual void OnGameStarted(GameStartedEventArgs eventArgs)
         {
-            GameProcessWatcher.SetProcess(process);
-            GameStarted?.Invoke(this, process);
+            GameProcessWatcher.SetProcess(eventArgs.Process);
+            GameStarted?.Invoke(this, eventArgs);
         }
 
         protected class GameStartInfo
@@ -257,7 +263,8 @@ namespace FocLauncher.Game
             var modsDir = Directory.GetDirectories("Mods").FirstOrDefault();
             if (modsDir is null || !modsDir.Exists)
                 return Enumerable.Empty<IMod>();
-            var modFolders = modsDir.EnumerateDirectories().ToList();
+            var modFolders = modsDir.EnumerateDirectories()
+                .Where(x => !x.Attributes.HasFlag(FileAttributes.Hidden)).ToList();
             return modFolders.SelectMany(folder => ModFactory.CreateModAndVariants(this, ModType.Default, folder, true));
         }
     }

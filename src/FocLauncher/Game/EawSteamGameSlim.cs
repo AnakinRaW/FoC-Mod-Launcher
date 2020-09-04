@@ -16,7 +16,7 @@
 
         public void StartGame()
         {
-            SteamClient.Instance.StartGame(SteamGame.EmpireAtWarSteamId);
+            SteamClient.Instance.StartGame(SteamGameEaw.EmpireAtWarSteamId);
         }
     }
 }

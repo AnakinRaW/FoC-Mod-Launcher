@@ -10,6 +10,9 @@ namespace FocLauncher.Game.Detection
 
         public GameType FocType { get; }
 
+        public GameType EawType { get; }
+
+
         // Setter required, because EA was too dump to fix registry values when they adapted the game for their Origin client.
         public FileInfo? FocExe { get; internal set; }
 
@@ -21,6 +24,7 @@ namespace FocLauncher.Game.Detection
         {
             Result = result;
             FocType = GameType.Undefined;
+            EawType = GameType.Undefined;
         }
 
         public GameDetection(FileInfo eawExe, FileInfo focExe)
@@ -31,13 +35,17 @@ namespace FocLauncher.Game.Detection
             EawExe = eawExe;
             FocExe = focExe;
             FocType = GameTypeHelper.GetGameType(this);
+            // TODO: Don't assume eaw type is the same as foc type
+            EawType = FocType;
         }
 
         public bool IsError => Result != DetectionResult.Installed || FocExe == null || EawExe == null;
 
         public override string ToString()
         {
-            return $"Game Detection Object: Result:{Result}; FoC-Type:{FocType}; FoC:'{FocExe?.FullName}'; EaW:'{EawExe?.FullName}'";
+            return $"Game Detection Object: Result:{Result}; " +
+                   $"FoC-Type:{FocType}; FoC:'{FocExe?.FullName}'; " +
+                   $"Eaw-Type:{EawType}; EaW:'{EawExe?.FullName}'";
         }
     }
 }

@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 
 namespace FocLauncher.Game
 {
-    public sealed class GameProcessWatcher : INotifyPropertyChanged
+    public sealed class GameProcessWatcher
     {
         private readonly object _syncObject = new object();
 
@@ -16,17 +16,7 @@ namespace FocLauncher.Game
             IsProcessRunning = false;
         }
 
-        public bool IsProcessRunning
-        {
-            get => _isProcessRunning;
-            private set
-            {
-                if (value == _isProcessRunning)
-                    return;
-                _isProcessRunning = value;
-                OnPropertyChanged();
-            }
-        }
+        public bool IsProcessRunning { get; private set; }
 
 
         private Process _process;

@@ -12,13 +12,14 @@ namespace FocLauncher.Game
         public override GameType Type { get; }
 
         protected override string GameExeFileName => "swfoc.exe";
-        
+        protected override string GameConstantsMd5Hash => GameconstantsUpdateHash;
+
         protected override int DefaultXmlFileCount => 2;
 
         public override string Name => "Forces of Corruption";
         public override string Description => string.Empty;
 
-        public override string? IconFile => LauncherApp.IconPath;
+        public override string? IconFile => LauncherApp.FocIconPath;
 
         public Foc(DirectoryInfo gameDirectory, GameType type) : base(gameDirectory)
         {
@@ -27,13 +28,12 @@ namespace FocLauncher.Game
 
         public override bool IsPatched()
         {
-            var constantsFilePath = Path.Combine(Directory.FullName, @"Data\XML\GAMECONSTANTS.XML");
+            if (!base.IsPatched())
+                return false;
             var graphicsFilePath = Path.Combine(Directory.FullName, @"Data\XML\GRAPHICDETAILS.XML");
-            if (!File.Exists(constantsFilePath) || !File.Exists(graphicsFilePath))
+            if (!File.Exists(graphicsFilePath))
                 return false;
             var hashProvider = new HashProvider();
-            if (hashProvider.GetFileHash(constantsFilePath) != GameconstantsUpdateHash)
-                return false;
             return hashProvider.GetFileHash(graphicsFilePath) == GraphicdetailsUpdateHash;
         }
 
@@ -41,8 +41,6 @@ namespace FocLauncher.Game
         {
             if (args.GameArguments.Mods is null || args.GameArguments.Mods.Any())
                 return;
-            //if (!args.GameArguments.Mods.Any(x => x.ModDirectory.StartsWith(GameDirectory)))
-            //    throw new Exception("Mod is not compatible");
             base.OnGameStarting(args);
         }
     }

@@ -12,7 +12,7 @@ namespace FocLauncher.Game
             switch (type)
             {
                 case GameType.SteamGold:
-                    return new SteamGame(directory);
+                    return new SteamGameFoc(directory);
                 case GameType.Disk:
                 case GameType.Origin:
                 case GameType.GoG:
@@ -27,8 +27,18 @@ namespace FocLauncher.Game
         {
             if (directory is null)
                 throw new ArgumentNullException(nameof(directory));
-            // TODO: Consume type and create SteamGameEaw
-            return new Eaw(directory);
+            switch (type)
+            {
+                case GameType.SteamGold:
+                    return new SteamGameEaw(directory);
+                case GameType.Disk:
+                case GameType.Origin:
+                case GameType.GoG:
+                case GameType.DiskGold:
+                    return new Eaw(directory, type);
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(type));
+            }
         }
     }
 }

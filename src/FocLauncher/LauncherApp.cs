@@ -13,7 +13,8 @@ namespace FocLauncher
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public static string IconPath = Path.Combine(LauncherConstants.ApplicationBasePath, "foc.ico");
+        public static string FocIconPath = Path.Combine(LauncherConstants.ApplicationBasePath, "foc.ico");
+        public static string EawIconPath = Path.Combine(LauncherConstants.ApplicationBasePath, "eaw.ico");
 
         protected override void OnExit(ExitEventArgs e)
         {
@@ -28,7 +29,7 @@ namespace FocLauncher
             Logger.Trace("Starting LauncherApp");
             Exit += LauncherApp_Exit;
             base.OnStartup(e);
-            InstallFocIcon();
+            InstallIcons();
 
             ApplicationResourceLoader.LoadResources();
 
@@ -53,12 +54,26 @@ namespace FocLauncher
                 throw new LauncherException(e.Exception.Message);
         }
 
+        private static void InstallIcons()
+        {
+            InstallFocIcon();
+            InstallEaWIcon();
+        }
+
         private static void InstallFocIcon()
         {
-            if (File.Exists(IconPath))
+            if (File.Exists(FocIconPath))
                 return;
-            using var fs = new FileStream(IconPath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
+            using var fs = new FileStream(FocIconPath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
             foc.Save(fs);
+        }
+
+        private static void InstallEaWIcon()
+        {
+            if (File.Exists(EawIconPath))
+                return;
+            using var fs = new FileStream(EawIconPath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
+            eaw.Save(fs);
         }
 
         private void LauncherApp_Exit(object sender, ExitEventArgs e)

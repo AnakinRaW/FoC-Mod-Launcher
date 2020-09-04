@@ -5,10 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:theming="clr-namespace:FocLauncher.Theming;assembly=FocLauncher.Theming"
         xmlns:converters="clr-namespace:FocLauncher.Converters"
-        xmlns:mods="clr-namespace:FocLauncher.Mods"
         xmlns:controls="clr-namespace:FocLauncher.Controls"
         xmlns:baseControls="clr-namespace:FocLauncher.Controls;assembly=FocLauncher.BaseControls"
-        xmlns:items="clr-namespace:FocLauncher.Items"
         xmlns:focLauncher="clr-namespace:FocLauncher"
         mc:Ignorable="d"
         Title="FoC Mod Launcher" Width="400" 
@@ -24,9 +22,6 @@
         <Style x:Key="ArgumentCheckBox" TargetType="{x:Type CheckBox}">
             <Setter Property="Margin" Value="0,6,24,0"/>
         </Style>
-
-
-        <DataTemplate x:Key="Test" DataType="{x:Type mods:IMod}"></DataTemplate>
 
     </Window.Resources>
     <Grid Background="{DynamicResource {x:Static theming:EnvironmentColors.BackgroundColor}}">
@@ -44,10 +39,6 @@
             <TextBlock Text="Choose the mod you want to play:"/>
         </Grid>
 
-        <!--<controls:LauncherListBox x:Name="ListBox" Grid.Row="1" Margin="6,0" ItemsSource="{Binding GameObjects}" ItemTemplate="{StaticResource ItemDataTemplate}"
-                                  HorizontalContentAlignment="Stretch">
-        </controls:LauncherListBox>-->  
-
         <controls:LauncherListBoxPane x:Name="ListBoxPane" Grid.Row="1" Margin="6,0"/>
         
         <StackPanel Grid.Row="3" Margin="0,12,0,12">
@@ -56,7 +47,7 @@
                         Text="PLAY"/>
             <controls:LauncherCheckBox x:Name="DebugCheckBox" Content="Use Debug Build" HorizontalAlignment="Center"
                                        IsChecked="{Binding Source={x:Static focLauncher:LauncherGameOptions.Instance}, Path=UseDebugBuild, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                              Visibility="{Binding FoC, Converter={StaticResource DebugBuildToVisibilityConverter}}"/>
+                              Visibility="{Binding SelectedItem.GameObject, ElementName=ListBoxPane, Converter={StaticResource DebugBuildToVisibilityConverter}}"/>
             <DockPanel HorizontalAlignment="Center">
                 <controls:LauncherCheckBox Content="IgnoreAsserts"
                                            IsChecked="{Binding Source={x:Static focLauncher:LauncherGameOptions.Instance}, Path=IgnoreAsserts, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"

@@ -7,7 +7,6 @@ namespace FocLauncher.Items
 {
     public class LauncherItemManager : ILauncherItemManager
     {
-        public event EventHandler<LauncherItemEventArgs> AfterInvalidateItems;
         public event EventHandler<LauncherItemEventArgs>? OnItemAdded;
 
         private readonly Dictionary<IPetroglyhGameableObject, LauncherItem> _items = new Dictionary<IPetroglyhGameableObject, LauncherItem>();

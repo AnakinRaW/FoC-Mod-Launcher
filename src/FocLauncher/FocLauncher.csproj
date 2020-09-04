@@ -72,6 +72,9 @@
     <Compile Include="Controls\Controllers\IContextMenuController.cs" />
     <Compile Include="Controls\Controllers\IHasContextMenuController.cs" />
     <Compile Include="Controls\LauncherListBoxPane.cs" />
+    <Compile Include="Game\GameStartedEventArgs.cs" />
+    <Compile Include="Game\SteamGameBase.cs" />
+    <Compile Include="Game\SteamGameEaw.cs" />
     <Compile Include="Utilities\DisposableObject.cs" />
     <Compile Include="Utilities\ExtensionMethods.cs" />
     <Compile Include="Utilities\FocusHelper.cs" />
@@ -156,7 +159,7 @@
     <Compile Include="Game\Eaw.cs" />
     <Compile Include="Game\Foc.cs" />
     <Compile Include="Game\GameStartHelper.cs" />
-    <Compile Include="Game\SteamGame.cs" />
+    <Compile Include="Game\SteamGameFoc.cs" />
     <Compile Include="Game\WorkshopNameResolver.cs" />
     <Compile Include="LauncherException.cs" />
     <Compile Include="Items\LauncherItem.cs" />
@@ -286,6 +289,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -355,6 +359,8 @@
   <ItemGroup>
     <Resource Include="Resources\StatusHelp_grey_disabled_16x.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\eaw.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

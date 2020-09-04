@@ -83,9 +83,10 @@ namespace FocLauncher
                     CloseApplication(gameDetection);
                 }
 
-                await AddToListBoxAndSetupAsync(gameDetection);
+                await SetupGamesAsync(gameDetection);
 
                 await ListBoxPane.AddGameAsync(LauncherGameManager.Instance.ForcesOfCorruption!);
+                await ListBoxPane.AddGameAsync(LauncherGameManager.Instance.EmpireAtWar!, false);
             });
             ListBoxPane.Focus();
         }
@@ -100,6 +101,7 @@ namespace FocLauncher
                     await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                     gameDetection = GameDetectionHelper.GetGameInstallations();
                 }).ConfigureAwait(false);
+
                 return gameDetection;
             }
             catch (Exception e)
@@ -109,7 +111,7 @@ namespace FocLauncher
             }
         }
 
-        private async Task AddToListBoxAndSetupAsync(GameDetection e)
+        private Task SetupGamesAsync(GameDetection e)
         {
             var gameManager = LauncherGameManager.Instance;
             gameManager.Initialize(e);
@@ -120,7 +122,10 @@ namespace FocLauncher
             new TaskFactory().StartNew(() =>
             {
                 foc!.Setup(GameSetupOptions.ResolveModDependencies);
+                eaw!.Setup(GameSetupOptions.ResolveModDependencies);
             }).Forget();
+
+            return Task.CompletedTask;
         }
        
         
