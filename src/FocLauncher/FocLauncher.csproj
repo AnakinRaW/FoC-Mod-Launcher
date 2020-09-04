@@ -72,9 +72,11 @@
     <Compile Include="Controls\Controllers\IContextMenuController.cs" />
     <Compile Include="Controls\Controllers\IHasContextMenuController.cs" />
     <Compile Include="Controls\LauncherListBoxPane.cs" />
+    <Compile Include="Converters\LauncherItemMarginConverter.cs" />
     <Compile Include="Game\GameStartedEventArgs.cs" />
     <Compile Include="Game\SteamGameBase.cs" />
     <Compile Include="Game\SteamGameEaw.cs" />
+    <Compile Include="Items\LauncherItemEventSink.cs" />
     <Compile Include="Utilities\DisposableObject.cs" />
     <Compile Include="Utilities\ExtensionMethods.cs" />
     <Compile Include="Utilities\FocusHelper.cs" />

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -7,6 +8,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using FocLauncher.Game;
 using FocLauncher.Items;
+using FocLauncher.Mods;
 using FocLauncher.Threading;
 using FocLauncher.Utilities;
 
@@ -14,6 +16,8 @@ namespace FocLauncher.Controls
 {
     public sealed class LauncherListBoxPane : ContentControl
     {
+        private readonly object _syncObj = new object();
+
         public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register(
             "SelectedItem", typeof(LauncherItem), typeof(LauncherListBoxPane), new PropertyMetadata(default(LauncherItem)));
 
@@ -70,15 +74,28 @@ namespace FocLauncher.Controls
                 return;
             FocusHelper.MoveFocusInto(content);
         }
-        
+
+        public bool AddGame(IGame game, bool changeSelection = true)
+        {
+            var result = false;
+            ThreadHelper.JoinableTaskFactory.Run(async () =>
+            {
+                result = await AddGameAsync(game, changeSelection);
+            });
+            return result;
+        }
+
         public async Task<bool> AddGameAsync(IGame game, bool changeSelection = true)
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
             var item = ItemManager.GetGameObjectItem(game);
-            var position = GetGamePosition();
 
-            _itemCollection.Insert(position, item);
+            lock (_syncObj)
+            {
+                var position = GetGamePosition();
+                _itemCollection.Insert(position, item);
+            }
 
             if (changeSelection)
                 ListBox.SelectedItem = item;
@@ -102,7 +119,30 @@ namespace FocLauncher.Controls
 
         private void OnItemAdded(object sender, LauncherItemEventArgs e)
         {
-            _itemCollection.Add(e.Item);
+            if (e.Item.GameObject is IGame game)
+                AddGame(game, false);
+            else if (e.Item.GameObject is IMod mod)
+            {
+                lock (_syncObj)
+                {
+                    var gameItem = ItemManager.TryGetItem(mod.Game);
+                    if (gameItem is null)
+                        return;
+                    var insertPos = GetNextGamePos(gameItem) -1;
+                    lock (_syncObj) 
+                        _itemCollection.Insert(insertPos, ItemManager.GetGameObjectItem(mod));
+                }
+            }
+        }
+
+        private int GetNextGamePos(ILauncherItem currentItem)
+        {
+            var currentGamePos = ItemCollection.IndexOf(currentItem);
+            var temp = ItemCollection.Skip(currentGamePos + 1);
+            var nextGame = temp.FirstOrDefault(x => x.GameObject is IGame);
+            if (nextGame == null)
+                return currentGamePos + 1;
+            return ItemCollection.IndexOf(nextGame) + 1;
         }
     }
 }

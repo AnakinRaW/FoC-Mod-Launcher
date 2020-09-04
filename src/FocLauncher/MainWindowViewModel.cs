@@ -1,6 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -9,16 +7,13 @@ using FocLauncher.Game;
 using FocLauncher.Game.Detection;
 using FocLauncher.Input;
 using FocLauncher.Items;
-using FocLauncher.Mods;
-using FocLauncher.Properties;
-using FocLauncher.Theming;
 using FocLauncher.Threading;
 using Microsoft.VisualStudio.Threading;
 using NLog;
 
 namespace FocLauncher
 {
-    
+
     //public class PetroglyphInitialization
     //{
     //    public void Initialize()
@@ -50,16 +45,14 @@ namespace FocLauncher
     //        ThemeManager.Instance.AssociateThemeToMod(mod, theme);
     //    }
     //}
-    
 
-    public class MainWindowViewModel : INotifyPropertyChanged
+
+    public class MainWindowViewModel
     {
-        public event PropertyChangedEventHandler? PropertyChanged;
-
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public ICommand LaunchCommand => new UICommand(ExecutedLaunch, CanExecute);
-        
+
         private LauncherListBoxPane ListBoxPane { get; }
 
         public MainWindowViewModel(MainWindow window)
@@ -86,7 +79,7 @@ namespace FocLauncher
                 await SetupGamesAsync(gameDetection);
 
                 await ListBoxPane.AddGameAsync(LauncherGameManager.Instance.ForcesOfCorruption!);
-                await ListBoxPane.AddGameAsync(LauncherGameManager.Instance.EmpireAtWar!, false);
+                //await ListBoxPane.AddGameAsync(LauncherGameManager.Instance.EmpireAtWar!, false);
             });
             ListBoxPane.Focus();
         }
@@ -122,25 +115,24 @@ namespace FocLauncher
             new TaskFactory().StartNew(() =>
             {
                 foc!.Setup(GameSetupOptions.ResolveModDependencies);
-                eaw!.Setup(GameSetupOptions.ResolveModDependencies);
+                //eaw!.Setup(GameSetupOptions.ResolveModDependencies);
             }).Forget();
 
             return Task.CompletedTask;
         }
-       
-        
-        private void RegisterEvents()
-        {
 
+
+        private static void RegisterEvents()
+        {
+            LauncherGameManager.Instance.GameStarted += OnGameStarted;
         }
 
-        private static void OnGameStarted(object sender, System.Diagnostics.Process e)
+        private static void OnGameStarted(object sender, GameStartedEventArgs e)
         {
-            if (Settings.Default.AutoSwitchTheme &&
-                ThemeManager.Instance.TryGetThemeByMod(e as IMod, out var theme))
-                ThemeManager.Instance.Theme = theme;
+            //if (Settings.Default.AutoSwitchTheme && ThemeManager.Instance.TryGetThemeByMod(e as IMod, out var theme))
+            //    ThemeManager.Instance.Theme = theme;
         }
-        
+
         private static void ExecutedLaunch(object obj)
         {
             if (!(obj is IPetroglyhGameableObject gameObject))
@@ -164,11 +156,6 @@ namespace FocLauncher
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
             Application.Current.Shutdown();
-        }
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
