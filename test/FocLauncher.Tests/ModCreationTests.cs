@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using EawModinfo.Spec;
 using FocLauncher.Game;
 using FocLauncher.Mods;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using EawModinfo.Spec;
 using FocLauncher.Game;
-using FocLauncher.ModInfo;
 
 namespace FocLauncher.Mods
 {
     public sealed class VirtualMod : ModBase
     {
-        public VirtualMod(IGame game, ModInfoData? modInfoData) : base(game, ModType.Virtual, modInfoData)
+        public VirtualMod(IGame game, IModinfo? modInfoData) : base(game, ModType.Virtual, modInfoData)
         {
             // TODO: modinfo dependencies must not be null or empty!
         }

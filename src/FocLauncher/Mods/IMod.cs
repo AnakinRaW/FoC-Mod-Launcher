@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using EawModinfo.Model;
+using EawModinfo.Spec;
 using FocLauncher.Game;
-using FocLauncher.ModInfo;
 
 namespace FocLauncher.Mods
 {
@@ -30,7 +31,7 @@ namespace FocLauncher.Mods
         /// <summary>
         /// If a modinfo.json file is available its data gets stored here; otherwise this returns <see langword="null"/>
         /// </summary>
-        ModInfoData? ModInfo { get; }
+        IModinfo? ModInfo { get; }
 
         new IReadOnlyList<IMod> Dependencies { get; }
 

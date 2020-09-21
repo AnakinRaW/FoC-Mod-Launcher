@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using FocLauncher.ModInfo;
+using EawModinfo.Spec;
 using FocLauncher.Mods;
 
 namespace FocLauncher.Game

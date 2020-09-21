@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
+using EawModinfo.Spec;
 using FocLauncher.Game;
-using FocLauncher.Mods;
 
-namespace FocLauncher.ModInfo
+namespace FocLauncher.Utilities
 {
     internal static class ModInfoExtension
     {

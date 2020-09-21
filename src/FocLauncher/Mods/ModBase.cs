@@ -2,20 +2,23 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using EawModinfo;
+using EawModinfo.Model;
+using EawModinfo.Spec;
+using EawModinfo.Utilities;
 using FocLauncher.Game;
-using FocLauncher.ModInfo;
-using FocLauncher.Versioning;
+using NuGet.Versioning;
 
 namespace FocLauncher.Mods
 {
     [DebuggerDisplay("Mod:{Name};{Type}")]
     public abstract class ModBase : IMod
     {
-        private ModInfoData? _modInfo;
+        private IModinfo? _modInfo;
         private string _name;
         private string _description;
         private string? _iconFile;
-        private ModVersion? _modVersion;
+        private SemanticVersion? _modVersion;
         private bool _expectedDependenciesCalculated;
         private int _expectedDependencyCount;
         private bool _isResolving;
@@ -25,7 +28,7 @@ namespace FocLauncher.Mods
         public abstract string Identifier { get; }
 
 
-        public ModInfoData? ModInfo
+        public IModinfo? ModInfo
         {
             get
             {
@@ -69,7 +72,7 @@ namespace FocLauncher.Mods
             }
         }
 
-        public ModVersion? Version
+        public SemanticVersion? Version
         {
             get
             {
@@ -132,7 +135,7 @@ namespace FocLauncher.Mods
             _name = name;
         }
 
-        protected ModBase(IGame game, ModType type, ModInfoData? modInfoData) : this(game, type)
+        protected ModBase(IGame game, ModType type, IModinfo? modInfoData) : this(game, type)
         {
             if (modInfoData != null)
             {
@@ -141,7 +144,7 @@ namespace FocLauncher.Mods
                     modInfoData.Validate();
                     _modInfo = modInfoData;
                 }
-                catch (ModInfoException)
+                catch (ModinfoException)
                 {
                     _modInfo = null;
                 }
@@ -226,7 +229,7 @@ namespace FocLauncher.Mods
 
         public abstract string ToArgs(bool includeDependencies);
 
-        internal void SetModInfo(ModInfoData modInfo)
+        internal void SetModInfo(IModinfo modInfo)
         {
             _modInfo = modInfo;
         }
@@ -239,7 +242,7 @@ namespace FocLauncher.Mods
 
         protected abstract bool ResolveDependenciesCore();
 
-        protected virtual ModInfoData? ResolveModInfo()
+        protected virtual ModinfoData? ResolveModInfo()
         {
             return null;
         }
@@ -256,11 +259,11 @@ namespace FocLauncher.Mods
         {
             var name = string.Empty;
             if (ModInfo != null)
-                name = ModInfo.Description;
+                name = ModInfo.Summary;
             return name;
         }
 
-        protected virtual ModVersion? InitializeVersion()
+        protected virtual SemanticVersion? InitializeVersion()
         {
             return ModInfo?.Version;
         }

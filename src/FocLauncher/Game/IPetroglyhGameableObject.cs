@@ -1,4 +1,4 @@
-﻿using FocLauncher.Versioning;
+﻿using NuGet.Versioning;
 
 namespace FocLauncher.Game
 {
@@ -10,6 +10,6 @@ namespace FocLauncher.Game
 
         string? IconFile { get; }
 
-        ModVersion? Version { get; }
+        SemanticVersion? Version { get; }
     }
 }

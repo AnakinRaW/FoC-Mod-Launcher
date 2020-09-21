@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
+using EawModinfo.Spec;
 using FocLauncher.Controls.Controllers;
 using FocLauncher.Game;
 using FocLauncher.Mods;

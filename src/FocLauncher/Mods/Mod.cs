@@ -1,8 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using EawModinfo.Model;
+using EawModinfo.Spec;
 using FocLauncher.Game;
-using FocLauncher.ModInfo;
 using FocLauncher.Utilities;
 
 namespace FocLauncher.Mods
@@ -24,7 +25,7 @@ namespace FocLauncher.Mods
         {
         }
 
-        public Mod(IGame game, DirectoryInfo modDirectory, bool workshop, ModInfoData? modInfoData) :
+        public Mod(IGame game, DirectoryInfo modDirectory, bool workshop, IModinfo? modInfoData) :
             base(game, workshop ? ModType.Workshops : ModType.Default, modInfoData)
         {
             if (modDirectory is null)
