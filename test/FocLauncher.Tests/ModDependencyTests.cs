@@ -12,11 +12,6 @@ using NuGet.Versioning;
 
 namespace FocLauncher.Tests
 {
-    public class ModDependencyTest
-    {
-    }
-
-
     [TestClass]
     public class ModDependencyTests
     {

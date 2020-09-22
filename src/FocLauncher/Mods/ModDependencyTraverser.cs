@@ -58,7 +58,7 @@ namespace FocLauncher.Mods
             if (!seenNodes.Add(current))
                 throw new PetroglyphModException();
 
-            foreach (var before in current.Dependencies) 
+            foreach (var before in current.ModDependencies) 
                 CheckForCycles(before, seenNodes);
             seenNodes.Remove(current);
         }
@@ -75,7 +75,7 @@ namespace FocLauncher.Mods
                     continue;
                 yield return current;
 
-                var neighbors = current.Dependencies.Where(n => !visited.Contains(n));
+                var neighbors = current.ModDependencies.Where(n => !visited.Contains(n));
 
                 foreach (var child in neighbors)
                     stack.Enqueue(child);

@@ -83,6 +83,8 @@ namespace FocLauncher.Mods
             }
         }
 
+        string IPetroglyhGameableObject.Version => Version?.ToFullString() ?? string.Empty;
+
         public int ExpectedDependencies
         {
             get
@@ -100,7 +102,7 @@ namespace FocLauncher.Mods
 
         public bool DependenciesResolved { get; protected set; }
 
-        public IReadOnlyList<IMod> Dependencies => DependenciesInternal.ToList();
+        public IReadOnlyList<IMod> ModDependencies => DependenciesInternal.ToList();
 
         IList<IModReference> IModIdentity.Dependencies => new List<IModReference>(DependenciesInternal);
 
@@ -108,7 +110,7 @@ namespace FocLauncher.Mods
 
         public bool Virtual => Type == ModType.Virtual;
 
-        public bool HasDependencies => Dependencies.Count > 0;
+        public bool HasDependencies => ModDependencies.Count > 0;
 
 
 

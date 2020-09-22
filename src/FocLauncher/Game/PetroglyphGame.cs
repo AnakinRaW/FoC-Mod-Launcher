@@ -6,7 +6,6 @@ using System.Linq;
 using EawModinfo.Spec;
 using FocLauncher.Mods;
 using FocLauncher.Utilities;
-using NuGet.Versioning;
 
 namespace FocLauncher.Game
 {
@@ -28,7 +27,8 @@ namespace FocLauncher.Game
         public abstract string Description { get; }
 
         public virtual string? IconFile => string.Empty;
-        public virtual SemanticVersion? Version => null;
+        
+        public virtual string Version => string.Empty;
 
         
         protected abstract int DefaultXmlFileCount { get; }

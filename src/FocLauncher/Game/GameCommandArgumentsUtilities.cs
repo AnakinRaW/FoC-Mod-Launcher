@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using EawModinfo.Spec;
 using FocLauncher.Mods;
 
 namespace FocLauncher.Game
@@ -9,7 +10,7 @@ namespace FocLauncher.Game
     {
         internal static void Validate(this GameCommandArguments args)
         {
-            if (args.Mods != null && args.Mods.Any(x => x.Virtual))
+            if (args.Mods != null && args.Mods.Any(x => x.Type == ModType.Virtual))
                 throw new GameArgumentException("The mod list must not contain any virtual mods");
         }
 

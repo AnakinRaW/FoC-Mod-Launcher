@@ -1,6 +1,4 @@
-﻿using NuGet.Versioning;
-
-namespace FocLauncher.Game
+﻿namespace FocLauncher.Game
 {
     public interface IPetroglyhGameableObject
     {
@@ -10,6 +8,6 @@ namespace FocLauncher.Game
 
         string? IconFile { get; }
 
-        SemanticVersion? Version { get; }
+        string Version { get; }
     }
 }

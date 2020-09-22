@@ -77,6 +77,9 @@
     <Compile Include="Game\SteamGameBase.cs" />
     <Compile Include="Game\SteamGameEaw.cs" />
     <Compile Include="Items\LauncherItemEventSink.cs" />
+    <Compile Include="Mods\ModDependencyResolveStrategy.cs" />
+    <Compile Include="Mods\ModDependencyUtilities.cs" />
+    <Compile Include="Mods\ModEqualityComparer.cs" />
     <Compile Include="Utilities\DisposableObject.cs" />
     <Compile Include="Utilities\ExtensionMethods.cs" />
     <Compile Include="Utilities\FocusHelper.cs" />
