@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using EawModinfo.Spec;
 using FocLauncher.Game;
 
@@ -16,8 +15,6 @@ namespace FocLauncher.Mods
         /// If a modinfo.json file is available its data gets stored here; otherwise this returns <see langword="null"/>
         /// </summary>
         IModinfo? ModInfo { get; }
-
-        new IReadOnlyList<IMod> ModDependencies { get; }
 
         bool HasDependencies { get; }
 

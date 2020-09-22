@@ -15,8 +15,8 @@ namespace FocLauncher.Mods
     public abstract class ModBase : IMod
     {
         private IModinfo? _modInfo;
-        private string _name;
-        private string _description;
+        private string? _name;
+        private string? _description;
         private string? _iconFile;
         private SemanticVersion? _modVersion;
         private bool _expectedDependenciesCalculated;
@@ -102,17 +102,14 @@ namespace FocLauncher.Mods
 
         public bool DependenciesResolved { get; protected set; }
 
-        public IReadOnlyList<IMod> ModDependencies => DependenciesInternal.ToList();
-
         IList<IModReference> IModIdentity.Dependencies => new List<IModReference>(DependenciesInternal);
 
         public bool WorkshopMod => Type == ModType.Workshops;
 
         public bool Virtual => Type == ModType.Virtual;
 
-        public bool HasDependencies => ModDependencies.Count > 0;
-
-
+        public bool HasDependencies => DependenciesInternal.Count > 0;
+        
 
         public IGame Game { get; }
 
