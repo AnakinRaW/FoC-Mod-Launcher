@@ -72,8 +72,12 @@
     <Compile Include="Controls\Controllers\IContextMenuController.cs" />
     <Compile Include="Controls\Controllers\IHasContextMenuController.cs" />
     <Compile Include="Controls\LauncherListBoxPane.cs" />
+    <Compile Include="Controls\OptionsControl.xaml.cs">
+      <DependentUpon>OptionsControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Converters\LauncherItemMarginConverter.cs" />
     <Compile Include="Game\GameStartedEventArgs.cs" />
+    <Compile Include="Game\LanguageFinder.cs" />
     <Compile Include="Game\SteamGameBase.cs" />
     <Compile Include="Game\SteamGameEaw.cs" />
     <Compile Include="Items\LauncherItemEventSink.cs" />
@@ -176,6 +180,10 @@
     <Compile Include="Utilities\ReusableResourceStore.cs" />
     <Compile Include="Utilities\ReusableResourceStoreBase.cs" />
     <Compile Include="Utilities\ReusableStringBuilder.cs" />
+    <Page Include="Controls\OptionsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Dialogs\AboutWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

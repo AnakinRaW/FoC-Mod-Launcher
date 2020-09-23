@@ -66,9 +66,13 @@ namespace FocLauncher.Items
             var items = new HashSet<MenuItem>();
             var openExplorerItem = new MenuItem {Header = "Show in Explorer", Command = _commandHandler.OpenExplorerCommand};
             items.Add(openExplorerItem);
-            // TODO: Remove from Release
-            var showArgs = new MenuItem {Header = "Show Launch Args", Command = _commandHandler.ShowArgsCommand };
+#if DEBUG
+            var showArgs = new MenuItem { Header = "Show Launch Args", Command = _commandHandler.ShowArgsCommand };
             items.Add(showArgs);
+
+            var showLangs = new MenuItem{ Header = "Installed Languages", Command = _commandHandler.ShowLanguages};
+            items.Add(showLangs);
+#endif
             return items;
         }
 

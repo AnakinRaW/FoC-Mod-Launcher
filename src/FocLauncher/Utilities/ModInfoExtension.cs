@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
+using EawModinfo.Model;
 using EawModinfo.Spec;
 using FocLauncher.Game;
 
@@ -20,6 +22,13 @@ namespace FocLauncher.Utilities
             if (game is null)
                 throw new ArgumentNullException(nameof(game));
             return Path.Combine(game.Directory.FullName, modReference.Identifier);
+        }
+
+        public static string GetLanguageEnglishName(this ILanguageInfo languageInfo)
+        {
+            if (languageInfo is EawModinfo.Model.LanguageInfo lang)
+                return lang.Culture.EnglishName;
+            return new CultureInfo(languageInfo.Code).EnglishName;
         }
     }
 }

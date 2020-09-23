@@ -15,7 +15,7 @@ namespace FocLauncher.Mods
         /// If a modinfo.json file is available its data gets stored here; otherwise this returns <see langword="null"/>
         /// </summary>
         IModinfo? ModInfo { get; }
-
+        
         bool HasDependencies { get; }
 
         bool DependenciesResolved { get; }

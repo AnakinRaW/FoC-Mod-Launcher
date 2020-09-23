@@ -17,5 +17,7 @@ namespace FocLauncher.Game
         /// <remarks>The order of this list is equal to the order of CLI arguments.</remarks>
         /// </summary>
         public IList<IMod>? Mods { get; set; }
+
+        public string Langauge { get; set; }
     }
 }

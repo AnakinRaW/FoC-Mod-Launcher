@@ -1,4 +1,7 @@
-﻿namespace FocLauncher.Game
+﻿using System.Collections.Generic;
+using EawModinfo.Spec;
+
+namespace FocLauncher.Game
 {
     public interface IPetroglyhGameableObject
     {
@@ -9,5 +12,7 @@
         string? IconFile { get; }
 
         string Version { get; }
+
+        ICollection<ILanguageInfo> InstalledLanguages { get; }
     }
 }

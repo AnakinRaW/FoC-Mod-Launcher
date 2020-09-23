@@ -14,6 +14,7 @@ namespace FocLauncher.Mods
     [DebuggerDisplay("Mod:{Name};{Type}")]
     public abstract class ModBase : IMod
     {
+        private ICollection<ILanguageInfo>? _languageInfos;
         private IModinfo? _modInfo;
         private string? _name;
         private string? _description;
@@ -39,6 +40,19 @@ namespace FocLauncher.Mods
             }
         }
 
+        public ICollection<ILanguageInfo> InstalledLanguages
+        {
+            get
+            {
+                if (_languageInfos != null)
+                    return _languageInfos;
+                _languageInfos = ResolveInstalledLanguages();
+                if (!_languageInfos.Any())
+                    _languageInfos.Add(EawModinfo.Model.LanguageInfo.Default);
+                return _languageInfos.ToList();
+            }
+        }
+        
         public string Name
         {
             get
@@ -240,6 +254,12 @@ namespace FocLauncher.Mods
         }
 
         protected abstract bool ResolveDependenciesCore();
+
+
+        protected virtual ICollection<ILanguageInfo> ResolveInstalledLanguages()
+        {
+            return ModInfo != null ? ModInfo.Languages.ToList() : new List<ILanguageInfo>();
+        }
 
         protected virtual ModinfoData? ResolveModInfo()
         {

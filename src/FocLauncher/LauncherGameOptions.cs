@@ -11,6 +11,7 @@ namespace FocLauncher
         private bool _noArtProcess = true;
         private bool _ignoreAsserts;
         private bool _useDebugBuild;
+        private string _language;
         public event PropertyChangedEventHandler PropertyChanged;
 
         public bool UseDebugBuild
@@ -20,6 +21,17 @@ namespace FocLauncher
             {
                 if (value == _useDebugBuild) return;
                 _useDebugBuild = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string Language
+        {
+            get => _language;
+            set
+            {
+                if (value == _language) return;
+                _language = value;
                 OnPropertyChanged();
             }
         }
@@ -75,7 +87,7 @@ namespace FocLauncher
             args.IgnoreAsserts = IgnoreAsserts;
             args.NoArtProcess = NoArtProcess;
             args.Windowed = Windowed;
-
+            args.Langauge = Language;
         }
     }
 }
