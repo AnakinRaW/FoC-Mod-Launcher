@@ -75,6 +75,8 @@
     <Compile Include="Controls\OptionsControl.xaml.cs">
       <DependentUpon>OptionsControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\WatermarkedTextBox.cs" />
+    <Compile Include="Converters\IsNullOrEmptyConverter.cs" />
     <Compile Include="Converters\LauncherItemMarginConverter.cs" />
     <Compile Include="Game\GameStartedEventArgs.cs" />
     <Compile Include="Game\LanguageFinder.cs" />
@@ -259,6 +261,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Themes\Generic\MainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Generic\WatermarkedTextBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

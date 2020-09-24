@@ -88,10 +88,10 @@ namespace FocLauncher.Theming
         private static ComponentResourceKey _checkBoxBorderDown;
         private static ComponentResourceKey _checkBoxGlyphDown;
         private static ComponentResourceKey _checkBoxTextDown;
-        private static ComponentResourceKey _checkBoxBackgroundFocused;
-        private static ComponentResourceKey _checkBoxBorderFocused;
-        private static ComponentResourceKey _checkBoxGlyphFocused;
-        private static ComponentResourceKey _checkBoxTextFocused;
+        private static ComponentResourceKey _checkBoxBackgroundDisabled;
+        private static ComponentResourceKey _checkBoxBorderDisabled;
+        private static ComponentResourceKey _checkBoxGlyphDisabled;
+        private static ComponentResourceKey _checkBoxTextDisabled;
 
         private static ComponentResourceKey _mainWindowActiveShadowAndBorderColor;
         private static ComponentResourceKey _mainWindowInactiveShadowAndBorderColor;
@@ -114,6 +114,22 @@ namespace FocLauncher.Theming
         private static ComponentResourceKey _windowTitleBarButtonInactiveHoverBackground;
         private static ComponentResourceKey _windowTitleBarButtonInactiveHoverBorder;
         private static ComponentResourceKey _windowTitleBarButtonInactiveHoverForeground;
+       
+        private static ComponentResourceKey _textBoxBackground;
+        private static ComponentResourceKey _textBoxBorder;
+        private static ComponentResourceKey _textBoxWatermark;
+        private static ComponentResourceKey _textBoxTextDisabled;
+        private static ComponentResourceKey _textBoxBackgroundFocused;
+        private static ComponentResourceKey _textBoxBorderFocused;
+        private static ComponentResourceKey _textBoxBackgroundHover;
+        private static ComponentResourceKey _textBoxBorderHover;
+        private static ComponentResourceKey _textBoxBackgroundDisabled;
+        private static ComponentResourceKey _textBoxBorderDisabled;
+        private static ComponentResourceKey _textBoxTextUnfocused;
+        private static ComponentResourceKey _textBoxTextFocused;
+        private static ComponentResourceKey _textBoxTextHover;
+        private static ComponentResourceKey _textBoxSelection;
+        private static ComponentResourceKey _textBoxWatermarkHover;
 
 
         public static ComponentResourceKey BackgroundColor =>
@@ -370,17 +386,17 @@ namespace FocLauncher.Theming
         public static ComponentResourceKey CheckBoxTextDown => _checkBoxTextDown ??=
             new ComponentResourceKey(typeof(EnvironmentColors), nameof(CheckBoxTextDown));
 
-        public static ComponentResourceKey CheckBoxBackgroundFocused => _checkBoxBackgroundFocused ??=
-            new ComponentResourceKey(typeof(EnvironmentColors), nameof(CheckBoxBackgroundFocused));
+        public static ComponentResourceKey CheckBoxBackgroundDisabled => _checkBoxBackgroundDisabled ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), nameof(CheckBoxBackgroundDisabled));
 
-        public static ComponentResourceKey CheckBoxBorderFocused => _checkBoxBorderFocused ??=
-            new ComponentResourceKey(typeof(EnvironmentColors), nameof(CheckBoxBorderFocused));
+        public static ComponentResourceKey CheckBoxBorderDisabled => _checkBoxBorderDisabled ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), nameof(CheckBoxBorderDisabled));
 
-        public static ComponentResourceKey CheckBoxGlyphFocused => _checkBoxGlyphFocused ??=
-            new ComponentResourceKey(typeof(EnvironmentColors), nameof(CheckBoxGlyphFocused));
+        public static ComponentResourceKey CheckBoxGlyphDisabled => _checkBoxGlyphDisabled ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), nameof(CheckBoxGlyphDisabled));
 
-        public static ComponentResourceKey CheckBoxTextFocused => _checkBoxTextFocused ??=
-            new ComponentResourceKey(typeof(EnvironmentColors), nameof(CheckBoxTextFocused));
+        public static ComponentResourceKey CheckBoxTextDisabled => _checkBoxTextDisabled ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), nameof(CheckBoxTextDisabled));
 
 
         public static ComponentResourceKey MainWindowActiveShadowAndBorderColor =>
@@ -449,6 +465,55 @@ namespace FocLauncher.Theming
 
         public static ComponentResourceKey WindowTitleBarButtonInactiveHoverForeground => _windowTitleBarButtonInactiveHoverForeground ??=
             new ComponentResourceKey(typeof(EnvironmentColors), "WindowTitleBarButtonInactiveHoverForeground");
+
+
+        
+
+
+        public static ComponentResourceKey TextBoxBackground => _textBoxBackground ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), nameof(TextBoxBackground));
+
+        public static ComponentResourceKey TextBoxBorder => _textBoxBorder ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), nameof(TextBoxBorder));
+
+        public static ComponentResourceKey TextBoxWatermark => _textBoxWatermark ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), nameof(TextBoxWatermark));
+
+        public static ComponentResourceKey TextBoxTextDisabled => _textBoxTextDisabled ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), nameof(TextBoxTextDisabled));
+
+        public static ComponentResourceKey TextBoxBackgroundFocused => _textBoxBackgroundFocused ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), nameof(TextBoxBackgroundFocused));
+
+        public static ComponentResourceKey TextBoxBorderFocused => _textBoxBorderFocused ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), nameof(TextBoxBorderFocused));
+
+        public static ComponentResourceKey TextBoxBackgroundHover => _textBoxBackgroundHover ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), nameof(TextBoxBackgroundHover));
+
+        public static ComponentResourceKey TextBoxBorderHover => _textBoxBorderHover ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), nameof(TextBoxBorderHover));
+
+        public static ComponentResourceKey TextBoxBackgroundDisabled => _textBoxBackgroundDisabled ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), nameof(TextBoxBackgroundDisabled));
+
+        public static ComponentResourceKey TextBoxBorderDisabled => _textBoxBorderDisabled ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), nameof(TextBoxBorderDisabled));
+
+        public static ComponentResourceKey TextBoxTextUnfocused => _textBoxTextUnfocused ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), nameof(TextBoxTextUnfocused));
+
+        public static ComponentResourceKey TextBoxTextFocused => _textBoxTextFocused ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), nameof(TextBoxTextFocused));
+
+        public static ComponentResourceKey TextBoxTextHover => _textBoxTextHover ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), nameof(TextBoxTextHover));
+
+        public static ComponentResourceKey TextBoxSelection => _textBoxSelection ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), nameof(TextBoxSelection));
+
+        public static ComponentResourceKey TextBoxWatermarkHover => _textBoxWatermarkHover ??=
+            new ComponentResourceKey(typeof(EnvironmentColors), nameof(TextBoxWatermarkHover));
 
     }
 }

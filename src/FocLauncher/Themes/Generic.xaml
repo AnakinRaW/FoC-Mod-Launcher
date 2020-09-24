@@ -8,5 +8,6 @@
         <ResourceDictionary Source="/FocLauncher;component/Themes/Generic/ScrollBar.xaml" />
         <ResourceDictionary Source="/FocLauncher;component/Themes/Generic/PlayButton.xaml" />
         <ResourceDictionary Source="/FocLauncher;component/Themes/Generic/LauncherCheckBox.xaml" />
+        <ResourceDictionary Source="/FocLauncher;component/Themes/Generic/WatermarkedTextBox.xaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>
