@@ -1,6 +1,11 @@
 ﻿using System.ComponentModel;
+using System.Globalization;
+using System.Linq;
 using System.Runtime.CompilerServices;
+using EawModinfo.Spec;
 using FocLauncher.Game;
+using FocLauncher.Settings;
+using FocLauncher.Utilities;
 
 namespace FocLauncher
 {
@@ -11,8 +16,10 @@ namespace FocLauncher
         private bool _noArtProcess = true;
         private bool _ignoreAsserts;
         private bool _useDebugBuild;
-        private string _language;
-        public event PropertyChangedEventHandler PropertyChanged;
+        private bool _fallbackToEnglish = true;
+        private bool _useSystemLanguage = true;
+        private string _customLanguage;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         public bool UseDebugBuild
         {
@@ -24,18 +31,7 @@ namespace FocLauncher
                 OnPropertyChanged();
             }
         }
-
-        public string Language
-        {
-            get => _language;
-            set
-            {
-                if (value == _language) return;
-                _language = value;
-                OnPropertyChanged();
-            }
-        }
-
+        
         public bool IgnoreAsserts
         {
             get => _ignoreAsserts;
@@ -71,6 +67,43 @@ namespace FocLauncher
             }
         }
 
+        public bool UseSystemLanguage
+        {
+            get => _useSystemLanguage;
+            set
+            {
+                if (value == _useSystemLanguage)
+                    return;
+                _useSystemLanguage = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool FallbackToEnglish
+        {
+            get => _fallbackToEnglish;
+            set
+            {
+                if (value == _fallbackToEnglish)
+                    return;
+                _fallbackToEnglish = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string CustomLanguage
+        {
+            get => _customLanguage;
+            set
+            {
+                if (_customLanguage == value)
+                    return;
+                _customLanguage = value;
+                OnPropertyChanged();
+            }
+        }
+
+
         public static LauncherGameOptions Instance => _instance ??= new LauncherGameOptions();
 
         private LauncherGameOptions()
@@ -87,7 +120,35 @@ namespace FocLauncher
             args.IgnoreAsserts = IgnoreAsserts;
             args.NoArtProcess = NoArtProcess;
             args.Windowed = Windowed;
-            args.Langauge = Language;
+        }
+
+        public string GetLanguageFromOptions(IPetroglyhGameableObject gameObject)
+        {
+            if (!UseSystemLanguage)
+                return CustomLanguage.ToUpperInvariant();
+
+            var systemCulture = CultureInfo.InstalledUICulture;
+
+            if (UseSystemLanguage && !FallbackToEnglish)
+                return systemCulture.EnglishName.ToUpperInvariant();
+
+            const string englishName = "ENGLISH";
+
+            var supportedLanguage =
+                gameObject.InstalledLanguages.FirstOrDefault(x =>
+                    x.Code.Equals(systemCulture.TwoLetterISOLanguageName));
+
+            if (supportedLanguage == null)
+                return englishName;
+
+            var supportLevel = supportedLanguage.Support;
+            if (Properties.Settings.Default.LanguageFallback == LanguageFallback.NoFullLocalization &&
+                !supportLevel.HasFlag(LanguageSupportLevel.FullLocalized))
+                return englishName;
+            if (Properties.Settings.Default.LanguageFallback == LanguageFallback.NoText &&
+                !supportLevel.HasFlag(LanguageSupportLevel.Text))
+                return englishName;
+            return supportedLanguage.GetLanguageEnglishName();
         }
     }
 }

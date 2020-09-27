@@ -2,7 +2,6 @@
 using System.IO;
 using System.Windows;
 using System.Windows.Threading;
-using FocLauncher.Properties;
 using FocLauncher.Theming;
 using NLog;
 using static FocLauncher.Properties.Resources;
@@ -18,7 +17,7 @@ namespace FocLauncher
 
         protected override void OnExit(ExitEventArgs e)
         {
-            Settings.Default.Save();
+            FocLauncher.Properties.Settings.Default.Save();
             base.OnExit(e);
         }
 

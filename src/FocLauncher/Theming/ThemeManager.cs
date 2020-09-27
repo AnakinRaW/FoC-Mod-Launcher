@@ -109,7 +109,7 @@ namespace FocLauncher.Theming
 
         public void ApplySavedDefaultTheme()
         {
-            var defaultTheme = Settings.Default.DefaultTheme;
+            var defaultTheme = Properties.Settings.Default.DefaultTheme;
             var theme = Themes.FirstOrDefault(x => x.Name == defaultTheme);
             if (theme != null)
                 Theme = theme;
@@ -131,8 +131,8 @@ namespace FocLauncher.Theming
             var newResourceDict = Application.LoadComponent(theme.GetResourceUri()) as ResourceDictionary;
             resources.MergedDictionaries.Add(newResourceDict);
             _mainWindow?.Resources.MergedDictionaries.Add(newResourceDict);
-            if (changeSettings && Settings.Default.SaveDefaultTheme)
-                Settings.Default.DefaultTheme = theme.Name;
+            if (changeSettings && Properties.Settings.Default.SaveDefaultTheme)
+                Properties.Settings.Default.DefaultTheme = theme.Name;
         }
 
         public void AssociateThemeToMod(IMod mod, ITheme theme)

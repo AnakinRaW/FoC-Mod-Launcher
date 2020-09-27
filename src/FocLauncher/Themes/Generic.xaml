@@ -9,5 +9,7 @@
         <ResourceDictionary Source="/FocLauncher;component/Themes/Generic/PlayButton.xaml" />
         <ResourceDictionary Source="/FocLauncher;component/Themes/Generic/LauncherCheckBox.xaml" />
         <ResourceDictionary Source="/FocLauncher;component/Themes/Generic/WatermarkedTextBox.xaml" />
+        <ResourceDictionary Source="/FocLauncher;component/Themes/Generic/LauncherExpander.xaml" />
+        <ResourceDictionary Source="/FocLauncher;component/Themes/Generic/LauncherRadioButton.xaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

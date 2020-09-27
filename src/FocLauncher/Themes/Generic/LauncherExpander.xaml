@@ -1,0 +1,109 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:theming="clr-namespace:FocLauncher.Theming;assembly=FocLauncher.Theming"
+                    xmlns:controls="clr-namespace:FocLauncher.Controls">
+
+    <Style x:Key="ExpanderUpHeaderStyle" TargetType="{x:Type ToggleButton}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                    <Border Padding="{TemplateBinding Padding}">
+                        <Grid Background="Transparent" SnapsToDevicePixels="False">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="19"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid>
+                                <FrameworkElement.LayoutTransform>
+                                    <TransformGroup>
+                                        <TransformGroup.Children>
+                                            <TransformCollection>
+                                                <RotateTransform Angle="180"/>
+                                            </TransformCollection>
+                                        </TransformGroup.Children>
+                                    </TransformGroup>
+                                </FrameworkElement.LayoutTransform>
+                                <Ellipse x:Name="circle" Fill="{DynamicResource {x:Static theming:EnvironmentColors.CheckBoxBackground}}" HorizontalAlignment="Center" 
+                                         Height="19" Stroke="{DynamicResource {x:Static theming:EnvironmentColors.CheckBoxBorder}}" VerticalAlignment="Center" Width="19"/>
+                                <Path x:Name="arrow" Data="M 1,1.5 L 4.5,5 8,1.5 " HorizontalAlignment="Center"
+                                      SnapsToDevicePixels="false"
+                                      Stroke="{DynamicResource {x:Static theming:EnvironmentColors.CheckBoxGlyph}}" StrokeThickness="2"
+                                      VerticalAlignment="Center"/>
+                            </Grid>
+                            <ContentPresenter Grid.Column="1" HorizontalAlignment="Left" Margin="4,0,0,0" RecognizesAccessKey="true"
+                                                  SnapsToDevicePixels="true" VerticalAlignment="Center"/>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="arrow" Property="Data" Value="M 1,4.5 L 4.5,1 8,4.5"/>
+                        </Trigger>
+                        <Trigger Property="UIElement.IsMouseOver" Value="true">
+                            <Setter TargetName="circle" Value="{DynamicResource {x:Static theming:EnvironmentColors.CheckBoxBorderHover}}"
+                                        Property="Shape.Stroke"/>
+                            <Setter TargetName="circle"
+                                        Value="{DynamicResource {x:Static theming:EnvironmentColors.CheckBoxBackgroundHover}}"
+                                        Property="Shape.Fill"/>
+                            <Setter TargetName="arrow" Value="{DynamicResource {x:Static theming:EnvironmentColors.CheckBoxGlyphHover}}"
+                                        Property="Shape.Stroke"/>
+                        </Trigger>
+                        <Trigger Property="ButtonBase.IsPressed" Value="true">
+                            <Setter TargetName="circle" Property="Shape.StrokeThickness" Value="1.5"/>
+                            <Setter TargetName="circle"
+                                        Value="{DynamicResource {x:Static theming:EnvironmentColors.CheckBoxBorderDown}}"
+                                        Property="Shape.Stroke"/>
+                            <Setter TargetName="circle"
+                                        Value="{DynamicResource {x:Static theming:EnvironmentColors.CheckBoxBackgroundDown}}"
+                                        Property="Shape.Fill"/>
+                            <Setter TargetName="arrow" Value="{DynamicResource {x:Static theming:EnvironmentColors.CheckBoxGlyphDown}}"
+                                        Property="Shape.Stroke"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type controls:LauncherExpander}">
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type controls:LauncherExpander}">
+                    <Border BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Background="{TemplateBinding Background}" CornerRadius="3" SnapsToDevicePixels="True">
+                        <DockPanel>
+                            <ToggleButton x:Name="HeaderSite" DockPanel.Dock="Bottom"
+                                              IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                              VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              MinWidth="0" MinHeight="0" Padding="{TemplateBinding Padding}"
+                                              HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              Margin="1" Content="{TemplateBinding Header}" ContentTemplate="{TemplateBinding HeaderTemplate}"
+                                              ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}" FontWeight="{TemplateBinding Control.FontWeight}"
+                                              FontSize="{TemplateBinding Control.FontSize}" FontFamily="{TemplateBinding Control.FontFamily}"
+                                              Style="{StaticResource ExpanderUpHeaderStyle}"/>
+                            <ContentPresenter x:Name="ExpandSite" DockPanel.Dock="Top" Focusable="False"
+                                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                  Margin="{TemplateBinding Padding}" Visibility="Collapsed"
+                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </DockPanel>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsExpanded" Value="True">
+                            <Setter TargetName="ExpandSite" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+                        <Trigger Property="UIElement.IsEnabled" Value="false">
+                            <Setter Property="Control.Foreground" Value="{DynamicResource {x:Static theming:EnvironmentColors.CheckBoxTextDisabled}}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

@@ -71,13 +71,19 @@
     <Compile Include="Controls\Controllers\ContextMenuController.cs" />
     <Compile Include="Controls\Controllers\IContextMenuController.cs" />
     <Compile Include="Controls\Controllers\IHasContextMenuController.cs" />
+    <Compile Include="Controls\LauncherExpander.cs" />
     <Compile Include="Controls\LauncherListBoxPane.cs" />
+    <Compile Include="Controls\LauncherRadioButton.cs" />
     <Compile Include="Controls\OptionsControl.xaml.cs">
       <DependentUpon>OptionsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\WatermarkedTextBox.cs" />
     <Compile Include="Converters\IsNullOrEmptyConverter.cs" />
     <Compile Include="Converters\LauncherItemMarginConverter.cs" />
+    <Compile Include="Converters\SystemLangEmojiConverter.cs" />
+    <Compile Include="Settings\LanguageFallback.cs" />
+    <Compile Include="Settings\LanguageFallbackData.cs" />
+    <Compile Include="Settings\LauncherSettingsConstants.cs" />
     <Compile Include="Game\GameStartedEventArgs.cs" />
     <Compile Include="Game\LanguageFinder.cs" />
     <Compile Include="Game\SteamGameBase.cs" />
@@ -232,6 +238,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Themes\Generic\LauncherExpander.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Themes\Generic\LauncherCheckBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -241,6 +251,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Themes\Generic\LauncherListBoxItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Generic\LauncherRadioButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -364,5 +378,6 @@
   <ItemGroup>
     <Resource Include="Resources\eaw.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

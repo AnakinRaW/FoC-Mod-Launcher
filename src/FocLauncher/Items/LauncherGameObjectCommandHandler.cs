@@ -108,6 +108,8 @@ namespace FocLauncher.Items
                 args.Mods = modList;
             }
 
+            args.Langauge = gameOptions.GetLanguageFromOptions(gameObject);
+
             RunGame(game, args, gameObject.IconFile, gameOptions.UseDebugBuild);
         }
 

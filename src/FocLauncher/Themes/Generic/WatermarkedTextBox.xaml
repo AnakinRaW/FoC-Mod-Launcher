@@ -57,7 +57,9 @@
                                     Text="{TemplateBinding Watermark}"
                                     Foreground="{DynamicResource {x:Static theming:EnvironmentColors.TextBoxWatermark}}" 
                                     Background="Transparent" VerticalAlignment="Center" HorizontalAlignment="Stretch"/>
-                        <TextBox x:Name="RealTextBox" Style="{StaticResource TextBoxStyle}" Padding="4,1,4,1"/>
+                        <TextBox x:Name="RealTextBox" Style="{StaticResource TextBoxStyle}" Padding="4,1,4,1"
+                                 Text="{Binding RelativeSource={RelativeSource TemplatedParent}, 
+                            Path=Text, UpdateSourceTrigger=PropertyChanged}"/>
                     </Grid>
                     <ControlTemplate.Triggers>
                         <DataTrigger Value="False">

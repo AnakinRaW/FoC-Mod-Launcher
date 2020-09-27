@@ -6,122 +6,33 @@
              xmlns:focLauncher="clr-namespace:FocLauncher"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:converters="clr-namespace:FocLauncher.Converters"
              mc:Ignorable="d"
              d:DesignWidth="400">
     <FrameworkElement.Resources>
+
+        <converters:SystemLangEmojiConverter x:Key="SystemLangEmojiConverter"/>
         
         <Style x:Key="ArgumentCheckBox" TargetType="{x:Type CheckBox}">
             <Setter Property="Margin" Value="0,8,16,0"/>
         </Style>
 
-        <Style x:Key="ExpanderUpHeaderStyle" TargetType="{x:Type ToggleButton}">
+        <Style x:Key="RadioButtonStyle" TargetType="{x:Type RadioButton}">
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="Foreground" Value="White"></Setter>
             <Setter Property="Template">
                 <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type ToggleButton}">
-                        <Border Padding="{TemplateBinding Padding}">
-                            <Grid Background="Transparent" SnapsToDevicePixels="False">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="19"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <Grid>
-                                    <FrameworkElement.LayoutTransform>
-                                        <TransformGroup>
-                                            <TransformGroup.Children>
-                                                <TransformCollection>
-                                                    <RotateTransform Angle="180"/>
-                                                </TransformCollection>
-                                            </TransformGroup.Children>
-                                        </TransformGroup>
-                                    </FrameworkElement.LayoutTransform>
-                                    <Ellipse x:Name="circle" Fill="{DynamicResource {x:Static theming:EnvironmentColors.CheckBoxBackground}}" HorizontalAlignment="Center" 
-                                         Height="19" Stroke="{DynamicResource {x:Static theming:EnvironmentColors.CheckBoxBorder}}" VerticalAlignment="Center" Width="19"/>
-                                    <Path x:Name="arrow" Data="M 1,1.5 L 4.5,5 8,1.5 " HorizontalAlignment="Center"
-                                      SnapsToDevicePixels="false"
-                                      Stroke="{DynamicResource {x:Static theming:EnvironmentColors.CheckBoxGlyph}}" StrokeThickness="2"
-                                      VerticalAlignment="Center"/>
-                                </Grid>
-                                <ContentPresenter Grid.Column="1" HorizontalAlignment="Left" Margin="4,0,0,0" RecognizesAccessKey="true"
-                                                  SnapsToDevicePixels="true" VerticalAlignment="Center"/>
-                            </Grid>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsChecked" Value="True">
-                                <Setter TargetName="arrow" Property="Data" Value="M 1,4.5 L 4.5,1 8,4.5"/>
-                            </Trigger>
-                            <Trigger Property="UIElement.IsMouseOver" Value="true">
-                                <Setter TargetName="circle" Value="{DynamicResource {x:Static theming:EnvironmentColors.CheckBoxBorderHover}}"
-                                        Property="Shape.Stroke"/>
-                                <Setter TargetName="circle"
-                                        Value="{DynamicResource {x:Static theming:EnvironmentColors.CheckBoxBackgroundHover}}"
-                                        Property="Shape.Fill"/>
-                                <Setter TargetName="arrow" Value="{DynamicResource {x:Static theming:EnvironmentColors.CheckBoxGlyphHover}}"
-                                        Property="Shape.Stroke"/>
-                            </Trigger>
-                            <Trigger Property="ButtonBase.IsPressed" Value="true">
-                                <Setter TargetName="circle" Property="Shape.StrokeThickness" Value="1.5"/>
-                                <Setter TargetName="circle"
-                                        Value="{DynamicResource {x:Static theming:EnvironmentColors.CheckBoxBorderDown}}"
-                                        Property="Shape.Stroke"/>
-                                <Setter TargetName="circle"
-                                        Value="{DynamicResource {x:Static theming:EnvironmentColors.CheckBoxBackgroundDown}}"
-                                        Property="Shape.Fill"/>
-                                <Setter TargetName="arrow" Value="{DynamicResource {x:Static theming:EnvironmentColors.CheckBoxGlyphDown}}"
-                                        Property="Shape.Stroke"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
+                    <ControlTemplate TargetType="{x:Type RadioButton}">
+                        <ContentPresenter Margin="4,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left"
+                                          RecognizesAccessKey="True"/>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
-
-
-        <Style x:Key="ExpanderStyle" TargetType="{x:Type Expander}">
-            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-            <Setter Property="VerticalContentAlignment" Value="Stretch"/>
-            <Setter Property="BorderBrush" Value="Transparent"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Expander}">
-                        <Border BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                Background="{TemplateBinding Background}" CornerRadius="3" SnapsToDevicePixels="True">
-                            <DockPanel>
-                                <ToggleButton x:Name="HeaderSite" DockPanel.Dock="Bottom"
-                                              IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
-                                              VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                                              MinWidth="0" MinHeight="0" Padding="{TemplateBinding Padding}"
-                                              HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                              Margin="1" Content="{TemplateBinding Header}" ContentTemplate="{TemplateBinding HeaderTemplate}"
-                                              ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}" FontWeight="{TemplateBinding Control.FontWeight}"
-                                              FontSize="{TemplateBinding Control.FontSize}" FontFamily="{TemplateBinding Control.FontFamily}"
-                                              Style="{StaticResource ExpanderUpHeaderStyle}"/>
-                                <ContentPresenter x:Name="ExpandSite" DockPanel.Dock="Top" Focusable="False"
-                                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                                  Margin="{TemplateBinding Padding}" Visibility="Collapsed"
-                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                            </DockPanel>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsExpanded" Value="True">
-                                <Setter TargetName="ExpandSite" Property="Visibility" Value="Visible"/>
-                            </Trigger>
-                            <Trigger Property="UIElement.IsEnabled" Value="false">
-                                <Setter Property="Control.Foreground" Value="{DynamicResource {x:Static theming:EnvironmentColors.CheckBoxTextDisabled}}"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
 
     </FrameworkElement.Resources>
-    <Expander x:Name="Expander" Foreground="{DynamicResource {x:Static theming:EnvironmentColors.CaptionText}}" FlowDirection="RightToLeft"
-              Style="{StaticResource ExpanderStyle}" ExpandDirection="Up" Margin="0,0,8,0">
+    <controls:LauncherExpander x:Name="Expander" Foreground="{DynamicResource {x:Static theming:EnvironmentColors.CaptionText}}" FlowDirection="RightToLeft"
+                      ExpandDirection="Up" Margin="0,0,8,0">
         <Expander.Header>
             <TextBlock Text="Launch Options" FontWeight="Bold"/>
         </Expander.Header>
@@ -148,8 +59,18 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="0">
-                    <RadioButton x:Name="SystemLangBox" GroupName="LanguageGroup" Margin="16,8,0,0" Content="Use System Language"/>
-                    <controls:LauncherCheckBox Margin="32,4,0,0">
+                    <controls:LauncherRadioButton x:Name="SystemLangBox" GroupName="LanguageGroup" Margin="16,8,0,0"
+                                                  IsChecked="{Binding Source={x:Static focLauncher:LauncherGameOptions.Instance},
+                        Path=UseSystemLanguage, Mode=TwoWay}">
+                        <TextBlock TextWrapping="Wrap">
+                            <TextBlock.Text>
+                                <Binding Converter="{StaticResource SystemLangEmojiConverter}" ConverterParameter="Use System Language: "/>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </controls:LauncherRadioButton>
+                    <controls:LauncherCheckBox Margin="32,4,0,0"
+                                               IsChecked="{Binding Source={x:Static focLauncher:LauncherGameOptions.Instance}, 
+                        Path=FallbackToEnglish, Mode=TwoWay}">
                         <TextBlock Text="Fallback to English if Game/Mod does not support system language." TextWrapping="Wrap"/>
                         <CheckBox.IsEnabled>
                             <Binding ElementName="SystemLangBox" Path="IsChecked"/>
@@ -157,9 +78,11 @@
                     </controls:LauncherCheckBox>
                 </StackPanel>
                 <DockPanel Grid.Row="2" >
-                    <RadioButton x:Name="UseCustomBox" GroupName="LanguageGroup" Margin="16,8,0,0" Content="Use Custom:"/>
+                    <controls:LauncherRadioButton x:Name="UseCustomBox" GroupName="LanguageGroup" Margin="16,8,0,0" Content="Use Custom:"/>
                     <controls:WatermarkedTextBox Margin="16,8,32,0" Watermark="Enter English Language Name..." 
-                                                 IsEnabled="{Binding ElementName=UseCustomBox, Path=IsChecked}"/>
+                                                 IsEnabled="{Binding ElementName=UseCustomBox, Path=IsChecked}"
+                                                 Text="{Binding Source={x:Static focLauncher:LauncherGameOptions.Instance}, 
+                        Path=CustomLanguage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </DockPanel>
             </Grid>
 
@@ -173,5 +96,5 @@
                                            Style="{StaticResource ArgumentCheckBox}"/>
             </DockPanel>
         </StackPanel>
-    </Expander>
+    </controls:LauncherExpander>
 </UserControl>
