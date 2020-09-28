@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using EawModinfo.Spec;
+using FocLauncher.Game.Language;
 using FocLauncher.Mods;
 using FocLauncher.Utilities;
 
@@ -16,7 +17,7 @@ namespace FocLauncher.Game
         public event EventHandler GameClosed;
         public event EventHandler<ModCollectionChangedEventArgs> ModCollectionModified;
 
-        private readonly LanguageFinder _languageFinder;
+        private readonly LanguageFinderBase _languageFinder;
         
         public DirectoryInfo Directory { get; }
 
@@ -51,7 +52,7 @@ namespace FocLauncher.Game
             Directory = gameDirectory;
             if (!ExistsGameDirectoryAndGameExecutable())
                 throw new Exception($"{GetType().Name} does not exists");
-            _languageFinder = new LanguageFinder(Directory);
+            _languageFinder = new GameLanguageFinder(Directory);
             GameProcessWatcher.ProcessExited += OnGameProcessExited;
         }
 

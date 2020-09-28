@@ -81,11 +81,14 @@
     <Compile Include="Converters\IsNullOrEmptyConverter.cs" />
     <Compile Include="Converters\LauncherItemMarginConverter.cs" />
     <Compile Include="Converters\SystemLangEmojiConverter.cs" />
+    <Compile Include="Game\Language\GameLanguageFinder.cs" />
+    <Compile Include="Game\Language\LanguageFinderUtilities.cs" />
+    <Compile Include="Game\Language\LanguageInfo.cs" />
     <Compile Include="Settings\LanguageFallback.cs" />
     <Compile Include="Settings\LanguageFallbackData.cs" />
     <Compile Include="Settings\LauncherSettingsConstants.cs" />
     <Compile Include="Game\GameStartedEventArgs.cs" />
-    <Compile Include="Game\LanguageFinder.cs" />
+    <Compile Include="Game\Language\LanguageFinderBase.cs" />
     <Compile Include="Game\SteamGameBase.cs" />
     <Compile Include="Game\SteamGameEaw.cs" />
     <Compile Include="Items\LauncherItemEventSink.cs" />
