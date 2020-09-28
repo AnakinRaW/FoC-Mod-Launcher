@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using EawModinfo.Spec;
 using FocLauncher.Game;
+using FocLauncher.Game.Language;
 using FocLauncher.Utilities;
 
 namespace FocLauncher.Mods
@@ -119,6 +121,14 @@ namespace FocLauncher.Mods
             if (string.IsNullOrEmpty(name))
                 name = Directory.Name;
             return name;
+        }
+
+        protected override ICollection<ILanguageInfo> ResolveInstalledLanguages()
+        {
+            var languages =  base.ResolveInstalledLanguages();
+            if (!languages.Any())
+                languages =  new GenericModLanguageFinder(Directory).Find();
+            return languages;
         }
 
         protected override string InitializeIcon()

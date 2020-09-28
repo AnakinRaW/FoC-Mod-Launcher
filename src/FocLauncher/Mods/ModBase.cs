@@ -258,7 +258,9 @@ namespace FocLauncher.Mods
 
         protected virtual ICollection<ILanguageInfo> ResolveInstalledLanguages()
         {
-            return ModInfo != null ? ModInfo.Languages.ToList() : new List<ILanguageInfo>();
+            return ModInfo != null ? 
+                ModInfo.Languages.ToList() : 
+                new List<ILanguageInfo>();
         }
 
         protected virtual ModinfoData? ResolveModInfo()

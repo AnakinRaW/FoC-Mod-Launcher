@@ -148,7 +148,7 @@ namespace FocLauncher
             if (Properties.Settings.Default.LanguageFallback == LanguageFallback.NoText &&
                 !supportLevel.HasFlag(LanguageSupportLevel.Text))
                 return englishName;
-            return supportedLanguage.GetLanguageEnglishName();
+            return supportedLanguage.GetLanguageEnglishName().ToUpperInvariant();
         }
     }
 }

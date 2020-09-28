@@ -30,7 +30,7 @@
         <Setter Property="Background" Value="{DynamicResource {x:Static theming:EnvironmentColors.ListBoxBackground}}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource {x:Static theming:EnvironmentColors.ListBoxBorder}}"/>
         <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="TextElement.Foreground" Value="White"/>
+        <Setter Property="TextElement.Foreground" Value="{DynamicResource {x:Static theming:EnvironmentColors.WindowText}}"/>
         <Setter Property="Template" Value="{StaticResource ListBoxTemplate}"/>
     </Style>
     

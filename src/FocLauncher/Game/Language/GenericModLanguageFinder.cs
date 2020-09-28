@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using EawModinfo.Spec;
 
 namespace FocLauncher.Game.Language
 {
-    public class GameLanguageFinder : LanguageFinderBase
+    public class GenericModLanguageFinder : LanguageFinderBase
     {
-        public GameLanguageFinder(DirectoryInfo baseDirectory) : base(baseDirectory)
+        public GenericModLanguageFinder(DirectoryInfo baseDirectory) : base(baseDirectory)
         {
         }
 

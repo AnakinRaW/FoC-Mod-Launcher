@@ -82,6 +82,7 @@
     <Compile Include="Converters\LauncherItemMarginConverter.cs" />
     <Compile Include="Converters\SystemLangEmojiConverter.cs" />
     <Compile Include="Game\Language\GameLanguageFinder.cs" />
+    <Compile Include="Game\Language\GenericModLanguageFinder.cs" />
     <Compile Include="Game\Language\LanguageFinderUtilities.cs" />
     <Compile Include="Game\Language\LanguageInfo.cs" />
     <Compile Include="Settings\LanguageFallback.cs" />

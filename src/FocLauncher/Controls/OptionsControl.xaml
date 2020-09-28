@@ -14,22 +14,8 @@
         <converters:SystemLangEmojiConverter x:Key="SystemLangEmojiConverter"/>
         <converters:DebugBuildToVisibilityConverter x:Key="DebugBuildToVisibilityConverter"/>
 
-
         <Style x:Key="ArgumentCheckBox" TargetType="{x:Type CheckBox}">
             <Setter Property="Margin" Value="0,8,16,0"/>
-        </Style>
-
-        <Style x:Key="RadioButtonStyle" TargetType="{x:Type RadioButton}">
-            <Setter Property="SnapsToDevicePixels" Value="True"/>
-            <Setter Property="Foreground" Value="White"></Setter>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type RadioButton}">
-                        <ContentPresenter Margin="4,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left"
-                                          RecognizesAccessKey="True"/>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
         </Style>
 
     </FrameworkElement.Resources>
@@ -40,7 +26,8 @@
         </Expander.Header>
         <StackPanel FlowDirection="LeftToRight" Margin="0,0,16,8">
 
-            <TextBlock Margin="0,0,0,0" Text="General Options" FontWeight="Bold" Foreground="White"/>
+            <TextBlock Margin="0,0,0,0" Text="General Options" FontWeight="Bold" 
+                       Foreground="{DynamicResource {x:Static theming:EnvironmentColors.WindowText}}"/>
 
             <DockPanel Margin="16,0,0,0">
                 <controls:LauncherCheckBox x:Name="DebugCheckBox" Content="Use Debug Build" Style="{StaticResource ArgumentCheckBox}"
@@ -53,7 +40,8 @@
                     Path=Windowed, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
             </DockPanel>
 
-            <TextBlock Margin="0,8,0,0" Text="Language Options" FontWeight="Bold" Foreground="White"/>
+            <TextBlock Margin="0,8,0,0" Text="Language Options" FontWeight="Bold" 
+                       Foreground="{DynamicResource {x:Static theming:EnvironmentColors.WindowText}}"/>
 
             <Grid>
                 <Grid.RowDefinitions>
@@ -89,7 +77,8 @@
                 </DockPanel>
             </Grid>
 
-            <TextBlock Margin="0,8,0,0" Text="Advanced Options" FontWeight="Bold" Foreground="White"/>
+            <TextBlock Margin="0,8,0,0" Text="Advanced Options" FontWeight="Bold" 
+                       Foreground="{DynamicResource {x:Static theming:EnvironmentColors.WindowText}}"/>
 
             <DockPanel Margin="16,0,0,0">
                 <controls:LauncherCheckBox Content="IgnoreAsserts"
