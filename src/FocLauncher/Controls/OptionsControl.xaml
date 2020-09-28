@@ -12,7 +12,9 @@
     <FrameworkElement.Resources>
 
         <converters:SystemLangEmojiConverter x:Key="SystemLangEmojiConverter"/>
-        
+        <converters:DebugBuildToVisibilityConverter x:Key="DebugBuildToVisibilityConverter"/>
+
+
         <Style x:Key="ArgumentCheckBox" TargetType="{x:Type CheckBox}">
             <Setter Property="Margin" Value="0,8,16,0"/>
         </Style>
@@ -43,7 +45,8 @@
             <DockPanel Margin="16,0,0,0">
                 <controls:LauncherCheckBox x:Name="DebugCheckBox" Content="Use Debug Build" Style="{StaticResource ArgumentCheckBox}"
                                            IsChecked="{Binding Source={x:Static focLauncher:LauncherGameOptions.Instance}, 
-                Path=UseDebugBuild, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                Path=UseDebugBuild, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                           Visibility="{Binding Converter={StaticResource DebugBuildToVisibilityConverter}}"/>
 
                 <controls:LauncherCheckBox Content="Windowed" Style="{StaticResource ArgumentCheckBox}"
                                            IsChecked="{Binding Source={x:Static focLauncher:LauncherGameOptions.Instance}, 

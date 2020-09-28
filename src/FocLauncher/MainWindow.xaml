@@ -15,14 +15,7 @@
         UseLayoutRounding="True"
         Closing="MainWindow_OnClosing">
     <Window.Resources>
-        
         <converters:GameTypeToStringConverter x:Key="GameTypeToStringConverter"/>
-        <converters:DebugBuildToVisibilityConverter x:Key="DebugBuildToVisibilityConverter"/>
-
-        <Style x:Key="ArgumentCheckBox" TargetType="{x:Type CheckBox}">
-            <Setter Property="Margin" Value="0,6,24,0"/>
-        </Style>
-
     </Window.Resources>
     <Grid Background="{DynamicResource {x:Static theming:EnvironmentColors.BackgroundColor}}">
         <Grid.RowDefinitions>
@@ -47,13 +40,8 @@
                         Text="PLAY"/>
            
 
-            <controls:OptionsControl DataContext="{Binding}" Margin="0,4,0,8"/>
-            
-            <!--<controls:LauncherCheckBox x:Name="DebugCheckBox" Content="Use Debug Build" HorizontalAlignment="Center"
-                                       IsChecked="{Binding Source={x:Static focLauncher:LauncherGameOptions.Instance}, Path=UseDebugBuild, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                       Visibility="{Binding SelectedItem.GameObject, ElementName=ListBoxPane, Converter={StaticResource DebugBuildToVisibilityConverter}}"/>
-            -->
-            </StackPanel>
+            <controls:OptionsControl DataContext="{Binding ElementName=ListBoxPane, Path=SelectedItem}" Margin="0,4,0,8"/>
+        </StackPanel>
 
         <controls:LauncherStatusBar Grid.Row="4" >
             <Grid>
