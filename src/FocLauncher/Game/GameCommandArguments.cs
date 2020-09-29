@@ -18,6 +18,6 @@ namespace FocLauncher.Game
         /// </summary>
         public IList<IMod>? Mods { get; set; }
 
-        public string Langauge { get; set; }
+        public string Language { get; set; }
     }
 }

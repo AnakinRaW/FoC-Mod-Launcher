@@ -26,6 +26,8 @@ namespace FocLauncher.Game
                 sb.Append(" NOARTPROCESS");
             if (args.Windowed)
                 sb.Append(" WINDOWED");
+            if (!string.IsNullOrEmpty(args.Language))
+                sb.Append($" LANGUAGE={args.Language}");
 
             return sb.ToString().Trim(' ');
         }
