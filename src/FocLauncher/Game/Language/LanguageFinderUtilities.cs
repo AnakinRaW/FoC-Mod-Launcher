@@ -13,18 +13,34 @@ namespace FocLauncher.Game.Language
 
         public static IEnumerable<ILanguageInfo> GetTextFileLanguages(string directory)
         {
-            var languages = GetTextFileLanguageNames(directory).ToList();
+            return GetLanguages(directory, GetTextFileLanguageNames, LanguageSupportLevel.Text);
+        }
+
+        public static IEnumerable<ILanguageInfo> GetSpeechMegLanguages(string directory)
+        {
+            return GetLanguages(directory, GetSpeechMegsLanguageNames, LanguageSupportLevel.Speech);
+        }
+
+        public static IEnumerable<ILanguageInfo> GetSfxLanguages(string directory)
+        {
+            return GetLanguages(directory, GetSfxMegsLanguageNames, LanguageSupportLevel.SFX);
+        }
+
+
+        public static IEnumerable<ILanguageInfo> GetLanguages(string directory, Func<string, IEnumerable<string>> languageNameFinder, LanguageSupportLevel supportLevel)
+        {
+            var languages = languageNameFinder(directory).ToList();
             if (!languages.Any())
                 yield break;
 
             foreach (var language in languages)
             {
-                if (!LanguageFinderUtilities.TryGetLanguageInfoFromEnglishName(language, LanguageSupportLevel.Text, out var languageInfo))
+                if (!TryGetLanguageInfoFromEnglishName(language, supportLevel, out var languageInfo))
                     continue;
                 yield return languageInfo!;
             }
         }
-        
+
         public static bool TryGetLanguageInfoFromEnglishName(string englishName, LanguageSupportLevel supportLevel, out ILanguageInfo? languageInfo)
         {
             var culture = AvailableCultures.FirstOrDefault(x =>
@@ -36,32 +52,62 @@ namespace FocLauncher.Game.Language
             return true;
         }
 
-        internal static IEnumerable<string> GetTextFileLanguageNames(string directory)
+
+        public static IEnumerable<string> GetLanguageNamesFromFile(string directory, string filePattern, Func<string, string> extractFunc)
         {
-            if (string.IsNullOrEmpty(directory) || !Directory.Exists(directory))
+            if (string.IsNullOrEmpty(directory) || !Directory.Exists(directory) || extractFunc is null)
                 yield break;
 
-            var languageFiles = Directory.EnumerateFiles(directory, "MasterTextFile_*.dat").ToList();
-
-            if (languageFiles.Count() < 0)
+            var files = Directory.EnumerateFiles(directory, filePattern).ToList();
+            if (files.Count() < 0)
                 yield break;
 
-            foreach (var file in languageFiles)
+            foreach (var file in files)
             {
-                var langName = ExtractLanguageName(Path.GetFileNameWithoutExtension(file));
+                var langName = extractFunc(Path.GetFileNameWithoutExtension(file));
                 if (string.IsNullOrEmpty(langName))
                     continue;
                 yield return langName;
             }
         }
 
-        private static string ExtractLanguageName(string file)
+        public static string ExtractLanguageNameFromMasterTextFile(string file)
         {
             var start = file.IndexOf('_');
             if (start < 0 || start + 1 == file.Length)
                 return string.Empty;
-
             return file.Substring(start + 1);
+        }
+
+        public static string ExtractLanguageNameFromSpeechMeg(string file)
+        {
+            var end = file.IndexOf("speech", StringComparison.InvariantCultureIgnoreCase);
+            return end < 0 ? string.Empty : file.Substring(0, end);
+        }
+
+        public static string ExtractLanguageNameFromSfxMeg(string file)
+        {
+            if (file.Equals("sfx2d_non_localized", StringComparison.InvariantCultureIgnoreCase))
+                return string.Empty;
+            var start = file.LastIndexOf('_');
+            if (start < 0 || start + 1 == file.Length)
+                return string.Empty;
+            return file.Substring(start + 1);
+        }
+
+        internal static IEnumerable<string> GetTextFileLanguageNames(string directory)
+        {
+            return GetLanguageNamesFromFile(directory, "MasterTextFile_*.dat", ExtractLanguageNameFromMasterTextFile);
+        }
+
+        internal static IEnumerable<string> GetSpeechMegsLanguageNames(string directory)
+        {
+            return GetLanguageNamesFromFile(directory, "*speech.meg", ExtractLanguageNameFromSpeechMeg);
+        }
+
+        internal static IEnumerable<string> GetSfxMegsLanguageNames(string directory)
+        {
+            return GetLanguageNamesFromFile(directory, "sfx2d_*.meg", ExtractLanguageNameFromSfxMeg);
         }
     }
 }

@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
-using System.Linq;
 using EawModinfo.Spec;
 
 namespace FocLauncher.Game.Language
@@ -20,12 +18,15 @@ namespace FocLauncher.Game.Language
 
         protected override IEnumerable<ILanguageInfo> FindSpeechLanguages()
         {
-            return Enumerable.Empty<ILanguageInfo>();
+            var speechPath = Path.Combine(BaseDirectory.FullName, "Data");
+            return LanguageFinderUtilities.GetSpeechMegLanguages(speechPath);
+
         }
 
         protected override IEnumerable<ILanguageInfo> FindSfxLanguages()
         {
-            return Enumerable.Empty<ILanguageInfo>();
+            var sfxPath = Path.Combine(BaseDirectory.FullName, "Data\\Audio\\SFX");
+            return LanguageFinderUtilities.GetSfxLanguages(sfxPath);
         }
     }
 }

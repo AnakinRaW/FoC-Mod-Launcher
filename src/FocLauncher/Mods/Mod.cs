@@ -76,7 +76,7 @@ namespace FocLauncher.Mods
             throw new NotImplementedException();
         }
 
-        public override bool Equals(IModReference modReference)
+        public override bool Equals(IModReference? modReference)
         {
             if (modReference is null)
                 return false;
