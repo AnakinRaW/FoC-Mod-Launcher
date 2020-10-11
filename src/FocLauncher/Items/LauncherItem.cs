@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
+using EawModinfo.Spec;
 using FocLauncher.Controls.Controllers;
 using FocLauncher.Game;
 using FocLauncher.Mods;
@@ -17,7 +18,7 @@ namespace FocLauncher.Items
 {
     public class LauncherItem : ILauncherItem, IHasInvocationController, IHasContextMenuController
     {
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         private readonly LauncherGameObjectCommandHandler _commandHandler;
 
@@ -26,21 +27,13 @@ namespace FocLauncher.Items
         public string Text { get; private set; } = "Resolving name...";
 
         // TODO: Get async from GameObject
-        public ImageSource ImageSource { get; }
+        public ImageSource? ImageSource { get; }
 
         public LauncherItemManager Manager { get; }
 
         public IPetroglyhGameableObject GameObject { get; }
 
-        public int Depth
-        {
-            get
-            {
-                if (GameObject is IGame)
-                    return 0;
-                return 1;
-            }
-        }
+        public int Depth => GameObject is IGame ? 0 : 1;
 
         IInvocationController IHasInvocationController.InvocationController => LauncherItemInvocationController.Instance;
 
@@ -65,9 +58,13 @@ namespace FocLauncher.Items
             var items = new HashSet<MenuItem>();
             var openExplorerItem = new MenuItem {Header = "Show in Explorer", Command = _commandHandler.OpenExplorerCommand};
             items.Add(openExplorerItem);
-            // TODO: Remove from Release
-            var showArgs = new MenuItem {Header = "Show Launch Args", Command = _commandHandler.ShowArgsCommand };
+#if DEBUG
+            var showArgs = new MenuItem { Header = "Show Launch Args", Command = _commandHandler.ShowArgsCommand };
             items.Add(showArgs);
+
+            var showLangs = new MenuItem{ Header = "Installed Languages", Command = _commandHandler.ShowLanguages};
+            items.Add(showLangs);
+#endif
             return items;
         }
 
@@ -93,7 +90,7 @@ namespace FocLauncher.Items
                         break;
                     case ModType.Workshops:
                     {
-                        var doc = await HtmlDownloader.GetSteamModPageDocument(folderName);
+                        var doc = await HtmlDownloader.GetSteamModPageDocumentAsync(folderName);
                         name = new WorkshopNameResolver().GetName(doc, folderName);
                         SteamModNamePersister.Instance.AddModName(folderName, name);
                         break;

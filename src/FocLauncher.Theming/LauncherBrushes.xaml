@@ -235,16 +235,16 @@
         ResourceId=CheckBoxBorderDown}" Color="#FF007ACC" />
 
     <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type themes:EnvironmentColors}, 
-        ResourceId=CheckBoxBackgroundFocused}" Color="#FF2D2D30" />
+        ResourceId=CheckBoxBackgroundDisabled}" Color="#FF2D2D30" />
 
     <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type themes:EnvironmentColors}, 
-        ResourceId=CheckBoxGlyphFocused}" Color="#FFF1F1F1" />
+        ResourceId=CheckBoxGlyphDisabled}" Color="#FF656565" />
 
     <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type themes:EnvironmentColors}, 
-        ResourceId=CheckBoxTextFocused}" Color="#FFF1F1F1" />
+        ResourceId=CheckBoxTextDisabled}" Color="#FF999999" />
 
     <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type themes:EnvironmentColors}, 
-        ResourceId=CheckBoxBorderFocused}" Color="#FF007ACC" />
+        ResourceId=CheckBoxBorderDisabled}" Color="#FF434346" />
 
 
 
@@ -322,4 +322,50 @@
 
 
 
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type themes:EnvironmentColors}, 
+        ResourceId=TextBoxBackground}" Color="#FF252526" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type themes:EnvironmentColors}, 
+        ResourceId=TextBoxBorder}" Color="#FFD0D2D3" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type themes:EnvironmentColors}, 
+        ResourceId=TextBoxWatermark}" Color="#FF999999" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type themes:EnvironmentColors}, 
+        ResourceId=TextBoxTextDisabled}" Color="#FF656565" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type themes:EnvironmentColors}, 
+        ResourceId=TextBoxBackgroundFocused}" Color="#FF1F1F20" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type themes:EnvironmentColors}, 
+        ResourceId=TextBoxBorderFocused}" Color="#FF007ACC" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type themes:EnvironmentColors}, 
+        ResourceId=TextBoxBackgroundHover}" Color="#FF1F1F20" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type themes:EnvironmentColors}, 
+        ResourceId=TextBoxBorderHover}" Color="#FF007ACC" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type themes:EnvironmentColors}, 
+        ResourceId=TextBoxBackgroundDisabled}" Color="#FF2D2D30" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type themes:EnvironmentColors}, 
+        ResourceId=TextBoxBorderDisabled}" Color="#FF434346" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type themes:EnvironmentColors}, 
+        ResourceId=TextBoxTextUnfocused}" Color="#FFD0D2D3" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type themes:EnvironmentColors}, 
+        ResourceId=TextBoxTextFocused}" Color="#FFF1F1F1" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type themes:EnvironmentColors}, 
+        ResourceId=TextBoxTextHover}" Color="#FFF1F1F1" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type themes:EnvironmentColors}, 
+        ResourceId=TextBoxSelection}" Color="#FF007ACC" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type themes:EnvironmentColors}, 
+        ResourceId=TextBoxWatermarkHover}" Color="#FFF1F1F1" />
+    
 </ResourceDictionary>

@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 using FocLauncher.Game;
+using FocLauncher.Items;
 using FocLauncher.Mods;
 
 namespace FocLauncher.Converters
@@ -12,6 +13,8 @@ namespace FocLauncher.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             IGame game;
+            if (value is LauncherItem launcherItem)
+                value = launcherItem.GameObject;
             switch (value)
             {
                 case IMod mod:

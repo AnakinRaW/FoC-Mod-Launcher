@@ -109,7 +109,7 @@ namespace TaskBasedUpdater.FileSystem
         }
 
         public static bool DeleteFileWithRetry(string path, out bool restartRequired,
-            bool restartOk = false, int retryCount = 2, int retryDelay = 500, Func<Exception, int, bool> errorAction = null)
+            bool restartOk = false, int retryCount = 2, int retryDelay = 500, Func<Exception, int, bool>? errorAction = null)
         {
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException(nameof(path));

@@ -73,7 +73,7 @@ namespace FocLauncher.Utilities
                     throw new Exception();
                 result = true;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 result = false;
             }

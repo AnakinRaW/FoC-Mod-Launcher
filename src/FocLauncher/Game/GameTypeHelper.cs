@@ -52,7 +52,7 @@ namespace FocLauncher.Game
 
 
 
-        private static bool CheckSteam(FileInfo exeFile)
+        private static bool CheckSteam(FileInfo? exeFile)
         {
             if (exeFile is null || !exeFile.Exists)
                 return false;
@@ -68,11 +68,11 @@ namespace FocLauncher.Game
             if (!gameData.GetFiles().Any(x => x.Name.Equals("sweaw.exe")))
                 return false;
 
-            var parentFiles = directory.Parent.GetFiles();
+            var parentFiles = directory.Parent?.GetFiles() ?? new FileInfo[0];
             return parentFiles.Any(x => x.Name.Equals("runm2.dat")) && parentFiles.Any(x => x.Name.Equals("runme.dat"));
         }
 
-        private static bool CheckGoG(FileInfo exeFile)
+        private static bool CheckGoG(FileInfo? exeFile)
         {
             if (exeFile is null || !exeFile.Exists)
                 return false;
@@ -109,7 +109,7 @@ namespace FocLauncher.Game
             return false;
         }
 
-        private static bool CheckOrigin(FileInfo exeFile)
+        private static bool CheckOrigin(FileInfo? exeFile)
         {
             Logger.Info($"CheckOrigin on file: {exeFile}");
             var directory = exeFile?.Directory;
@@ -150,7 +150,7 @@ namespace FocLauncher.Game
         }
 
 
-        private static FileInfo? CreateOriginFileInfo(FileInfo focExeFile)
+        private static FileInfo? CreateOriginFileInfo(FileInfo? focExeFile)
         {
             if (focExeFile is null)
                 throw new ArgumentNullException(nameof(focExeFile));

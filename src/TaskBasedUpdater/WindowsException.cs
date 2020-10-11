@@ -15,7 +15,7 @@ namespace TaskBasedUpdater
         {
             get
             {
-                return LazyInitializer.EnsureInitialized(ref _message, () => GetMessage(NativeErrorCode, false));
+                return LazyInitializer.EnsureInitialized(ref _message, () => GetMessage(NativeErrorCode));
             }
         }
 

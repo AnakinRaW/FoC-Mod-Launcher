@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using EawModinfo.File;
+using EawModinfo.Model;
+using EawModinfo.Spec;
 using FocLauncher.Game;
-using FocLauncher.ModInfo;
 using NLog;
 
 namespace FocLauncher.Mods
@@ -12,9 +14,9 @@ namespace FocLauncher.Mods
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public static IMod CreateMod(IGame game, ModType type, DirectoryInfo directory, ModInfoData modInfo)
+        public static IMod CreateMod(IGame game, ModType type, DirectoryInfo directory, ModinfoData modinfo)
         {
-            return CreateMod(game, type, directory, modInfo, false);
+            return CreateMod(game, type, directory, modinfo, false);
         }
         
         public static IMod CreateMod(IGame game, ModType type, DirectoryInfo directory, bool searchModFileOnDisk)
@@ -22,7 +24,7 @@ namespace FocLauncher.Mods
             return CreateMod(game, type, directory, null, searchModFileOnDisk);
         }
 
-        public static IMod CreateMod(IGame game, ModType type, string modPath, ModInfoData modInfo)
+        public static IMod CreateMod(IGame game, ModType type, string modPath, ModinfoData modInfo)
         {
             return CreateMod(game, type, new DirectoryInfo(modPath), modInfo);
         }
@@ -60,14 +62,17 @@ namespace FocLauncher.Mods
             if (directory is null)
                 throw new ArgumentNullException(nameof(directory));
 
-            ModInfoFinderCollection? modInfoCollection = default;
+            ModinfoFinderCollection? modInfoCollection = default;
             try
             {
-                if (!ModInfoFileFinder.TryFind(directory, ModInfoFileFinder.FindOptions.FindAny, out modInfoCollection))
+                var finder = new ModinfoFileFinder(directory);
+                modInfoCollection = finder.Find(FindOptions.FindAny);
+
+                if (!modInfoCollection.HasMainModinfoFile && !modInfoCollection.HasVariantModinfoFiles)
                 {
                     var mod = CreateModInstanceOrNull(game, type, directory, null);
                     if (mod != null)
-                        return new []{mod};
+                        return new[] { mod };
                 }
             }
             catch (Exception e)
@@ -80,7 +85,7 @@ namespace FocLauncher.Mods
 
             if (!modInfoCollection.Variants.Any())
             {
-                var mod = CreateModInstanceOrNull(game, type, directory, modInfoCollection.MainModInfo?.TryGetModInfo());
+                var mod = CreateModInstanceOrNull(game, type, directory, modInfoCollection.MainModinfo?.TryGetModinfo());
                 if (mod != null)
                     return new[] { mod };
             } 
@@ -89,19 +94,19 @@ namespace FocLauncher.Mods
 
             var result = new List<IMod>();
 
-            if (!onlyVariantsIfPresent && TryCreateModInstance(game, type, directory, modInfoCollection.MainModInfo?.TryGetModInfo(), out var baseMod))
+            if (!onlyVariantsIfPresent && TryCreateModInstance(game, type, directory, modInfoCollection.MainModinfo?.TryGetModinfo(), out var baseMod))
                 result.Add(baseMod!);
 
             foreach (var variant in modInfoCollection!.Variants)
             {
-                if (TryCreateModInstance(game, type, directory, variant.TryGetModInfo(), out var variantMod))
+                if (TryCreateModInstance(game, type, directory, variant.TryGetModinfo(), out var variantMod))
                     result.Add(variantMod!);
             }
 
             return result;
         }
 
-        private static IMod CreateMod(IGame game, ModType type, DirectoryInfo directory, ModInfoData? modInfo, bool searchModFileOnDisk) 
+        private static IMod CreateMod(IGame game, ModType type, DirectoryInfo directory, IModinfo? modInfo, bool searchModFileOnDisk) 
         {
             if (game is null)
                 throw new ArgumentNullException(nameof(game));
@@ -110,15 +115,16 @@ namespace FocLauncher.Mods
 
             if (searchModFileOnDisk && modInfo is null)
             {
-                if (ModInfoFileFinder.TryFindModInfo(directory, out var modInfoFile))
-                    modInfo = modInfoFile!.GetModInfo();
+                var mainModinfoFile = ModinfoFileFinder.FindMain(directory);
+                if (mainModinfoFile != null)
+                    modInfo = mainModinfoFile!.GetModinfo();
             }
 
 
             return CreateModInstance(game, type, directory, modInfo);
         }
 
-        private static bool TryCreateModInstance(IGame game, ModType type, DirectoryInfo directory, ModInfoData? modInfo, out IMod? mod)
+        private static bool TryCreateModInstance(IGame game, ModType type, DirectoryInfo directory, IModinfo? modInfo, out IMod? mod)
         {
             mod = default;
             try
@@ -132,13 +138,13 @@ namespace FocLauncher.Mods
             }
         }
 
-        private static IMod? CreateModInstanceOrNull(IGame game, ModType type, DirectoryInfo directory, ModInfoData? modInfo)
+        private static IMod? CreateModInstanceOrNull(IGame game, ModType type, DirectoryInfo directory, IModinfo? modInfo)
         {
             TryCreateModInstance(game, type, directory, modInfo, out var mod);
             return mod;
         }
 
-        private static IMod CreateModInstance(IGame game, ModType type, DirectoryInfo directory, ModInfoData? modInfo = null)
+        private static IMod CreateModInstance(IGame game, ModType type, DirectoryInfo directory, IModinfo? modInfo = null)
         {
             switch (type)
             {

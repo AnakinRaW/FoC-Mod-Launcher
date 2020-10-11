@@ -4,12 +4,9 @@ namespace TaskBasedUpdater.Download
 {
     public class DownloadFailureInformation
     {
-        public Exception Exception { get; set; }
-        public string Engine { get; set; }
+        public Exception Exception { get; }
 
-        public DownloadFailureInformation()
-        {
-        }
+        public string Engine { get; }
 
         public DownloadFailureInformation(Exception exception, string engine)
         {

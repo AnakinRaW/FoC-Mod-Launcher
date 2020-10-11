@@ -3,18 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using EawModinfo.Spec;
+using EawModinfo.Spec.Steam;
 using FocLauncher.Game;
-using FocLauncher.ModInfo;
 using FocLauncher.Mods;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NuGet.Versioning;
 
 namespace FocLauncher.Tests
 {
-    public class ModDependencyTest
-    {
-    }
-
-
     [TestClass]
     public class ModDependencyTests
     {
@@ -236,11 +233,11 @@ namespace FocLauncher.Tests
 
         private void SetModInfo(Action<IModIdentity, IModIdentity, IModIdentity, IModIdentity, IModIdentity> setAction)
         {
-            var modInfoA = new ModInfoData();
-            var modInfoB = new ModInfoData();
-            var modInfoC = new ModInfoData();
-            var modInfoD = new ModInfoData();
-            var modInfoE = new ModInfoData();
+            var modInfoA = new MyModinfo();
+            var modInfoB = new MyModinfo();
+            var modInfoC = new MyModinfo();
+            var modInfoD = new MyModinfo();
+            var modInfoE = new MyModinfo();
 
             setAction(modInfoA, modInfoB, modInfoC, modInfoD, modInfoE);
 
@@ -274,6 +271,28 @@ namespace FocLauncher.Tests
             var resolver = new ModDependencyTraverser(_modA);
             var mods = resolver.Traverse();
             CollectionAssert.AreEqual(expected, mods.ToList());
+        }
+
+        private class MyModinfo : IModinfo
+        {
+            public bool Equals(IModIdentity other)
+            {
+                throw new NotImplementedException();
+            }
+
+            public string Name { get; }
+            public SemanticVersion? Version { get; }
+            public IList<IModReference> Dependencies { get; }
+            public string Summary { get; }
+            public string Icon { get; }
+            public IDictionary<string, object> Custom { get; }
+            public ISteamData? SteamData { get; }
+            public IEnumerable<ILanguageInfo> Languages { get; }
+
+            public MyModinfo()
+            {
+                Dependencies = new List<IModReference>();
+            }
         }
     }
 }

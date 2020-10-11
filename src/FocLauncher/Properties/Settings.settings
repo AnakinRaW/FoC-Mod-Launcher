@@ -11,5 +11,8 @@
     <Setting Name="DefaultTheme" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="LanguageFallback" Type="FocLauncher.Settings.LanguageFallback" Scope="User">
+      <Value Profile="(Default)">NoText</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

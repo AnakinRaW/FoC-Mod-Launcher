@@ -5,7 +5,9 @@ namespace FocLauncher
 {
     public class FocLauncherInformation : INotifyPropertyChanged
     {
-        private static FocLauncherInformation _instance;
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        private static FocLauncherInformation? _instance;
 
         public string Name => LauncherConstants.ProductName;
         public string Author => LauncherConstants.Author;
@@ -116,10 +118,8 @@ namespace FocLauncher
         private FocLauncherInformation()
         {
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

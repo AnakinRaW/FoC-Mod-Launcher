@@ -47,7 +47,7 @@ namespace TaskBasedUpdater
         internal static string GetFailureSignature(this IComponent package, string action, string result)
         {
             var stringBuilder = new StringBuilder();
-            if (!string.IsNullOrEmpty(package?.Name)) 
+            if (!string.IsNullOrEmpty(package.Name)) 
                 stringBuilder.Append("Component=" + package.Name);
             if (!string.IsNullOrEmpty(action))
             {
@@ -64,12 +64,12 @@ namespace TaskBasedUpdater
             return stringBuilder.ToString();
         }
 
-        public static string TryJoin(this IEnumerable<string> source, string separator)
+        public static string? TryJoin(this IEnumerable<string>? source, string separator)
         {
             return source == null ? null : string.Join(separator, source);
         }
 
-        public static bool IsNullOrEmpty<T>(this IEnumerable<T> source)
+        public static bool IsNullOrEmpty<T>(this IEnumerable<T>? source)
         {
             return source == null || !FastAny<T>(source);
         }
@@ -83,13 +83,7 @@ namespace TaskBasedUpdater
             foreach (var obj in items)
                 source.Add(obj);
         }
-
-        public static IEnumerable<TSource> DistinctBy<TSource, TKey>(this IEnumerable<TSource> source,
-            Func<TSource, TKey> keySelector)
-        {
-            return DistinctBy(source, keySelector, null);
-        }
-
+        
         public static IEnumerable<TSource> DistinctBy<TSource, TKey>(this IEnumerable<TSource> source,
             Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
         {

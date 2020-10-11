@@ -12,7 +12,7 @@ namespace TaskBasedUpdater.TaskRunner
         protected static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly List<IUpdaterTask> _tasks;
 
-        public event EventHandler<TaskEventArgs> Error;
+        public event EventHandler<TaskEventArgs>? Error;
 
         protected ConcurrentQueue<IUpdaterTask> TaskQueue { get; }
 

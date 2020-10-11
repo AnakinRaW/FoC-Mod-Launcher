@@ -1,4 +1,5 @@
-﻿using FocLauncher.Versioning;
+﻿using System.Collections.Generic;
+using EawModinfo.Spec;
 
 namespace FocLauncher.Game
 {
@@ -10,6 +11,8 @@ namespace FocLauncher.Game
 
         string? IconFile { get; }
 
-        ModVersion? Version { get; }
+        string Version { get; }
+
+        ICollection<ILanguageInfo> InstalledLanguages { get; }
     }
 }

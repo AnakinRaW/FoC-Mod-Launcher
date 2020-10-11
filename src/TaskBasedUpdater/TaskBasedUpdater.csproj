@@ -126,7 +126,6 @@
     <Compile Include="Tasks\CleanFileTask.cs" />
     <Compile Include="Tasks\ComponentDownloadTask.cs" />
     <Compile Include="Tasks\ComponentInstallTask.cs" />
-    <Compile Include="Tasks\DownloadTask.cs" />
     <Compile Include="Tasks\SynchronizedUpdaterTask.cs" />
     <Compile Include="Tasks\UpdaterTask.cs" />
     <Compile Include="UpdateInformation.cs" />
@@ -138,7 +137,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="NLog">
-      <Version>4.7.0</Version>
+      <Version>4.7.5</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

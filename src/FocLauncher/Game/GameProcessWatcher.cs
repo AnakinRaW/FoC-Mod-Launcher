@@ -1,7 +1,5 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
 
 namespace FocLauncher.Game
 {
@@ -9,7 +7,7 @@ namespace FocLauncher.Game
     {
         private readonly object _syncObject = new object();
 
-        internal event EventHandler ProcessExited;
+        internal event EventHandler? ProcessExited;
 
         public GameProcessWatcher()
         {
@@ -19,8 +17,8 @@ namespace FocLauncher.Game
         public bool IsProcessRunning { get; private set; }
 
 
-        private Process _process;
-        private bool _isProcessRunning;
+        private Process? _process;
+
 
         internal void SetProcess(Process process)
         {
@@ -29,7 +27,7 @@ namespace FocLauncher.Game
             Process = process;
         }
 
-        private Process Process
+        private Process? Process
         {
             set
             {
@@ -66,14 +64,7 @@ namespace FocLauncher.Game
             }
             Process = null;
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
+        
         private void OnProcessExited()
         {
             ProcessExited?.Invoke(this, EventArgs.Empty);

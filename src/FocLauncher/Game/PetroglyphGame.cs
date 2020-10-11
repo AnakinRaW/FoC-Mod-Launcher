@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using FocLauncher.ModInfo;
+using EawModinfo.Spec;
+using FocLauncher.Game.Language;
 using FocLauncher.Mods;
 using FocLauncher.Utilities;
-using FocLauncher.Versioning;
 
 namespace FocLauncher.Game
 {
@@ -16,6 +16,8 @@ namespace FocLauncher.Game
         public event EventHandler<GameStartingEventArgs> GameStarting;
         public event EventHandler GameClosed;
         public event EventHandler<ModCollectionChangedEventArgs> ModCollectionModified;
+
+        private readonly LanguageFinderBase _languageFinder;
         
         public DirectoryInfo Directory { get; }
 
@@ -27,29 +29,28 @@ namespace FocLauncher.Game
 
         public abstract string Description { get; }
 
-        public virtual string? IconFile => string.Empty;
-        public virtual ModVersion? Version => null;
+        public ICollection<ILanguageInfo> InstalledLanguages => _languageFinder.Find();
 
+        public virtual string? IconFile => string.Empty;
+        
+        public virtual string Version => string.Empty;
         
         protected abstract int DefaultXmlFileCount { get; }
 
         protected abstract string GameExeFileName { get; }
 
         protected abstract string GameConstantsMd5Hash { get; }
-
-        protected string GameConstantsFilePath => Path.Combine(Directory.FullName, @"Data\XML\GAMECONSTANTS.XML");
-
+        
         public IReadOnlyCollection<IMod> Mods => ModsInternal.ToList();
 
         protected internal HashSet<IMod> ModsInternal { get; } = new HashSet<IMod>(ModEqualityComparer.NameAndIdentifier);
-
 
         protected PetroglyphGame(DirectoryInfo gameDirectory)
         {
             Directory = gameDirectory;
             if (!ExistsGameDirectoryAndGameExecutable())
                 throw new Exception($"{GetType().Name} does not exists");
-
+            _languageFinder = new GameLanguageFinder(Directory);
             GameProcessWatcher.ProcessExited += OnGameProcessExited;
         }
 
@@ -125,6 +126,11 @@ namespace FocLauncher.Game
                 if (mod != null && add)
                     AddMod(mod);
             }
+        }
+
+        protected virtual ICollection<ILanguageInfo> FindInstalledLanguages()
+        {
+            throw new NotImplementedException();
         }
 
         protected virtual IEnumerable<IMod> GetPhysicalModsCore()

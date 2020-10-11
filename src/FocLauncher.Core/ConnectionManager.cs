@@ -14,7 +14,7 @@ namespace FocLauncher
         private const int PingTimeoutMilliseconds = 1000;
         private static readonly IPAddress PingServer = IPAddress.Parse(GoogleDNSAddress);
         private static readonly SemaphoreSlim SemaphoreSlim = new SemaphoreSlim(1, 1);
-        private static ConnectionManager _instance;
+        private static ConnectionManager? _instance;
 
         private DateTime _lastStateChange;
         private bool _connected;

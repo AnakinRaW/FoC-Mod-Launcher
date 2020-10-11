@@ -1,4 +1,4 @@
-﻿namespace FocLauncher.NativeMethods
+﻿namespace FocLauncher.WindowsPrimitives
 {
     internal struct BitmapInfoHeader
     {

@@ -15,6 +15,7 @@ namespace FocLauncher.Game
 
         protected string DebugExePath => Path.Combine(Directory.FullName, DebugExeName);
 
+        
         protected SteamGameBase(DirectoryInfo gameDirectory) : base(gameDirectory)
         {
         }

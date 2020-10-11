@@ -41,17 +41,17 @@ namespace TaskBasedUpdater.Component
             return Compare(x, y) == 0;
         }
 
-        public int GetHashCode(IComponent obj)
+        public int GetHashCode(IComponent? obj)
         {
             var num = 0;
-            if (obj.Name != null)
+            if (obj?.Name != null)
                 num ^= _comparer.GetHashCode(obj.Name);
-            if (!_excludeVersion && obj.CurrentVersion != null)
+            if (!_excludeVersion && obj?.CurrentVersion != null)
                 num ^= obj.CurrentVersion.GetHashCode();
             return num;
         }
 
-        public int Compare(IComponent x, IComponent y)
+        public int Compare(IComponent? x, IComponent? y)
         {
             if (x == y)
                 return 0;
@@ -65,7 +65,7 @@ namespace TaskBasedUpdater.Component
             if (!_excludeVersion)
             {
                 var version = x.CurrentVersion;
-                num = (object) version != null ? version.CompareTo(y.CurrentVersion) : y.CurrentVersion == null ? 0 : -1;
+                num = version != null ? version.CompareTo(y.CurrentVersion) : y.CurrentVersion == null ? 0 : -1;
             }
             return num;
         }

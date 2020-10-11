@@ -3,7 +3,6 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 using FocLauncher.Input;
-using FocLauncher.Properties;
 using FocLauncher.Theming;
 
 namespace FocLauncher.Dialogs
@@ -30,8 +29,8 @@ namespace FocLauncher.Dialogs
         private void ApplyTheme()
         {
             if (!SelectedTheme.Equals(_themeManager.Theme))
-                _themeManager.Theme = SelectedTheme;  
-            Settings.Default.Save();
+                _themeManager.Theme = SelectedTheme;
+            Properties.Settings.Default.Save();
             Close();
         }
 
@@ -58,7 +57,7 @@ namespace FocLauncher.Dialogs
             base.OnKeyDown(e);
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {

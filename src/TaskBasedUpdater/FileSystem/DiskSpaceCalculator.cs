@@ -27,13 +27,13 @@ namespace TaskBasedUpdater.FileSystem
             {
                 var downloadRoot = FileSystemExtensions.GetPathRoot(downloadPath);
                 if (!string.IsNullOrEmpty(downloadPath))
-                    SetSizeMembers(component.OriginInfo?.Size, downloadRoot);
+                    SetSizeMembers(component.OriginInfo?.Size, downloadRoot!);
             }
 
             if (option.HasFlag(CalculationOption.Install))
-                SetSizeMembers(component.OriginInfo?.Size, destinationRoot);
+                SetSizeMembers(component.OriginInfo?.Size, destinationRoot!);
             if (option.HasFlag(CalculationOption.Backup))
-                SetSizeMembers(component.DiskSize, backupRoot);
+                SetSizeMembers(component.DiskSize, backupRoot!);
 
             foreach (var sizes in CalculatedDiskSizes)
             {

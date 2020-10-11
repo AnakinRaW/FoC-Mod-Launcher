@@ -10,8 +10,8 @@ namespace FocLauncher
     {
         internal const string LauncherDataModelKey = "LauncherDebugInformation";
 
-        public string ResourceReferenceProperty { get; set; }
-        public override string StackTrace => InnerException?.StackTrace;
+        public string? ResourceReferenceProperty { get; set; }
+        public override string StackTrace => InnerException?.StackTrace ?? string.Empty;
 
         public LauncherException()
         {

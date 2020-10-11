@@ -105,7 +105,7 @@ namespace TaskBasedUpdater.Download
             var proxyResolution = ProxyResolution.Default;
             while (proxyResolution != ProxyResolution.Error)
             {
-                var httpWebResponse = (HttpWebResponse) null;
+                HttpWebResponse? httpWebResponse = null;
                 var successful = true;
                 try
                 {

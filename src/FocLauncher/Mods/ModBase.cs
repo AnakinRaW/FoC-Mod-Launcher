@@ -2,20 +2,24 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using EawModinfo;
+using EawModinfo.Model;
+using EawModinfo.Spec;
+using EawModinfo.Utilities;
 using FocLauncher.Game;
-using FocLauncher.ModInfo;
-using FocLauncher.Versioning;
+using NuGet.Versioning;
 
 namespace FocLauncher.Mods
 {
     [DebuggerDisplay("Mod:{Name};{Type}")]
     public abstract class ModBase : IMod
     {
-        private ModInfoData? _modInfo;
-        private string _name;
-        private string _description;
+        private ICollection<ILanguageInfo>? _languageInfos;
+        private IModinfo? _modInfo;
+        private string? _name;
+        private string? _description;
         private string? _iconFile;
-        private ModVersion? _modVersion;
+        private SemanticVersion? _modVersion;
         private bool _expectedDependenciesCalculated;
         private int _expectedDependencyCount;
         private bool _isResolving;
@@ -25,7 +29,7 @@ namespace FocLauncher.Mods
         public abstract string Identifier { get; }
 
 
-        public ModInfoData? ModInfo
+        public IModinfo? ModInfo
         {
             get
             {
@@ -36,6 +40,19 @@ namespace FocLauncher.Mods
             }
         }
 
+        public ICollection<ILanguageInfo> InstalledLanguages
+        {
+            get
+            {
+                if (_languageInfos != null)
+                    return _languageInfos;
+                _languageInfos = ResolveInstalledLanguages();
+                if (!_languageInfos.Any())
+                    _languageInfos.Add(EawModinfo.Model.LanguageInfo.Default);
+                return _languageInfos.ToList();
+            }
+        }
+        
         public string Name
         {
             get
@@ -69,7 +86,7 @@ namespace FocLauncher.Mods
             }
         }
 
-        public ModVersion? Version
+        public SemanticVersion? Version
         {
             get
             {
@@ -79,6 +96,8 @@ namespace FocLauncher.Mods
                 return _modVersion;
             }
         }
+
+        string IPetroglyhGameableObject.Version => Version?.ToFullString() ?? string.Empty;
 
         public int ExpectedDependencies
         {
@@ -97,17 +116,14 @@ namespace FocLauncher.Mods
 
         public bool DependenciesResolved { get; protected set; }
 
-        public IReadOnlyList<IMod> Dependencies => DependenciesInternal.ToList();
-
         IList<IModReference> IModIdentity.Dependencies => new List<IModReference>(DependenciesInternal);
 
         public bool WorkshopMod => Type == ModType.Workshops;
 
         public bool Virtual => Type == ModType.Virtual;
 
-        public bool HasDependencies => Dependencies.Count > 0;
-
-
+        public bool HasDependencies => DependenciesInternal.Count > 0;
+        
 
         public IGame Game { get; }
 
@@ -132,7 +148,7 @@ namespace FocLauncher.Mods
             _name = name;
         }
 
-        protected ModBase(IGame game, ModType type, ModInfoData? modInfoData) : this(game, type)
+        protected ModBase(IGame game, ModType type, IModinfo? modInfoData) : this(game, type)
         {
             if (modInfoData != null)
             {
@@ -141,7 +157,7 @@ namespace FocLauncher.Mods
                     modInfoData.Validate();
                     _modInfo = modInfoData;
                 }
-                catch (ModInfoException)
+                catch (ModinfoException)
                 {
                     _modInfo = null;
                 }
@@ -226,7 +242,7 @@ namespace FocLauncher.Mods
 
         public abstract string ToArgs(bool includeDependencies);
 
-        internal void SetModInfo(ModInfoData modInfo)
+        internal void SetModInfo(IModinfo modInfo)
         {
             _modInfo = modInfo;
         }
@@ -239,7 +255,15 @@ namespace FocLauncher.Mods
 
         protected abstract bool ResolveDependenciesCore();
 
-        protected virtual ModInfoData? ResolveModInfo()
+
+        protected virtual ICollection<ILanguageInfo> ResolveInstalledLanguages()
+        {
+            return ModInfo != null ? 
+                ModInfo.Languages.ToList() : 
+                new List<ILanguageInfo>();
+        }
+
+        protected virtual ModinfoData? ResolveModInfo()
         {
             return null;
         }
@@ -256,16 +280,16 @@ namespace FocLauncher.Mods
         {
             var name = string.Empty;
             if (ModInfo != null)
-                name = ModInfo.Description;
+                name = ModInfo.Summary;
             return name;
         }
 
-        protected virtual ModVersion? InitializeVersion()
+        protected virtual SemanticVersion? InitializeVersion()
         {
             return ModInfo?.Version;
         }
 
-        protected virtual string InitializeIcon()
+        protected virtual string? InitializeIcon()
         {
             var name = string.Empty;
             if (ModInfo != null)

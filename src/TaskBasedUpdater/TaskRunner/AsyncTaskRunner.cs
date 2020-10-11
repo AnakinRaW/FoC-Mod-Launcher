@@ -13,7 +13,7 @@ namespace TaskBasedUpdater.TaskRunner
 
         internal int WorkerCount { get; }
 
-        internal AggregateException Exception => _exceptions.Count > 0 ? new AggregateException(_exceptions) : null;
+        internal AggregateException? Exception => _exceptions.Count > 0 ? new AggregateException(_exceptions) : null;
 
         public AsyncTaskRunner(int workerCount)
         {

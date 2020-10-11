@@ -4,11 +4,11 @@ namespace TaskBasedUpdater.Tasks
 {
     internal class AcquireMutexTask : UpdaterTask
     {
-        private Mutex _mutex;
+        private Mutex? _mutex;
 
         internal string MutexName { get; }
 
-        public AcquireMutexTask(string name = null)
+        public AcquireMutexTask(string? name = null)
         {
             MutexName = name ?? UpdaterUtilities.UpdaterMutex;
         }

@@ -8,6 +8,7 @@ using System.Windows.Input;
 using FocLauncher.Game;
 using FocLauncher.Input;
 using FocLauncher.Mods;
+using FocLauncher.Utilities;
 using Microsoft.VisualStudio.Threading;
 
 namespace FocLauncher.Items
@@ -24,6 +25,15 @@ namespace FocLauncher.Items
         public ICommand OpenExplorerCommand => new UICommand(OpenInExplorer, () => GameObject is IHasDirectory);
 
         public ICommand ShowArgsCommand => new UICommand(ShowArgs, () => GameObject is IMod);
+
+        public ICommand ShowLanguages => new UICommand(ShowInstalledLangs, () => true);
+
+        private void ShowInstalledLangs()
+        {
+            var message = GameObject.InstalledLanguages.Aggregate("Installed languages:\r\n",
+                (current, language) => current + $"{language.GetLanguageEnglishName()}:{language.Support}\r\n");
+            MessageBox.Show(message);
+        }
 
         internal void OpenInExplorer()
         {
@@ -97,6 +107,8 @@ namespace FocLauncher.Items
                     throw new InvalidOperationException("The selected mod object seems to be invalid.");
                 args.Mods = modList;
             }
+
+            args.Language = gameOptions.GetLanguageFromOptions(gameObject);
 
             RunGame(game, args, gameObject.IconFile, gameOptions.UseDebugBuild);
         }

@@ -178,7 +178,7 @@ namespace TaskBasedUpdater
             }
         }
 
-        protected string GetInstallResultDetails(InstallResult installResult, IComponent component, string action)
+        protected string GetInstallResultDetails(InstallResult installResult, IComponent? component, string action)
         {
             var stringBuilder = new StringBuilder();
             if (stringBuilder.Length > 0) stringBuilder.Append(", ");
@@ -204,7 +204,7 @@ namespace TaskBasedUpdater
                     return InstallResult.Failure;
                 installResult = InstallCore(installData.LocalPath, installData.InstallDir, component);
             }
-            catch (OperationCanceledException ex)
+            catch (OperationCanceledException)
             {
                 Logger.Info("User canceled during install.");
                 return InstallResult.Cancel;

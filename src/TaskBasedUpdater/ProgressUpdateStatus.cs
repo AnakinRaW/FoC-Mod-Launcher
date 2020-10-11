@@ -8,14 +8,14 @@
 
         public double BitRate { get; }
 
-        public string DownloadEngine { get; }
+        public string? DownloadEngine { get; }
 
         public ProgressUpdateStatus(long bytesRead, long totalBytes, double bitRate)
             : this(null, bytesRead, totalBytes, bitRate)
         {
         }
 
-        public ProgressUpdateStatus(string downloadEngine, long bytesRead, long totalBytes, double bitRate)
+        public ProgressUpdateStatus(string? downloadEngine, long bytesRead, long totalBytes, double bitRate)
         {
             DownloadEngine = downloadEngine;
             BytesRead = bytesRead;

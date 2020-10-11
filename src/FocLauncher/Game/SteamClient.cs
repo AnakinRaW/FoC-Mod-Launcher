@@ -15,13 +15,13 @@ namespace FocLauncher.Game
     public class SteamClient
     {
         private readonly SteamRegistry _registry;
-        private static SteamClient _instance;
+        private static SteamClient? _instance;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public static SteamClient Instance => _instance ??= new SteamClient();
 
-        internal FileInfo SteamExe { get; private set; }
+        internal FileInfo? SteamExe { get; private set; }
 
         public bool Installed => SteamExe != null && SteamExe.Exists;
 
@@ -133,7 +133,7 @@ namespace FocLauncher.Game
             {
                 StartInfo =
                 {
-                    FileName = SteamExe.FullName,
+                    FileName = SteamExe!.FullName,
                     UseShellExecute = false
                 }
             };
@@ -177,6 +177,8 @@ namespace FocLauncher.Game
             while (!token.IsCancellationRequested && !IsRunning)
             {
                 var k = _registry.GetKey("ActiveProcess");
+                if (k is null)
+                    return;
                 await k.WaitForChangeAsync(false, RegistryChangeNotificationFilters.Value, token);
             }
         }
@@ -190,6 +192,8 @@ namespace FocLauncher.Game
             while (!token.IsCancellationRequested && !IsUserLoggedIn)
             {
                 var k = _registry.GetKey("ActiveProcess");
+                if (k is null)
+                    return;
                 await k.WaitForChangeAsync(false, RegistryChangeNotificationFilters.Value, token);
             }
         }

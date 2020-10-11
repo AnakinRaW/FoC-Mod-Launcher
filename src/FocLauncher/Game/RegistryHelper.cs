@@ -61,6 +61,8 @@ namespace FocLauncher.Game
             try
             {
                 using var key = GetKey(subPath, true);
+                if (key is null)
+                    return false;
                 key.SetValue(name, value, registryValueKind);
                 return true;
             }
@@ -85,7 +87,7 @@ namespace FocLauncher.Game
             try
             {
                 using var key = GetKey(subPath, true);
-                key.DeleteValue(name);
+                key?.DeleteValue(name);
                 return true;
             }
             catch
@@ -94,7 +96,7 @@ namespace FocLauncher.Game
             }
         }
 
-        public RegistryKey GetKey(string subPath, bool writable = false)
+        public RegistryKey? GetKey(string subPath, bool writable = false)
         {
             return RootRegistryKey.OpenSubKey(Path.Combine(RegistryBasePath, subPath), writable);
         }

@@ -8,26 +8,24 @@ namespace TaskBasedUpdater.Download
     internal class PreferredDownloadEngines
     {
         private static readonly object SyncRoot = new object();
-        private static PreferredDownloadEngines _instance;
+        private static PreferredDownloadEngines? _instance;
         private static readonly ConcurrentDictionary<string, int> ConcurrentPreferredEngines = new ConcurrentDictionary<string, int>();
         private readonly ConcurrentDictionary<string, int> _preferredEngines;
-        private string _lastSuccessfulEngineName;
+        private string? _lastSuccessfulEngineName;
 
         public static PreferredDownloadEngines Instance
         {
             get
             {
-                if (_instance == null)
-                {
-                    lock (SyncRoot)
-                        if (_instance == null)
-                            _instance = new PreferredDownloadEngines();
-                }
+                if (_instance != null) 
+                    return _instance;
+                lock (SyncRoot) 
+                    _instance ??= new PreferredDownloadEngines();
                 return _instance;
             }
         }
 
-        public string LastSuccessfulEngineName
+        public string? LastSuccessfulEngineName
         {
             get => _lastSuccessfulEngineName;
             set
@@ -43,7 +41,7 @@ namespace TaskBasedUpdater.Download
             }
         }
 
-        public PreferredDownloadEngines(ConcurrentDictionary<string, int> preferredEngines = null)
+        public PreferredDownloadEngines(ConcurrentDictionary<string, int>? preferredEngines = null)
         { 
             _preferredEngines = preferredEngines ?? ConcurrentPreferredEngines;
         }

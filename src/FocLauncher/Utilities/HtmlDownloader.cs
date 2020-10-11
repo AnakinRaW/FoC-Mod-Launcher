@@ -8,7 +8,7 @@ namespace FocLauncher.Utilities
     {
         private static string _steamUrl = "https://steamcommunity.com/sharedfiles/filedetails/?id=";
 
-        public static async Task<HtmlDocument> GetSteamModPageDocument(string workshopId)
+        public static async Task<HtmlDocument?> GetSteamModPageDocumentAsync(string workshopId)
         {
             try
             {

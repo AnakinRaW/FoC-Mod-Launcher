@@ -34,8 +34,8 @@ namespace TaskBasedUpdater.NativeMethods
         internal static extern int RmStartSession(out int pSessionHandle, int dwSessionFlags, [Out] StringBuilder strSessionKey);
 
         [DllImport("rstrtmgr.dll", CharSet = CharSet.Unicode)]
-        internal static extern int RmRegisterResources(int dwSessionHandle, int nFiles, string[] fileNames, 
-            int nApplications, RmUniqueProcess[] rgApplications, int nServices, string[] rgsServiceNames);
+        internal static extern int RmRegisterResources(int dwSessionHandle, int nFiles, string[]? fileNames, 
+            int nApplications, RmUniqueProcess[]? rgApplications, int nServices, string[]? rgsServiceNames);
 
         [DllImport("rstrtmgr.dll", CharSet = CharSet.Unicode)]
         internal static extern int RmGetList(int dwSessionHandle, out int pnProcInfoNeeded, ref int pnProcInfo, [Out] RmProcessInfo[] rgAffectedApps, out int lpdwRebootReasons);

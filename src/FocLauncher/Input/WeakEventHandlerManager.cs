@@ -40,7 +40,7 @@ namespace FocLauncher.Input
             }
         }
 
-        private static void CallHandler(object sender, EventHandler eventHandler)
+        private static void CallHandler(object sender, EventHandler? eventHandler)
         {
             if (eventHandler == null)
                 return;

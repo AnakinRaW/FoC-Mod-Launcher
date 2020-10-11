@@ -12,7 +12,7 @@ namespace FocLauncherHost
     public partial class SplashScreen : INotifyPropertyChanged
     {
         private bool _isProgressVisible;
-        private string _progressText;
+        private string _progressText = string.Empty;
         private bool _cancelable = true;
 
         private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();

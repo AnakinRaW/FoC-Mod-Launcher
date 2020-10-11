@@ -6,12 +6,12 @@ namespace FocLauncher.Game
 {
     public static class ProcessHelper
     {
-        public static Process FindProcess(string name)
+        public static Process? FindProcess(string name)
         {
             return Process.GetProcessesByName(name).FirstOrDefault();
         }
 
-        public static Process GetProcessByPid(int pid)
+        public static Process? GetProcessByPid(int pid)
         {
             try
             {

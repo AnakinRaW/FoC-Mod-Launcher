@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using EawModinfo.Spec;
 using FocLauncher.Game;
-using FocLauncher.ModInfo;
+using FocLauncher.Game.Language;
 using FocLauncher.Utilities;
 
 namespace FocLauncher.Mods
@@ -24,7 +26,7 @@ namespace FocLauncher.Mods
         {
         }
 
-        public Mod(IGame game, DirectoryInfo modDirectory, bool workshop, ModInfoData? modInfoData) :
+        public Mod(IGame game, DirectoryInfo modDirectory, bool workshop, IModinfo? modInfoData) :
             base(game, workshop ? ModType.Workshops : ModType.Default, modInfoData)
         {
             if (modDirectory is null)
@@ -74,7 +76,7 @@ namespace FocLauncher.Mods
             throw new NotImplementedException();
         }
 
-        public override bool Equals(IModReference modReference)
+        public override bool Equals(IModReference? modReference)
         {
             if (modReference is null)
                 return false;
@@ -121,11 +123,19 @@ namespace FocLauncher.Mods
             return name;
         }
 
-        protected override string InitializeIcon()
+        protected override ICollection<ILanguageInfo> ResolveInstalledLanguages()
+        {
+            var languages =  base.ResolveInstalledLanguages();
+            if (!languages.Any())
+                languages =  new GenericModLanguageFinder(Directory).Find();
+            return languages;
+        }
+
+        protected override string? InitializeIcon()
         {
             var iconFile = base.InitializeIcon();
             if (!string.IsNullOrEmpty(iconFile))
-                iconFile = Path.Combine(Directory.FullName, iconFile);
+                iconFile = Path.Combine(Directory.FullName, iconFile!);
             else
             {
                 var icon = Directory.EnumerateFiles("*.ico");

@@ -22,7 +22,7 @@ namespace FocLauncherHost.Utilities
                 var hash = dependency.Sha2;
                 var size = dependency.Size;
 
-                ValidationContext validationContext = null;
+                ValidationContext? validationContext = null;
                 if (hash != null)
                     validationContext = new ValidationContext { Hash = hash, HashType = HashType.Sha256 };
                 var originInfo = new OriginInfo(new Uri(dependency.Origin, UriKind.Absolute), newVersion, size, validationContext);
