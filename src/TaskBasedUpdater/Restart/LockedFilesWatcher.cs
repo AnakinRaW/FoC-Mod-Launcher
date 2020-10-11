@@ -5,7 +5,7 @@ namespace TaskBasedUpdater.Restart
 {
     public class LockedFilesWatcher
     {
-        private static LockedFilesWatcher _instance;
+        private static LockedFilesWatcher? _instance;
 
         private readonly HashSet<string> _lockedFiles = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 

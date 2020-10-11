@@ -12,7 +12,7 @@ namespace FocLauncher.Mods
         private readonly Dictionary<string, string> _modNames = new Dictionary<string, string>(); 
 
         private readonly object _syncObject = new object();
-        private static SteamModNamePersister _instance;
+        private static SteamModNamePersister? _instance;
         public static SteamModNamePersister Instance => _instance ??= new SteamModNamePersister();
 
         public string FilePath { get; }

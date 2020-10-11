@@ -6,7 +6,7 @@ namespace TaskBasedUpdater
 {
     public class ComponentDownloadPathStorage : IEnumerable<KeyValuePair<IComponent, string>>
     {
-        private static ComponentDownloadPathStorage _instance;
+        private static ComponentDownloadPathStorage? _instance;
 
         private readonly object _syncObject = new object();
 

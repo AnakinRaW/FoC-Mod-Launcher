@@ -12,7 +12,7 @@ namespace FocLauncherHost.Dialogs
         private const string WasRestoredMessage =
             "The update of the launcher failed so hard that it had to reset itself.";
 
-        private string _message;
+        private string _message = string.Empty;
         private bool _requiresRestore;
 
         public bool RestoreNow { get; private set; }
@@ -53,9 +53,9 @@ namespace FocLauncherHost.Dialogs
             RestoreNow = true;
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

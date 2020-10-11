@@ -13,6 +13,7 @@ using System.Windows.Threading;
 using FocLauncher.NativeMethods;
 using FocLauncher.ScreenUtilities;
 using FocLauncher.Utilities;
+using FocLauncher.WindowsPrimitives;
 using Point = System.Windows.Point;
 
 namespace FocLauncher.Controls

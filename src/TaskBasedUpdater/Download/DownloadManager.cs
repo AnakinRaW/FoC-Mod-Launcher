@@ -14,7 +14,7 @@ namespace TaskBasedUpdater.Download
     internal class DownloadManager : IDownloadManager
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private static DownloadManager _instance;
+        private static DownloadManager? _instance;
         private readonly List<IDownloadEngine> _allEngines = new List<IDownloadEngine>();
         private readonly List<IDownloadEngine> _defaultEngines = new List<IDownloadEngine>();
 

@@ -18,7 +18,7 @@ namespace FocLauncher
         private bool _useDebugBuild;
         private bool _fallbackToEnglish = true;
         private bool _useSystemLanguage = true;
-        private string _customLanguage;
+        private string _customLanguage = string.Empty;
         public event PropertyChangedEventHandler? PropertyChanged;
 
         public bool UseDebugBuild

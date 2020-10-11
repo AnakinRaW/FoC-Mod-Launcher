@@ -289,7 +289,7 @@ namespace FocLauncher.Mods
             return ModInfo?.Version;
         }
 
-        protected virtual string InitializeIcon()
+        protected virtual string? InitializeIcon()
         {
             var name = string.Empty;
             if (ModInfo != null)

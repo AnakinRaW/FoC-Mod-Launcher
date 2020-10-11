@@ -40,9 +40,7 @@ namespace FocLauncher.Game
         protected abstract string GameExeFileName { get; }
 
         protected abstract string GameConstantsMd5Hash { get; }
-
-        protected string GameConstantsFilePath => Path.Combine(Directory.FullName, @"Data\XML\GAMECONSTANTS.XML");
-
+        
         public IReadOnlyCollection<IMod> Mods => ModsInternal.ToList();
 
         protected internal HashSet<IMod> ModsInternal { get; } = new HashSet<IMod>(ModEqualityComparer.NameAndIdentifier);

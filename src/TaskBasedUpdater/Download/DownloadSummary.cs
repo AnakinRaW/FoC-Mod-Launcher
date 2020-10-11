@@ -13,9 +13,9 @@ namespace TaskBasedUpdater.Download
 
         public string DownloadEngine { get; internal set; }
 
-        public string ProxyResolution { get; internal set; }
+        public string? ProxyResolution { get; internal set; }
 
-        public string FinalUri { get; internal set; }
+        public string? FinalUri { get; internal set; }
 
         public DownloadResult Result { get; internal set; }
 

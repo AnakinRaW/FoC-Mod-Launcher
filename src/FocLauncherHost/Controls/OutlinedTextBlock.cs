@@ -24,7 +24,7 @@ namespace FocLauncherHost.Controls
             Inside
         }
 
-        private FormattedText _formattedText;
+        private FormattedText? _formattedText;
         private Geometry _textGeometry;
         private Pen _pen;
         private PathGeometry _clipGeometry;
@@ -261,20 +261,18 @@ namespace FocLauncherHost.Controls
         private void EnsureFormattedText()
         {
             if (_formattedText != null)
-            {
                 return;
-            }
 
-            _formattedText = new FormattedText(Text ?? "", CultureInfo.CurrentUICulture, FlowDirection, new Typeface(FontFamily, FontStyle, FontWeight, FontStretch), FontSize, Brushes.Black);
+            _formattedText = new FormattedText(Text, CultureInfo.CurrentUICulture, FlowDirection,
+                new Typeface(FontFamily, FontStyle, FontWeight, FontStretch), FontSize, Brushes.Black, 
+                VisualTreeHelper.GetDpi(this).PixelsPerDip);
             UpdateFormattedText();
         }
 
         private void UpdateFormattedText()
         {
             if (_formattedText == null)
-            {
                 return;
-            }
 
             _formattedText.MaxLineCount = TextWrapping == TextWrapping.NoWrap ? 1 : int.MaxValue;
             _formattedText.TextAlignment = TextAlignment;

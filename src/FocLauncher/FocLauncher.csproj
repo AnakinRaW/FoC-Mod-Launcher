@@ -186,7 +186,6 @@
     <Compile Include="Utilities\StreamUtilities.cs" />
     <Compile Include="Utilities\VisualUtilities.cs" />
     <Compile Include="Utilities\WeakCollection.cs" />
-    <Compile Include="Utilities\XmlTools.cs" />
     <Compile Include="Utilities\HashProvider.cs" />
     <Compile Include="Utilities\ReusableResourceHolder.cs" />
     <Compile Include="Utilities\ReusableResourceStore.cs" />

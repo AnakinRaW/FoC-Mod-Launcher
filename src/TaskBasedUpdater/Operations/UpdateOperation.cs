@@ -98,7 +98,7 @@ namespace TaskBasedUpdater.Operations
                     {
                         _downloads.Wait();
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
                     }
                 }

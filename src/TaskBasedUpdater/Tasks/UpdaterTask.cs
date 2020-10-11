@@ -13,11 +13,11 @@ namespace TaskBasedUpdater.Tasks
 
         internal bool IsDisposed { get; private set; }
 
-        protected internal ILogger Logger { get; private set; }
+        protected internal ILogger? Logger { get; private set; }
 
-        public Exception Error { get; internal set; }
+        public Exception? Error { get; internal set; }
 
-        public IComponent Component { get; internal set; }
+        public IComponent? Component { get; internal set; }
 
         ~UpdaterTask()
         {

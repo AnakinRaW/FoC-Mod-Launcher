@@ -10,9 +10,9 @@ namespace FocLauncher
 {
     public sealed class LauncherGameManager : INotifyPropertyChanged
     {
-        public event EventHandler<GameStartedEventArgs> GameStarted;
-        public event EventHandler<IGame> GameClosed;
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event EventHandler<GameStartedEventArgs>? GameStarted;
+        public event EventHandler<IGame>? GameClosed;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 

@@ -21,20 +21,20 @@ namespace FocLauncher.Game.Detection
                 return GameDetection.NotInstalled;
 
             var regPath = FocRegistryHelper.Instance.ExePath;
-            if (!string.IsNullOrEmpty(regPath) && Path.GetFullPath(currentPath) == Path.GetFullPath(regPath))
+            if (!string.IsNullOrEmpty(regPath) && Path.GetFullPath(currentPath) == Path.GetFullPath(regPath!))
             {
                 var eawRegPath = EaWRegistryHelper.Instance.ExePath;
-                return new GameDetection(new FileInfo(eawRegPath), focExe);
+                return new GameDetection(new FileInfo(eawRegPath!), focExe);
             }
 
             var gameType = GameTypeHelper.GetGameType(focExe);
             if (!Eaw.FindInstallationRelativeToFoc(focExe, gameType, out var eawPath))
             {
                 var eawRegPath = EaWRegistryHelper.Instance.ExePath;
-                return new GameDetection(new FileInfo(eawRegPath), focExe);
+                return new GameDetection(new FileInfo(eawRegPath!), focExe);
             }
 
-            return new GameDetection(eawPath, focExe);
+            return new GameDetection(eawPath!, focExe);
         }
     }
 }

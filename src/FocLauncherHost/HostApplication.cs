@@ -54,7 +54,7 @@ namespace FocLauncherHost
                     SetWhenWaitDialogIsShownAsync(WaitProgressDelay, SplashScreen.CancellationToken).Forget();
                     var cts = CancellationTokenSource.CreateLinkedTokenSource(SplashScreen.CancellationToken);
                     
-                    UpdateInformation updateInformation = null;
+                    UpdateInformation? updateInformation = null;
                     try
                     {
                         var updateManager = new FocLauncherUpdaterManager(LauncherConstants.UpdateMetadataPath);

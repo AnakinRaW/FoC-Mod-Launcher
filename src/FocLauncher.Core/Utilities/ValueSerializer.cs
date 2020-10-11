@@ -36,7 +36,7 @@ namespace FocLauncher.Utilities
                 typeof (Point)
             };
             foreach (var type in typeArray)
-                SpecialTypes.Add(type.FullName, Tuple.Create(type, (TypeConverter)null));
+                SpecialTypes.Add(type.FullName, Tuple.Create(type, (TypeConverter) null));
         }
 
         public static string Serialize(object obj, Type type)

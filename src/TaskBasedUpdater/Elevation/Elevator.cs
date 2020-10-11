@@ -6,9 +6,9 @@ namespace TaskBasedUpdater.Elevation
 {
     public class Elevator
     {
-        private static Elevator _instance;
+        private static Elevator? _instance;
 
-        public event EventHandler<ElevationRequestData> ElevationRequested;
+        public event EventHandler<ElevationRequestData>? ElevationRequested;
 
         public static Elevator Instance => _instance ??= new Elevator();
 

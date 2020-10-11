@@ -131,11 +131,11 @@ namespace FocLauncher.Mods
             return languages;
         }
 
-        protected override string InitializeIcon()
+        protected override string? InitializeIcon()
         {
             var iconFile = base.InitializeIcon();
             if (!string.IsNullOrEmpty(iconFile))
-                iconFile = Path.Combine(Directory.FullName, iconFile);
+                iconFile = Path.Combine(Directory.FullName, iconFile!);
             else
             {
                 var icon = Directory.EnumerateFiles("*.ico");

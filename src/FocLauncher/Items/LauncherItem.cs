@@ -18,7 +18,7 @@ namespace FocLauncher.Items
 {
     public class LauncherItem : ILauncherItem, IHasInvocationController, IHasContextMenuController
     {
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         private readonly LauncherGameObjectCommandHandler _commandHandler;
 
@@ -27,21 +27,13 @@ namespace FocLauncher.Items
         public string Text { get; private set; } = "Resolving name...";
 
         // TODO: Get async from GameObject
-        public ImageSource ImageSource { get; }
+        public ImageSource? ImageSource { get; }
 
         public LauncherItemManager Manager { get; }
 
         public IPetroglyhGameableObject GameObject { get; }
 
-        public int Depth
-        {
-            get
-            {
-                if (GameObject is IGame)
-                    return 0;
-                return 1;
-            }
-        }
+        public int Depth => GameObject is IGame ? 0 : 1;
 
         IInvocationController IHasInvocationController.InvocationController => LauncherItemInvocationController.Instance;
 
@@ -98,7 +90,7 @@ namespace FocLauncher.Items
                         break;
                     case ModType.Workshops:
                     {
-                        var doc = await HtmlDownloader.GetSteamModPageDocument(folderName);
+                        var doc = await HtmlDownloader.GetSteamModPageDocumentAsync(folderName);
                         name = new WorkshopNameResolver().GetName(doc, folderName);
                         SteamModNamePersister.Instance.AddModName(folderName, name);
                         break;

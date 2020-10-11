@@ -13,12 +13,6 @@ namespace FocLauncher.Input
     /// <seealso cref="ICommand" />
     public abstract class AbstractCommandWrapper : ICommand
     {
-
-        protected AbstractCommandWrapper()
-        {
-
-        }
-
         protected AbstractCommandWrapper(Action executeAction, Func<bool> cantExecuteFunc)
         {
             if (executeAction == null)

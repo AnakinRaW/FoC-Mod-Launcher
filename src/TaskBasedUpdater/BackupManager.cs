@@ -14,7 +14,7 @@ namespace TaskBasedUpdater
     {
         //private const string NonExistentSource = "SOURCE_ORIGINALLY_MISSING";
 
-        private static BackupManager _instance;
+        private static BackupManager? _instance;
 
         private readonly object _syncObject = new object();
         private readonly Dictionary<IComponent, string?> _backupLookup = new Dictionary<IComponent, string?>();
@@ -32,7 +32,7 @@ namespace TaskBasedUpdater
             ValidateHasAccess(backupPath);
             if (_backupLookup.ContainsKey(component))
                 return;
-            string backupFilePath;
+            string? backupFilePath;
             var componentFilePath = component.GetFilePath();
             if (File.Exists(componentFilePath))
             {
@@ -82,8 +82,8 @@ namespace TaskBasedUpdater
 
                     if (File.Exists(componentFile))
                     {
-                        var backupHash = UpdaterUtilities.GetFileHash(backupFile, HashType.Sha256);
-                        var fileHash = UpdaterUtilities.GetFileHash(backupFile, HashType.Sha256);
+                        var backupHash = UpdaterUtilities.GetFileHash(backupFile!, HashType.Sha256);
+                        var fileHash = UpdaterUtilities.GetFileHash(backupFile!, HashType.Sha256);
                         if (backupHash.SequenceEqual(fileHash))
                         {
                             remove = false;
@@ -102,7 +102,7 @@ namespace TaskBasedUpdater
 
                     try
                     {
-                        FileSystemExtensions.DeleteFileWithRetry(backupFile, out _);
+                        FileSystemExtensions.DeleteFileWithRetry(backupFile!, out _);
                     }
                     catch
                     {
@@ -129,7 +129,7 @@ namespace TaskBasedUpdater
             _backupLookup.Clear();
         }
 
-        public IEnumerator<KeyValuePair<IComponent, string>> GetEnumerator()
+        public IEnumerator<KeyValuePair<IComponent, string?>> GetEnumerator()
         {
             return _backupLookup.GetEnumerator();
         }
@@ -167,7 +167,7 @@ namespace TaskBasedUpdater
             var backupPath = UpdateConfiguration.Instance.BackupPath;
             if (string.IsNullOrEmpty(backupPath))
                 backupPath = component.Destination;
-            return backupPath;
+            return backupPath!;
         }
     }
 }

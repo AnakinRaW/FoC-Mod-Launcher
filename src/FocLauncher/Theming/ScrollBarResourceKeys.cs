@@ -4,9 +4,9 @@ namespace FocLauncher.Theming
 {
     internal static class ScrollBarResourceKeys
     {
-        private static object _scrollBarStyleKey;
-        private static object _scrollViewerStyleKey;
-        private static object _customGridViewScrollViewerStyleKey;
+        private static object? _scrollBarStyleKey;
+        private static object? _scrollViewerStyleKey;
+        private static object? _customGridViewScrollViewerStyleKey;
 
         public static object UnthemedScrollBarStyleKey => "ResourceKeys.UnthemedScrollBarStyleKey";
 
@@ -24,23 +24,17 @@ namespace FocLauncher.Theming
 
         public static object GetScrollBarStyleKey(bool themed)
         {
-            if (!themed)
-                return UnthemedScrollBarStyleKey;
-            return ScrollBarStyleKey;
+            return !themed ? UnthemedScrollBarStyleKey : ScrollBarStyleKey;
         }
 
         public static object GetScrollViewerStyleKey(bool themed)
         {
-            if (!themed)
-                return UnthemedScrollViewerStyleKey;
-            return ScrollViewerStyleKey;
+            return !themed ? UnthemedScrollViewerStyleKey : ScrollViewerStyleKey;
         }
 
         public static object GetGridViewScrollViewerStyleKey(bool themed)
         {
-            if (!themed)
-                return UnthemedGridViewScrollViewerStyleKey;
-            return CustomGridViewScrollViewerStyleKey;
+            return !themed ? UnthemedGridViewScrollViewerStyleKey : CustomGridViewScrollViewerStyleKey;
         }
 
         private static object GetResourceKey(string resourceId)

@@ -57,7 +57,7 @@ namespace FocLauncher.Dialogs
             base.OnKeyDown(e);
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {

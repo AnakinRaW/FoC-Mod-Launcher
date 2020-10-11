@@ -126,7 +126,6 @@
     <Compile Include="Tasks\CleanFileTask.cs" />
     <Compile Include="Tasks\ComponentDownloadTask.cs" />
     <Compile Include="Tasks\ComponentInstallTask.cs" />
-    <Compile Include="Tasks\DownloadTask.cs" />
     <Compile Include="Tasks\SynchronizedUpdaterTask.cs" />
     <Compile Include="Tasks\UpdaterTask.cs" />
     <Compile Include="UpdateInformation.cs" />

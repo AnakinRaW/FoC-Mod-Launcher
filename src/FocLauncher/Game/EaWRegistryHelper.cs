@@ -6,7 +6,7 @@ namespace FocLauncher.Game
     {
         internal const string EawRegistryPath = @"SOFTWARE\LucasArts\Star Wars Empire at War\1.0";
 
-        private static PetroglyphGameRegistry _instance;
+        private static PetroglyphGameRegistry? _instance;
 
         public static PetroglyphGameRegistry Instance => _instance ??= new EaWRegistryHelper();
         

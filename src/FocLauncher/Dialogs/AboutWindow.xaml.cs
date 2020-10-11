@@ -43,8 +43,8 @@ namespace FocLauncher.Dialogs
         public AboutWindow()
         {
             InitializeComponent();
-            LauncherVersion = GetType().Assembly.GetName().Version;
-            ThemeVersion = typeof(ITheme).Assembly.GetName().Version;
+            _launcherVersion = GetType().Assembly.GetName().Version;
+            _themeVersion = typeof(ITheme).Assembly.GetName().Version;
         }
 
         private void OpenLicenseSite(object sender, RequestNavigateEventArgs e)
@@ -53,9 +53,9 @@ namespace FocLauncher.Dialogs
             e.Handled = true;
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

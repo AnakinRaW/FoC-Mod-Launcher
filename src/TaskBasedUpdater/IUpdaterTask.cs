@@ -6,9 +6,9 @@ namespace TaskBasedUpdater
 {
     internal interface IUpdaterTask : IDisposable
     {
-        Exception Error { get; }
+        Exception? Error { get; }
 
-        IComponent Component { get; }
+        IComponent? Component { get; }
 
         void Run(CancellationToken token);
     }

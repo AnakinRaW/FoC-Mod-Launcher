@@ -51,7 +51,7 @@ namespace TaskBasedUpdater.Restart
 
         public static IEnumerable<ILockingProcessInfo> GetProcesses(IEnumerable<string> paths)
         {
-            IEnumerable<ILockingProcessInfo> source = null;
+            IEnumerable<ILockingProcessInfo>? source = null;
             try
             {
                 using var manager = LockingProcessManagerFactory.Create();
@@ -69,7 +69,7 @@ namespace TaskBasedUpdater.Restart
             return Enumerable.Empty<ILockingProcessInfo>();
         }
 
-        public void Register(IEnumerable<string> files = null, IEnumerable<ILockingProcessInfo> processes = null)
+        public void Register(IEnumerable<string>? files = null, IEnumerable<ILockingProcessInfo>? processes = null)
         {
             var fileNames = files?.ToArray();
             var fileCount = fileNames?.Length ?? 0;

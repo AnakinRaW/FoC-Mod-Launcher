@@ -26,7 +26,7 @@ namespace FocLauncher
             Dispose(true);
         }
 
-        public override object InitializeLifetimeService()
+        public override object? InitializeLifetimeService()
         {
             return null;
         }

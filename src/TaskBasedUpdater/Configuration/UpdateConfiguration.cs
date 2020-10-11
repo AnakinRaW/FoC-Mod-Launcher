@@ -2,7 +2,7 @@
 {
     public class UpdateConfiguration
     {
-        private static UpdateConfiguration _instance;
+        private static UpdateConfiguration? _instance;
 
         public static UpdateConfiguration Instance => _instance ??= new UpdateConfiguration();
 
@@ -28,9 +28,9 @@
 
         public bool SupportsRestart { get; set; }
 
-        public string ExternalUpdaterPath { get; set; }
-
-        public string ExternalElevatorPath { get; set; }
+        public string? ExternalUpdaterPath { get; set; }
+        
+        public string? ExternalElevatorPath { get; set; }
 
         public bool RequiredElevationCancelsUpdate { get; set; }
 

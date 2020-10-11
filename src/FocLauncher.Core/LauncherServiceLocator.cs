@@ -5,7 +5,7 @@ namespace FocLauncher
 {
     public class LauncherServiceProvider : IServiceProvider
     {
-        private static LauncherServiceProvider _instance;
+        private static LauncherServiceProvider? _instance;
 
         private readonly IDictionary<Type, object> _services;
 

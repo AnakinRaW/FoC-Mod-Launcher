@@ -13,12 +13,12 @@ namespace FocLauncher.Utilities
     {
         private static bool _triedGettingIconsFromExecutable;
         private static bool _isWindowIconRetrieved;
-        private static BitmapSource _windowIcon;
-        private static BitmapSource _largeIcon;
-        private static BitmapSource _smallIcon;
+        private static BitmapSource? _windowIcon;
+        private static BitmapSource? _largeIcon;
+        private static BitmapSource? _smallIcon;
         private static readonly object SyncLock = new object();
 
-        public static async Task UseWindowIconAsync(Action<ImageSource> callback)
+        public static async Task UseWindowIconAsync(Action<ImageSource?> callback)
         {
             if (_isWindowIconRetrieved) 
                 callback(_windowIcon);
@@ -31,7 +31,7 @@ namespace FocLauncher.Utilities
             }
         }
 
-        private static BitmapSource ExtractIconsFromExecutable(ref BitmapSource smallIcon, ref BitmapSource largeIcon)
+        private static BitmapSource? ExtractIconsFromExecutable(ref BitmapSource? smallIcon, ref BitmapSource? largeIcon)
         {
             var executablePath = Assembly.GetExecutingAssembly().Location;
             var phiconLarge = new[] {IntPtr.Zero};
@@ -44,9 +44,9 @@ namespace FocLauncher.Utilities
             return null;
         }
 
-        private static BitmapSource BitmapSourceFromHIcon(IntPtr iconHandle)
+        private static BitmapSource? BitmapSourceFromHIcon(IntPtr iconHandle)
         {
-            BitmapSource bitmapSource = null;
+            BitmapSource? bitmapSource = null;
             if (iconHandle != IntPtr.Zero)
             {
                 bitmapSource = System.Windows.Interop.Imaging.CreateBitmapSourceFromHIcon(iconHandle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
@@ -56,7 +56,7 @@ namespace FocLauncher.Utilities
             return bitmapSource;
         }
 
-        private static void GetWindowIcon(Func<BitmapSource> imageGetter, ref bool imageGotFlag)
+        private static void GetWindowIcon(Func<BitmapSource?> imageGetter, ref bool imageGotFlag)
         {
             lock (SyncLock)
             {
@@ -73,16 +73,16 @@ namespace FocLauncher.Utilities
             }
         }
 
-        private static void FreezeImage(ImageSource image)
+        private static void FreezeImage(ImageSource? image)
         {
             if (image == null || image.IsFrozen || !image.CanFreeze)
                 return;
             image.Freeze();
         }
 
-        private static BitmapSource ChooseOrEncodeWindowIcon(BitmapSource smallIcon, BitmapSource largeIcon)
+        private static BitmapSource? ChooseOrEncodeWindowIcon(BitmapSource? smallIcon, BitmapSource? largeIcon)
         {
-            BitmapSource bitmapSource = null;
+            BitmapSource? bitmapSource = null;
             if (largeIcon != null)
             {
                 if (smallIcon != null)

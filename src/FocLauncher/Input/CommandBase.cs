@@ -13,8 +13,8 @@ namespace FocLauncher.Input
     /// </summary>
     public abstract class CommandBase : ICommand
     {
-        protected readonly Func<object, bool> CanExecuteMethod;
-        protected readonly Func<object, Task> ExecuteMethod;
+        protected readonly Func<object, bool>? CanExecuteMethod;
+        protected readonly Func<object?, Task> ExecuteMethod;
         private List<WeakReference> _canExecuteChangedHandlers;
 
         protected CommandBase(Action<object> executeMethod, Func<object, bool> canExecuteMethod)
@@ -81,7 +81,7 @@ namespace FocLauncher.Input
         }
 
 #pragma warning disable IDE1006
-        protected async Task Execute(object parameter)
+        protected async Task Execute(object? parameter)
 #pragma warning restore IDE1006
         {
             await ExecuteMethod(parameter);

@@ -40,7 +40,7 @@ namespace FocLauncher.Utilities
                 return;
             for (var childIndex = VisualTreeHelper.GetChildrenCount(obj) - 1; childIndex >= 0; --childIndex)
             {
-                DependencyObject child = VisualTreeHelper.GetChild(obj, childIndex);
+                var child = VisualTreeHelper.GetChild(obj, childIndex);
                 if (child != null)
                 {
                     T obj1 = child as T;

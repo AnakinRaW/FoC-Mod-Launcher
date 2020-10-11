@@ -9,7 +9,7 @@ namespace FocLauncher.Utilities
 {
     public class ProcessCreationListener : IDisposable
     {
-		public event EventHandler Started;
+		public event EventHandler? Started;
         private ManagementEventWatcher _watcher;
         private bool _disposed;
         private readonly object _syncObject = new object();
@@ -31,10 +31,6 @@ namespace FocLauncher.Utilities
 
         public ProcessCreationListener(string processName, bool startImmediately) : this(processName, 0.25, startImmediately)
         {
-        }
-
-        public ProcessCreationListener(string processName) : this(processName, 1, false)
-		{
         }
 
         public ProcessCreationListener(string processName, double pollingTimeSeconds, bool startImmediately)

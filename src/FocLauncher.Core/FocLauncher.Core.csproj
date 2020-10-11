@@ -38,7 +38,6 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="AppDomainHelper.cs" />
     <Compile Include="Information\BuildType.cs" />
     <Compile Include="Converters\BooleanAndConverter.cs" />
     <Compile Include="ConnectionManager.cs" />

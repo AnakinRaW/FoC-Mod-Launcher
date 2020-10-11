@@ -5,7 +5,7 @@ namespace TaskBasedUpdater.Tasks
 {
     internal abstract class SynchronizedUpdaterTask : UpdaterTask
     {
-        public event EventHandler<EventArgs> Canceled;
+        public event EventHandler<EventArgs>? Canceled;
 
         private readonly ManualResetEvent _handle;
 

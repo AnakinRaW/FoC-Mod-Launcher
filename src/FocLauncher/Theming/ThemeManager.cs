@@ -24,7 +24,7 @@ namespace FocLauncher.Theming
         public ObservableCollection<ITheme> Themes { get; }
 
         private readonly Dictionary<IMod, ITheme> _modThemeMapping = new Dictionary<IMod, ITheme>();
-        private static ThemeManager _instance;
+        private static ThemeManager? _instance;
 
         public event EventHandler<ThemeChangedEventArgs> ThemeChanged;
 

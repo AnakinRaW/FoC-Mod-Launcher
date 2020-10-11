@@ -77,7 +77,7 @@ namespace TaskBasedUpdater.Operations
                 {
                     _taskRunner.Wait();
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                 }
 

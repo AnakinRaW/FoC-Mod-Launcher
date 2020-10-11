@@ -8,8 +8,8 @@ namespace TaskBasedUpdater
     [Serializable]
     public class ComponentFailedException : UpdaterException
     {
-        private readonly IEnumerable<IComponent> _failedComponents;
-        private string _error;
+        private readonly IEnumerable<IComponent>? _failedComponents;
+        private string? _error;
 
         public override string Message => Error;
 
@@ -17,10 +17,10 @@ namespace TaskBasedUpdater
         {
             get
             {
-                if (this._error != null)
-                    return this._error;
+                if (_error != null)
+                    return _error;
                 var stringBuilder = new StringBuilder();
-                if (this._failedComponents != null)
+                if (_failedComponents != null)
                 {
                     foreach (var component in _failedComponents)
                         stringBuilder.Append("Package '" + component.Name + "' failed to " + component.RequiredAction + ";");
