@@ -6,7 +6,7 @@ set BUILD_PLATFORM="Any CPU"
 
 set METADATA_OUTPUT="gen"
 set CURRENT_METADATA_LOCATION="https://republicatwar.com/downloads/FocLauncher/LauncherUpdateData.xml"
-set COPY_FILES_LOCATION="C:\Users\Anakin\source\repos\FoC-Mod-Launcher-Builds"
+set COPY_FILES_LOCATION="C:\Users\Anakin\source\repos\AnakinSklavenwalker\FoC-Mod-Launcher-Builds"
 
 set METADATA_CREATOR_BIN=".\tools\MetadataCreator\bin"
 set METADATA_CREATOR_FILE="MetadataCreator.exe"
