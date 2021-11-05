@@ -2,38 +2,36 @@
 using EawModinfo.Spec;
 using FocLauncher.Game;
 using FocLauncher.Mods;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace FocLauncher.Tests
 {
-    [TestClass]
     public class ModCreationTests
     {
         private static readonly string TestScenariosPath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "..\\..\\..\\TestScenarios"));
         private IGame _game;
 
-        [TestInitialize]
-        public void CreateGame()
+        public ModCreationTests()
         {
             _game = new Foc(new DirectoryInfo(Path.Combine(TestScenariosPath, "TwoMods")), GameType.Disk);
         }
 
-        [TestMethod]
+        [Fact]
         public void ModCreation()
         {
             var path = Path.Combine(_game.Directory.FullName, "Mods\\ModA");
             var mod = ModFactory.CreateMod(_game, ModType.Default, path, false);
-            Assert.IsNotNull(mod);
-            Assert.AreEqual(ModType.Default, mod.Type);
-            Assert.IsInstanceOfType(mod, typeof(Mod));
-            Assert.AreEqual(path, ((Mod)mod).Directory.FullName);
+            Assert.NotNull(mod);
+            Assert.Equal(ModType.Default, mod.Type);
+            Assert.IsType<Mod>(mod);
+            Assert.Equal(path, ((Mod)mod).Directory.FullName);
         }
 
-        [TestMethod]
+        [Fact]
         public void ModNotExists()
         {
             var path = Path.Combine(_game.Directory.FullName, "Mods\\ModC");
-            Assert.ThrowsException<PetroglyphModException>(() =>
+            Assert.Throws<PetroglyphModException>(() =>
                 ModFactory.CreateMod(_game, ModType.Default, path, false));
         }
     }

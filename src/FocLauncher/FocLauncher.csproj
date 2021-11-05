@@ -1,386 +1,125 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{511EA4F6-7C7A-4242-9986-16F28F126D11}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <RootNamespace>FocLauncher</RootNamespace>
-    <AssemblyName>FocLauncher</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <WarningLevel>4</WarningLevel>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <Deterministic>true</Deterministic>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <LangVersion>8</LangVersion>
+    <TargetFramework>net4.8</TargetFramework>
     <Nullable>enable</Nullable>
+	<LangVersion>10.0</LangVersion>
+	<RootNamespace>FocLauncher</RootNamespace>
+	<Description>Contains the main logic of the launcher.</Description>
+	<Copyright>Copyright © 2021 Anakin Sklavenwalker</Copyright>
+	<Company>Republic at War Modding Team</Company>
+	<Version>1.2.0.0</Version>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <LangVersion>8</LangVersion>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationIcon>Resources\launcherIcon.ico</ApplicationIcon>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>false</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyOriginatorKeyFile>
-    </AssemblyOriginatorKeyFile>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Xml" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xaml">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="WindowsBase" />
+    <None Remove="Controls\OptionsControl.xaml" />
+    <None Remove="Dialogs\AboutWindow.xaml" />
+    <None Remove="Dialogs\ChangeThemeDialog.xaml" />
+    <None Remove="Dialogs\SettingsWindow.xaml" />
+    <None Remove="MainWindow.xaml" />
+    <None Remove="Resources\eaw.ico" />
+    <None Remove="Resources\foc.ico" />
+    <None Remove="Resources\launcherIcon.ico" />
+    <None Remove="Resources\SettingsOutline_16x.png" />
+    <None Remove="Resources\StatusHelp_grey_disabled_16x.png" />
+    <None Remove="Resources\steam.png" />
+    <None Remove="Templates\LauncherItemTemplate.xaml" />
+    <None Remove="Themes\Generic.xaml" />
+    <None Remove="Themes\Generic\LauncherCheckBox.xaml" />
+    <None Remove="Themes\Generic\LauncherExpander.xaml" />
+    <None Remove="Themes\Generic\LauncherListBox.xaml" />
+    <None Remove="Themes\Generic\LauncherListBoxItem.xaml" />
+    <None Remove="Themes\Generic\LauncherRadioButton.xaml" />
+    <None Remove="Themes\Generic\LauncherStatusBar.xaml" />
+    <None Remove="Themes\Generic\MainWindow.xaml" />
+    <None Remove="Themes\Generic\PlayButton.xaml" />
+    <None Remove="Themes\Generic\ScrollBar.xaml" />
+    <None Remove="Themes\Generic\StatusBarButton.xaml" />
+    <None Remove="Themes\Generic\WatermarkedTextBox.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Include="Controls\OptionsControl.xaml" />
+    <Page Include="Dialogs\AboutWindow.xaml" />
+    <Page Include="Dialogs\ChangeThemeDialog.xaml" />
+    <Page Include="Dialogs\SettingsWindow.xaml" />
+    <Page Include="MainWindow.xaml" />
+    <Page Include="Templates\LauncherItemTemplate.xaml" />
+    <Page Include="Themes\Generic.xaml" />
+    <Page Include="Themes\Generic\LauncherCheckBox.xaml" />
+    <Page Include="Themes\Generic\LauncherExpander.xaml" />
+    <Page Include="Themes\Generic\LauncherListBox.xaml" />
+    <Page Include="Themes\Generic\LauncherListBoxItem.xaml" />
+    <Page Include="Themes\Generic\LauncherRadioButton.xaml" />
+    <Page Include="Themes\Generic\LauncherStatusBar.xaml" />
+    <Page Include="Themes\Generic\MainWindow.xaml" />
+    <Page Include="Themes\Generic\PlayButton.xaml" />
+    <Page Include="Themes\Generic\ScrollBar.xaml" />
+    <Page Include="Themes\Generic\StatusBarButton.xaml" />
+    <Page Include="Themes\Generic\WatermarkedTextBox.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Costura.Fody" Version="5.7.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="eaw.modinfo" Version="2.2.0.3" />
+    <PackageReference Include="Gameloop.Vdf" Version="0.6.1" />
+    <PackageReference Include="Gameloop.Vdf.JsonConverter" Version="0.2.1" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.37" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="System.Management" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FocLauncher.BaseControls\FocLauncher.BaseControls.csproj" />
+    <ProjectReference Include="..\FocLauncher.Core\FocLauncher.Core.csproj" />
+    <ProjectReference Include="..\FocLauncher.Theming\FocLauncher.Theming.csproj" />
+    <ProjectReference Include="..\FocLauncher.Threading\FocLauncher.Threading.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="ApplicationResourceLoader.cs" />
-    <Compile Include="Controls\Controllers\ContextMenuController.cs" />
-    <Compile Include="Controls\Controllers\IContextMenuController.cs" />
-    <Compile Include="Controls\Controllers\IHasContextMenuController.cs" />
-    <Compile Include="Controls\LauncherExpander.cs" />
-    <Compile Include="Controls\LauncherListBoxPane.cs" />
-    <Compile Include="Controls\LauncherRadioButton.cs" />
-    <Compile Include="Controls\OptionsControl.xaml.cs">
-      <DependentUpon>OptionsControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\WatermarkedTextBox.cs" />
-    <Compile Include="Converters\IsNullOrEmptyConverter.cs" />
-    <Compile Include="Converters\LauncherItemMarginConverter.cs" />
-    <Compile Include="Converters\SystemLangEmojiConverter.cs" />
-    <Compile Include="Game\Language\GameLanguageFinder.cs" />
-    <Compile Include="Game\Language\GenericModLanguageFinder.cs" />
-    <Compile Include="Game\Language\LanguageFinderUtilities.cs" />
-    <Compile Include="Game\Language\LanguageInfo.cs" />
-    <Compile Include="Settings\LanguageFallback.cs" />
-    <Compile Include="Settings\LanguageFallbackData.cs" />
-    <Compile Include="Settings\LauncherSettingsConstants.cs" />
-    <Compile Include="Game\GameStartedEventArgs.cs" />
-    <Compile Include="Game\Language\LanguageFinderBase.cs" />
-    <Compile Include="Game\SteamGameBase.cs" />
-    <Compile Include="Game\SteamGameEaw.cs" />
-    <Compile Include="Items\LauncherItemEventSink.cs" />
-    <Compile Include="Mods\ModDependencyResolveStrategy.cs" />
-    <Compile Include="Mods\ModDependencyUtilities.cs" />
-    <Compile Include="Mods\ModEqualityComparer.cs" />
-    <Compile Include="Utilities\DisposableObject.cs" />
-    <Compile Include="Utilities\ExtensionMethods.cs" />
-    <Compile Include="Utilities\FocusHelper.cs" />
-    <Compile Include="Game\GameSetupOptions.cs" />
-    <Compile Include="Game\GameStartException.cs" />
-    <Compile Include="Game\ModSearchOptions.cs" />
-    <Compile Include="Items\ILauncherItem.cs" />
-    <Compile Include="Items\ILauncherItemManager.cs" />
-    <Compile Include="Items\LauncherGameObjectCommandHandler.cs" />
-    <Compile Include="Items\LauncherItemEventArgs.cs" />
-    <Compile Include="Items\LauncherItemManager.cs" />
-    <Compile Include="LauncherGameOptions.cs" />
-    <Compile Include="NativeMethods\AppBarData.cs" />
-    <Compile Include="NativeMethods\RECT.cs" />
-    <Compile Include="NativeMethods\Shell32.cs" />
-    <Compile Include="Utilities\IconHelper.cs" />
-    <Compile Include="Theming\ScrollBarResourceKeys.cs" />
-    <Compile Include="Theming\ScrollBarThemingUtilities.cs" />
-    <Compile Include="Controls\LauncherCheckBox.cs" />
-    <Compile Include="Controls\LauncherListBox.cs" />
-    <Compile Include="Controls\LauncherListBoxItem.cs" />
-    <Compile Include="Controls\PlayButton.cs" />
-    <Compile Include="Controls\StatusBarButton.cs" />
-    <Compile Include="Converters\DebugBuildToVisibilityConverter.cs" />
-    <Compile Include="Dialogs\SettingsWindow.xaml.cs">
-      <DependentUpon>SettingsWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Game\Detection\GameDetector.cs" />
-    <Compile Include="Game\Detection\LocalGameDetector.cs" />
-    <Compile Include="Game\Detection\RegistryGameDetector.cs" />
-    <Compile Include="Game\EaWRegistryHelper.cs" />
-    <Compile Include="Game\EawSteamGameSlim.cs" />
-    <Compile Include="Game\Detection\GameDetectionOptions.cs" />
-    <Compile Include="Game\FocRegistryHelper.cs" />
-    <Compile Include="Game\GameArgumentException.cs" />
-    <Compile Include="Game\GameBuildType.cs" />
-    <Compile Include="Game\GameCommandArgumentsUtilities.cs" />
-    <Compile Include="Game\GameStartingEventArgs.cs" />
-    <Compile Include="Game\GameTypeHelper.cs" />
-    <Compile Include="Game\IDebugable.cs" />
-    <Compile Include="Game\IHasDirectory.cs" />
-    <Compile Include="Game\IModContainer.cs" />
-    <Compile Include="Game\IPetroglyhGameableObject.cs" />
-    <Compile Include="Game\LauncherSteamHelper.cs" />
-    <Compile Include="Game\ModCollectionChangedAction.cs" />
-    <Compile Include="Game\ModCollectionChangedEventArgs.cs" />
-    <Compile Include="Game\ModCreationDelegate.cs" />
-    <Compile Include="Game\PetroglyphException.cs" />
-    <Compile Include="Game\PetroglyphGameException.cs" />
-    <Compile Include="Game\PetroglyphGameRegistry.cs" />
-    <Compile Include="Mods\ModBase.cs" />
-    <Compile Include="Mods\ModDependencyTraverser.cs" />
-    <Compile Include="Mods\PetroglyphModException.cs" />
-    <Compile Include="Game\RegistryHelper.cs" />
-    <Compile Include="Game\SteamClient.cs" />
-    <Compile Include="Controls\Controllers\IHasInvocationController.cs" />
-    <Compile Include="Controls\Controllers\IInvocationController.cs" />
-    <Compile Include="IsolatingLauncherBootstrapper.cs" />
-    <Compile Include="Controls\LauncherStatusBar.cs" />
-    <Compile Include="Game\GameCommandArguments.cs" />
-    <Compile Include="Game\PetroglyphGame.cs" />
-    <Compile Include="LauncherGameManager.cs" />
-    <Compile Include="LauncherApp.cs" />
-    <Compile Include="Converters\GameTypeToStringConverter.cs" />
-    <Compile Include="Converters\SteamToVisibilityConverter.cs" />
-    <Compile Include="Converters\ThemeSelectedConverter.cs" />
-    <Compile Include="Dialogs\ChangeThemeDialog.xaml.cs">
-      <DependentUpon>ChangeThemeDialog.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Game\Eaw.cs" />
-    <Compile Include="Game\Foc.cs" />
-    <Compile Include="Game\GameStartHelper.cs" />
-    <Compile Include="Game\SteamGameFoc.cs" />
-    <Compile Include="Game\WorkshopNameResolver.cs" />
-    <Compile Include="LauncherException.cs" />
-    <Compile Include="Items\LauncherItem.cs" />
-    <Compile Include="Mods\Mod.cs" />
-    <Compile Include="Mods\ModFactory.cs" />
-    <Compile Include="Mods\VirtualMod.cs" />
-    <Compile Include="NativeMethods\User32.cs" />
-    <Compile Include="Game\GameFactory.cs" />
-    <Compile Include="Theming\ThemeManager.cs" />
-    <Compile Include="Utilities\FileUtilities.cs" />
-    <Compile Include="Utilities\HashCodeCombiner.cs" />
-    <Compile Include="Utilities\HtmlDownloader.cs" />
-    <Compile Include="Utilities\ModInfoExtension.cs" />
-    <Compile Include="Utilities\ProcessCreationListener.cs" />
-    <Compile Include="Utilities\StreamUtilities.cs" />
-    <Compile Include="Utilities\VisualUtilities.cs" />
-    <Compile Include="Utilities\WeakCollection.cs" />
-    <Compile Include="Utilities\HashProvider.cs" />
-    <Compile Include="Utilities\ReusableResourceHolder.cs" />
-    <Compile Include="Utilities\ReusableResourceStore.cs" />
-    <Compile Include="Utilities\ReusableResourceStoreBase.cs" />
-    <Compile Include="Utilities\ReusableStringBuilder.cs" />
-    <Page Include="Controls\OptionsControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Dialogs\AboutWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Dialogs\ChangeThemeDialog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Dialogs\SettingsWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Compile Include="Dialogs\AboutWindow.xaml.cs">
-      <DependentUpon>AboutWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Game\Detection\DetectionResult.cs" />
-    <Compile Include="Game\Detection\GameDetection.cs" />
-    <Compile Include="Game\Detection\GameDetectionHelper.cs" />
-    <Compile Include="Game\GameProcessWatcher.cs" />
-    <Compile Include="Game\GameType.cs" />
-    <Compile Include="Game\ProcessHelper.cs" />
-    <Compile Include="Game\SteamClientException.cs" />
-    <Compile Include="Game\IGame.cs" />
-    <Compile Include="Mods\IMod.cs" />
-    <Compile Include="Input\AbstractCommandWrapper.cs" />
-    <Compile Include="Input\Command.cs" />
-    <Compile Include="Input\CommandBase.cs" />
-    <Compile Include="Input\UICommand.cs" />
-    <Compile Include="Input\WeakEventHandlerManager.cs" />
-    <Compile Include="Mods\SteamModNamePersister.cs" />
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Page Include="Templates\LauncherItemTemplate.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\Generic.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\Generic\LauncherExpander.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\Generic\LauncherCheckBox.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\Generic\LauncherListBox.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\Generic\LauncherListBoxItem.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\Generic\LauncherRadioButton.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\Generic\LauncherStatusBar.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\Generic\PlayButton.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\Generic\ScrollBar.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\Generic\StatusBarButton.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\Generic\MainWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\Generic\WatermarkedTextBox.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
+    <Resource Include="Resources\eaw.ico" />
+    <Resource Include="Resources\foc.ico" />
+    <Resource Include="Resources\launcherIcon.ico" />
+    <Resource Include="Resources\SettingsOutline_16x.png" />
+    <Resource Include="Resources\StatusHelp_grey_disabled_16x.png" />
+    <Resource Include="Resources\steam.png" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="MainWindowViewModel.cs" />
-    <Compile Include="NativeMethods\NativeMethods.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
+    <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Properties\Settings.Designer.cs">
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <EmbeddedResource Include="Properties\Resources.resx">
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
-    <None Include="Properties\Settings.settings">
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\launcherIcon.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\foc.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\FocLauncher.BaseControls\FocLauncher.BaseControls.csproj">
-      <Project>{c63e6a07-4f18-4edf-988e-45ee120b014f}</Project>
-      <Name>FocLauncher.BaseControls</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\FocLauncher.Core\FocLauncher.Core.csproj">
-      <Project>{93cdc38a-d74a-4cd5-a5aa-9ce8d953519a}</Project>
-      <Name>FocLauncher.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\FocLauncher.Theming\FocLauncher.Theming.csproj">
-      <Project>{b952dcaa-749d-476c-bbc3-2074adfb1cc4}</Project>
-      <Name>FocLauncher.Theming</Name>
-      <Private>True</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\FocLauncher.Threading\FocLauncher.Threading.csproj">
-      <Project>{162A7F9A-D855-44CF-B204-B10469F695BC}</Project>
-      <Name>FocLauncher.Threading</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\steam.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Costura.Fody">
-      <Version>4.1.0</Version>
-    </PackageReference>
-    <PackageReference Include="eaw.modinfo">
-      <Version>2.2.0.3</Version>
-    </PackageReference>
-    <PackageReference Include="Gameloop.Vdf">
-      <Version>0.6.1</Version>
-    </PackageReference>
-    <PackageReference Include="Gameloop.Vdf.JsonConverter">
-      <Version>0.2.1</Version>
-    </PackageReference>
-    <PackageReference Include="HtmlAgilityPack">
-      <Version>1.11.27</Version>
-    </PackageReference>
-    <PackageReference Include="Microsoft.VisualStudio.Threading">
-      <Version>16.8.55</Version>
-    </PackageReference>
-    <PackageReference Include="Newtonsoft.Json">
-      <Version>12.0.3</Version>
-    </PackageReference>
-    <PackageReference Include="NLog">
-      <Version>4.7.5</Version>
-    </PackageReference>
-    <PackageReference Include="System.Management">
-      <Version>4.7.0</Version>
-    </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\SettingsOutline_16x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\StatusHelp_grey_disabled_16x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\eaw.ico" />
-  </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
 </Project>

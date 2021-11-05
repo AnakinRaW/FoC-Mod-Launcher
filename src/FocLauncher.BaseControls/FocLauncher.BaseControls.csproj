@@ -1,179 +1,78 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C63E6A07-4F18-4EDF-988E-45EE120B014F}</ProjectGuid>
-    <OutputType>library</OutputType>
-    <RootNamespace>FocLauncher</RootNamespace>
-    <AssemblyName>FocLauncher.BaseControls</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <WarningLevel>4</WarningLevel>
-    <Deterministic>true</Deterministic>
+    <TargetFramework>net4.8</TargetFramework>
+    <Nullable>enable</Nullable>
+	<LangVersion>10.0</LangVersion>
+	<RootNamespace>FocLauncher</RootNamespace>
+	<Description>Implements basic non-Launcher specific Controls.</Description>
+	<Copyright>Copyright © 2021 Anakin Sklavenwalker</Copyright>
+	<Company>Republic at War Modding Team</Company>
+	<Version>1.0.0.0</Version>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <LangVersion>8</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <LangVersion>8</LangVersion>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xaml">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="WindowsBase" />
+    <None Remove="Resources\ShadowImages\bottom.png" />
+    <None Remove="Resources\ShadowImages\bottomleft.png" />
+    <None Remove="Resources\ShadowImages\bottomright.png" />
+    <None Remove="Resources\ShadowImages\cornerbottomleft.png" />
+    <None Remove="Resources\ShadowImages\cornerbottomright.png" />
+    <None Remove="Resources\ShadowImages\cornertopleft.png" />
+    <None Remove="Resources\ShadowImages\cornertopright.png" />
+    <None Remove="Resources\ShadowImages\left.png" />
+    <None Remove="Resources\ShadowImages\leftbottom.png" />
+    <None Remove="Resources\ShadowImages\lefttop.png" />
+    <None Remove="Resources\ShadowImages\right.png" />
+    <None Remove="Resources\ShadowImages\rightbottom.png" />
+    <None Remove="Resources\ShadowImages\righttop.png" />
+    <None Remove="Resources\ShadowImages\top.png" />
+    <None Remove="Resources\ShadowImages\topleft.png" />
+    <None Remove="Resources\ShadowImages\topright.png" />
+    <None Remove="Themes\Generic.xaml" />
+    <None Remove="Themes\Styles\GlyphButton.xaml" />
+    <None Remove="Themes\Styles\SystemMenu.xaml" />
+    <None Remove="Themes\Styles\WindowTitleBarButton.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Include="Themes\Generic.xaml" />
+    <Page Include="Themes\Styles\GlyphButton.xaml" />
+    <Page Include="Themes\Styles\SystemMenu.xaml" />
+    <Page Include="Themes\Styles\WindowTitleBarButton.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NLog" Version="4.7.12" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FocLauncher.Threading\FocLauncher.Threading.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="System.Xaml" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Controls\GlyphButton.cs" />
-    <Compile Include="Controls\HwndWrapper.cs" />
-    <Compile Include="Controls\INonClientArea.cs" />
-    <Compile Include="Controls\MainWindowTitleBar.cs" />
-    <Compile Include="Controls\RoutedCommandButton.cs" />
-    <Compile Include="Controls\ShadowChromeWindow.cs" />
-    <Compile Include="Controls\SystemMenu.cs" />
-    <Compile Include="Controls\WindowCommands.cs" />
-    <Compile Include="Controls\WindowTitleBarButton.cs" />
-    <Compile Include="Converters\BooleanOrConverter.cs" />
-    <Compile Include="NativeMethods\Gdi32.cs" />
-    <Compile Include="NativeMethods\Kernel32.cs" />
-    <Compile Include="NativeMethods\Msimg32.cs" />
-    <Compile Include="NativeMethods\NativeMethods.cs" />
-    <Compile Include="NativeMethods\User32.cs" />
-    <Compile Include="Utilities\DisposableObject.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
-    <Compile Include="Utilities\VisualUtilities.cs" />
-    <Compile Include="WindowsPrimitives\BitmapInfo.cs" />
-    <Compile Include="WindowsPrimitives\BitmapInfoHeader.cs" />
-    <Compile Include="WindowsPrimitives\BlendFunction.cs" />
-    <Compile Include="WindowsPrimitives\EnumWindowsProc.cs" />
-    <Compile Include="WindowsPrimitives\GWL.cs" />
-    <Compile Include="WindowsPrimitives\MonitorInfo.cs" />
-    <Compile Include="WindowsPrimitives\POINT.cs" />
-    <Compile Include="WindowsPrimitives\RECT.cs" />
-    <Compile Include="WindowsPrimitives\RedrawWindowFlags.cs" />
-    <Compile Include="WindowsPrimitives\Win32Size.cs" />
-    <Compile Include="WindowsPrimitives\WindowPlacement.cs" />
-    <Compile Include="WindowsPrimitives\WindowPos.cs" />
-    <Compile Include="WindowsPrimitives\WndClass.cs" />
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\FocLauncher.Threading\FocLauncher.Threading.csproj">
-      <Project>{162a7f9a-d855-44cf-b204-b10469f695bc}</Project>
-      <Name>FocLauncher.Threading</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup />
-  <ItemGroup>
-    <Page Include="Themes\Generic.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\Styles\GlyphButton.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Themes\Styles\SystemMenu.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Themes\Styles\WindowTitleBarButton.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-  </ItemGroup>
+
   <ItemGroup>
     <Resource Include="Resources\ShadowImages\bottom.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\ShadowImages\bottomleft.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\ShadowImages\bottomright.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\ShadowImages\cornerbottomleft.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\ShadowImages\cornerbottomright.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\ShadowImages\cornertopleft.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\ShadowImages\cornertopright.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\ShadowImages\left.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\ShadowImages\leftbottom.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\ShadowImages\lefttop.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\ShadowImages\right.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\ShadowImages\rightbottom.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\ShadowImages\righttop.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\ShadowImages\top.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\ShadowImages\topleft.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\ShadowImages\topright.png" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
 </Project>
