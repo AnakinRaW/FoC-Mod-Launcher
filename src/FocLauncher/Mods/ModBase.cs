@@ -286,7 +286,14 @@ namespace FocLauncher.Mods
 
         protected virtual SemanticVersion? InitializeVersion()
         {
-            return ModInfo?.Version;
+            try
+            {
+                return ModInfo?.Version;
+            }
+            catch (ArgumentException)
+            {
+                return null;
+            }
         }
 
         protected virtual string? InitializeIcon()
