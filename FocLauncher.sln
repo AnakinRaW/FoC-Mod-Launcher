@@ -3,44 +3,44 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31825.309
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FocLauncher.Core", "src\FocLauncher.Core\FocLauncher.Core.csproj", "{58915429-C97F-4B77-8830-BF900DA51B51}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FocLauncher.Core", "old\src\FocLauncher.Core\FocLauncher.Core.csproj", "{58915429-C97F-4B77-8830-BF900DA51B51}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{09E759F4-A483-4606-A529-39E04C7AF843}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{A35E7A04-E835-48F7-8154-C7661CD33624}"
 	ProjectSection(SolutionItems) = preProject
-		src\FocLauncher.Shared\ExternalUpdaterResult.cs = src\FocLauncher.Shared\ExternalUpdaterResult.cs
-		src\FocLauncher.Shared\LauncherRestartOptions.cs = src\FocLauncher.Shared\LauncherRestartOptions.cs
-		src\FocLauncher.Shared\LauncherUpdateItem.cs = src\FocLauncher.Shared\LauncherUpdateItem.cs
+		old\src\FocLauncher.Shared\ExternalUpdaterResult.cs = old\src\FocLauncher.Shared\ExternalUpdaterResult.cs
+		old\src\FocLauncher.Shared\LauncherRestartOptions.cs = old\src\FocLauncher.Shared\LauncherRestartOptions.cs
+		old\src\FocLauncher.Shared\LauncherUpdateItem.cs = old\src\FocLauncher.Shared\LauncherUpdateItem.cs
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FocLauncher.Theming", "src\FocLauncher.Theming\FocLauncher.Theming.csproj", "{B952DCAA-749D-476C-BBC3-2074ADFB1CC4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FocLauncher.Theming", "old\src\FocLauncher.Theming\FocLauncher.Theming.csproj", "{B952DCAA-749D-476C-BBC3-2074ADFB1CC4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FocLauncher.Threading", "src\FocLauncher.Threading\FocLauncher.Threading.csproj", "{4B3DE560-5885-4704-85A3-956C918DBC0E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FocLauncher.Threading", "old\src\FocLauncher.Threading\FocLauncher.Threading.csproj", "{4B3DE560-5885-4704-85A3-956C918DBC0E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FocLauncher.BaseControls", "src\FocLauncher.BaseControls\FocLauncher.BaseControls.csproj", "{D0FC5279-ED1D-4181-9BD1-D3934965F69F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FocLauncher.BaseControls", "old\src\FocLauncher.BaseControls\FocLauncher.BaseControls.csproj", "{D0FC5279-ED1D-4181-9BD1-D3934965F69F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FocLauncher.AppUpdater", "src\FocLauncher.AppUpdater\FocLauncher.AppUpdater.csproj", "{128D692B-AC8E-48B5-A990-ABE0C5CC49EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FocLauncher.AppUpdater", "old\src\FocLauncher.AppUpdater\FocLauncher.AppUpdater.csproj", "{128D692B-AC8E-48B5-A990-ABE0C5CC49EC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Updater", "Updater", "{29BDDBB9-12D2-4D59-8221-7F08F966421A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskBasedUpdater.Elevator", "src\TaskBasedUpdater.Elevator\TaskBasedUpdater.Elevator.csproj", "{7071D057-8669-48C6-9C1A-15B1383ADD44}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskBasedUpdater.Elevator", "old\src\TaskBasedUpdater.Elevator\TaskBasedUpdater.Elevator.csproj", "{7071D057-8669-48C6-9C1A-15B1383ADD44}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskBasedUpdater", "src\TaskBasedUpdater\TaskBasedUpdater.csproj", "{CE2505D2-64CE-48E3-AD51-2ED6D5503CAA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskBasedUpdater", "old\src\TaskBasedUpdater\TaskBasedUpdater.csproj", "{CE2505D2-64CE-48E3-AD51-2ED6D5503CAA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FocLauncher", "src\FocLauncher\FocLauncher.csproj", "{91C44AFC-7EE6-4B41-B77B-32A79FC78703}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FocLauncher", "old\src\FocLauncher\FocLauncher.csproj", "{91C44AFC-7EE6-4B41-B77B-32A79FC78703}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FocLauncherHost", "src\FocLauncherHost\FocLauncherHost.csproj", "{9C59451D-7415-4437-B858-00952053E854}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FocLauncherHost", "old\src\FocLauncherHost\FocLauncherHost.csproj", "{9C59451D-7415-4437-B858-00952053E854}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{AC2110DF-E2DF-415F-AAE7-256D641164B3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FocLauncher.Tests", "test\FocLauncher.Tests\FocLauncher.Tests.csproj", "{B4025596-DA6E-4A67-85AE-38287144ECB0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FocLauncher.Tests", "old\test\FocLauncher.Tests\FocLauncher.Tests.csproj", "{B4025596-DA6E-4A67-85AE-38287144ECB0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FocLauncher.Updater.Tests", "test\FocLauncher.Updater.Tests\FocLauncher.Updater.Tests.csproj", "{995758B4-B0A3-4D32-B420-E1D6754D8A63}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FocLauncher.Updater.Tests", "old\test\FocLauncher.Updater.Tests\FocLauncher.Updater.Tests.csproj", "{995758B4-B0A3-4D32-B420-E1D6754D8A63}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{146AFE2E-B5DD-4A98-A82F-44EC1A644E93}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetadataCreator", "old\tools\MetadataCreator\MetadataCreator.csproj", "{882B627B-6182-4AAB-8FB3-FF2C0882617F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetadataCreator", "tools\MetadataCreator\MetadataCreator.csproj", "{882B627B-6182-4AAB-8FB3-FF2C0882617F}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "old", "old", "{AFC514E1-88CB-4D98-A77F-3B01830C3ECA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -102,6 +102,7 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{58915429-C97F-4B77-8830-BF900DA51B51} = {09E759F4-A483-4606-A529-39E04C7AF843}
+		{09E759F4-A483-4606-A529-39E04C7AF843} = {AFC514E1-88CB-4D98-A77F-3B01830C3ECA}
 		{A35E7A04-E835-48F7-8154-C7661CD33624} = {09E759F4-A483-4606-A529-39E04C7AF843}
 		{B952DCAA-749D-476C-BBC3-2074ADFB1CC4} = {09E759F4-A483-4606-A529-39E04C7AF843}
 		{4B3DE560-5885-4704-85A3-956C918DBC0E} = {09E759F4-A483-4606-A529-39E04C7AF843}
@@ -112,9 +113,10 @@ Global
 		{CE2505D2-64CE-48E3-AD51-2ED6D5503CAA} = {29BDDBB9-12D2-4D59-8221-7F08F966421A}
 		{91C44AFC-7EE6-4B41-B77B-32A79FC78703} = {09E759F4-A483-4606-A529-39E04C7AF843}
 		{9C59451D-7415-4437-B858-00952053E854} = {09E759F4-A483-4606-A529-39E04C7AF843}
+		{AC2110DF-E2DF-415F-AAE7-256D641164B3} = {AFC514E1-88CB-4D98-A77F-3B01830C3ECA}
 		{B4025596-DA6E-4A67-85AE-38287144ECB0} = {AC2110DF-E2DF-415F-AAE7-256D641164B3}
 		{995758B4-B0A3-4D32-B420-E1D6754D8A63} = {AC2110DF-E2DF-415F-AAE7-256D641164B3}
-		{882B627B-6182-4AAB-8FB3-FF2C0882617F} = {146AFE2E-B5DD-4A98-A82F-44EC1A644E93}
+		{882B627B-6182-4AAB-8FB3-FF2C0882617F} = {AFC514E1-88CB-4D98-A77F-3B01830C3ECA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {94E96BB4-E6D8-4E1F-B4A4-4F4B667DC600}
