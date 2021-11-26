@@ -1,0 +1,45 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net48</TargetFramework>
+		<ApplicationIcon>Resources\icon.ico</ApplicationIcon>
+		<PlatformTarget>AnyCPU</PlatformTarget>
+		<UseWPF>true</UseWPF>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<LangVersion>10.0</LangVersion>
+		<Nullable>enable</Nullable>
+		<EnableNETAnalyzers>True</EnableNETAnalyzers>
+		<AnalysisLevel>latest</AnalysisLevel>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<Version>2.0.0</Version>
+		<Authors>AnakinSklavenwalker</Authors>
+		<Company>Republic at War Modding Team</Company>
+		<Product>FoCLauncher</Product>
+		<Description>Mod and game launcher for Star Wars Empire at War: Forces of Corruption.</Description>
+		<Copyright>Copyright © 2021 Anakin Sklavenwalker</Copyright>
+		<RepositoryUrl>https://github.com/AnakinSklavenwalker/FoC-Mod-Launcher</RepositoryUrl>
+		<PackageProjectUrl>https://github.com/AnakinSklavenwalker/FoC-Mod-Launcher</PackageProjectUrl>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Remove="Resources\icon.ico" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="Resources\icon.ico" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="Costura.Fody" Version="5.7.0">
+	    <PrivateAssets>all</PrivateAssets>
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
+	</ItemGroup>
+
+</Project>
