@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Data;
-using Sklavenwalker.CommonUtilities.Wpf.Utils;
 
 namespace Sklavenwalker.CommonUtilities.Wpf.Converters;
 
@@ -27,12 +26,12 @@ public class ValueConverter<TSource, TTarget> : IValueConverter
         return ConvertBack((TTarget)value!, parameter, culture);
     }
 
-    protected virtual TTarget Convert(TSource value, object? parameter, CultureInfo culture)
+    protected virtual TTarget? Convert(TSource value, object? parameter, CultureInfo culture)
     {
         throw this.MakeConverterFunctionNotDefinedException(nameof(Convert));
     }
 
-    protected virtual TSource ConvertBack(TTarget value, object? parameter, CultureInfo culture)
+    protected virtual TSource? ConvertBack(TTarget value, object? parameter, CultureInfo culture)
     {
         throw this.MakeConverterFunctionNotDefinedException(nameof(ConvertBack));
     }

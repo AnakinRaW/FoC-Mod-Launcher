@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows;
 using System.Windows.Controls;
@@ -8,6 +9,8 @@ using System.Windows.Media.Imaging;
 using FocLauncher.Themes;
 using Microsoft.Extensions.DependencyInjection;
 using Sklavenwalker.CommonUtilities.Wpf.Controls;
+using Sklavenwalker.CommonUtilities.Wpf.Imaging;
+using Sklavenwalker.CommonUtilities.Wpf.Imaging.Controls;
 using Sklavenwalker.CommonUtilities.Wpf.Input;
 using Sklavenwalker.CommonUtilities.Wpf.Theming;
 using Validation;
@@ -26,6 +29,8 @@ public partial class MainWindow
         _serviceProvider = serviceProvider;
         InitializeComponent();
 
+        ImageLibrary.Instance.LoadCatalog(LauncherImageCatalog.Instance);
+
         BuildContextMenu();
     }
 
@@ -33,13 +38,11 @@ public partial class MainWindow
     {
         var m = new ThemedContextMenu();
 
-        using var iconStream = Application.GetResourceStream(
-            new Uri("pack://application:,,,/FocLauncher;component/Resources/icon.ico", UriKind.Absolute))?.Stream;
-        var i = new Icon(iconStream);
-        var b = new System.Windows.Controls.Image
+        var b = new ThemedImage
         {
-            Source = ToImageSource(i)
+            Moniker = new ImageMoniker { CatalogType = typeof(LauncherImageCatalog), Name = "Test" }
         };
+
         var item = new MenuItem { Header = "123", Icon = b};
         item.SetResourceReference(StyleProperty, StyleResourceKeys.MenuItemStyleKey);
 
@@ -76,4 +79,22 @@ public partial class MainWindow
         else
             manager.Theme = new FallbackTheme();
     }
+}
+
+internal class LauncherImageCatalog : ImmutableImageCatalog
+{
+
+    private static readonly Lazy<LauncherImageCatalog> LazyConstruction = new(() => new LauncherImageCatalog());
+
+    public static LauncherImageCatalog Instance => LazyConstruction.Value;
+
+    public static IEnumerable<ImageDefinition> Definitions = new List<ImageDefinition>
+    {
+
+    };
+
+    private LauncherImageCatalog() : base(Definitions)
+    {
+    }
+
 }

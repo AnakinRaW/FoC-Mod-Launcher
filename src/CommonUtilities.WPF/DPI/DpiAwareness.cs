@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Reflection;
 using System.Threading;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Interop;
 using System.Windows.Media;
 using Sklavenwalker.CommonUtilities.Wpf.NativeMethods;
 using Validation;
@@ -125,7 +128,30 @@ public static class DpiAwareness
         }
         return systemDpi;
     }
-    
+
+    public static double GetDpiX(this Visual visual) => GetDpi(visual, true);
+
+    public static double GetDpiXScale(this Visual visual) => GetDpiScale(visual, true);
+
+    public static double GetDpiY(this Visual visual) => GetDpi(visual, false);
+
+    public static double GetDpiYScale(this Visual visual) => GetDpiScale(visual, false);
+
+    public static void HookDpiChanged(this HwndHost hwndHost, RoutedEventHandler callback) => HookDpiChanged<HwndHost>(hwndHost, callback);
+
+    public static void HookDpiChanged(this Image image, RoutedEventHandler callback) => HookDpiChanged<Image>(image, callback);
+
+    public static void HookDpiChanged(this Window window, RoutedEventHandler callback) => HookDpiChanged<Window>(window, callback);
+
+    private static void HookDpiChanged<T>(T element, RoutedEventHandler callback) where T : FrameworkElement
+    {
+        Requires.NotNull((object)element, nameof(element));
+        Requires.NotNull((object)callback, nameof(callback));
+        if (!IsPerMonitorAwarenessEnabled)
+            return;
+        element.AddHandler(Image.DpiChangedEvent, callback);
+    }
+
     public static IDisposable EnterDpiScope(DpiAwarenessContext awareness)
     {
         return new DpiScope(awareness);
@@ -331,7 +357,7 @@ public static class DpiAwareness
             num = getDpiScaleX ? LazySystemDpiScaleX.Value : LazySystemDpiScaleY.Value;
         return IsValidDpi(num) ? num : throw new InvalidOperationException("The DPI scale must be greater than zero.");
     }
-    
+
     private enum DeviceCaps
     {
         LogPixelsX = 88,

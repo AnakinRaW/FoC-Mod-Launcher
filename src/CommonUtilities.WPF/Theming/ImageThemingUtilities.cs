@@ -40,6 +40,14 @@ public static class ImageThemingUtilities
         element.SetValue(ThemeScrollBarsProperty, value);
     }
 
+    // TODO
+    public static bool IsDark(this Color color) => false;
+
+    public static bool IsLight(this Color color)
+    {
+        return !color.IsDark();
+    }
+
     private static void OnThemeScrollBarsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         ThemeScrollBarsChanged?.Invoke(d, e);

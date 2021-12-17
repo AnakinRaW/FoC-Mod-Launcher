@@ -69,7 +69,7 @@ public static class IconHelper
         BitmapSource? image = null;
         if (iconHandle != IntPtr.Zero)
         {
-            image = Imaging.CreateBitmapSourceFromHIcon(iconHandle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+            image = System.Windows.Interop.Imaging.CreateBitmapSourceFromHIcon(iconHandle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
             User32.DestroyIcon(iconHandle);
             FreezeImage(image);
         }
