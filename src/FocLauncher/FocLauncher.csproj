@@ -29,6 +29,7 @@
 
 	<ItemGroup>
 	  <None Remove="Resources\icon.ico" />
+	  <None Remove="Resources\Icons\Png\Undo_16x.png" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -51,6 +52,7 @@
 
 	<ItemGroup>
 	  <Resource Include="Resources\icon.ico" />
+	  <Resource Include="Resources\Icons\Png\Undo_16x.png" />
 	</ItemGroup>
 
 	<ItemGroup>

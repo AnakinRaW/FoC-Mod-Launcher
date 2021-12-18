@@ -2,16 +2,14 @@
 
 namespace FocLauncher.Controls
 {
-    public class WindowTitleBarButton : GlyphButton, INonClientArea
+    public class WindowTitleBarButton : GlyphButton
     { 
         static WindowTitleBarButton()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(WindowTitleBarButton), new FrameworkPropertyMetadata(typeof(WindowTitleBarButton)));
         }
 
-        int INonClientArea.HitTest(Point point)
-        {
-            return 1;
-        }
+        protected override int HitTestCore(Point point) => this.HitTestResult;
+
     }
 }

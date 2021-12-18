@@ -2,14 +2,6 @@
 
 namespace Sklavenwalker.CommonUtilities.Wpf.Themes.Colors;
 
-public static class CommandBarColors
-{
-    private static ComponentResourceKey? _commandBarMenuIconBackground;
-
-    public static ComponentResourceKey CommandBarMenuIconBackground => _commandBarMenuIconBackground ??=
-        new ComponentResourceKey(typeof(WindowColors), nameof(CommandBarMenuIconBackground));
-}
-
 public static class WindowColors
 {
     private static ComponentResourceKey? _environmentBackground;

@@ -1,10 +1,15 @@
 ﻿using System;
+using System.Globalization;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Media;
+using Sklavenwalker.CommonUtilities.Wpf.Converters;
+using Sklavenwalker.CommonUtilities.Wpf.Theming;
+using Sklavenwalker.CommonUtilities.Wpf.Utils;
 using Sklavenwalker.Wpf.CommandBar.Utilities;
 using Validation;
 
@@ -28,8 +33,11 @@ public class ThemedContextMenu : ContextMenu
     public static readonly DependencyProperty IsInsideContextMenuProperty = IsInsideContextMenuPropertyKey.DependencyProperty;
     public static readonly DependencyProperty? ShowKeyboardCuesProperty = FetchShowKeyboardCuesProperty();
 
+    private static readonly BrushToColorConverter BrushToColorConverter = new();
+
     private bool _isCommandInExecution;
     private ScrollViewer? _scrollViewer;
+    private Border? _iconBorder;
 
     public MenuShowOptions ShowOptions
     {
@@ -64,7 +72,7 @@ public class ThemedContextMenu : ContextMenu
             OnIsCommandInExecutionChanged(EventArgs.Empty);
         }
     }
-
+    
     public static bool GetIsInsideContextMenu(DependencyObject element)
     {
         Requires.NotNull(element, nameof(element));
@@ -105,8 +113,36 @@ public class ThemedContextMenu : ContextMenu
     {
         base.OnApplyTemplate();
         _scrollViewer = GetTemplateChild("PART_ScrollViewer") as ScrollViewer;
+        _iconBorder = GetTemplateChild("PART_IconBackground") as Border;
+        SubscribeToBorderBackgroundChanges();
     }
-    
+
+    private void SubscribeToBorderBackgroundChanges()
+    {
+        UnsubscribeFromBorderBackgroundChanges();
+        if (_iconBorder == null)
+            return;
+        _iconBorder.AddPropertyChangeHandler(Border.BackgroundProperty, OnBorderBackgroundChanged);
+        OnBorderBackgroundChanged(_iconBorder, EventArgs.Empty);
+    }
+
+    private void UnsubscribeFromBorderBackgroundChanges()
+    {
+        var border = _iconBorder;
+        border?.RemovePropertyChangeHandler(Border.BackgroundProperty, OnBorderBackgroundChanged);
+    }
+
+    private void OnBorderBackgroundChanged(object sender, EventArgs e)
+    {
+        if (sender is not Border border)
+            return;
+        var color = (Color)BrushToColorConverter.Convert(border.Background, typeof(Color), null, CultureInfo.CurrentCulture)!;
+        if (color.A > 127)
+            SetValue(ImageThemingUtilities.ImageBackgroundColorProperty, color);
+        else
+            ClearValue(ImageThemingUtilities.ImageBackgroundColorProperty);
+    }
+
     protected override DependencyObject GetContainerForItemOverride()
     {
         return new ThemedMenuItem();

@@ -3,7 +3,7 @@
                     xmlns:colors="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Themes.Colors;assembly=Sklavenwalker.CommonUtilities.WPF">
 
     <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=EnvironmentBackground}" 
-                     Color="Red"/>
+                     Color="Black"/>
     <Color x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=MainWindowActiveDefaultBorder}"  
            A="255"
            B="204"
@@ -68,7 +68,7 @@
     <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=StatusBarDefault}" 
                      Color="Blue"/>
 
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=CommandBarMenuIconBackground}" 
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommandBarColors}, ResourceId=CommandBarMenuIconBackground}" 
                      Color="Black"/>
 
 

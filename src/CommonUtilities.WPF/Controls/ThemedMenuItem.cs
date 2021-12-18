@@ -36,7 +36,7 @@ public class ThemedMenuItem : MenuItem, INonClientArea
         }
         base.OnDpiChanged(oldDpi, newDpi);
     }
-    
+
     protected override void OnSubmenuOpened(RoutedEventArgs e)
     {
         UtilityMethods.InvalidateRecursive(_popup?.Child);

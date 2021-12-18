@@ -4,9 +4,30 @@
                            xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                            xmlns:controls="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Controls;assembly=Sklavenwalker.CommonUtilities.WPF"
+                           xmlns:controls1="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Imaging.Controls;assembly=Sklavenwalker.CommonUtilities.WPF"
+                           xmlns:focLauncher="clr-namespace:FocLauncher"
+                           xmlns:converters="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Imaging.Converters;assembly=Sklavenwalker.CommonUtilities.WPF"
+                           xmlns:imaging="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Theming;assembly=Sklavenwalker.CommonUtilities.WPF"
+                           xmlns:utilities="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Utils;assembly=Sklavenwalker.CommonUtilities.WPF"
                            mc:Ignorable="d"
                            Title="MainWindow" Height="450" Width="800">
-    <Grid Background="Green">
+    <Window.Resources>
+        <converters:DpiPrescaleThemedImageSourceConverter x:Key="DpiPrescaleThemedImageSourceConverter"/>
+
+        <Image x:Key="LockImage" Source="Resources/Icons/Png/Undo_16x.png" />
+
+    </Window.Resources>
+    <Grid Background="White">
+        <controls1:ThemedImage Width="16" Height="16" Margin="0,-100,0,0" Moniker="{x:Static focLauncher:Monikers.Settings}"></controls1:ThemedImage>
         <Button Width="100" Height="32" Click="OneChangeTheme">Change Theme</Button>
+        <Image Width="16" Height="16" Margin="0, 100,0, 0">
+            <Image.Source>
+                <MultiBinding Converter="{StaticResource DpiPrescaleThemedImageSourceConverter}">
+                    <Binding Path="Source" Source="{StaticResource LockImage}" />
+                    <Binding Path="(imaging:ImageThemingUtilities.ImageBackgroundColor)" RelativeSource="{RelativeSource Self}" />
+                    <Binding Source="{x:Static utilities:Boxes.BooleanTrue}" />
+                </MultiBinding>
+            </Image.Source>
+        </Image>
     </Grid>
 </controls:ThemedMainWindow>

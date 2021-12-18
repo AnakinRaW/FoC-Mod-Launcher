@@ -7,7 +7,6 @@ using Microsoft.Extensions.Logging.Console;
 using Microsoft.Extensions.Logging.Debug;
 using Sklavenwalker.CommonUtilities.Wpf.Controls;
 using Sklavenwalker.CommonUtilities.Wpf.Theming;
-using Sklavenwalker.Wpf.CommandBar;
 
 namespace FocLauncher;
 

@@ -152,10 +152,10 @@
                 <ControlTemplate TargetType="{x:Type controls:ThemedMenuItem}">
                     <Grid SnapsToDevicePixels="true" Background="Transparent" MinHeight="22">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="{StaticResource MenuItemIconWidth}" SharedSizeGroup="MenuItemIconColumnGroup"/>
+                            <ColumnDefinition Width="{StaticResource MenuItemIconWidth}"/>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="{StaticResource MenuItemNameKeyBindingSpacerWidth}"/>
-                            <ColumnDefinition Width="Auto" SharedSizeGroup="MenuItemIGTColumnGroup"/>
+                            <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="{StaticResource MenuItemSubMenuArrowWidth}"/>
                         </Grid.ColumnDefinitions>
                         <Rectangle x:Name="Bg" Stroke="Transparent" Fill="Transparent" StrokeThickness="0" Grid.ColumnSpan="5"/>
@@ -189,7 +189,7 @@
                         </Trigger>
                         <DataTrigger Value="True"
                                      Binding="{Binding InputGestureText, RelativeSource={RelativeSource Self}, Converter={StaticResource IsNullOrEmptyConverter}}">
-                            <Setter x:Uid="Setter_15" TargetName="ShortcutText" Property="UIElement.Visibility" Value="Collapsed"/>
+                            <Setter TargetName="ShortcutText" Property="UIElement.Visibility" Value="Collapsed"/>
                         </DataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -204,15 +204,13 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type controls:ThemedContextMenu}">
                     <controls:SystemDropShadowChrome x:Name="Shadow" Color="Transparent">
-                        <Grid Background="Yellow">
+                        <Grid Background="{DynamicResource {x:Static vsui:CommandBarColors.CommandBarMenuIconBackground}}">
                             <controls:ThemedMenuScrollViewer>
                                 <Grid Background="Red" RenderOptions.ClearTypeHint="Enabled"
                                       RenderOptions.BitmapScalingMode="{x:Static dpi:DpiAwareness.BitmapScalingMode}">
-                                    <theming:ImageThemingUtilities.ImageBackgroundColor>
-                                        <Binding Path="Background" ElementName="IconBackground" Converter="{StaticResource BrushToColorConverter}"/>
-                                    </theming:ImageThemingUtilities.ImageBackgroundColor>
-                                    <Border x:Name="IconBackground" Width="28" 
-                                            Background="{DynamicResource {x:Static vsui:CommandBarColors.CommandBarMenuIconBackground}}" HorizontalAlignment="Left"/>
+                                    <Border x:Name="PART_IconBackground" Width="28" 
+                                            Background="{DynamicResource {x:Static vsui:CommandBarColors.CommandBarMenuIconBackground}}" 
+                                            HorizontalAlignment="Left"/>
                                     <ItemsPresenter KeyboardNavigation.TabNavigation="Cycle" KeyboardNavigation.DirectionalNavigation="Cycle" 
                                                     Margin="3" Grid.IsSharedSizeScope="true"
                                                     SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
