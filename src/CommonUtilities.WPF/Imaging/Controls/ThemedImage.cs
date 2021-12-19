@@ -2,6 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
+using Sklavenwalker.CommonUtilities.Wpf.Converters;
 using Sklavenwalker.CommonUtilities.Wpf.DPI;
 using Sklavenwalker.CommonUtilities.Wpf.Imaging.Converters;
 using Validation;
@@ -132,6 +133,23 @@ public class ThemedImage : Image
     {
         InitializeBindings();
         this.HookDpiChanged(DisplayDpiChanged);
+    }
+
+    public static ThemedImage ForMenuItem(ImageMoniker moniker, MenuItem item)
+    {
+        var b = new ThemedImage
+        {
+            Moniker = moniker
+        };
+
+        b.SetBinding(GrayscaleProperty, new Binding
+        {
+            Converter = new InverseBooleanConverter(),
+            Source = item,
+            Path = new PropertyPath("IsEnabled")
+        });
+
+        return b;
     }
 
     private static void DisplayDpiChanged(object sender, RoutedEventArgs e)

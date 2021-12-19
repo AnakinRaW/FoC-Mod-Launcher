@@ -34,13 +34,12 @@ public partial class MainWindow
     {
         var m = new ThemedContextMenu();
 
-        var b = new ThemedImage
-        {
-            Moniker = Monikers.Undo
-        };
+        var item = new ThemedMenuItem { Header = "123"};
 
-        var item = new MenuItem { Header = "123", Icon = b};
-        item.SetResourceReference(StyleProperty, StyleResourceKeys.MenuItemStyleKey);
+        var b = ThemedImage.ForMenuItem(Monikers.Undo, item);
+        item.Icon = b;
+
+        item.IsEnabled = false;
 
         m.Items.Add(item);
         _menu = m;

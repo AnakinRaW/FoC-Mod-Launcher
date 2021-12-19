@@ -13,3 +13,11 @@ public class BooleanToFlowDirectionConverter : ValueConverter<bool, FlowDirectio
         return flowDirection;
     }
 }
+
+public class InverseBooleanConverter : ValueConverter<bool, bool>
+{
+    protected override bool Convert(bool value, object? parameter, CultureInfo culture)
+    {
+        return !value;
+    }
+}
