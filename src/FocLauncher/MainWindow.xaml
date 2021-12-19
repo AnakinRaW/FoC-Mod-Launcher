@@ -3,22 +3,21 @@
                            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                            xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                           xmlns:controls="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Controls;assembly=Sklavenwalker.CommonUtilities.WPF"
-                           xmlns:controls1="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Imaging.Controls;assembly=Sklavenwalker.CommonUtilities.WPF"
                            xmlns:focLauncher="clr-namespace:FocLauncher"
-                           xmlns:converters="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Imaging.Converters;assembly=Sklavenwalker.CommonUtilities.WPF"
-                           xmlns:imaging="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Theming;assembly=Sklavenwalker.CommonUtilities.WPF"
-                           xmlns:utilities="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Utils;assembly=Sklavenwalker.CommonUtilities.WPF"
+                           xmlns:converters="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Imaging.Converters;assembly=Sklavenwalker.CommonUtilities.WPF.Imaging"
+                           xmlns:imageControls="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Imaging.Controls;assembly=Sklavenwalker.CommonUtilities.WPF.Imaging"
+                           xmlns:imaging="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Imaging;assembly=Sklavenwalker.CommonUtilities.WPF.Imaging"
+                           xmlns:utilities="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Utilities;assembly=Sklavenwalker.CommonUtilities.WPF.Core"
+                           xmlns:controls="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Controls;assembly=Sklavenwalker.CommonUtilities.WPF.ThemedControls"
                            mc:Ignorable="d"
                            Title="MainWindow" Height="450" Width="800">
     <Window.Resources>
         <converters:DpiPrescaleThemedImageSourceConverter x:Key="DpiPrescaleThemedImageSourceConverter"/>
-
         <Image x:Key="LockImage" Source="Resources/Icons/Png/Undo_16x.png" />
-
     </Window.Resources>
+
     <Grid Background="White">
-        <controls1:ThemedImage Width="16" Height="16" Margin="0,-100,0,0" Moniker="{x:Static focLauncher:Monikers.Settings}"></controls1:ThemedImage>
+        <imageControls:ThemedImage Width="16" Height="16" Margin="0,-100,0,0" Moniker="{x:Static focLauncher:Monikers.Settings}"/>
         <Button Width="100" Height="32" Click="OneChangeTheme">Change Theme</Button>
         <Image Width="16" Height="16" Margin="0, 100,0, 0">
             <Image.Source>

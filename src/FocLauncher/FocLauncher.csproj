@@ -47,7 +47,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\CommonUtilities.WPF\CommonUtilities.WPF.csproj" />
+	  <ProjectReference Include="..\CommonUtilities.WPF.ThemdControls\CommonUtilities.WPF.ThemedControls.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

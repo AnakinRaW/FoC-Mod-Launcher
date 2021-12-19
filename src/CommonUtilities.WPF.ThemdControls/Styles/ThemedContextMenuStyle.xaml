@@ -1,0 +1,247 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Controls"
+                    xmlns:theming="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Theming"
+                    xmlns:vsui="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Themes.Colors"
+                    xmlns:converters="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Converters"
+                    xmlns:coreConverters="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Converters;assembly=Sklavenwalker.CommonUtilities.WPF.Core"
+                    xmlns:coreControls="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Controls;assembly=Sklavenwalker.CommonUtilities.WPF.Core"
+                    xmlns:dpi="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.DPI;assembly=Sklavenwalker.CommonUtilities.WPF.Core">
+
+    <converters:BrushToColorConverter x:Key="BrushToColorConverter"/>
+
+    <GridLength x:Key="MenuItemIconWidth">24</GridLength>
+    <GridLength x:Key="MenuItemNameKeyBindingSpacerWidth">36</GridLength>
+    <GridLength x:Key="MenuItemSubMenuArrowWidth">16</GridLength>
+    <coreConverters:IsNullOrEmptyConverter x:Key="IsNullOrEmptyConverter"/>
+    <MenuScrollingVisibilityConverter x:Key="MenuScrollingVisibilityConverter"/>
+
+    <Geometry x:Key="DownArrowGeometry">M 0 0 L 3 3 L 6 0 Z</Geometry>
+    <Geometry x:Key="UpArrowGeometry">M 0 3 L 3 0 L 6 3 Z</Geometry>
+
+    <Style x:Key="{x:Static theming:StyleResourceKeys.MenuItemStyleKey}" TargetType="{x:Type MenuItem}">
+        <Setter Property="TextElement.Foreground" Value="Black"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type MenuItem}">
+                    <Grid SnapsToDevicePixels="true" Background="Transparent" MinHeight="22">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="{StaticResource MenuItemIconWidth}" SharedSizeGroup="MenuItemIconColumnGroup"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="{StaticResource MenuItemNameKeyBindingSpacerWidth}"/>
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="MenuItemIGTColumnGroup"/>
+                            <ColumnDefinition Width="{StaticResource MenuItemSubMenuArrowWidth}"/>
+                        </Grid.ColumnDefinitions>
+                        <Rectangle x:Name="Bg" Stroke="Transparent" Fill="Transparent" StrokeThickness="0" Grid.ColumnSpan="5"/>
+                        <ContentPresenter x:Name="Icon" Margin="2,1,4,1" Width="16" Height="16" VerticalAlignment="Center"
+                                          ContentSource="Icon" SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"/>
+                        <ContentPresenter Grid.Column="1" ContentSource="Header" Margin="8,1,0,1"
+                                          VerticalAlignment="Center" RecognizesAccessKey="True"
+                                          SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"/>
+                        <TextBlock x:Name="ShortcutText" Grid.Column="3" Text="{TemplateBinding MenuItem.InputGestureText}"
+                                   Margin="2" VerticalAlignment="Center"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="MenuItem.Icon">
+                            <Trigger.Value>
+                                <x:NullExtension/>
+                            </Trigger.Value>
+                            <Setter TargetName="Icon" Property="UIElement.Visibility" Value="Collapsed"/>
+                        </Trigger>
+                        <Trigger Property="MenuItem.IsHighlighted" Value="true">
+                            <Setter TargetName="Bg"
+                                    Value="DarkOrange"
+                                    Property="Shape.Fill"/>
+                            <Setter TargetName="Bg"
+                                    Value="Cyan"
+                                    Property="Shape.Stroke"/>
+                            <Setter Value="White"
+                                    Property="TextElement.Foreground"/>
+                        </Trigger>
+                        <Trigger Property="UIElement.IsEnabled" Value="false">
+                            <Setter Value="Gray" Property="Control.Foreground"/>
+                        </Trigger>
+                        <DataTrigger Value="True"
+                                     Binding="{Binding InputGestureText, RelativeSource={RelativeSource Self}, Converter={StaticResource IsNullOrEmptyConverter}}">
+                            <Setter x:Uid="Setter_15" TargetName="ShortcutText" Property="UIElement.Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type controls:ThemedMenuScrollViewer}">
+        <Setter Property="HorizontalScrollBarVisibility" Value="Hidden"/>
+        <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ScrollViewer}">
+                    <Grid SnapsToDevicePixels="True">
+                        <Grid.Resources>
+                            <Style TargetType="{x:Type RepeatButton}">
+                                <Style.BasedOn>
+                                    <x:NullExtension/>
+                                </Style.BasedOn>
+                                <Setter Property="ClickMode" Value="Hover"/>
+                                <Setter Property="MinWidth" Value="0"/>
+                                <Setter Property="MinHeight" Value="0"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type RepeatButton}">
+                                            <ContentPresenter Margin="4" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Grid.Resources>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Border Grid.Row="1" Grid.Column="0">
+                            <ScrollContentPresenter Margin="{TemplateBinding Control.Padding}" 
+                                                    CanContentScroll="{TemplateBinding ScrollViewer.CanContentScroll}"/>
+                        </Border>
+                        <coreControls:RoutedCommandRepeatButton x:Name="ScrollUpButton" Grid.Row="0" Grid.Column="0"
+                                                            Command="{x:Static ScrollBar.LineUpCommand}" Focusable="false">
+                            <ButtonBase.CommandTarget>
+                                <Binding RelativeSource="{RelativeSource TemplatedParent}"/>
+                            </ButtonBase.CommandTarget>
+                            <UIElement.Visibility>
+                                <MultiBinding FallbackValue="Visibility.Collapsed"
+                                              Converter="{StaticResource MenuScrollingVisibilityConverter}" ConverterParameter="100">
+                                    <Binding Path="ComputedVerticalScrollBarVisibility"
+                                             RelativeSource="{RelativeSource TemplatedParent}"/>
+                                    <Binding Path="VerticalOffset" RelativeSource="{RelativeSource TemplatedParent}"/>
+                                    <Binding Path="ExtentHeight" RelativeSource="{RelativeSource TemplatedParent}"/>
+                                    <Binding Path="ViewportHeight" RelativeSource="{RelativeSource TemplatedParent}"/>
+                                </MultiBinding>
+                            </UIElement.Visibility>
+                            <Path x:Name="ScrollUpArrow" Fill="Black" Data="{StaticResource UpArrowGeometry}"/>
+                        </coreControls:RoutedCommandRepeatButton>
+                        <coreControls:RoutedCommandRepeatButton x:Name="ScrollDownButton" Grid.Row="2" Grid.Column="0"
+                                                            Command="{x:Static ScrollBar.LineDownCommand}" Focusable="false">
+                            <ButtonBase.CommandTarget>
+                                <Binding RelativeSource="{RelativeSource TemplatedParent}"/>
+                            </ButtonBase.CommandTarget>
+                            <UIElement.Visibility>
+                                <MultiBinding FallbackValue="Visibility.Collapsed"
+                                              Converter="{StaticResource MenuScrollingVisibilityConverter}" ConverterParameter="100">
+                                    <Binding Path="ComputedVerticalScrollBarVisibility"
+                                             RelativeSource="{RelativeSource TemplatedParent}"/>
+                                    <Binding Path="VerticalOffset" RelativeSource="{RelativeSource TemplatedParent}"/>
+                                    <Binding Path="ExtentHeight" RelativeSource="{RelativeSource TemplatedParent}"/>
+                                    <Binding Path="ViewportHeight" RelativeSource="{RelativeSource TemplatedParent}"/>
+                                </MultiBinding>
+                            </UIElement.Visibility>
+                            <Path x:Name="ScrollDownArrow" Fill="Black" Data="{StaticResource DownArrowGeometry}"/>
+                        </coreControls:RoutedCommandRepeatButton>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type controls:ThemedMenuItem}" BasedOn="{StaticResource {x:Type MenuItem}}">
+        <Setter Property="TextElement.Foreground" Value="Black"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type controls:ThemedMenuItem}">
+                    <Grid SnapsToDevicePixels="true" Background="Transparent" MinHeight="22">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="{StaticResource MenuItemIconWidth}"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="{StaticResource MenuItemNameKeyBindingSpacerWidth}"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="{StaticResource MenuItemSubMenuArrowWidth}"/>
+                        </Grid.ColumnDefinitions>
+                        <Rectangle x:Name="Bg" Stroke="Transparent" Fill="Transparent" StrokeThickness="0" Grid.ColumnSpan="5"/>
+                        <ContentPresenter x:Name="Icon" Margin="2,1,4,1" Width="16" Height="16" VerticalAlignment="Center"
+                                          ContentSource="Icon" SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"/>
+                        <ContentPresenter Grid.Column="1" ContentSource="Header" Margin="8,1,0,1"
+                                          VerticalAlignment="Center" RecognizesAccessKey="True"
+                                          SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"/>
+                        <TextBlock x:Name="ShortcutText" Grid.Column="3" Text="{TemplateBinding MenuItem.InputGestureText}"
+                                   Margin="2" VerticalAlignment="Center"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="MenuItem.Icon">
+                            <Trigger.Value>
+                                <x:NullExtension/>
+                            </Trigger.Value>
+                            <Setter TargetName="Icon" Property="UIElement.Visibility" Value="Collapsed"/>
+                        </Trigger>
+                        <Trigger Property="MenuItem.IsHighlighted" Value="true">
+                            <Setter TargetName="Bg"
+                                    Value="DarkGreen"
+                                    Property="Shape.Fill"/>
+                            <Setter TargetName="Bg"
+                                    Value="Cyan"
+                                    Property="Shape.Stroke"/>
+                            <Setter Value="White"
+                                    Property="TextElement.Foreground"/>
+                        </Trigger>
+                        <Trigger Property="UIElement.IsEnabled" Value="false">
+                            <Setter Value="Gray" Property="Control.Foreground"/>
+                        </Trigger>
+                        <DataTrigger Value="True"
+                                     Binding="{Binding InputGestureText, RelativeSource={RelativeSource Self}, Converter={StaticResource IsNullOrEmptyConverter}}">
+                            <Setter TargetName="ShortcutText" Property="UIElement.Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type controls:ThemedContextMenu}" BasedOn="{StaticResource {x:Type ContextMenu}}">
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="TextElement.Foreground" Value="Black"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type controls:ThemedContextMenu}">
+                    <coreControls:SystemDropShadowChrome x:Name="Shadow" Color="Transparent">
+                        <Grid Background="{DynamicResource {x:Static vsui:CommandBarColors.CommandBarMenuIconBackground}}">
+                            <controls:ThemedMenuScrollViewer>
+                                <Grid Background="Red" RenderOptions.ClearTypeHint="Enabled"
+                                      RenderOptions.BitmapScalingMode="{x:Static dpi:DpiHelper.BitmapScalingMode}">
+                                    <Border x:Name="PART_IconBackground" Width="28" 
+                                            Background="{DynamicResource {x:Static vsui:CommandBarColors.CommandBarMenuIconBackground}}" 
+                                            HorizontalAlignment="Left"/>
+                                    <ItemsPresenter KeyboardNavigation.TabNavigation="Cycle" KeyboardNavigation.DirectionalNavigation="Cycle" 
+                                                    Margin="3" Grid.IsSharedSizeScope="true"
+                                                    SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
+                                </Grid>
+                            </controls:ThemedMenuScrollViewer>
+                            <Border BorderBrush="Black" BorderThickness="1"/>
+                        </Grid>
+                    </coreControls:SystemDropShadowChrome>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type controls:ThemedSeparator}">
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Grid SnapsToDevicePixels="true" Background="Transparent">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="26" SharedSizeGroup="MenuItemIconColumnGroup"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Rectangle x:Uid="Rectangle_1" Height="1" Margin="4,2,1,2" Grid.Column="1"
+                                   Fill="DarkSlateGray"/>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>
