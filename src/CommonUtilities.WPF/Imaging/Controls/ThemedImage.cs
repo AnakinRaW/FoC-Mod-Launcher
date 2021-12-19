@@ -137,19 +137,19 @@ public class ThemedImage : Image
 
     public static ThemedImage ForMenuItem(ImageMoniker moniker, MenuItem item)
     {
-        var b = new ThemedImage
+        var themedImage = new ThemedImage
         {
             Moniker = moniker
         };
 
-        b.SetBinding(GrayscaleProperty, new Binding
+        themedImage.SetBinding(GrayscaleProperty, new Binding
         {
             Converter = new InverseBooleanConverter(),
             Source = item,
             Path = new PropertyPath("IsEnabled")
         });
 
-        return b;
+        return themedImage;
     }
 
     private static void DisplayDpiChanged(object sender, RoutedEventArgs e)
