@@ -11,7 +11,6 @@ public class ThemeManager : IThemeManager
     public event EventHandler<ThemeChangedEventArgs>? ThemeChanged;
 
     private Application _application;
-    private Window _mainWindow;
     private ITheme _theme;
 
     private readonly IThemeResourceDictionaryCache _cache;
@@ -40,16 +39,14 @@ public class ThemeManager : IThemeManager
         _cache = serviceProvider.GetRequiredService<IThemeResourceDictionaryCache>();
     }
 
-    public void Initialize(Application application, Window mainWindow, ITheme? defaultTheme = null)
+    public void Initialize(Application application,ITheme? defaultTheme = null)
     {
         if (_initialized)
             throw new InvalidOperationException("Theme manager already initialized");
         Requires.NotNull(application, nameof(application));
-        Requires.NotNull(mainWindow, nameof(mainWindow));
         lock (this)
         {
             _application = application;
-            _mainWindow = mainWindow;
             _theme = defaultTheme ?? new FallbackTheme();
             ChangeTheme(null, _theme);
             _initialized = true;
@@ -65,18 +62,15 @@ public class ThemeManager : IThemeManager
     private void ChangeTheme(ITheme? oldTheme, ITheme theme)
     {
         var resources = _application.Resources;
-        var windowResources = _mainWindow.Resources;
 
         if (oldTheme is not null)
         {
             var oldResourceDict = _cache.Get(oldTheme);
             resources.MergedDictionaries.Remove(oldResourceDict);
-            windowResources.MergedDictionaries.Remove(oldResourceDict);
         }
 
         var themeResources = _cache.GetOrCreate(theme);
         resources.MergedDictionaries.Add(themeResources);
-        windowResources.MergedDictionaries.Add(themeResources);
     }
 
     protected void ThrowIfNotInitialized()

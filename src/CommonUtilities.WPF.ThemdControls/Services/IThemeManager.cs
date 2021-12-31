@@ -10,5 +10,5 @@ public interface IThemeManager
 
     ITheme Theme { get; set; }
 
-    void Initialize(Application app, Window mainWindow, ITheme? defaultTheme);
+    void Initialize(Application app, ITheme? defaultTheme);
 }

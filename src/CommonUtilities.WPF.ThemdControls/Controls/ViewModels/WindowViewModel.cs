@@ -3,62 +3,29 @@ using Microsoft.Toolkit.Mvvm.ComponentModel;
 
 namespace Sklavenwalker.CommonUtilities.Wpf.Controls;
 
-public class WindowViewModel : ObservableObject
+public partial class WindowViewModel : ObservableObject
 {
+    [ObservableProperty]
     private WindowState _minMaxState;
+    
+    [ObservableProperty]
     private bool _leftToRight;
+    
+    [ObservableProperty]
     private string? _title;
+    
+    [ObservableProperty]
     private bool _isFullScreen;
+    
+    [ObservableProperty]
     private bool _isResizable = true;
+   
+    [ObservableProperty]
     private bool _hasMaximizeButton = true;
+    
+    [ObservableProperty]
     private bool _hasMinimizeButton = true;
+    
+    [ObservableProperty]
     private bool _isGripVisible = true;
-
-    public bool RightToLeft
-    {
-        get => _leftToRight;
-        set => SetProperty(ref _leftToRight, value);
-    }
-
-    public WindowState MinMaxState
-    {
-        get => _minMaxState;
-        set => SetProperty(ref _minMaxState, value);
-    }
-
-    public string? Title
-    {
-        get => _title;
-        set => SetProperty(ref _title, value);
-    }
-
-    public bool IsFullScreen
-    {
-        get => _isFullScreen;
-        set => SetProperty(ref _isFullScreen, value);
-    }
-
-    public bool IsResizable
-    {
-        get => _isResizable;
-        set => SetProperty(ref _isResizable, value);
-    }
-
-    public bool HasMaximizeButton
-    {
-        get => _hasMaximizeButton;
-        set => SetProperty(ref _hasMaximizeButton, value);
-    }
-
-    public bool HasMinimizeButton
-    {
-        get => _hasMinimizeButton;
-        set => SetProperty(ref _hasMinimizeButton, value);
-    }
-
-    public bool IsGripVisible
-    {
-        get => _isGripVisible;
-        set => SetProperty(ref _isGripVisible, value);
-    }
 }

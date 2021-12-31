@@ -11,7 +11,7 @@ namespace Sklavenwalker.CommonUtilities.Wpf.Controls;
 
 public class ThemedWindow : ShadowChromeWindow
 {
-    public WindowViewModel ViewModel { get; protected set; }
+    public IWindowViewModel ViewModel { get; protected set; }
 
 
     static ThemedWindow()
@@ -25,7 +25,7 @@ public class ThemedWindow : ShadowChromeWindow
             new CommandBinding(ViewCommands.CloseWindow, OnCloseWindow));
     }
     
-    public ThemedWindow(WindowViewModel dataContext)
+    public ThemedWindow(IWindowViewModel dataContext)
     {
         Requires.NotNull(dataContext, nameof(dataContext));
         DataContext = dataContext;
@@ -35,7 +35,7 @@ public class ThemedWindow : ShadowChromeWindow
 
     protected virtual void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
     {
-        if (e.NewValue is not MainWindowViewModel windowViewModel)
+        if (e.NewValue is not IMainWindowViewModel windowViewModel)
             return;
         ViewModel = windowViewModel;
     }
@@ -82,6 +82,7 @@ public class ThemedWindow : ShadowChromeWindow
         if (args.Parameter is not Window window)
             return;
         var handle = new WindowInteropHelper(window).Handle;
-        User32.SendMessage(handle, 274, window.WindowState == WindowState.Maximized ? new IntPtr(61728) : new IntPtr(61488), IntPtr.Zero);
+        User32.SendMessage(handle, 274,
+            window.WindowState == WindowState.Maximized ? new IntPtr(61728) : new IntPtr(61488), IntPtr.Zero);
     }
 }

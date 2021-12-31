@@ -1,14 +1,8 @@
-﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
+﻿using System.ComponentModel;
 
 namespace Sklavenwalker.CommonUtilities.Wpf.Controls;
 
-public class StatusBarViewModel : ObservableObject
+public interface IStatusBarViewModel : INotifyPropertyChanged
 {
-    private bool _isVisible = true;
-
-    public bool IsVisible
-    {
-        get => _isVisible;
-        set => SetProperty(ref _isVisible, value);
-    }
+    bool IsVisible { get; set; }
 }

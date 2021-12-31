@@ -1,19 +1,20 @@
-﻿namespace Sklavenwalker.CommonUtilities.Wpf.Controls;
+﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
 
-public class MainWindowViewModel : WindowViewModel
+namespace Sklavenwalker.CommonUtilities.Wpf.Controls;
+
+public partial class MainWindowViewModel : WindowViewModel, IMainWindowViewModel
 {
-    public MainWindowViewModel(StatusBarViewModel statusBar)
+    [ObservableProperty]
+    private TaskBarIconProgressState _progressState;
+
+    public IStatusBarViewModel StatusBar { get; }
+
+    public MainWindowViewModel(IStatusBarViewModel statusBar)
     {
         StatusBar = statusBar;
     }
 
     public MainWindowViewModel() : this(new InvisibleStatusBarViewModel())
-    {
-    }
-
-    public StatusBarViewModel StatusBar { get; }
-
-    private class InvisibleStatusBarViewModel : StatusBarViewModel
     {
     }
 }

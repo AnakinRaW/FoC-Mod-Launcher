@@ -16,6 +16,7 @@ using Sklavenwalker.CommonUtilities.Registry.Windows;
 using Sklavenwalker.CommonUtilities.Wpf.Controls;
 using Sklavenwalker.CommonUtilities.Wpf.Services;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
+using UnhandledExceptionDialogViewModel = FocLauncher.ViewModels.UnhandledExceptionDialogViewModel;
 
 namespace FocLauncher;
 
@@ -65,12 +66,13 @@ internal static class Program
         LibraryInitializer.InitializeLibrary(serviceCollection);
 
         serviceCollection.AddSingleton<IThemeManager>(sp => new LauncherThemeManager(sp));
+        serviceCollection.AddSingleton<IViewModelPresenter>(_ => new ViewPresenterService());
+
         serviceCollection.AddTransient<IStatusBarFactory>(_ => new LauncherStatusBarFactory()); 
         
         return serviceCollection.BuildServiceProvider();
     }
     
-
     private static void CreateProgramServices(IServiceCollection serviceCollection)
     {
         var fileSystem = new FileSystem();
@@ -131,8 +133,8 @@ internal static class Program
         if (!pathService.UserHasDirectoryAccessRights(appLocalPath.Parent.FullName, FileSystemRights.CreateDirectories))
         {
             var exception = new IOException($"Permission on '{appLocalPath}' denied: Creating a new directory");
+            new UnhandledExceptionDialog(new UnhandledExceptionDialogViewModel(exception)).ShowModal();
             throw exception;
-            // TODO ShowExceptionDialogAndExit(exception);
         }
 
         appLocalPath.Create();

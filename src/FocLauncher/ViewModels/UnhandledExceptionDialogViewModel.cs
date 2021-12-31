@@ -9,7 +9,7 @@ using Microsoft.Toolkit.Mvvm.Input;
 using Sklavenwalker.CommonUtilities.Wpf.Controls.ViewModels;
 using Validation;
 
-namespace FocLauncher.Controls.ViewModels;
+namespace FocLauncher.ViewModels;
 
 public partial class UnhandledExceptionDialogViewModel : ObservableObject, IUnhandledExceptionDialogViewModel
 {
