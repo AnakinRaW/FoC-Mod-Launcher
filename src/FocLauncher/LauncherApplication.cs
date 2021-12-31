@@ -2,7 +2,7 @@
 using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using Sklavenwalker.CommonUtilities.Wpf.Controls;
-using Sklavenwalker.CommonUtilities.Wpf.Theming;
+using Sklavenwalker.CommonUtilities.Wpf.Services;
 using Validation;
 
 namespace FocLauncher;

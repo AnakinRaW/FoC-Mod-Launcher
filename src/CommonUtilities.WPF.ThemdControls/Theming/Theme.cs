@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows;
 
 namespace Sklavenwalker.CommonUtilities.Wpf.Theming;
 
@@ -8,7 +9,7 @@ public abstract class Theme : ITheme
 
     public abstract string Text { get; }
     public abstract Uri ResourceUri { get; }
-    
+
     public bool Equals(ITheme? other)
     {
         if (ReferenceEquals(this, other))
@@ -16,6 +17,11 @@ public abstract class Theme : ITheme
         if (other == null)
             return false;
         return ResourceUri == other.ResourceUri && Id == other.Id;
+    }
+
+    public virtual ResourceDictionary? CustomResources()
+    {
+        return null;
     }
 
     public override bool Equals(object? obj)

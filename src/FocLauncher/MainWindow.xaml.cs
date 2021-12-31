@@ -1,13 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using FocLauncher.Imaging;
 using FocLauncher.Themes;
 using Microsoft.Extensions.DependencyInjection;
 using Sklavenwalker.CommonUtilities.Wpf.Controls;
 using Sklavenwalker.CommonUtilities.Wpf.Imaging;
 using Sklavenwalker.CommonUtilities.Wpf.Imaging.Controls;
 using Sklavenwalker.CommonUtilities.Wpf.Input;
+using Sklavenwalker.CommonUtilities.Wpf.Services;
 using Sklavenwalker.CommonUtilities.Wpf.Theming;
 using Validation;
 
@@ -25,7 +26,7 @@ public partial class MainWindow
         _serviceProvider = serviceProvider;
         InitializeComponent();
 
-        ImageLibrary.Instance.LoadCatalog(LauncherImageCatalog.Instance);
+        ImageLibrary.Instance.LoadCatalog(ImageCatalog.Instance);
 
         BuildContextMenu();
     }
@@ -38,9 +39,7 @@ public partial class MainWindow
 
         var b = ThemedImage.ForMenuItem(Monikers.Undo, item);
         item.Icon = b;
-
-        item.IsEnabled = false;
-
+        
         m.Items.Add(item);
         _menu = m;
     }
@@ -64,45 +63,14 @@ public partial class MainWindow
         else
             manager.Theme = new FallbackTheme();
     }
-}
 
-internal static class Monikers
-{
-    public static ImageMoniker Settings => new() { CatalogType = typeof(LauncherImageCatalog), Name = "Settings" };
-    public static ImageMoniker Undo => new() { CatalogType = typeof(LauncherImageCatalog), Name = "Undo" };
-}
-
-internal class LauncherImageCatalog : ImmutableImageCatalog
-{
-    public static ImageDefinition SettingsDefinition => new()
+    private void OnClick(object sender, RoutedEventArgs e)
     {
-        Kind = ImageFileKind.Xaml,
-        Moniker = Monikers.Settings,
-        Source = ResourcesUriCreator.Create("Settings_16x", ImageFileKind.Xaml),
-        CanTheme = true
-    };
-
-    public static ImageDefinition UndoDefinition => new()
-    {
-        Kind = ImageFileKind.Png,
-        Moniker = Monikers.Undo,
-        Source = ResourcesUriCreator.Create("Undo_16x", ImageFileKind.Png),
-        CanTheme = true
-    };
-
-
-    private static readonly Lazy<LauncherImageCatalog> LazyConstruction = new(() => new LauncherImageCatalog());
-
-    public static LauncherImageCatalog Instance => LazyConstruction.Value;
-
-    public static IEnumerable<ImageDefinition> Definitions = new List<ImageDefinition>
-    {
-        SettingsDefinition,
-        UndoDefinition
-    };
-
-    private LauncherImageCatalog() : base(Definitions)
-    {
+        var tm = _serviceProvider.GetService<IThemeManager>();
+        var c = tm.Theme;
+        if (c.Id == "LauncherDefaultTheme")
+            tm.Theme = new FallbackTheme();
+        else
+            tm.Theme = new LauncherTheme();
     }
-
 }

@@ -26,7 +26,7 @@
 	  <PackageReference Include="Microsoft.Bcl.HashCode" Version="1.1.1" />
 	  <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
 	  <PackageReference Include="Microsoft.Toolkit.Mvvm" Version="7.1.2" />
-	  <PackageReference Include="Sklavenwalker.CommonUtilities" Version="1.0.1" />
+	  <PackageReference Include="Sklavenwalker.CommonUtilities" Version="1.0.2" />
 	  <PackageReference Include="System.Collections.Immutable" Version="6.0.0" />
 	  <PackageReference Include="Validation" Version="2.5.42" />
 	</ItemGroup>
@@ -34,6 +34,13 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\CommonUtilities.WPF.Core\CommonUtilities.WPF.Core.csproj" />
 	  <ProjectReference Include="..\CommonUtilities.WPF.Imaging\CommonUtilities.WPF.Imaging.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Page Update="Styles\ThemedDialogStyle.xaml">
+	    <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+	    <SubType>Designer</SubType>
+	  </Page>
 	</ItemGroup>
 
 </Project>

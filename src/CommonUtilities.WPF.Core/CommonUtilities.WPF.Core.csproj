@@ -26,4 +26,17 @@
 		<PackageReference Include="Validation" Version="2.5.42" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Compile Update="Controls\UnhandledExceptionDialog.xaml.cs">
+	    <SubType>Code</SubType>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Page Update="Controls\UnhandledExceptionDialog.xaml">
+	    <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+	    <SubType>Designer</SubType>
+	  </Page>
+	</ItemGroup>
+
 </Project>

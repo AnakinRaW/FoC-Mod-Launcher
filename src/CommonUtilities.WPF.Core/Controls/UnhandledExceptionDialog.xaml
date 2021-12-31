@@ -1,0 +1,112 @@
+﻿<controls:DialogWindowBase x:Class="Sklavenwalker.CommonUtilities.Wpf.Controls.UnhandledExceptionDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
+        xmlns:designer="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Controls.Designer"
+        xmlns:converters="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Converters"
+        xmlns:controls="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Controls"
+        Title="{Binding WindowCaption}" 
+        MinHeight="175" Width="650" SizeToContent="Height"
+        Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" 
+        Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" ResizeMode="NoResize"
+        d:DataContext="{d:DesignInstance {x:Type designer:UnhandledExceptionDialogViewModel}, IsDesignTimeCreatable=True}">
+    <Window.Resources>
+        <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
+        <converters:ToTypeNameConverter x:Key="ToTypeNameConverter"/>
+
+        <Style x:Key="DialogButton" TargetType="{x:Type Button}">
+            <Setter Property="MinWidth" Value="75" />
+            <Setter Property="MinHeight" Value="23" />
+            <Setter Property="Margin" Value="0,0,10,10" />
+            <Setter Property="Padding" Value="10,1,10,1" />
+        </Style>
+
+        <DataTemplate x:Key="ImageButtonTemplate">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <Image x:Name="Icon" Margin="0,0,8,0" Focusable="False" UseLayoutRounding="True" SnapsToDevicePixels="True" 
+                       VerticalAlignment="Center" Source="{Binding HandlerIcon}" Height="16" Width="16"
+                       RenderOptions.BitmapScalingMode="HighQuality"/>
+                <AccessText SnapsToDevicePixels="True" VerticalAlignment="Center" Text="{Binding HandlerName}"/>
+            </StackPanel>
+            <DataTemplate.Triggers>
+                <DataTrigger Binding="{Binding HandlerIcon}" Value="{x:Null}">
+                    <Setter TargetName="Icon" Property="Visibility" Value="Collapsed"/>
+                </DataTrigger>
+            </DataTemplate.Triggers>
+        </DataTemplate>
+
+
+        <DataTemplate x:Key="ExceptionDataTemplate" DataType="{x:Type system:Exception}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="6"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="12"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="2" Text="{Binding Message}" TextWrapping="Wrap" TextTrimming="CharacterEllipsis"
+                           FontSize="13"/>
+                <Expander Grid.Row="4">
+                    <Expander.Header>More Details</Expander.Header>
+                    <StackPanel>
+                        <TextBlock Text="Exception Type:" FontWeight="DemiBold" Margin="0,6,0,0"/>
+                        <TextBlock Text="{Binding ., Converter={StaticResource ToTypeNameConverter}}"/>
+                        <TextBlock Text="Stack Trace:" FontWeight="DemiBold" Margin="0,12,0,0"/>
+                        <TextBox MaxHeight="150" Text="{Binding StackTrace, Mode=OneWay}" FontSize="10" IsReadOnly="True" IsTabStop="False"
+                                 HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"/>
+
+                        <Button Margin="0,6,0,0" HorizontalAlignment="Left" Click="OnCopyStackTrace">
+                            <AccessText>_Copy to Clipboard</AccessText>
+                        </Button>
+                    </StackPanel>
+                </Expander>
+            </Grid>
+        </DataTemplate>
+
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Border Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" Padding="0,15,0,0">
+            <Grid SnapsToDevicePixels="True">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="16"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Border Grid.Column="2" Background="Transparent" Margin="12,0,10,3">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Text="{Binding Header}" FontSize="18" FontWeight="Bold"/>
+                        <ContentPresenter Grid.Row="1" Content="{Binding Exception}" ContentTemplate="{StaticResource ExceptionDataTemplate}"/>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Border>
+        <Grid Grid.Row="1" Margin="10,0,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Text="{Binding HandlerDescription}" Margin="0,3,0,10" 
+                       TextWrapping="Wrap" VerticalAlignment="Bottom"
+                       Visibility="{Binding HandlerDescription, Converter={StaticResource NullToVisibilityConverter}}"/>
+            <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,6,0,0">
+                <controls:RoutedCommandButton Style="{StaticResource DialogButton}" ContentTemplate="{StaticResource ImageButtonTemplate}"
+                                              Command="{Binding Handler}" Content="{Binding}"
+                                              Visibility="{Binding Handler, Converter={StaticResource NullToVisibilityConverter}}"/>
+                <controls:RoutedCommandButton IsCancel="True" IsDefault="True" Content="_Exit Application" Style="{StaticResource DialogButton}"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</controls:DialogWindowBase>

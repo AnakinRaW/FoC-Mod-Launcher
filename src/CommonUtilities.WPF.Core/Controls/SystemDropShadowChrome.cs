@@ -28,7 +28,7 @@ public sealed class SystemDropShadowChrome : Decorator
     private const int BottomRight = 8;
     private static Brush[]? _commonBrushes;
     private static CornerRadius _commonCornerRadius;
-    private static object _resourceAccess = new();
+    private static readonly object ResourceAccess = new();
     private Brush[]? _brushes;
 
     public Color Color
@@ -346,7 +346,7 @@ public sealed class SystemDropShadowChrome : Decorator
     {
         if (_commonBrushes == null)
         {
-            lock (_resourceAccess)
+            lock (ResourceAccess)
             {
                 if (_commonBrushes == null)
                 {

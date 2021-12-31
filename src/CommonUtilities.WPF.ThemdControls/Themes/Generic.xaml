@@ -7,5 +7,6 @@
         <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.ThemedControls;component/Styles/CustomResizeGripStyle.xaml"/>
         <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.ThemedControls;component/Styles/SystemMenuStyle.xaml"/>
         <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.ThemedControls;component/Styles/ThemedContextMenuStyle.xaml"/>
+        <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.ThemedControls;component/Styles/ThemedDialogStyle.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

@@ -1,75 +1,8 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:colors="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Themes.Colors;assembly=Sklavenwalker.CommonUtilities.WPF.ThemedControls">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=EnvironmentBackground}" 
-                     Color="Black"/>
-    <Color x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=MainWindowActiveDefaultBorder}"  
-           A="255"
-           B="204"
-           G="122"
-           R="00" />
-    <Color x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=MainWindowInactiveBorder}" 
-           A="255"
-           B="70"
-           G="67"
-           R="67"/>
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=MainWindowActiveCaption}" 
-                     Color="Beige"/>
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=MainWindowActiveCaptionText}" 
-                     Color="Black"/>
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=MainWindowInactiveCaption}" 
-                     Color="GreenYellow"/>
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=MainWindowInactiveCaptionText}" 
-                     Color="Gray"/>
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=MainWindowActiveIconDefault}" 
-                     Color="BlueViolet"/>
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=MainWindowInactiveIconDefault}" 
-                     Color="Gray"/>
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=MainWindowResizeGripTexture1}" 
-                     Color="DeepPink"/>
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=MainWindowResizeGripTexture2}" 
-                     Color="BlueViolet"/>
-
-
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=MainWindowButtonActiveBorder}" 
-                     Color="Black"/>
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=MainWindowButtonActiveGlyph}" 
-                     Color="Black"/>
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=MainWindowButtonHoverActive}" 
-                     Color="Black"/>
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=MainWindowButtonHoverActiveBorder}" 
-                     Color="Black"/>
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=MainWindowButtonHoverActiveGlyph}" 
-                     Color="Black"/>
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=MainWindowButtonDown}" 
-                     Color="Black"/>
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=MainWindowButtonDownBorder}" 
-                     Color="Black"/>
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=MainWindowButtonDownGlyph}" 
-                     Color="Black"/>
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=MainWindowButtonInactiveBorder}" 
-                     Color="White"/>
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=MainWindowButtonInactiveGlyph}" 
-                     Color="White"/>
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=MainWindowButtonHoverInactive}" 
-                     Color="White"/>
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=MainWindowButtonHoverInactiveBorder}" 
-                     Color="White"/>
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=MainWindowButtonHoverInactiveGlyph}" 
-                     Color="White"/>
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=StatusBarDefault}" 
-                     Color="Blue"/>
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommandBarColors}, ResourceId=CommandBarMenuIconBackground}" 
-                     Color="Black"/>
-
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/Sklavenwalker.CommonUtilities.Wpf.ThemedControls;component/Themes/Colors/FallbackTheme.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
 
 </ResourceDictionary>

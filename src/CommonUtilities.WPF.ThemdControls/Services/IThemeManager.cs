@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Windows;
+using Sklavenwalker.CommonUtilities.Wpf.Theming;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Theming;
+namespace Sklavenwalker.CommonUtilities.Wpf.Services;
 
 public interface IThemeManager
 {

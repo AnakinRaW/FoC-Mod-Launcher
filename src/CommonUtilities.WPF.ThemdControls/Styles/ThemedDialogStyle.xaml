@@ -1,0 +1,10 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Controls"
+                    xmlns:controls1="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Controls;assembly=Sklavenwalker.CommonUtilities.WPF.Core"
+                    xmlns:imaging="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Imaging;assembly=Sklavenwalker.CommonUtilities.WPF.Imaging">
+    <Style TargetType="{x:Type controls:ThemedDialog}" BasedOn="{StaticResource {x:Type controls1:DialogWindowBase}}">
+        <Setter Property="imaging:ImageThemingUtilities.ImageBackgroundColor"
+                Value="{DynamicResource {x:Static SystemColors.WindowColorKey}}"/>
+    </Style>
+</ResourceDictionary>

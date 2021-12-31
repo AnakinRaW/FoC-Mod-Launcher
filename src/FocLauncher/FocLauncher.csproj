@@ -28,7 +28,9 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Fonts\EaW-bold.ttf" />
 	  <None Remove="Resources\icon.ico" />
+	  <None Remove="Resources\Icons\Png\GitHub_Mark_32px.png" />
 	  <None Remove="Resources\Icons\Png\Undo_16x.png" />
 	</ItemGroup>
 
@@ -43,7 +45,12 @@
 	  <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
 	  <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="6.0.0" />
 	  <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="6.0.0" />
-	  <PackageReference Include="System.IO.Abstractions" Version="14.0.3" />
+	  <PackageReference Include="SemanticVersioning" Version="2.0.0" />
+	  <PackageReference Include="Serilog.Extensions.Logging.File" Version="2.0.0" />
+	  <PackageReference Include="Sklavenwalker.CommonUtilities.FileSystem.Windows" Version="2.0.0" />
+	  <PackageReference Include="Sklavenwalker.CommonUtilities.Registry" Version="2.1.0" />
+	  <PackageReference Include="Sklavenwalker.CommonUtilities.Registry.Windows" Version="2.1.0" />
+	  <PackageReference Include="System.IO.Abstractions" Version="16.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -51,12 +58,14 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Resource Include="Resources\Fonts\EaW-bold.ttf" />
 	  <Resource Include="Resources\icon.ico" />
+	  <Resource Include="Resources\Icons\Png\GitHub_Mark_32px.png" />
 	  <Resource Include="Resources\Icons\Png\Undo_16x.png" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Page Update="Themes\LauncherTheme.xaml">
+		<Page Update="Themes\LauncherTheme.xaml">
 	    <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
 	    <SubType>Designer</SubType>
 	  </Page>

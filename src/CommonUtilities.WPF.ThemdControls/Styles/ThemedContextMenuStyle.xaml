@@ -2,7 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:controls="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Controls"
                     xmlns:theming="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Theming"
-                    xmlns:vsui="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Themes.Colors"
+                    xmlns:colors="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Themes.Colors"
                     xmlns:converters="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Converters"
                     xmlns:coreConverters="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Converters;assembly=Sklavenwalker.CommonUtilities.WPF.Core"
                     xmlns:coreControls="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Controls;assembly=Sklavenwalker.CommonUtilities.WPF.Core"
@@ -20,7 +20,7 @@
     <Geometry x:Key="UpArrowGeometry">M 0 3 L 3 0 L 6 3 Z</Geometry>
 
     <Style x:Key="{x:Static theming:StyleResourceKeys.MenuItemStyleKey}" TargetType="{x:Type MenuItem}">
-        <Setter Property="TextElement.Foreground" Value="Black"/>
+        <Setter Property="TextElement.Foreground" Value="{DynamicResource {x:Static colors:CommandBarColors.CommandBarTextActive}}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type MenuItem}">
@@ -50,20 +50,20 @@
                         </Trigger>
                         <Trigger Property="MenuItem.IsHighlighted" Value="true">
                             <Setter TargetName="Bg"
-                                    Value="DarkOrange"
+                                    Value="{DynamicResource {x:Static colors:CommandBarColors.CommandBarMenuItemHover}}"
                                     Property="Shape.Fill"/>
                             <Setter TargetName="Bg"
-                                    Value="Cyan"
+                                    Value="{DynamicResource {x:Static colors:CommandBarColors.CommandBarMenuItemHoverBorder}}"
                                     Property="Shape.Stroke"/>
-                            <Setter Value="White"
+                            <Setter Value="{DynamicResource {x:Static colors:CommandBarColors.CommandBarMenuItemHoverText}}"
                                     Property="TextElement.Foreground"/>
                         </Trigger>
                         <Trigger Property="UIElement.IsEnabled" Value="false">
-                            <Setter Value="Gray" Property="Control.Foreground"/>
+                            <Setter Value="{DynamicResource {x:Static colors:CommandBarColors.CommandBarTextInactive}}" Property="Control.Foreground"/>
                         </Trigger>
                         <DataTrigger Value="True"
                                      Binding="{Binding InputGestureText, RelativeSource={RelativeSource Self}, Converter={StaticResource IsNullOrEmptyConverter}}">
-                            <Setter x:Uid="Setter_15" TargetName="ShortcutText" Property="UIElement.Visibility" Value="Collapsed"/>
+                            <Setter TargetName="ShortcutText" Property="UIElement.Visibility" Value="Collapsed"/>
                         </DataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -122,7 +122,7 @@
                                     <Binding Path="ViewportHeight" RelativeSource="{RelativeSource TemplatedParent}"/>
                                 </MultiBinding>
                             </UIElement.Visibility>
-                            <Path x:Name="ScrollUpArrow" Fill="Black" Data="{StaticResource UpArrowGeometry}"/>
+                            <Path x:Name="ScrollUpArrow" Fill="{DynamicResource {x:Static colors:CommandBarColors.CommandBarMenuScrollGlyph}}" Data="{StaticResource UpArrowGeometry}"/>
                         </coreControls:RoutedCommandRepeatButton>
                         <coreControls:RoutedCommandRepeatButton x:Name="ScrollDownButton" Grid.Row="2" Grid.Column="0"
                                                             Command="{x:Static ScrollBar.LineDownCommand}" Focusable="false">
@@ -139,7 +139,7 @@
                                     <Binding Path="ViewportHeight" RelativeSource="{RelativeSource TemplatedParent}"/>
                                 </MultiBinding>
                             </UIElement.Visibility>
-                            <Path x:Name="ScrollDownArrow" Fill="Black" Data="{StaticResource DownArrowGeometry}"/>
+                            <Path x:Name="ScrollDownArrow" Fill="{DynamicResource {x:Static colors:CommandBarColors.CommandBarMenuScrollGlyph}}" Data="{StaticResource DownArrowGeometry}"/>
                         </coreControls:RoutedCommandRepeatButton>
                     </Grid>
                 </ControlTemplate>
@@ -148,7 +148,6 @@
     </Style>
 
     <Style TargetType="{x:Type controls:ThemedMenuItem}" BasedOn="{StaticResource {x:Type MenuItem}}">
-        <Setter Property="TextElement.Foreground" Value="Black"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type controls:ThemedMenuItem}">
@@ -178,16 +177,16 @@
                         </Trigger>
                         <Trigger Property="MenuItem.IsHighlighted" Value="true">
                             <Setter TargetName="Bg"
-                                    Value="DarkGreen"
+                                    Value="{DynamicResource {x:Static colors:CommandBarColors.CommandBarMenuItemHover}}"
                                     Property="Shape.Fill"/>
                             <Setter TargetName="Bg"
-                                    Value="Cyan"
+                                    Value="{DynamicResource {x:Static colors:CommandBarColors.CommandBarMenuItemHoverBorder}}"
                                     Property="Shape.Stroke"/>
-                            <Setter Value="White"
+                            <Setter Value="{DynamicResource {x:Static colors:CommandBarColors.CommandBarMenuItemHoverText}}"
                                     Property="TextElement.Foreground"/>
                         </Trigger>
                         <Trigger Property="UIElement.IsEnabled" Value="false">
-                            <Setter Value="Gray" Property="Control.Foreground"/>
+                            <Setter Value="{DynamicResource {x:Static colors:CommandBarColors.CommandBarTextInactive}}" Property="Control.Foreground"/>
                         </Trigger>
                         <DataTrigger Value="True"
                                      Binding="{Binding InputGestureText, RelativeSource={RelativeSource Self}, Converter={StaticResource IsNullOrEmptyConverter}}">
@@ -201,24 +200,27 @@
 
     <Style TargetType="{x:Type controls:ThemedContextMenu}" BasedOn="{StaticResource {x:Type ContextMenu}}">
         <Setter Property="SnapsToDevicePixels" Value="True"/>
-        <Setter Property="TextElement.Foreground" Value="Black"/>
+        <Setter Property="TextElement.Foreground" Value="{DynamicResource {x:Static colors:CommandBarColors.CommandBarTextActive}}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type controls:ThemedContextMenu}">
-                    <coreControls:SystemDropShadowChrome x:Name="Shadow" Color="Transparent">
-                        <Grid Background="{DynamicResource {x:Static vsui:CommandBarColors.CommandBarMenuIconBackground}}">
+                    <coreControls:SystemDropShadowChrome x:Name="Shadow" Margin="0,0,5,5" 
+                                                         Color="{DynamicResource {x:Static colors:CommandBarColors.DropShadowBackgroundColor}}">
+                        <Grid Background="{DynamicResource {x:Static colors:CommandBarColors.CommandBarMenuIconBackground}}">
                             <controls:ThemedMenuScrollViewer>
-                                <Grid Background="Red" RenderOptions.ClearTypeHint="Enabled"
-                                      RenderOptions.BitmapScalingMode="{x:Static dpi:DpiHelper.BitmapScalingMode}">
+                                <Grid RenderOptions.ClearTypeHint="Enabled" 
+                                      RenderOptions.BitmapScalingMode="{x:Static dpi:DpiHelper.BitmapScalingMode}"
+                                      Background="{DynamicResource {x:Static colors:CommandBarColors.CommandBarMenuBackground}}">
                                     <Border x:Name="PART_IconBackground" Width="28" 
-                                            Background="{DynamicResource {x:Static vsui:CommandBarColors.CommandBarMenuIconBackground}}" 
+                                            Background="{DynamicResource {x:Static colors:CommandBarColors.CommandBarMenuIconBackground}}" 
                                             HorizontalAlignment="Left"/>
                                     <ItemsPresenter KeyboardNavigation.TabNavigation="Cycle" KeyboardNavigation.DirectionalNavigation="Cycle" 
                                                     Margin="3" Grid.IsSharedSizeScope="true"
                                                     SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
                                 </Grid>
                             </controls:ThemedMenuScrollViewer>
-                            <Border BorderBrush="Black" BorderThickness="1"/>
+                            <Border BorderThickness="1" 
+                                    BorderBrush="{DynamicResource {x:Static colors:CommandBarColors.CommandBarMenuBorder}}"/>
                         </Grid>
                     </coreControls:SystemDropShadowChrome>
                 </ControlTemplate>
@@ -233,11 +235,11 @@
                 <ControlTemplate>
                     <Grid SnapsToDevicePixels="true" Background="Transparent">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="26" SharedSizeGroup="MenuItemIconColumnGroup"/>
+                            <ColumnDefinition Width="26"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Rectangle x:Uid="Rectangle_1" Height="1" Margin="4,2,1,2" Grid.Column="1"
-                                   Fill="DarkSlateGray"/>
+                        <Rectangle Height="1" Margin="4,2,1,2" Grid.Column="1"
+                                   Fill="{DynamicResource {x:Static colors:CommandBarColors.CommandBarMenuSeparatorBrush}}"/>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>

@@ -245,6 +245,16 @@ public static class DpiHelper
         };
     }
 
+    public static Point DeviceToLogicalPoint(this IntPtr hwnd, Point point)
+    {
+        ValidateIntPtr(hwnd, nameof(hwnd));
+        return new Point
+        {
+            X = hwnd.DeviceToLogicalUnits(point.X),
+            Y = hwnd.DeviceToLogicalUnits(point.Y)
+        };
+    }
+
 
     public static Rect LogicalToDeviceRect(this Window window)
     {
@@ -284,6 +294,18 @@ public static class DpiHelper
         };
     }
 
+    public static Size LogicalToDeviceSize(this IntPtr hwnd, Size size)
+    {
+        ValidateIntPtr(hwnd, nameof(hwnd));
+        if (size == Size.Empty)
+            return size;
+        return new Size
+        {
+            Width = hwnd.LogicalToDeviceUnits(size.Width),
+            Height = hwnd.LogicalToDeviceUnits(size.Height)
+        };
+    }
+
     public static T DeviceToLogicalUnitsX<T>(this Visual visual, T value) where T : IConvertible
     {
         return visual.DeviceToLogicalUnits(value, true);
@@ -298,6 +320,14 @@ public static class DpiHelper
     {
         var dpiScale = GetDpiScale(visual, getDpiScaleX);
         return (T)Convert.ChangeType(value.ToDouble(null) / dpiScale, typeof(T));
+    }
+
+    public static double DeviceToLogicalUnits(this IntPtr hwnd, double value) => hwnd.DeviceToLogicalUnits<double>(value);
+
+    private static T DeviceToLogicalUnits<T>(this IntPtr hwnd, T value) where T : IConvertible
+    {
+        var windowDpiScale = hwnd.GetWindowDpiScale();
+        return (T)Convert.ChangeType(value.ToDouble(null) / windowDpiScale, typeof(T));
     }
 
     public static T LogicalToDeviceUnitsX<T>(this Visual visual, T value) where T : IConvertible

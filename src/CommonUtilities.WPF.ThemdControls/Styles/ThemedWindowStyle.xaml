@@ -7,7 +7,8 @@
                     xmlns:nativeMethods="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.NativeMethods"
                     xmlns:input="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Input"
                     xmlns:coreConverters="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Converters;assembly=Sklavenwalker.CommonUtilities.WPF.Core"
-                    xmlns:imaging="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Imaging;assembly=Sklavenwalker.CommonUtilities.WPF.Imaging">
+                    xmlns:imaging="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Imaging;assembly=Sklavenwalker.CommonUtilities.WPF.Imaging"
+                    xmlns:fonts="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Themes.Fonts">
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.ThemedControls;component/Styles/ShadowChromeWindowStyle.xaml"/>
@@ -110,6 +111,8 @@
                                                                  Width="32" Height="32" Margin="12,7,0,0" Grid.Column="0" VerticalAlignment="Top">
                                             </controls:SystemMenu>
                                             <TextBlock Text="{TemplateBinding Window.Title}"
+                                                       FontSize="{DynamicResource {x:Static fonts:EnvironmentFonts.CaptionFontSizeKey}}"
+                                                       FontFamily="{DynamicResource {x:Static fonts:EnvironmentFonts.CaptionFontFamilyKey}}"
                                                        TextTrimming="CharacterEllipsis" VerticalAlignment="Center" Margin="6,7,0,4" Grid.Column="1"/>
                                             <StackPanel Orientation="Horizontal" Grid.Column="2">
                                                 <controls:WindowTitleBarButton x:Name="MinimizeButton" VerticalAlignment="Top"

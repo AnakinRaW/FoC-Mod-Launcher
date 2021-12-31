@@ -4,7 +4,6 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using Sklavenwalker.CommonUtilities.Wpf.Utilities;
-using Sklavenwalker.CommonUtilities.Wpf.Utils;
 
 namespace Sklavenwalker.CommonUtilities.Wpf.Controls;
 

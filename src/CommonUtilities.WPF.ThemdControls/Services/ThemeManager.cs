@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Windows;
+using Microsoft.Extensions.DependencyInjection;
+using Sklavenwalker.CommonUtilities.Wpf.Theming;
 using Validation;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Theming;
+namespace Sklavenwalker.CommonUtilities.Wpf.Services;
 
 public class ThemeManager : IThemeManager
 {
@@ -12,6 +14,8 @@ public class ThemeManager : IThemeManager
     private Window _mainWindow;
     private ITheme _theme;
 
+    private readonly IThemeResourceDictionaryCache _cache;
+
     private bool _initialized;
 
     public ITheme Theme
@@ -19,9 +23,9 @@ public class ThemeManager : IThemeManager
         get => _theme;
         set
         {
-            ThrowIfNotInitialized();
             if (value == null)
                 throw new InvalidOperationException("Theme must not be null");
+            ThrowIfNotInitialized();
             if (Equals(value, _theme))
                 return;
             var oldTheme = _theme;
@@ -29,6 +33,11 @@ public class ThemeManager : IThemeManager
             ChangeTheme(oldTheme, _theme);
             OnRaiseThemeChanged(new ThemeChangedEventArgs(value, oldTheme));
         }
+    }
+
+    public ThemeManager(IServiceProvider serviceProvider)
+    {
+        _cache = serviceProvider.GetRequiredService<IThemeResourceDictionaryCache>();
     }
 
     public void Initialize(Application application, Window mainWindow, ITheme? defaultTheme = null)
@@ -60,14 +69,14 @@ public class ThemeManager : IThemeManager
 
         if (oldTheme is not null)
         {
-            var oldResourceDict = Application.LoadComponent(oldTheme.ResourceUri) as ResourceDictionary;
+            var oldResourceDict = _cache.Get(oldTheme);
             resources.MergedDictionaries.Remove(oldResourceDict);
             windowResources.MergedDictionaries.Remove(oldResourceDict);
         }
 
-        var newResourceDict = Application.LoadComponent(theme.ResourceUri) as ResourceDictionary;
-        resources.MergedDictionaries.Add(newResourceDict);
-        windowResources.MergedDictionaries.Add(newResourceDict);
+        var themeResources = _cache.GetOrCreate(theme);
+        resources.MergedDictionaries.Add(themeResources);
+        windowResources.MergedDictionaries.Add(themeResources);
     }
 
     protected void ThrowIfNotInitialized()
