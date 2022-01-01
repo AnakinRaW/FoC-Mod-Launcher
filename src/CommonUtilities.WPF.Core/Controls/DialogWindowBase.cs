@@ -22,9 +22,19 @@ public abstract class DialogWindowBase : Window
         nameof(HasDialogFrame), typeof(bool), typeof(DialogWindowBase),
         new FrameworkPropertyMetadata(Boxes.BooleanTrue, OnWindowStyleChanged));
 
+    public static readonly DependencyProperty IsResizableProperty = DependencyProperty.Register(
+        nameof(IsResizable), typeof(bool), typeof(DialogWindowBase),
+        new PropertyMetadata(true, OnResizeChanged));
+
     public static readonly DependencyProperty IsCloseButtonEnabledProperty =
         DependencyProperty.Register(nameof(IsCloseButtonEnabled), typeof(bool), typeof(DialogWindowBase),
             new PropertyMetadata(Boxes.BooleanTrue, OnWindowStyleChanged));
+
+    public bool IsResizable
+    {
+        get => (bool)GetValue(IsResizableProperty);
+        set => SetValue(IsResizableProperty, value);
+    }
 
     public bool HasMaximizeButton
     {
@@ -88,6 +98,14 @@ public abstract class DialogWindowBase : Window
         ((DialogWindowBase)obj).UpdateWindowStyle();
     }
 
+    private static void OnResizeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        var window = (Window)d;
+        if (PresentationSource.FromVisual(window) is not HwndSource hwndSource)
+            return;
+        UpdateResizable(hwndSource.Handle, (bool)e.NewValue);
+    }
+    
     private void UpdateWindowStyle()
     {
         if (_hwndSource == null)
@@ -111,6 +129,16 @@ public abstract class DialogWindowBase : Window
             User32.EnableMenuItem(systemMenu, 61536U, 0U | num5);
         }
         User32.SetWindowPos(handle, IntPtr.Zero, 0, 0, 0, 0, 35);
+    }
+
+    private static void UpdateResizable(IntPtr hwnd, bool resizable)
+    {
+        var newStyle = User32.GetWindowLong(hwnd, -16);
+        if (resizable)
+            newStyle |= 262144;
+        else
+            newStyle &= ~262144;
+        User32.SetWindowLong(hwnd, -16, newStyle);
     }
 
     protected virtual IntPtr WndProcHook(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)

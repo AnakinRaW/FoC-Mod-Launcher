@@ -3,13 +3,13 @@ using Microsoft.Toolkit.Mvvm.ComponentModel;
 
 namespace Sklavenwalker.CommonUtilities.Wpf.Controls;
 
-public partial class WindowViewModel : ObservableObject
+public partial class WindowViewModel : ObservableObject, IWindowViewModel
 {
     [ObservableProperty]
     private WindowState _minMaxState;
     
     [ObservableProperty]
-    private bool _leftToRight;
+    private bool _rightToLeft;
     
     [ObservableProperty]
     private string? _title;

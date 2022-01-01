@@ -10,7 +10,7 @@ internal class ApplicationViewModel : IApplicationViewModel
     public event PropertyChangedEventHandler? PropertyChanged;
 
     public WindowState MinMaxState { get; set; }
-    public bool LeftToRight { get; set; }
+    public bool RightToLeft { get; set; }
     public string Title { get; set; }
     public bool IsFullScreen { get; set; }
     public bool IsResizable { get; set; }

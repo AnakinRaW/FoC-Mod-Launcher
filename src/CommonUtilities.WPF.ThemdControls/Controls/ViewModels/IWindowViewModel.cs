@@ -7,9 +7,9 @@ public interface IWindowViewModel : INotifyPropertyChanged
 {
     WindowState MinMaxState { get; set; }
 
-    bool LeftToRight { get; set; }
+    bool RightToLeft { get; set; }
 
-    string Title { get; set; }
+    string? Title { get; set; }
 
     bool IsFullScreen { get; set; }
 

@@ -35,7 +35,7 @@ public class ShadowChromeWindow : Window
 
     public static readonly DependencyProperty IsResizableProperty = DependencyProperty.Register(
         nameof(IsResizable), typeof(bool), typeof(ShadowChromeWindow),
-        new PropertyMetadata(true, PropertyChangedCallback));
+        new PropertyMetadata(true, OnResizeChanged));
 
     public static readonly DependencyProperty HasMaximizeButtonProperty = DependencyProperty.Register(
         nameof(HasMaximizeButton), typeof(bool), typeof(ShadowChromeWindow),
@@ -55,10 +55,10 @@ public class ShadowChromeWindow : Window
 
     private void UpdateWindowStyle(IntPtr hwnd)
     {
-        var windowLong = User32.GetWindowLong(hwnd, GWL.Style);
-        var num1 = !HasMaximizeButton ? windowLong & -65537 : windowLong | 65536;
-        var num2 = !HasMinimizeButton ? num1 & -131073 : num1 | 131072;
-        User32.SetWindowLong(hwnd, -16, num2);
+        var currentStyle = User32.GetWindowLong(hwnd, GWL.Style);
+        var newStyle = !HasMaximizeButton ? currentStyle & -65537 : currentStyle | 65536;
+        newStyle = !HasMinimizeButton ? newStyle & -131073 : newStyle | 131072;
+        User32.SetWindowLong(hwnd, -16, newStyle);
     }
 
     public bool HasMinimizeButton
@@ -158,15 +158,15 @@ public class ShadowChromeWindow : Window
         }
     }
 
-    private static void PropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    private static void OnResizeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         var window = (Window)d;
         if (PresentationSource.FromVisual(window) is not HwndSource hwndSource)
             return;
-        UpdateResizable(window, hwndSource.Handle, (bool)e.NewValue);
+        UpdateResizable(hwndSource.Handle, (bool)e.NewValue);
     }
 
-    private static void UpdateResizable(Window window, IntPtr hwnd, bool resizable)
+    private static void UpdateResizable(IntPtr hwnd, bool resizable)
     {
         var windowLong = User32.GetWindowLong(hwnd, GWL.Style);
         if (resizable)
