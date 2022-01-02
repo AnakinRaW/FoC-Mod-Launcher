@@ -3,33 +3,67 @@
                     xmlns:controls="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Controls"
                     xmlns:coreControls="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Controls;assembly=Sklavenwalker.CommonUtilities.WPF.Core"
                     xmlns:imaging="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Imaging;assembly=Sklavenwalker.CommonUtilities.WPF.Imaging"
-                    xmlns:converters="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Converters">
+                    xmlns:converters="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Converters"
+                    xmlns:imageControls="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Imaging.Controls;assembly=Sklavenwalker.CommonUtilities.WPF.Imaging"
+                    xmlns:coreConverters="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Converters;assembly=Sklavenwalker.CommonUtilities.WPF.Core">
     <Style TargetType="{x:Type controls:ThemedDialog}" BasedOn="{StaticResource {x:Type coreControls:DialogWindowBase}}">
         <Style.Resources>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
             <converters:BooleanToFlowDirectionConverter x:Key="BooleanToFlowDirectionConverter"/>
+            <coreConverters:IsNullOrEmptyConverter x:Key="IsNullOrEmptyConverter"/>
 
-            <DataTemplate x:Key="ButtonTemplate" DataType="{x:Type controls:IButtonViewModel}">
-                <Button Margin="10,0,0,0" Padding="10,2"
-                        Content="{Binding CommandDefinition.Text}" ToolTip="{Binding CommandDefinition.Tooltip}"
-                        IsDefault="{Binding IsDefault}" IsCancel="{Binding IsCancel}"
-                        Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.UnifiedButtonCommand}"
-                        CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"/>
+            <DataTemplate x:Key="ButtonContentTemplate" DataType="{x:Type controls:ICommandDefinition}">
+                <Border>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <imageControls:ThemedImage x:Name="Image" Margin="0,0,8,0" VerticalAlignment="Center" Focusable="False"
+                                                   SnapsToDevicePixels="True" UseLayoutRounding="True" Moniker="{Binding Image}"/>
+                        <AccessText x:Name="Text" VerticalAlignment="Center" SnapsToDevicePixels="True" Text="{Binding Text}"/>
+                    </StackPanel>
+                </Border>
+                <DataTemplate.Triggers>
+                    <DataTrigger Binding="{Binding Image}" 
+                                 Value="{x:Static imaging:ImageLibrary.InvalidImageMoniker}">
+                        <Setter TargetName="Image" Property="Visibility" Value="Collapsed"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Text, Converter={StaticResource IsNullOrEmptyConverter}}" 
+                                 Value="True">
+                        <Setter TargetName="Text" Property="Visibility" Value="Collapsed"/>
+                        <Setter TargetName="Image" Property="Margin" Value="0"/>
+                    </DataTrigger>
+                </DataTemplate.Triggers>
             </DataTemplate>
 
-            <DataTemplate x:Key="DropDownTemplate">
-                <Button Margin="10,0,0,0" Padding="10,2"
-                        Content="{Binding CommandDefinition.Text}" Background="Red"/>
+            <Style x:Key="DialogButtonStyle" TargetType="{x:Type Button}">
+                <Setter Property="MinWidth" Value="64"/>
+                <Setter Property="Height" Value="23"/>
+                <Setter Property="Margin" Value="10,0,0,0"/>
+                <Setter Property="Padding" Value="10,2"/>
+                <Setter Property="IsDefault" Value="{Binding IsDefault}"/>
+                <Setter Property="IsCancel" Value="{Binding IsCancel}"/>
+                <Setter Property="Content" Value="{Binding CommandDefinition}"/>
+                <Setter Property="ToolTip" Value="{Binding CommandDefinition.Tooltip}"/>
+                <Setter Property="Command" Value="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.UnifiedButtonCommand}"/>
+                <Setter Property="CommandParameter" Value="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"/>
+                <Setter Property="ContentTemplate" Value="{StaticResource ButtonContentTemplate}"/>
+            </Style>
+
+            <DataTemplate x:Key="ThemedButtonTemplate">
+                <controls:ThemedButton Style="{StaticResource DialogButtonStyle}"/>
             </DataTemplate>
 
+            <DataTemplate x:Key="ButtonTemplate">
+                <Button Style="{StaticResource DialogButtonStyle}"/>
+            </DataTemplate>
+            
             <controls:DialogButtonTemplateSelector x:Key="DialogButtonTemplateSelector"
-                                                   ButtonTemplate="{StaticResource ButtonTemplate}"
-                                                   DropDownButtonTemplate="{StaticResource DropDownTemplate}"/>
+                                                   ThemedButtonTemplate="{StaticResource ThemedButtonTemplate}"
+                                                   ButtonTemplate="{StaticResource ButtonTemplate}"/>
         </Style.Resources>
         <Setter Property="imaging:ImageThemingUtilities.ImageBackgroundColor"
                 Value="{DynamicResource {x:Static SystemColors.WindowColorKey}}"/>
         <Setter Property="SizeToContent" Value="WidthAndHeight"/>
         <Setter Property="MinWidth" Value="280"/>
+        <Setter Property="MinHeight" Value="175"/>
         <Setter Property="FlowDirection">
             <Setter.Value>
                 <Binding Path="RightToLeft" Converter="{StaticResource BooleanToFlowDirectionConverter}"/>
@@ -74,13 +108,18 @@
                         <Border Background="#FF2D2D30" Padding="0,15,0,0" Grid.Row="0">
                             <ContentPresenter Content="{Binding}"/>
                         </Border>
-                        <ItemsControl Grid.Row="1" IsTabStop="False" ItemsSource="{Binding Buttons}" 
-                                      ItemTemplateSelector="{StaticResource DialogButtonTemplateSelector}">
+                        <ItemsControl Grid.Row="1" IsTabStop="False" ItemsSource="{Binding Buttons}" Margin="0,6,6,6">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"/>
                                 </ItemsPanelTemplate>
                             </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <ContentControl Margin="0,8,0,0" HorizontalAlignment="Stretch"
+                                                    Content="{Binding}" ContentTemplateSelector="{StaticResource DialogButtonTemplateSelector}"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
                         </ItemsControl>
                     </Grid>
                 </ControlTemplate>

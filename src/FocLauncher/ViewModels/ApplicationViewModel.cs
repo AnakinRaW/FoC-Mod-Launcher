@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
+using FocLauncher.Imaging;
 using FocLauncher.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -57,19 +58,21 @@ public partial class ApplicationViewModel : MainWindowViewModel, IApplicationVie
 
         var a = new ButtonViewModel("test", new CommandDefinition("123")
         {
-            Command = new RelayCommand(() => MessageBox.Show("a"), () => false)
+            Image = Monikers.Undo,
+            Command = new RelayCommand(() => MessageBox.Show("a"))
         });
         var b = new ButtonViewModel("test", new CommandDefinition("456")
         {
+            Tooltip = "Some tooltip",
+            Image = Monikers.Undo,
             Command = new RelayCommand(() => dialog.Close())
         })
         {
+            Themed = true,
             IsDefault = true,
             IsCancel = true
         };
-        var c = new DropDownButtonViewModel("test", new CommandDefinition("789"));
-
-        var buttons = new List<IButtonViewModel> { a, b, c };
+        var buttons = new List<IButtonViewModel> { a, b };
         
         dialog.Initialize(new ErrorDialogViewModel(buttons));
         dialog.ShowModal();

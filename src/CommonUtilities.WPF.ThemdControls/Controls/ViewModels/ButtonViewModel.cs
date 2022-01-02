@@ -10,7 +10,7 @@ public partial class ButtonViewModel : ObservableObject, IButtonViewModel
     [ObservableProperty]
     private string _id;
     [ObservableProperty]
-    private ButtonStyle _style;
+    private bool _themed;
     [ObservableProperty]
     private bool _isDefault;
     [ObservableProperty]

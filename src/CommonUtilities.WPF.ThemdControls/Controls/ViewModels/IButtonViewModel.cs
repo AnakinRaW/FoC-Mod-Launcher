@@ -15,7 +15,7 @@ public interface IButtonViewModel
 
     bool IsCancel { get; }
 
-    ButtonStyle Style { get; }
+    bool Themed { get; }
 }
 
 public interface IDropDownButtonViewModel : IButtonViewModel, INotifyPropertyChanged

@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Toolkit.Mvvm.Input;
-using Validation;
 
 namespace Sklavenwalker.CommonUtilities.Wpf.Controls;
 
-public class DialogViewModel : WindowViewModel, IDialogViewModel
+public abstract class DialogViewModel : WindowViewModel, IDialogViewModel
 {
     public string? ResultButton { get; private set; }
 
     public IList<IButtonViewModel> Buttons { get; }
-
+    
     public IRelayCommand<IButtonViewModel> UnifiedButtonCommand { get; }
 
-    public DialogViewModel(IList<IButtonViewModel> buttons)
+    protected DialogViewModel(IList<IButtonViewModel> buttons)
     {
         ValidateButtons(buttons);
         UnifiedButtonCommand = new RelayCommand<IButtonViewModel>(Execute, CanExecute);
@@ -22,7 +21,8 @@ public class DialogViewModel : WindowViewModel, IDialogViewModel
 
     private void Execute(IButtonViewModel? button)
     {
-        Requires.NotNull(button, nameof(button));
+        if (button is null)
+            return;
         ResultButton = button.Id;
         button.CommandDefinition.Command?.Execute(this);
     }
