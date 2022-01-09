@@ -6,7 +6,7 @@ using Sklavenwalker.CommonUtilities.Wpf.Converters;
 
 namespace Sklavenwalker.CommonUtilities.Wpf.Imaging.Converters;
 
-internal sealed class CrispImageSourceConverter : 
+internal sealed class InternalThemedImageSourceConverter : 
     MultiValueConverter<ImageMoniker, double, double, Color, bool, Color, bool, double, double, ImageSource>
 {
     protected override ImageSource? Convert(ImageMoniker moniker, double logicalWidth, double logicalHeight, 

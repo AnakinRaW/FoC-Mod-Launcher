@@ -1,7 +1,8 @@
-﻿using Sklavenwalker.CommonUtilities.Wpf.Controls;
+﻿namespace FocLauncher.ViewModels;
 
-namespace FocLauncher.ViewModels;
-
-public interface IErrorDialogViewModel : ILauncherViewModel, IDialogViewModel
+public interface IErrorMessageDialogViewModel : ILauncherViewModel, IImageDialogViewModel
 {
+    string Header { get; }
+
+    string Message { get; }
 }

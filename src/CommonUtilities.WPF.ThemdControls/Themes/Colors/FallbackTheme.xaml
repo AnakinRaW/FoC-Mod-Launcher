@@ -65,6 +65,17 @@
     <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=MainWindowButtonHoverInactiveGlyph}" 
                      Color="#FFFFFFFF"/>
 
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=DialogBackground}" 
+                     Color="#FF252526"/>
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=DialogContentBackground}" 
+                     Color="#FF2D2D30"/>
+    
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=DialogContentText}" 
+                     Color="#FFF1F1F1"/>
+
+
     <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=StatusBarDefault}" 
                      Color="#FF007ACC"/>
 
@@ -94,6 +105,63 @@
            B="00"
            G="00"
            R="00" />
+
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, ResourceId=ButtonBackground}" 
+                     Color="#FF2D2D30"/>
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, ResourceId=ButtonBorder}" 
+                     Color="#FF3D3D3D"/>
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, ResourceId=ButtonText}" 
+                     Color="#FFFFFFFF"/>
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, ResourceId=ButtonDefaultBackground}" 
+                     Color="#FF252526"/>
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, ResourceId=ButtonDefaultBorder}" 
+                     Color="#FF9E9E9E"/>
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, ResourceId=ButtonDefaultText}" 
+                     Color="#FFFFFFFF"/>
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, ResourceId=ButtonFocusedBackground}" 
+                     Color="#FF252526"/>
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, ResourceId=ButtonFocusedBorder}" 
+                     Color="#FF0097FB"/>
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, ResourceId=ButtonFocusedText}" 
+                     Color="#FFFFFFFF"/>
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, ResourceId=ButtonHoverBackground}" 
+                     Color="#FF4D4D4D"/>
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, ResourceId=ButtonHoverBorder}" 
+                     Color="#FF4D4D4D"/>
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, ResourceId=ButtonHoverText}" 
+                     Color="#FFFFFFFF"/>
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, ResourceId=ButtonPressedBackground}" 
+                     Color="#FF333333"/>
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, ResourceId=ButtonPressedBorder}" 
+                     Color="#FF333333"/>
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, ResourceId=ButtonPressedText}" 
+                     Color="#FFFFFFFF"/>
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, ResourceId=ButtonDisabledBackground}" 
+                     Color="#FF333333"/>
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, ResourceId=ButtonDisabledBorder}" 
+                     Color="#FF3D3D3D"/>
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, ResourceId=ButtonDisabledText}" 
+                     Color="#FF7A7A7A"/>
+
+
 
 
 </ResourceDictionary>

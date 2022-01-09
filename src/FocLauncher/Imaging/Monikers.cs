@@ -7,4 +7,6 @@ internal static class Monikers
     public static ImageMoniker Settings => new() { CatalogType = typeof(ImageCatalog), Name = "Settings" };
     public static ImageMoniker Undo => new() { CatalogType = typeof(ImageCatalog), Name = "Undo" };
     public static ImageMoniker Github => new() { CatalogType = typeof(ImageCatalog), Name = "Github" };
+
+    public static ImageMoniker Trooper => new() { CatalogType = typeof(ImageCatalog), Name = "Trooper" };
 }

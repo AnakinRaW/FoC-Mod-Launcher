@@ -18,8 +18,8 @@ internal class DialogButtonTemplateSelector : DataTemplateSelector
         return item switch
         {
             IDropDownButtonViewModel => DropDownButtonTemplate,
-            IButtonViewModel {Themed:true} => ThemedButtonTemplate,
-            IButtonViewModel {Themed:false} => ButtonTemplate,
+            IButtonViewModel { Themed: true } => ThemedButtonTemplate,
+            IButtonViewModel { Themed: false } => ButtonTemplate,
             _ => null
         };
     }

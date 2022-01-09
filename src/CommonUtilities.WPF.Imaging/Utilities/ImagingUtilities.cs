@@ -23,11 +23,12 @@ internal static class ImagingUtilities
     {
         var image = LoadManagedImage(imageDefinition, attributes.DeviceSize);
         var themedImage = ThemeImage(image, attributes, imageDefinition.CanTheme);
+        themedImage = DetectAndRemoveOptOutPixel(themedImage);
         if (themedImage is { CanFreeze: true })
             themedImage.Freeze();
         return themedImage;
     }
-
+    
     private static BitmapSource? ThemeImage(BitmapSource? image, ImageAttributes attributes, bool canTheme)
     {
         if (image == null)
@@ -40,6 +41,21 @@ internal static class ImagingUtilities
         if (!canTheme)
             image = ImageThemingUtilities.SetOptOutPixel(image!);
         return image;
+    }
+
+    private static unsafe BitmapSource? DetectAndRemoveOptOutPixel(BitmapSource? source)
+    {
+        if (source is null)
+            return null;
+        var bitmapSource = ImageThemingUtilities.ModifyBitmap(source, (s, pixels) =>
+        {
+            var wasThemed = !ImageThemingUtilities.IsOptOutPixelSet(pixels, s.PixelWidth, s.PixelHeight, true);
+            if (wasThemed)
+                return false;
+            ImageThemingUtilities.ClearOptOutPixel(pixels, s.PixelWidth, s.PixelHeight, true);
+            return true;
+        });
+        return bitmapSource;
     }
 
     private static BitmapSource? LoadManagedImage(ImageDefinition imageDefinition, Size deviceSize)

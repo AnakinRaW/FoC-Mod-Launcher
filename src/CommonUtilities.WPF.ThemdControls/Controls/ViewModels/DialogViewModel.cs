@@ -6,17 +6,45 @@ namespace Sklavenwalker.CommonUtilities.Wpf.Controls;
 
 public abstract class DialogViewModel : WindowViewModel, IDialogViewModel
 {
+    public event EventHandler? CloseDialogRequest;
+
+    private IList<IButtonViewModel>? _buttons;
+
     public string? ResultButton { get; private set; }
 
-    public IList<IButtonViewModel> Buttons { get; }
-    
+    public IList<IButtonViewModel> Buttons
+    {
+        get
+        {
+            if (_buttons is null)
+            {
+                _buttons = CreateButtons();
+                ValidateButtons(_buttons);
+            }
+            return _buttons;
+        }
+    }
+
     public IRelayCommand<IButtonViewModel> UnifiedButtonCommand { get; }
 
-    protected DialogViewModel(IList<IButtonViewModel> buttons)
+    protected DialogViewModel()
     {
-        ValidateButtons(buttons);
         UnifiedButtonCommand = new RelayCommand<IButtonViewModel>(Execute, CanExecute);
-        Buttons = buttons;
+    }
+
+    public void CloseDialog()
+    {
+        RequestClose();
+    }
+
+    protected virtual void RequestClose()
+    {
+        CloseDialogRequest?.Invoke(this, EventArgs.Empty);
+    }
+
+    protected virtual IList<IButtonViewModel> CreateButtons()
+    {
+        return new List<IButtonViewModel>();
     }
 
     private void Execute(IButtonViewModel? button)

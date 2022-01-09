@@ -11,13 +11,13 @@ public class ThemedImageSourceConverter : MultiValueConverter<ImageSource, Color
     internal static ImageSource? ConvertCore(ImageSource? inputImage, Color backgroundColor, bool isEnabled, bool isHighContrast,
         bool? enhanceContrastIfNecessary, object parameter)
     {
-        if (inputImage is not BitmapSource inputImage1 || backgroundColor.A == 0 && isEnabled)
+        if (inputImage is not BitmapSource bitmapSource || backgroundColor.A == 0 && isEnabled)
             return inputImage;
         var biasColor = GrayscaleBitmapSourceConverter.GetBiasColor(parameter);
         if (!enhanceContrastIfNecessary.HasValue)
-            return ImageThemingUtilities.GetOrCreateThemedBitmapSource(inputImage1, backgroundColor,
+            return ImageThemingUtilities.GetOrCreateThemedBitmapSource(bitmapSource, backgroundColor,
                 isEnabled, biasColor, isHighContrast);
-        return ImageThemingUtilities.GetOrCreateThemedBitmapSource(inputImage1, backgroundColor,
+        return ImageThemingUtilities.GetOrCreateThemedBitmapSource(bitmapSource, backgroundColor,
             isEnabled, biasColor, isHighContrast);
     }
 

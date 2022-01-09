@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
+using System.Windows.Threading;
 using Validation;
 
 namespace Sklavenwalker.CommonUtilities.Wpf.Controls;
@@ -6,18 +8,36 @@ namespace Sklavenwalker.CommonUtilities.Wpf.Controls;
 public class ThemedDialog : DialogWindowBase
 {
     private IDialogViewModel? _viewModel;
-
-    public string? ResultButtonId => _viewModel?.ResultButton;
-
+    
     static ThemedDialog()
     {
         DefaultStyleKeyProperty.OverrideMetadata(typeof(ThemedDialog), new FrameworkPropertyMetadata(typeof(ThemedDialog)));
     }
 
+    public ThemedDialog()
+    {
+        DataContextChanged += OnDataContextChanged;
+    }
+    
     public void Initialize(IDialogViewModel viewModel)
     {
         Requires.NotNull(viewModel, nameof(viewModel));
         DataContext = viewModel;
-        _viewModel = viewModel;
+    }
+
+    private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+    {
+        if (_viewModel is not null)
+            _viewModel.CloseDialogRequest -= OnCloseRequested;
+        if (e.NewValue is IDialogViewModel dialogViewModel)
+        {
+            _viewModel = dialogViewModel;
+            _viewModel.CloseDialogRequest += OnCloseRequested;
+        }
+    }
+
+    private void OnCloseRequested(object? sender, EventArgs e)
+    {
+        Dispatcher.Invoke(DispatcherPriority.Input, Close);
     }
 }

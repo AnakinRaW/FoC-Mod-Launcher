@@ -43,4 +43,8 @@
 	  </Page>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="CommandDefinitions\" />
+	</ItemGroup>
+
 </Project>

@@ -3,7 +3,8 @@
                     xmlns:controls="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Controls"
                     xmlns:imaging="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Imaging;assembly=Sklavenwalker.CommonUtilities.WPF.Imaging"
                     xmlns:converters="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Converters"
-                    xmlns:coreConverters="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Converters;assembly=Sklavenwalker.CommonUtilities.WPF.Core">
+                    xmlns:coreConverters="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Converters;assembly=Sklavenwalker.CommonUtilities.WPF.Core"
+                    xmlns:themes="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Themes.Colors">
 
     <converters:BrushToColorConverter x:Key="BrushToColorConverter"/>
     <coreConverters:IsNullOrEmptyConverter x:Key="IsNullOrEmptyConverter"/>
@@ -12,9 +13,9 @@
         <Setter Property="imaging:ImageThemingUtilities.ImageBackgroundColor"
                 Value="{Binding Background, RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToColorConverter}}"/>
         <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="Background" Value="Black"/>
-        <Setter Property="BorderBrush" Value="Red"/>
-        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Background" Value="{DynamicResource {x:Static themes:CommonControlsColors.ButtonBackground}}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static themes:CommonControlsColors.ButtonBorder}}"/>
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static themes:CommonControlsColors.ButtonText}}"/>
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Template">
@@ -31,27 +32,44 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsDefaulted" Value="True">
-                            <Setter TargetName="Border" Value="White" 
-                                    Property="BorderBrush"/>
+                            <Setter Property="Background"
+                                    Value="{DynamicResource {x:Static themes:CommonControlsColors.ButtonDefaultBackground}}"/>
+                            <Setter Property="Control.Foreground"
+                                    Value="{DynamicResource {x:Static themes:CommonControlsColors.ButtonDefaultText}}"/>
+                            <Setter Property="BorderBrush"
+                                    Value="{DynamicResource {x:Static themes:CommonControlsColors.ButtonDefaultBorder}}"/>
+                        </Trigger>
+                        <Trigger Property="UIElement.IsKeyboardFocused" Value="true">
+                            <Setter Property="Background"
+                                    Value="{DynamicResource {x:Static themes:CommonControlsColors.ButtonFocusedBackground}}"/>
+                            <Setter Property="Control.Foreground"
+                                    Value="{DynamicResource {x:Static themes:CommonControlsColors.ButtonFocusedText}}"/>
+                            <Setter Property="BorderBrush"
+                                    Value="{DynamicResource {x:Static themes:CommonControlsColors.ButtonFocusedBorder}}"/>
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Border" Value="LightCoral"
-                                    Property="Background"/>
-                            <Setter TargetName="Border" Value="Gold"
-                                    Property="BorderBrush"/>
-                            <Setter Value="White" Property="Foreground"/>
+                            <Setter Property="Background"
+                                    Value="{DynamicResource {x:Static themes:CommonControlsColors.ButtonHoverBackground}}"/>
+                            <Setter Property="Control.Foreground"
+                                    Value="{DynamicResource {x:Static themes:CommonControlsColors.ButtonHoverText}}"/>
+                            <Setter Property="BorderBrush"
+                                    Value="{DynamicResource {x:Static themes:CommonControlsColors.ButtonHoverBorder}}"/>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="Border" Value="DeepPink"
-                                    Property="Background"/>
-                            <Setter TargetName="Border" Value="Green"
-                                    Property="BorderBrush"/>
-                            <Setter Value="White" Property="Foreground"/>
+                            <Setter Property="Background"
+                                    Value="{DynamicResource {x:Static themes:CommonControlsColors.ButtonPressedBackground}}"/>
+                            <Setter Property="Control.Foreground"
+                                    Value="{DynamicResource {x:Static themes:CommonControlsColors.ButtonPressedText}}"/>
+                            <Setter Property="BorderBrush"
+                                    Value="{DynamicResource {x:Static themes:CommonControlsColors.ButtonPressedBorder}}"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="Border" Value="Red" Property="Background"/>
-                            <Setter TargetName="Border" Value="Blue" Property="BorderBrush"/>
-                            <Setter Value="White" Property="Foreground"/>
+                            <Setter Property="Background"
+                                    Value="{DynamicResource {x:Static themes:CommonControlsColors.ButtonDisabledBackground}}"/>
+                            <Setter Property="Control.Foreground"
+                                    Value="{DynamicResource {x:Static themes:CommonControlsColors.ButtonDisabledText}}"/>
+                            <Setter Property="BorderBrush"
+                                    Value="{DynamicResource {x:Static themes:CommonControlsColors.ButtonDisabledBorder}}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

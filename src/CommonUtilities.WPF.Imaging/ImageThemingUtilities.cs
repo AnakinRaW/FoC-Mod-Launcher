@@ -326,9 +326,9 @@ public static class ImageThemingUtilities
 
     private struct WeakImageCacheKey : IEquatable<WeakImageCacheKey>
     {
-        public Color Background;
-        public Color GrayscaleBias;
-        public bool IsEnabled;
+        private Color Background;
+        private Color GrayscaleBias;
+        private readonly bool IsEnabled;
 
         public WeakImageCacheKey(Color background, Color grayscaleBias, bool isEnabled)
         {

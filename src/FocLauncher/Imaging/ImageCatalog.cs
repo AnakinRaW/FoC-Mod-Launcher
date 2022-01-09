@@ -17,6 +17,14 @@ internal class ImageCatalog : ImmutableImageCatalog
         CanTheme = true
     };
 
+    public static ImageDefinition TrooperDefinition => new()
+    {
+        Kind = ImageFileKind.Png,
+        Moniker = Monikers.Trooper,
+        Source = ResourcesUriCreator.Create("sadTrooper", ImageFileKind.Png),
+        CanTheme = false
+    };
+
     public static ImageDefinition UndoDefinition => new()
     {
         Kind = ImageFileKind.Png,
@@ -39,7 +47,9 @@ internal class ImageCatalog : ImmutableImageCatalog
     public static IEnumerable<ImageDefinition> Definitions = new List<ImageDefinition>
     {
         SettingsDefinition,
-        UndoDefinition
+        UndoDefinition,
+        GithubDefinition, 
+        TrooperDefinition
     };
 
     private ImageCatalog() : base(Definitions)

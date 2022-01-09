@@ -33,6 +33,10 @@ public static class WindowColors
     private static ComponentResourceKey? _mainWindowResizeGripTexture1;
     private static ComponentResourceKey? _mainWindowResizeGripTexture2;
 
+    private static ComponentResourceKey? _dialogBackground;
+    private static ComponentResourceKey? _dialogContentBackground;
+    private static ComponentResourceKey? _dialogContentText;
+
     private static ComponentResourceKey? _statusBarDefault;
 
 
@@ -108,6 +112,92 @@ public static class WindowColors
     public static ComponentResourceKey MainWindowResizeGripTexture2 => _mainWindowResizeGripTexture2 ??=
         new ComponentResourceKey(typeof(WindowColors), nameof(MainWindowResizeGripTexture2));
 
+    public static ComponentResourceKey DialogBackground => _dialogBackground ??=
+        new ComponentResourceKey(typeof(WindowColors), nameof(DialogBackground));
+
+    public static ComponentResourceKey DialogContentBackground => _dialogContentBackground ??=
+        new ComponentResourceKey(typeof(WindowColors), nameof(DialogContentBackground));
+
+    public static ComponentResourceKey DialogContentText => _dialogContentText ??=
+        new ComponentResourceKey(typeof(WindowColors), nameof(DialogContentText));
+
+
     public static ComponentResourceKey StatusBarDefault => _statusBarDefault ??=
         new ComponentResourceKey(typeof(WindowColors), nameof(StatusBarDefault));
+}
+
+public class CommonControlsColors
+{
+    private static ComponentResourceKey? _buttonBackground;
+    private static ComponentResourceKey? _buttonBorder;
+    private static ComponentResourceKey? _buttonText;
+    private static ComponentResourceKey? _buttonDefaultBackground;
+    private static ComponentResourceKey? _buttonDefaultBorder;
+    private static ComponentResourceKey? _buttonDefaultText;
+    private static ComponentResourceKey? _buttonFocusedBackground;
+    private static ComponentResourceKey? _buttonFocusedBorder;
+    private static ComponentResourceKey? _buttonFocusedText;
+    private static ComponentResourceKey? _buttonHoverBackground;
+    private static ComponentResourceKey? _buttonHoverBorder;
+    private static ComponentResourceKey? _buttonHoverText;
+    private static ComponentResourceKey? _buttonPressedBackground;
+    private static ComponentResourceKey? _buttonPressedBorder;
+    private static ComponentResourceKey? _buttonPressedText;
+    private static ComponentResourceKey? _buttonDisabledBackground;
+    private static ComponentResourceKey? _buttonDisabledBorder;
+    private static ComponentResourceKey? _buttonDisabledText;
+
+    public static ComponentResourceKey ButtonBackground => _buttonBackground ??=
+        new ComponentResourceKey(typeof(CommonControlsColors), nameof(ButtonBackground));
+
+    public static ComponentResourceKey ButtonBorder => _buttonBorder ??=
+        new ComponentResourceKey(typeof(CommonControlsColors), nameof(ButtonBorder));
+
+    public static ComponentResourceKey ButtonText => _buttonText ??=
+        new ComponentResourceKey(typeof(CommonControlsColors), nameof(ButtonText));
+
+    public static ComponentResourceKey ButtonDefaultBackground => _buttonDefaultBackground ??=
+        new ComponentResourceKey(typeof(CommonControlsColors), nameof(ButtonDefaultBackground));
+
+    public static ComponentResourceKey ButtonDefaultBorder => _buttonDefaultBorder ??=
+        new ComponentResourceKey(typeof(CommonControlsColors), nameof(ButtonDefaultBorder));
+
+    public static ComponentResourceKey ButtonDefaultText => _buttonDefaultText ??=
+        new ComponentResourceKey(typeof(CommonControlsColors), nameof(ButtonDefaultText));
+
+    public static ComponentResourceKey ButtonFocusedBackground => _buttonFocusedBackground ??=
+        new ComponentResourceKey(typeof(CommonControlsColors), nameof(ButtonFocusedBackground));
+
+    public static ComponentResourceKey ButtonFocusedBorder => _buttonFocusedBorder ??=
+        new ComponentResourceKey(typeof(CommonControlsColors), nameof(ButtonFocusedBorder));
+
+    public static ComponentResourceKey ButtonFocusedText => _buttonFocusedText ??=
+        new ComponentResourceKey(typeof(CommonControlsColors), nameof(ButtonFocusedText));
+
+    public static ComponentResourceKey ButtonHoverBackground => _buttonHoverBackground ??=
+        new ComponentResourceKey(typeof(CommonControlsColors), nameof(ButtonHoverBackground));
+
+    public static ComponentResourceKey ButtonHoverBorder => _buttonHoverBorder ??=
+        new ComponentResourceKey(typeof(CommonControlsColors), nameof(ButtonHoverBorder));
+
+    public static ComponentResourceKey ButtonHoverText => _buttonHoverText ??=
+        new ComponentResourceKey(typeof(CommonControlsColors), nameof(ButtonHoverText));
+
+    public static ComponentResourceKey ButtonPressedBackground => _buttonPressedBackground ??=
+        new ComponentResourceKey(typeof(CommonControlsColors), nameof(ButtonPressedBackground));
+
+    public static ComponentResourceKey ButtonPressedBorder => _buttonPressedBorder ??=
+        new ComponentResourceKey(typeof(CommonControlsColors), nameof(ButtonPressedBorder));
+
+    public static ComponentResourceKey ButtonPressedText => _buttonPressedText ??=
+        new ComponentResourceKey(typeof(CommonControlsColors), nameof(ButtonPressedText));
+
+    public static ComponentResourceKey ButtonDisabledBackground => _buttonDisabledBackground ??=
+        new ComponentResourceKey(typeof(CommonControlsColors), nameof(ButtonDisabledBackground));
+
+    public static ComponentResourceKey ButtonDisabledBorder => _buttonDisabledBorder ??=
+        new ComponentResourceKey(typeof(CommonControlsColors), nameof(ButtonDisabledBorder));
+
+    public static ComponentResourceKey ButtonDisabledText => _buttonDisabledText ??=
+        new ComponentResourceKey(typeof(CommonControlsColors), nameof(ButtonDisabledText));
 }

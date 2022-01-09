@@ -4,7 +4,7 @@
                     xmlns:controls="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Imaging.Controls"
                     xmlns:imaging="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Imaging">
 
-    <converters:CrispImageSourceConverter x:Key="CrispImageSourceConverter"/>
+    <converters:InternalThemedImageSourceConverter x:Key="CrispImageSourceConverter"/>
 
     <Style TargetType="{x:Type controls:ThemedImage}">
         <Setter Property="Width" Value="16"/>

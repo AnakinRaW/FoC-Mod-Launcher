@@ -31,15 +31,12 @@
 	  <None Remove="Resources\Fonts\EaW-bold.ttf" />
 	  <None Remove="Resources\icon.ico" />
 	  <None Remove="Resources\Icons\Png\GitHub_Mark_32px.png" />
+	  <None Remove="Resources\Icons\Png\sadTrooper.png" />
 	  <None Remove="Resources\Icons\Png\Undo_16x.png" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="Costura.Fody" Version="5.7.0">
-	    <PrivateAssets>all</PrivateAssets>
-	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-	  </PackageReference>
-	  <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
 	  <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
 	  <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
 	  <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
@@ -53,6 +50,13 @@
 	  <PackageReference Include="System.IO.Abstractions" Version="16.0.1" />
 	</ItemGroup>
 
+	<ItemGroup Condition="'$(Configuration)' == 'Release'">
+		<PackageReference Include="Costura.Fody" Version="5.7.0">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
 	<ItemGroup>
 	  <ProjectReference Include="..\CommonUtilities.WPF.ThemdControls\CommonUtilities.WPF.ThemedControls.csproj" />
 	</ItemGroup>
@@ -61,6 +65,7 @@
 	  <Resource Include="Resources\Fonts\EaW-bold.ttf" />
 	  <Resource Include="Resources\icon.ico" />
 	  <Resource Include="Resources\Icons\Png\GitHub_Mark_32px.png" />
+	  <Resource Include="Resources\Icons\Png\sadTrooper.png" />
 	  <Resource Include="Resources\Icons\Png\Undo_16x.png" />
 	</ItemGroup>
 

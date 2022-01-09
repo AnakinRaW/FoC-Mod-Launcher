@@ -67,6 +67,9 @@ internal static class Program
 
         serviceCollection.AddSingleton<IThemeManager>(sp => new LauncherThemeManager(sp));
         serviceCollection.AddSingleton<IViewModelPresenter>(_ => new ViewPresenterService());
+        serviceCollection.AddSingleton<IQueuedDialogService>(sp => new QueuedDialogService(sp));
+        serviceCollection.AddSingleton<IDialogFactory>(_ => new DialogFactory());
+        serviceCollection.AddSingleton<IDialogButtonFactory>(_ => new DialogButtonFactory(true));
 
         serviceCollection.AddTransient<IStatusBarFactory>(_ => new LauncherStatusBarFactory()); 
         
