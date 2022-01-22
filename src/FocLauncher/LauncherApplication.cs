@@ -82,7 +82,10 @@ internal class LauncherApplication : Application
     {
         return Task.Run(() =>
         {
-            return Dispatcher.Invoke<ILauncherViewModel>(() => new MainPageViewModel(_serviceProvider));
+            return Dispatcher.Invoke<ILauncherViewModel>(() => 
+                new MainPageViewModel(
+                    new GameArgumentsViewModel(_serviceProvider),
+                    _serviceProvider));
         });
     }
 

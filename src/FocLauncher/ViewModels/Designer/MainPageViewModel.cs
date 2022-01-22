@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows;
 using FocLauncher.Imaging;
+using PetroGlyph.Games.EawFoc;
 using Sklavenwalker.CommonUtilities.Wpf.Controls;
 using Sklavenwalker.CommonUtilities.Wpf.Imaging;
 
@@ -11,14 +13,22 @@ namespace FocLauncher.ViewModels.Designer;
 
 internal class MainPageViewModel : IMainPageViewModel
 {
+    private IPlayableObject? _selectedGameObject;
     public event PropertyChangedEventHandler? PropertyChanged;
 
     public bool IsLoading { get; }
     public string? LoadingText { get; }
 
+    public ObservableCollection<IPlayableObject> Games { get; }
+
+    public IPlayableObject? SelectedGameObject { get; set; }
+
+
+    public IGameArgumentsViewModel ArgumentsViewModel { get; }
+
     public Task InitializeAsync()
     {
-        throw new System.NotImplementedException();
+        throw new NotImplementedException();
     }
 }
 

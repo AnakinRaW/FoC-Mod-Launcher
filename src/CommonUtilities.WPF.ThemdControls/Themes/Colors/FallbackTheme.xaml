@@ -163,5 +163,55 @@
 
 
 
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
+        ResourceId=CheckBoxBackground}" Color="#FF252526" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
+        ResourceId=CheckBoxGlyph}" Color="#FFF1F1F1" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors},
+        ResourceId=CheckBoxText}" Color="#FFF1F1F1" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
+        ResourceId=CheckBoxBorder}" Color="#FF999999" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors},
+        ResourceId=CheckBoxBackgroundHover}" Color="#FF1F1F20" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
+        ResourceId=CheckBoxGlyphHover}" Color="#FFF1F1F1" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
+        ResourceId=CheckBoxTextHover}" Color="#FFF1F1F1" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
+        ResourceId=CheckBoxBorderHover}" Color="#FF007ACC" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
+        ResourceId=CheckBoxBackgroundDown}" Color="#FF1F1F20" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
+        ResourceId=CheckBoxGlyphDown}" Color="#FFF1F1F1" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
+        ResourceId=CheckBoxTextDown}" Color="#FFF1F1F1" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
+        ResourceId=CheckBoxBorderDown}" Color="#FF007ACC" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
+        ResourceId=CheckBoxBackgroundDisabled}" Color="#FF2D2D30" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
+        ResourceId=CheckBoxGlyphDisabled}" Color="#FF656565" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
+        ResourceId=CheckBoxTextDisabled}" Color="#FF999999" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
+        ResourceId=CheckBoxBorderDisabled}" Color="#FF434346" />
+
+
+
 
 </ResourceDictionary>

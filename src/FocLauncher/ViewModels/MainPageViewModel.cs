@@ -1,26 +1,52 @@
 ﻿using System;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Threading.Tasks;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
+using PetroGlyph.Games.EawFoc;
+using Validation;
 
 namespace FocLauncher.ViewModels;
 
-public partial class MainPageViewModel : ObservableObject, IMainPageViewModel
+internal partial class MainPageViewModel : LoadingViewModelBase, IMainPageViewModel
 {
-    private readonly IServiceProvider _serviceProvider;
-    
-    [ObservableProperty]
-    private bool _isLoading;
+    private bool _isInitialized;
 
     [ObservableProperty]
-    private string? _loadingText;
+    private IPlayableObject? _selectedGameObject;
 
-    public MainPageViewModel(IServiceProvider serviceProvider)
+    public ObservableCollection<IPlayableObject> Games { get; }
+
+    public IGameArgumentsViewModel ArgumentsViewModel { get; }
+
+    public MainPageViewModel(IGameArgumentsViewModel argumentsViewModel, IServiceProvider serviceProvider) : base(serviceProvider)
     {
-        _serviceProvider = serviceProvider;
+        Requires.NotNull(argumentsViewModel, nameof(argumentsViewModel));
+        ArgumentsViewModel = argumentsViewModel;
     }
 
-    public Task InitializeAsync()
+    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {
-        return Task.CompletedTask;
+        base.OnPropertyChanged(e);
+        if (e.PropertyName == nameof(SelectedGameObject))
+            ArgumentsViewModel.CurrentGameObject = SelectedGameObject;
+    }
+
+    public override Task InitializeAsync()
+    {
+        return Task.Run(async () =>
+        {
+            if (_isInitialized)
+                return;
+            lock (this)
+            {
+                if (_isInitialized)
+                    return;
+                _isInitialized = true;
+            }
+            await Task.Delay(2000);
+
+            IsLoading = false;
+        });
     }
 }
