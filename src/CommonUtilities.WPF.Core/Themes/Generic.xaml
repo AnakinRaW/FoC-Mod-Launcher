@@ -2,5 +2,7 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Core;component/Themes/DialogWindowBaseStyle.xaml"/>
         <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Core;component/Themes/DialogButtonStyle.xaml"/>
+        <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Core;component/Themes/VirtualizingTreeViewStyle.xaml"/>
+        <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Core;component/Themes/VirtualizingTreeViewItemStyle.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

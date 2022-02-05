@@ -19,9 +19,9 @@ internal class MainPageViewModel : IMainPageViewModel
     public bool IsLoading { get; }
     public string? LoadingText { get; }
 
-    public ObservableCollection<IPlayableObject> Games { get; }
+    public ObservableCollection<object> Games { get; }
 
-    public IPlayableObject? SelectedGameObject { get; set; }
+    public object? SelectedGameObject { get; set; }
 
 
     public IGameArgumentsViewModel ArgumentsViewModel { get; }

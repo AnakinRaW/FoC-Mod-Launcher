@@ -145,4 +145,15 @@ internal static class User32
 
     [DllImport("user32.dll")]
     public static extern IntPtr GetActiveWindow();
+
+    internal static int HiWord(int value) => (short)(value >> 16);
+
+    internal static int HiWord(long value) => (short)(value >> 16 & ushort.MaxValue);
+
+    internal static int LoWord(int value) => (short)(value & ushort.MaxValue);
+
+    internal static int LoWord(long value) => (short)(value & ushort.MaxValue);
+
+    [DllImport("user32.dll", CharSet = CharSet.Auto)]
+    public static extern int GetMessagePos();
 }

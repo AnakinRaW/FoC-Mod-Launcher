@@ -5,9 +5,9 @@ namespace FocLauncher.ViewModels;
 
 public interface IMainPageViewModel : ILoadingViewModel
 {
-    ObservableCollection<IPlayableObject> Games { get; }
+    ObservableCollection<object> Games { get; }
 
-    IPlayableObject? SelectedGameObject { get; set; }
+    object? SelectedGameObject { get; set; }
 
     IGameArgumentsViewModel ArgumentsViewModel { get; }
 }

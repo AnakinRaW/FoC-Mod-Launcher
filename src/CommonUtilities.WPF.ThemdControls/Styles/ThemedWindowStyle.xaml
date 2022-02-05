@@ -5,10 +5,10 @@
                     xmlns:converters="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Converters"
                     xmlns:colors="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Themes.Colors"
                     xmlns:nativeMethods="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.NativeMethods"
-                    xmlns:input="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Input"
                     xmlns:coreConverters="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Converters;assembly=Sklavenwalker.CommonUtilities.WPF.Core"
                     xmlns:imaging="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Imaging;assembly=Sklavenwalker.CommonUtilities.WPF.Imaging"
-                    xmlns:fonts="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Themes.Fonts">
+                    xmlns:fonts="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Themes.Fonts"
+                    xmlns:input="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Input;assembly=Sklavenwalker.CommonUtilities.WPF.Core">
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.ThemedControls;component/Styles/ShadowChromeWindowStyle.xaml"/>

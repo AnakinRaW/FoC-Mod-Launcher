@@ -5,7 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:designer="clr-namespace:FocLauncher.ViewModels.Designer"
              xmlns:converters="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Converters;assembly=Sklavenwalker.CommonUtilities.WPF.Core"
-             xmlns:controls="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Controls;assembly=Sklavenwalker.CommonUtilities.WPF.ThemedControls"
+             xmlns:themedControls="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Controls;assembly=Sklavenwalker.CommonUtilities.WPF.ThemedControls"
+             xmlns:controls="clr-namespace:FocLauncher.Controls"
              mc:Ignorable="d"  
              d:DesignHeight="450" d:DesignWidth="800"
              d:DataContext="{d:DesignInstance {x:Type designer:MainPageViewModel}, IsDesignTimeCreatable=True}">
@@ -24,13 +25,13 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <TextBlock Text="Select the game or mod you want to play."/>
-            <ListBox Grid.Row="1" ItemsSource="{Binding Games}" SelectedItem="{Binding SelectedGameObject, Mode=TwoWay}"/>
-            <Button Grid.Row="2" HorizontalAlignment="Center">Play</Button>
+            <controls:LauncherTreeViewControl x:Name="TreeView" Grid.Row="1" ItemsSource="{Binding Games}" SelectedItem="{Binding SelectedGameObject, Mode=TwoWay}"/>
+            <Button Grid.Row="2" HorizontalAlignment="Center" Click="ButtonBase_OnClick">Play</Button>
         </Grid>
-        <controls:ThemedExpander Grid.Row="1" FlowDirection="RightToLeft" ExpandDirection="Up" 
+        <themedControls:ThemedExpander Grid.Row="1" FlowDirection="RightToLeft" ExpandDirection="Up" 
                                  Header="Launch Arguments"
                                  IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBooleanConverter}}">
             <Border Background="Red" MinHeight="50" DataContext="{Binding ArgumentsViewModel}"/>
-        </controls:ThemedExpander>
+        </themedControls:ThemedExpander>
     </Grid>
 </UserControl>

@@ -9,7 +9,6 @@ using Sklavenwalker.CommonUtilities.Wpf.DPI;
 using Sklavenwalker.CommonUtilities.Wpf.Input;
 using Sklavenwalker.CommonUtilities.Wpf.NativeMethods;
 using Sklavenwalker.CommonUtilities.Wpf.Utilities;
-using Sklavenwalker.CommonUtilities.Wpf.Utils;
 
 namespace Sklavenwalker.CommonUtilities.Wpf.Controls;
 

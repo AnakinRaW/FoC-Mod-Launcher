@@ -124,4 +124,19 @@ public static class ExtensionMethods
             }
         }
     }
+
+    public static void RaiseEvent(this EventHandler eventHandler, object source)
+    {
+        eventHandler.RaiseEvent(source, EventArgs.Empty);
+    }
+
+    public static void RaiseEvent(this EventHandler? eventHandler, object source, EventArgs args)
+    {
+        eventHandler?.Invoke(source, args);
+    }
+
+    public static void RaiseEvent(this PropertyChangedEventHandler? eventHandler, object source, string propertyName)
+    {
+        eventHandler?.Invoke(source, new PropertyChangedEventArgs(propertyName));
+    }
 }

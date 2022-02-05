@@ -13,9 +13,9 @@ internal partial class MainPageViewModel : LoadingViewModelBase, IMainPageViewMo
     private bool _isInitialized;
 
     [ObservableProperty]
-    private IPlayableObject? _selectedGameObject;
+    private object? _selectedGameObject;
 
-    public ObservableCollection<IPlayableObject> Games { get; }
+    public ObservableCollection<object> Games { get; }
 
     public IGameArgumentsViewModel ArgumentsViewModel { get; }
 

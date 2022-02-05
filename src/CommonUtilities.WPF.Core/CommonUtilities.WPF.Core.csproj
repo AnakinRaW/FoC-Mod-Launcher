@@ -23,6 +23,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Sklavenwalker.CommonUtilities" Version="1.0.2" />
 		<PackageReference Include="Validation" Version="2.5.42" />
 	</ItemGroup>
 
@@ -34,6 +35,10 @@
 
 	<ItemGroup>
 	  <Page Update="Controls\UnhandledExceptionDialog.xaml">
+	    <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+	    <SubType>Designer</SubType>
+	  </Page>
+	  <Page Update="Themes\VirtualizingTreeViewStyle.xaml">
 	    <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
 	    <SubType>Designer</SubType>
 	  </Page>

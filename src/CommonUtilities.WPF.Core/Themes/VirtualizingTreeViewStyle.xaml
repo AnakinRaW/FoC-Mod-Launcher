@@ -1,0 +1,25 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Controls">
+
+    <ControlTemplate x:Key="ScrollbarTemplate" TargetType="{x:Type controls:VirtualizingTreeView}">
+        <ScrollViewer x:Name="PART_ScrollViewer" Focusable="False" CanContentScroll="True"
+                      Background="{TemplateBinding Control.Background}" FocusVisualStyle="{x:Null}">
+            <ItemsPresenter/>
+        </ScrollViewer>
+    </ControlTemplate>
+
+    <Style TargetType="{x:Type controls:VirtualizingTreeView}" BasedOn="{StaticResource {x:Type ListBox}}">
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+        <Setter Property="KeyboardNavigation.DirectionalNavigation" Value="Continue"/>
+        <Setter Property="SelectionMode" Value="Extended"/>
+        <Setter Property="Template" Value="{StaticResource ScrollbarTemplate}"/>
+        <Setter Property="VirtualizingPanel.VirtualizationMode" Value="Recycling"/>
+        <Setter Property="AllowDrop" Value="True"/>
+        <Setter Property="IsTabStop" Value="True"/>
+    </Style>
+
+</ResourceDictionary>
