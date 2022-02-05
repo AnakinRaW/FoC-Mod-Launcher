@@ -15,15 +15,9 @@ public static class ImageThemingUtilities
 {
     public unsafe delegate bool ModifyPixelCallback(BitmapSource originalSource, byte* pixels);
 
-    public static event EventHandler<DependencyPropertyChangedEventArgs>? ThemeScrollBarsChanged;
-
     public static readonly DependencyProperty ImageBackgroundColorProperty = DependencyProperty.RegisterAttached(
         "ImageBackgroundColor", typeof(Color), typeof(ImageThemingUtilities),
         new FrameworkPropertyMetadata(Colors.Transparent, FrameworkPropertyMetadataOptions.Inherits));
-
-    public static readonly DependencyProperty ThemeScrollBarsProperty = DependencyProperty.RegisterAttached(
-        "ThemeScrollBars", typeof(bool?), typeof(ImageThemingUtilities),
-        new FrameworkPropertyMetadata(null, OnThemeScrollBarsChanged));
 
     private const double BlueChannelWeight = 0.000429687497671694;
     private const double GreenChannelWeight = 0.00230468739755452;
@@ -48,18 +42,6 @@ public static class ImageThemingUtilities
     public static void SetImageBackgroundColor(DependencyObject obj, Color value)
     {
         obj.SetValue(ImageBackgroundColorProperty, value);
-    }
-
-    public static bool? GetThemeScrollBars(DependencyObject element)
-    {
-        Requires.NotNull((object)element, nameof(element));
-        return (bool?)element.GetValue(ThemeScrollBarsProperty);
-    }
-
-    public static void SetThemeScrollBars(DependencyObject element, bool? value)
-    {
-        Requires.NotNull((object)element, nameof(element));
-        element.SetValue(ThemeScrollBarsProperty, value);
     }
 
     public static bool IsDark(this Color color)
@@ -317,11 +299,6 @@ public static class ImageThemingUtilities
     private static int ComputeOffsetToOptOutPixel(int width, int height, bool isTopDownBitmap)
     {
         return isTopDownBitmap ? width - 1 : width * height - 1;
-    }
-
-    private static void OnThemeScrollBarsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-    {
-        ThemeScrollBarsChanged?.Invoke(d, e);
     }
 
     private struct WeakImageCacheKey : IEquatable<WeakImageCacheKey>

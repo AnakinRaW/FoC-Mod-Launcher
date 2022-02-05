@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Sklavenwalker.CommonUtilities.Wpf.Controls;
 using Sklavenwalker.CommonUtilities.Wpf.Services;
+using Sklavenwalker.CommonUtilities.Wpf.Theming;
 using Validation;
 
 namespace FocLauncher;
@@ -56,6 +57,7 @@ internal class LauncherApplication : Application
         Resources.MergedDictionaries.Add(LoadResourceValue<ResourceDictionary>("DataTemplates.xaml"));
         var themeManager = _serviceProvider.GetRequiredService<IThemeManager>();
         themeManager.Initialize(this, new LauncherTheme());
+        ScrollBarThemingUtilities.Initialize(themeManager);
     }
     
     private void ShowWindow(Window window)

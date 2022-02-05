@@ -258,6 +258,73 @@
         ResourceId=TreeItemInactiveBackground}" Color="#FF3F3F46" />
 
 
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
+        ResourceId=ScrollBarArrowBackground}" Color="#FF3E3E42" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
+        ResourceId=ScrollBarArrowDisabledBackground}" Color="#FF3E3E42" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors},
+        ResourceId=ScrollBarArrowGlyph}" Color="#FF999999" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors},
+        ResourceId=ScrollBarArrowGlyphDisabled}" Color="#FF555558" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors},
+        ResourceId=ScrollBarArrowGlyphMouseOver}" Color="#FF1C97EA" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors},
+        ResourceId=ScrollBarArrowGlyphPressed}" Color="#FF007ACC" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors},
+        ResourceId=ScrollBarArrowMouseOverBackground}" Color="#FF3E3E42" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors},
+        ResourceId=ScrollBarArrowPressedBackground}" Color="#FF3E3E42" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors},
+        ResourceId=ScrollBarBackground}" Color="#FF3E3E42" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors},
+        ResourceId=ScrollBarBorder}" Color="#FF1C1C1C" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors},
+        ResourceId=ScrollBarDisabledBackground}" Color="#FF3E3E42" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors},
+        ResourceId=ScrollBarThumbBackground}" Color="#FF686868" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors},
+        ResourceId=ScrollBarThumbBorder}" Color="#FF686868" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors},
+        ResourceId=ScrollBarThumbDisabled}" Color="#FF3E3E42" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors},
+        ResourceId=ScrollBarThumbGlyph}" Color="#FF686868" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors},
+        ResourceId=ScrollBarThumbGlyphMouseOverBorder}" Color="#FF9E9E9E" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors},
+        ResourceId=ScrollBarThumbGlyphPressedBorder}" Color="#FFEFEBEF" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors},
+        ResourceId=ScrollBarThumbMouseOverBackground}" Color="#FF9E9E9E" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors},
+        ResourceId=ScrollBarThumbMouseOverBorder}" Color="#FF9E9E9E" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
+        ResourceId=ScrollBarThumbPressedBackground}" Color="#FFEFEBEF" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
+        ResourceId=ScrollBarThumbPressedBorder}" Color="#FFEFEBEF" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors},
+        ResourceId=AutoHideResizeGrip}" Color="#FF2D2D30" />
+
+
 
 
 </ResourceDictionary>

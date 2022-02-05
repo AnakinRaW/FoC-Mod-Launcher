@@ -15,6 +15,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonUtilities.WPF.Imaging
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonUtilities.WPF.Core", "src\CommonUtilities.WPF.Core\CommonUtilities.WPF.Core.csproj", "{93D9F0EE-2B71-4333-8BAB-941308B612EC}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FocLauncher.Theming", "old\src\FocLauncher.Theming\FocLauncher.Theming.csproj", "{9CED3476-6486-4A19-B5E0-95C9802BC3DF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FocLauncher.Core", "old\src\FocLauncher.Core\FocLauncher.Core.csproj", "{8A4CDD52-D320-4970-AB6A-04D6770C7CBC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FocLauncher", "old\src\FocLauncher\FocLauncher.csproj", "{D8FC2BF9-E118-47E3-9C92-7C43AEEC20D9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,12 +47,27 @@ Global
 		{93D9F0EE-2B71-4333-8BAB-941308B612EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{93D9F0EE-2B71-4333-8BAB-941308B612EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{93D9F0EE-2B71-4333-8BAB-941308B612EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9CED3476-6486-4A19-B5E0-95C9802BC3DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9CED3476-6486-4A19-B5E0-95C9802BC3DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9CED3476-6486-4A19-B5E0-95C9802BC3DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9CED3476-6486-4A19-B5E0-95C9802BC3DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A4CDD52-D320-4970-AB6A-04D6770C7CBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A4CDD52-D320-4970-AB6A-04D6770C7CBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A4CDD52-D320-4970-AB6A-04D6770C7CBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A4CDD52-D320-4970-AB6A-04D6770C7CBC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8FC2BF9-E118-47E3-9C92-7C43AEEC20D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8FC2BF9-E118-47E3-9C92-7C43AEEC20D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8FC2BF9-E118-47E3-9C92-7C43AEEC20D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8FC2BF9-E118-47E3-9C92-7C43AEEC20D9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{1B994360-D194-441F-A87F-53A83A69C212} = {AB38445D-A3D8-4478-8764-1341F6CE6B23}
+		{9CED3476-6486-4A19-B5E0-95C9802BC3DF} = {AB38445D-A3D8-4478-8764-1341F6CE6B23}
+		{8A4CDD52-D320-4970-AB6A-04D6770C7CBC} = {AB38445D-A3D8-4478-8764-1341F6CE6B23}
+		{D8FC2BF9-E118-47E3-9C92-7C43AEEC20D9} = {AB38445D-A3D8-4478-8764-1341F6CE6B23}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {94E96BB4-E6D8-4E1F-B4A4-4F4B667DC600}

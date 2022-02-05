@@ -34,7 +34,6 @@
         </Style.Triggers>
         <Setter Property="AllowDrop" Value="True"/>
         <Setter Property="UseLayoutRounding" Value="True"/>
-        <Setter Property="imaging:ImageThemingUtilities.ThemeScrollBars" Value="True"/>
         <Setter Property="InputMethod.IsInputMethodSuspended" Value="True"/>
         <Setter Property="FlowDirection">
             <Setter.Value>

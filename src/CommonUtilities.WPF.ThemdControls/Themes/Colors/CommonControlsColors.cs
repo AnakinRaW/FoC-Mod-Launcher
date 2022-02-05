@@ -55,7 +55,30 @@ public class CommonControlsColors
     private static ComponentResourceKey? _treeItemHover;
     private static ComponentResourceKey? _treeItemSelectedBackground;
     private static ComponentResourceKey? _treeItemInactiveBackground;
-    
+
+    private static ComponentResourceKey? _scrollBarArrowBackground;
+    private static ComponentResourceKey? _scrollBarArrowDisabledBackground;
+    private static ComponentResourceKey? _scrollBarArrowGlyph;
+    private static ComponentResourceKey? _scrollBarArrowGlyphDisabled;
+    private static ComponentResourceKey? _scrollBarArrowGlyphMouseOver;
+    private static ComponentResourceKey? _scrollBarArrowGlyphPressed;
+    private static ComponentResourceKey? _scrollBarArrowMouseOverBackground;
+    private static ComponentResourceKey? _scrollBarArrowPressedBackground;
+    private static ComponentResourceKey? _scrollBarBackground;
+    private static ComponentResourceKey? _scrollBarBorder;
+    private static ComponentResourceKey? _scrollBarDisabledBackground;
+    private static ComponentResourceKey? _scrollBarThumbBackground;
+    private static ComponentResourceKey? _scrollBarThumbBorder;
+    private static ComponentResourceKey? _scrollBarThumbDisabled;
+    private static ComponentResourceKey? _scrollBarThumbGlyph;
+    private static ComponentResourceKey? _scrollBarThumbGlyphMouseOverBorder;
+    private static ComponentResourceKey? _scrollBarThumbGlyphPressedBorder;
+    private static ComponentResourceKey? _scrollBarThumbMouseOverBackground;
+    private static ComponentResourceKey? _scrollBarThumbMouseOverBorder;
+    private static ComponentResourceKey? _scrollBarThumbPressedBackground;
+    private static ComponentResourceKey? _scrollBarThumbPressedBorder;
+    private static ComponentResourceKey? _autoHideResizeGrip;
+
     public static ComponentResourceKey ButtonBackground => _buttonBackground ??=
         new ComponentResourceKey(typeof(CommonControlsColors), nameof(ButtonBackground));
 
@@ -204,4 +227,71 @@ public class CommonControlsColors
 
     public static ComponentResourceKey TreeItemInactiveBackground => _treeItemInactiveBackground ??=
         new ComponentResourceKey(typeof(CommonControlsColors), nameof(TreeItemInactiveBackground));
+
+    public static ComponentResourceKey ScrollBarArrowBackground => _scrollBarArrowBackground ??=
+           new ComponentResourceKey(typeof(CommonControlsColors), nameof(ScrollBarArrowBackground));
+
+    public static ComponentResourceKey ScrollBarArrowDisabledBackground => _scrollBarArrowDisabledBackground ??=
+        new ComponentResourceKey(typeof(CommonControlsColors), nameof(ScrollBarArrowDisabledBackground));
+
+    public static ComponentResourceKey ScrollBarArrowGlyph => _scrollBarArrowGlyph ??=
+        new ComponentResourceKey(typeof(CommonControlsColors), nameof(ScrollBarArrowGlyph));
+
+    public static ComponentResourceKey ScrollBarArrowGlyphDisabled => _scrollBarArrowGlyphDisabled ??=
+        new ComponentResourceKey(typeof(CommonControlsColors), nameof(ScrollBarArrowGlyphDisabled));
+
+    public static ComponentResourceKey ScrollBarArrowGlyphMouseOver => _scrollBarArrowGlyphMouseOver ??=
+        new ComponentResourceKey(typeof(CommonControlsColors), nameof(ScrollBarArrowGlyphMouseOver));
+
+    public static ComponentResourceKey ScrollBarArrowGlyphPressed => _scrollBarArrowGlyphPressed ??=
+        new ComponentResourceKey(typeof(CommonControlsColors), nameof(ScrollBarArrowGlyphPressed));
+
+    public static ComponentResourceKey ScrollBarArrowMouseOverBackground => _scrollBarArrowMouseOverBackground ??=
+        new ComponentResourceKey(typeof(CommonControlsColors), nameof(ScrollBarArrowMouseOverBackground));
+
+    public static ComponentResourceKey ScrollBarArrowPressedBackground => _scrollBarArrowPressedBackground ??=
+        new ComponentResourceKey(typeof(CommonControlsColors), nameof(ScrollBarArrowPressedBackground));
+
+    public static ComponentResourceKey ScrollBarBackground => _scrollBarBackground ??=
+        new ComponentResourceKey(typeof(CommonControlsColors), nameof(ScrollBarBackground));
+
+    public static ComponentResourceKey ScrollBarBorder => _scrollBarBorder ??=
+        new ComponentResourceKey(typeof(CommonControlsColors), nameof(ScrollBarBorder));
+
+    public static ComponentResourceKey ScrollBarDisabledBackground => _scrollBarDisabledBackground ??=
+        new ComponentResourceKey(typeof(CommonControlsColors), nameof(ScrollBarDisabledBackground));
+
+
+    public static ComponentResourceKey ScrollBarThumbBackground => _scrollBarThumbBackground ??=
+        new ComponentResourceKey(typeof(CommonControlsColors), nameof(ScrollBarThumbBackground));
+
+    public static ComponentResourceKey ScrollBarThumbBorder => _scrollBarThumbBorder ??=
+        new ComponentResourceKey(typeof(CommonControlsColors), nameof(ScrollBarThumbBorder));
+
+    public static ComponentResourceKey ScrollBarThumbDisabled => _scrollBarThumbDisabled ??=
+        new ComponentResourceKey(typeof(CommonControlsColors), nameof(ScrollBarThumbDisabled));
+
+    public static ComponentResourceKey ScrollBarThumbGlyph => _scrollBarThumbGlyph ??=
+        new ComponentResourceKey(typeof(CommonControlsColors), nameof(ScrollBarThumbGlyph));
+
+    public static ComponentResourceKey ScrollBarThumbGlyphMouseOverBorder => _scrollBarThumbGlyphMouseOverBorder ??=
+        new ComponentResourceKey(typeof(CommonControlsColors), nameof(ScrollBarThumbGlyphMouseOverBorder));
+
+    public static ComponentResourceKey ScrollBarThumbGlyphPressedBorder => _scrollBarThumbGlyphPressedBorder ??=
+        new ComponentResourceKey(typeof(CommonControlsColors), nameof(ScrollBarThumbGlyphPressedBorder));
+
+    public static ComponentResourceKey ScrollBarThumbMouseOverBackground => _scrollBarThumbMouseOverBackground ??=
+        new ComponentResourceKey(typeof(CommonControlsColors), nameof(ScrollBarThumbMouseOverBackground));
+
+    public static ComponentResourceKey ScrollBarThumbMouseOverBorder => _scrollBarThumbMouseOverBorder ??=
+        new ComponentResourceKey(typeof(CommonControlsColors), nameof(ScrollBarThumbMouseOverBorder));
+
+    public static ComponentResourceKey ScrollBarThumbPressedBackground => _scrollBarThumbPressedBackground ??=
+        new ComponentResourceKey(typeof(CommonControlsColors), nameof(ScrollBarThumbPressedBackground));
+
+    public static ComponentResourceKey ScrollBarThumbPressedBorder => _scrollBarThumbPressedBorder ??=
+        new ComponentResourceKey(typeof(CommonControlsColors), nameof(ScrollBarThumbPressedBorder));
+
+    public static ComponentResourceKey AutoHideResizeGrip => _autoHideResizeGrip ??=
+        new ComponentResourceKey(typeof(CommonControlsColors), nameof(AutoHideResizeGrip));
 }

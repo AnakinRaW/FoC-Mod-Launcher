@@ -12,5 +12,6 @@
         <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.ThemedControls;component/Styles/ThemedExpanderStyle.xaml"/>
         <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.ThemedControls;component/Styles/ThemedVirtualizingTreeViewStyle.xaml"/>
         <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.ThemedControls;component/Styles/ThemedVirtualizingTreeViewItemStyle.xaml"/>
+        <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.ThemedControls;component/Styles/ThemedScrollBarStyles.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>
