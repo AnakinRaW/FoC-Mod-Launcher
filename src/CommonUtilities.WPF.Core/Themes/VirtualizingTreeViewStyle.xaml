@@ -3,10 +3,12 @@
                     xmlns:controls="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Controls">
 
     <ControlTemplate x:Key="ScrollbarTemplate" TargetType="{x:Type controls:VirtualizingTreeView}">
-        <ScrollViewer x:Name="PART_ScrollViewer" Focusable="False" CanContentScroll="True"
-                      Background="{TemplateBinding Control.Background}" FocusVisualStyle="{x:Null}">
-            <ItemsPresenter/>
-        </ScrollViewer>
+        <Border BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}">
+            <ScrollViewer x:Name="PART_ScrollViewer" Focusable="False" CanContentScroll="True" 
+                          Background="{TemplateBinding Control.Background}" FocusVisualStyle="{x:Null}">
+                <ItemsPresenter/>
+            </ScrollViewer>
+        </Border>
     </ControlTemplate>
 
     <Style TargetType="{x:Type controls:VirtualizingTreeView}" BasedOn="{StaticResource {x:Type ListBox}}">

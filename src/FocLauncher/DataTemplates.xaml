@@ -2,7 +2,9 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:viewModels="clr-namespace:FocLauncher.ViewModels"
                     xmlns:views="clr-namespace:FocLauncher.Views"
-                    xmlns:dialogs="clr-namespace:FocLauncher.Dialogs">
+                    xmlns:dialogs="clr-namespace:FocLauncher.Dialogs"
+                    xmlns:controls="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Imaging.Controls;assembly=Sklavenwalker.CommonUtilities.WPF.Imaging"
+                    xmlns:imaging="clr-namespace:FocLauncher.Imaging">
     
     <DataTemplate DataType="{x:Type viewModels:MainPageViewModel}">
         <views:MainPage/>
@@ -10,6 +12,13 @@
     
     <DataTemplate DataType="{x:Type viewModels:ErrorMessageDialogViewModel}">
         <dialogs:ErrorDialog/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type views:Item}">
+        <StackPanel Orientation="Horizontal">
+            <controls:ThemedImage Moniker="{x:Static imaging:Monikers.Trooper}" Width="32" Height="32"/>
+            <TextBlock Text="{Binding Text}"/>
+        </StackPanel>
     </DataTemplate>
 
 </ResourceDictionary>

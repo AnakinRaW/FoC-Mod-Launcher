@@ -25,7 +25,8 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <TextBlock Text="Select the game or mod you want to play."/>
-            <controls:LauncherTreeViewControl x:Name="TreeView" Grid.Row="1" ItemsSource="{Binding Games}" SelectedItem="{Binding SelectedGameObject, Mode=TwoWay}"/>
+            <controls:LauncherTreeViewControl x:Name="TreeView" Grid.Row="1" ItemsSource="{Binding Games}" SelectedItem="{Binding SelectedGameObject, Mode=TwoWay}"
+                                              BorderThickness="1"/>
             <Button Grid.Row="2" HorizontalAlignment="Center" Click="ButtonBase_OnClick">Play</Button>
         </Grid>
         <themedControls:ThemedExpander Grid.Row="1" FlowDirection="RightToLeft" ExpandDirection="Up" 

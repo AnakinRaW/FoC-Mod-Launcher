@@ -23,8 +23,8 @@ public partial class MainPage
         TreeView.RootItemsSource = r;
         
         r.Add(new Item("000"));
-        r.Add(_item);
-       // _item.Items.Add(new Item("345", _item));
+        r.Add(_item); 
+        _item.Items.Add(new Item("345", _item));
     }
 
     private void ButtonBase_OnClick(object sender, RoutedEventArgs e)

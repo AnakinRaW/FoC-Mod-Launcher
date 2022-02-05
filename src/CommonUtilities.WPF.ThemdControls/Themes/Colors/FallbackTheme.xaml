@@ -212,6 +212,52 @@
         ResourceId=CheckBoxBorderDisabled}" Color="#FF434346" />
 
 
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
+        ResourceId=TreeViewBackground}" Color="#FF252526" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
+        ResourceId=TreeViewBorder}" Color="#FF3F3F46" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
+        ResourceId=TreeViewText}" Color="#FFF1F1F1" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
+        ResourceId=TreeViewSelectedText}" Color="#FFFFFFFF" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
+        ResourceId=TreeViewInactiveText}" Color="#FFFFFFFF" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
+        ResourceId=TreeFocusBorder}" Color="#FF007ACC" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
+        ResourceId=TreeExpander}" Color="#FFF1F1F1" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
+        ResourceId=TreeExpanderHover}" Color="#FF007ACC" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
+        ResourceId=TreeExpanderSelected}" Color="#FFF1F1F1" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
+        ResourceId=TreeExpanderSelectedHover}" Color="#FFF1F1F1" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
+        ResourceId=TreeExpanderInactive}" Color="#FFF1F1F1" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
+        ResourceId=TreeExpanderInactiveHover}" Color="#FF007ACC" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
+        ResourceId=TreeItemHover}" Color="#FF3F3F40" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
+        ResourceId=TreeItemSelectedBackground}" Color="#FF007ACC" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
+        ResourceId=TreeItemInactiveBackground}" Color="#FF3F3F46" />
+
+
 
 
 </ResourceDictionary>

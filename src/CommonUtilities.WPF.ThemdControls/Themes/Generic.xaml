@@ -10,5 +10,7 @@
         <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.ThemedControls;component/Styles/ThemedDialogStyle.xaml"/>
         <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.ThemedControls;component/Styles/ThemedButtonStyle.xaml"/>
         <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.ThemedControls;component/Styles/ThemedExpanderStyle.xaml"/>
+        <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.ThemedControls;component/Styles/ThemedVirtualizingTreeViewStyle.xaml"/>
+        <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.ThemedControls;component/Styles/ThemedVirtualizingTreeViewItemStyle.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

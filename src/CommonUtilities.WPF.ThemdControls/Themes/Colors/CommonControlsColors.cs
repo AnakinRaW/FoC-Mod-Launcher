@@ -40,6 +40,22 @@ public class CommonControlsColors
     private static ComponentResourceKey? _checkBoxGlyphDisabled;
     private static ComponentResourceKey? _checkBoxTextDisabled;
 
+    private static ComponentResourceKey? _treeViewBackground;
+    private static ComponentResourceKey? _treeViewBorder;
+    private static ComponentResourceKey? _treeViewText;
+    private static ComponentResourceKey? _treeViewSelectedText;
+    private static ComponentResourceKey? _treeViewInactiveText;
+    private static ComponentResourceKey? _treeFocusBorder;
+    private static ComponentResourceKey? _treeExpander;
+    private static ComponentResourceKey? _treeExpanderHover;
+    private static ComponentResourceKey? _treeExpanderSelected;
+    private static ComponentResourceKey? _treeExpanderSelectedHover;
+    private static ComponentResourceKey? _treeExpanderInactive;
+    private static ComponentResourceKey? _treeExpanderInactiveHover;
+    private static ComponentResourceKey? _treeItemHover;
+    private static ComponentResourceKey? _treeItemSelectedBackground;
+    private static ComponentResourceKey? _treeItemInactiveBackground;
+    
     public static ComponentResourceKey ButtonBackground => _buttonBackground ??=
         new ComponentResourceKey(typeof(CommonControlsColors), nameof(ButtonBackground));
 
@@ -142,4 +158,50 @@ public class CommonControlsColors
 
     public static ComponentResourceKey CheckBoxTextDisabled => _checkBoxTextDisabled ??=
         new ComponentResourceKey(typeof(CommonControlsColors), nameof(CheckBoxTextDisabled));
+
+
+    public static ComponentResourceKey TreeViewBackground => _treeViewBackground ??=
+        new ComponentResourceKey(typeof(CommonControlsColors), nameof(TreeViewBackground));
+
+    public static ComponentResourceKey TreeViewBorder => _treeViewBorder ??=
+        new ComponentResourceKey(typeof(CommonControlsColors), nameof(TreeViewBorder));
+
+    public static ComponentResourceKey TreeViewText => _treeViewText ??=
+        new ComponentResourceKey(typeof(CommonControlsColors), nameof(TreeViewText));
+
+    public static ComponentResourceKey TreeViewSelectedText => _treeViewSelectedText ??=
+        new ComponentResourceKey(typeof(CommonControlsColors), nameof(TreeViewSelectedText));
+
+    public static ComponentResourceKey TreeViewInactiveText => _treeViewInactiveText ??=
+        new ComponentResourceKey(typeof(CommonControlsColors), nameof(TreeViewInactiveText));
+
+    public static ComponentResourceKey TreeFocusBorder => _treeFocusBorder ??=
+        new ComponentResourceKey(typeof(CommonControlsColors), nameof(TreeFocusBorder));
+
+    public static ComponentResourceKey TreeExpander => _treeExpander ??=
+        new ComponentResourceKey(typeof(CommonControlsColors), nameof(TreeExpander));
+
+    public static ComponentResourceKey TreeExpanderHover => _treeExpanderHover ??=
+        new ComponentResourceKey(typeof(CommonControlsColors), nameof(TreeExpanderHover));
+
+    public static ComponentResourceKey TreeExpanderSelected => _treeExpanderSelected ??=
+        new ComponentResourceKey(typeof(CommonControlsColors), nameof(TreeExpanderSelected));
+
+    public static ComponentResourceKey TreeExpanderSelectedHover => _treeExpanderSelectedHover ??=
+        new ComponentResourceKey(typeof(CommonControlsColors), nameof(TreeExpanderSelectedHover));
+
+    public static ComponentResourceKey TreeExpanderInactive => _treeExpanderInactive ??=
+        new ComponentResourceKey(typeof(CommonControlsColors), nameof(TreeExpanderInactive));
+
+    public static ComponentResourceKey TreeExpanderInactiveHover => _treeExpanderInactiveHover ??=
+        new ComponentResourceKey(typeof(CommonControlsColors), nameof(TreeExpanderInactiveHover));
+
+    public static ComponentResourceKey TreeItemHover => _treeItemHover ??=
+        new ComponentResourceKey(typeof(CommonControlsColors), nameof(TreeItemHover));
+
+    public static ComponentResourceKey TreeItemSelectedBackground => _treeItemSelectedBackground ??=
+        new ComponentResourceKey(typeof(CommonControlsColors), nameof(TreeItemSelectedBackground));
+
+    public static ComponentResourceKey TreeItemInactiveBackground => _treeItemInactiveBackground ??=
+        new ComponentResourceKey(typeof(CommonControlsColors), nameof(TreeItemInactiveBackground));
 }

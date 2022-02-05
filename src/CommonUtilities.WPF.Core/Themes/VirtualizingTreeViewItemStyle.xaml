@@ -81,12 +81,11 @@
         <Setter Property="Margin" Value="0"/>
         <Setter Property="Panel.ZIndex" Value="1"/>
         <Setter Property="Background" Value="{StaticResource Item.Static.Background}"/>
-        <Setter Property="MinHeight" Value="40"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type controls:VirtualizingTreeViewItem}">
                     <Border x:Name="Border" Padding="1" BorderThickness="1"
-                            Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding Background}">
+                            Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Name="Indention">
@@ -127,8 +126,8 @@
                                     </Condition.Binding>
                                 </Condition>
                             </MultiDataTrigger.Conditions>
-                            <Setter TargetName="Border" Property="Background" Value="{StaticResource Item.SelectedActive.Background}"/>
-                            <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource Item.SelectedActive.Border}"/>
+                            <Setter Property="Background" Value="{StaticResource Item.SelectedActive.Background}"/>
+                            <Setter Property="BorderBrush" Value="{StaticResource Item.SelectedActive.Border}"/>
                             <Setter Value="{DynamicResource {x:Static SystemColors.ControlTextColor}}" Property="TextElement.Foreground"/>
                         </MultiDataTrigger>
                         <MultiTrigger>
@@ -137,8 +136,8 @@
                                 <Condition Property="Selector.IsSelectionActive" Value="False"/>
                                 <Condition Property="controls:VirtualizingTreeView.IsContextMenuOpen" Value="False"/>
                             </MultiTrigger.Conditions>
-                            <Setter TargetName="Border" Property="Background" Value="{StaticResource Item.SelectedInactive.Background}"/>
-                            <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource Item.SelectedInactive.Border}"/>
+                            <Setter Property="Background" Value="{StaticResource Item.SelectedInactive.Background}"/>
+                            <Setter Property="BorderBrush" Value="{StaticResource Item.SelectedInactive.Border}"/>
                             <Setter Value="{DynamicResource {x:Static SystemColors.InactiveCaptionTextBrush}}" Property="TextElement.Foreground"/>
                         </MultiTrigger>
                     </ControlTemplate.Triggers>
