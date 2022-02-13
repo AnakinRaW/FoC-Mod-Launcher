@@ -3,7 +3,7 @@ using System.Windows;
 
 namespace Sklavenwalker.CommonUtilities.Wpf.Converters;
 
-internal class TreeViewExpanderVisibilityConverter : MultiValueConverter<bool, bool, int, Visibility>
+public class TreeViewExpanderVisibilityConverter : MultiValueConverter<bool, bool, int, Visibility>
 {
     protected override Visibility Convert(bool expandable, bool showRootExpander, int depth, object parameter, CultureInfo culture)
     {
