@@ -6,7 +6,6 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<LangVersion>10.0</LangVersion>
 		<RootNamespace>Sklavenwalker.CommonUtilities.Wpf.Imaging</RootNamespace>
 		<AssemblyName>Sklavenwalker.CommonUtilities.WPF.Imaging</AssemblyName>
 		<Nullable>enable</Nullable>

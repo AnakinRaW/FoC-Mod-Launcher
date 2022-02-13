@@ -9,7 +9,6 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<LangVersion>10.0</LangVersion>
 		<Nullable>enable</Nullable>
 		<EnableNETAnalyzers>True</EnableNETAnalyzers>
 		<AnalysisLevel>latest</AnalysisLevel>
@@ -17,14 +16,7 @@
 
 	<PropertyGroup>
 		<Version>2.0.0</Version>
-		<Authors>AnakinSklavenwalker</Authors>
-		<Company>Republic at War Modding Team</Company>
-		<Product>FoCLauncher</Product>
 		<Description>Mod and game launcher for Star Wars Empire at War: Forces of Corruption.</Description>
-		<Copyright>Copyright © 2021 Anakin Sklavenwalker</Copyright>
-		<RepositoryUrl>https://github.com/AnakinSklavenwalker/FoC-Mod-Launcher</RepositoryUrl>
-		<PackageProjectUrl>https://github.com/AnakinSklavenwalker/FoC-Mod-Launcher</PackageProjectUrl>
-		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -47,8 +39,8 @@
 	  <PackageReference Include="Serilog.Extensions.Logging.File" Version="2.0.0" />
 	  <PackageReference Include="Sklavenwalker.CommonUtilities.FileSystem.Windows" Version="2.0.0" />
 	  <PackageReference Include="Sklavenwalker.CommonUtilities.Registry" Version="2.1.0" />
-	  <PackageReference Include="Sklavenwalker.CommonUtilities.Registry.Windows" Version="2.1.0" />
-	  <PackageReference Include="System.IO.Abstractions" Version="16.0.1" />
+	  <PackageReference Include="Sklavenwalker.CommonUtilities.Registry.Windows" Version="2.1.1" />
+	  <PackageReference Include="System.IO.Abstractions" Version="16.1.10" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(Configuration)' == 'Release'">

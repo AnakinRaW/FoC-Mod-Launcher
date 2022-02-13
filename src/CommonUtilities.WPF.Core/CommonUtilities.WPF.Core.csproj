@@ -6,7 +6,6 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<LangVersion>10.0</LangVersion>
 		<RootNamespace>Sklavenwalker.CommonUtilities.Wpf</RootNamespace>
 		<AssemblyName>Sklavenwalker.CommonUtilities.WPF.Core</AssemblyName>
 		<Nullable>enable</Nullable>
@@ -23,8 +22,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Sklavenwalker.CommonUtilities" Version="1.0.2" />
-		<PackageReference Include="Validation" Version="2.5.42" />
+		<PackageReference Include="Sklavenwalker.CommonUtilities" Version="2.1.0" />
+		<PackageReference Include="Validation" Version="2.5.51" />
 	</ItemGroup>
 
 	<ItemGroup>
