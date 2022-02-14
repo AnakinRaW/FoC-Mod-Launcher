@@ -21,7 +21,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FocLauncher.Core", "old\src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FocLauncher", "old\src\FocLauncher\FocLauncher.csproj", "{D8FC2BF9-E118-47E3-9C92-7C43AEEC20D9}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FocLauncherHost", "old\src\FocLauncherHost\FocLauncherHost.csproj", "{BF10A23D-8357-4418-9984-FFF3C509489D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FocLauncher.AppUpdater", "src\FocLauncher.AppUpdater\FocLauncher.AppUpdater.csproj", "{A6CB6DA5-4777-41D2-9D37-AC710B3779D9}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "FocLauncher.Shared", "src\FocLauncher.Shared\FocLauncher.Shared.shproj", "{948C37FD-3947-41B0-8FA6-8654A0658756}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonUtilities.TaskPipeline", "src\CommonUtilities.TaskPipeline\CommonUtilities.TaskPipeline.csproj", "{C12EA396-37B9-480F-982E-D278F27CF16D}"
+EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		src\FocLauncher.Shared\FocLauncher.Shared.projitems*{948c37fd-3947-41b0-8fa6-8654a0658756}*SharedItemsImports = 13
+		src\FocLauncher.Shared\FocLauncher.Shared.projitems*{a6cb6da5-4777-41d2-9d37-ac710b3779d9}*SharedItemsImports = 5
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -59,6 +71,18 @@ Global
 		{D8FC2BF9-E118-47E3-9C92-7C43AEEC20D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D8FC2BF9-E118-47E3-9C92-7C43AEEC20D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D8FC2BF9-E118-47E3-9C92-7C43AEEC20D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF10A23D-8357-4418-9984-FFF3C509489D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF10A23D-8357-4418-9984-FFF3C509489D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF10A23D-8357-4418-9984-FFF3C509489D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF10A23D-8357-4418-9984-FFF3C509489D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6CB6DA5-4777-41D2-9D37-AC710B3779D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6CB6DA5-4777-41D2-9D37-AC710B3779D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6CB6DA5-4777-41D2-9D37-AC710B3779D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6CB6DA5-4777-41D2-9D37-AC710B3779D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C12EA396-37B9-480F-982E-D278F27CF16D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C12EA396-37B9-480F-982E-D278F27CF16D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C12EA396-37B9-480F-982E-D278F27CF16D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C12EA396-37B9-480F-982E-D278F27CF16D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -68,6 +92,7 @@ Global
 		{9CED3476-6486-4A19-B5E0-95C9802BC3DF} = {AB38445D-A3D8-4478-8764-1341F6CE6B23}
 		{8A4CDD52-D320-4970-AB6A-04D6770C7CBC} = {AB38445D-A3D8-4478-8764-1341F6CE6B23}
 		{D8FC2BF9-E118-47E3-9C92-7C43AEEC20D9} = {AB38445D-A3D8-4478-8764-1341F6CE6B23}
+		{BF10A23D-8357-4418-9984-FFF3C509489D} = {AB38445D-A3D8-4478-8764-1341F6CE6B23}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {94E96BB4-E6D8-4E1F-B4A4-4F4B667DC600}

@@ -52,6 +52,7 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\CommonUtilities.WPF.ThemdControls\CommonUtilities.WPF.ThemedControls.csproj" />
+	  <ProjectReference Include="..\FocLauncher.AppUpdater\FocLauncher.AppUpdater.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

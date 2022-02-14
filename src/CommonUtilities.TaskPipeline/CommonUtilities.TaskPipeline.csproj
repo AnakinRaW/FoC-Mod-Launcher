@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<VersionPrefix>1.0.0</VersionPrefix>
+		<Authors>Anakin Sklavenwalker</Authors>
+		<Description>Implements task based pipeline runners to run job synchronized or in parallel.</Description>
+		<Copyright>Anakin Sklavenwalker</Copyright>
+		<RepositoryUrl>https://github.com/AnakinSklavenwalker/CommonUtilities</RepositoryUrl>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	</PropertyGroup>
+
+</Project>
