@@ -22,7 +22,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Sklavenwalker.CommonUtilities" Version="2.1.0" />
+		<PackageReference Include="Sklavenwalker.CommonUtilities" Version="2.1.1" />
 		<PackageReference Include="Validation" Version="2.5.51" />
 	</ItemGroup>
 

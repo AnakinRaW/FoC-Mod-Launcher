@@ -31,16 +31,16 @@
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
 	  <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
 	  <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
-	  <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
+	  <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.1" />
 	  <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="6.0.0" />
 	  <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="6.0.0" />
 	  <PackageReference Include="PetroGlyph.Games.EawFoc.Clients.Steam.Windows" Version="1.1.1" />
-	  <PackageReference Include="SemanticVersioning" Version="2.0.0" />
+	  <PackageReference Include="SemanticVersioning" Version="2.0.2" />
 	  <PackageReference Include="Serilog.Extensions.Logging.File" Version="2.0.0" />
 	  <PackageReference Include="Sklavenwalker.CommonUtilities.FileSystem.Windows" Version="2.0.0" />
 	  <PackageReference Include="Sklavenwalker.CommonUtilities.Registry" Version="2.1.0" />
 	  <PackageReference Include="Sklavenwalker.CommonUtilities.Registry.Windows" Version="2.1.1" />
-	  <PackageReference Include="System.IO.Abstractions" Version="16.1.10" />
+	  <PackageReference Include="System.IO.Abstractions" Version="16.1.25" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(Configuration)' == 'Release'">

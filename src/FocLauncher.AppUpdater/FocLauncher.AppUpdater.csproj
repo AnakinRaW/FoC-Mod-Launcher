@@ -23,11 +23,11 @@
 		  <TreatAsUsed>true</TreatAsUsed>
 		</PackageReference>
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.1" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 		<PackageReference Include="NLog.Extensions.Logging" Version="1.7.4" />
 		<PackageReference Include="Sklavenwalker.CommonUtilities.FileSystem.Windows" Version="2.0.0" />
-		<PackageReference Include="Sklavenwalker.CommonUtilities" Version="2.1.0" />
+		<PackageReference Include="Sklavenwalker.CommonUtilities" Version="2.1.1" />
 	</ItemGroup>
 
 	<Import Project="..\FocLauncher.Shared\FocLauncher.Shared.projitems" Label="Shared" />
