@@ -2,6 +2,8 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Threading.Tasks;
+using System.Windows;
+using FocLauncher.Update;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using PetroGlyph.Games.EawFoc;
 using Validation;
@@ -44,7 +46,16 @@ internal partial class MainPageViewModel : LoadingViewModelBase, IMainPageViewMo
                     return;
                 _isInitialized = true;
             }
-            await Task.Delay(2000);
+
+            await Application.Current.Dispatcher.InvokeAsync(() =>
+            {
+                new UpdateWindow(ServiceProvider)
+                {
+                    Owner = Application.Current.MainWindow
+                }.ShowDialog();
+            });
+
+            //await Task.Delay(2000);
 
             IsLoading = false;
         });

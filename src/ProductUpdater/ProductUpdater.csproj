@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<RootNamespace>Sklavenwalker.ProductUpdater</RootNamespace>
+		<AssemblyName>Sklavenwalker.ProductUpdater</AssemblyName>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<VersionPrefix>1.0.0</VersionPrefix>
+		<Authors>Anakin Sklavenwalker</Authors>
+		<Description>Update service for .NET applications.</Description>
+		<Copyright>Anakin Sklavenwalker</Copyright>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\ProductMetadata\ProductMetadata.csproj" />
+	</ItemGroup>
+
+</Project>
