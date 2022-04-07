@@ -61,7 +61,6 @@ public class VariableCollection : IReadOnlyDictionary<string, string?>
         }
     }
 
-
     public string? this[string name]
     {
         get
@@ -99,7 +98,6 @@ public class VariableCollection : IReadOnlyDictionary<string, string?>
             Add(name, value);
         }
     }
-
 
     public VariableCollection()
     {
@@ -222,8 +220,7 @@ public class VariableCollection : IReadOnlyDictionary<string, string?>
 
     public IEnumerator<KeyValuePair<string, string?>> GetEnumerator()
     {
-        foreach (var variable in _variables.Values)
-            yield return variable.GetPair();
+        return _variables.Values.Select(variable => variable.GetPair()).GetEnumerator();
     }
 
     bool IReadOnlyDictionary<string, string?>.TryGetValue(string key, out string? value)

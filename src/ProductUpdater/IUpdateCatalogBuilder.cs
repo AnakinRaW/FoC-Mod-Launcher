@@ -1,4 +1,4 @@
-﻿using Sklavenwalker.ProductMetadata;
+﻿using Sklavenwalker.ProductMetadata.Catalog;
 
 namespace Sklavenwalker.ProductUpdater
 {

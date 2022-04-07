@@ -5,8 +5,8 @@ using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Sklavenwalker.CommonUtilities.FileSystem;
+using Sklavenwalker.ProductMetadata.Catalog;
 using Sklavenwalker.ProductMetadata.Component;
-using Sklavenwalker.ProductMetadata.Manifest;
 using Sklavenwalker.ProductMetadata.Services.Detectors;
 using Validation;
 
@@ -23,7 +23,7 @@ public abstract class ProductServiceBase : IProductService
     protected ILogger? Logger;
     protected readonly IFileSystem FileSystem;
         
-    protected IAvailableManifestBuilder AvailableManifestBuilder { get; }
+    protected ICatalogBuilder CatalogBuilder { get; }
         
     protected IManifestFileResolver? ManifestFileResolver { get; private set; }
 
@@ -33,7 +33,7 @@ public abstract class ProductServiceBase : IProductService
     {
         Requires.NotNull(serviceProvider, nameof(serviceProvider));
         _serviceProvider = serviceProvider;
-        AvailableManifestBuilder = serviceProvider.GetRequiredService<IAvailableManifestBuilder>();
+        CatalogBuilder = serviceProvider.GetRequiredService<ICatalogBuilder>();
 
         FileSystem = serviceProvider.GetRequiredService<IFileSystem>();
         _fsUtils = serviceProvider.GetRequiredService<IFileSystemService>();
@@ -56,12 +56,12 @@ public abstract class ProductServiceBase : IProductService
     public IInstalledProductCatalog GetInstalledProductCatalog()
     {
         Initialize();
-        var manifest = _installedProduct!.CurrentManifest;
+        var manifest = _installedProduct!.Manifest;
         var installPath = _installedProduct.InstallationPath;
         return new InstalledProductCatalog(_installedProduct!, FindInstalledComponents(manifest, installPath));
     }
 
-    public IManifest GetAvailableProductManifest(ManifestLocation manifestLocation)
+    public IProductCatalog GetAvailableProductManifest(CatalogLocation manifestLocation)
     {
         Initialize();
         if (!IsProductCompatible(manifestLocation.Product))
@@ -72,13 +72,13 @@ public abstract class ProductServiceBase : IProductService
             Logger?.LogTrace("Getting manifest file.");
             var manifestFile = GetAvailableManifestFile(manifestLocation);
             if (manifestFile is null || !manifestFile.Exists)
-                throw new ManifestNotFoundException("Manifest file not found or null");
+                throw new CatalogException("Manifest file not found or null");
             try
             {
                 Logger?.LogTrace($"Loading manifest form {manifestFile.FullName}");
                 var manifest = LoadManifest(manifestFile, manifestLocation.Product);
                 if (manifest is null)
-                    throw new ManifestException("Manifest cannot be null");
+                    throw new CatalogException("Manifest cannot be null");
                 return manifest;
             }
             finally
@@ -95,7 +95,7 @@ public abstract class ProductServiceBase : IProductService
 
     protected abstract IInstalledProduct BuildProduct();
         
-    private IEnumerable<IProductComponent> FindInstalledComponents(IManifest manifest, string installationPath)
+    private IEnumerable<IProductComponent> FindInstalledComponents(IProductCatalog manifest, string installationPath)
     {
         var currentInstance = GetCurrentInstance();
         return manifest.Items.Select(component =>
@@ -105,7 +105,7 @@ public abstract class ProductServiceBase : IProductService
         });
     }
 
-    protected virtual IFileInfo GetAvailableManifestFile(ManifestLocation manifestLocation)
+    protected virtual IFileInfo GetAvailableManifestFile(CatalogLocation manifestLocation)
     {
         return ManifestFileResolver!.GetManifest(manifestLocation.ManifestUri);
     }
@@ -115,9 +115,9 @@ public abstract class ProductServiceBase : IProductService
         return !ProductReferenceEqualityComparer.NameOnly.Equals(_installedProduct!, product);
     }
         
-    protected virtual IManifest LoadManifest(IFileInfo manifestFile, IProductReference productReference)
+    protected virtual IProductCatalog LoadManifest(IFileInfo manifestFile, IProductReference productReference)
     {
-        return AvailableManifestBuilder.Build(manifestFile, productReference);
+        return CatalogBuilder.Build(manifestFile, productReference);
     }
 
     private void Initialize()

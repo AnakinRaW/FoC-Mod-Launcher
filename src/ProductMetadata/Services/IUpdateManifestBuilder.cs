@@ -1,9 +1,9 @@
 ﻿using System.IO.Abstractions;
-using Sklavenwalker.ProductMetadata.Manifest;
+using Sklavenwalker.ProductMetadata.Catalog;
 
 namespace Sklavenwalker.ProductMetadata.Services;
 
-public interface IAvailableManifestBuilder
+public interface ICatalogBuilder
 {
-    IManifest Build(IFileInfo manifestFile, IProductReference product);
+    IProductCatalog Build(IFileInfo manifestFile, IProductReference product);
 }

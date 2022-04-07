@@ -27,6 +27,8 @@ public class ProductComponentIdentityComparer : IEqualityComparer<IProductCompon
             StringComparison.CurrentCultureIgnoreCase => StringComparer.CurrentCultureIgnoreCase,
             StringComparison.Ordinal => StringComparer.Ordinal,
             StringComparison.OrdinalIgnoreCase => StringComparer.OrdinalIgnoreCase,
+            StringComparison.InvariantCulture => StringComparer.InvariantCulture,
+            StringComparison.InvariantCultureIgnoreCase => StringComparer.InvariantCultureIgnoreCase,
             _ => throw new ArgumentException("The comparison type is not supported", nameof(comparisonType))
         };
     }

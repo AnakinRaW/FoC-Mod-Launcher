@@ -1,5 +1,5 @@
 ﻿using System;
-using Sklavenwalker.ProductMetadata.Manifest;
+using Sklavenwalker.ProductMetadata.Catalog;
 
 namespace Sklavenwalker.ProductMetadata;
 
@@ -7,7 +7,7 @@ public interface IInstalledProduct : IProductReference
 { 
     string InstallationPath { get; }
 
-    IManifest CurrentManifest { get; }
+    IProductCatalog Manifest { get; }
         
     string? Author { get; }
 

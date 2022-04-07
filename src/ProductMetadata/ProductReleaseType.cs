@@ -3,7 +3,7 @@
 public enum ProductReleaseType
 {
     Stable,
-    PreAlpha,
+    Dev,
     Alpha,
     Beta,
     ReleaseCandidate,

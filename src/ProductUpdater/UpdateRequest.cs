@@ -1,4 +1,4 @@
-﻿using Sklavenwalker.ProductMetadata.Manifest;
+﻿using Sklavenwalker.ProductMetadata.Catalog;
 using Validation;
 
 namespace Sklavenwalker.ProductUpdater

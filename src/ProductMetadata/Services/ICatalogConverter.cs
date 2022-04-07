@@ -1,6 +1,8 @@
-﻿namespace Sklavenwalker.ProductMetadata.Services;
+﻿using Sklavenwalker.ProductMetadata.Catalog;
+
+namespace Sklavenwalker.ProductMetadata.Services;
 
 public interface ICatalogConverter<in TCatalogModel>
 {
-    public ICatalog Convert(TCatalogModel catalogModel);
+    public IProductCatalog Convert(TCatalogModel catalogModel);
 }

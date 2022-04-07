@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Sklavenwalker.ProductMetadata;
+using Sklavenwalker.ProductMetadata.Catalog;
 using Sklavenwalker.ProductMetadata.Component;
 using Validation;
 

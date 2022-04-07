@@ -1,5 +1,5 @@
 ﻿using System;
-using Sklavenwalker.ProductMetadata.Manifest;
+using Sklavenwalker.ProductMetadata.Catalog;
 
 namespace Sklavenwalker.ProductMetadata.Services;
 
@@ -13,5 +13,5 @@ public interface IProductService
 
     IInstalledProductCatalog GetInstalledProductCatalog();
 
-    IManifest GetAvailableProductManifest(ManifestLocation updateRequest);
+    IProductCatalog GetAvailableProductManifest(CatalogLocation updateRequest);
 }
