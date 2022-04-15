@@ -1,9 +1,9 @@
 ﻿using Sklavenwalker.ProductMetadata.Catalog;
+using Sklavenwalker.ProductUpdater.Catalog;
 
-namespace Sklavenwalker.ProductUpdater
+namespace Sklavenwalker.ProductUpdater;
+
+public interface IUpdateCatalogBuilder
 {
-    public interface IUpdateCatalogBuilder
-    {
-        IUpdateCatalog Build(IInstalledProductCatalog installedCatalog, IAvailableProductManifest availableCatalog);
-    }
+    IUpdateCatalog Build(IInstalledProductCatalog installedCatalog, IProductCatalog availableCatalog);
 }

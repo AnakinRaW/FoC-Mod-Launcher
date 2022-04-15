@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 using Sklavenwalker.ProductMetadata.Component;
@@ -28,22 +27,15 @@ public sealed class FileComponentDetector : ComponentDetectorBase
         var fileSystem = ServiceProvider.GetRequiredService<IFileSystem>();
 
         var originInfo = fileComponent.OriginInfos[0];
-        var fileToDetect = fileSystem.Path.Combine(fileComponent.Path, originInfo.FileName);
+        var fileToDetect = fileSystem.Path.Combine(fileComponent.InstallPath, originInfo.FileName);
 
         var filePath = variableResolver.ResolveVariables(fileToDetect, product.ProductVariables.ToDictionary());
 
         var detectionState = DetectionState.Absent;
-        IList<FileItem> files;
-        if (fileSystem.File.Exists(filePath))
-        {
-            files = new FileItem[] { new(filePath, originInfo.IntegrityInformation) };
+        if (fileSystem.File.Exists(filePath)) 
             detectionState = DetectionState.Present;
-        }
-        else
-            files = Array.Empty<FileItem>();
 
-
-        var detectedFileComponent = new SingleFileComponent(manifestComponent, fileComponent.Path, files)
+        var detectedFileComponent = new SingleFileComponent(manifestComponent, fileComponent.InstallPath, filePath)
         {
             DetectedState = detectionState
         };

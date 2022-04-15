@@ -13,5 +13,5 @@ public interface IProductService
 
     IInstalledProductCatalog GetInstalledProductCatalog();
 
-    IProductCatalog GetAvailableProductManifest(CatalogLocation updateRequest);
+    IProductCatalog GetAvailableProductManifest(CatalogLocation manifestLocation);
 }

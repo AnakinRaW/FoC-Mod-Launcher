@@ -4,5 +4,5 @@ namespace Sklavenwalker.ProductMetadata.Component;
 
 public interface IComponentGroup : IProductComponent
 {
-    IList<IProductComponent> Components { get; } 
+    ICollection<IProductComponent> Components { get; } 
 }

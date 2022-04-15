@@ -1,10 +1,9 @@
-﻿namespace Sklavenwalker.ProductUpdater
+﻿namespace Sklavenwalker.ProductUpdater;
+
+public enum UpdateCheckState
 {
-    public enum UpdateCheckState
-    {
-        Error,
-        Success,
-        AlreadyInProgress,
-        Cancelled
-    }
+    Error,
+    Success,
+    AlreadyInProgress,
+    Cancelled
 }

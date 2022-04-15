@@ -1,11 +1,10 @@
-﻿namespace Sklavenwalker.ProductUpdater
+﻿namespace Sklavenwalker.ProductUpdater;
+
+public enum UpdateResult
 {
-    public enum UpdateResult
-    {
-        Failed,
-        Success,
-        SuccessRestartRequired,
-        Cancelled,
-        NoUpdate
-    }
+    Failed,
+    Success,
+    SuccessRestartRequired,
+    Cancelled,
+    NoUpdate
 }

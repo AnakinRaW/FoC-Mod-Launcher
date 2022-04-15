@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Sklavenwalker.ProductMetadata.Component;
@@ -12,9 +13,6 @@ public class IntegrityInformationComparer : IEqualityComparer<ComponentIntegrity
 
     public int GetHashCode(ComponentIntegrityInformation obj)
     {
-        unchecked
-        {
-            return (obj.Hash.GetHashCode() * 397) ^ (int)obj.HashType;
-        }
+        return HashCode.Combine(obj.HashType, obj.Hash);
     }
 }

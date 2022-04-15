@@ -1,12 +1,12 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using Sklavenwalker.ProductMetadata.Catalog;
 
-namespace Sklavenwalker.ProductUpdater
+namespace Sklavenwalker.ProductUpdater;
+
+public interface IUpdateCheckService
 {
-    public interface IUpdateCheckService
-    {
-        bool IsCheckingForUpdates { get; }
+    bool IsCheckingForUpdates { get; }
 
-        Task<UpdateCheckResult> CheckForUpdates(UpdateRequest updateRequest, CancellationToken token = default);
-    }
+    Task<UpdateCheckResult> CheckForUpdates(CatalogLocation updateRequest, CancellationToken token = default);
 }
