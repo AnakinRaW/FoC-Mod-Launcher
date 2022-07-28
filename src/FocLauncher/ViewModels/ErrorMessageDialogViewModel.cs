@@ -13,15 +13,16 @@ public class ErrorMessageDialogViewModel : DialogViewModel, IErrorMessageDialogV
 {
     private readonly IServiceProvider _serviceProvider;
 
-    public string Header => "Initializing the launcher resulted in an error.";
+    public string Header { get; }
 
     public string Message { get; }
 
     public ImageMoniker Image => Monikers.Trooper;
 
-    public ErrorMessageDialogViewModel(string message, IServiceProvider serviceProvider)
+    public ErrorMessageDialogViewModel(string header, string message, IServiceProvider serviceProvider)
     {
         Title = LauncherEnvironment.LauncherProgramName;
+        Header = header;
         Message = message;
         _serviceProvider = serviceProvider;
         IsResizable = false;

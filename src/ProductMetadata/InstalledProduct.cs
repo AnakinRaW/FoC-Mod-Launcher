@@ -1,4 +1,5 @@
 ﻿using System;
+using Semver;
 using Sklavenwalker.ProductMetadata.Catalog;
 using Validation;
 
@@ -9,8 +10,8 @@ public sealed class InstalledProduct : IInstalledProduct
     private readonly IProductReference _reference;
 
     public string Name => _reference.Name;
-    public Version? Version => _reference.Version;
-    public string? Branch => _reference.Branch;
+    public SemVersion? Version => _reference.Version;
+    public ProductBranch? Branch => _reference.Branch;
 
     public string InstallationPath { get; }
     public IProductCatalog Manifest { get; }
@@ -33,7 +34,7 @@ public sealed class InstalledProduct : IInstalledProduct
 
     public override string ToString()
     {
-        return $"Product '{_reference.Name} v{_reference.Version} Branch:{_reference.Branch?? string.Empty}' " +
+        return $"Product '{_reference.Name}, v:{_reference.Version?.ToString() ?? "NO_VERSION"}, Branch:{_reference.Branch?.ToString() ?? "NO_BRANCH"}' " +
                $"at {InstallationPath}";
     }
 }

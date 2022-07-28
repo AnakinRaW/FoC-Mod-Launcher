@@ -1,38 +1,27 @@
 ﻿using Sklavenwalker.ProductUpdater.Catalog;
-using System;
+using Validation;
 
 namespace Sklavenwalker.ProductUpdater;
 
 public record UpdateCheckResult
 {
     public static UpdateCheckResult AlreadyInProgress = new()
-        {State = UpdateCheckState.AlreadyInProgress, Message = "Checking already running."};
-
-    public static UpdateCheckResult Cancelled = new()
-        { State = UpdateCheckState.Cancelled, Message = "Update check was cancelled." };
-
-    public Exception? Error { get; init; }
-
+        { State = UpdateCheckState.AlreadyInProgress, Message = "Checking already running." };
+    
     public string? Message { get; init; }
 
-    public bool IsUpdateAvailable => Error is null && UpdateCatalog is not null && UpdateCatalog.RequiresUpdate();
-
-    public IUpdateCatalog? UpdateCatalog { get; init; }
+    public IUpdateCatalog? UpdateCatalog { get; }
 
     public UpdateCheckState State { get; init; }
 
-
-    public static UpdateCheckResult FromError(Exception e)
+    private UpdateCheckResult()
     {
-        return new UpdateCheckResult { Error = e, Message = e.Message };
     }
 
-    public static UpdateCheckResult Succeeded(IUpdateCatalog catalog)
+    public UpdateCheckResult(IUpdateCatalog catalog)
     {
-        return new UpdateCheckResult
-        {
-            UpdateCatalog = catalog, State = UpdateCheckState.Success,
-            Message = "Successfully checked for an update."
-        };
+        Requires.NotNull(catalog, nameof(catalog));
+        UpdateCatalog = catalog;
+        State = UpdateCheckState.Success;
     }
 }

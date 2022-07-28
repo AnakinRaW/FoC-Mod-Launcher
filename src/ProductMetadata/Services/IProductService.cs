@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Semver;
 using Sklavenwalker.ProductMetadata.Catalog;
 
 namespace Sklavenwalker.ProductMetadata.Services;
@@ -7,11 +7,9 @@ public interface IProductService
 {
     IInstalledProduct GetCurrentInstance();
 
-    void UpdateCurrentInstance(IInstalledProduct product);
-
-    IProductReference CreateProductReference(Version? newVersion, string? branch);
+    IProductReference CreateProductReference(SemVersion? newVersion, ProductBranch? branch);
 
     IInstalledProductCatalog GetInstalledProductCatalog();
 
-    IProductCatalog GetAvailableProductManifest(CatalogLocation manifestLocation);
+    bool IsProductCompatible(IProductReference product);
 }

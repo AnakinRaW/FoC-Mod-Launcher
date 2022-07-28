@@ -6,7 +6,7 @@
              xmlns:controls="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Controls;assembly=Sklavenwalker.CommonUtilities.WPF.ThemedControls"
              xmlns:controls1="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Imaging.Controls;assembly=Sklavenwalker.CommonUtilities.WPF.Imaging"
              xmlns:designer="clr-namespace:FocLauncher.ViewModels.Designer"
-             mc:Ignorable="d"
+             mc:Ignorable="d" d:DesignWidth="400"
              d:DataContext="{d:DesignInstance {x:Type designer:ImageDialogViewModel}, IsDesignTimeCreatable=True}"
              MaxWidth="480">
     <Grid Margin="12">

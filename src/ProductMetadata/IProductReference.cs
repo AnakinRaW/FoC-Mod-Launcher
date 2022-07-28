@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Semver;
 
 namespace Sklavenwalker.ProductMetadata;
 
@@ -6,7 +6,7 @@ public interface IProductReference
 {
     string Name { get; }
 
-    Version? Version { get; }
+    SemVersion? Version { get; }
         
-    string? Branch { get; }
+    ProductBranch? Branch { get; }
 }
