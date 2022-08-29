@@ -22,9 +22,9 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
 	  <PackageReference Include="Microsoft.Bcl.HashCode" Version="1.1.1" />
 	  <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
-	  <PackageReference Include="Microsoft.Toolkit.Mvvm" Version="7.1.2" />
 	  <PackageReference Include="Sklavenwalker.CommonUtilities" Version="2.1.1" />
 	  <PackageReference Include="System.Collections.Immutable" Version="6.0.0" />
 	  <PackageReference Include="Validation" Version="2.5.51" />
@@ -41,5 +41,15 @@
 	    <SubType>Designer</SubType>
 	  </Page>
 	</ItemGroup>
+
+	<Target Name="RemoveDuplicateAnalyzers" BeforeTargets="CoreCompile">
+		<!-- Work around https://github.com/dotnet/wpf/issues/6792 -->
+
+		<ItemGroup>
+			<FilteredAnalyzer Include="@(Analyzer->Distinct())" />
+			<Analyzer Remove="@(Analyzer)" />
+			<Analyzer Include="@(FilteredAnalyzer)" />
+		</ItemGroup>
+	</Target>
 
 </Project>

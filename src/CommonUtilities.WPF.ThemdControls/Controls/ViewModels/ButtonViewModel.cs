@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Sklavenwalker.CommonUtilities.Wpf.Imaging;
 
 namespace Sklavenwalker.CommonUtilities.Wpf.Controls;
