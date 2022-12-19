@@ -33,12 +33,12 @@
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Flurl" Version="3.0.6" />
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
-	  <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
-	  <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
-	  <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.1" />
-	  <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="6.0.0" />
-	  <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="6.0.0" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+	  <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
+	  <PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
+	  <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0" />
+	  <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="7.0.0" />
+	  <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
 	  <PackageReference Include="PetroGlyph.Games.EawFoc.Clients.Steam.Windows" Version="1.1.1" />
 	  <PackageReference Include="Semver" Version="2.2.0" />
 	  <PackageReference Include="Serilog.Extensions.Logging.File" Version="3.0.0" />
@@ -81,7 +81,7 @@
 		<!-- Work around https://github.com/dotnet/wpf/issues/6792 -->
 
 		<ItemGroup>
-			<FilteredAnalyzer Include="@(Analyzer->Distinct())" />
+			<FilteredAnalyzer Include="@(Analyzer-&gt;Distinct())" />
 			<Analyzer Remove="@(Analyzer)" />
 			<Analyzer Include="@(FilteredAnalyzer)" />
 		</ItemGroup>

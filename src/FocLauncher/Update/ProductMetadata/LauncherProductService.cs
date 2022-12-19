@@ -64,7 +64,7 @@ public class LauncherBranchManager : BranchManager
         throw new NotImplementedException();
     }
 
-    protected override async Task<IProductCatalog> LoadManifest(IFileInfo manifestFile, IProductReference productReference)
+    protected override Task<IProductCatalog> LoadManifest(IFileInfo f, IProductReference r)
     {
         return null;
     }
