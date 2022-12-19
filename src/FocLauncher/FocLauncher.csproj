@@ -28,6 +28,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Costura.Fody" Version="5.7.0">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Flurl" Version="3.0.6" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
 	  <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
 	  <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
@@ -35,12 +40,12 @@
 	  <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="6.0.0" />
 	  <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="6.0.0" />
 	  <PackageReference Include="PetroGlyph.Games.EawFoc.Clients.Steam.Windows" Version="1.1.1" />
-	  <PackageReference Include="SemanticVersioning" Version="2.0.2" />
-	  <PackageReference Include="Serilog.Extensions.Logging.File" Version="2.0.0" />
+	  <PackageReference Include="Semver" Version="2.2.0" />
+	  <PackageReference Include="Serilog.Extensions.Logging.File" Version="3.0.0" />
 	  <PackageReference Include="Sklavenwalker.CommonUtilities.FileSystem.Windows" Version="2.0.0" />
 	  <PackageReference Include="Sklavenwalker.CommonUtilities.Registry" Version="2.1.0" />
 	  <PackageReference Include="Sklavenwalker.CommonUtilities.Registry.Windows" Version="2.1.1" />
-	  <PackageReference Include="System.IO.Abstractions" Version="16.1.25" />
+	  <PackageReference Include="System.IO.Abstractions" Version="17.0.24" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(Configuration)' == 'Release'">
@@ -71,5 +76,15 @@
 	    <SubType>Designer</SubType>
 	  </Page>
 	</ItemGroup>
+
+	<Target Name="RemoveDuplicateAnalyzers" BeforeTargets="CoreCompile">
+		<!-- Work around https://github.com/dotnet/wpf/issues/6792 -->
+
+		<ItemGroup>
+			<FilteredAnalyzer Include="@(Analyzer->Distinct())" />
+			<Analyzer Remove="@(Analyzer)" />
+			<Analyzer Include="@(FilteredAnalyzer)" />
+		</ItemGroup>
+	</Target>
 
 </Project>

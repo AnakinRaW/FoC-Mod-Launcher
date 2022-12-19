@@ -76,8 +76,9 @@ internal class QueuedDialogService : IQueuedDialogService
 
     private CancelEventHandler OnDialogClosing(DialogWindowBase dialog, IDialogViewModel viewModel, TaskCompletionSource<string?> task)
     {
-        return (_, e) =>
+        return (_,_) =>
         {
+            dialog.EnableOwner();
             task.SetResult(viewModel.ResultButton);
             _logger?.LogTrace($"Button selected: {viewModel.ResultButton}");
             lock (_syncObject)

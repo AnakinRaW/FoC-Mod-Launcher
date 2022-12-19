@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO.Abstractions;
-using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Sklavenwalker.CommonUtilities.FileSystem;
+using Semver;
 using Sklavenwalker.ProductMetadata.Catalog;
 using Sklavenwalker.ProductMetadata.Component;
 using Sklavenwalker.ProductMetadata.Services.Detectors;
@@ -17,15 +16,8 @@ public abstract class ProductServiceBase : IProductService
     private readonly IServiceProvider _serviceProvider;
     private bool _isInitialized;
     private IInstalledProduct? _installedProduct;
-    private readonly IFileSystemService _fsUtils;
-
-
     protected ILogger? Logger;
     protected readonly IFileSystem FileSystem;
-        
-    protected ICatalogBuilder CatalogBuilder { get; }
-        
-    protected IManifestFileResolver? ManifestFileResolver { get; private set; }
 
     protected IComponentDetectorFactory? ComponentDetectorFactory { get; private set; }
 
@@ -33,10 +25,7 @@ public abstract class ProductServiceBase : IProductService
     {
         Requires.NotNull(serviceProvider, nameof(serviceProvider));
         _serviceProvider = serviceProvider;
-        CatalogBuilder = serviceProvider.GetRequiredService<ICatalogBuilder>();
-
         FileSystem = serviceProvider.GetRequiredService<IFileSystem>();
-        _fsUtils = serviceProvider.GetRequiredService<IFileSystemService>();
         Logger = serviceProvider.GetService<ILoggerFactory>()?.CreateLogger(GetType());
     }
 
@@ -46,85 +35,37 @@ public abstract class ProductServiceBase : IProductService
         return _installedProduct!;
     }
 
-    public void UpdateCurrentInstance(IInstalledProduct product)
+    public virtual IProductReference CreateProductReference(SemVersion? newVersion, ProductBranch? newBranch)
     {
-        throw new NotImplementedException();
+        var current = GetCurrentInstance();
+        var branch = current.Branch;
+        if (newBranch is not null)
+            branch = newBranch;
+        var version = current.Version;
+        if (newVersion is not null)
+            version = newVersion;
+        return new ProductReference(current.Name, version, branch);
     }
-
-    public abstract IProductReference CreateProductReference(Version? newVersion, string? branch);
 
     public IInstalledProductCatalog GetInstalledProductCatalog()
     {
         Initialize();
-        var manifest = _installedProduct!.Manifest;
-        var installPath = _installedProduct.InstallationPath;
-        return new InstalledProductCatalog(_installedProduct!, FindInstalledComponents(manifest, installPath));
+        return new InstalledProductCatalog(_installedProduct!, FindInstalledComponents());
     }
-
-    public IProductCatalog GetAvailableProductManifest(CatalogLocation manifestLocation)
-    {
-        Initialize();
-        if (!IsProductCompatible(manifestLocation.Product))
-            throw new InvalidOperationException("Not compatible product");
-            
-        try
-        {
-            Logger?.LogTrace("Getting manifest file.");
-            var manifestFile = GetAvailableManifestFile(manifestLocation);
-            if (manifestFile is null || !manifestFile.Exists)
-                throw new CatalogException("Manifest file not found or null");
-            try
-            {
-                Logger?.LogTrace($"Loading manifest form {manifestFile.FullName}");
-                var manifest = LoadManifest(manifestFile, manifestLocation.Product);
-                if (manifest is null)
-                    throw new CatalogException("Manifest cannot be null");
-                return manifest;
-            }
-            finally
-            {
-                _fsUtils.DeleteFileIfInTemp(manifestFile);
-            }
-        }
-        catch (Exception e)
-        {
-            Logger?.LogError(e, e.Message);
-            throw;
-        }
-    }
-
+    
     protected abstract IInstalledProduct BuildProduct();
-        
-    private IEnumerable<IProductComponent> FindInstalledComponents(IProductCatalog manifest, string installationPath)
-    {
-        var currentInstance = GetCurrentInstance();
-        return manifest.Items.Select(component =>
-        {
-            var detector = ComponentDetectorFactory!.GetDetector(component.Type, _serviceProvider);
-            return detector.Find(component, currentInstance);
-        });
-    }
 
-    protected virtual IFileInfo GetAvailableManifestFile(CatalogLocation manifestLocation)
-    {
-        return ManifestFileResolver!.GetManifest(manifestLocation.ManifestUri);
-    }
-        
-    protected virtual bool IsProductCompatible(IProductReference product)
+    protected abstract IEnumerable<IProductComponent> FindInstalledComponents();
+
+    public virtual bool IsProductCompatible(IProductReference product)
     {
         return !ProductReferenceEqualityComparer.NameOnly.Equals(_installedProduct!, product);
-    }
-        
-    protected virtual IProductCatalog LoadManifest(IFileInfo manifestFile, IProductReference productReference)
-    {
-        return CatalogBuilder.Build(manifestFile, productReference);
     }
 
     private void Initialize()
     {
         if (_isInitialized)
             return;
-        ManifestFileResolver = _serviceProvider.GetService<IManifestFileResolver>() ?? new LocalManifestFileResolver(_serviceProvider);
         ComponentDetectorFactory = _serviceProvider.GetService<IComponentDetectorFactory>() ?? new ComponentDetectorFactory();
         _installedProduct ??= BuildProduct();
         AddProductVariables(_installedProduct);

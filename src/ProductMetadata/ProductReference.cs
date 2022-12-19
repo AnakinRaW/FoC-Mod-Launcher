@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Semver;
 using Validation;
 
 namespace Sklavenwalker.ProductMetadata;
@@ -6,10 +6,10 @@ namespace Sklavenwalker.ProductMetadata;
 public class ProductReference : IProductReference
 {
     public string Name { get; }
-    public Version? Version { get; init; }
-    public string? Branch { get; }
+    public SemVersion? Version { get; init; }
+    public ProductBranch? Branch { get; }
 
-    public ProductReference(string name, Version? version = null, string? branch = null)
+    public ProductReference(string name, SemVersion? version = null, ProductBranch? branch = null)
     {
         Requires.NotNullOrEmpty(name, nameof(name));
         Name = name;
@@ -19,6 +19,6 @@ public class ProductReference : IProductReference
 
     public override string ToString()
     {
-        return $"Product {Name};v{Version};branch:{Branch}";
+        return $"Product {Name};v:{Version};branch:{Branch}";
     }
 }

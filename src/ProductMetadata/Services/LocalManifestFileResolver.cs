@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO.Abstractions;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Sklavenwalker.ProductMetadata.Catalog;
 using Validation;
@@ -16,12 +18,12 @@ public class LocalManifestFileResolver : IManifestFileResolver
         _fileSystem = serviceProvider.GetRequiredService<IFileSystem>();
     }
 
-    public IFileInfo GetManifest(Uri manifestPath)
+    public Task<IFileInfo> GetManifest(Uri manifestPath, CancellationToken token)
     {
         var manifestFilePath = manifestPath.LocalPath;
         var fileInfo = _fileSystem.FileInfo.FromFileName(manifestFilePath);
         if (!fileInfo.Exists)
-            throw new CatalogNotFoundException($"Could not find manifest at {fileInfo.FullName}");
-        return fileInfo;
+            throw new CatalogDownloadException($"Could not find manifest at {fileInfo.FullName}");
+        return Task.FromResult(fileInfo);
     }
 }

@@ -45,22 +45,6 @@ public class ShadowChromeWindow : Window
         nameof(HasMinimizeButton), typeof(bool), typeof(ShadowChromeWindow),
         new PropertyMetadata(default(bool), OnWindowStyleChanged));
 
-    private static void OnWindowStyleChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
-    {
-        var window = (ShadowChromeWindow)obj;
-        if (!(PresentationSource.FromVisual(window) is HwndSource hwndSource))
-            return;
-        window.UpdateWindowStyle(hwndSource.Handle);
-    }
-
-    private void UpdateWindowStyle(IntPtr hwnd)
-    {
-        var currentStyle = User32.GetWindowLong(hwnd, GWL.Style);
-        var newStyle = !HasMaximizeButton ? currentStyle & -65537 : currentStyle | 65536;
-        newStyle = !HasMinimizeButton ? newStyle & -131073 : newStyle | 131072;
-        User32.SetWindowLong(hwnd, -16, newStyle);
-    }
-
     public bool HasMinimizeButton
     {
         get => (bool)GetValue(HasMinimizeButtonProperty);
@@ -115,6 +99,25 @@ public class ShadowChromeWindow : Window
         private set => SetValue(DwmOwnsBorderPropertyKey, value);
     }
 
+    private static int PressedMouseButtons
+    {
+        get
+        {
+            var pressedMouseButtons = 0;
+            if (User32.IsKeyPressed(1))
+                pressedMouseButtons |= 1;
+            if (User32.IsKeyPressed(2))
+                pressedMouseButtons |= 2;
+            if (User32.IsKeyPressed(4))
+                pressedMouseButtons |= 16;
+            if (User32.IsKeyPressed(5))
+                pressedMouseButtons |= 32;
+            if (User32.IsKeyPressed(6))
+                pressedMouseButtons |= 64;
+            return pressedMouseButtons;
+        }
+    }
+
     static ShadowChromeWindow()
     {
         DefaultStyleKeyProperty.OverrideMetadata(typeof(ShadowChromeWindow),
@@ -125,6 +128,167 @@ public class ShadowChromeWindow : Window
     {
         WindowHelper = new WindowInteropHelper(this);
         NCButtonManager = new NonClientButtonManager(this);
+    }
+
+    public static void ShowWindowMenu(HwndSource source, Visual element, Point elementPoint, Size elementSize)
+    {
+        if (elementPoint.X < 0.0 || elementPoint.X > elementSize.Width || elementPoint.Y < 0.0 ||
+            elementPoint.Y > elementSize.Height)
+            return;
+        var screen = element.PointToScreen(elementPoint);
+        var window = element.FindAncestorOrSelf<ShadowChromeWindow>();
+        var canMaximize = window?.HasMaximizeButton ?? true;
+        var canMinimize = window?.HasMinimizeButton ?? true;
+        ShowWindowMenu(source, screen, canMinimize, canMaximize);
+    }
+
+    public void ChangeOwner(IntPtr newOwner)
+    {
+        WindowHelper.Owner = newOwner;
+        UpdateZOrderOfThisAndOwner();
+    }
+
+    public void ChangeOwnerForActivate(IntPtr newOwner)
+    {
+        _ownerForActivate = newOwner;
+    }
+
+    protected static void ShowWindowMenu(HwndSource source, Point screenPoint, bool canMinimize, bool canMaximize)
+    {
+        var systemMetrics = User32.GetSystemMetrics(40);
+        var systemMenu = User32.GetSystemMenu(source.Handle, false);
+        var windowPlacement = User32.GetWindowPlacement(source.Handle);
+        using (new SuppressRedrawScope(source.Handle))
+        {
+            var minFalg = canMinimize ? 0U : 1U;
+            var maxFalg = canMaximize ? 0U : 1U;
+            if (windowPlacement.showCmd == 1)
+            {
+                User32.EnableMenuItem(systemMenu, 61728U, 1U);
+                User32.EnableMenuItem(systemMenu, 61456U, 0U);
+                User32.EnableMenuItem(systemMenu, 61440U, 0U);
+                User32.EnableMenuItem(systemMenu, 61488U, 0U | maxFalg);
+                User32.EnableMenuItem(systemMenu, 61472U, 0U | minFalg);
+                User32.EnableMenuItem(systemMenu, 61536U, 0U);
+            }
+            else if (windowPlacement.showCmd == 3)
+            {
+                User32.EnableMenuItem(systemMenu, 61728U, 0U);
+                User32.EnableMenuItem(systemMenu, 61456U, 1U);
+                User32.EnableMenuItem(systemMenu, 61440U, 1U);
+                User32.EnableMenuItem(systemMenu, 61488U, 1U | maxFalg);
+                User32.EnableMenuItem(systemMenu, 61472U, 0U | minFalg);
+                User32.EnableMenuItem(systemMenu, 61536U, 0U);
+            }
+        }
+
+        var fuFlags = (uint)(systemMetrics | 256 | 128 | 2);
+        var num1 = User32.TrackPopupMenuEx(systemMenu, fuFlags,
+            (int)screenPoint.X, (int)screenPoint.Y, source.Handle, IntPtr.Zero);
+        if (num1 == 0)
+            return;
+        User32.PostMessage(source.Handle, 274, new IntPtr(num1), IntPtr.Zero);
+    }
+
+    protected virtual void OnWindowPosChanged(IntPtr hWnd, int showCmd, Int32Rect rcNormalPosition)
+    {
+    }
+
+    protected virtual bool ShouldHaveBorderThickness(IntPtr hWnd)
+    {
+        return User32.IsWindowVisible(hWnd) && !User32.IsZoomed(hWnd) && !User32.IsIconic(hWnd);
+    }
+
+    protected override void OnSourceInitialized(EventArgs e)
+    {
+        base.OnSourceInitialized(e);
+        HwndSource.FromHwnd(WindowHelper.Handle)!.AddHook(HwndSourceHook);
+    }
+
+    protected void UpdateGlowBorder(bool activate, bool maximized)
+    {
+        if (WindowHelper.Handle == IntPtr.Zero)
+            return;
+        var color = activate ? ActiveGlowColor : InactiveGlowColor;
+        var colorRef = new ColorRef(color);
+        var attrValue = maximized ? -2 : (int)colorRef.DwColor;
+        DwmOwnsBorder = DwmApi.DwmSetWindowAttribute(WindowHelper.Handle,
+            DwmWindowAttribute.DwmwaBorderColor, ref attrValue, 4) == 0;
+        if (DwmOwnsBorder)
+            return;
+        var solidColorBrush = new SolidColorBrush(color);
+        solidColorBrush.Freeze();
+        BorderBrush = solidColorBrush;
+    }
+
+    protected void EnsureOnScreen()
+    {
+        var deviceRect = this.LogicalToDeviceRect();
+        var displayForWindowRect = DisplayHelper.FindDisplayForWindowRect(deviceRect);
+        var onScreenPosition = DisplayHelper.GetOnScreenPosition(deviceRect, displayForWindowRect, true);
+        User32.SetWindowPos(WindowHelper.Handle, IntPtr.Zero, (int)onScreenPosition.Left,
+            (int)onScreenPosition.Top, (int)onScreenPosition.Width, (int)onScreenPosition.Height, 20);
+    }
+
+    protected virtual IntPtr HwndSourceHook(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+    {
+        switch (msg)
+        {
+            case 2:
+                var hwndSource = HwndSource.FromHwnd(hWnd);
+                hwndSource?.RemoveHook(HwndSourceHook);
+
+                break;
+            case 6:
+                WmActivate(hWnd, wParam, lParam);
+                break;
+            case 12:
+            case 128:
+                return CallDefWindowProcWithoutRedraw(hWnd, msg, wParam, lParam, ref handled);
+            case 70:
+                WmWindowPosChanging(hWnd, lParam);
+                break;
+            case 71:
+                WmWindowPosChanged(hWnd, lParam);
+                break;
+            case 124:
+                return WmStyleChanging(wParam, lParam);
+            case 131:
+                return WmNcCalcSize(hWnd, wParam, lParam, ref handled);
+            case 132:
+                return WmNcHitTest(hWnd, lParam, ref handled);
+            case 160:
+                handled = NCButtonManager.HoverTrackedButton(lParam);
+                break;
+            case 161:
+                handled = NCButtonManager.PressTrackedButton(lParam);
+                break;
+            case 162:
+                handled = NCButtonManager.ClickTrackedButton(lParam);
+                break;
+            case 164:
+            case 165:
+            case 166:
+                RaiseNonClientMouseMessageAsClient(hWnd, msg, wParam, lParam);
+                handled = true;
+                break;
+            case 274:
+                WmSysCommand(hWnd, wParam, lParam);
+                break;
+            case 512:
+            case 674:
+            case 675:
+                NCButtonManager.ClearTrackedButton();
+                break;
+            case 561:
+                _isDragging = true;
+                break;
+            case 562:
+                _isDragging = false;
+                break;
+        }
+
+        return IntPtr.Zero;
     }
 
     private static void OnGlowColorChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
@@ -175,99 +339,7 @@ public class ShadowChromeWindow : Window
             windowLong &= ~262144;
         User32.SetWindowLong(hwnd, (short)GWL.Style, windowLong);
     }
-
-    protected override void OnSourceInitialized(EventArgs e)
-    {
-        base.OnSourceInitialized(e);
-        HwndSource.FromHwnd(WindowHelper.Handle)!.AddHook(HwndSourceHook);
-    }
-
-    protected void UpdateGlowBorder(bool activate, bool maximized)
-    {
-        if (WindowHelper.Handle == IntPtr.Zero)
-            return;
-        var color = activate ? ActiveGlowColor : InactiveGlowColor;
-        var colorRef = new ColorRef(color);
-        var attrValue = maximized ? -2 : (int)colorRef.DwColor;
-        DwmOwnsBorder = DwmApi.DwmSetWindowAttribute(WindowHelper.Handle,
-            DwmWindowAttribute.DwmwaBorderColor, ref attrValue, 4) == 0;
-        if (DwmOwnsBorder)
-            return;
-        var solidColorBrush = new SolidColorBrush(color);
-        solidColorBrush.Freeze();
-        BorderBrush = solidColorBrush;
-    }
-
-    protected void EnsureOnScreen()
-    {
-        var deviceRect = this.LogicalToDeviceRect();
-        var displayForWindowRect = DisplayHelper.FindDisplayForWindowRect(deviceRect);
-        var onScreenPosition = DisplayHelper.GetOnScreenPosition(deviceRect, displayForWindowRect, true);
-        User32.SetWindowPos(WindowHelper.Handle, IntPtr.Zero, (int)onScreenPosition.Left,
-            (int)onScreenPosition.Top, (int)onScreenPosition.Width, (int)onScreenPosition.Height, 20);
-    }
-
-    protected virtual IntPtr HwndSourceHook(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
-    {
-        switch (msg)
-        {
-            case 2:
-                var hwndSource = HwndSource.FromHwnd(hWnd);
-                hwndSource?.RemoveHook(HwndSourceHook);
-
-                break;
-            case 6:
-                WmActivate(hWnd, wParam, lParam);
-                break;
-            case 12:
-            case 128: 
-                return CallDefWindowProcWithoutRedraw(hWnd, msg, wParam, lParam, ref handled);
-            case 70:
-                WmWindowPosChanging(hWnd, lParam);
-                break;
-            case 71:
-                WmWindowPosChanged(hWnd, lParam);
-                break;
-            case 124:
-                return WmStyleChanging(wParam, lParam);
-            case 131:
-                return WmNcCalcSize(hWnd, wParam, lParam, ref handled);
-            case 132:
-                return WmNcHitTest(hWnd, lParam, ref handled);
-            case 160:
-                handled = NCButtonManager.HoverTrackedButton(lParam);
-                break;
-            case 161:
-                handled = NCButtonManager.PressTrackedButton(lParam);
-                break;
-            case 162:
-                handled = NCButtonManager.ClickTrackedButton(lParam);
-                break;
-            case 164:
-            case 165:
-            case 166:
-                RaiseNonClientMouseMessageAsClient(hWnd, msg, wParam, lParam);
-                handled = true;
-                break;
-            case 274:
-                WmSysCommand(hWnd, wParam, lParam);
-                break;
-            case 512:
-            case 674:
-            case 675:
-                NCButtonManager.ClearTrackedButton();
-                break;
-            case 561:
-                _isDragging = true;
-                break;
-            case 562:
-                _isDragging = false;
-                break;
-        }
-
-        return IntPtr.Zero;
-    }
-
+    
     private static void RaiseNonClientMouseMessageAsClient(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam)
     {
         var point = new PointStruct
@@ -278,25 +350,6 @@ public class ShadowChromeWindow : Window
         User32.ScreenToClient(hWnd, ref point);
         User32.SendMessage(hWnd, msg + 513 - 161, new IntPtr(PressedMouseButtons),
             User32.MakeParam(point.X, point.Y));
-    }
-
-    private static int PressedMouseButtons
-    {
-        get
-        {
-            var pressedMouseButtons = 0;
-            if (User32.IsKeyPressed(1))
-                pressedMouseButtons |= 1;
-            if (User32.IsKeyPressed(2))
-                pressedMouseButtons |= 2;
-            if (User32.IsKeyPressed(4))
-                pressedMouseButtons |= 16;
-            if (User32.IsKeyPressed(5))
-                pressedMouseButtons |= 32;
-            if (User32.IsKeyPressed(6))
-                pressedMouseButtons |= 64;
-            return pressedMouseButtons;
-        }
     }
 
     private static IntPtr CallDefWindowProcWithoutRedraw(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
@@ -511,11 +564,6 @@ public class ShadowChromeWindow : Window
         }
     }
 
-    protected virtual bool ShouldHaveBorderThickness(IntPtr hWnd)
-    {
-        return User32.IsWindowVisible(hWnd) && !User32.IsZoomed(hWnd) && !User32.IsIconic(hWnd);
-    }
-
     private void UpdateZOrderOfThisAndOwner()
     {
         if (_updatingZOrder)
@@ -547,10 +595,6 @@ public class ShadowChromeWindow : Window
         User32.SetWindowPos(hwndOwner, lastOwnedWindow, 0, 0, 0, 0, 19);
     }
 
-    protected virtual void OnWindowPosChanged(IntPtr hWnd, int showCmd, Int32Rect rcNormalPosition)
-    {
-    }
-
     private static MonitorInfoStruct MonitorInfoFromWindow(IntPtr hWnd)
     {
         var hMonitor = User32.MonitorFromWindow(hWnd, 2);
@@ -560,55 +604,6 @@ public class ShadowChromeWindow : Window
         };
         User32.GetMonitorInfo(hMonitor, ref monitorInfo);
         return monitorInfo;
-    }
-
-    public static void ShowWindowMenu(HwndSource source, Visual element, Point elementPoint, Size elementSize)
-    {
-        if (elementPoint.X < 0.0 || elementPoint.X > elementSize.Width || elementPoint.Y < 0.0 ||
-            elementPoint.Y > elementSize.Height)
-            return;
-        var screen = element.PointToScreen(elementPoint);
-        var window = element.FindAncestorOrSelf<ShadowChromeWindow>();
-        var canMaximize = window?.HasMaximizeButton ?? true;
-        var canMinimize = window?.HasMinimizeButton ?? true;
-        ShowWindowMenu(source, screen, canMinimize, canMaximize);
-    }
-
-    protected static void ShowWindowMenu(HwndSource source, Point screenPoint, bool canMinimize, bool canMaximize)
-    {
-        var systemMetrics = User32.GetSystemMetrics(40);
-        var systemMenu = User32.GetSystemMenu(source.Handle, false);
-        var windowPlacement = User32.GetWindowPlacement(source.Handle);
-        using (new SuppressRedrawScope(source.Handle))
-        {
-            var minFalg = canMinimize ? 0U : 1U;
-            var maxFalg = canMaximize ? 0U : 1U;
-            if (windowPlacement.showCmd == 1)
-            {
-                User32.EnableMenuItem(systemMenu, 61728U, 1U);
-                User32.EnableMenuItem(systemMenu, 61456U, 0U);
-                User32.EnableMenuItem(systemMenu, 61440U, 0U);
-                User32.EnableMenuItem(systemMenu, 61488U, 0U | maxFalg);
-                User32.EnableMenuItem(systemMenu, 61472U, 0U | minFalg);
-                User32.EnableMenuItem(systemMenu, 61536U, 0U);
-            }
-            else if (windowPlacement.showCmd == 3)
-            {
-                User32.EnableMenuItem(systemMenu, 61728U, 0U);
-                User32.EnableMenuItem(systemMenu, 61456U, 1U);
-                User32.EnableMenuItem(systemMenu, 61440U, 1U);
-                User32.EnableMenuItem(systemMenu, 61488U, 1U | maxFalg);
-                User32.EnableMenuItem(systemMenu, 61472U, 0U | minFalg);
-                User32.EnableMenuItem(systemMenu, 61536U, 0U);
-            }
-        }
-
-        var fuFlags = (uint)(systemMetrics | 256 | 128 | 2);
-        var num1 = User32.TrackPopupMenuEx(systemMenu, fuFlags,
-            (int)screenPoint.X, (int)screenPoint.Y, source.Handle, IntPtr.Zero);
-        if (num1 == 0)
-            return;
-        User32.PostMessage(source.Handle, 274, new IntPtr(num1), IntPtr.Zero);
     }
 
     private IntPtr WmStyleChanging(IntPtr wParam, IntPtr lParam)
@@ -628,16 +623,26 @@ public class ShadowChromeWindow : Window
         return IntPtr.Zero;
     }
 
-    public void ChangeOwnerForActivate(IntPtr newOwner) => _ownerForActivate = newOwner;
-
-    public void ChangeOwner(IntPtr newOwner)
+    private static void OnWindowStyleChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
     {
-        WindowHelper.Owner = newOwner;
-        UpdateZOrderOfThisAndOwner();
+        var window = (ShadowChromeWindow)obj;
+        if (!(PresentationSource.FromVisual(window) is HwndSource hwndSource))
+            return;
+        window.UpdateWindowStyle(hwndSource.Handle);
+    }
+
+    private void UpdateWindowStyle(IntPtr hwnd)
+    {
+        var currentStyle = User32.GetWindowLong(hwnd, GWL.Style);
+        var newStyle = !HasMaximizeButton ? currentStyle & -65537 : currentStyle | 65536;
+        newStyle = !HasMinimizeButton ? newStyle & -131073 : newStyle | 131072;
+        User32.SetWindowLong(hwnd, -16, newStyle);
     }
 
     private class ShadowBorder : Window
     {
+        private IntPtr Hwnd { get; set; }
+
         public ShadowBorder(ShadowChromeWindow window)
         {
             Focusable = false;
@@ -656,19 +661,18 @@ public class ShadowChromeWindow : Window
             });
         }
 
-        private IntPtr Hwnd { get; set; }
+        public void Resize(int left, int top, int width, int height)
+        {
+            User32.SetWindowPos(Hwnd, IntPtr.Zero, left, top, 0, 0, 21);
+            User32.SetWindowPos(Hwnd, IntPtr.Zero, 0, 0, width, height, 22);
+        }
+
 
         protected override void OnSourceInitialized(EventArgs e)
         {
             base.OnSourceInitialized(e);
             Hwnd = new WindowInteropHelper(this).Handle;
             HwndSource.FromHwnd(Hwnd)?.AddHook(WndProc);
-        }
-
-        public void Resize(int left, int top, int width, int height)
-        {
-            User32.SetWindowPos(Hwnd, IntPtr.Zero, left, top, 0, 0, 21);
-            User32.SetWindowPos(Hwnd, IntPtr.Zero, 0, 0, width, height, 22);
         }
 
         private IntPtr WndProc(IntPtr hwnd, int message, IntPtr wParam, IntPtr lParam, ref bool handled)

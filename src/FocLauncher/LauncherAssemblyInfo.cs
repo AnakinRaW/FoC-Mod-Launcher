@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
-using SemanticVersioning;
+using Semver;
 
 namespace FocLauncher;
 
@@ -23,9 +23,9 @@ internal static class LauncherAssemblyInfo
         AssemblyName = executingAssembly.GetName().Name;
     }
 
-    internal static Version? InformationalAsSemVer()
+    internal static SemVersion? InformationalAsSemVer()
     {
-        Version.TryParse(InformationalVersion, true, out var version);
+        SemVersion.TryParse(InformationalVersion, SemVersionStyles.Any, out var version);
         return version;
     }
 }

@@ -75,6 +75,16 @@ public abstract class DialogWindowBase : Window
         return WindowHelper.ShowModal(this);
     }
 
+    public void EnableOwner()
+    {
+        if (Owner is null)
+            return;
+        Owner.IsEnabled = true;
+        if (Owner.IsActive)
+            return;
+        Owner.Activate();
+    }
+
     protected override void OnSourceInitialized(EventArgs e)
     {
         _hwndSource = (HwndSource)PresentationSource.FromVisual(this);

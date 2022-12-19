@@ -3,9 +3,8 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows;
+using CommunityToolkit.Mvvm.ComponentModel;
 using FocLauncher.Update;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
-using PetroGlyph.Games.EawFoc;
 using Validation;
 
 namespace FocLauncher.ViewModels;

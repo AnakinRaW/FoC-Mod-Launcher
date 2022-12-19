@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using FocLauncher.Services;
 using FocLauncher.Themes;
+using FocLauncher.Threading;
 using FocLauncher.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -33,7 +34,7 @@ internal class LauncherApplication : Application
         base.OnStartup(e);
         var mainViewModel = new ApplicationViewModel(_serviceProvider, new StatusBarViewModel())
         {
-            Title = "Foc Mod Launcher",
+            Title = LauncherConstants.ApplicationName,
             IsResizable = false,
             HasMaximizeButton = false,
             HasMinimizeButton = true
@@ -42,7 +43,7 @@ internal class LauncherApplication : Application
         var window = InitializeWindow(mainViewModel);
         ShowWindow(window);
         mainViewModel.InitializeAsync().Wait();
-        LoadStartPageAsync();
+        LoadStartPageAsync().Forget();
     }
 
     private Window InitializeWindow(MainWindowViewModel viewModel)

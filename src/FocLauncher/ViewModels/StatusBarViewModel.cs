@@ -1,4 +1,4 @@
-﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Sklavenwalker.CommonUtilities.Wpf.Controls;
 
 namespace FocLauncher.ViewModels;

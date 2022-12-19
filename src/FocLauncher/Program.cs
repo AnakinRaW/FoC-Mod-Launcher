@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.IO.Abstractions;
 using System.Security.AccessControl;
 using System.Threading.Tasks;
 using FocLauncher.Controls;
 using FocLauncher.Services;
+using FocLauncher.Update.ProductMetadata;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Debug;
@@ -15,6 +17,8 @@ using Sklavenwalker.CommonUtilities.Registry;
 using Sklavenwalker.CommonUtilities.Registry.Windows;
 using Sklavenwalker.CommonUtilities.Wpf.Controls;
 using Sklavenwalker.CommonUtilities.Wpf.Services;
+using Sklavenwalker.ProductMetadata.Services;
+using Sklavenwalker.ProductUpdater.Services;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
 using UnhandledExceptionDialogViewModel = FocLauncher.ViewModels.UnhandledExceptionDialogViewModel;
 
@@ -73,6 +77,8 @@ internal static class Program
         serviceCollection.AddSingleton<IThreadHelper>(_ => new ThreadHelper());
 
         serviceCollection.AddTransient<IStatusBarFactory>(_ => new LauncherStatusBarFactory()); 
+
+        CreateUpdateProgramServices(serviceCollection);
         
         return serviceCollection.BuildServiceProvider();
     }
@@ -95,6 +101,13 @@ internal static class Program
         serviceCollection.AddSingleton<ILauncherRegistry>(sp => new LauncherRegistry(sp));
     }
 
+    private static void CreateUpdateProgramServices(IServiceCollection serviceCollection)
+    {
+        serviceCollection.AddSingleton<IProductUpdateProviderService>(sp => new ProductUpdateProviderService(sp));
+        serviceCollection.AddSingleton<IBranchManager>(sp => new LauncherBranchManager(sp));
+    }
+
+    [SuppressMessage("ReSharper", "RedundantAssignment")]
     private static void SetLogging(IServiceCollection serviceCollection, IFileSystem fileSystem, ILauncherEnvironment environment)
     {
         serviceCollection.AddLogging(l =>
@@ -121,7 +134,7 @@ internal static class Program
                 "launcher.log");
             var fileLogLevel = LogLevel.Information;
             var version = LauncherAssemblyInfo.InformationalAsSemVer();
-            if (version is not null && version.IsPreRelease)
+            if (version is not null && version.IsPrerelease)
                 fileLogLevel = LogLevel.Debug;
 #if DEBUG
             logPath = "log.txt";

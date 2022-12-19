@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
 using FocLauncher.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Sklavenwalker.CommonUtilities.Wpf.Controls;
 using Validation;
 
@@ -51,6 +51,7 @@ public partial class ApplicationViewModel : MainWindowViewModel, IApplicationVie
     {
         _logger?.LogTrace("An exception happened while initializing ApplicationViewModel. Showing the error dialog.");
         var dialogService = _serviceProvider.GetRequiredService<IQueuedDialogService>();
-        dialogService.ShowDialog(new ErrorMessageDialogViewModel(message, _serviceProvider));
+        const string header = "Initializing the launcher resulted in an error.";
+        dialogService.ShowDialog(new ErrorMessageDialogViewModel(header, message, _serviceProvider));
     }
 }

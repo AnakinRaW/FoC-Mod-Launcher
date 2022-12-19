@@ -3,6 +3,5 @@
 public enum UpdateCheckState
 {
     Success,
-    Error,
-    Cancelled
+    AlreadyInProgress
 }
