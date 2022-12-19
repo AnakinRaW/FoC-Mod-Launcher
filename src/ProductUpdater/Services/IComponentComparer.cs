@@ -2,12 +2,12 @@
 using Sklavenwalker.ProductMetadata.Component;
 using Sklavenwalker.ProductUpdater.Catalog;
 
-namespace Sklavenwalker.ProductUpdater;
+namespace Sklavenwalker.ProductUpdater.Services;
 
-public interface IComponentComparer
+internal interface IComponentComparer
 {
     public UpdateAction Compare(
-        IInstallableComponent? installableComponent, 
+        IInstallableComponent? installableComponent,
         IInstallableComponent availableComponent,
         IDictionary<string, string?>? properties = null);
 }

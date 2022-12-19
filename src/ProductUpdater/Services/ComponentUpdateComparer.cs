@@ -1,38 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.Extensions.DependencyInjection;
 using Sklavenwalker.ProductMetadata.Component;
 using Sklavenwalker.ProductMetadata.Conditions;
 using Sklavenwalker.ProductUpdater.Catalog;
 
-namespace Sklavenwalker.ProductUpdater;
+namespace Sklavenwalker.ProductUpdater.Services;
 
 public class ComponentUpdateComparer : IComponentComparer
 {
-    private readonly IServiceProvider _serviceProvider;
-
-    private ConditionEvaluatorFactory? _evaluatorFactory;
-
-    private ConditionEvaluatorFactory EvaluatorFactory
-    {
-        get
-        {
-            if (_evaluatorFactory is null)
-            {
-                var factory = new ConditionEvaluatorFactory();
-                factory.AddConditionEvaluator(new FileConditionEvaluator());
-                _evaluatorFactory = factory;
-            }
-            return _evaluatorFactory;
-        }
-    }
+    private readonly CompositeConditionsEvaluator _evaluator;
 
     public ComponentUpdateComparer(IServiceProvider serviceProvider)
     {
-        _serviceProvider = serviceProvider;
+        var evaluatorStore = serviceProvider.GetRequiredService<IConditionEvaluatorStore>();
+        _evaluator = new CompositeConditionsEvaluator(serviceProvider, evaluatorStore);
     }
 
     public UpdateAction Compare(
-        IInstallableComponent? installedComponent, 
+        IInstallableComponent? installedComponent,
         IInstallableComponent? availableComponent,
         IDictionary<string, string?>? properties = null)
     {
@@ -44,7 +30,7 @@ public class ComponentUpdateComparer : IComponentComparer
             return UpdateAction.Delete;
         if (ReferenceEquals(installedComponent, availableComponent))
             return 0;
-        
+
         if (!ProductComponentIdentityComparer.VersionAndBranchIndependent.Equals(installedComponent, availableComponent))
             throw new InvalidOperationException("Current and available components are not compatible.");
 
@@ -53,7 +39,8 @@ public class ComponentUpdateComparer : IComponentComparer
         if (availableComponent.DetectConditions.Count == 0)
             return 0;
 
-        return !new CompositeConditionsEvaluator().EvaluateConditions(_serviceProvider,
-            availableComponent.DetectConditions, EvaluatorFactory, properties) ? UpdateAction.Update : UpdateAction.Keep;
+        return !_evaluator.EvaluateConditions(availableComponent.DetectConditions, properties)
+            ? UpdateAction.Update
+            : UpdateAction.Keep;
     }
 }

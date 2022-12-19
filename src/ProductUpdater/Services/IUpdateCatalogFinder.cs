@@ -1,9 +1,9 @@
 ﻿using Sklavenwalker.ProductMetadata;
 using Sklavenwalker.ProductMetadata.Catalog;
 
-namespace Sklavenwalker.ProductUpdater;
+namespace Sklavenwalker.ProductUpdater.Services;
 
 public interface IUpdateCatalogFinder
 {
-    CatalogLocation Find(IInstalledProduct product);
+    CatalogLocation Find(IInstalledProduct product, string branch);
 }

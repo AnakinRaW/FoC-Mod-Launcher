@@ -6,22 +6,29 @@ namespace Sklavenwalker.ProductMetadata.Conditions;
 
 public class CompositeConditionsEvaluator
 {
-    public bool EvaluateConditions(
-        IServiceProvider services,
-        IList<ICondition> conditions,
-        ConditionEvaluatorFactory evaluatorFactory,
-        IDictionary<string, string?>? properties = null)
+    private readonly IServiceProvider _services;
+    private readonly IConditionEvaluatorStore _evaluatorStore;
+
+
+    public CompositeConditionsEvaluator(IServiceProvider services, IConditionEvaluatorStore evaluatorStore)
+    {
+        Requires.NotNull(evaluatorStore, nameof(evaluatorStore));
+        _services = services;
+        _evaluatorStore = evaluatorStore;
+    }
+
+    public bool EvaluateConditions(IList<ICondition> conditions, IDictionary<string, string?>? properties = null)
     {
         Requires.NotNull(conditions, nameof(conditions));
-        Requires.NotNull(evaluatorFactory, nameof(evaluatorFactory));
+        
         var result = false;
         var resultList = new List<(bool value, ConditionJoin join)>();
         foreach (var condition in conditions)
         {
-            var evaluator = evaluatorFactory.GetConditionEvaluator(condition);
+            var evaluator = _evaluatorStore.GetConditionEvaluator(condition);
             if (evaluator is null)
                 throw new Exception($"Cannot find evaluator for {condition.Id} of type {condition.Type}");
-            var evaluation = evaluator.Evaluate(services, condition, properties);
+            var evaluation = evaluator.Evaluate(_services, condition, properties);
             resultList.Add((evaluation, condition.Join));
         }
 

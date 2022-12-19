@@ -7,9 +7,9 @@ using Sklavenwalker.ProductMetadata.Component;
 using Sklavenwalker.ProductUpdater.Catalog;
 using Validation;
 
-namespace Sklavenwalker.ProductUpdater;
+namespace Sklavenwalker.ProductUpdater.Services;
 
-public class UpdateCatalogBuilder : IUpdateCatalogBuilder
+internal class UpdateCatalogBuilder : IUpdateCatalogBuilder
 {
     private readonly IComponentComparer _comparer;
 

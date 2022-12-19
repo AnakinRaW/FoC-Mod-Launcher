@@ -4,7 +4,7 @@ using Validation;
 
 namespace Sklavenwalker.ProductMetadata.Conditions;
 
-public class ConditionEvaluatorFactory
+public class ConditionEvaluatorStore : IConditionEvaluatorStore
 {
     private readonly IDictionary<ConditionType, IConditionEvaluator> _conditionEvaluators =
         new Dictionary<ConditionType, IConditionEvaluator>();
