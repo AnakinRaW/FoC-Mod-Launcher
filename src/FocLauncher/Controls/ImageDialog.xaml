@@ -6,14 +6,18 @@
              xmlns:controls="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Controls;assembly=Sklavenwalker.CommonUtilities.WPF.ThemedControls"
              xmlns:controls1="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Imaging.Controls;assembly=Sklavenwalker.CommonUtilities.WPF.Imaging"
              xmlns:designer="clr-namespace:FocLauncher.ViewModels.Designer"
-             mc:Ignorable="d" d:DesignWidth="400"
+             mc:Ignorable="d" d:DesignWidth="480"
              d:DataContext="{d:DesignInstance {x:Type designer:ImageDialogViewModel}, IsDesignTimeCreatable=True}"
-             MaxWidth="480">
+             MaxWidth="480" SizeToContent="WidthAndHeight">
     <Grid Margin="12">
-        <StackPanel Orientation="Horizontal">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
             <controls1:ThemedImage Moniker="{Binding Image}" Height="92" Width="92"
-                                  Stretch="Fill" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-            <ContentPresenter Content="{Binding}" Margin="10,0,0,0"/>
-        </StackPanel>
+                                   Stretch="Fill" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+            <ContentPresenter Grid.Column="1" Content="{Binding}" Margin="10,0,0,0"/>
+        </Grid>
     </Grid>
 </controls:ThemedDialog>
