@@ -6,7 +6,6 @@ using Microsoft.Extensions.Logging;
 using Semver;
 using Sklavenwalker.ProductMetadata.Catalog;
 using Sklavenwalker.ProductMetadata.Component;
-using Sklavenwalker.ProductMetadata.Services.Detectors;
 using Validation;
 
 namespace Sklavenwalker.ProductMetadata.Services;
@@ -18,8 +17,6 @@ public abstract class ProductServiceBase : IProductService
     private IInstalledProduct? _installedProduct;
     protected ILogger? Logger;
     protected readonly IFileSystem FileSystem;
-
-    protected IComponentDetectorFactory? ComponentDetectorFactory { get; private set; }
 
     protected ProductServiceBase(IServiceProvider serviceProvider)
     {
@@ -55,7 +52,7 @@ public abstract class ProductServiceBase : IProductService
     
     protected abstract IInstalledProduct BuildProduct();
 
-    protected abstract IEnumerable<IProductComponent> FindInstalledComponents();
+    protected abstract IReadOnlyList<IProductComponent> FindInstalledComponents();
 
     public virtual bool IsProductCompatible(IProductReference product)
     {
@@ -66,7 +63,6 @@ public abstract class ProductServiceBase : IProductService
     {
         if (_isInitialized)
             return;
-        ComponentDetectorFactory = _serviceProvider.GetService<IComponentDetectorFactory>() ?? new ComponentDetectorFactory();
         _installedProduct ??= BuildProduct();
         AddProductVariables(_installedProduct);
         if (_installedProduct is null)

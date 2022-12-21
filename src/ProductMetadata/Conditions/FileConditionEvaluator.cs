@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO.Abstractions;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
+using Semver;
 using Sklavenwalker.CommonUtilities.Hashing;
 using Sklavenwalker.ProductMetadata.Component;
 using Sklavenwalker.ProductMetadata.Services;
@@ -51,10 +52,9 @@ public class FileConditionEvaluator : IConditionEvaluator
         return actualHash.SequenceEqual(expectedHash);
     }
 
-    private static bool EvaluateFileVersion(string filePath, Version version)
+    private static bool EvaluateFileVersion(string filePath, SemVersion version)
     {
-        if (!Version.TryParse(FileVersionInfo.GetVersionInfo(filePath).ProductVersion, out var fileProductVersion) || fileProductVersion is null)
-            return false;
-        return version.Equals(fileProductVersion);
+        return SemVersion.TryParse(FileVersionInfo.GetVersionInfo(filePath).ProductVersion, SemVersionStyles.Any, out var fileProductVersion) 
+               && version.Equals(fileProductVersion);
     }
 }

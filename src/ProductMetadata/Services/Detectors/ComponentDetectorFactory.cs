@@ -12,15 +12,11 @@ internal class ComponentDetectorFactory : IComponentDetectorFactory
     public IComponentDetector GetDetector(ComponentType type, IServiceProvider serviceProvider)
     {
         Requires.NotNull(serviceProvider, nameof(serviceProvider));
-        switch (type)
+        return type switch
         {
-            case ComponentType.File:
-                return GetOrCreate(type, () => new FileComponentDetector(serviceProvider));
-            case ComponentType.Group:
-                return GetOrCreate(type, () => new GroupComponentDetector(serviceProvider));
-            default:
-                throw new NotSupportedException();
-        }
+            ComponentType.File => GetOrCreate(type, () => new DefaultComponentDetector(serviceProvider)),
+            _ => throw new NotSupportedException()
+        };
     }
 
     private IComponentDetector GetOrCreate(ComponentType type, Func<IComponentDetector> createFunc)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.Extensions.DependencyInjection;
 using Validation;
 
 namespace Sklavenwalker.ProductMetadata.Conditions;
@@ -10,14 +11,13 @@ public class CompositeConditionsEvaluator
     private readonly IConditionEvaluatorStore _evaluatorStore;
 
 
-    public CompositeConditionsEvaluator(IServiceProvider services, IConditionEvaluatorStore evaluatorStore)
+    public CompositeConditionsEvaluator(IServiceProvider services)
     {
-        Requires.NotNull(evaluatorStore, nameof(evaluatorStore));
         _services = services;
-        _evaluatorStore = evaluatorStore;
+        _evaluatorStore = services.GetRequiredService<IConditionEvaluatorStore>();
     }
-
-    public bool EvaluateConditions(IList<ICondition> conditions, IDictionary<string, string?>? properties = null)
+    
+    public bool EvaluateConditions(IReadOnlyList<ICondition> conditions, IDictionary<string, string?>? properties = null)
     {
         Requires.NotNull(conditions, nameof(conditions));
         

@@ -11,6 +11,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Debug;
 using Serilog.Extensions.Logging;
+using Sklavenwalker.CommonUtilities.DownloadManager;
+using Sklavenwalker.CommonUtilities.DownloadManager.Configuration;
+using Sklavenwalker.CommonUtilities.DownloadManager.Verification;
 using Sklavenwalker.CommonUtilities.FileSystem;
 using Sklavenwalker.CommonUtilities.FileSystem.Windows;
 using Sklavenwalker.CommonUtilities.Registry;
@@ -105,6 +108,15 @@ internal static class Program
     {
         serviceCollection.AddSingleton<IProductUpdateProviderService>(sp => new ProductUpdateProviderService(sp));
         serviceCollection.AddSingleton<IBranchManager>(sp => new LauncherBranchManager(sp));
+        serviceCollection.AddSingleton<IManifestLoader>(sp => new LauncherManifestLoader(sp));
+        serviceCollection.AddSingleton<IDownloadManager>(sp => new DownloadManager(sp));
+        serviceCollection.AddSingleton<IVerificationManager>(sp => new VerificationManager(sp));
+        serviceCollection.AddSingleton(CreateDownloadConfiguration());
+    }
+
+    private static IDownloadManagerConfiguration CreateDownloadConfiguration()
+    {
+        return new DownloadManagerConfiguration { VerificationPolicy = VerificationPolicy.Optional };
     }
 
     [SuppressMessage("ReSharper", "RedundantAssignment")]

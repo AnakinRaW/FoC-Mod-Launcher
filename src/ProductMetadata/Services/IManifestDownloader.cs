@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Sklavenwalker.ProductMetadata.Services;
 
-public interface IManifestFileResolver
+public interface IManifestDownloader
 {
     Task<IFileInfo> GetManifest(Uri manifestPath, CancellationToken token = default);
 }

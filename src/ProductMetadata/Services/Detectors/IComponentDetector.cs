@@ -2,7 +2,7 @@
 
 namespace Sklavenwalker.ProductMetadata.Services.Detectors;
 
-public interface IComponentDetector
+internal interface IComponentDetector
 {
-    IProductComponent Find(IProductComponent manifestComponent, IInstalledProduct product);
+    bool GetCurrentInstalledState(IInstallableComponent installableComponent, VariableCollection productVariables);
 }

@@ -1,23 +1,26 @@
-﻿using System;
+﻿using Semver;
 using Sklavenwalker.ProductMetadata.Component;
+using Validation;
 
 namespace Sklavenwalker.ProductMetadata.Conditions;
 
-public class FileCondition : ICondition
+public sealed record FileCondition : ICondition
 {
     public ConditionType Type => ConditionType.File;
 
-    public string Id { get; }
-
-    public ConditionJoin Join { get; }
+    public string Id => "FileCondition";
 
     public string FilePath { get; }
 
-    public ComponentIntegrityInformation IntegrityInformation { get; }
+    public ConditionJoin Join { get; init; }
 
-    public Version? Version { get; }
+    public ComponentIntegrityInformation IntegrityInformation { get; init; }
+
+    public SemVersion? Version { get; init; }
     
     public FileCondition(string file)
     {
+        Requires.NotNullOrEmpty(file, nameof(file));
+        FilePath = file;
     }
 }

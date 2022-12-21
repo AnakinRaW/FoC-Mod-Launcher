@@ -21,10 +21,10 @@ public class ErrorMessageDialogViewModel : DialogViewModel, IErrorMessageDialogV
 
     public ErrorMessageDialogViewModel(string header, string message, IServiceProvider serviceProvider)
     {
+        _serviceProvider = serviceProvider;
         Title = LauncherEnvironment.LauncherProgramName;
         Header = header;
         Message = message;
-        _serviceProvider = serviceProvider;
         IsResizable = false;
     }
 

@@ -1,7 +1,6 @@
 ﻿namespace Sklavenwalker.ProductMetadata.Component;
 
-public struct InstallSizes
+public record struct InstallationSize(long SystemDrive, long ProductDrive)
 {
-    public long SystemDrive;
-    public long ProductDrive;
+    public long Total => SystemDrive + ProductDrive;
 }

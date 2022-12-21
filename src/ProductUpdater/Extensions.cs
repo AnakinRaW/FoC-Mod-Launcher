@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Sklavenwalker.ProductMetadata.Catalog;
 using Sklavenwalker.ProductMetadata.Component;
@@ -16,31 +15,16 @@ internal static class Extensions
         return updateCatalog.UpdateItems.Any() && updateCatalog.UpdateItems.Any(i => i.Action != UpdateAction.Update);
     }
 
-    public static IEnumerable<IInstallableComponent> GetInstallableComponentsRecursive(this IProductCatalog catalog)
+    public static IEnumerable<IInstallableComponent> GetInstallableComponents(this IProductCatalog catalog)
     {
         if (!catalog.Items.Any())
             return Enumerable.Empty<IInstallableComponent>();
         var result = new List<IInstallableComponent>();
-        foreach (var item in catalog.Items) 
-            AddInstallableComponentsRecursive(item, result);
-        return result;
-    }
-
-    public static void AddInstallableComponentsRecursive(IProductComponent component, ICollection<IInstallableComponent> result)
-    {
-        switch (component)
+        foreach (var item in catalog.Items)
         {
-            case IComponentGroup group:
-            {
-                foreach (var groupComponent in group.Components)
-                    AddInstallableComponentsRecursive(groupComponent, result);
-                break;
-            }
-            case IInstallableComponent installable:
+            if (item is IInstallableComponent installable)
                 result.Add(installable);
-                break;
-            default:
-                throw new NotSupportedException("Unknown component type");
         }
+        return result;
     }
 }

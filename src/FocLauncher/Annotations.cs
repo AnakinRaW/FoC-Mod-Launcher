@@ -424,7 +424,7 @@ namespace FocLauncher.Annotations
   /// [BaseTypeRequired(typeof(IComponent)] // Specify requirement
   /// class ComponentAttribute : Attribute { }
   /// 
-  /// [Component] // ComponentAttribute requires implementing IComponent interface
+  /// [LauncherComponent] // ComponentAttribute requires implementing IComponent interface
   /// class MyComponent : IComponent { }
   /// </code></example>
   [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]

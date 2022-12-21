@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Semver;
 using Validation;
 
 namespace Sklavenwalker.ProductMetadata.Component;
@@ -6,10 +6,10 @@ namespace Sklavenwalker.ProductMetadata.Component;
 public class ProductComponentIdentity : IProductComponentIdentity
 {
     public string Id { get; }
-    public Version? Version { get; }
+    public SemVersion? Version { get; }
     public string? Branch { get; }
         
-    public ProductComponentIdentity(string id, Version? version = null, string? branch = null)
+    public ProductComponentIdentity(string id, SemVersion? version = null, string? branch = null)
     {
         Requires.NotNullOrEmpty(id, nameof(id));
         Id = id;

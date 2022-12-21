@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Semver;
+using System;
 
 namespace Sklavenwalker.ProductMetadata.Component;
 
@@ -6,7 +7,7 @@ public interface IProductComponentIdentity : IEquatable<IProductComponentIdentit
 {
     string Id { get; }
 
-    Version? Version { get; }
+    SemVersion? Version { get; }
 
     string? Branch { get; }
 

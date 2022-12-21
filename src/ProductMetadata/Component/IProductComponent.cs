@@ -4,5 +4,5 @@ public interface IProductComponent : IProductComponentIdentity
 {
     ComponentType Type { get; }
 
-    DetectionState DetectedState { get; }
+    DetectionState DetectedState { get; set; }
 }

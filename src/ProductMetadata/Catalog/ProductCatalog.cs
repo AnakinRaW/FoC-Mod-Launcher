@@ -8,9 +8,9 @@ public class ProductCatalog : IProductCatalog
 {
     public IProductReference Product { get; }
 
-    public IEnumerable<IProductComponent> Items { get; }
+    public IReadOnlyList<IProductComponent> Items { get; }
 
-    public ProductCatalog(IProductReference product, IEnumerable<IProductComponent> components)
+    public ProductCatalog(IProductReference product, IReadOnlyList<IProductComponent> components)
     {
         Requires.NotNull(product, nameof(product));
         Requires.NotNull(components, nameof(components));

@@ -8,7 +8,7 @@
              xmlns:designer="clr-namespace:FocLauncher.ViewModels.Designer"
              mc:Ignorable="d" d:DesignWidth="480"
              d:DataContext="{d:DesignInstance {x:Type designer:ImageDialogViewModel}, IsDesignTimeCreatable=True}"
-             MaxWidth="480" SizeToContent="WidthAndHeight">
+             MaxWidth="480" ResizeMode="NoResize">
     <Grid Margin="12">
         <Grid>
             <Grid.ColumnDefinitions>

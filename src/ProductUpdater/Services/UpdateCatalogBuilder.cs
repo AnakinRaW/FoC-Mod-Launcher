@@ -31,10 +31,10 @@ internal class UpdateCatalogBuilder : IUpdateCatalogBuilder
         if (!ProductReferenceEqualityComparer.Default.Equals(installedCatalog.Product, availableCatalog.Product))
             throw new InvalidOperationException("Cannot build update catalog from different products.");
 
-        var currentInstalledComponents = new HashSet<IInstallableComponent>(installedCatalog.GetInstallableComponentsRecursive(),
+        var currentInstalledComponents = new HashSet<IInstallableComponent>(installedCatalog.GetInstallableComponents(),
             ProductComponentIdentityComparer.VersionIndependent);
 
-        var availableInstallableComponents = new HashSet<IInstallableComponent>(availableCatalog.GetInstallableComponentsRecursive(),
+        var availableInstallableComponents = new HashSet<IInstallableComponent>(availableCatalog.GetInstallableComponents(),
             ProductComponentIdentityComparer.VersionIndependent);
 
         if (!currentInstalledComponents.Any() && !availableInstallableComponents.Any())
@@ -51,7 +51,7 @@ internal class UpdateCatalogBuilder : IUpdateCatalogBuilder
         var updateItems = new List<IUpdateItem>();
         foreach (var availableItem in availableInstallableComponents)
         {
-            if (availableItem.OriginInfos is null || !availableItem.OriginInfos.Any())
+            if (availableItem.OriginInfo is null)
                 throw new CatalogException("Available catalog component must have origin data information.");
 
             var installedComponent = currentInstalledComponents.FirstOrDefault(c =>

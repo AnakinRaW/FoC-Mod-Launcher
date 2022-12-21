@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.Extensions.DependencyInjection;
 using Sklavenwalker.ProductMetadata.Component;
 using Sklavenwalker.ProductMetadata.Conditions;
 using Sklavenwalker.ProductUpdater.Catalog;
@@ -13,8 +12,7 @@ public class ComponentUpdateComparer : IComponentComparer
 
     public ComponentUpdateComparer(IServiceProvider serviceProvider)
     {
-        var evaluatorStore = serviceProvider.GetRequiredService<IConditionEvaluatorStore>();
-        _evaluator = new CompositeConditionsEvaluator(serviceProvider, evaluatorStore);
+        _evaluator = new CompositeConditionsEvaluator(serviceProvider);
     }
 
     public UpdateAction Compare(

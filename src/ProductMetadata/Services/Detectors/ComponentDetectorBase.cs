@@ -6,13 +6,11 @@ using Validation;
 
 namespace Sklavenwalker.ProductMetadata.Services.Detectors;
 
-public abstract class ComponentDetectorBase : IComponentDetector
+internal abstract class ComponentDetectorBase<T> : IComponentDetector where T : IInstallableComponent
 {
     protected IServiceProvider ServiceProvider { get; }
 
     protected ILogger? Logger { get; }
-
-    protected abstract ComponentType SupportedType { get; }
 
     protected ComponentDetectorBase(IServiceProvider serviceProvider)
     {
@@ -21,19 +19,26 @@ public abstract class ComponentDetectorBase : IComponentDetector
         Logger = serviceProvider.GetService<ILoggerFactory>()?.CreateLogger(GetType());
     }
         
-    public IProductComponent Find(IProductComponent manifestComponent, IInstalledProduct product)
+    public bool GetCurrentInstalledState(IInstallableComponent installableComponent, VariableCollection productVariables)
     {
-        Requires.NotNull(manifestComponent, nameof(manifestComponent));
-        Requires.NotNull(product, nameof(product));
-        ValidateSupported(manifestComponent.Type);
-        return FindCore(manifestComponent, product);
+        Requires.NotNull(installableComponent, nameof(installableComponent));
+        Requires.NotNull(productVariables, nameof(productVariables));
+        var component = ValidateSupported(installableComponent);
+        return FindCore(component, productVariables);
     }
 
-    protected abstract IProductComponent FindCore(IProductComponent manifestComponent, IInstalledProduct product);
+    protected abstract bool FindCore(T component, VariableCollection product);
 
-    protected void ValidateSupported(ComponentType type)
+    protected T ValidateSupported(IInstallableComponent component)
     {
-        if (type != SupportedType)
-            throw new InvalidOperationException();
+        if (component is not T obj)
+            throw new InvalidOperationException($"Component {component.GetType().Name} is of wrong type. " +
+                                                $"Expected {nameof(SingleFileComponent)}");
+        return obj;
+    }
+
+    public override string ToString()
+    {
+        return $"Detector: {GetType().Name}";
     }
 }

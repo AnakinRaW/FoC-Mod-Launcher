@@ -7,9 +7,9 @@ public interface IInstallableComponent : IProductComponent
 {
     long DownloadSize { get; }
 
-    IList<OriginInfo> OriginInfos { get; }
+    OriginInfo OriginInfo { get; }
 
-    IList<ICondition> DetectConditions { get; }
+    IReadOnlyList<ICondition> DetectConditions { get; }
 
-    InstallSizes InstallSizes { get; }
+    InstallationSize InstallationSize { get; }
 }
