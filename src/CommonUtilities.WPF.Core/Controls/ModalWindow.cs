@@ -6,28 +6,28 @@ using Sklavenwalker.CommonUtilities.Wpf.Utilities;
 
 namespace Sklavenwalker.CommonUtilities.Wpf.Controls;
 
-public abstract class DialogWindowBase : Window
+public class ModalWindow : Window
 {
     private HwndSource? _hwndSource;
 
     public static readonly DependencyProperty HasMaximizeButtonProperty = DependencyProperty.Register(
-        nameof(HasMaximizeButton), typeof(bool), typeof(DialogWindowBase),
+        nameof(HasMaximizeButton), typeof(bool), typeof(ModalWindow),
         new FrameworkPropertyMetadata(Boxes.BooleanFalse, OnWindowStyleChanged));
 
     public static readonly DependencyProperty HasMinimizeButtonProperty = DependencyProperty.Register(
-        nameof(HasMinimizeButton), typeof(bool), typeof(DialogWindowBase),
+        nameof(HasMinimizeButton), typeof(bool), typeof(ModalWindow),
         new FrameworkPropertyMetadata(Boxes.BooleanFalse, OnWindowStyleChanged));
 
     public static readonly DependencyProperty HasDialogFrameProperty = DependencyProperty.Register(
-        nameof(HasDialogFrame), typeof(bool), typeof(DialogWindowBase),
+        nameof(HasDialogFrame), typeof(bool), typeof(ModalWindow),
         new FrameworkPropertyMetadata(Boxes.BooleanTrue, OnWindowStyleChanged));
 
     public static readonly DependencyProperty IsResizableProperty = DependencyProperty.Register(
-        nameof(IsResizable), typeof(bool), typeof(DialogWindowBase),
+        nameof(IsResizable), typeof(bool), typeof(ModalWindow),
         new PropertyMetadata(true, OnResizeChanged));
 
     public static readonly DependencyProperty IsCloseButtonEnabledProperty =
-        DependencyProperty.Register(nameof(IsCloseButtonEnabled), typeof(bool), typeof(DialogWindowBase),
+        DependencyProperty.Register(nameof(IsCloseButtonEnabled), typeof(bool), typeof(ModalWindow),
             new PropertyMetadata(Boxes.BooleanTrue, OnWindowStyleChanged));
 
     public bool IsResizable
@@ -60,12 +60,12 @@ public abstract class DialogWindowBase : Window
         set => SetValue(IsCloseButtonEnabledProperty, value);
     }
 
-    static DialogWindowBase()
+    static ModalWindow()
     {
-        DefaultStyleKeyProperty.OverrideMetadata(typeof(DialogWindowBase), new FrameworkPropertyMetadata(typeof(DialogWindowBase)));
+        DefaultStyleKeyProperty.OverrideMetadata(typeof(ModalWindow), new FrameworkPropertyMetadata(typeof(ModalWindow)));
     }
 
-    protected DialogWindowBase()
+    public ModalWindow()
     {
         WindowStartupLocation = WindowStartupLocation.CenterOwner;
     }
@@ -105,7 +105,7 @@ public abstract class DialogWindowBase : Window
 
     private static void OnWindowStyleChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
     {
-        ((DialogWindowBase)obj).UpdateWindowStyle();
+        ((ModalWindow)obj).UpdateWindowStyle();
     }
 
     private static void OnResizeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -155,13 +155,13 @@ public abstract class DialogWindowBase : Window
     {
         if (msg == 26 && wParam.ToInt32() == 67 || msg == 21)
         {
-            OnDialogThemeChanged();
+            OnThemeChanged();
             handled = true;
         }
         return IntPtr.Zero;
     }
 
-    protected virtual void OnDialogThemeChanged()
+    protected virtual void OnThemeChanged()
     {
     }
 }

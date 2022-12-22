@@ -5,7 +5,7 @@ using Validation;
 
 namespace Sklavenwalker.CommonUtilities.Wpf.Controls;
 
-public class ThemedDialog : DialogWindowBase
+public class ThemedDialog : ModalWindow
 {
     private IDialogViewModel? _viewModel;
     

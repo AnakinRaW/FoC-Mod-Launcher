@@ -60,25 +60,25 @@ internal class QueuedDialogService : IQueuedDialogService
         });
     }
 
-    private static void ShowDialogAsync(DialogWindowBase dialog)
+    private static void ShowDialogAsync(ModalWindow window)
     {
-        Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, dialog.ShowModal);
+        Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, window.ShowModal);
     }
 
-    private DialogWindowBase CreateNextDialog()
+    private ModalWindow CreateNextDialog()
     {
         var (viewModel, task) = _queuedDialogs.Dequeue();
         var dialog = _dialogFactory.Create(viewModel);
-        _logger?.LogTrace($"Showing dialog: {viewModel}");
+        _logger?.LogTrace($"Showing window: {viewModel}");
         dialog.Closing += OnDialogClosing(dialog, viewModel, task);
         return dialog;
     }
 
-    private CancelEventHandler OnDialogClosing(DialogWindowBase dialog, IDialogViewModel viewModel, TaskCompletionSource<string?> task)
+    private CancelEventHandler OnDialogClosing(ModalWindow window, IDialogViewModel viewModel, TaskCompletionSource<string?> task)
     {
         return (_,_) =>
         {
-            dialog.EnableOwner();
+            window.EnableOwner();
             task.SetResult(viewModel.ResultButton);
             _logger?.LogTrace($"Button selected: {viewModel.ResultButton}");
             lock (_syncObject)

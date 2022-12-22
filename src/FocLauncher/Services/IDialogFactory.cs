@@ -4,5 +4,5 @@ namespace FocLauncher.Services;
 
 internal interface IDialogFactory
 {
-    DialogWindowBase Create(IDialogViewModel viewModel);
+    ModalWindow Create(IDialogViewModel viewModel);
 }

@@ -49,7 +49,7 @@ public partial class ApplicationViewModel : MainWindowViewModel, IApplicationVie
 
     private void ShowErrorDialog(string message)
     {
-        _logger?.LogTrace("An exception happened while initializing ApplicationViewModel. Showing the error dialog.");
+        _logger?.LogTrace("An exception happened while initializing ApplicationViewModel. Showing the error window.");
         var dialogService = _serviceProvider.GetRequiredService<IQueuedDialogService>();
         const string header = "Initializing the launcher resulted in an error.";
         dialogService.ShowDialog(new ErrorMessageDialogViewModel(header, message, _serviceProvider));

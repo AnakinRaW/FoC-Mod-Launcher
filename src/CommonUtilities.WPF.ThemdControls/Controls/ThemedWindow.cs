@@ -35,7 +35,7 @@ public class ThemedWindow : ShadowChromeWindow
 
     protected virtual void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
     {
-        if (e.NewValue is not IMainWindowViewModel windowViewModel)
+        if (e.NewValue is not IWindowViewModel windowViewModel)
             return;
         ViewModel = windowViewModel;
     }

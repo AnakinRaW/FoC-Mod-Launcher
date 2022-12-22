@@ -11,12 +11,12 @@ using System.ComponentModel;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Sklavenwalker.CommonUtilities.Wpf.Input;
 
 namespace FocLauncher.Services;
 
 interface ILauncherModalViewModel : IWindowViewModel, ILauncherViewModel
 {
-    void OnClosing(CancelEventArgs e);
 }
 
 
@@ -30,14 +30,14 @@ internal partial class UpdateWindowViewModel : WindowViewModel, ILauncherModalVi
     [ObservableProperty]
     private string? _loadingText;
 
-    public ICommand ClickCommand => new RelayCommand(() => throw new Exception("Button"));
+    public ICommand ClickCommand => ViewCommands.CloseWindow;
 
     public Task InitializeAsync()
     {
-        return Task.Run(async () =>
+        return Task.Run(() =>
         {
-            await Task.Delay(3000);
-            throw new Exception();
+            //await Task.Delay(3000);
+            //throw new Exception();
         });
     }
 

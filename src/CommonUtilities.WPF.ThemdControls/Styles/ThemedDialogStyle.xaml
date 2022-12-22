@@ -7,7 +7,7 @@
                     xmlns:imageControls="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Imaging.Controls;assembly=Sklavenwalker.CommonUtilities.WPF.Imaging"
                     xmlns:coreConverters="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Converters;assembly=Sklavenwalker.CommonUtilities.WPF.Core"
                     xmlns:colors="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Themes.Colors">
-    <Style TargetType="{x:Type controls:ThemedDialog}" BasedOn="{StaticResource {x:Type coreControls:DialogWindowBase}}">
+    <Style TargetType="{x:Type controls:ThemedDialog}" BasedOn="{StaticResource {x:Type coreControls:ModalWindow}}">
         <Style.Resources>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
             <converters:BooleanToFlowDirectionConverter x:Key="BooleanToFlowDirectionConverter"/>

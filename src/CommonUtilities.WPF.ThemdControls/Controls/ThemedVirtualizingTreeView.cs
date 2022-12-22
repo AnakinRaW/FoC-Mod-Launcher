@@ -20,12 +20,3 @@ public class ThemedVirtualizingTreeView : VirtualizingTreeView
         return new ThemedVirtualizingTreeViewItem();
     }
 }
-
-public class ThemedVirtualizingTreeViewItem : VirtualizingTreeViewItem
-{
-    static ThemedVirtualizingTreeViewItem()
-    {
-        DefaultStyleKeyProperty.OverrideMetadata(typeof(ThemedVirtualizingTreeViewItem),
-            new FrameworkPropertyMetadata(typeof(ThemedVirtualizingTreeViewItem)));
-    }
-}

@@ -35,7 +35,11 @@ internal class ErrorMessageDialogViewModel : IErrorMessageDialogViewModel
     {
     }
 
-    public string Header => "This is a test message for the error dialog.";
+    public void OnClosing(CancelEventArgs e)
+    {
+    }
+
+    public string Header => "This is a test message for the error window.";
     public string Message => "This is a very long message, which may represent an exception message containing a lot of details, end-users don't under stand anyway. However this is better than a hexed error code.";
     public ImageMoniker Image => Monikers.Settings;
 }

@@ -25,7 +25,10 @@ internal class ImageDialogViewModel : ViewModels.IImageDialogViewModel
     public IList<IButtonViewModel> Buttons { get; }
     public void CloseDialog()
     {
-        throw new NotImplementedException();
+    }
+
+    public void OnClosing(CancelEventArgs e)
+    {
     }
 
     public ImageMoniker Image => Monikers.Settings;

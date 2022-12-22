@@ -4,10 +4,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:designer="clr-namespace:FocLauncher.ViewModels.Designer"
-             mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="80"
+             mc:Ignorable="d" d:DesignWidth="200"
              d:DataContext="{d:DesignInstance {x:Type designer:ErrorMessageDialogViewModel}, IsDesignTimeCreatable=True}"
              MaxWidth="480">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="0*"/>
+        </Grid.ColumnDefinitions>
         <StackPanel Orientation="Vertical">
             <TextBlock Text="{Binding Header}" TextWrapping="Wrap" TextTrimming="CharacterEllipsis" 
                        FontWeight="Bold"/>

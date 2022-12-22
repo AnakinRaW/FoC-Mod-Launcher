@@ -17,7 +17,7 @@ internal class DialogFactory : IDialogFactory
         _windowService = serviceProvider.GetRequiredService<IWindowService>();
     }
 
-    public DialogWindowBase Create(IDialogViewModel viewModel)
+    public ModalWindow Create(IDialogViewModel viewModel)
     {
         return Application.Current.Dispatcher.Invoke(() =>
         {

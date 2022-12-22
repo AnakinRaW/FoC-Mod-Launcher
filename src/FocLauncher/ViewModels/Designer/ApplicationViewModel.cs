@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows;
 using Sklavenwalker.CommonUtilities.Wpf.Controls;
@@ -10,6 +11,7 @@ internal class ApplicationViewModel : IApplicationViewModel
 {
     public event PropertyChangedEventHandler? PropertyChanged;
 
+    public event EventHandler? CloseDialogRequest;
     public WindowState MinMaxState { get; set; }
     public bool RightToLeft { get; set; }
     public string Title { get; set; }
@@ -24,6 +26,16 @@ internal class ApplicationViewModel : IApplicationViewModel
 
     public Task InitializeAsync()
     {
-        throw new System.NotImplementedException();
+        throw new NotImplementedException();
+    }
+
+    public void CloseDialog()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void OnClosing(CancelEventArgs e)
+    {
+        throw new NotImplementedException();
     }
 }
