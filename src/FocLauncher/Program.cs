@@ -74,8 +74,11 @@ internal static class Program
 
         serviceCollection.AddSingleton<IThemeManager>(sp => new LauncherThemeManager(sp));
         serviceCollection.AddSingleton<IViewModelPresenter>(_ => new ViewPresenterService());
+        serviceCollection.AddSingleton<IWindowService>(sp => new WindowService());
+        serviceCollection.AddSingleton<IModalWindowService>(sp => new ModalWindowService(sp));
+        serviceCollection.AddSingleton<IModalWindowFactory>(sp => new ModalWindowFactory(sp));
         serviceCollection.AddSingleton<IQueuedDialogService>(sp => new QueuedDialogService(sp));
-        serviceCollection.AddSingleton<IDialogFactory>(_ => new DialogFactory());
+        serviceCollection.AddSingleton<IDialogFactory>(sp => new DialogFactory(sp));
         serviceCollection.AddSingleton<IDialogButtonFactory>(_ => new DialogButtonFactory(true));
         serviceCollection.AddSingleton<IThreadHelper>(_ => new ThreadHelper());
 

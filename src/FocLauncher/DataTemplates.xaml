@@ -2,7 +2,8 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:viewModels="clr-namespace:FocLauncher.ViewModels"
                     xmlns:views="clr-namespace:FocLauncher.Views"
-                    xmlns:dialogs="clr-namespace:FocLauncher.Dialogs">
+                    xmlns:dialogs="clr-namespace:FocLauncher.Dialogs"
+                    xmlns:services="clr-namespace:FocLauncher.Services">
     
     <DataTemplate DataType="{x:Type viewModels:MainPageViewModel}">
         <views:MainPage/>
@@ -16,6 +17,11 @@
         <StackPanel Orientation="Horizontal">
             <TextBlock Text="{Binding Text}"/>
         </StackPanel>
+    </DataTemplate>
+
+
+    <DataTemplate DataType="{x:Type services:UpdateWindowViewModel}">
+        <views:UpdateWindow/>
     </DataTemplate>
 
 </ResourceDictionary>

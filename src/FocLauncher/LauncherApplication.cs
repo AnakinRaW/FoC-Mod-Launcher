@@ -50,6 +50,7 @@ internal class LauncherApplication : Application
     {
         var window = new MainWindow(viewModel, _serviceProvider);
         MainWindow = window;
+        _serviceProvider.GetRequiredService<IWindowService>().SetMainWindow(window);
         return window;
     }
 

@@ -4,7 +4,9 @@ using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
+using FocLauncher.Services;
 using FocLauncher.Update;
+using Microsoft.Extensions.DependencyInjection;
 using Validation;
 
 namespace FocLauncher.ViewModels;
@@ -37,26 +39,36 @@ internal partial class MainPageViewModel : LoadingViewModelBase, IMainPageViewMo
     {
         return Task.Run(async () =>
         {
-            if (_isInitialized)
-                return;
-            lock (this)
+            try
             {
                 if (_isInitialized)
                     return;
-                _isInitialized = true;
-            }
-
-            await Application.Current.Dispatcher.InvokeAsync(() =>
-            {
-                new UpdateWindow(ServiceProvider)
+                lock (this)
                 {
-                    Owner = Application.Current.MainWindow
-                }.ShowDialog();
-            });
+                    if (_isInitialized)
+                        return;
+                    _isInitialized = true;
+                }
 
-            //await Task.Delay(2000);
+                var vm = new UpdateWindowViewModel();
+                await ServiceProvider.GetRequiredService<IModalWindowService>().ShowModal(vm);
 
-            IsLoading = false;
+                //await Application.Current.Dispatcher.InvokeAsync(() =>
+                //{
+                //    new UpdateWindow(ServiceProvider)
+                //    {
+                //        Owner = Application.Current.MainWindow
+                //    }.ShowDialog();
+                //});
+
+                //await Task.Delay(2000);
+
+                IsLoading = false;
+            }
+            finally
+            {
+                ServiceProvider.GetRequiredService<IWindowService>().ShowWindow();
+            }
         });
     }
 }
