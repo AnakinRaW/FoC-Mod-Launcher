@@ -9,7 +9,7 @@ using Sklavenwalker.CommonUtilities.Wpf.Imaging;
 namespace FocLauncher.ViewModels.Designer;
 
 [EditorBrowsable(EditorBrowsableState.Never)]
-internal class ImageDialogViewModel : ViewModels.IImageDialogViewModel
+internal class ImageDialogViewModel : IImageDialogViewModel
 {
     public event PropertyChangedEventHandler? PropertyChanged;
     public WindowState MinMaxState { get; set; }
@@ -20,6 +20,8 @@ internal class ImageDialogViewModel : ViewModels.IImageDialogViewModel
     public bool HasMinimizeButton { get; set; }
     public bool HasMaximizeButton { get; set; }
     public bool IsGripVisible { get; set; }
+    public bool HasDialogFrame { get; set; }
+    public bool IsCloseButtonEnabled { get; set; }
     public event EventHandler? CloseDialogRequest;
     public string? ResultButton { get; }
     public IList<IButtonViewModel> Buttons { get; }

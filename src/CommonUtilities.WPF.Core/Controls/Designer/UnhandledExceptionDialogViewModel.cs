@@ -1,16 +1,12 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows.Input;
 using System.Windows.Media;
-using Sklavenwalker.CommonUtilities.Wpf.Controls.ViewModels;
 
 namespace Sklavenwalker.CommonUtilities.Wpf.Controls.Designer;
 
-internal class UnhandledExceptionDialogViewModel : IUnhandledExceptionDialogViewModel
+internal class UnhandledExceptionDialogViewModel : ModalWindowViewModel, IUnhandledExceptionDialogViewModel
 {
-    public event PropertyChangedEventHandler? PropertyChanged;
-
     public Exception Exception => new TestException("Test Message", new StackTrace().ToString());
 
     public string WindowCaption => "Window Title";

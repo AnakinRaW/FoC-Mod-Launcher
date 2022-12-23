@@ -4,7 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace Sklavenwalker.CommonUtilities.Wpf.Controls;
 
-public abstract class DialogViewModel : WindowViewModel, IDialogViewModel
+public abstract class DialogViewModel : ModalWindowViewModel, IDialogViewModel
 {
     private IList<IButtonViewModel>? _buttons;
 

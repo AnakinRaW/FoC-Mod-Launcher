@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using Sklavenwalker.CommonUtilities.Wpf.Controls.ViewModels;
 
 namespace Sklavenwalker.CommonUtilities.Wpf.Controls;
 
@@ -7,10 +6,9 @@ public partial class UnhandledExceptionDialog
 {
     private readonly IUnhandledExceptionDialogViewModel _viewModel;
 
-    public UnhandledExceptionDialog(IUnhandledExceptionDialogViewModel viewModel)
+    public UnhandledExceptionDialog(IUnhandledExceptionDialogViewModel viewModel) : base(viewModel)
     {
         InitializeComponent();
-        DataContext = viewModel;
         _viewModel = viewModel;
     }
 

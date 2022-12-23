@@ -2,7 +2,7 @@
 
 namespace Sklavenwalker.CommonUtilities.Wpf.Controls;
 
-public interface IDialogViewModel : IWindowViewModel
+public interface IDialogViewModel : IModalWindowViewModel
 {
     string? ResultButton { get; }
 

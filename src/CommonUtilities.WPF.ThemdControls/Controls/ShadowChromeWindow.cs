@@ -15,11 +15,9 @@ using Validation;
 
 namespace Sklavenwalker.CommonUtilities.Wpf.Controls;
 
-public class ShadowChromeWindow : Window
+public class ShadowChromeWindow : WindowBase
 {
     public static readonly Size LogicalResizeBorder = new(6.0, 6.0);
-    private IntPtr _ownerForActivate;
-    private bool _isDragging;
 
     public static readonly DependencyProperty ActiveGlowColorProperty = DependencyProperty.Register(
         nameof(ActiveGlowColor), typeof(Color), typeof(ShadowChromeWindow),
@@ -32,41 +30,11 @@ public class ShadowChromeWindow : Window
     private static readonly DependencyPropertyKey DwmOwnsBorderPropertyKey = DependencyProperty.RegisterReadOnly(
         nameof(DwmOwnsBorder), typeof(bool), typeof(ShadowChromeWindow),
         new FrameworkPropertyMetadata(true, FrameworkPropertyMetadataOptions.AffectsRender, DwmOwnsBorderChanged));
-
-    public static readonly DependencyProperty IsResizableProperty = DependencyProperty.Register(
-        nameof(IsResizable), typeof(bool), typeof(ShadowChromeWindow),
-        new PropertyMetadata(true, OnResizeChanged));
-
-    public static readonly DependencyProperty HasMaximizeButtonProperty = DependencyProperty.Register(
-        nameof(HasMaximizeButton), typeof(bool), typeof(ShadowChromeWindow),
-        new PropertyMetadata(default(bool), OnWindowStyleChanged));
-
-    public static readonly DependencyProperty HasMinimizeButtonProperty = DependencyProperty.Register(
-        nameof(HasMinimizeButton), typeof(bool), typeof(ShadowChromeWindow),
-        new PropertyMetadata(default(bool), OnWindowStyleChanged));
-
-    public bool HasMinimizeButton
-    {
-        get => (bool)GetValue(HasMinimizeButtonProperty);
-        set => SetValue(HasMinimizeButtonProperty, value);
-    }
-
-    public bool HasMaximizeButton
-    {
-        get => (bool)GetValue(HasMaximizeButtonProperty);
-        set => SetValue(HasMaximizeButtonProperty, value);
-    }
-
+    
 
     public static readonly DependencyProperty DwmOwnsBorderProperty =
         DwmOwnsBorderPropertyKey.DependencyProperty;
-
-    private Rect _logicalSizeForRestore = Rect.Empty;
-    private bool _useLogicalSizeForRestore;
-    private bool _updatingZOrder;
-
-    protected WindowInteropHelper WindowHelper { get; }
-
+    
     private NonClientButtonManager NCButtonManager { get; }
 
     private ShadowBorder? LeftBorder { get; set; }
@@ -74,12 +42,6 @@ public class ShadowChromeWindow : Window
     private ShadowBorder? RightBorder { get; set; }
 
     private ShadowBorder? BottomBorder { get; set; }
-
-    public bool IsResizable
-    {
-        get => (bool)GetValue(IsResizableProperty);
-        set => SetValue(IsResizableProperty, value);
-    }
 
     public Color ActiveGlowColor
     {
@@ -99,34 +61,14 @@ public class ShadowChromeWindow : Window
         private set => SetValue(DwmOwnsBorderPropertyKey, value);
     }
 
-    private static int PressedMouseButtons
-    {
-        get
-        {
-            var pressedMouseButtons = 0;
-            if (User32.IsKeyPressed(1))
-                pressedMouseButtons |= 1;
-            if (User32.IsKeyPressed(2))
-                pressedMouseButtons |= 2;
-            if (User32.IsKeyPressed(4))
-                pressedMouseButtons |= 16;
-            if (User32.IsKeyPressed(5))
-                pressedMouseButtons |= 32;
-            if (User32.IsKeyPressed(6))
-                pressedMouseButtons |= 64;
-            return pressedMouseButtons;
-        }
-    }
-
     static ShadowChromeWindow()
     {
         DefaultStyleKeyProperty.OverrideMetadata(typeof(ShadowChromeWindow),
             new FrameworkPropertyMetadata(typeof(ShadowChromeWindow)));
     }
 
-    public ShadowChromeWindow()
+    public ShadowChromeWindow(IWindowViewModel viewModel) : base(viewModel)
     {
-        WindowHelper = new WindowInteropHelper(this);
         NCButtonManager = new NonClientButtonManager(this);
     }
 
@@ -140,17 +82,6 @@ public class ShadowChromeWindow : Window
         var canMaximize = window?.HasMaximizeButton ?? true;
         var canMinimize = window?.HasMinimizeButton ?? true;
         ShowWindowMenu(source, screen, canMinimize, canMaximize);
-    }
-
-    public void ChangeOwner(IntPtr newOwner)
-    {
-        WindowHelper.Owner = newOwner;
-        UpdateZOrderOfThisAndOwner();
-    }
-
-    public void ChangeOwnerForActivate(IntPtr newOwner)
-    {
-        _ownerForActivate = newOwner;
     }
 
     protected static void ShowWindowMenu(HwndSource source, Point screenPoint, bool canMinimize, bool canMaximize)
@@ -199,12 +130,6 @@ public class ShadowChromeWindow : Window
         return User32.IsWindowVisible(hWnd) && !User32.IsZoomed(hWnd) && !User32.IsIconic(hWnd);
     }
 
-    protected override void OnSourceInitialized(EventArgs e)
-    {
-        base.OnSourceInitialized(e);
-        HwndSource.FromHwnd(WindowHelper.Handle)!.AddHook(HwndSourceHook);
-    }
-
     protected void UpdateGlowBorder(bool activate, bool maximized)
     {
         if (WindowHelper.Handle == IntPtr.Zero)
@@ -221,42 +146,24 @@ public class ShadowChromeWindow : Window
         BorderBrush = solidColorBrush;
     }
 
-    protected void EnsureOnScreen()
+    protected override IntPtr WndProcHook(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
     {
-        var deviceRect = this.LogicalToDeviceRect();
-        var displayForWindowRect = DisplayHelper.FindDisplayForWindowRect(deviceRect);
-        var onScreenPosition = DisplayHelper.GetOnScreenPosition(deviceRect, displayForWindowRect, true);
-        User32.SetWindowPos(WindowHelper.Handle, IntPtr.Zero, (int)onScreenPosition.Left,
-            (int)onScreenPosition.Top, (int)onScreenPosition.Width, (int)onScreenPosition.Height, 20);
-    }
-
-    protected virtual IntPtr HwndSourceHook(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
-    {
+        base.WndProcHook(hwnd, msg, wParam, lParam, ref handled);
         switch (msg)
         {
-            case 2:
-                var hwndSource = HwndSource.FromHwnd(hWnd);
-                hwndSource?.RemoveHook(HwndSourceHook);
-
-                break;
             case 6:
-                WmActivate(hWnd, wParam, lParam);
+                WmActivate(hwnd, wParam, lParam);
                 break;
             case 12:
             case 128:
-                return CallDefWindowProcWithoutRedraw(hWnd, msg, wParam, lParam, ref handled);
-            case 70:
-                WmWindowPosChanging(hWnd, lParam);
-                break;
+                return CallDefWindowProcWithoutRedraw(hwnd, msg, wParam, lParam, ref handled);
             case 71:
-                WmWindowPosChanged(hWnd, lParam);
+                WmWindowPosChanged(hwnd, lParam);
                 break;
-            case 124:
-                return WmStyleChanging(wParam, lParam);
             case 131:
-                return WmNcCalcSize(hWnd, wParam, lParam, ref handled);
+                return WmNcCalcSize(hwnd, wParam, lParam, ref handled);
             case 132:
-                return WmNcHitTest(hWnd, lParam, ref handled);
+                return WmNcHitTest(hwnd, lParam, ref handled);
             case 160:
                 handled = NCButtonManager.HoverTrackedButton(lParam);
                 break;
@@ -266,25 +173,10 @@ public class ShadowChromeWindow : Window
             case 162:
                 handled = NCButtonManager.ClickTrackedButton(lParam);
                 break;
-            case 164:
-            case 165:
-            case 166:
-                RaiseNonClientMouseMessageAsClient(hWnd, msg, wParam, lParam);
-                handled = true;
-                break;
-            case 274:
-                WmSysCommand(hWnd, wParam, lParam);
-                break;
             case 512:
             case 674:
             case 675:
                 NCButtonManager.ClearTrackedButton();
-                break;
-            case 561:
-                _isDragging = true;
-                break;
-            case 562:
-                _isDragging = false;
                 break;
         }
 
@@ -322,36 +214,6 @@ public class ShadowChromeWindow : Window
         }
     }
 
-    private static void OnResizeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-    {
-        var window = (Window)d;
-        if (PresentationSource.FromVisual(window) is not HwndSource hwndSource)
-            return;
-        UpdateResizable(hwndSource.Handle, (bool)e.NewValue);
-    }
-
-    private static void UpdateResizable(IntPtr hwnd, bool resizable)
-    {
-        var windowLong = User32.GetWindowLong(hwnd, GWL.Style);
-        if (resizable)
-            windowLong |= 262144;
-        else
-            windowLong &= ~262144;
-        User32.SetWindowLong(hwnd, (short)GWL.Style, windowLong);
-    }
-    
-    private static void RaiseNonClientMouseMessageAsClient(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam)
-    {
-        var point = new PointStruct
-        {
-            X = User32.GetXLParam(lParam.ToInt32Unchecked()),
-            Y = User32.GetYLParam(lParam.ToInt32Unchecked())
-        };
-        User32.ScreenToClient(hWnd, ref point);
-        User32.SendMessage(hWnd, msg + 513 - 161, new IntPtr(PressedMouseButtons),
-            User32.MakeParam(point.X, point.Y));
-    }
-
     private static IntPtr CallDefWindowProcWithoutRedraw(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
     {
         using (new SuppressRedrawScope(hWnd))
@@ -363,8 +225,6 @@ public class ShadowChromeWindow : Window
 
     private void WmActivate(IntPtr hWnd, IntPtr wParam, IntPtr lParam)
     {
-        if (_ownerForActivate != IntPtr.Zero)
-            User32.SendMessage(_ownerForActivate, User32.NotifyOwnerActive, wParam, lParam);
         UpdateGlowBorder(Convert.ToBoolean(wParam.ToInt64()), User32.IsZoomed(hWnd));
     }
 
@@ -478,52 +338,6 @@ public class ShadowChromeWindow : Window
         return new IntPtr(num1);
     }
 
-    private void WmSysCommand(IntPtr hWnd, IntPtr wParam, IntPtr lParam)
-    {
-        var scWparam = (int)wParam & 65520;
-        if (scWparam is 61488 or 61472 or 61456 or 61440 && WindowState == WindowState.Normal && !IsAeroSnappedToMonitor(hWnd))
-            _logicalSizeForRestore = new Rect(Left, Top, Width, Height);
-        if (scWparam != 61728 || WindowState == WindowState.Minimized || _logicalSizeForRestore.Width <= 0.0 ||
-            _logicalSizeForRestore.Height <= 0.0)
-            return;
-        Left = _logicalSizeForRestore.Left;
-        Top = _logicalSizeForRestore.Top;
-        Width = _logicalSizeForRestore.Width;
-        Height = _logicalSizeForRestore.Height;
-        _useLogicalSizeForRestore = true;
-
-        bool IsAeroSnappedToMonitor(IntPtr hWnd)
-        {
-            var monitorInfo = MonitorInfoFromWindow(hWnd);
-            var rect = new Rect(Left, Top, Width, Height);
-            var deviceRect = hWnd.LogicalToDeviceRect(rect);
-            return monitorInfo.RcWork.Height == deviceRect.Height &&
-                   monitorInfo.RcWork.Top == deviceRect.Top;
-        }
-    }
-
-    private void WmWindowPosChanging(IntPtr hwnd, IntPtr lParam)
-    {
-        var structure = (WindowPosStruct)Marshal.PtrToStructure(lParam, typeof(WindowPosStruct));
-        if (((int)structure.flags & 2) != 0 || ((int)structure.flags & 1) != 0 || structure.cx <= 0 ||
-            structure.cy <= 0)
-            return;
-        var floatRect = new Rect(structure.x, structure.y, structure.cx, structure.cy);
-        if (_useLogicalSizeForRestore)
-        {
-            floatRect = hwnd.LogicalToDeviceRect(_logicalSizeForRestore);
-            _logicalSizeForRestore = Rect.Empty;
-            _useLogicalSizeForRestore = false;
-        }
-
-        var rect = _isDragging ? floatRect : DisplayHelper.GetOnScreenPosition(floatRect);
-        structure.x = (int)rect.X;
-        structure.y = (int)rect.Y;
-        structure.cx = (int)rect.Width;
-        structure.cy = (int)rect.Height; 
-        Marshal.StructureToPtr(structure, lParam, true);
-    }
-
     private void WmWindowPosChanged(IntPtr hWnd, IntPtr lParam)
     {
         try
@@ -564,37 +378,6 @@ public class ShadowChromeWindow : Window
         }
     }
 
-    private void UpdateZOrderOfThisAndOwner()
-    {
-        if (_updatingZOrder)
-            return;
-        try
-        {
-            _updatingZOrder = true;
-            if (!(WindowHelper.Owner != IntPtr.Zero))
-                return;
-            UpdateZOrderOfOwner(WindowHelper.Owner);
-        }
-        finally
-        {
-            _updatingZOrder = false;
-        }
-    }
-
-    private static void UpdateZOrderOfOwner(IntPtr hwndOwner)
-    {
-        var lastOwnedWindow = IntPtr.Zero;
-        User32.EnumThreadWindows(Kernel32.GetCurrentThreadId(), (hwnd, _) =>
-        {
-            if (User32.GetWindow(hwnd, 4) == hwndOwner)
-                lastOwnedWindow = hwnd;
-            return true;
-        }, IntPtr.Zero);
-        if (lastOwnedWindow == IntPtr.Zero || !(User32.GetWindow(hwndOwner, 3) != lastOwnedWindow))
-            return;
-        User32.SetWindowPos(hwndOwner, lastOwnedWindow, 0, 0, 0, 0, 19);
-    }
-
     private static MonitorInfoStruct MonitorInfoFromWindow(IntPtr hWnd)
     {
         var hMonitor = User32.MonitorFromWindow(hWnd, 2);
@@ -604,39 +387,6 @@ public class ShadowChromeWindow : Window
         };
         User32.GetMonitorInfo(hMonitor, ref monitorInfo);
         return monitorInfo;
-    }
-
-    private IntPtr WmStyleChanging(IntPtr wParam, IntPtr lParam)
-    {
-        var structure = Marshal.PtrToStructure<StyleStruct>(lParam);
-        if (wParam.ToInt64() == -16L)
-        {
-            structure.StyleNew |= 13565952;
-            if (!IsResizable) 
-                structure.StyleNew &= ~262144;
-            if (!HasMaximizeButton) 
-                structure.StyleNew &= ~65536;
-            if (!HasMinimizeButton)
-                structure.StyleNew &= ~131072;
-        }
-        Marshal.StructureToPtr(structure, lParam, true);
-        return IntPtr.Zero;
-    }
-
-    private static void OnWindowStyleChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
-    {
-        var window = (ShadowChromeWindow)obj;
-        if (!(PresentationSource.FromVisual(window) is HwndSource hwndSource))
-            return;
-        window.UpdateWindowStyle(hwndSource.Handle);
-    }
-
-    private void UpdateWindowStyle(IntPtr hwnd)
-    {
-        var currentStyle = User32.GetWindowLong(hwnd, GWL.Style);
-        var newStyle = !HasMaximizeButton ? currentStyle & -65537 : currentStyle | 65536;
-        newStyle = !HasMinimizeButton ? newStyle & -131073 : newStyle | 131072;
-        User32.SetWindowLong(hwnd, -16, newStyle);
     }
 
     private class ShadowBorder : Window
@@ -682,7 +432,6 @@ public class ShadowChromeWindow : Window
                 case 2:
                     var hwndSource = HwndSource.FromHwnd(hwnd);
                     hwndSource?.RemoveHook(WndProc);
-
                     break;
                 case 7:
                     handled = true;

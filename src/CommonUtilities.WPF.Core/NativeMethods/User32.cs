@@ -7,6 +7,21 @@ namespace Sklavenwalker.CommonUtilities.Wpf.NativeMethods;
 
 internal static class User32
 {
+    private static int _notifyOwnerActivate;
+
+    public static int NotifyOwnerActive
+    {
+        get
+        {
+            if (_notifyOwnerActivate == 0)
+                _notifyOwnerActivate = RegisterWindowMessage("NotifyOwnerActive{A982313C-756C-4da9-8BD0-0C375A45784B}");
+            return _notifyOwnerActivate;
+        }
+    }
+
+    [DllImport("user32.dll", CharSet = CharSet.Unicode)]
+    public static extern int RegisterWindowMessage(string lpString);
+
     [DllImport("user32.dll")]
     internal static extern IntPtr GetThreadDpiAwarenessContext();
 
@@ -54,12 +69,12 @@ internal static class User32
 
     internal static Point GetCursorPos()
     {
-        var point = new PointStruct { x = 0, y = 0 };
+        var point = new PointStruct { X = 0, Y = 0 };
         var cursorPos = new Point();
         if (GetCursorPos(ref point))
         {
-            cursorPos.X = point.x;
-            cursorPos.Y = point.y;
+            cursorPos.X = point.X;
+            cursorPos.Y = point.Y;
         }
         return cursorPos;
     }
@@ -77,6 +92,9 @@ internal static class User32
     public static extern int GetWindowLong32(IntPtr hWnd, int nIndex);
 
     public static int GetWindowLong(IntPtr hWnd, int nIndex) => GetWindowLong32(hWnd, nIndex);
+
+    public static int GetWindowLong(IntPtr hWnd, GWL nIndex) => GetWindowLong(hWnd, (int)nIndex);
+
 
     [DllImport("user32.dll")]
     public static extern IntPtr GetSystemMenu(IntPtr hwnd, bool bRevert);
@@ -156,4 +174,31 @@ internal static class User32
 
     [DllImport("user32.dll", CharSet = CharSet.Auto)]
     public static extern int GetMessagePos();
+
+    [DllImport("user32.dll")]
+    internal static extern IntPtr MonitorFromWindow(IntPtr handle, int flags);
+
+    [DllImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static extern bool EnumThreadWindows(uint dwThreadId, EnumWindowsProc lpfn, IntPtr lParam);
+
+    [DllImport("user32.dll")]
+    public static extern IntPtr GetWindow(IntPtr hwnd, int nCmd);
+
+    internal static int GetXLParam(int lParam) => LoWord(lParam);
+
+    internal static int GetYLParam(int lParam) => HiWord(lParam);
+
+    internal static int ToInt32Unchecked(this IntPtr value) => (int)value.ToInt64();
+
+    [DllImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    internal static extern bool ScreenToClient(IntPtr hWnd, ref PointStruct point);
+
+    internal static IntPtr MakeParam(int lowWord, int highWord) => new(lowWord & ushort.MaxValue | highWord << 16);
+
+    [DllImport("user32.dll")]
+    internal static extern short GetKeyState(int vKey);
+
+    internal static bool IsKeyPressed(int vKey) => GetKeyState(vKey) < 0;
 }

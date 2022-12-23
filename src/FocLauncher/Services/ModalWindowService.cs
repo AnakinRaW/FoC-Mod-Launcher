@@ -9,20 +9,20 @@ using Sklavenwalker.CommonUtilities.Wpf.Controls;
 using Validation;
 using System.ComponentModel;
 using System.Windows.Input;
+using System.Windows.Interop;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Sklavenwalker.CommonUtilities.Wpf.Input;
 
 namespace FocLauncher.Services;
 
-interface ILauncherModalViewModel : IWindowViewModel, ILauncherViewModel
+interface ILauncherModalViewModel : IModalWindowViewModel, ILauncherViewModel
 {
 }
 
 
 
 
-internal partial class UpdateWindowViewModel : WindowViewModel, ILauncherModalViewModel, ILoadingViewModel
+internal partial class UpdateWindowViewModel : ModalWindowViewModel, ILauncherModalViewModel, ILoadingViewModel
 {
     [ObservableProperty]
     private bool _isLoading = true;
@@ -30,14 +30,20 @@ internal partial class UpdateWindowViewModel : WindowViewModel, ILauncherModalVi
     [ObservableProperty]
     private string? _loadingText;
 
-    public ICommand ClickCommand => ViewCommands.CloseWindow;
+    public ICommand ClickCommand => new RelayCommand(() => throw new Exception());
+
+    public UpdateWindowViewModel()
+    {
+        HasMaximizeButton = false;
+        HasMinimizeButton = false;
+    }
 
     public Task InitializeAsync()
     {
-        return Task.Run(() =>
+        return Task.Run(async () =>
         {
             //await Task.Delay(3000);
-            //throw new Exception();
+            throw new Exception();
         });
     }
 
@@ -53,7 +59,7 @@ internal interface IModalWindowService
 
 internal interface IModalWindowFactory
 {
-    Window Create(ILauncherModalViewModel viewModel);
+    ModalWindow Create(ILauncherModalViewModel viewModel);
 }
 
 internal class ModalWindowFactory : IModalWindowFactory
@@ -66,12 +72,12 @@ internal class ModalWindowFactory : IModalWindowFactory
         _windowService = serviceProvider.GetRequiredService<IWindowService>();
     }
 
-    public Window Create(ILauncherModalViewModel viewModel)
+    public ModalWindow Create(ILauncherModalViewModel viewModel)
     {
-        return Application.Current.Dispatcher.Invoke<Window>(() =>
+        return Application.Current.Dispatcher.Invoke(() =>
         {
             _windowService.ShowWindow();
-            var window = new ThemedWindow(viewModel);
+            var window = new ModalWindow(viewModel);
             window.Content = viewModel;
             _windowService.SetOwner(window);
             return window;
@@ -107,7 +113,7 @@ internal class ModalWindowService : IModalWindowService
         Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, () =>
         {
             _windowService.DisableOwner(window);
-            window.ShowDialog();
+            window.ShowModal();
         });
 
         try
@@ -163,7 +169,13 @@ internal class WindowService : IWindowService
     public void SetOwner(Window window)
     {
         ValidateMainWindow();
-        window.Owner = _mainWindow;
+        if (window is WindowBase windowBase)
+        {
+            var mwh = new WindowInteropHelper(_mainWindow).Handle;
+            windowBase.ChangeOwnerForActivate(mwh);
+            windowBase.ChangeOwner(mwh);
+        }
+        else window.Owner = _mainWindow;
     }
 
     public void DisableOwner(Window window)

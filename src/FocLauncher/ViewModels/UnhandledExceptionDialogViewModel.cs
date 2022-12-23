@@ -6,12 +6,12 @@ using System.Windows.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FocLauncher.Imaging;
-using Sklavenwalker.CommonUtilities.Wpf.Controls.ViewModels;
+using Sklavenwalker.CommonUtilities.Wpf.Controls;
 using Validation;
 
 namespace FocLauncher.ViewModels;
 
-public partial class UnhandledExceptionDialogViewModel : ObservableObject, IUnhandledExceptionDialogViewModel
+public partial class UnhandledExceptionDialogViewModel : ModalWindowViewModel, IUnhandledExceptionDialogViewModel
 {
     [ObservableProperty]
     private Exception _exception;
@@ -30,7 +30,11 @@ public partial class UnhandledExceptionDialogViewModel : ObservableObject, IUnha
     public UnhandledExceptionDialogViewModel(Exception exception)
     {
         Requires.NotNull(exception, nameof(exception));
-        _exception = exception;
+        Exception = exception;
+        HasMaximizeButton = false;
+        HasMinimizeButton = false;
+        IsResizable = false;
+        IsCloseButtonEnabled = false;
     }
 
     private static void OnCreateIssue()

@@ -25,6 +25,8 @@ internal class ErrorMessageDialogViewModel : IErrorMessageDialogViewModel
     public bool IsGripVisible { get; set; }
     public string? ResultButton { get; }
     public IList<IButtonViewModel> Buttons { get; }
+    public bool HasDialogFrame { get; set; }
+    public bool IsCloseButtonEnabled { get; set; }
 
     public Task InitializeAsync()
     {

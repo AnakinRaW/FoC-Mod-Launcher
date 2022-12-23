@@ -17,7 +17,6 @@
     <Style TargetType="{x:Type controls:ThemedWindow}" BasedOn="{StaticResource {x:Type controls:ShadowChromeWindow}}">
         <Style.Resources>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-            <converters:BooleanToFlowDirectionConverter x:Key="BooleanToFlowDirectionConverter"/>
             <converters:WindowStateConverter x:Key="WindowStateConverter"/>
             <converters:BrushToColorConverter x:Key="BrushToColorConverter"/>
             <coreConverters:AndBooleanConverter x:Key="AndBooleanConverter"/>
@@ -32,39 +31,6 @@
                 <Setter Property="Control.Padding" Value="0"/>
             </DataTrigger>
         </Style.Triggers>
-        <Setter Property="AllowDrop" Value="True"/>
-        <Setter Property="UseLayoutRounding" Value="True"/>
-        <Setter Property="InputMethod.IsInputMethodSuspended" Value="True"/>
-        <Setter Property="FlowDirection">
-            <Setter.Value>
-                <Binding Path="RightToLeft" Converter="{StaticResource BooleanToFlowDirectionConverter}"/>
-            </Setter.Value>
-        </Setter>
-        <Setter Property="WindowState">
-            <Setter.Value>
-                <Binding Path="MinMaxState" Mode="TwoWay"/>
-            </Setter.Value>
-        </Setter>
-        <Setter Property="IsResizable">
-            <Setter.Value>
-                <Binding Path="IsResizable"/>
-            </Setter.Value>
-        </Setter>
-        <Setter Property="HasMaximizeButton">
-            <Setter.Value>
-                <Binding Path="HasMaximizeButton"/>
-            </Setter.Value>
-        </Setter>
-        <Setter Property="HasMinimizeButton">
-            <Setter.Value>
-                <Binding Path="HasMinimizeButton"/>
-            </Setter.Value>
-        </Setter>
-        <Setter Property="Title">
-            <Setter.Value>
-                <Binding Path="Title"/>
-            </Setter.Value>
-        </Setter>
         <Setter Property="Background" Value="{DynamicResource {x:Static colors:WindowColors.EnvironmentBackground}}"/>
         <Setter Property="imaging:ImageThemingUtilities.ImageBackgroundColor">
             <Setter.Value>

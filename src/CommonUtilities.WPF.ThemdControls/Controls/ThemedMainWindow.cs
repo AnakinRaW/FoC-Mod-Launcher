@@ -21,6 +21,7 @@ public class ThemedMainWindow : ThemedWindow
     {
         Requires.NotNull(viewModel, nameof(viewModel));
         SetBindings();
+        DataContextChanged += OnDataContextChanged;
     }
 
     public override void OnApplyTemplate()
@@ -31,9 +32,8 @@ public class ThemedMainWindow : ThemedWindow
             _statusBarHost.Content = CreateStatusBarView();
     }
 
-    protected override void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+    private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
     {
-        base.OnDataContextChanged(sender, e);
         if (e.NewValue is not IMainWindowViewModel mainWindowViewModel)
             return;
         _statusBarHost.Content = !mainWindowViewModel.StatusBar.IsVisible ? null : CreateStatusBarView();

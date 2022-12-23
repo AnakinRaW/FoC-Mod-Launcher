@@ -22,6 +22,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.1.0-preview2" />
 		<PackageReference Include="Sklavenwalker.CommonUtilities" Version="2.1.1" />
 		<PackageReference Include="Validation" Version="2.5.51" />
 	</ItemGroup>

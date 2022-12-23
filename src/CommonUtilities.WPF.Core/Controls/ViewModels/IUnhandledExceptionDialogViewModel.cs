@@ -1,11 +1,10 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Controls.ViewModels;
+namespace Sklavenwalker.CommonUtilities.Wpf.Controls;
 
-public interface IUnhandledExceptionDialogViewModel : INotifyPropertyChanged
+public interface IUnhandledExceptionDialogViewModel : IModalWindowViewModel
 {
     string WindowCaption { get; }
 

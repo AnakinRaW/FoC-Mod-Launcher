@@ -10,7 +10,7 @@
     <Style TargetType="{x:Type controls:ThemedDialog}" BasedOn="{StaticResource {x:Type coreControls:ModalWindow}}">
         <Style.Resources>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-            <converters:BooleanToFlowDirectionConverter x:Key="BooleanToFlowDirectionConverter"/>
+            <coreConverters:BooleanToFlowDirectionConverter x:Key="BooleanToFlowDirectionConverter"/>
             <coreConverters:IsNullOrEmptyConverter x:Key="IsNullOrEmptyConverter"/>
             <converters:BrushToColorConverter x:Key="BrushToColorConverter"/>
 

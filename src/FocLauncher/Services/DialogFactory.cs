@@ -22,9 +22,8 @@ internal class DialogFactory : IDialogFactory
         return Application.Current.Dispatcher.Invoke(() =>
         {
             _windowService.ShowWindow();
-            var dialog = new ImageDialog();
+            var dialog = new ImageDialog(viewModel);
             _windowService.SetOwner(dialog);
-            dialog.Initialize(viewModel);
             return dialog;
         });
     }

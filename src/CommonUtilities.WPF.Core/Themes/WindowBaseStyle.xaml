@@ -1,0 +1,45 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Controls"
+                    xmlns:converters="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Converters">
+    <Style TargetType="{x:Type controls:WindowBase}" BasedOn="{StaticResource {x:Type Window}}">
+        <Style.Resources>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+            <converters:BooleanToFlowDirectionConverter x:Key="BooleanToFlowDirectionConverter"/>
+            <converters:AndBooleanConverter x:Key="AndBooleanConverter"/>
+        </Style.Resources>
+        <Setter Property="AllowDrop" Value="True"/>
+        <Setter Property="UseLayoutRounding" Value="True"/>
+        <Setter Property="InputMethod.IsInputMethodSuspended" Value="True"/>
+        <Setter Property="IsResizable">
+            <Setter.Value>
+                <Binding Path="IsResizable"/>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="HasMaximizeButton">
+            <Setter.Value>
+                <Binding Path="HasMaximizeButton"/>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="HasMinimizeButton">
+            <Setter.Value>
+                <Binding Path="HasMinimizeButton"/>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Title">
+            <Setter.Value>
+                <Binding Path="Title"/>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="FlowDirection">
+            <Setter.Value>
+                <Binding Path="RightToLeft" Converter="{StaticResource BooleanToFlowDirectionConverter}"/>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="WindowState">
+            <Setter.Value>
+                <Binding Path="MinMaxState" Mode="TwoWay"/>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

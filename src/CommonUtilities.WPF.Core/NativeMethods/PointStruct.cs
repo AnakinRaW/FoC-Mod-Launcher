@@ -4,12 +4,12 @@ namespace Sklavenwalker.CommonUtilities.Wpf.NativeMethods;
 
 internal struct PointStruct
 {
-    public int x;
-    public int y;
+    public int X;
+    public int Y;
 
-    public static PointStruct FromPoint(Point pt) => new PointStruct()
+    public static PointStruct FromPoint(Point pt) => new()
     {
-        x = (int)pt.X,
-        y = (int)pt.Y
+        X = (int)pt.X,
+        Y = (int)pt.Y
     };
 }

@@ -1,7 +1,13 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:controls="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Controls">
-    <Style TargetType="{x:Type controls:ShadowChromeWindow}" BasedOn="{StaticResource {x:Type Window}}">
+                    xmlns:controls="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Controls"
+                    xmlns:controls1="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Controls;assembly=Sklavenwalker.CommonUtilities.WPF.Core">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Core;component/Themes/WindowBaseStyle.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+
+    <Style TargetType="{x:Type controls:ShadowChromeWindow}" BasedOn="{StaticResource {x:Type controls1:WindowBase}}">
         <Setter Property="ResizeMode" Value="NoResize"/>
         <Setter Property="WindowStyle" Value="None"/>
         <Style.Triggers>

@@ -37,7 +37,7 @@ internal class LauncherApplication : Application
             Title = LauncherConstants.ApplicationName,
             IsResizable = false,
             HasMaximizeButton = false,
-            HasMinimizeButton = true
+            HasMinimizeButton = false
         };
         PreWindowShowInitialize();
         var window = InitializeWindow(mainViewModel);
