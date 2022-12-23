@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using FocLauncher;
-using FocLauncher.Threading;
 using FocLauncherHost.Dialogs;
 using Microsoft.VisualStudio.Threading;
 using NLog;

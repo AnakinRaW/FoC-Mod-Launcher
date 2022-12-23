@@ -18,6 +18,7 @@ using Sklavenwalker.CommonUtilities.FileSystem;
 using Sklavenwalker.CommonUtilities.FileSystem.Windows;
 using Sklavenwalker.CommonUtilities.Registry;
 using Sklavenwalker.CommonUtilities.Registry.Windows;
+using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Services;
 using Sklavenwalker.CommonUtilities.Wpf.Controls;
 using Sklavenwalker.CommonUtilities.Wpf.Services;
 using Sklavenwalker.ProductMetadata.Services;

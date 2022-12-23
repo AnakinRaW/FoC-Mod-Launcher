@@ -91,8 +91,4 @@ internal static class User32
 
     [DllImport("user32.dll")]
     internal static extern int MapWindowPoints(IntPtr hwndFrom, IntPtr hwndTo, ref RectStruct rect, int points);
-
-    [DllImport("user32.dll", SetLastError = true)]
-    [return: MarshalAs(UnmanagedType.Bool)]
-    public static extern bool DestroyIcon(IntPtr hIcon);
 }

@@ -7,7 +7,6 @@ using EawModinfo.Model;
 using EawModinfo.Spec;
 using EawModinfo.Utilities;
 using FocLauncher.Game;
-using NuGet.Versioning;
 
 namespace FocLauncher.Mods
 {

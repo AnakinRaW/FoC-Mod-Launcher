@@ -6,7 +6,6 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using FocLauncher.NativeMethods;
-using FocLauncher.ScreenUtilities;
 using FocLauncher.Utilities;
 
 namespace FocLauncher.Controls

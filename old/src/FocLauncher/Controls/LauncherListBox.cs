@@ -7,7 +7,6 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using FocLauncher.Controls.Controllers;
 using FocLauncher.NativeMethods;
-using FocLauncher.ScreenUtilities;
 using FocLauncher.Utilities;
 
 namespace FocLauncher.Controls

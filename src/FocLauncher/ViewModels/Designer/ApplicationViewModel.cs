@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows;
+using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
 using Sklavenwalker.CommonUtilities.Wpf.Controls;
 
 namespace FocLauncher.ViewModels.Designer;
@@ -20,6 +21,7 @@ internal class ApplicationViewModel : IApplicationViewModel
     public bool HasMinimizeButton { get; set; }
     public bool HasMaximizeButton { get; set; }
     public bool IsGripVisible { get; set; }
+    public bool ShowIcon { get; set; }
     public TaskBarIconProgressState ProgressState { get; set; }
     public IStatusBarViewModel StatusBar { get; }
     public ILauncherViewModel CurrentViewModel { get; set; } = new MainPageViewModel();

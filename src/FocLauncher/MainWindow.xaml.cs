@@ -4,6 +4,8 @@ using System.Windows.Controls;
 using FocLauncher.Imaging;
 using FocLauncher.Themes;
 using Microsoft.Extensions.DependencyInjection;
+using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Services;
+using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
 using Sklavenwalker.CommonUtilities.Wpf.Controls;
 using Sklavenwalker.CommonUtilities.Wpf.Imaging;
 using Sklavenwalker.CommonUtilities.Wpf.Imaging.Controls;
@@ -20,7 +22,7 @@ public partial class MainWindow
 
     private ContextMenu _menu;
 
-    public MainWindow(MainWindowViewModel viewModel, IServiceProvider serviceProvider) : base(viewModel)
+    public MainWindow(MainWindowViewModel viewModel, IServiceProvider serviceProvider) : base(viewModel, serviceProvider)
     {
         Requires.NotNull(serviceProvider, nameof(serviceProvider));
         _serviceProvider = serviceProvider;
@@ -47,12 +49,6 @@ public partial class MainWindow
     protected override void OnContextMenuOpening(ContextMenuEventArgs e)
     {
         e.Handled = ContextMenuPlotter.Instance.ShowContextMenu(_menu, null);
-    }
-
-    protected override FrameworkElement? CreateStatusBarView()
-    {
-        var factory = _serviceProvider.GetService<IStatusBarFactory>();
-        return factory is null ? null : new WorkerThreadStatusBarContainer(factory);
     }
 
     private void OneChangeTheme(object sender, RoutedEventArgs e)

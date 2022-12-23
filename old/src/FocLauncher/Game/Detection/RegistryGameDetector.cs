@@ -2,7 +2,6 @@
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
-using FocLauncher.Threading;
 using Microsoft.VisualStudio.Threading;
 
 namespace FocLauncher.Game.Detection

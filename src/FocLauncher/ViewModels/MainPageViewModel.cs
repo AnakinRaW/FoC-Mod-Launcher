@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using FocLauncher.Services;
-using FocLauncher.Update;
 using Microsoft.Extensions.DependencyInjection;
+using Sklavenwalker.CommonUtilities.Wpf.Controls;
 using Validation;
 
 namespace FocLauncher.ViewModels;

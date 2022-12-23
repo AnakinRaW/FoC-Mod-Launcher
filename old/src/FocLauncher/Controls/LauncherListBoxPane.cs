@@ -9,7 +9,6 @@ using System.Windows.Input;
 using FocLauncher.Game;
 using FocLauncher.Items;
 using FocLauncher.Mods;
-using FocLauncher.Threading;
 using FocLauncher.Utilities;
 
 namespace FocLauncher.Controls

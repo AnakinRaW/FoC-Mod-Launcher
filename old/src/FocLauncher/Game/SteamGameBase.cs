@@ -1,7 +1,5 @@
 ﻿using System;
 using System.IO;
-using FocLauncher.Threading;
-using FocLauncher.WaitDialog;
 
 namespace FocLauncher.Game
 {

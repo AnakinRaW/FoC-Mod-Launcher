@@ -1,4 +1,6 @@
-﻿namespace Sklavenwalker.CommonUtilities.Wpf.Controls;
+﻿using Sklavenwalker.CommonUtilities.Wpf.Controls;
+
+namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
 
 public interface IMainWindowViewModel : IWindowViewModel
 {

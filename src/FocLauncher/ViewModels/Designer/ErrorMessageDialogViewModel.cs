@@ -23,6 +23,7 @@ internal class ErrorMessageDialogViewModel : IErrorMessageDialogViewModel
     public bool HasMinimizeButton { get; set; }
     public bool HasMaximizeButton { get; set; }
     public bool IsGripVisible { get; set; }
+    public bool ShowIcon { get; set; }
     public string? ResultButton { get; }
     public IList<IButtonViewModel> Buttons { get; }
     public bool HasDialogFrame { get; set; }

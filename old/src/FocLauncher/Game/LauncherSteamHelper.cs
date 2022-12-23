@@ -2,7 +2,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 using FocLauncher.Utilities;
-using FocLauncher.WaitDialog;
 using NLog;
 
 namespace FocLauncher.Game

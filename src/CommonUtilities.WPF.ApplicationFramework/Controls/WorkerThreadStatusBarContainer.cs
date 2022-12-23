@@ -1,14 +1,17 @@
 ﻿using System.Windows;
 using System.Windows.Input;
+using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Services;
+using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
+using Sklavenwalker.CommonUtilities.Wpf.Controls;
 using Validation;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Controls;
+namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Controls;
 
 public class WorkerThreadStatusBarContainer : WorkerThreadElementContainer
 {
     private readonly IStatusBarFactory _factory;
 
-    private UIElement _statusBarElement;
+    private UIElement _statusBarElement = null!;
 
     private IHasMouseEvents? StatusBarWithMouseEvent { get; set; }
 
@@ -21,7 +24,7 @@ public class WorkerThreadStatusBarContainer : WorkerThreadElementContainer
         Requires.NotNull(factory, nameof(factory));
         _factory = factory;
     }
-    
+
     protected override UIElement CreateRootUiElement()
     {
         _statusBarElement = _factory.CreateStatusBar();

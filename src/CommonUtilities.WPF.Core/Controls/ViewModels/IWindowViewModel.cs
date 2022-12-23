@@ -24,6 +24,8 @@ public interface IWindowViewModel : INotifyPropertyChanged
 
     bool IsGripVisible { get; set; }
 
+    bool ShowIcon { get; set; }
+
     void CloseDialog();
 
     void OnClosing(CancelEventArgs e);

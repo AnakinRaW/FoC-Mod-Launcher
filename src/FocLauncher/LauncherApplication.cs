@@ -8,7 +8,7 @@ using FocLauncher.Threading;
 using FocLauncher.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Sklavenwalker.CommonUtilities.Wpf.Controls;
+using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
 using Sklavenwalker.CommonUtilities.Wpf.Services;
 using Sklavenwalker.CommonUtilities.Wpf.Theming;
 using Validation;

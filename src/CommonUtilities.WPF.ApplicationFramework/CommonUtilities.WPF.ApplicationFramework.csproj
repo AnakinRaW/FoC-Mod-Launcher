@@ -21,14 +21,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\CommonUtilities.WPF.Core\CommonUtilities.WPF.Core.csproj" />
-	  <ProjectReference Include="..\CommonUtilities.WPF.Imaging\CommonUtilities.WPF.Imaging.csproj" />
-	  <ProjectReference Include="..\CommonUtilities.WPF.ThemdControls\CommonUtilities.WPF.ThemedControls.csproj" />
+	  <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Controls\" />
-	  <Folder Include="ViewModels\" />
+	  <ProjectReference Include="..\CommonUtilities.WPF.Core\CommonUtilities.WPF.Core.csproj" />
+	  <ProjectReference Include="..\CommonUtilities.WPF.Imaging\CommonUtilities.WPF.Imaging.csproj" />
+	  <ProjectReference Include="..\CommonUtilities.WPF.ThemdControls\CommonUtilities.WPF.ThemedControls.csproj" />
 	</ItemGroup>
 
 </Project>

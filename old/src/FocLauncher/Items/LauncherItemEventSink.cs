@@ -1,6 +1,5 @@
 ﻿using FocLauncher.Game;
 using FocLauncher.Mods;
-using FocLauncher.Threading;
 using FocLauncher.Utilities;
 
 namespace FocLauncher.Items

@@ -33,6 +33,9 @@ public partial class WindowViewModel : ObservableObject, IWindowViewModel
     [ObservableProperty]
     private bool _isGripVisible = true;
 
+    [ObservableProperty]
+    private bool _showIcon = true;
+
     public void CloseDialog()
     {
         OnCloseRequested();

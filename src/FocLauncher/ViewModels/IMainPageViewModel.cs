@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using PetroGlyph.Games.EawFoc;
 
 namespace FocLauncher.ViewModels;
 

@@ -7,9 +7,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Sklavenwalker.CommonUtilities.Wpf.NativeMethods;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Utils;
+namespace Sklavenwalker.CommonUtilities.Wpf.Utilities;
 
-public static class IconHelper
+internal static class IconHelper
 {
     private static BitmapSource? _smallIcon;
     private static BitmapSource? _largeIcon;

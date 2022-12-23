@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using Sklavenwalker.CommonUtilities.Wpf.Controls;
+using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Services;
 
 namespace FocLauncher.Controls;
 

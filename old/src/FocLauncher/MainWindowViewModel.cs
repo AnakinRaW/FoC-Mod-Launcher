@@ -7,7 +7,6 @@ using FocLauncher.Game;
 using FocLauncher.Game.Detection;
 using FocLauncher.Input;
 using FocLauncher.Items;
-using FocLauncher.Threading;
 using Microsoft.VisualStudio.Threading;
 using NLog;
 

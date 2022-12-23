@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
-using EawModinfo.Model;
 using EawModinfo.Spec;
 using FocLauncher.Game;
 

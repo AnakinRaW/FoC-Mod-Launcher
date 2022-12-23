@@ -201,4 +201,8 @@ internal static class User32
     internal static extern short GetKeyState(int vKey);
 
     internal static bool IsKeyPressed(int vKey) => GetKeyState(vKey) < 0;
+
+    [DllImport("user32.dll", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static extern bool DestroyIcon(IntPtr hIcon);
 }

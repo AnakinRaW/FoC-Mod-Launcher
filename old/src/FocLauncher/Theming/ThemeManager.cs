@@ -9,7 +9,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using FocLauncher.Mods;
-using FocLauncher.Properties;
 
 namespace FocLauncher.Theming
 {

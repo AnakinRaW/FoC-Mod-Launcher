@@ -114,6 +114,7 @@ public class WindowBase : Window
         HwndSource.AddHook(WndProcHook);
         UpdateWindowStyle();
         base.OnSourceInitialized(e);
+        SetWindowIcon();
     }
 
     protected override void OnClosed(EventArgs e)
@@ -124,16 +125,6 @@ public class WindowBase : Window
             HwndSource = null;
         }
         base.OnClosed(e);
-    }
-
-    private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
-    {
-        if (ViewModel is not null)
-            ViewModel.CloseDialogRequest -= OnCloseRequested;
-        if (e.NewValue is not IWindowViewModel windowViewModel)
-            return;
-        ViewModel = windowViewModel;
-        windowViewModel.CloseDialogRequest += OnCloseRequested;
     }
 
     protected virtual void UpdateWindowStyle()
@@ -203,6 +194,18 @@ public class WindowBase : Window
             (int)onScreenPosition.Top, (int)onScreenPosition.Width, (int)onScreenPosition.Height, 20);
     }
 
+    protected T? GetTemplateChild<T>(string name) where T : class
+    {
+        var templateChild = GetTemplateChild(name) as T;
+        try
+        {
+        }
+        catch (InvalidOperationException)
+        {
+        }
+        return templateChild;
+    }
+
     private protected void UpdateZOrderOfThisAndOwner()
     {
         if (_updatingZOrder)
@@ -218,6 +221,16 @@ public class WindowBase : Window
         {
             _updatingZOrder = false;
         }
+    }
+
+    private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+    {
+        if (ViewModel is not null)
+            ViewModel.CloseDialogRequest -= OnCloseRequested;
+        if (e.NewValue is not IWindowViewModel windowViewModel)
+            return;
+        ViewModel = windowViewModel;
+        windowViewModel.CloseDialogRequest += OnCloseRequested;
     }
 
     private static void OnCloseWindow(object sender, ExecutedRoutedEventArgs args)
@@ -381,5 +394,11 @@ public class WindowBase : Window
         User32.ScreenToClient(hWnd, ref point);
         User32.SendMessage(hWnd, msg + 513 - 161, new IntPtr(PressedMouseButtons),
             User32.MakeParam(point.X, point.Y));
+    }
+
+    private void SetWindowIcon()
+    {
+        if (ViewModel.ShowIcon)
+            IconHelper.UseWindowIconAsync(windowIcon => Icon = windowIcon);
     }
 }

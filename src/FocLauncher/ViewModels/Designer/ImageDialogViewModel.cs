@@ -20,6 +20,7 @@ internal class ImageDialogViewModel : IImageDialogViewModel
     public bool HasMinimizeButton { get; set; }
     public bool HasMaximizeButton { get; set; }
     public bool IsGripVisible { get; set; }
+    public bool ShowIcon { get; set; }
     public bool HasDialogFrame { get; set; }
     public bool IsCloseButtonEnabled { get; set; }
     public event EventHandler? CloseDialogRequest;
