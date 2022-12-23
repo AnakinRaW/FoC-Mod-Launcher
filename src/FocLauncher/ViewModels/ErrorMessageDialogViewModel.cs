@@ -26,6 +26,9 @@ public class ErrorMessageDialogViewModel : DialogViewModel, IErrorMessageDialogV
         Header = header;
         Message = message;
         IsResizable = false;
+        HasMaximizeButton = false;
+        HasMinimizeButton = false;
+        HasDialogFrame = true;
     }
 
     public Task InitializeAsync()

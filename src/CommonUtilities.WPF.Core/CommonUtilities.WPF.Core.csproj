@@ -44,4 +44,8 @@
 	  </Page>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Dialog\" />
+	</ItemGroup>
+
 </Project>

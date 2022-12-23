@@ -20,8 +20,8 @@ public partial class ButtonViewModel : ObservableObject, IButtonViewModel
 
     public ButtonViewModel(string id, ICommandDefinition commandDefinition)
     {
-        _id = id;
-        _commandDefinition = commandDefinition;
+        Id = id;
+        CommandDefinition = commandDefinition;
     }
 }
 
@@ -37,11 +37,11 @@ public partial class DropDownButtonViewModel : ButtonViewModel, IDropDownButtonV
 
 public partial class CommandDefinition : ObservableObject, ICommandDefinition
 {
-    public string Text { get; }
-
     [ObservableProperty] private string? _tooltip;
     [ObservableProperty] private ImageMoniker _image;
     [ObservableProperty] private ICommand? _command;
+
+    public string Text { get; }
 
     public CommandDefinition(string text)
     {

@@ -7,7 +7,7 @@ using Sklavenwalker.CommonUtilities.Wpf.Utilities;
 
 namespace Sklavenwalker.CommonUtilities.Wpf.Controls;
 
-public class MainWindowTitleBar : Border, INonClientArea
+internal class MainWindowTitleBar : Border, INonClientArea
 {
     public int HitTest(Point point)
     {

@@ -69,10 +69,8 @@ internal static class Program
     {
         var serviceCollection = new ServiceCollection();
         CreateProgramServices(serviceCollection);
-
-        LibraryInitializer.InitializeLibrary(serviceCollection);
-
-        serviceCollection.AddSingleton<IThemeManager>(sp => new LauncherThemeManager(sp));
+        
+        serviceCollection.AddSingleton<IThemeManager>(sp => new ThemeManager());
         serviceCollection.AddSingleton<IViewModelPresenter>(_ => new ViewPresenterService());
         serviceCollection.AddSingleton<IWindowService>(sp => new WindowService());
         serviceCollection.AddSingleton<IModalWindowService>(sp => new ModalWindowService(sp));

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows;
-using Microsoft.Extensions.DependencyInjection;
 using Sklavenwalker.CommonUtilities.Wpf.Theming;
 using Validation;
 
@@ -34,9 +33,9 @@ public class ThemeManager : IThemeManager
         }
     }
 
-    public ThemeManager(IServiceProvider serviceProvider)
+    public ThemeManager()
     {
-        _cache = serviceProvider.GetRequiredService<IThemeResourceDictionaryCache>();
+        _cache = new ThemeResourceDictionaryCache();
     }
 
     public void Initialize(Application application,ITheme? defaultTheme = null)

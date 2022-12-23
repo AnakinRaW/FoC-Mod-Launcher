@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.Extensions.DependencyInjection;
-using Validation;
+﻿using System.Collections.Generic;
 
 namespace Sklavenwalker.CommonUtilities.Wpf.Theming;
 
@@ -11,10 +8,9 @@ internal class ThemeResourceDictionaryCache : IThemeResourceDictionaryCache
 
     private readonly Dictionary<ITheme, ThemeResourceDictionary> _themeResourceCache = new();
 
-    public ThemeResourceDictionaryCache(IServiceProvider serviceProvider)
+    public ThemeResourceDictionaryCache()
     {
-        Requires.NotNull(serviceProvider, nameof(serviceProvider));
-        _builder = serviceProvider.GetRequiredService<IThemeResourceDictionaryBuilder>();
+        _builder = new ThemeResourceDictionaryBuilder();
     }
 
     public ThemeResourceDictionary? Get(ITheme theme)

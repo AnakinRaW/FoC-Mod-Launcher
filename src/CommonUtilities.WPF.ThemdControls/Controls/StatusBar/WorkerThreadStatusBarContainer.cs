@@ -1,11 +1,10 @@
-﻿using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Input;
 using Validation;
 
 namespace Sklavenwalker.CommonUtilities.Wpf.Controls;
 
-public class WorkerThreadStatusBarContainer : WorkerThreadElementContainer, IPointConverter
+public class WorkerThreadStatusBarContainer : WorkerThreadElementContainer
 {
     private readonly IStatusBarFactory _factory;
 
@@ -22,12 +21,7 @@ public class WorkerThreadStatusBarContainer : WorkerThreadElementContainer, IPoi
         Requires.NotNull(factory, nameof(factory));
         _factory = factory;
     }
-
-    public async Task<Point> PointToScreenCoordinatesAsync(Point point)
-    {
-        return await Dispatcher.InvokeAsync(() => PointToScreen(point));
-    }
-
+    
     protected override UIElement CreateRootUiElement()
     {
         _statusBarElement = _factory.CreateStatusBar();

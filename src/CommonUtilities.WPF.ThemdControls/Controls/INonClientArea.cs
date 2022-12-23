@@ -2,7 +2,7 @@
 
 namespace Sklavenwalker.CommonUtilities.Wpf.Controls;
 
-public interface INonClientArea
+internal interface INonClientArea
 {
     int HitTest(Point point);
 }

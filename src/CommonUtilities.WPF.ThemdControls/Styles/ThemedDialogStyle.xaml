@@ -7,6 +7,11 @@
                     xmlns:imageControls="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Imaging.Controls;assembly=Sklavenwalker.CommonUtilities.WPF.Imaging"
                     xmlns:coreConverters="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Converters;assembly=Sklavenwalker.CommonUtilities.WPF.Core"
                     xmlns:colors="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Themes.Colors">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Core;component/Themes/ModalWindowStyle.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+
     <Style TargetType="{x:Type controls:ThemedDialog}" BasedOn="{StaticResource {x:Type coreControls:ModalWindow}}">
         <Style.Resources>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
@@ -66,37 +71,6 @@
         <Setter Property="SizeToContent" Value="WidthAndHeight"/>
         <Setter Property="MinWidth" Value="280"/>
         <Setter Property="MinHeight" Value="175"/>
-        <Setter Property="FlowDirection">
-            <Setter.Value>
-                <Binding Path="RightToLeft" Converter="{StaticResource BooleanToFlowDirectionConverter}"/>
-            </Setter.Value>
-        </Setter>
-        <Setter Property="WindowState">
-            <Setter.Value>
-                <Binding Path="MinMaxState" Mode="TwoWay"/>
-            </Setter.Value>
-        </Setter>
-        <Setter Property="IsResizable">
-            <Setter.Value>
-                <Binding Path="IsResizable"/>
-            </Setter.Value>
-        </Setter>
-        <Setter Property="HasMaximizeButton">
-            <Setter.Value>
-                <Binding Path="HasMaximizeButton"/>
-            </Setter.Value>
-        </Setter>
-        <Setter Property="HasMinimizeButton">
-            <Setter.Value>
-                <Binding Path="HasMinimizeButton"/>
-            </Setter.Value>
-        </Setter>
-        <Setter Property="Title">
-            <Setter.Value>
-                <Binding Path="Title"/>
-            </Setter.Value>
-        </Setter>
-        <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
         <Setter Property="Background" Value="{DynamicResource {x:Static colors:WindowColors.DialogBackground}}"/>
         <Setter Property="Foreground" Value="{DynamicResource {x:Static colors:WindowColors.DialogContentText}}"/>
         <Setter Property="Template">

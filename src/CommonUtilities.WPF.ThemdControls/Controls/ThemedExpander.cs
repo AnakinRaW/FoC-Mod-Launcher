@@ -1,14 +1,13 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Controls
+namespace Sklavenwalker.CommonUtilities.Wpf.Controls;
+
+public class ThemedExpander : Expander
 {
-    public class ThemedExpander : Expander
+    static ThemedExpander()
     {
-        static ThemedExpander()
-        {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(ThemedExpander),
-                new FrameworkPropertyMetadata(typeof(ThemedExpander)));
-        }
+        DefaultStyleKeyProperty.OverrideMetadata(typeof(ThemedExpander),
+            new FrameworkPropertyMetadata(typeof(ThemedExpander)));
     }
 }
