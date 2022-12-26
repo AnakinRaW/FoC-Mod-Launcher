@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Theming;
+namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Theming;
 
 /// <summary>
 /// The event args when <see cref="IThemeManager.ThemeChanged"/> was raised.

@@ -1,10 +1,10 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:controls="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Controls"
-                    xmlns:theming="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Theming"
                     xmlns:colors="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Themes.Colors"
                     xmlns:dpi="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.DPI;assembly=Sklavenwalker.CommonUtilities.WPF.Core"
-                    xmlns:converters="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Converters;assembly=Sklavenwalker.CommonUtilities.WPF.Core">
+                    xmlns:converters="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Converters;assembly=Sklavenwalker.CommonUtilities.WPF.Core"
+                    xmlns:theming="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Themes">
 
     <converters:BrushToColorConverter x:Key="BrushToColorConverter"/>
 

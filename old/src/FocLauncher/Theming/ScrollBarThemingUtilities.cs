@@ -8,7 +8,7 @@ using System.Windows.Controls.Primitives;
 {
     internal class ScrollBarThemingUtilities
     {
-        private static readonly WeakCollection<FrameworkElement> WeakUnthemedScrollingElements = new WeakCollection<FrameworkElement>();
+        private static readonly WeakCollection<FrameworkElement> WeakUnthemedScrollingElements = new();
 
         public static readonly DependencyProperty ThemeScrollBarsProperty = 
             DependencyProperty.RegisterAttached("ThemeScrollBars", typeof(bool?), typeof(ScrollBarThemingUtilities),
@@ -119,7 +119,7 @@ using System.Windows.Controls.Primitives;
 
         private static void OnThemeScrollBarsChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
-            if (!(sender is FrameworkElement element))
+            if (sender is not FrameworkElement element)
                 return;
             if (PresentationSource.FromDependencyObject(element) != null)
                 UpdateScrollBarStyles(element);

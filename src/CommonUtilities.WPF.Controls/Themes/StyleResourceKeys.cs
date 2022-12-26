@@ -1,9 +1,8 @@
 ﻿using System.Windows;
-using Sklavenwalker.CommonUtilities.Wpf.Controls;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Theming
+namespace Sklavenwalker.CommonUtilities.Wpf.Themes
 {
-    public static class StyleResourceKeys
+    internal static class StyleResourceKeys
     {
         private static object? _menuItemStyleKey;
         private static object? _scrollBarStyleKey;
@@ -33,7 +32,7 @@ namespace Sklavenwalker.CommonUtilities.Wpf.Theming
 
         private static object GetResourceKey(object resourceId)
         {
-            return new ComponentResourceKey(typeof(WindowBase), resourceId);
+            return new ComponentResourceKey(typeof(StyleResourceKeys), resourceId);
         }
     }
 }

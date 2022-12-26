@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Theming;
+namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Theming;
 
 public interface ITheme : IEquatable<ITheme>
 {

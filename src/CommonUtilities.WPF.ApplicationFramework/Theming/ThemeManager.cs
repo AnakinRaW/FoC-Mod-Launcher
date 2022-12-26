@@ -1,14 +1,16 @@
 ﻿using System;
-using System.Windows;
+using Microsoft.Extensions.DependencyInjection;
+using Sklavenwalker.CommonUtilities.Wpf.Imaging;
+using Sklavenwalker.CommonUtilities.Wpf.Themes;
 using Validation;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Theming;
+namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Theming;
 
 public class ThemeManager : IThemeManager
 {
     public event EventHandler<ThemeChangedEventArgs>? ThemeChanged;
 
-    private Application _application;
+    private System.Windows.Application _application;
     private ITheme _theme;
 
     private readonly IThemeResourceDictionaryCache _cache;
@@ -32,13 +34,13 @@ public class ThemeManager : IThemeManager
         }
     }
 
-    public ThemeManager()
+    public ThemeManager(IServiceProvider serviceProvider)
     {
-        _cache = new ThemeResourceDictionaryCache();
-        ScrollBarThemingUtilities.Initialize(this);
+        Requires.NotNull(serviceProvider, nameof(serviceProvider));
+        _cache = serviceProvider.GetService<IThemeResourceDictionaryCache>() ?? new ThemeResourceDictionaryCache(serviceProvider);
     }
 
-    public void Initialize(Application application,ITheme? defaultTheme = null)
+    public void Initialize(System.Windows.Application application, ITheme? defaultTheme = null)
     {
         if (_initialized)
             throw new InvalidOperationException("Theme manager already initialized");
@@ -46,7 +48,7 @@ public class ThemeManager : IThemeManager
         lock (this)
         {
             _application = application;
-            _theme = defaultTheme ?? new FallbackTheme();
+            _theme = defaultTheme ?? new DefaultTheme();
             ChangeTheme(null, _theme);
             _initialized = true;
         }
@@ -54,8 +56,9 @@ public class ThemeManager : IThemeManager
     
     protected virtual void OnRaiseThemeChanged(ThemeChangedEventArgs e)
     {
-        var handler = ThemeChanged;
-        handler?.Invoke(this, e);
+        ThemeChanged?.Invoke(this, e);
+        ImageThemingUtilities.ClearWeakImageCache();
+        ScrollBarThemingUtilities.OnThemeChanged();
     }
 
     private void ChangeTheme(ITheme? oldTheme, ITheme theme)
@@ -65,7 +68,8 @@ public class ThemeManager : IThemeManager
         if (oldTheme is not null)
         {
             var oldResourceDict = _cache.Get(oldTheme);
-            resources.MergedDictionaries.Remove(oldResourceDict);
+            if (oldResourceDict != null) 
+                resources.MergedDictionaries.Remove(oldResourceDict);
         }
 
         var themeResources = _cache.GetOrCreate(theme);

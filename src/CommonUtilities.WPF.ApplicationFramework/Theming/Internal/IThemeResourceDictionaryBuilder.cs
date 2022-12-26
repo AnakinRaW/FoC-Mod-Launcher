@@ -1,4 +1,4 @@
-﻿namespace Sklavenwalker.CommonUtilities.Wpf.Theming;
+﻿namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Theming;
 
 internal interface IThemeResourceDictionaryBuilder
 {

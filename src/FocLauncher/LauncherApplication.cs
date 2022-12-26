@@ -9,7 +9,7 @@ using FocLauncher.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Application;
-using Sklavenwalker.CommonUtilities.Wpf.Theming;
+using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Theming;
 using Validation;
 
 namespace FocLauncher;

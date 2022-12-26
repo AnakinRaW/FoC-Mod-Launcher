@@ -5,11 +5,11 @@ using FocLauncher.Imaging;
 using FocLauncher.Themes;
 using Microsoft.Extensions.DependencyInjection;
 using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Application;
+using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Theming;
 using Sklavenwalker.CommonUtilities.Wpf.Controls;
 using Sklavenwalker.CommonUtilities.Wpf.Imaging;
 using Sklavenwalker.CommonUtilities.Wpf.Imaging.Controls;
 using Sklavenwalker.CommonUtilities.Wpf.Input;
-using Sklavenwalker.CommonUtilities.Wpf.Theming;
 using Validation;
 
 namespace FocLauncher;
@@ -52,10 +52,10 @@ public partial class MainWindow
     private void OneChangeTheme(object sender, RoutedEventArgs e)
     {
         var manager = _serviceProvider.GetRequiredService<IThemeManager>();
-        if (manager.Theme.Id == "FallbackTheme")
+        if (manager.Theme.Id == "DefaultTheme")
             manager.Theme = new LauncherTheme();
         else
-            manager.Theme = new FallbackTheme();
+            manager.Theme = new DefaultTheme();
     }
 
     private void OnClick(object sender, RoutedEventArgs e)
@@ -63,7 +63,7 @@ public partial class MainWindow
         var tm = _serviceProvider.GetService<IThemeManager>();
         var c = tm.Theme;
         if (c.Id == "LauncherDefaultTheme")
-            tm.Theme = new FallbackTheme();
+            tm.Theme = new DefaultTheme();
         else
             tm.Theme = new LauncherTheme();
     }

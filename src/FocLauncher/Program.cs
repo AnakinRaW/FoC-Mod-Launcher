@@ -20,8 +20,8 @@ using Sklavenwalker.CommonUtilities.Registry;
 using Sklavenwalker.CommonUtilities.Registry.Windows;
 using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.StatusBar;
+using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Theming;
 using Sklavenwalker.CommonUtilities.Wpf.Controls;
-using Sklavenwalker.CommonUtilities.Wpf.Theming;
 using Sklavenwalker.ProductMetadata.Services;
 using Sklavenwalker.ProductUpdater.Services;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
@@ -72,7 +72,7 @@ internal static class Program
         var serviceCollection = new ServiceCollection();
         CreateProgramServices(serviceCollection);
         
-        serviceCollection.AddSingleton<IThemeManager>(sp => new ThemeManager());
+        serviceCollection.AddSingleton<IThemeManager>(sp => new ThemeManager(sp));
         serviceCollection.AddSingleton<IViewModelPresenter>(_ => new ViewPresenterService());
         serviceCollection.AddSingleton<IWindowService>(sp => new WindowService());
         serviceCollection.AddSingleton<IModalWindowService>(sp => new ModalWindowService(sp));

@@ -4,7 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using Sklavenwalker.CommonUtilities.Wpf.Utilities;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Theming; 
+namespace Sklavenwalker.CommonUtilities.Wpf.Themes; 
 
     public class ScrollBarThemingUtilities
     {
@@ -13,6 +13,11 @@ namespace Sklavenwalker.CommonUtilities.Wpf.Theming;
         public static readonly DependencyProperty ThemeScrollBarsProperty = 
             DependencyProperty.RegisterAttached("ThemeScrollBars", typeof(bool?), typeof(ScrollBarThemingUtilities),
                 new FrameworkPropertyMetadata(null, OnThemeScrollBarsChanged));
+
+        static ScrollBarThemingUtilities()
+        {
+            RepublishUnthemedScrollBarStyles();
+        }
 
         public static void SetThemeScrollBars(Control element, bool? value)
         {
@@ -26,12 +31,6 @@ namespace Sklavenwalker.CommonUtilities.Wpf.Theming;
             if (element is null)
                 throw new ArgumentNullException(nameof(element));
             return (bool?)element.GetValue(ThemeScrollBarsProperty);
-        }
-
-        internal static void Initialize(IThemeManager themeManager)
-        {
-            themeManager.ThemeChanged += OnThemeChanged!;
-            RepublishUnthemedScrollBarStyles();
         }
 
         private static void UpdateUnthemedScrollBarStyles()
@@ -108,7 +107,7 @@ namespace Sklavenwalker.CommonUtilities.Wpf.Theming;
             element.Resources.Remove(GridView.GridViewScrollViewerStyleKey);
         }
 
-        private static void OnThemeChanged(object sender, ThemeChangedEventArgs e)
+        internal static void OnThemeChanged()
         {
             UpdateUnthemedScrollBarStyles();
         }

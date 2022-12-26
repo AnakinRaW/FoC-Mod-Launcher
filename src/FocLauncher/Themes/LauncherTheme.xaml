@@ -2,9 +2,9 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:colors="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Themes.Colors;assembly=Sklavenwalker.CommonUtilities.WPF.Controls">
 
-    <ResourceDictionary.MergedDictionaries>
+    <!--<ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/Sklavenwalker.CommonUtilities.Wpf.Controls;component/Themes/Colors/FallbackTheme.xaml"/>
-    </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary.MergedDictionaries>-->
 
     <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=MainWindowActiveCaptionText}" 
                      Color="#FFFFFFFF"/>

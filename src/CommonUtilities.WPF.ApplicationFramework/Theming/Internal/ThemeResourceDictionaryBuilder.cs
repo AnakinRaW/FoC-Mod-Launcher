@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Theming;
+namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Theming;
 
 internal class ThemeResourceDictionaryBuilder : IThemeResourceDictionaryBuilder
 {
@@ -24,7 +24,7 @@ internal class ThemeResourceDictionaryBuilder : IThemeResourceDictionaryBuilder
     {
         try
         {
-            return Application.LoadComponent(uri) as ResourceDictionary;
+            return System.Windows.Application.LoadComponent(uri) as ResourceDictionary;
         }
         catch
         {

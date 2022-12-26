@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using Validation;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Theming;
+namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Theming;
 
 internal class ThemeResourceDictionary : ResourceDictionary, IEquatable<ThemeResourceDictionary>
 {
@@ -14,7 +14,7 @@ internal class ThemeResourceDictionary : ResourceDictionary, IEquatable<ThemeRes
         Requires.NotNull(theme, nameof(theme));
         Requires.NotNull(resources, nameof(resources));
         _theme = theme;
-        foreach (var dictionary in resources) 
+        foreach (var dictionary in resources)
             MergedDictionaries.Add(dictionary);
     }
 

@@ -10,7 +10,6 @@ using System.Windows.Media;
 using Sklavenwalker.CommonUtilities.Wpf.Converters;
 using Sklavenwalker.CommonUtilities.Wpf.Imaging;
 using Sklavenwalker.CommonUtilities.Wpf.Utilities;
-using Sklavenwalker.CommonUtilities.Wpf.Utils;
 using Validation;
 
 namespace Sklavenwalker.CommonUtilities.Wpf.Controls;
@@ -183,7 +182,7 @@ public class ThemedContextMenu : ContextMenu
 
     private static DependencyProperty? FetchShowKeyboardCuesProperty()
     {
-        var field = typeof(KeyboardNavigation).GetField("ShowKeyboardCuesProperty", BindingFlags.Static |BindingFlags.NonPublic);
+        var field = typeof(KeyboardNavigation).GetField("ShowKeyboardCuesProperty", BindingFlags.Static | BindingFlags.NonPublic);
         return field == null ? null : field.GetValue(null) as DependencyProperty;
     }
 

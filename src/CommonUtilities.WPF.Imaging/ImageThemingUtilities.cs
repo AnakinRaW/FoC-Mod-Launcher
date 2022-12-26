@@ -33,6 +33,8 @@ public static class ImageThemingUtilities
         IsImageThemingEnabled = true;
     }
 
+    public static void ClearWeakImageCache() => WeakImageCache.Clear();
+
     public static Color GetImageBackgroundColor(DependencyObject obj)
     {
         return (Color)obj.GetValue(ImageBackgroundColorProperty);
