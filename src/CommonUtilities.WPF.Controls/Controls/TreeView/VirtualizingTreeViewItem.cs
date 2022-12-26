@@ -3,7 +3,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
-using Sklavenwalker.CommonUtilities.Wpf.Controls.TreeView.Internal;
 using Sklavenwalker.CommonUtilities.Wpf.Utilities;
 
 namespace Sklavenwalker.CommonUtilities.Wpf.Controls;

@@ -12,8 +12,6 @@
 		<PublishRepositoryUrl>true</PublishRepositoryUrl>
 	</PropertyGroup>
 	<PropertyGroup>
-		<SignAssembly Condition="'$(Configuration)' == 'Release'">True</SignAssembly>
-		<AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)AnakinOSS.snk</AssemblyOriginatorKeyFile>
 		<LangVersion>latest</LangVersion>
 		<ImplicitUsings>disable</ImplicitUsings>
 	</PropertyGroup>

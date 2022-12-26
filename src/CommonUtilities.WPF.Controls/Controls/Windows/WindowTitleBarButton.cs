@@ -9,7 +9,7 @@ using Sklavenwalker.CommonUtilities.Wpf.Utilities;
 
 namespace Sklavenwalker.CommonUtilities.Wpf.Controls;
 
-internal class WindowTitleBarButton : GlyphButton
+public class WindowTitleBarButton : GlyphButton
 {
     public static readonly DependencyProperty CornerRadiusProperty = DependencyProperty.Register(nameof(CornerRadius),
         typeof(CornerRadius), typeof(WindowTitleBarButton), new FrameworkPropertyMetadata(new CornerRadius(0.0)));

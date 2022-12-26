@@ -320,7 +320,7 @@ public static class ImageThemingUtilities
             return $"{Background}, {GrayscaleBias}, {(IsEnabled ? "enabled" : "disabled")}";
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return obj is WeakImageCacheKey other && Equals(other);
         }

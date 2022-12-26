@@ -1,6 +1,6 @@
 ﻿namespace Sklavenwalker.CommonUtilities.Wpf.NativeMethods;
 
-internal static class HitTestConstants
+public static class HitTestConstants
 {
     public const int HTNOWHERE = 0;
     public const int HTCLIENT = 1;

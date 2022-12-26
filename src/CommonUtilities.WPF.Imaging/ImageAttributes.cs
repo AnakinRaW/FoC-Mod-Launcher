@@ -30,7 +30,7 @@ public struct ImageAttributes : IEquatable<ImageAttributes>
         Grayscale = grayscale;
     }
 
-    public override bool Equals(object other)
+    public override bool Equals(object? other)
     {
         return other is ImageAttributes imageAttributes && Equals(imageAttributes);
     }

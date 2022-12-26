@@ -7,7 +7,7 @@ using Sklavenwalker.CommonUtilities.Wpf.Utilities;
 
 namespace Sklavenwalker.CommonUtilities.Wpf.Controls;
 
-internal class MainWindowTitleBar : Border, INonClientArea
+public class MainWindowTitleBar : Border, INonClientArea
 {
     public int HitTest(Point point)
     {
@@ -19,8 +19,8 @@ internal class MainWindowTitleBar : Border, INonClientArea
     {
         if (e.Handled)
             return;
-        if (PresentationSource.FromVisual(this) is HwndSource source) 
-            ShadowChromeWindow.ShowWindowMenu(source, this, Mouse.GetPosition(this),RenderSize);
+        if (PresentationSource.FromVisual(this) is HwndSource source)
+            ShadowChromeWindow.ShowWindowMenu(source, this, Mouse.GetPosition(this), RenderSize);
         e.Handled = true;
     }
 

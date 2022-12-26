@@ -1,4 +1,4 @@
-﻿namespace Sklavenwalker.CommonUtilities.Wpf.Controls.TreeView.Internal;
+﻿namespace Sklavenwalker.CommonUtilities.Wpf.Controls;
 
 internal interface IInvokable
 {

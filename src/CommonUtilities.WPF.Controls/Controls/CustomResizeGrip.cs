@@ -7,7 +7,7 @@ using Sklavenwalker.CommonUtilities.Wpf.NativeMethods;
 
 namespace Sklavenwalker.CommonUtilities.Wpf.Controls;
 
-internal class CustomResizeGrip : ResizeGrip
+public class CustomResizeGrip : ResizeGrip
 {
     private const int SizeBottomLeft = 7;
     private const int SizeBottomRight = 8;

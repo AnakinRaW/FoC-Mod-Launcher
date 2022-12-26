@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Controls.Windows;
+namespace Sklavenwalker.CommonUtilities.Wpf.Controls;
 
 public partial class WindowViewModel : ObservableObject, IWindowViewModel
 {

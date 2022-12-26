@@ -12,7 +12,7 @@ using Sklavenwalker.CommonUtilities.Wpf.Utilities;
 
 namespace Sklavenwalker.CommonUtilities.Wpf.Controls;
 
-internal sealed class SystemMenu : Control, INonClientArea
+public sealed class SystemMenu : Control, INonClientArea
 {
     private ImageSource? _optimalImageForSize;
 

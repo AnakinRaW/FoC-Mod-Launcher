@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.StatusBar;
-using Sklavenwalker.CommonUtilities.Wpf.Controls.Windows;
+using WindowViewModel = Sklavenwalker.CommonUtilities.Wpf.Controls.WindowViewModel;
 
 namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Application;
 

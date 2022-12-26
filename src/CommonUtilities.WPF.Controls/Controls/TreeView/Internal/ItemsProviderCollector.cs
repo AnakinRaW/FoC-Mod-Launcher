@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Controls.TreeView.Internal;
+namespace Sklavenwalker.CommonUtilities.Wpf.Controls;
 
 internal class ItemsProviderCollector<TPattern, TController>
 {

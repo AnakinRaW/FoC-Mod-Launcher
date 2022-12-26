@@ -1,5 +1,4 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using Sklavenwalker.CommonUtilities.Wpf.Controls.Windows;
 
 namespace Sklavenwalker.CommonUtilities.Wpf.Controls;
 

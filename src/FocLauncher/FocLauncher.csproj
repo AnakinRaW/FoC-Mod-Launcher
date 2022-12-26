@@ -49,7 +49,7 @@
 	  <PackageReference Include="Sklavenwalker.CommonUtilities.FileSystem.Windows" Version="2.0.0" />
 	  <PackageReference Include="Sklavenwalker.CommonUtilities.Registry" Version="2.1.0" />
 	  <PackageReference Include="Sklavenwalker.CommonUtilities.Registry.Windows" Version="2.1.1" />
-	  <PackageReference Include="System.IO.Abstractions" Version="17.0.24" />
+		<PackageReference Include="System.IO.Abstractions" Version="17.0.24" />
 	  <PackageReference Include="System.Runtime.Extensions" Version="4.3.1" />
 	</ItemGroup>
 

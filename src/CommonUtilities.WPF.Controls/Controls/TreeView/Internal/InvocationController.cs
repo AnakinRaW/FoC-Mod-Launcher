@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Sklavenwalker.CommonUtilities.Wpf.Controls.TreeView.Internal;
 
 namespace Sklavenwalker.CommonUtilities.Wpf.Controls;
 
