@@ -2,329 +2,136 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:colors="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Themes.Colors">
 
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=EnvironmentBackground}" 
-                     Color="#FF2D2D30"/>
-    <Color x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=MainWindowActiveDefaultBorder}"  
-           A="255"
-           B="204"
-           G="122"
-           R="00" />
-    <Color x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=MainWindowInactiveBorder}" 
-           A="255"
-           B="70"
-           G="67"
-           R="67"/>
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=MainWindowActiveCaption}" 
-                     Color="#FF2D2D30"/>
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=MainWindowActiveCaptionText}" 
-                     Color="#FF999999"/>
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=MainWindowInactiveCaption}" 
-                     Color="#FF2D2D30"/>
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=MainWindowInactiveCaptionText}" 
-                     Color="#99999999"/>
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=MainWindowActiveIconDefault}" 
-                     Color="#FFFFFFFF"/>
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=MainWindowInactiveIconDefault}" 
-                     Color="#66FFFFFF"/>
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=MainWindowResizeGripTexture1}" 
-                     Color="#FFFFFFFF"/>
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=MainWindowResizeGripTexture2}" 
-                     Color="#7F000000"/>
-
-
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=MainWindowButtonActiveBorder}" 
-                     Color="Transparent"/>
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=MainWindowButtonActiveGlyph}" 
-                     Color="#FFF1F1F1"/>
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=MainWindowButtonHoverActive}" 
-                     Color="#72555555"/>
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=MainWindowButtonHoverActiveBorder}" 
-                     Color="#72555555"/>
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=MainWindowButtonHoverActiveGlyph}" 
-                     Color="#FFFFFFFF"/>
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=MainWindowButtonDown}" 
-                     Color="#FF007ACC"/>
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=MainWindowButtonDownBorder}" 
-                     Color="#FF007ACC"/>
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=MainWindowButtonDownGlyph}" 
-                     Color="#FFFFFFFF"/>
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=MainWindowButtonInactiveBorder}" 
-                     Color="Transparent"/>
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=MainWindowButtonInactiveGlyph}" 
-                     Color="#FFF1F1F1"/>
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=MainWindowButtonHoverInactive}" 
-                     Color="#72555555"/>
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=MainWindowButtonHoverInactiveBorder}" 
-                     Color="#72555555"/>
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=MainWindowButtonHoverInactiveGlyph}" 
-                     Color="#FFFFFFFF"/>
-
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=DialogBackground}" 
-                     Color="#FF252526"/>
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=DialogContentBackground}" 
-                     Color="#FF2D2D30"/>
-    
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=DialogContentText}" 
-                     Color="#FFF1F1F1"/>
-
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:WindowColors}, ResourceId=StatusBarDefault}" 
-                     Color="#FF007ACC"/>
-
-    
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommandBarColors}, ResourceId=CommandBarTextActive}" 
-                     Color="#FFF1F1F1"/>
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommandBarColors}, ResourceId=CommandBarTextInactive}" 
-                     Color="#FF656565"/>
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommandBarColors}, ResourceId=CommandBarMenuBackground}" 
-                     Color="#FF1B1B1C"/>
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommandBarColors}, ResourceId=CommandBarMenuBorder}" 
-                     Color="#FF333337"/>
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommandBarColors}, ResourceId=CommandBarMenuIconBackground}" 
-                     Color="#FF1B1B1C"/>
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommandBarColors}, ResourceId=CommandBarMenuItemHover}" 
-                     Color="#FF333334"/>
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommandBarColors}, ResourceId=CommandBarMenuItemHoverBorder}" 
-                     Color="Transparent"/>
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommandBarColors}, ResourceId=CommandBarMenuItemHoverText}" 
-                     Color="#FFF1F1F1"/>
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommandBarColors}, ResourceId=CommandBarMenuScrollGlyph}" 
-                     Color="#FF007ACC"/>
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommandBarColors}, ResourceId=CommandBarMenuSeparatorBrush}" 
-                     Color="#FF333337"/>
-    <Color x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommandBarColors}, ResourceId=DropShadowBackgroundColor}"  
-           A="114"
-           B="00"
-           G="00"
-           R="00" />
-
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, ResourceId=ButtonBackground}" 
-                     Color="#FF2D2D30"/>
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, ResourceId=ButtonBorder}" 
-                     Color="#FF3D3D3D"/>
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, ResourceId=ButtonText}" 
-                     Color="#FFFFFFFF"/>
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, ResourceId=ButtonDefaultBackground}" 
-                     Color="#FF252526"/>
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, ResourceId=ButtonDefaultBorder}" 
-                     Color="#FF9E9E9E"/>
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, ResourceId=ButtonDefaultText}" 
-                     Color="#FFFFFFFF"/>
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, ResourceId=ButtonFocusedBackground}" 
-                     Color="#FF252526"/>
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, ResourceId=ButtonFocusedBorder}" 
-                     Color="#FF0097FB"/>
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, ResourceId=ButtonFocusedText}" 
-                     Color="#FFFFFFFF"/>
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, ResourceId=ButtonHoverBackground}" 
-                     Color="#FF4D4D4D"/>
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, ResourceId=ButtonHoverBorder}" 
-                     Color="#FF4D4D4D"/>
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, ResourceId=ButtonHoverText}" 
-                     Color="#FFFFFFFF"/>
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, ResourceId=ButtonPressedBackground}" 
-                     Color="#FF333333"/>
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, ResourceId=ButtonPressedBorder}" 
-                     Color="#FF333333"/>
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, ResourceId=ButtonPressedText}" 
-                     Color="#FFFFFFFF"/>
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, ResourceId=ButtonDisabledBackground}" 
-                     Color="#FF333333"/>
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, ResourceId=ButtonDisabledBorder}" 
-                     Color="#FF3D3D3D"/>
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, ResourceId=ButtonDisabledText}" 
-                     Color="#FF7A7A7A"/>
-
-
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
-        ResourceId=CheckBoxBackground}" Color="#FF252526" />
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
-        ResourceId=CheckBoxGlyph}" Color="#FFF1F1F1" />
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors},
-        ResourceId=CheckBoxText}" Color="#FFF1F1F1" />
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
-        ResourceId=CheckBoxBorder}" Color="#FF999999" />
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors},
-        ResourceId=CheckBoxBackgroundHover}" Color="#FF1F1F20" />
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
-        ResourceId=CheckBoxGlyphHover}" Color="#FFF1F1F1" />
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
-        ResourceId=CheckBoxTextHover}" Color="#FFF1F1F1" />
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
-        ResourceId=CheckBoxBorderHover}" Color="#FF007ACC" />
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
-        ResourceId=CheckBoxBackgroundDown}" Color="#FF1F1F20" />
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
-        ResourceId=CheckBoxGlyphDown}" Color="#FFF1F1F1" />
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
-        ResourceId=CheckBoxTextDown}" Color="#FFF1F1F1" />
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
-        ResourceId=CheckBoxBorderDown}" Color="#FF007ACC" />
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
-        ResourceId=CheckBoxBackgroundDisabled}" Color="#FF2D2D30" />
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
-        ResourceId=CheckBoxGlyphDisabled}" Color="#FF656565" />
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
-        ResourceId=CheckBoxTextDisabled}" Color="#FF999999" />
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
-        ResourceId=CheckBoxBorderDisabled}" Color="#FF434346" />
-
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
-        ResourceId=TreeViewBackground}" Color="#FF252526" />
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
-        ResourceId=TreeViewBorder}" Color="#FF3F3F46" />
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
-        ResourceId=TreeViewText}" Color="#FFF1F1F1" />
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
-        ResourceId=TreeViewSelectedText}" Color="#FFFFFFFF" />
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
-        ResourceId=TreeViewInactiveText}" Color="#FFFFFFFF" />
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
-        ResourceId=TreeFocusBorder}" Color="#FF007ACC" />
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
-        ResourceId=TreeExpander}" Color="#FFF1F1F1" />
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
-        ResourceId=TreeExpanderHover}" Color="#FF007ACC" />
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
-        ResourceId=TreeExpanderSelected}" Color="#FFF1F1F1" />
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
-        ResourceId=TreeExpanderSelectedHover}" Color="#FFF1F1F1" />
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
-        ResourceId=TreeExpanderInactive}" Color="#FFF1F1F1" />
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
-        ResourceId=TreeExpanderInactiveHover}" Color="#FF007ACC" />
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
-        ResourceId=TreeItemHover}" Color="#FF3F3F40" />
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
-        ResourceId=TreeItemSelectedBackground}" Color="#FF007ACC" />
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
-        ResourceId=TreeItemInactiveBackground}" Color="#FF3F3F46" />
-
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
-        ResourceId=ScrollBarArrowBackground}" Color="#FF3E3E42" />
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
-        ResourceId=ScrollBarArrowDisabledBackground}" Color="#FF3E3E42" />
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors},
-        ResourceId=ScrollBarArrowGlyph}" Color="#FF999999" />
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors},
-        ResourceId=ScrollBarArrowGlyphDisabled}" Color="#FF555558" />
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors},
-        ResourceId=ScrollBarArrowGlyphMouseOver}" Color="#FF1C97EA" />
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors},
-        ResourceId=ScrollBarArrowGlyphPressed}" Color="#FF007ACC" />
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors},
-        ResourceId=ScrollBarArrowMouseOverBackground}" Color="#FF3E3E42" />
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors},
-        ResourceId=ScrollBarArrowPressedBackground}" Color="#FF3E3E42" />
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors},
-        ResourceId=ScrollBarBackground}" Color="#FF3E3E42" />
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors},
-        ResourceId=ScrollBarBorder}" Color="#FF1C1C1C" />
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors},
-        ResourceId=ScrollBarDisabledBackground}" Color="#FF3E3E42" />
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors},
-        ResourceId=ScrollBarThumbBackground}" Color="#FF686868" />
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors},
-        ResourceId=ScrollBarThumbBorder}" Color="#FF686868" />
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors},
-        ResourceId=ScrollBarThumbDisabled}" Color="#FF3E3E42" />
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors},
-        ResourceId=ScrollBarThumbGlyph}" Color="#FF686868" />
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors},
-        ResourceId=ScrollBarThumbGlyphMouseOverBorder}" Color="#FF9E9E9E" />
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors},
-        ResourceId=ScrollBarThumbGlyphPressedBorder}" Color="#FFEFEBEF" />
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors},
-        ResourceId=ScrollBarThumbMouseOverBackground}" Color="#FF9E9E9E" />
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors},
-        ResourceId=ScrollBarThumbMouseOverBorder}" Color="#FF9E9E9E" />
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
-        ResourceId=ScrollBarThumbPressedBackground}" Color="#FFEFEBEF" />
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors}, 
-        ResourceId=ScrollBarThumbPressedBorder}" Color="#FFEFEBEF" />
-
-    <SolidColorBrush x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type colors:CommonControlsColors},
-        ResourceId=AutoHideResizeGrip}" Color="#FF2D2D30" />
-
-
-
+    <SolidColorBrush x:Key="{x:Static colors:WindowColors.EnvironmentBackground}" Color="#FF2D2D30"/>
+    <Color x:Key="{x:Static colors:WindowColors.MainWindowActiveDefaultBorder}" A="255" B="204" G="122" R="00"/>
+    <Color x:Key="{x:Static colors:WindowColors.MainWindowInactiveBorder}" A="255" B="70" G="67" R="67"/>
+
+    <SolidColorBrush x:Key="{x:Static colors:WindowColors.MainWindowActiveCaption}" Color="#FF2D2D30"/>
+    <SolidColorBrush x:Key="{x:Static colors:WindowColors.MainWindowActiveCaptionText}" Color="#FF999999"/>
+    <SolidColorBrush x:Key="{x:Static colors:WindowColors.MainWindowInactiveCaption}" Color="#FF2D2D30"/>
+    <SolidColorBrush x:Key="{x:Static colors:WindowColors.MainWindowInactiveCaptionText}" Color="#99999999"/>
+
+    <SolidColorBrush x:Key="{x:Static colors:WindowColors.MainWindowActiveIconDefault}" Color="#FFFFFFFF"/>
+    <SolidColorBrush x:Key="{x:Static colors:WindowColors.MainWindowInactiveIconDefault}" Color="#66FFFFFF"/>
+
+    <SolidColorBrush x:Key="{x:Static colors:WindowColors.MainWindowResizeGripTexture1}" Color="#FFFFFFFF"/>
+    <SolidColorBrush x:Key="{x:Static colors:WindowColors.MainWindowResizeGripTexture2}" Color="#7F000000"/>
+
+
+    <SolidColorBrush x:Key="{x:Static colors:WindowColors.MainWindowButtonActiveBorder}" Color="Transparent"/>
+    <SolidColorBrush x:Key="{x:Static colors:WindowColors.MainWindowButtonActiveGlyph}" Color="#FFF1F1F1"/>
+    <SolidColorBrush x:Key="{x:Static colors:WindowColors.MainWindowButtonHoverActive}" Color="#72555555"/>
+    <SolidColorBrush x:Key="{x:Static colors:WindowColors.MainWindowButtonHoverActiveBorder}" Color="#72555555"/>
+    <SolidColorBrush x:Key="{x:Static colors:WindowColors.MainWindowButtonHoverActiveGlyph}" Color="#FFFFFFFF"/>
+    <SolidColorBrush x:Key="{x:Static colors:WindowColors.MainWindowButtonDown}" Color="#FF007ACC"/>
+    <SolidColorBrush x:Key="{x:Static colors:WindowColors.MainWindowButtonDownBorder}" Color="#FF007ACC"/>
+    <SolidColorBrush x:Key="{x:Static colors:WindowColors.MainWindowButtonDownGlyph}" Color="#FFFFFFFF"/>
+
+    <SolidColorBrush x:Key="{x:Static colors:WindowColors.MainWindowButtonInactiveBorder}" Color="Transparent"/>
+    <SolidColorBrush x:Key="{x:Static colors:WindowColors.MainWindowButtonInactiveGlyph}" Color="#FFF1F1F1"/>
+    <SolidColorBrush x:Key="{x:Static colors:WindowColors.MainWindowButtonHoverInactive}" Color="#72555555"/>
+    <SolidColorBrush x:Key="{x:Static colors:WindowColors.MainWindowButtonHoverInactiveBorder}" Color="#72555555"/>
+    <SolidColorBrush x:Key="{x:Static colors:WindowColors.MainWindowButtonHoverInactiveGlyph}" Color="#FFFFFFFF"/>
+
+
+    <SolidColorBrush x:Key="{x:Static colors:WindowColors.DialogBackground}" Color="#FF252526"/>
+    <SolidColorBrush x:Key="{x:Static colors:WindowColors.DialogContentBackground}" Color="#FF2D2D30"/>
+    <SolidColorBrush x:Key="{x:Static colors:WindowColors.DialogContentText}" Color="#FFF1F1F1"/>
+
+
+    <SolidColorBrush x:Key="{x:Static colors:WindowColors.StatusBarDefault}" Color="#FF007ACC"/>
+
+
+    <SolidColorBrush x:Key="{x:Static colors:CommandBarColors.CommandBarTextActive}" Color="#FFF1F1F1"/>
+    <SolidColorBrush x:Key="{x:Static colors:CommandBarColors.CommandBarTextInactive}" Color="#FF656565"/>
+    <SolidColorBrush x:Key="{x:Static colors:CommandBarColors.CommandBarMenuBackground}" Color="#FF1B1B1C"/>
+    <SolidColorBrush x:Key="{x:Static colors:CommandBarColors.CommandBarMenuBorder}" Color="#FF333337"/>
+    <SolidColorBrush x:Key="{x:Static colors:CommandBarColors.CommandBarMenuIconBackground}" Color="#FF1B1B1C"/>
+    <SolidColorBrush x:Key="{x:Static colors:CommandBarColors.CommandBarMenuItemHover}" Color="#FF333334"/>
+    <SolidColorBrush x:Key="{x:Static colors:CommandBarColors.CommandBarMenuItemHoverBorder}" Color="Transparent"/>
+    <SolidColorBrush x:Key="{x:Static colors:CommandBarColors.CommandBarMenuItemHoverText}" Color="#FFF1F1F1"/>
+    <SolidColorBrush x:Key="{x:Static colors:CommandBarColors.CommandBarMenuScrollGlyph}" Color="#FF007ACC"/>
+    <SolidColorBrush x:Key="{x:Static colors:CommandBarColors.CommandBarMenuSeparatorBrush}" Color="#FF333337"/>
+    <Color x:Key="{x:Static colors:CommandBarColors.DropShadowBackgroundColor}" A="114" B="00" G="00" R="00"/>
+
+
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ButtonBackground}" Color="#FF2D2D30"/>
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ButtonBorder}" Color="#FF3D3D3D"/>
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ButtonText}" Color="#FFFFFFFF"/>
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ButtonDefaultBackground}" Color="#FF252526"/>
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ButtonDefaultBorder}" Color="#FF9E9E9E"/>
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ButtonDefaultText}" Color="#FFFFFFFF"/>
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ButtonFocusedBackground}" Color="#FF252526"/>
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ButtonFocusedBorder}" Color="#FF0097FB"/>
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ButtonFocusedText}" Color="#FFFFFFFF"/>
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ButtonHoverBackground}" Color="#FF4D4D4D"/>
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ButtonHoverBorder}" Color="#FF4D4D4D"/>
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ButtonHoverText}" Color="#FFFFFFFF"/>
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ButtonPressedBackground}" Color="#FF333333"/>
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ButtonPressedBorder}" Color="#FF333333"/>
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ButtonPressedText}" Color="#FFFFFFFF"/>
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ButtonDisabledBackground}" Color="#FF333333"/>
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ButtonDisabledBorder}" Color="#FF3D3D3D"/>
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ButtonDisabledText}" Color="#FF7A7A7A"/>
+
+
+
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.CheckBoxBackground}" Color="#FF252526" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.CheckBoxGlyph}" Color="#FFF1F1F1" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.CheckBoxText}" Color="#FFF1F1F1" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.CheckBoxBorder}" Color="#FF999999" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.CheckBoxBackgroundHover}" Color="#FF1F1F20" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.CheckBoxGlyphHover}" Color="#FFF1F1F1" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.CheckBoxTextHover}" Color="#FFF1F1F1" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.CheckBoxBorderHover}" Color="#FF007ACC" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.CheckBoxBackgroundDown}" Color="#FF1F1F20" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.CheckBoxGlyphDown}" Color="#FFF1F1F1" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.CheckBoxTextDown}" Color="#FFF1F1F1" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.CheckBoxBorderDown}" Color="#FF007ACC" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.CheckBoxBackgroundDisabled}" Color="#FF2D2D30" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.CheckBoxGlyphDisabled}" Color="#FF656565" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.CheckBoxTextDisabled}" Color="#FF999999" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.CheckBoxBorderDisabled}" Color="#FF434346" />
+
+
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.TreeViewBackground}" Color="#FF252526" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.TreeViewBorder}" Color="#FF3F3F46" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.TreeViewText}" Color="#FFF1F1F1" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.TreeViewSelectedText}" Color="#FFFFFFFF" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.TreeViewInactiveText}" Color="#FFFFFFFF" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.TreeFocusBorder}" Color="#FF007ACC" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.TreeExpander}" Color="#FFF1F1F1" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.TreeExpanderHover}" Color="#FF007ACC" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.TreeExpanderSelected}" Color="#FFF1F1F1" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.TreeExpanderSelectedHover}" Color="#FFF1F1F1" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.TreeExpanderInactive}" Color="#FFF1F1F1" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.TreeExpanderInactiveHover}" Color="#FF007ACC" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.TreeItemHover}" Color="#FF3F3F40" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.TreeItemSelectedBackground}" Color="#FF007ACC" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.TreeItemInactiveBackground}" Color="#FF3F3F46" />
+
+
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ScrollBarArrowBackground}" Color="#FF3E3E42" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ScrollBarArrowDisabledBackground}" Color="#FF3E3E42" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ScrollBarArrowGlyph}" Color="#FF999999" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ScrollBarArrowGlyphDisabled}" Color="#FF555558" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ScrollBarArrowGlyphMouseOver}" Color="#FF1C97EA" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ScrollBarArrowGlyphPressed}" Color="#FF007ACC" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ScrollBarArrowMouseOverBackground}" Color="#FF3E3E42" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ScrollBarArrowPressedBackground}" Color="#FF3E3E42" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ScrollBarBackground}" Color="#FF3E3E42" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ScrollBarBorder}" Color="#FF1C1C1C" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ScrollBarDisabledBackground}" Color="#FF3E3E42" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ScrollBarThumbBackground}" Color="#FF686868" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ScrollBarThumbBorder}" Color="#FF686868" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ScrollBarThumbDisabled}" Color="#FF3E3E42" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ScrollBarThumbGlyph}" Color="#FF686868" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ScrollBarThumbGlyphMouseOverBorder}" Color="#FF9E9E9E" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ScrollBarThumbGlyphPressedBorder}" Color="#FFEFEBEF" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ScrollBarThumbMouseOverBackground}" Color="#FF9E9E9E" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ScrollBarThumbMouseOverBorder}" Color="#FF9E9E9E" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ScrollBarThumbPressedBackground}" Color="#FFEFEBEF" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ScrollBarThumbPressedBorder}" Color="#FFEFEBEF" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.AutoHideResizeGrip}" Color="#FF2D2D30" />
 
 </ResourceDictionary>
