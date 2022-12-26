@@ -1,0 +1,21 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Controls;component/Styles/CustomResizeGripStyle.xaml"/>
+        <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Controls;component/Styles/DialogButtonStyle.xaml"/>
+        <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Controls;component/Styles/GlyphButtonStyle.xaml"/>
+        <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Controls;component/Styles/ModalWindowStyle.xaml"/>
+        <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Controls;component/Styles/ShadowChromeWindowStyle.xaml"/>
+        <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Controls;component/Styles/SystemMenuStyle.xaml"/>
+        <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Controls;component/Styles/ThemedButtonStyle.xaml"/>
+        <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Controls;component/Styles/ThemedContextMenuStyle.xaml"/>
+        <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Controls;component/Styles/ThemedExpanderStyle.xaml"/>
+        <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Controls;component/Styles/ThemedScrollBarStyles.xaml"/>
+        <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Controls;component/Styles/ThemedVirtualizingTreeViewItemStyle.xaml"/>
+        <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Controls;component/Styles/ThemedVirtualizingTreeViewStyle.xaml"/>
+        <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Controls;component/Styles/ThemedWindowStyle.xaml"/>
+        <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Controls;component/Styles/VirtualizingTreeViewItemStyle.xaml"/>
+        <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Controls;component/Styles/VirtualizingTreeViewStyle.xaml"/>
+        <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Controls;component/Styles/WindowBaseStyle.xaml"/>
+        <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Controls;component/Styles/WindowTitleBarButtonStyle.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+</ResourceDictionary>

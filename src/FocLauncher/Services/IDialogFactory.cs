@@ -1,4 +1,5 @@
-﻿using Sklavenwalker.CommonUtilities.Wpf.Controls;
+﻿using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog;
+using Sklavenwalker.CommonUtilities.Wpf.Controls;
 
 namespace FocLauncher.Services;
 

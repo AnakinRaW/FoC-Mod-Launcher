@@ -1,13 +1,12 @@
 ﻿using System.Windows;
 using System.Windows.Input;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Services;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
+using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.StatusBar;
 using Sklavenwalker.CommonUtilities.Wpf.Controls;
 using Validation;
 
 namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Controls;
 
-public class WorkerThreadStatusBarContainer : WorkerThreadElementContainer
+internal class WorkerThreadStatusBarContainer : WorkerThreadElementContainer
 {
     private readonly IStatusBarFactory _factory;
 

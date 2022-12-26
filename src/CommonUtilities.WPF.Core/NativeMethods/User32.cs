@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Windows;
 
@@ -7,21 +6,6 @@ namespace Sklavenwalker.CommonUtilities.Wpf.NativeMethods;
 
 internal static class User32
 {
-    private static int _notifyOwnerActivate;
-
-    public static int NotifyOwnerActive
-    {
-        get
-        {
-            if (_notifyOwnerActivate == 0)
-                _notifyOwnerActivate = RegisterWindowMessage("NotifyOwnerActive{A982313C-756C-4da9-8BD0-0C375A45784B}");
-            return _notifyOwnerActivate;
-        }
-    }
-
-    [DllImport("user32.dll", CharSet = CharSet.Unicode)]
-    public static extern int RegisterWindowMessage(string lpString);
-
     [DllImport("user32.dll")]
     internal static extern IntPtr GetThreadDpiAwarenessContext();
 
@@ -85,122 +69,17 @@ internal static class User32
     [DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
     public static extern IntPtr SendMessage(IntPtr hWnd, int nMsg, IntPtr wParam, IntPtr lParam);
 
-    [DllImport("user32.dll", CharSet = CharSet.Unicode)]
-    public static extern int SetWindowLong(IntPtr hWnd, short nIndex, int value);
-
-    [DllImport("user32.dll", EntryPoint = "GetWindowLong", CharSet = CharSet.Auto)]
-    public static extern int GetWindowLong32(IntPtr hWnd, int nIndex);
-
-    public static int GetWindowLong(IntPtr hWnd, int nIndex) => GetWindowLong32(hWnd, nIndex);
-
-    public static int GetWindowLong(IntPtr hWnd, GWL nIndex) => GetWindowLong(hWnd, (int)nIndex);
-
-
-    [DllImport("user32.dll")]
-    public static extern IntPtr GetSystemMenu(IntPtr hwnd, bool bRevert);
-
-    [DllImport("user32.dll")]
-    [return: MarshalAs(UnmanagedType.Bool)]
-    public static extern bool EnableMenuItem(IntPtr menu, uint uIDEnableItem, uint uEnable);
 
     [DllImport("User32", CharSet = CharSet.Auto)]
     [return: MarshalAs(UnmanagedType.Bool)]
     public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int x, int y, int cx, int cy, int flags);
-
-    [DllImport("user32.dll")]
-    [return: MarshalAs(UnmanagedType.Bool)]
-    public static extern bool IsWindowEnabled(IntPtr hWnd);
-
-    [DllImport("user32.dll")]
-    [return: MarshalAs(UnmanagedType.Bool)]
-    public static extern bool EnableWindow(IntPtr hWnd, bool bEnable);
-
-    [DllImport("user32.dll")]
-    [return: MarshalAs(UnmanagedType.Bool)]
-    public static extern bool GetWindowRect(IntPtr hwnd, out RectStruct lpRect);
-
-    internal static void FindMaximumSingleMonitorRectangle(RectStruct windowRect, out RectStruct screenSubRect, out RectStruct monitorRect)
-    {
-        var rects = new List<RectStruct>();
-        EnumDisplayMonitors(IntPtr.Zero, IntPtr.Zero, (IntPtr hMonitor, IntPtr _, ref RectStruct _, IntPtr _) =>
-        {
-            var monitorInfo = new MonitorInfoStruct
-            {
-                CbSize = (uint)Marshal.SizeOf(typeof(MonitorInfoStruct))
-            };
-            GetMonitorInfo(hMonitor, ref monitorInfo);
-            rects.Add(monitorInfo.RcWork);
-            return true;
-        }, IntPtr.Zero);
-        long currentArea = 0;
-        screenSubRect = new RectStruct
-        {
-            Left = 0,
-            Right = 0,
-            Top = 0,
-            Bottom = 0
-        };
-        monitorRect = new RectStruct
-        {
-            Left = 0,
-            Right = 0,
-            Top = 0,
-            Bottom = 0
-        };
-        foreach (var rect in rects)
-        {
-            var lprcSrc1 = rect;
-            IntersectRect(out var lprcDst, ref lprcSrc1, ref windowRect);
-            var area = (long)(lprcDst.Width * lprcDst.Height);
-            if (area > currentArea)
-            {
-                screenSubRect = lprcDst;
-                monitorRect = rect;
-                currentArea = area;
-            }
-        }
-    }
-
-    [DllImport("user32.dll")]
-    public static extern IntPtr GetActiveWindow();
-
+    
     internal static int HiWord(int value) => (short)(value >> 16);
-
-    internal static int HiWord(long value) => (short)(value >> 16 & ushort.MaxValue);
 
     internal static int LoWord(int value) => (short)(value & ushort.MaxValue);
 
-    internal static int LoWord(long value) => (short)(value & ushort.MaxValue);
-
     [DllImport("user32.dll", CharSet = CharSet.Auto)]
     public static extern int GetMessagePos();
-
-    [DllImport("user32.dll")]
-    internal static extern IntPtr MonitorFromWindow(IntPtr handle, int flags);
-
-    [DllImport("user32.dll")]
-    [return: MarshalAs(UnmanagedType.Bool)]
-    public static extern bool EnumThreadWindows(uint dwThreadId, EnumWindowsProc lpfn, IntPtr lParam);
-
-    [DllImport("user32.dll")]
-    public static extern IntPtr GetWindow(IntPtr hwnd, int nCmd);
-
-    internal static int GetXLParam(int lParam) => LoWord(lParam);
-
-    internal static int GetYLParam(int lParam) => HiWord(lParam);
-
-    internal static int ToInt32Unchecked(this IntPtr value) => (int)value.ToInt64();
-
-    [DllImport("user32.dll")]
-    [return: MarshalAs(UnmanagedType.Bool)]
-    internal static extern bool ScreenToClient(IntPtr hWnd, ref PointStruct point);
-
-    internal static IntPtr MakeParam(int lowWord, int highWord) => new(lowWord & ushort.MaxValue | highWord << 16);
-
-    [DllImport("user32.dll")]
-    internal static extern short GetKeyState(int vKey);
-
-    internal static bool IsKeyPressed(int vKey) => GetKeyState(vKey) < 0;
 
     [DllImport("user32.dll", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]

@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Services;
+using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.StatusBar;
 
 namespace FocLauncher.Controls;
 

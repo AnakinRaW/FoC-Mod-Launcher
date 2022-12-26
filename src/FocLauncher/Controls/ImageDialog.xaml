@@ -1,11 +1,11 @@
-﻿<controls:ThemedDialog x:Class="FocLauncher.Controls.ImageDialog"
+﻿<controls:DialogWindow x:Class="FocLauncher.Controls.ImageDialog"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:controls="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Controls;assembly=Sklavenwalker.CommonUtilities.WPF.ThemedControls"
-             xmlns:controls1="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Imaging.Controls;assembly=Sklavenwalker.CommonUtilities.WPF.Imaging"
              xmlns:designer="clr-namespace:FocLauncher.ViewModels.Designer"
+             xmlns:controls="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Controls;assembly=Sklavenwalker.CommonUtilities.WPF.ApplicationFramework"
+             xmlns:imaging="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Imaging.Controls;assembly=Sklavenwalker.CommonUtilities.WPF.Imaging"
              mc:Ignorable="d" d:DesignWidth="480"
              d:DataContext="{d:DesignInstance {x:Type designer:ImageDialogViewModel}, IsDesignTimeCreatable=True}"
              MaxWidth="480" ResizeMode="NoResize">
@@ -15,9 +15,9 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <controls1:ThemedImage Moniker="{Binding Image}" Height="92" Width="92"
+            <imaging:ThemedImage Moniker="{Binding Image}" Height="92" Width="92"
                                    Stretch="Fill" VerticalAlignment="Top" HorizontalAlignment="Left"/>
             <ContentPresenter Grid.Column="1" Content="{Binding}" Margin="10,0,0,0"/>
         </Grid>
     </Grid>
-</controls:ThemedDialog>
+</controls:DialogWindow>

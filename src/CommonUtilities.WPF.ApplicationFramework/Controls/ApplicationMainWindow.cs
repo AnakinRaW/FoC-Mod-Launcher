@@ -6,9 +6,9 @@ using System.Windows.Input;
 using System.Windows.Shell;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Application;
 using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Converters;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Services;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
+using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.StatusBar;
 using Sklavenwalker.CommonUtilities.Wpf.Controls;
 using Validation;
 

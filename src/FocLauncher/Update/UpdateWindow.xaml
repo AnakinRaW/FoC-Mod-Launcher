@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:imaging="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Imaging;assembly=Sklavenwalker.CommonUtilities.WPF.Imaging"
-        xmlns:converters="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Converters;assembly=Sklavenwalker.CommonUtilities.WPF.ThemedControls"
+        xmlns:converters="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Converters;assembly=Sklavenwalker.CommonUtilities.WPF.Core"
         mc:Ignorable="d"
         Title="UpdateWindow" Width="500" SizeToContent="Height" ResizeMode="NoResize">
 

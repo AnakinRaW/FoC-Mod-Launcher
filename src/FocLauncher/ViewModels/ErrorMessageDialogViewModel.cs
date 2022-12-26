@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using FocLauncher.Imaging;
 using Microsoft.Extensions.DependencyInjection;
-using Sklavenwalker.CommonUtilities.Wpf.Controls;
+using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog;
+using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Input;
 using Sklavenwalker.CommonUtilities.Wpf.Imaging;
-using Sklavenwalker.CommonUtilities.Wpf.Services;
 
 namespace FocLauncher.ViewModels;
 

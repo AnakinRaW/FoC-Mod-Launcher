@@ -2,7 +2,8 @@
 using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
+using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Application;
+using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.StatusBar;
 using Sklavenwalker.CommonUtilities.Wpf.Controls;
 
 namespace FocLauncher.ViewModels.Designer;

@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>net6.0-windows;net48</TargetFrameworks>
+		<UseWPF>true</UseWPF>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<RootNamespace>Sklavenwalker.CommonUtilities.Wpf</RootNamespace>
+		<AssemblyName>Sklavenwalker.CommonUtilities.WPF.Controls</AssemblyName>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<VersionPrefix>1.0.0</VersionPrefix>
+		<Authors>Anakin Sklavenwalker</Authors>
+		<Description>Contains all sorts of controls.</Description>
+		<Copyright>Anakin Sklavenwalker</Copyright>
+		<RepositoryUrl>https://github.com/AnakinSklavenwalker/CommonUtilities</RepositoryUrl>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\CommonUtilities.WPF.Core\CommonUtilities.WPF.Core.csproj" />
+	  <ProjectReference Include="..\CommonUtilities.WPF.Imaging\CommonUtilities.WPF.Imaging.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Page Update="Styles\ThemedContextMenuStyle.xaml">
+	    <SubType>Designer</SubType>
+	  </Page>
+	  <Page Update="Styles\VirtualizingTreeViewStyle.xaml">
+	    <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+	  </Page>
+	</ItemGroup>
+
+</Project>

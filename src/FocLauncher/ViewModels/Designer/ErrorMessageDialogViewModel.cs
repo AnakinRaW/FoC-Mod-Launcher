@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows;
 using FocLauncher.Imaging;
-using Sklavenwalker.CommonUtilities.Wpf.Controls;
+using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Input;
 using Sklavenwalker.CommonUtilities.Wpf.Imaging;
 
 namespace FocLauncher.ViewModels.Designer;

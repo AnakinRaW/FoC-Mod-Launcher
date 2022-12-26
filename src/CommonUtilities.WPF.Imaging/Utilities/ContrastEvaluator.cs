@@ -2,7 +2,7 @@
 using System.Buffers;
 using System.Windows.Media;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Imaging.Utilities;
+namespace Sklavenwalker.CommonUtilities.Wpf.Imaging;
 
 internal class ContrastEvaluator
 {

@@ -144,7 +144,7 @@ public class ThemedImage : Image
 
         themedImage.SetBinding(GrayscaleProperty, new Binding
         {
-            Converter = new InverseBooleanConverter(),
+            Converter = new BooleanInverseConverter(),
             Source = item,
             Path = new PropertyPath("IsEnabled")
         });

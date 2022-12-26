@@ -1,0 +1,19 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Controls"
+                    xmlns:imaging="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Imaging;assembly=Sklavenwalker.CommonUtilities.WPF.Imaging"
+                    xmlns:colors="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Themes.Colors"
+                    xmlns:converters="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Converters;assembly=Sklavenwalker.CommonUtilities.WPF.Core">
+
+    <converters:BrushToColorConverter x:Key="BrushToColorConverter"/>
+
+    <Style TargetType="{x:Type controls:ThemedVirtualizingTreeView}" 
+           BasedOn="{StaticResource {x:Type controls:VirtualizingTreeView}}">
+        <Setter Property="Background" Value="{DynamicResource {x:Static colors:CommonControlsColors.TreeViewBackground}}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static colors:CommonControlsColors.TreeViewBorder}}"/>
+        <Setter Property="TextElement.Foreground" Value="{DynamicResource {x:Static colors:CommonControlsColors.TreeViewText}}"/>
+        <Setter Property="imaging:ImageThemingUtilities.ImageBackgroundColor"
+                Value="{Binding Path=Background, RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToColorConverter}}"/>
+    </Style>
+
+</ResourceDictionary>

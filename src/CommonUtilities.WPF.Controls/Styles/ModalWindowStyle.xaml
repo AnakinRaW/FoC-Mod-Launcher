@@ -1,0 +1,24 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Controls"
+                    xmlns:vs="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.DPI;assembly=Sklavenwalker.CommonUtilities.WPF.Core">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Controls;component/Styles/WindowBaseStyle.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+
+    <Style TargetType="{x:Type controls:ModalWindow}" BasedOn="{StaticResource {x:Type controls:WindowBase}}">
+        <Setter Property="HasDialogFrame">
+            <Setter.Value>
+                <Binding Path="HasDialogFrame"/>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="IsCloseButtonEnabled">
+            <Setter.Value>
+                <Binding Path="IsCloseButtonEnabled"/>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
+        <Setter Property="RenderOptions.BitmapScalingMode" Value="{x:Static vs:DpiHelper.BitmapScalingMode}"/>
+    </Style>
+</ResourceDictionary>

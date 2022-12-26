@@ -2,11 +2,9 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Threading.Tasks;
-using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using FocLauncher.Services;
 using Microsoft.Extensions.DependencyInjection;
-using Sklavenwalker.CommonUtilities.Wpf.Controls;
 using Validation;
 
 namespace FocLauncher.ViewModels;
@@ -50,8 +48,8 @@ internal partial class MainPageViewModel : LoadingViewModelBase, IMainPageViewMo
                     _isInitialized = true;
                 }
 
-                var vm = new UpdateWindowViewModel();
-                await ServiceProvider.GetRequiredService<IModalWindowService>().ShowModal(vm);
+                //var vm = new UpdateWindowViewModel();
+                //await ServiceProvider.GetRequiredService<IModalWindowService>().ShowModal(vm);
 
                 //await Application.Current.Dispatcher.InvokeAsync(() =>
                 //{

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Windows.Media;
 using Validation;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Imaging.Utilities;
+namespace Sklavenwalker.CommonUtilities.Wpf.Imaging;
 
 internal class PixelBuffer
 {

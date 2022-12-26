@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Sklavenwalker.CommonUtilities.Wpf.Controls;
+using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 
 namespace FocLauncher.Services;
 

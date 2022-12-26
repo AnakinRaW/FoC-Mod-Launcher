@@ -5,7 +5,6 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using Sklavenwalker.CommonUtilities.Wpf.Imaging.Utilities;
 using Validation;
 using Color = System.Windows.Media.Color;
 

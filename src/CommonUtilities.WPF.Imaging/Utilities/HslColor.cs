@@ -1,7 +1,8 @@
 ﻿using System;
+
 using System.Windows.Media;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Imaging.Utilities;
+namespace Sklavenwalker.CommonUtilities.Wpf.Imaging;
 
 internal struct HslColor
 {

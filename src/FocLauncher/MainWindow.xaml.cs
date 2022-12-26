@@ -4,13 +4,11 @@ using System.Windows.Controls;
 using FocLauncher.Imaging;
 using FocLauncher.Themes;
 using Microsoft.Extensions.DependencyInjection;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Services;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
+using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Application;
 using Sklavenwalker.CommonUtilities.Wpf.Controls;
 using Sklavenwalker.CommonUtilities.Wpf.Imaging;
 using Sklavenwalker.CommonUtilities.Wpf.Imaging.Controls;
 using Sklavenwalker.CommonUtilities.Wpf.Input;
-using Sklavenwalker.CommonUtilities.Wpf.Services;
 using Sklavenwalker.CommonUtilities.Wpf.Theming;
 using Validation;
 

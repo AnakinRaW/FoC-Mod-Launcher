@@ -5,13 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:designer="clr-namespace:FocLauncher.ViewModels.Designer"
              xmlns:converters="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Converters;assembly=Sklavenwalker.CommonUtilities.WPF.Core"
-             xmlns:themedControls="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Controls;assembly=Sklavenwalker.CommonUtilities.WPF.ThemedControls"
              xmlns:controls="clr-namespace:FocLauncher.Controls"
+             xmlns:coreControls="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Controls;assembly=Sklavenwalker.CommonUtilities.WPF.Controls"
              mc:Ignorable="d"  
              d:DesignHeight="450" d:DesignWidth="800"
              d:DataContext="{d:DesignInstance {x:Type designer:MainPageViewModel}, IsDesignTimeCreatable=True}">
     <FrameworkElement.Resources>
-        <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+        <converters:BooleanInverseConverter x:Key="InverseBooleanConverter"/>
     </FrameworkElement.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -29,10 +29,10 @@
                                               BorderThickness="1"/>
             <Button Grid.Row="2" HorizontalAlignment="Center" Click="ButtonBase_OnClick">Play</Button>
         </Grid>
-        <themedControls:ThemedExpander Grid.Row="1" FlowDirection="RightToLeft" ExpandDirection="Up" 
+        <coreControls:ThemedExpander Grid.Row="1" FlowDirection="RightToLeft" ExpandDirection="Up" 
                                  Header="Launch Arguments"
                                  IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBooleanConverter}}">
             <Border Background="Red" MinHeight="50" DataContext="{Binding ArgumentsViewModel}"/>
-        </themedControls:ThemedExpander>
+        </coreControls:ThemedExpander>
     </Grid>
 </UserControl>

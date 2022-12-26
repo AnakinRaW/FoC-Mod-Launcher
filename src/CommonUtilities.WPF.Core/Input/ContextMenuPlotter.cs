@@ -82,7 +82,7 @@ public sealed class ContextMenuPlotter : IContextMenuPlotter
             contextMenu.IsOpen = true;
         }
     }
-    
+
     private static Point GetContextMenuLocation(ref UIElement? uiElement)
     {
         var p = new Point();

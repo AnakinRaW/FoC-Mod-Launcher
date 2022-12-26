@@ -9,7 +9,7 @@ using Sklavenwalker.CommonUtilities.Wpf.NativeMethods;
 
 namespace Sklavenwalker.CommonUtilities.Wpf.Utilities;
 
-internal static class IconHelper
+public static class IconHelper
 {
     private static BitmapSource? _smallIcon;
     private static BitmapSource? _largeIcon;

@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Data;
+using Sklavenwalker.CommonUtilities.Wpf.Utilities;
 
 namespace Sklavenwalker.CommonUtilities.Wpf.Converters;
 

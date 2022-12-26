@@ -4,7 +4,8 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using FocLauncher.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
+using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Application;
+using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.StatusBar;
 using Validation;
 
 namespace FocLauncher.ViewModels;
