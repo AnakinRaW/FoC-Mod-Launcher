@@ -4,7 +4,7 @@ using Sklavenwalker.CommonUtilities.Wpf.Controls;
 
 namespace FocLauncher.Controls;
 
-internal sealed class LauncherTreeViewControl : VirtualizingTreeView
+internal sealed class LauncherTreeViewControl : ThemedVirtualizingTreeView
 {
     public LauncherTreeViewControl()
     {

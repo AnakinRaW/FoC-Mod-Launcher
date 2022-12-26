@@ -33,7 +33,7 @@ namespace Sklavenwalker.CommonUtilities.Wpf.Theming
 
         private static object GetResourceKey(object resourceId)
         {
-            return new ComponentResourceKey(typeof(ThemedWindow), resourceId);
+            return new ComponentResourceKey(typeof(WindowBase), resourceId);
         }
     }
 }

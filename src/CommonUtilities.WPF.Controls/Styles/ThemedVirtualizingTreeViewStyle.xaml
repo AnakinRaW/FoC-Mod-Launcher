@@ -5,6 +5,10 @@
                     xmlns:colors="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Themes.Colors"
                     xmlns:converters="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Converters;assembly=Sklavenwalker.CommonUtilities.WPF.Core">
 
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Controls;component/Styles/VirtualizingTreeViewStyle.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+
     <converters:BrushToColorConverter x:Key="BrushToColorConverter"/>
 
     <Style TargetType="{x:Type controls:ThemedVirtualizingTreeView}" 
