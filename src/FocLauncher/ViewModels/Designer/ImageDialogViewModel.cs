@@ -34,5 +34,5 @@ internal class ImageDialogViewModel : IImageDialogViewModel
     {
     }
 
-    public ImageMoniker Image => Monikers.Settings;
+    public ImageKey Image => ImageKeys.Settings;
 }

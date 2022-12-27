@@ -35,8 +35,8 @@ public class ThemedImage : Image
         typeof(bool?), typeof(ThemedImage),
         new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.Inherits));
     
-    public static readonly DependencyProperty MonikerProperty = DependencyProperty.Register(nameof(Moniker),
-        typeof(ImageMoniker), typeof(ThemedImage));
+    public static readonly DependencyProperty ImakgeKeyProperty = DependencyProperty.Register(nameof(ImakgeKey),
+        typeof(ImageKey), typeof(ThemedImage));
 
     public static readonly DependencyProperty ScaleFactorProperty = DependencyProperty.RegisterAttached("ScaleFactor",
         typeof(double), typeof(ThemedImage),
@@ -109,10 +109,10 @@ public class ThemedImage : Image
         set => SetValue(GrayscaleProperty, value);
     }
 
-    public ImageMoniker Moniker
+    public ImageKey ImakgeKey
     {
-        get => (ImageMoniker)GetValue(MonikerProperty);
-        set => SetValue(MonikerProperty, value);
+        get => (ImageKey)GetValue(ImakgeKeyProperty);
+        set => SetValue(ImakgeKeyProperty, value);
     }
 
     static ThemedImage()
@@ -135,11 +135,11 @@ public class ThemedImage : Image
         this.HookDpiChanged(DisplayDpiChanged);
     }
 
-    public static ThemedImage ForMenuItem(ImageMoniker moniker, MenuItem item)
+    public static ThemedImage ForMenuItem(ImageKey imageKey, MenuItem item)
     {
         var themedImage = new ThemedImage
         {
-            Moniker = moniker
+            ImakgeKey = imageKey
         };
 
         themedImage.SetBinding(GrayscaleProperty, new Binding

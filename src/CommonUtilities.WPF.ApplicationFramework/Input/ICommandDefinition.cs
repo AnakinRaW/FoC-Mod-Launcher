@@ -9,7 +9,7 @@ public interface ICommandDefinition
 
     string? Tooltip { get; }
 
-    ImageMoniker Image { get; }
+    ImageKey Image { get; }
 
     ICommand? Command { get; }
 }

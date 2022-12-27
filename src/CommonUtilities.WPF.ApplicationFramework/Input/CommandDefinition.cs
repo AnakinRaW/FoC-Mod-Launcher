@@ -7,7 +7,7 @@ namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Input;
 public partial class CommandDefinition : ObservableObject, ICommandDefinition
 {
     [ObservableProperty] private string? _tooltip;
-    [ObservableProperty] private ImageMoniker _image;
+    [ObservableProperty] private ImageKey _image;
     [ObservableProperty] private ICommand? _command;
 
     public string Text { get; }

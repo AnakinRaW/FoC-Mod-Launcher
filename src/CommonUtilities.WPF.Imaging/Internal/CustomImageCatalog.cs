@@ -17,11 +17,11 @@ internal class CustomImageCatalog : IImageCatalog
 
     public bool AddDefinition(ImageDefinition definition)
     {
-        if (definition.Moniker.CatalogType != CatalogType)
+        if (definition.ImakgeKey.CatalogType != CatalogType)
             throw new ArgumentException("ImageDefinition does not match this catalog.");
-        if (_definitions.ContainsKey(definition.Moniker.Name))
+        if (_definitions.ContainsKey(definition.ImakgeKey.Name))
             return false;
-        _definitions[definition.Moniker.Name] = definition;
+        _definitions[definition.ImakgeKey.Name] = definition;
         return true;
     }
 

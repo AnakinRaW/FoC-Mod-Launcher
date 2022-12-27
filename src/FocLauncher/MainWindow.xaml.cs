@@ -37,7 +37,7 @@ public partial class MainWindow
 
         var item = new ThemedMenuItem { Header = "123"};
 
-        var b = ThemedImage.ForMenuItem(Monikers.Undo, item);
+        var b = ThemedImage.ForMenuItem(ImageKeys.Undo, item);
         item.Icon = b;
 
         m.Items.Add(item);

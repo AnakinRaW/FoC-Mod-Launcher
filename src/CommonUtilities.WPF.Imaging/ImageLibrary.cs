@@ -11,7 +11,7 @@ namespace Sklavenwalker.CommonUtilities.Wpf.Imaging;
 
 public class ImageLibrary
 {
-    public static readonly ImageMoniker InvalidImageMoniker = default;
+    public static readonly ImageKey InvalidImageKey = default;
 
     public static readonly Color DefaultGrayscaleBiasColor =
         Color.FromArgb(64, byte.MaxValue, byte.MaxValue, byte.MaxValue);
@@ -23,7 +23,7 @@ public class ImageLibrary
 
     private readonly HashSet<IImageCatalog> _imageCatalogs = new(new ImageCatalogEqualityComparer());
 
-    private readonly Dictionary<(ImageMoniker, ImageAttributes), BitmapSource?> _imageCache = new();
+    private readonly Dictionary<(ImageKey, ImageAttributes), BitmapSource?> _imageCache = new();
 
     private CustomImageCatalog CustomImageCatalog { get; } = new();
 
@@ -40,7 +40,7 @@ public class ImageLibrary
             throw new InvalidOperationException($"Catalog with id {catalog.CatalogType} already exists.");
     }
 
-    public ImageMoniker AddCustomImage(ImageSource inputImage, bool canTheme)
+    public ImageKey AddCustomImage(ImageSource inputImage, bool canTheme)
     {
         Requires.NotNull(inputImage, nameof(inputImage));
         try
@@ -61,27 +61,27 @@ public class ImageLibrary
         if (string.IsNullOrEmpty(uriString) || !Uri.TryCreate(uriString, UriKind.RelativeOrAbsolute, out var imageUri))
             return default;
 
-        var moniker = BuildCustomMonikerFromUri(imageUri, out var kind);
+        var key = BuildCustomKeyFromUri(imageUri, out var kind);
 
-        if (moniker == InvalidImageMoniker)
+        if (key == InvalidImageKey)
             return default;
 
-        if (CustomImageCatalog.GetDefinition(moniker.Name, out _))
-            return moniker;
+        if (CustomImageCatalog.GetDefinition(key.Name, out _))
+            return key;
 
         var def = new ImageDefinition
         {
             CanTheme = canTheme,
-            Moniker = moniker,
+            ImakgeKey = key,
             Kind = kind, 
             Source = imageUri
         };
 
         CustomImageCatalog.AddDefinition(def);
-        return moniker;
+        return key;
     }
 
-    private static ImageMoniker BuildCustomMonikerFromUri(Uri source, out ImageFileKind kind)
+    private static ImageKey BuildCustomKeyFromUri(Uri source, out ImageFileKind kind)
     {
         kind = ImageFileKind.Xaml;
         var localPath = source.LocalPath;
@@ -94,28 +94,28 @@ public class ImageLibrary
             "png" => ImageFileKind.Png,
             _ => kind
         };
-        return new ImageMoniker { CatalogType = typeof(CustomImageCatalog), Name = localPath };
+        return new ImageKey { CatalogType = typeof(CustomImageCatalog), Name = localPath };
     }
 
-    internal ImageSource? GetImage(ImageMoniker moniker, ImageAttributes attributes)
+    internal ImageSource? GetImage(ImageKey imageKey, ImageAttributes attributes)
     {
-        if (moniker == InvalidImageMoniker)
+        if (imageKey == InvalidImageKey)
             return null;
 
-        if (_imageCache.TryGetValue((moniker, attributes), out var cachedImage))
+        if (_imageCache.TryGetValue((imageKey, attributes), out var cachedImage))
             return cachedImage;
 
-        var catalog = _imageCatalogs.FirstOrDefault(x => x.CatalogType == moniker.CatalogType);
+        var catalog = _imageCatalogs.FirstOrDefault(x => x.CatalogType == imageKey.CatalogType);
         if (catalog == null)
             return null;
-        if (!catalog.GetDefinition(moniker.Name, out var imageDefinition))
+        if (!catalog.GetDefinition(imageKey.Name, out var imageDefinition))
             return null;
         ImagingUtilities.ValidateAttributes(attributes);
 
         try
         {
             var image = ImagingUtilities.LoadImage(attributes, imageDefinition);
-            _imageCache[(moniker, attributes)] = image;
+            _imageCache[(imageKey, attributes)] = image;
             return image;
         }
         catch (Exception)

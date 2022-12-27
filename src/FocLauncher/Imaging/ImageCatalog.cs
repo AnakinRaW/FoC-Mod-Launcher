@@ -12,7 +12,7 @@ internal class ImageCatalog : ImmutableImageCatalog
     public static ImageDefinition SettingsDefinition => new()
     {
         Kind = ImageFileKind.Xaml,
-        Moniker = Monikers.Settings,
+        ImakgeKey = ImageKeys.Settings,
         Source = ResourcesUriCreator.Create("Settings_16x", ImageFileKind.Xaml),
         CanTheme = true
     };
@@ -20,7 +20,7 @@ internal class ImageCatalog : ImmutableImageCatalog
     public static ImageDefinition TrooperDefinition => new()
     {
         Kind = ImageFileKind.Png,
-        Moniker = Monikers.Trooper,
+        ImakgeKey = ImageKeys.Trooper,
         Source = ResourcesUriCreator.Create("sadTrooper", ImageFileKind.Png),
         CanTheme = false
     };
@@ -28,7 +28,7 @@ internal class ImageCatalog : ImmutableImageCatalog
     public static ImageDefinition UndoDefinition => new()
     {
         Kind = ImageFileKind.Png,
-        Moniker = Monikers.Undo,
+        ImakgeKey = ImageKeys.Undo,
         Source = ResourcesUriCreator.Create("Undo_16x", ImageFileKind.Png),
         CanTheme = true
     };
@@ -36,7 +36,7 @@ internal class ImageCatalog : ImmutableImageCatalog
     public static ImageDefinition GithubDefinition => new()
     {
         Kind = ImageFileKind.Png,
-        Moniker = Monikers.Github,
+        ImakgeKey = ImageKeys.Github,
         Source = ResourcesUriCreator.Create("GitHub_Mark_32px", ImageFileKind.Png),
         CanTheme = true
     };

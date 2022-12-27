@@ -14,10 +14,10 @@ public abstract class ImmutableImageCatalog : IImageCatalog
     {
         foreach (var imageDefinition in definitions)
         {
-            if (imageDefinition.Moniker.CatalogType != CatalogType)
+            if (imageDefinition.ImakgeKey.CatalogType != CatalogType)
                 throw new ArgumentException(
                     "definitions contains an ImageDefinition which does not belong to this catalog.");
-            _imageDefinitions[imageDefinition.Moniker.Name] = imageDefinition;
+            _imageDefinitions[imageDefinition.ImakgeKey.Name] = imageDefinition;
         }
     }
 

@@ -17,7 +17,7 @@ public class ErrorMessageDialogViewModel : DialogViewModel, IErrorMessageDialogV
 
     public string Message { get; }
 
-    public ImageMoniker Image => Monikers.Trooper;
+    public ImageKey Image => ImageKeys.Trooper;
 
     public ErrorMessageDialogViewModel(string header, string message, IServiceProvider serviceProvider)
     {

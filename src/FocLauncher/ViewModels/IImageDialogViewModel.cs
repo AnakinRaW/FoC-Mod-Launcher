@@ -5,5 +5,5 @@ namespace FocLauncher.ViewModels;
 
 public interface IImageDialogViewModel : IDialogViewModel
 {
-    ImageMoniker Image { get; }
+    ImageKey Image { get; }
 }

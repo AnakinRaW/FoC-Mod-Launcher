@@ -24,13 +24,13 @@
                 <Border>
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <imageControls:ThemedImage x:Name="Image" Margin="0,0,8,0" VerticalAlignment="Center" Focusable="False"
-                                                   SnapsToDevicePixels="True" UseLayoutRounding="True" Moniker="{Binding Image}"/>
+                                                   SnapsToDevicePixels="True" UseLayoutRounding="True" ImakgeKey="{Binding Image}"/>
                         <AccessText x:Name="Text" VerticalAlignment="Center" SnapsToDevicePixels="True" Text="{Binding Text}"/>
                     </StackPanel>
                 </Border>
                 <DataTemplate.Triggers>
                     <DataTrigger Binding="{Binding Image}" 
-                                 Value="{x:Static imaging:ImageLibrary.InvalidImageMoniker}">
+                                 Value="{x:Static imaging:ImageLibrary.InvalidImageKey}">
                         <Setter TargetName="Image" Property="Visibility" Value="Collapsed"/>
                     </DataTrigger>
                     <DataTrigger Binding="{Binding Text, Converter={StaticResource IsNullOrEmptyConverter}}" 

@@ -20,8 +20,8 @@ public class DpiPrescaleImageSourceConverter : ValueConverter<ImageSource, Image
         var num = DpiHelper.SystemDpiX / 96.0;
         if (num <= 1.0)
             return inputImage;
-        var moniker = ImageLibrary.Instance.AddCustomImage(inputImage, false);
+        var imageKey = ImageLibrary.Instance.AddCustomImage(inputImage, false);
         var attributes = new ImageAttributes(new Size(inputImage.Width * num, inputImage.Height * num));
-        return ImageLibrary.Instance.GetImage(moniker, attributes);
+        return ImageLibrary.Instance.GetImage(imageKey, attributes);
     }
 }

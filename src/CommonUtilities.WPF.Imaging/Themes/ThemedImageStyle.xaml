@@ -12,7 +12,7 @@
         <Setter Property="Source">
             <Setter.Value>
                 <MultiBinding Converter="{StaticResource CrispImageSourceConverter}">
-                    <Binding Path="Moniker" RelativeSource="{RelativeSource Self}"/>
+                    <Binding Path="ImakgeKey" RelativeSource="{RelativeSource Self}"/>
                     <Binding Path="Width" RelativeSource="{RelativeSource Self}"/>
                     <Binding Path="Height" RelativeSource="{RelativeSource Self}"/>
                     <Binding Path="(imaging:ImageThemingUtilities.ImageBackgroundColor)" RelativeSource="{RelativeSource Self}"/>

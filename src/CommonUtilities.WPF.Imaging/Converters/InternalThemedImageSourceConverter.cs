@@ -7,14 +7,14 @@ using Sklavenwalker.CommonUtilities.Wpf.Converters;
 namespace Sklavenwalker.CommonUtilities.Wpf.Imaging.Converters;
 
 internal sealed class InternalThemedImageSourceConverter : 
-    MultiValueConverter<ImageMoniker, double, double, Color, bool, Color, bool, double, double, ImageSource>
+    MultiValueConverter<ImageKey, double, double, Color, bool, Color, bool, double, double, ImageSource>
 {
-    protected override ImageSource? Convert(ImageMoniker moniker, double logicalWidth, double logicalHeight, 
+    protected override ImageSource? Convert(ImageKey imageKey, double logicalWidth, double logicalHeight, 
         Color background, bool grayscale, Color biasColor, bool highContrast, double dpi, double scaleFactor, object parameter, CultureInfo culture)
     {
         try
         {
-            return ConvertCore(moniker, logicalWidth, logicalHeight, background, grayscale, biasColor, highContrast, dpi, scaleFactor);
+            return ConvertCore(imageKey, logicalWidth, logicalHeight, background, grayscale, biasColor, highContrast, dpi, scaleFactor);
         }
         catch (Exception)
         {
@@ -22,10 +22,10 @@ internal sealed class InternalThemedImageSourceConverter :
         }
     }
 
-    internal static ImageSource? ConvertCore(ImageMoniker moniker, double logicalWidth, double logicalHeight, 
+    internal static ImageSource? ConvertCore(ImageKey imageKey, double logicalWidth, double logicalHeight, 
         Color background, bool grayscale, Color biasColor, bool highContrast, double dpi, double scaleFactor)
     {
-        if (moniker == ImageLibrary.InvalidImageMoniker)
+        if (imageKey == ImageLibrary.InvalidImageKey)
             return null;
         var num = dpi / 96.0 * scaleFactor;
         ValidateDimensions(logicalWidth, logicalHeight, 0.0, short.MaxValue / num);
@@ -35,7 +35,7 @@ internal sealed class InternalThemedImageSourceConverter :
             grayscale,
             biasColor,
             highContrast);
-        return ImageLibrary.Instance.GetImage(moniker, attributes);
+        return ImageLibrary.Instance.GetImage(imageKey, attributes);
     }
 
     private static void ValidateDimensions(double logicalWidth, double logicalHeight, double logicalMin, double logicalMax)
