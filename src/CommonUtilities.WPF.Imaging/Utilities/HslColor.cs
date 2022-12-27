@@ -1,8 +1,7 @@
 ﻿using System;
-
 using System.Windows.Media;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Imaging;
+namespace Sklavenwalker.CommonUtilities.Wpf.Imaging.Utilities;
 
 internal struct HslColor
 {
@@ -76,7 +75,7 @@ internal struct HslColor
                 else
                     hue = 60.0 * (b - r) / num3 + 120.0;
             else
-                hue = (int)(60.0 * (g - b) / num3 + MaxHue) % 360;
+                hue = (int)(60.0 * (g - b) / num3 + 360.0) % 360;
         else
             hue = 0.0;
         var alpha = a / (double)byte.MaxValue;

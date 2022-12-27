@@ -39,7 +39,7 @@ public partial class MainWindow
 
         var b = ThemedImage.ForMenuItem(Monikers.Undo, item);
         item.Icon = b;
-        
+
         m.Items.Add(item);
         _menu = m;
     }

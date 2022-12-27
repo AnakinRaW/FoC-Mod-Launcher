@@ -48,9 +48,7 @@ public class GrayscaleBitmapSourceConverter : ValueConverter<BitmapSource, Bitma
         return parameter is Color color ? color : DefaultBiasColor;
     }
 
-    private static unsafe BitmapSource ConvertToGrayScale(
-        BitmapSource image,
-        Color biasColor)
+    private static unsafe BitmapSource ConvertToGrayScale(BitmapSource image, Color biasColor)
     {
         Requires.NotNull((object)image, nameof(image));
         if (image.Format != PixelFormats.Bgra32)
@@ -59,13 +57,13 @@ public class GrayscaleBitmapSourceConverter : ValueConverter<BitmapSource, Bitma
         var num = image.PixelWidth * image.PixelHeight * BytesPerPixelBgra32;
 
         var arrayPool = ArrayPool<byte>.Shared;
-        var resource = arrayPool.Rent(num);
+        var pixels = arrayPool.Rent(num);
         try
         {
-            image.CopyPixels(resource, stride, 0);
-            ImageThemingUtilities.GrayscaleDiBits(resource, num, biasColor);
+            image.CopyPixels(pixels, stride, 0);
+            ImageThemingUtilities.GrayscalePixelsWithBias(pixels, num, biasColor);
             BitmapSource grayScale;
-            fixed (byte* buffer = resource)
+            fixed (byte* buffer = pixels)
                 grayScale = BitmapSource.Create(image.PixelWidth, image.PixelHeight, image.DpiX, image.DpiY,
                     PixelFormats.Bgra32, image.Palette, (IntPtr)buffer, num, stride);
             grayScale.Freeze();
@@ -73,7 +71,7 @@ public class GrayscaleBitmapSourceConverter : ValueConverter<BitmapSource, Bitma
         }
         finally
         {
-            arrayPool.Return(resource);
+            arrayPool.Return(pixels);
         }
     }
 }

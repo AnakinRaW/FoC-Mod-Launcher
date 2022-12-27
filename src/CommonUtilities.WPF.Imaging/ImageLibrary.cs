@@ -97,7 +97,7 @@ public class ImageLibrary
         return new ImageMoniker { CatalogType = typeof(CustomImageCatalog), Name = localPath };
     }
 
-    public ImageSource? GetImage(ImageMoniker moniker, ImageAttributes attributes)
+    internal ImageSource? GetImage(ImageMoniker moniker, ImageAttributes attributes)
     {
         if (moniker == InvalidImageMoniker)
             return null;

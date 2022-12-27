@@ -4,7 +4,7 @@ using System.Windows.Media;
 
 namespace Sklavenwalker.CommonUtilities.Wpf.Imaging;
 
-public struct ImageAttributes : IEquatable<ImageAttributes>
+internal struct ImageAttributes : IEquatable<ImageAttributes>
 {
     public Color GrayscaleBiasColor { get; }
     public Size DeviceSize { get; }
@@ -26,7 +26,7 @@ public struct ImageAttributes : IEquatable<ImageAttributes>
         if (grayscaleBiasColor.HasValue)
             GrayscaleBiasColor = grayscaleBiasColor.Value;
         else
-            GrayscaleBiasColor = HighContrast? ImageLibrary.HighContrastGrayscaleBiasColor : ImageLibrary.DefaultGrayscaleBiasColor;
+            GrayscaleBiasColor = HighContrast ? ImageLibrary.HighContrastGrayscaleBiasColor : ImageLibrary.DefaultGrayscaleBiasColor;
         Grayscale = grayscale;
     }
 

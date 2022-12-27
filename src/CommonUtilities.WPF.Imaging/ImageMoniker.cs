@@ -2,7 +2,7 @@
 
 namespace Sklavenwalker.CommonUtilities.Wpf.Imaging;
 
-public struct ImageMoniker
+public struct ImageMoniker : IEquatable<ImageMoniker>
 {
     public Type CatalogType;
     public string Name;
