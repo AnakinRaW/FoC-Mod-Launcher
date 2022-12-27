@@ -4,7 +4,7 @@ using Sklavenwalker.CommonUtilities.Wpf.Imaging.Controls;
 
 namespace Sklavenwalker.CommonUtilities.Wpf.Imaging.Converters;
 
-public sealed class ActualDpiConverter : ValueConverter<double, double>
+internal sealed class ActualDpiConverter : ValueConverter<double, double>
 {
     public static readonly ActualDpiConverter Instance = new();
 

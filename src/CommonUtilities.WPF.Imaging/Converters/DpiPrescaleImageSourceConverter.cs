@@ -6,6 +6,7 @@ using Sklavenwalker.CommonUtilities.Wpf.DPI;
 
 namespace Sklavenwalker.CommonUtilities.Wpf.Imaging.Converters;
 
+// TODO: Can they be deleted?
 public class DpiPrescaleImageSourceConverter : ValueConverter<ImageSource, ImageSource>
 {
     protected override ImageSource? Convert(ImageSource inputImage, object? parameter, CultureInfo culture)

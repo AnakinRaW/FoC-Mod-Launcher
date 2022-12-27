@@ -3,7 +3,7 @@ using Sklavenwalker.CommonUtilities.Wpf.Converters;
 
 namespace Sklavenwalker.CommonUtilities.Wpf.Imaging.Converters;
 
-public sealed class ActualHighContrastConverter : MultiValueConverter<bool?, bool, bool>
+internal sealed class ActualHighContrastConverter : MultiValueConverter<bool?, bool, bool>
 {
     public static readonly ActualHighContrastConverter Instance = new();
 

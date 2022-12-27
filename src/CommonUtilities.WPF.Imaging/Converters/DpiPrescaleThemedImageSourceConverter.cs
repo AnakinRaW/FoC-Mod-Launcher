@@ -5,6 +5,7 @@ using Sklavenwalker.CommonUtilities.Wpf.Converters;
 
 namespace Sklavenwalker.CommonUtilities.Wpf.Imaging.Converters;
 
+// TODO: Can they be deleted?
 public class DpiPrescaleThemedImageSourceConverter : MultiValueConverter<ImageSource, Color, bool, ImageSource>
 {
     protected override ImageSource? Convert(ImageSource? inputImage, Color backgroundColor, bool isEnabled, object parameter, CultureInfo culture)

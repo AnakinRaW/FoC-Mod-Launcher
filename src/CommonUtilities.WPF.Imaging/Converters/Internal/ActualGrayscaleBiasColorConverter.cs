@@ -4,7 +4,7 @@ using Sklavenwalker.CommonUtilities.Wpf.Converters;
 
 namespace Sklavenwalker.CommonUtilities.Wpf.Imaging.Converters;
 
-public sealed class ActualGrayscaleBiasColorConverter : MultiValueConverter<Color?, bool, Color>
+internal sealed class ActualGrayscaleBiasColorConverter : MultiValueConverter<Color?, bool, Color>
 {
     public static readonly ActualGrayscaleBiasColorConverter Instance = new();
 

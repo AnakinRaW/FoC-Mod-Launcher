@@ -6,7 +6,7 @@ using Sklavenwalker.CommonUtilities.Wpf.Converters;
 
 namespace Sklavenwalker.CommonUtilities.Wpf.Imaging.Converters;
 
-internal sealed class InternalThemedImageSourceConverter : 
+internal sealed class ThemedImageControlSourceConverter : 
     MultiValueConverter<ImageKey, double, double, Color, bool, Color, bool, double, double, ImageSource>
 {
     protected override ImageSource? Convert(ImageKey imageKey, double logicalWidth, double logicalHeight, 
