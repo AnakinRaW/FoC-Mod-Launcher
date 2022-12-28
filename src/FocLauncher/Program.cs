@@ -18,6 +18,7 @@ using Sklavenwalker.CommonUtilities.FileSystem;
 using Sklavenwalker.CommonUtilities.FileSystem.Windows;
 using Sklavenwalker.CommonUtilities.Registry;
 using Sklavenwalker.CommonUtilities.Registry.Windows;
+using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework;
 using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.StatusBar;
 using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Theming;

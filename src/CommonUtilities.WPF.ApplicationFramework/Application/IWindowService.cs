@@ -1,8 +1,8 @@
 ﻿using System.Windows;
 
-namespace FocLauncher.Services;
+namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework;
 
-internal interface IWindowService
+public interface IWindowService
 {
     void SetMainWindow(Window window);
 

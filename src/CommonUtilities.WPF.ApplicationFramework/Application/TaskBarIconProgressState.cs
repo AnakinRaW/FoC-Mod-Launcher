@@ -1,4 +1,4 @@
-﻿namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Application;
+﻿namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework;
 
 public enum TaskBarIconProgressState
 {

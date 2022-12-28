@@ -1,6 +1,8 @@
-﻿namespace FocLauncher.ViewModels;
+﻿using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
 
-public interface IGameArgumentsViewModel : ILauncherViewModel
+namespace FocLauncher.ViewModels;
+
+public interface IGameArgumentsViewModel : IViewModel
 {
     public object? CurrentGameObject { get; set; }
 }

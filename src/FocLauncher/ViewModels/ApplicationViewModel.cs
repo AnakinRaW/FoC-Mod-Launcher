@@ -1,31 +1,28 @@
 ﻿using System;
 using System.Threading.Tasks;
-using CommunityToolkit.Mvvm.ComponentModel;
 using FocLauncher.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Application;
+using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework;
 using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.StatusBar;
+using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
 using Validation;
 
 namespace FocLauncher.ViewModels;
 
-public partial class ApplicationViewModel : MainWindowViewModel, IApplicationViewModel
+public class ApplicationViewModel : ApplicationViewModelBase, IApplicationViewModel
 {
     private readonly IServiceProvider _serviceProvider;
     private readonly ILogger? _logger;
 
-    [ObservableProperty]
-    private ILauncherViewModel? _currentViewModel;
-
-    public ApplicationViewModel(IServiceProvider serviceProvider, IStatusBarViewModel statusBar) : base(statusBar)
+    public ApplicationViewModel(IServiceProvider serviceProvider, IStatusBarViewModel statusBar) : base(statusBar, serviceProvider)
     {
         Requires.NotNull(serviceProvider, nameof(serviceProvider));
         _serviceProvider = serviceProvider;
         _logger = serviceProvider.GetService<ILoggerFactory>()?.CreateLogger(GetType());
     }
 
-    public Task InitializeAsync()
+    public override Task InitializeAsync()
     {
         return Task.Run(() =>
         {

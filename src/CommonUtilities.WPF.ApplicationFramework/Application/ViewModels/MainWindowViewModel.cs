@@ -2,7 +2,7 @@
 using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.StatusBar;
 using WindowViewModel = Sklavenwalker.CommonUtilities.Wpf.Controls.WindowViewModel;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Application;
+namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
 
 public partial class MainWindowViewModel : WindowViewModel, IMainWindowViewModel
 {

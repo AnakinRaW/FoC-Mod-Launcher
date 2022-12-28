@@ -2,9 +2,9 @@
 using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Application;
+using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework;
 using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.StatusBar;
-using Sklavenwalker.CommonUtilities.Wpf.Controls;
+using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
 
 namespace FocLauncher.ViewModels.Designer;
 
@@ -25,7 +25,7 @@ internal class ApplicationViewModel : IApplicationViewModel
     public bool ShowIcon { get; set; }
     public TaskBarIconProgressState ProgressState { get; set; }
     public IStatusBarViewModel StatusBar { get; }
-    public ILauncherViewModel CurrentViewModel { get; set; } = new MainPageViewModel();
+    public IViewModel CurrentViewModel { get; set; } = new MainPageViewModel();
 
     public Task InitializeAsync()
     {
@@ -40,5 +40,9 @@ internal class ApplicationViewModel : IApplicationViewModel
     public void OnClosing(CancelEventArgs e)
     {
         throw new NotImplementedException();
+    }
+
+    public void Dispose()
+    {
     }
 }

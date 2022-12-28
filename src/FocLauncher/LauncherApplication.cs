@@ -2,92 +2,76 @@
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
+using FocLauncher.Imaging;
 using FocLauncher.Services;
 using FocLauncher.Themes;
-using FocLauncher.Threading;
 using FocLauncher.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Application;
+using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework;
+using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Controls;
 using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Theming;
+using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
+using Sklavenwalker.CommonUtilities.Wpf.Imaging;
 using Validation;
 
 namespace FocLauncher;
 
-internal class LauncherApplication : Application
+internal class LauncherApplication : ApplicationBase
 {
-    private readonly IServiceProvider _serviceProvider;
-    private readonly ILogger? _logger;
-    private bool _windowShown;
-    private readonly object _syncObject = new();
-
-    public LauncherApplication(IServiceProvider serviceProvider)
+    public LauncherApplication(IServiceProvider serviceProvider) : base(serviceProvider)
     {
         Requires.NotNull(serviceProvider, nameof(serviceProvider));
-        _serviceProvider = serviceProvider;
-        _logger = serviceProvider.GetService<ILoggerFactory>()?.CreateLogger(GetType());
     }
 
     protected override void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
-        var mainViewModel = new ApplicationViewModel(_serviceProvider, new StatusBarViewModel())
+        //mainViewModel.InitializeAsync().Wait();
+        //LoadStartPageAsync().Forget();
+    }
+
+    protected override IApplicationViewModel CreateApplicationViewModel()
+    {
+        return new ApplicationViewModel(ServiceProvider, new StatusBarViewModel())
         {
             Title = LauncherConstants.ApplicationName,
             IsResizable = false,
             HasMaximizeButton = false,
             HasMinimizeButton = false
         };
-        PreWindowShowInitialize();
-        var window = InitializeWindow(mainViewModel);
-        ShowWindow(window);
-        mainViewModel.InitializeAsync().Wait();
-        LoadStartPageAsync().Forget();
     }
 
-    private Window InitializeWindow(MainWindowViewModel viewModel)
-    {
-        var window = new MainWindow(viewModel, _serviceProvider);
-        MainWindow = window;
-        _serviceProvider.GetRequiredService<IWindowService>().SetMainWindow(window);
-        return window;
-    }
-
-    private void PreWindowShowInitialize()
+    protected override void InitializeResources()
     {
         Resources.MergedDictionaries.Add(LoadResourceValue<ResourceDictionary>("DataTemplates.xaml"));
-        var themeManager = _serviceProvider.GetRequiredService<IThemeManager>();
+    }
+
+    protected override void InitializeServices()
+    {
+        ImageLibrary.Instance.LoadCatalog(ImageCatalog.Instance);
+        var themeManager = ServiceProvider.GetRequiredService<IThemeManager>();
         themeManager.Initialize(this, new LauncherTheme());
     }
-    
-    private void ShowWindow(Window window)
+
+    protected override ApplicationMainWindow CreateMainWindow(IMainWindowViewModel viewModel)
     {
-        if (_windowShown)
-            return;
-        lock (_syncObject)
-        {
-            if (_windowShown)
-                return;
-            _windowShown = true;
-        }
-        _logger?.LogTrace("Showing the window.");
-        Dispatcher.Invoke(window.Show);
+        return new MainWindow(viewModel, ServiceProvider);
     }
 
     private async Task LoadStartPageAsync()
     {
-        var navigationService = _serviceProvider.GetRequiredService<IViewModelPresenter>();
+        var navigationService = ServiceProvider.GetRequiredService<IViewModelPresenter>();
         navigationService.ShowViewModel(await CreateMainViewModel());
     }
 
-    private Task<ILauncherViewModel> CreateMainViewModel()
+    private Task<IViewModel> CreateMainViewModel()
     {
         return Task.Run(() =>
         {
-            return Dispatcher.Invoke<ILauncherViewModel>(() => 
+            return Dispatcher.Invoke<IViewModel>(() => 
                 new MainPageViewModel(
-                    new GameArgumentsViewModel(_serviceProvider),
-                    _serviceProvider));
+                    new GameArgumentsViewModel(ServiceProvider),
+                    ServiceProvider));
         });
     }
 

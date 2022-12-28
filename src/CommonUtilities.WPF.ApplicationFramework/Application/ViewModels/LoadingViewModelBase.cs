@@ -1,7 +1,7 @@
 ﻿using System;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace FocLauncher.ViewModels;
+namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
 
 public abstract partial class LoadingViewModelBase : ViewModelBase, ILoadingViewModel
 {
