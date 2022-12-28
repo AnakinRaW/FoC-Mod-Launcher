@@ -6,6 +6,7 @@ using System.Windows.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FocLauncher.Imaging;
+using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 using Sklavenwalker.CommonUtilities.Wpf.Controls;
 using Validation;
 
@@ -23,6 +24,7 @@ public partial class UnhandledExceptionDialogViewModel : ModalWindowViewModel, I
     public string HandlerDescription => "If the problem keeps appearing you can file an issue on GitHub.com";
 
     public ICommand Handler => new RelayCommand(OnCreateIssue);
+
     public ImageSource? HandlerIcon => new BitmapImage(ImageCatalog.GithubDefinition.Source);
     
     public string HandlerName => "Create _Issue...";

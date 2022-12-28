@@ -5,7 +5,7 @@ using FocLauncher.Utilities;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Sklavenwalker.CommonUtilities;
-using Sklavenwalker.CommonUtilities.Wpf.Controls;
+using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 using Validation;
 using UnhandledExceptionDialogViewModel = FocLauncher.ViewModels.UnhandledExceptionDialogViewModel;
 

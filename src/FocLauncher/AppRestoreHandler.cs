@@ -1,32 +1,37 @@
 ﻿using System;
+using System.IO;
+using System.Security.AccessControl;
 using System.Windows.Input;
 using FocLauncher.Services;
+using FocLauncher.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Sklavenwalker.CommonUtilities.FileSystem;
+using Sklavenwalker.CommonUtilities.FileSystem.Windows;
+using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog;
+using Sklavenwalker.CommonUtilities.Wpf.Controls;
 using Validation;
 
 namespace FocLauncher;
 
 internal class AppRestoreHandler
 {
-    private readonly ILogger? _logger;
     private readonly ILauncherRegistry _registry;
     private readonly IFileSystemService _fileSystemService;
     private readonly ILauncherEnvironment _environment;
+    private readonly IWindowsPathService _pathService;
 
     public AppRestoreHandler(IServiceProvider services)
     {
         Requires.NotNull(services, nameof(services));
-        _logger = services.GetService<ILogger>();
         _registry = services.GetRequiredService<ILauncherRegistry>();
         _fileSystemService = services.GetRequiredService<IFileSystemService>();
         _environment = services.GetRequiredService<ILauncherEnvironment>();
+        _pathService = services.GetRequiredService<IWindowsPathService>();
     }
 
-    public void RestoreIfRequested()
+    public void RestoreIfNecessary()
     {
-        if (_registry.Restore || Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
+        if (!_environment.ApplicationLocalDirectory.Exists || _registry.Restore || Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
             RestoreApplication();
     }
 
@@ -34,15 +39,18 @@ internal class AppRestoreHandler
     {
         try
         {
+            var appLocalPath = _environment.ApplicationLocalDirectory;
+            if (!_pathService.UserHasDirectoryAccessRights(appLocalPath.Parent.FullName, FileSystemRights.CreateDirectories))
+                throw new IOException($"Permission on '{appLocalPath}' denied: Creating a new directory");
+
             _fileSystemService.DeleteDirectoryWithRetry(_environment.ApplicationLocalDirectory);
+            _registry.Reset();
+            _environment.ApplicationLocalDirectory.Create();
         }
         catch (Exception e)
         {
-            _logger?.LogError(e, $"Unable to delete local app directory, because: {e.Message}");
+            new UnhandledExceptionDialog(new UnhandledExceptionDialogViewModel(e)).ShowModal();
             throw;
         }
-        _registry.Reset();
-        _environment.ApplicationLocalDirectory.Create();
-        _logger?.LogTrace("Test");
     }
 }

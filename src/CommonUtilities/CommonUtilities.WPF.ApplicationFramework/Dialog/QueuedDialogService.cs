@@ -6,11 +6,10 @@ using System.Windows;
 using System.Windows.Threading;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 using Sklavenwalker.CommonUtilities.Wpf.Controls;
 using Validation;
 
-namespace FocLauncher.Services;
+namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 
 internal class QueuedDialogService : IQueuedDialogService
 {

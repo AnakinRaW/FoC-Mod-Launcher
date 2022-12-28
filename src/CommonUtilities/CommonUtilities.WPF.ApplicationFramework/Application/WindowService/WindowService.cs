@@ -5,7 +5,7 @@ using Sklavenwalker.CommonUtilities.Wpf.Controls;
 
 namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework;
 
-public class WindowService : IWindowService
+internal class WindowService : IWindowService
 {
     private Window _mainWindow;
     private readonly object _syncObject = new();

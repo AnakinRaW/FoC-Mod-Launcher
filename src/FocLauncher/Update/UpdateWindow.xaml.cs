@@ -1,10 +1,10 @@
 ﻿using Sklavenwalker.ProductUpdater.Services;
 using System;
-using FocLauncher.Services;
 using FocLauncher.Threading;
 using FocLauncher.Update.ProductMetadata;
 using FocLauncher.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
+using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 
 namespace FocLauncher.Update;
 

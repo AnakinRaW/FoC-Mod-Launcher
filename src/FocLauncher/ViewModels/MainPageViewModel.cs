@@ -3,7 +3,6 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
-using FocLauncher.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework;
 using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
@@ -49,7 +48,7 @@ internal partial class MainPageViewModel : LoadingViewModelBase, IMainPageViewMo
                         return;
                     _isInitialized = true;
                 }
-
+                
                 //var vm = new UpdateWindowViewModel();
                 //await ServiceProvider.GetRequiredService<IModalWindowService>().ShowModal(vm);
 

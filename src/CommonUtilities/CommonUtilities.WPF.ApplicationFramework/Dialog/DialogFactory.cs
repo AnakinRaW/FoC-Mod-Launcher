@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Windows;
-using FocLauncher.Controls;
 using Microsoft.Extensions.DependencyInjection;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog;
-using Sklavenwalker.CommonUtilities.Wpf.Controls;
+using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Controls;
 using Validation;
 
-namespace FocLauncher.Services;
+namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 
-internal class DialogFactory : IDialogFactory
+public class DialogFactory : IDialogFactory
 {
     private readonly IWindowService _windowService;
 
@@ -19,14 +16,19 @@ internal class DialogFactory : IDialogFactory
         _windowService = serviceProvider.GetRequiredService<IWindowService>();
     }
 
-    public ModalWindow Create(IDialogViewModel viewModel)
+    public DialogWindow Create(IDialogViewModel viewModel)
     {
         return Application.Current.Dispatcher.Invoke(() =>
         {
             _windowService.ShowWindow();
-            var dialog = new ImageDialog(viewModel);
+            var dialog = CreateDialog(viewModel);
             _windowService.SetOwner(dialog);
             return dialog;
         });
+    }
+
+    protected virtual DialogWindow CreateDialog(IDialogViewModel viewModel)
+    {
+        return new DialogWindow(viewModel);
     }
 }

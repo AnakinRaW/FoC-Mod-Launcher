@@ -1,23 +1,23 @@
-﻿<baseControls:ModalWindow x:Class="Sklavenwalker.CommonUtilities.Wpf.Controls.UnhandledExceptionDialog"
+﻿<baseControls:ModalWindow x:Class="Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog.UnhandledExceptionDialog"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         xmlns:system="clr-namespace:System;assembly=mscorlib"
-        xmlns:controls="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Controls"
         xmlns:designer="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog.Designer"
-        xmlns:converters="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Converters"
         xmlns:coreConverters="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Converters;assembly=Sklavenwalker.CommonUtilities.WPF.Core"
         xmlns:baseControls="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Controls;assembly=Sklavenwalker.CommonUtilities.WPF.Controls"
+        xmlns:converters1="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Converters"
         Title="{Binding WindowCaption}" 
-        MinHeight="175" Width="650" SizeToContent="Height"
+        MinHeight="175" Width="650" SizeToContent="Height" 
+        HasMaximizeButton="False" HasMinimizeButton="False" IsResizable="False"
         Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" 
         Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" ResizeMode="NoResize"
         d:DataContext="{d:DesignInstance {x:Type designer:UnhandledExceptionDialogViewModel}, IsDesignTimeCreatable=True}">
     <Window.Resources>
         <coreConverters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
-        <converters:ToTypeNameConverter x:Key="ToTypeNameConverter"/>
+        <converters1:ToTypeNameConverter x:Key="ToTypeNameConverter"/>
 
         <Style x:Key="DialogButton" TargetType="{x:Type Button}">
             <Setter Property="MinWidth" Value="75" />

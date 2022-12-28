@@ -3,8 +3,8 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using FocLauncher.Imaging;
-using FocLauncher.Services;
 using FocLauncher.Themes;
+using FocLauncher.Threading;
 using FocLauncher.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework;
@@ -12,7 +12,6 @@ using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Controls;
 using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Theming;
 using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
 using Sklavenwalker.CommonUtilities.Wpf.Imaging;
-using Validation;
 
 namespace FocLauncher;
 
@@ -20,19 +19,10 @@ internal class LauncherApplication : ApplicationBase
 {
     public LauncherApplication(IServiceProvider serviceProvider) : base(serviceProvider)
     {
-        Requires.NotNull(serviceProvider, nameof(serviceProvider));
     }
-
-    protected override void OnStartup(StartupEventArgs e)
-    {
-        base.OnStartup(e);
-        //mainViewModel.InitializeAsync().Wait();
-        //LoadStartPageAsync().Forget();
-    }
-
     protected override IApplicationViewModel CreateApplicationViewModel()
     {
-        return new ApplicationViewModel(ServiceProvider, new StatusBarViewModel())
+        return new LauncherViewModel(ServiceProvider, new StatusBarViewModel())
         {
             Title = LauncherConstants.ApplicationName,
             IsResizable = false,
@@ -58,7 +48,13 @@ internal class LauncherApplication : ApplicationBase
         return new MainWindow(viewModel, ServiceProvider);
     }
 
-    private async Task LoadStartPageAsync()
+    protected override void OnApplicationStarted()
+    {
+        base.OnApplicationStarted();
+        LoadMainViewAsync().Forget();
+    }
+
+    private async Task LoadMainViewAsync()
     {
         var navigationService = ServiceProvider.GetRequiredService<IViewModelPresenter>();
         navigationService.ShowViewModel(await CreateMainViewModel());
@@ -68,10 +64,7 @@ internal class LauncherApplication : ApplicationBase
     {
         return Task.Run(() =>
         {
-            return Dispatcher.Invoke<IViewModel>(() => 
-                new MainPageViewModel(
-                    new GameArgumentsViewModel(ServiceProvider),
-                    ServiceProvider));
+            return Dispatcher.Invoke<IViewModel>(() => new MainPageViewModel(new GameArgumentsViewModel(ServiceProvider), ServiceProvider));
         });
     }
 

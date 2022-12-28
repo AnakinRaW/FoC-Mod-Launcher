@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
 using System.IO.Abstractions;
-using System.Security.AccessControl;
 using System.Threading.Tasks;
 using FocLauncher.Controls;
 using FocLauncher.Services;
@@ -22,90 +20,101 @@ using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework;
 using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.StatusBar;
 using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Theming;
-using Sklavenwalker.CommonUtilities.Wpf.Controls;
 using Sklavenwalker.ProductMetadata.Services;
 using Sklavenwalker.ProductUpdater.Services;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
-using UnhandledExceptionDialogViewModel = FocLauncher.ViewModels.UnhandledExceptionDialogViewModel;
 
 namespace FocLauncher;
 
 internal static class Program
 {
+    private static ServiceCollection _serviceCollection = null!;
+    private static IServiceProvider _coreServices = null!;
+
     [STAThread]
     private static int Main(string[] args)
     {
         Task.Run(() => LauncherAssemblyInfo.AssemblyName);
-        var launcherServices = BuildLauncherServiceProvider();
+        
+        _serviceCollection = CreateCoreServices();
+        _coreServices = _serviceCollection.BuildServiceProvider();
+
+        // Since logging directory is not yet assured, we cannot run under the global exception handler.
+        new AppRestoreHandler(_coreServices).RestoreIfNecessary();
+        
         // TODO: Parse args
         int exitCode;
-        using (GetUnhandledExceptionHandler(launcherServices)) 
-            exitCode = Execute(launcherServices);
+        using (GetUnhandledExceptionHandler()) 
+            exitCode = Execute();
         return exitCode;
     }
 
-    internal static int Execute(IServiceProvider services)
+    internal static int Execute()
     {
-        var logger = services.GetRequiredService<ILoggerFactory>().CreateLogger(typeof(Program));
+        var logger = _coreServices.GetRequiredService<ILoggerFactory>().CreateLogger(typeof(Program));
         logger.LogTrace($"FoC Mod Launcher Version: {LauncherAssemblyInfo.InformationalVersion}");
         logger.LogTrace($"Raw Command line: {Environment.CommandLine}");
         // TODO: Log parsed CMD
-        var exitCode = ExecuteInternal(services, logger);
+        var exitCode = ExecuteInternal(logger);
         logger.LogTrace($"Exit Code: {exitCode}");
         return exitCode;
     }
 
-    private static int ExecuteInternal(IServiceProvider services, ILogger logger)
+    private static int ExecuteInternal(ILogger logger)
     {
-        new AppRestoreHandler(services).RestoreIfRequested();
-        var exitCode = new LauncherApplication(services).Run();
+        BuildLauncherServices(_serviceCollection);
+
+        var launcherServices = _serviceCollection.BuildServiceProvider();
+        var exitCode = new LauncherApplication(launcherServices).Run();
         logger.LogTrace($"Closing the launcher with exit code {exitCode}");
         return exitCode;
     }
 
-    private static UnhandledExceptionHandler GetUnhandledExceptionHandler(IServiceProvider launcherServices)
+    private static UnhandledExceptionHandler GetUnhandledExceptionHandler()
     {
-        return new UnhandledExceptionHandler(launcherServices);
+        return new UnhandledExceptionHandler(_coreServices);
     }
 
-    private static IServiceProvider BuildLauncherServiceProvider()
+    private static void BuildLauncherServices(IServiceCollection serviceCollection)
     {
-        var serviceCollection = new ServiceCollection();
-        CreateProgramServices(serviceCollection);
-        
+        serviceCollection.AddApplicationFramework();
+
         serviceCollection.AddSingleton<IThemeManager>(sp => new ThemeManager(sp));
-        serviceCollection.AddSingleton<IViewModelPresenter>(_ => new ViewPresenterService());
-        serviceCollection.AddSingleton<IWindowService>(sp => new WindowService());
+        serviceCollection.AddSingleton<IViewModelPresenter>(_ => new ViewModelPresenterService());
+
         serviceCollection.AddSingleton<IModalWindowService>(sp => new ModalWindowService(sp));
         serviceCollection.AddSingleton<IModalWindowFactory>(sp => new ModalWindowFactory(sp));
-        serviceCollection.AddSingleton<IQueuedDialogService>(sp => new QueuedDialogService(sp));
-        serviceCollection.AddSingleton<IDialogFactory>(sp => new DialogFactory(sp));
+        serviceCollection.AddSingleton<IDialogFactory>(sp => new LauncherDialogFactory(sp));
         serviceCollection.AddSingleton<IDialogButtonFactory>(_ => new DialogButtonFactory(true));
-        serviceCollection.AddSingleton<IThreadHelper>(_ => new ThreadHelper());
 
         serviceCollection.AddTransient<IStatusBarFactory>(_ => new LauncherStatusBarFactory()); 
 
         CreateUpdateProgramServices(serviceCollection);
-        
-        return serviceCollection.BuildServiceProvider();
+
+        _serviceCollection.MakeReadOnly();
     }
     
-    private static void CreateProgramServices(IServiceCollection serviceCollection)
+    private static ServiceCollection CreateCoreServices()
     {
+        var serviceCollection = new ServiceCollection();
+
         var fileSystem = new FileSystem();
-        var windowsPathService = new WindowsPathService();
+        var windowsPathService = new WindowsPathService(fileSystem);
         var windowsFileSystemService = new WindowsFileSystemService(fileSystem);
         serviceCollection.AddSingleton<IFileSystem>(fileSystem);
         serviceCollection.AddSingleton<IFileSystemService>(windowsFileSystemService);
         serviceCollection.AddSingleton(windowsFileSystemService);
         serviceCollection.AddSingleton<IWindowsPathService>(windowsPathService);
         serviceCollection.AddSingleton<IPathHelperService>(new PathHelperService(fileSystem));
+
         var environment = new LauncherEnvironment(fileSystem);
         serviceCollection.AddSingleton<ILauncherEnvironment>(environment);
-        InitializeApplicationBasePath(windowsPathService, environment);
+
         SetLogging(serviceCollection, fileSystem, environment);
         serviceCollection.AddTransient<IRegistry>(_ => new WindowsRegistry());
         serviceCollection.AddSingleton<ILauncherRegistry>(sp => new LauncherRegistry(sp));
+
+        return serviceCollection;
     }
 
     private static void CreateUpdateProgramServices(IServiceCollection serviceCollection)
@@ -158,18 +167,5 @@ internal static class Program
 #endif
             builder.AddFile(logPath, fileLogLevel);
         }
-    }
-
-    private static void InitializeApplicationBasePath(IWindowsPathService pathService, ILauncherEnvironment environment)
-    {
-        var appLocalPath = environment.ApplicationLocalDirectory;
-        if (!pathService.UserHasDirectoryAccessRights(appLocalPath.Parent.FullName, FileSystemRights.CreateDirectories))
-        {
-            var exception = new IOException($"Permission on '{appLocalPath}' denied: Creating a new directory");
-            new UnhandledExceptionDialog(new UnhandledExceptionDialogViewModel(exception)).ShowModal();
-            throw exception;
-        }
-
-        appLocalPath.Create();
     }
 }

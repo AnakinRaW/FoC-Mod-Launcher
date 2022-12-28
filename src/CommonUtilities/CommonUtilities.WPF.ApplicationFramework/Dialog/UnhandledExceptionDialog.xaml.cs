@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Controls;
+namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 
 public partial class UnhandledExceptionDialog
 {

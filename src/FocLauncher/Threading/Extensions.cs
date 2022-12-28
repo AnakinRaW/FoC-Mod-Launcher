@@ -6,5 +6,6 @@ internal static class Extensions
 {
     public static void Forget(this Task task)
     {
+        // Intentionally empty
     }
 }

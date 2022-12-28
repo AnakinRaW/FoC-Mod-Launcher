@@ -9,22 +9,17 @@ using Sklavenwalker.CommonUtilities.Wpf.Controls;
 using Validation;
 using System.ComponentModel;
 using System.Windows.Input;
-using System.Windows.Interop;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework;
+using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
 
 namespace FocLauncher.Services;
 
-interface ILauncherModalViewModel : IModalWindowViewModel, IViewModel
-{
-}
 
 
-
-
-internal partial class UpdateWindowViewModel : ModalWindowViewModel, ILauncherModalViewModel, ILoadingViewModel
+internal partial class UpdateWindowViewModel : ModalWindowViewModel, ILoadingViewModel
 {
     [ObservableProperty]
     private bool _isLoading = true;
@@ -56,12 +51,12 @@ internal partial class UpdateWindowViewModel : ModalWindowViewModel, ILauncherMo
 
 internal interface IModalWindowService
 {
-    Task ShowModal(ILauncherModalViewModel viewModel);
+    Task ShowModal(IModalWindowViewModel viewModel);
 }
 
 internal interface IModalWindowFactory
 {
-    ModalWindow Create(ILauncherModalViewModel viewModel);
+    ModalWindow Create(IModalWindowViewModel viewModel);
 }
 
 internal class ModalWindowFactory : IModalWindowFactory
@@ -74,7 +69,7 @@ internal class ModalWindowFactory : IModalWindowFactory
         _windowService = serviceProvider.GetRequiredService<IWindowService>();
     }
 
-    public ModalWindow Create(ILauncherModalViewModel viewModel)
+    public ModalWindow Create(IModalWindowViewModel viewModel)
     {
         return Application.Current.Dispatcher.Invoke(() =>
         {
@@ -105,7 +100,7 @@ internal class ModalWindowService : IModalWindowService
         _logger = serviceProvider.GetService<ILoggerFactory>()?.CreateLogger(GetType());
     }
 
-    public async Task ShowModal(ILauncherModalViewModel viewModel)
+    public async Task ShowModal(IModalWindowViewModel viewModel)
     {
         var task = new TaskCompletionSource<bool>();
 
@@ -118,21 +113,21 @@ internal class ModalWindowService : IModalWindowService
             window.ShowModal();
         });
 
-        try
-        {
-            await viewModel.InitializeAsync();
-        }
-        catch (Exception e)
-        {
-            const string header = "error.";
-            await _queuedDialogService.ShowDialog(new ErrorMessageDialogViewModel(header, "message", _serviceProvider));
-        }
+        //try
+        //{
+        //    await viewModel.InitializeAsync();
+        //}
+        //catch (Exception e)
+        //{
+        //    const string header = "error.";
+        //    await _queuedDialogService.ShowDialog(new ErrorMessageDialogViewModel(header, "message", _serviceProvider));
+        //}
         
 
         await task.Task;
     }
 
-    private CancelEventHandler OnDialogClosing(Window window, ILauncherModalViewModel viewModel, TaskCompletionSource<bool> task)
+    private CancelEventHandler OnDialogClosing(Window window, IModalWindowViewModel viewModel, TaskCompletionSource<bool> task)
     {
         return (_, e) =>
         {

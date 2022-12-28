@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Windows.Input;
 using System.Windows.Media;
+using Sklavenwalker.CommonUtilities.Wpf.Controls;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Controls;
+namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 
 public interface IUnhandledExceptionDialogViewModel : IModalWindowViewModel
 {
