@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FocLauncher.Imaging;
-using Microsoft.Extensions.DependencyInjection;
 using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Input;
 using Sklavenwalker.CommonUtilities.Wpf.Imaging;
@@ -11,17 +10,14 @@ namespace FocLauncher.ViewModels;
 
 public class ErrorMessageDialogViewModel : DialogViewModel, IErrorMessageDialogViewModel
 {
-    private readonly IServiceProvider _serviceProvider;
-
     public string Header { get; }
 
     public string Message { get; }
 
     public ImageKey Image => ImageKeys.Trooper;
 
-    public ErrorMessageDialogViewModel(string header, string message, IServiceProvider serviceProvider)
+    public ErrorMessageDialogViewModel(string header, string message, IServiceProvider serviceProvider) : base(serviceProvider)
     {
-        _serviceProvider = serviceProvider;
         Title = LauncherEnvironment.LauncherProgramName;
         Header = header;
         Message = message;
@@ -36,9 +32,8 @@ public class ErrorMessageDialogViewModel : DialogViewModel, IErrorMessageDialogV
         return Task.CompletedTask;
     }
 
-    protected override IList<IButtonViewModel> CreateButtons()
+    protected override IList<IButtonViewModel> CreateButtons(IDialogButtonFactory buttonFactory)
     {
-        var buttonFactory = _serviceProvider.GetRequiredService<IDialogButtonFactory>();
         var okButton = buttonFactory.CreateOk(true);
         var buttons = new List<IButtonViewModel> { okButton };
         return buttons;

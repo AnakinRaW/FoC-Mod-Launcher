@@ -8,7 +8,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Sklavenwalker.CommonUtilities.FileSystem;
 using Sklavenwalker.CommonUtilities.FileSystem.Windows;
 using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog;
-using Sklavenwalker.CommonUtilities.Wpf.Controls;
 using Validation;
 
 namespace FocLauncher;

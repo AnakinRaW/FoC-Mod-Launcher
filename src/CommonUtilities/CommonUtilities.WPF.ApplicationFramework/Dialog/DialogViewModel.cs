@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.DependencyInjection;
 using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Input;
 using Sklavenwalker.CommonUtilities.Wpf.Controls;
+using Validation;
 
 namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 
 public abstract class DialogViewModel : ModalWindowViewModel, IDialogViewModel
 {
+    private readonly IServiceProvider _serviceProvider;
     private IList<IButtonViewModel>? _buttons;
 
     public string? ResultButton { get; private set; }
@@ -18,7 +21,8 @@ public abstract class DialogViewModel : ModalWindowViewModel, IDialogViewModel
         {
             if (_buttons is null)
             {
-                _buttons = CreateButtons();
+                var buttonFactory = _serviceProvider.GetRequiredService<IDialogButtonFactory>();
+                _buttons = CreateButtons(buttonFactory);
                 ValidateButtons(_buttons);
             }
             return _buttons;
@@ -27,12 +31,14 @@ public abstract class DialogViewModel : ModalWindowViewModel, IDialogViewModel
 
     public IRelayCommand<IButtonViewModel> UnifiedButtonCommand { get; }
 
-    protected DialogViewModel()
+    protected DialogViewModel(IServiceProvider serviceProvider)
     {
+        Requires.NotNull(serviceProvider, nameof(serviceProvider));
+        _serviceProvider = serviceProvider;
         UnifiedButtonCommand = new RelayCommand<IButtonViewModel>(Execute, CanExecute);
     }
 
-    protected virtual IList<IButtonViewModel> CreateButtons()
+    protected virtual IList<IButtonViewModel> CreateButtons(IDialogButtonFactory buttonFactory)
     {
         return new List<IButtonViewModel>();
     }

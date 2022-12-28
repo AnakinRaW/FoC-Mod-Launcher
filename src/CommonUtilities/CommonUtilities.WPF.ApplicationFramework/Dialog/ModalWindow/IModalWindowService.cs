@@ -1,65 +1,27 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Threading.Tasks;
-using System.Windows.Threading;
 using System.Windows;
-using FocLauncher.ViewModels;
+using System.Windows.Threading;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
 using Sklavenwalker.CommonUtilities.Wpf.Controls;
 using Validation;
-using System.ComponentModel;
-using System.Windows.Input;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
 
-namespace FocLauncher.Services;
+namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 
-
-
-internal partial class UpdateWindowViewModel : ModalWindowViewModel, ILoadingViewModel
-{
-    [ObservableProperty]
-    private bool _isLoading = true;
-
-    [ObservableProperty]
-    private string? _loadingText;
-
-    public ICommand ClickCommand => new RelayCommand(() => throw new Exception());
-
-    public UpdateWindowViewModel()
-    {
-        HasMaximizeButton = false;
-        HasMinimizeButton = false;
-    }
-
-    public Task InitializeAsync()
-    {
-        return Task.Run(async () =>
-        {
-            //await Task.Delay(3000);
-            throw new Exception();
-        });
-    }
-
-    public void OnClosing(CancelEventArgs e)
-    {
-    }
-}
-
-internal interface IModalWindowService
+public interface IModalWindowService
 {
     Task ShowModal(IModalWindowViewModel viewModel);
 }
 
-internal interface IModalWindowFactory
+public interface IModalWindowFactory
 {
     ModalWindow Create(IModalWindowViewModel viewModel);
 }
 
-internal class ModalWindowFactory : IModalWindowFactory
+public class ModalWindowFactory : IModalWindowFactory
 {
     private readonly IWindowService _windowService;
 
@@ -74,29 +36,30 @@ internal class ModalWindowFactory : IModalWindowFactory
         return Application.Current.Dispatcher.Invoke(() =>
         {
             _windowService.ShowWindow();
-            var window = new ModalWindow(viewModel);
+            var window = CreateWindow(viewModel);
             window.Content = viewModel;
             _windowService.SetOwner(window);
             return window;
         });
     }
+
+    protected virtual ModalWindow CreateWindow(IModalWindowViewModel viewModel)
+    {
+        return new ModalWindow(viewModel);
+    }
 }
 
 internal class ModalWindowService : IModalWindowService
 {
-    private readonly IServiceProvider _serviceProvider;
     private readonly IModalWindowFactory _windowFactory;
     private readonly IWindowService _windowService;
     private readonly ILogger? _logger;
-    private readonly IQueuedDialogService _queuedDialogService;
 
     public ModalWindowService(IServiceProvider serviceProvider)
     {
-        _serviceProvider = serviceProvider;
         Requires.NotNull(serviceProvider, nameof(serviceProvider));
         _windowFactory = serviceProvider.GetRequiredService<IModalWindowFactory>();
         _windowService = serviceProvider.GetRequiredService<IWindowService>();
-        _queuedDialogService = serviceProvider.GetRequiredService<IQueuedDialogService>();
         _logger = serviceProvider.GetService<ILoggerFactory>()?.CreateLogger(GetType());
     }
 
@@ -113,16 +76,8 @@ internal class ModalWindowService : IModalWindowService
             window.ShowModal();
         });
 
-        //try
-        //{
-        //    await viewModel.InitializeAsync();
-        //}
-        //catch (Exception e)
-        //{
-        //    const string header = "error.";
-        //    await _queuedDialogService.ShowDialog(new ErrorMessageDialogViewModel(header, "message", _serviceProvider));
-        //}
-        
+        if (viewModel is IViewModel initializingViewModel)
+            await initializingViewModel.InitializeAsync();
 
         await task.Task;
     }

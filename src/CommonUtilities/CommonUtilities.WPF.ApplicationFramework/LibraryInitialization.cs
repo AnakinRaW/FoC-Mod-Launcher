@@ -11,5 +11,6 @@ public static class LibraryInitialization
         serviceCollection.AddSingleton<IApplicationShutdownService>(sp => new ApplicationShutdownService(sp));
 
         serviceCollection.AddSingleton<IQueuedDialogService>(sp => new QueuedDialogService(sp));
+        serviceCollection.AddSingleton<IModalWindowService>(sp => new ModalWindowService(sp));
     }
 }
