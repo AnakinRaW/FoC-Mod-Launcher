@@ -9,9 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FocLauncher.BaseControls", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FocLauncher", "src\FocLauncher\FocLauncher.csproj", "{2A6DEA18-A716-4647-BF7A-8D4712246FCE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonUtilities.WPF.Imaging", "src\CommonUtilities.WPF.Imaging\CommonUtilities.WPF.Imaging.csproj", "{A3002D94-4DDF-4238-AA22-128E1BD801F1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonUtilities.WPF.Imaging", "src\CommonUtilities\CommonUtilities.WPF.Imaging\CommonUtilities.WPF.Imaging.csproj", "{A3002D94-4DDF-4238-AA22-128E1BD801F1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonUtilities.WPF.Core", "src\CommonUtilities.WPF.Core\CommonUtilities.WPF.Core.csproj", "{93D9F0EE-2B71-4333-8BAB-941308B612EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonUtilities.WPF.Core", "src\CommonUtilities\CommonUtilities.WPF.Core\CommonUtilities.WPF.Core.csproj", "{93D9F0EE-2B71-4333-8BAB-941308B612EC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FocLauncher.Theming", "old\src\FocLauncher.Theming\FocLauncher.Theming.csproj", "{9CED3476-6486-4A19-B5E0-95C9802BC3DF}"
 EndProject
@@ -29,11 +29,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductMetadata", "src\Prod
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductUpdater", "src\ProductUpdater\ProductUpdater.csproj", "{653031D4-C5BC-4718-B3F5-2E4A5BB71B9A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonUtilities.WPF.ApplicationFramework", "src\CommonUtilities.WPF.ApplicationFramework\CommonUtilities.WPF.ApplicationFramework.csproj", "{1F8E49DF-C8CD-425B-99AE-211CCBD5FAA4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonUtilities.WPF.ApplicationFramework", "src\CommonUtilities\CommonUtilities.WPF.ApplicationFramework\CommonUtilities.WPF.ApplicationFramework.csproj", "{1F8E49DF-C8CD-425B-99AE-211CCBD5FAA4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonUtilities.WPF.Controls", "src\CommonUtilities.WPF.Controls\CommonUtilities.WPF.Controls.csproj", "{4F0D9B49-36D5-435C-B45B-0E51209ED869}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonUtilities.WPF.Controls", "src\CommonUtilities\CommonUtilities.WPF.Controls\CommonUtilities.WPF.Controls.csproj", "{4F0D9B49-36D5-435C-B45B-0E51209ED869}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CommonUtitiles.WPF", "CommonUtitiles.WPF", "{CAB97A70-AE67-4E45-9418-F2A0EBE7626C}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CommonUtitiles", "CommonUtitiles", "{CAB97A70-AE67-4E45-9418-F2A0EBE7626C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,7 +42,6 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{1B994360-D194-441F-A87F-53A83A69C212}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1B994360-D194-441F-A87F-53A83A69C212}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1B994360-D194-441F-A87F-53A83A69C212}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1B994360-D194-441F-A87F-53A83A69C212}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2A6DEA18-A716-4647-BF7A-8D4712246FCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -58,19 +57,15 @@ Global
 		{93D9F0EE-2B71-4333-8BAB-941308B612EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{93D9F0EE-2B71-4333-8BAB-941308B612EC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9CED3476-6486-4A19-B5E0-95C9802BC3DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9CED3476-6486-4A19-B5E0-95C9802BC3DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9CED3476-6486-4A19-B5E0-95C9802BC3DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9CED3476-6486-4A19-B5E0-95C9802BC3DF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8A4CDD52-D320-4970-AB6A-04D6770C7CBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8A4CDD52-D320-4970-AB6A-04D6770C7CBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8A4CDD52-D320-4970-AB6A-04D6770C7CBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8A4CDD52-D320-4970-AB6A-04D6770C7CBC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D8FC2BF9-E118-47E3-9C92-7C43AEEC20D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D8FC2BF9-E118-47E3-9C92-7C43AEEC20D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D8FC2BF9-E118-47E3-9C92-7C43AEEC20D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D8FC2BF9-E118-47E3-9C92-7C43AEEC20D9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BF10A23D-8357-4418-9984-FFF3C509489D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BF10A23D-8357-4418-9984-FFF3C509489D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BF10A23D-8357-4418-9984-FFF3C509489D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BF10A23D-8357-4418-9984-FFF3C509489D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A6CB6DA5-4777-41D2-9D37-AC710B3779D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
