@@ -11,23 +11,6 @@
 		<RootNamespace>Sklavenwalker.CommonUtilities.Wpf</RootNamespace>
 		<AssemblyName>Sklavenwalker.CommonUtilities.WPF.Core</AssemblyName>
 		<UseWPF>true</UseWPF>
-		<Nullable>enable</Nullable>
-		<EnableNETAnalyzers>True</EnableNETAnalyzers>
-		<LangVersion>11.0</LangVersion>
-		<ImplicitUsings>disable</ImplicitUsings>
-	</PropertyGroup>
-
-	<PropertyGroup>
-		<SignAssembly Condition="'$(Configuration)' == 'Release'">True</SignAssembly>
-		<AssemblyOriginatorKeyFile>$(SolutionDir)AnakinOSS.snk</AssemblyOriginatorKeyFile>
-	</PropertyGroup>
-	
-	<PropertyGroup>
-		<Authors>Anakin Sklavenwalker</Authors>
-		<Copyright>Anakin Sklavenwalker</Copyright>
-		<RepositoryUrl>https://github.com/AnakinSklavenwalker/CommonUtilities</RepositoryUrl>
-		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
 
 	<ItemGroup>

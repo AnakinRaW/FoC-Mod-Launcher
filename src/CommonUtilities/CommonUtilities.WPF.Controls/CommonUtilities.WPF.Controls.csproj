@@ -11,37 +11,11 @@
 		<RootNamespace>Sklavenwalker.CommonUtilities.Wpf</RootNamespace>
 		<AssemblyName>Sklavenwalker.CommonUtilities.WPF.Controls</AssemblyName>
 		<UseWPF>true</UseWPF>
-		<Nullable>enable</Nullable>
-		<EnableNETAnalyzers>True</EnableNETAnalyzers>
-		<LangVersion>11.0</LangVersion>
-		<ImplicitUsings>disable</ImplicitUsings>
-	</PropertyGroup>
-
-	<PropertyGroup>
-		<SignAssembly Condition="'$(Configuration)' == 'Release'">True</SignAssembly>
-		<AssemblyOriginatorKeyFile>$(SolutionDir)AnakinOSS.snk</AssemblyOriginatorKeyFile>
-	</PropertyGroup>
-
-	<PropertyGroup>
-		<Authors>Anakin Sklavenwalker</Authors>
-		<Copyright>Anakin Sklavenwalker</Copyright>
-		<RepositoryUrl>https://github.com/AnakinSklavenwalker/CommonUtilities</RepositoryUrl>
-		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
 
 	<ItemGroup>
 	  <ProjectReference Include="..\CommonUtilities.WPF.Core\CommonUtilities.WPF.Core.csproj" />
 	  <ProjectReference Include="..\CommonUtilities.WPF.Imaging\CommonUtilities.WPF.Imaging.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Page Update="Styles\ThemedContextMenuStyle.xaml">
-	    <SubType>Designer</SubType>
-	  </Page>
-	  <Page Update="Styles\VirtualizingTreeViewStyle.xaml">
-	    <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-	  </Page>
 	</ItemGroup>
 
 </Project>

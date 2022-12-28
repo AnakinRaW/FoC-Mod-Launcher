@@ -11,25 +11,9 @@
 		<RootNamespace>Sklavenwalker.CommonUtilities.Wpf.Imaging</RootNamespace>
 		<AssemblyName>Sklavenwalker.CommonUtilities.WPF.Imaging</AssemblyName>
 		<UseWPF>true</UseWPF>
-		<Nullable>enable</Nullable>
-		<EnableNETAnalyzers>True</EnableNETAnalyzers>
-		<LangVersion>11.0</LangVersion>
-		<ImplicitUsings>disable</ImplicitUsings>
-	</PropertyGroup>
-
-	<PropertyGroup>
-		<SignAssembly Condition="'$(Configuration)' == 'Release'">True</SignAssembly>
-		<AssemblyOriginatorKeyFile>$(SolutionDir)AnakinOSS.snk</AssemblyOriginatorKeyFile>
-	</PropertyGroup>
-
-	<PropertyGroup>
-		<Authors>Anakin Sklavenwalker</Authors>
-		<Copyright>Anakin Sklavenwalker</Copyright>
-		<RepositoryUrl>https://github.com/AnakinSklavenwalker/CommonUtilities</RepositoryUrl>
-		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
-	
+
 	<ItemGroup>
 	  <PackageReference Include="Microsoft.Bcl.HashCode" Version="1.1.1" />
 	  <PackageReference Include="System.Buffers" Version="4.5.1" />
@@ -40,12 +24,6 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\CommonUtilities.WPF.Core\CommonUtilities.WPF.Core.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Page Update="Themes\ThemedImageStyle.xaml">
-	    <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-	  </Page>
 	</ItemGroup>
 
 </Project>
