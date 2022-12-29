@@ -11,5 +11,5 @@ public interface ICommandDefinition
 
     ImageKey Image { get; }
 
-    ICommand? Command { get; }
+    ICommand Command { get; }
 }

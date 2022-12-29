@@ -6,21 +6,24 @@ namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 
 public static class DialogButtonCommandsDefinitions
 {
-    private static readonly ICommand CloseDialogCommand =
+    internal static readonly ICommand CloseDialogCommand =
         new RelayCommand<IDialogViewModel>(vm => vm?.CloseDialog(), vm => vm != null);
 
-    public static ICommandDefinition OkCommandDefinition { get; } = new CommandDefinition("OK")
-    {
-        Command = CloseDialogCommand
-    };
+    public static ICommandDefinition OkCommandDefinition { get; } = new DialogCommand("OK", CloseDialogCommand);
 
-    public static ICommandDefinition CancelCommandDefinition { get; } = new CommandDefinition("Cancel")
-    {
-        Command = CloseDialogCommand
-    };
+    public static ICommandDefinition CancelCommandDefinition { get; } = new DialogCommand("Cancel", CloseDialogCommand);
 
-    public static ICommandDefinition RetryCommandDefinition { get; } = new CommandDefinition("Retry")
+    public static ICommandDefinition RetryCommandDefinition { get; } = new DialogCommand("Retry", CloseDialogCommand);
+
+    private class DialogCommand : CommandDefinition
     {
-        Command = CloseDialogCommand
-    };
+        public override string Text { get; }
+        public override ICommand Command { get; }
+
+        public DialogCommand(string text, ICommand command)
+        {
+            Text = text;
+            Command = command;
+        }
+    }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using FocLauncher.Imaging;
 using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Input;
+using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog.Buttons;
 using Sklavenwalker.CommonUtilities.Wpf.Imaging;
 
 namespace FocLauncher.ViewModels;

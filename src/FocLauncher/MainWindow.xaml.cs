@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using FocLauncher.Commands;
 using FocLauncher.Imaging;
 using FocLauncher.Themes;
 using Microsoft.Extensions.DependencyInjection;
+using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Controls;
+using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Input;
 using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Theming;
 using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
-using Sklavenwalker.CommonUtilities.Wpf.Controls;
-using Sklavenwalker.CommonUtilities.Wpf.Imaging.Controls;
 using Sklavenwalker.CommonUtilities.Wpf.Input;
 using Validation;
+using ButtonViewModel = Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.CommandBar.ButtonViewModel;
 
 namespace FocLauncher;
 
@@ -30,12 +32,9 @@ public partial class MainWindow
 
     private void BuildContextMenu()
     {
-        var m = new ThemedContextMenu();
+        var m = new StylingContextMenu();
 
-        var item = new ThemedMenuItem { Header = "123"};
-
-        var b = ThemedImage.ForMenuItem(ImageKeys.Undo, item);
-        item.Icon = b;
+        var item = new ButtonViewModel(new TestCommand());
 
         m.Items.Add(item);
         _menu = m;

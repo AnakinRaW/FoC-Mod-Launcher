@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Input;
+using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog.Buttons;
 using Sklavenwalker.CommonUtilities.Wpf.Controls;
 using Validation;
 

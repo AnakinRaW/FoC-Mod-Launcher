@@ -1,19 +1,15 @@
 ﻿using System.Windows.Input;
-using CommunityToolkit.Mvvm.ComponentModel;
 using Sklavenwalker.CommonUtilities.Wpf.Imaging;
 
 namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Input;
 
-public partial class CommandDefinition : ObservableObject, ICommandDefinition
+public abstract class CommandDefinition : ICommandDefinition
 {
-    [ObservableProperty] private string? _tooltip;
-    [ObservableProperty] private ImageKey _image;
-    [ObservableProperty] private ICommand? _command;
+    public virtual ImageKey Image => default;
 
-    public string Text { get; }
+    public virtual string Tooltip => string.Empty;
 
-    public CommandDefinition(string text)
-    {
-        Text = text;
-    }
+    public abstract string Text { get; }
+
+    public abstract ICommand Command { get; }
 }

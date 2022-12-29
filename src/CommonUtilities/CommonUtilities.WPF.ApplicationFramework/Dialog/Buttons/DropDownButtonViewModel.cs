@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
+using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Input;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Input;
+namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog.Buttons;
 
 public partial class DropDownButtonViewModel : ButtonViewModel, IDropDownButtonViewModel
 {

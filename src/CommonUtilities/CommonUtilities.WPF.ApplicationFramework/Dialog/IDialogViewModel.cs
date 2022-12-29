@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Input;
+using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog.Buttons;
 using Sklavenwalker.CommonUtilities.Wpf.Controls;
 
 namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog;

@@ -38,12 +38,12 @@ internal struct ImageAttributes : IEquatable<ImageAttributes>
     public bool Equals(ImageAttributes other)
     {
         return GrayscaleBiasColor == other.GrayscaleBiasColor && DeviceSize.Equals(other.DeviceSize) &&
-               Background == other.Background && HighContrast == other.HighContrast;
+               Background == other.Background && HighContrast == other.HighContrast && Grayscale == other.Grayscale;
     }
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(GrayscaleBiasColor, DeviceSize, Background, HighContrast);
+        return HashCode.Combine(GrayscaleBiasColor, DeviceSize, Background, HighContrast, Grayscale);
     }
 
     public static bool operator ==(ImageAttributes attr1, ImageAttributes attr2)

@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Input;
+using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog.Buttons;
 
 namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 
