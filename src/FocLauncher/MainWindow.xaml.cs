@@ -32,7 +32,7 @@ public partial class MainWindow
     {
         var m = new StylingContextMenu();
 
-       var item = new MenuItemViewModel();
+       var item = new MenuItemViewModel("TestMenu");
        item.Items.Add(new ButtonViewModel(new TestCommand()));
        item.Items.Add(new SeparatorControlViewModel());
        item.Items.Add(new ButtonViewModel(new TestCommand()));

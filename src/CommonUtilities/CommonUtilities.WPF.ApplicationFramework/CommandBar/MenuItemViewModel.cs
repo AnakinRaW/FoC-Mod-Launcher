@@ -1,17 +1,18 @@
 ﻿using System.Collections.ObjectModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.CommandBar;
 
-public sealed class MenuItemViewModel : CommandBarControlViewModel, ICommandBarMenuControlViewModel
+public sealed partial class MenuItemViewModel : CommandBarControlViewModel, ICommandBarMenuControlViewModel
 {
     public override CommandBarType Type => CommandBarType.Menu;
 
-    public bool IsEnabled { get; set; } = true;
+    [ObservableProperty] private bool _isEnabled = true;
 
     public ObservableCollection<ICommandBarControlViewModel> Items { get; } = new();
 
-    public MenuItemViewModel()
+    public MenuItemViewModel(string text)
     {
-        Text = "132";
+        Text = text;
     }
 }

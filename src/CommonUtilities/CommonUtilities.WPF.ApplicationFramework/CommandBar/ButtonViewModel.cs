@@ -22,8 +22,3 @@ public sealed partial class ButtonViewModel : CommandBarControlViewModel, IExecu
         Tooltip = commandDefinition.Tooltip;
     }
 }
-
-public sealed class SeparatorControlViewModel : CommandBarControlViewModel
-{
-    public override CommandBarType Type => CommandBarType.Separator;
-}
