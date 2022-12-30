@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Controls;
 using Sklavenwalker.CommonUtilities.Wpf.Controls;
+using Sklavenwalker.CommonUtilities.Wpf.Input;
 
 namespace FocLauncher.Views;
 
@@ -33,11 +36,16 @@ public partial class MainPage
     }
 }
 
-public class Item : IHasChildrenVisibility, INotifyPropertyChanged
+public class Item : IHasChildrenVisibility, IInvokable, INotifyPropertyChanged, IInvocationHandler, IContextMenuProvider  
+    //,IHasContextMenu
 {
     public string Text { get; }
 
     public ObservableCollection<Item> Items { get; }
+
+    public IInvocationHandler InvocationHandler => this;
+
+    public IContextMenuProvider ContextMenuProvider => this;
 
     public bool HasItems => Items.Count > 0;
 
@@ -61,6 +69,16 @@ public class Item : IHasChildrenVisibility, INotifyPropertyChanged
     public override string ToString()
     {
         return Text;
+    }
+
+    public ContextMenu? Provide(object data)
+    {
+        return new ContextMenu();
+    }
+
+    public bool Invoke(IEnumerable<object> items, InputSource source)
+    {
+        return true;
     }
 
     public bool ShowChildrenOnDefault => true;

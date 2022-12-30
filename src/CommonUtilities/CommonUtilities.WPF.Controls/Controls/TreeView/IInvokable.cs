@@ -1,6 +1,6 @@
 ﻿namespace Sklavenwalker.CommonUtilities.Wpf.Controls;
 
-internal interface IInvokable
+public interface IInvokable
 {
     IInvocationHandler InvocationHandler { get; }
 }
