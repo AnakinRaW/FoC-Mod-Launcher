@@ -13,6 +13,8 @@ public static class CommandBarColors
     private static ComponentResourceKey? _commandBarMenuItemHoverBorder;
     private static ComponentResourceKey? _commandBarMenuItemHoverText;
 
+    private static ComponentResourceKey? _commandBarMenuItemGlyph;
+    private static ComponentResourceKey? _commandBarMenuItemHoverGlyph;
     private static ComponentResourceKey? _commandBarMenuScrollGlyph;
 
     private static ComponentResourceKey? _commandBarMenuSeparatorBrush;
@@ -41,6 +43,12 @@ public static class CommandBarColors
 
     public static ComponentResourceKey CommandBarMenuItemHoverText => _commandBarMenuItemHoverText ??=
         new ComponentResourceKey(typeof(CommandBarColors), nameof(CommandBarMenuItemHoverText));
+
+    public static ComponentResourceKey CommandBarMenuItemGlyph => _commandBarMenuItemGlyph ??=
+        new ComponentResourceKey(typeof(CommandBarColors), nameof(CommandBarMenuItemGlyph));
+
+    public static ComponentResourceKey CommandBarMenuItemHoverGlyph => _commandBarMenuItemHoverGlyph ??=
+        new ComponentResourceKey(typeof(CommandBarColors), nameof(CommandBarMenuItemHoverGlyph));
 
     public static ComponentResourceKey CommandBarMenuScrollGlyph => _commandBarMenuScrollGlyph ??=
         new ComponentResourceKey(typeof(CommandBarColors), nameof(CommandBarMenuScrollGlyph));

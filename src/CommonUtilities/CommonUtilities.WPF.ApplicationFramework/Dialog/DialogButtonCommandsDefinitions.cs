@@ -1,13 +1,13 @@
 ﻿using System.Windows.Input;
-using CommunityToolkit.Mvvm.Input;
 using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Input;
+using Sklavenwalker.CommonUtilities.Wpf.Input;
 
 namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 
 public static class DialogButtonCommandsDefinitions
 {
     internal static readonly ICommand CloseDialogCommand =
-        new RelayCommand<IDialogViewModel>(vm => vm?.CloseDialog(), vm => vm != null);
+        new DelegateCommand<IDialogViewModel>(vm => vm?.CloseDialog(), vm => vm != null);
 
     public static ICommandDefinition OkCommandDefinition { get; } = new DialogCommand("OK", CloseDialogCommand);
 

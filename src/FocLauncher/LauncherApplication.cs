@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using FocLauncher.Imaging;
 using FocLauncher.Themes;
-using FocLauncher.Threading;
+using FocLauncher.Utilities;
 using FocLauncher.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework;

@@ -2,8 +2,12 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:controls="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Controls"
                     xmlns:colors="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Themes.Colors;assembly=Sklavenwalker.CommonUtilities.WPF.Controls"
-                    xmlns:vs="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Controls;assembly=Sklavenwalker.CommonUtilities.WPF.Controls"
-                    xmlns:converters="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Converters">
+                    xmlns:themedControls="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Controls;assembly=Sklavenwalker.CommonUtilities.WPF.Controls"
+                    xmlns:converters="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Converters"
+                    xmlns:vsui="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.DPI;assembly=Sklavenwalker.CommonUtilities.WPF.Core"
+                    xmlns:imaging="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Imaging;assembly=Sklavenwalker.CommonUtilities.WPF.Imaging"
+                    xmlns:coreConverters="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Converters;assembly=Sklavenwalker.CommonUtilities.WPF.Core"
+                    xmlns:utilities="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Utilities">
 
 
     <GridLength x:Key="MenuItemIconWidth">24</GridLength>
@@ -11,20 +15,165 @@
     <GridLength x:Key="MenuItemSubMenuArrowWidth">16</GridLength>
 
     <converters:ImageKeyToImageConverter x:Key="ImageKeyToImageConverter" />
+    <coreConverters:BrushToColorConverter x:Key="BrushToColorConverter" />
+
+    <Geometry x:Key="RightArrowGeometry">M 0 0 L 4 3.5 L 0 7 Z</Geometry>
 
     <ControlTemplate x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type controls:DynamicStyledMenuItem}, ResourceId=TopLevelHeaderTemplateKey}"
                      TargetType="{x:Type controls:DynamicStyledMenuItem}">
-        <Border Width="10" Height="10" Background="Red"/>
+        <Grid x:Name="HostingGrid">
+            <Border x:Name="Background" Margin="0,1,0,1" Padding="{TemplateBinding Padding}" BorderThickness="1" 
+                    BorderBrush="Transparent"  Background="{TemplateBinding Background}" >
+                <Grid x:Name="ContentGrid" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                      SnapsToDevicePixels="true">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <ContentPresenter x:Name="ContentPresenter" Grid.Column="0" Margin="3,0,6,0" HorizontalAlignment="Center" 
+                                      VerticalAlignment="Center" RecognizesAccessKey="true" 
+                                      SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                        <ContentPresenter.Content>
+                            <Binding Path="Header" RelativeSource="{RelativeSource TemplatedParent}"/>
+                        </ContentPresenter.Content>
+                    </ContentPresenter>
+                </Grid>
+            </Border>
+            <Popup x:Name="PART_Popup" AllowsTransparency="true" Focusable="false" HorizontalOffset="0" Placement="Bottom"
+                   PopupAnimation="{DynamicResource {x:Static SystemParameters.MenuPopupAnimationKey}}" VerticalOffset="-2">
+                <Popup.IsOpen>
+                    <Binding Path="IsSubmenuOpen" RelativeSource="{RelativeSource TemplatedParent}"/>
+                </Popup.IsOpen>
+                <themedControls:SystemDropShadowChrome x:Name="Shdw" SnapsToDevicePixels="true" Margin="0,0,5,5"
+                                           Color="{DynamicResource {x:Static colors:CommandBarColors.DropShadowBackgroundColor}}">
+                    <Grid Background="{DynamicResource {x:Static colors:CommandBarColors.CommandBarMenuIconBackground}}">
+                        <themedControls:ThemedMenuScrollViewer>
+                            <Grid Background="{DynamicResource {x:Static colors:CommandBarColors.CommandBarMenuBackground}}"
+                                  RenderOptions.BitmapScalingMode="{x:Static vsui:DpiHelper.BitmapScalingMode}" 
+                                  RenderOptions.ClearTypeHint="Enabled">
+                                <imaging:ImageThemingUtilities.ImageBackgroundColor>
+                                    <Binding Path="Background" ElementName="IconBackground" Converter="{StaticResource BrushToColorConverter}"/>
+                                </imaging:ImageThemingUtilities.ImageBackgroundColor>
+                                <Border x:Name="IconBackground" Width="28" HorizontalAlignment="Left"
+                                        Background="{DynamicResource {x:Static colors:CommandBarColors.CommandBarMenuIconBackground}}"/>
+                                <ItemsPresenter Margin="3" Grid.IsSharedSizeScope="true"  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                                KeyboardNavigation.DirectionalNavigation="Cycle" KeyboardNavigation.TabNavigation="Cycle"/>
+                            </Grid>
+                        </themedControls:ThemedMenuScrollViewer>
+                        <Border BorderBrush="{DynamicResource {x:Static colors:CommandBarColors.CommandBarMenuBorder}}"
+                                BorderThickness="1"/>
+                        <Border Height="2" HorizontalAlignment="Left" VerticalAlignment="Top"
+                                Background="{DynamicResource {x:Static colors:CommandBarColors.CommandBarMenuBackground}}">
+                            <FrameworkElement.Margin>
+                                <utilities:MenuPopupPositionerExtension ElementName="Background"/>
+                            </FrameworkElement.Margin>
+                        </Border>
+                    </Grid>
+                </themedControls:SystemDropShadowChrome>
+            </Popup>
+        </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsEnabled" Value="false">
+                <Setter Value="{DynamicResource {x:Static colors:CommandBarColors.CommandBarTextInactive}}"
+                Property="Foreground"/>
+            </Trigger>
+            <Trigger Property="IsSuspendingPopupAnimation" Value="true">
+                <Setter TargetName="PART_Popup" Property="Popup.PopupAnimation" Value="None"/>
+            </Trigger>
+            <Trigger Property="IsHighlighted" Value="true">
+                <Setter TargetName="Background" Property="BorderBrush"
+                        Value="{DynamicResource {x:Static colors:CommandBarColors.CommandBarMenuItemHoverBorder}}"/>
+                <Setter TargetName="Background" Property="Background"
+                        Value="{DynamicResource {x:Static colors:CommandBarColors.CommandBarMenuItemHover}}"/>
+                <Setter Property="Foreground"
+                        Value="{DynamicResource {x:Static colors:CommandBarColors.CommandBarMenuItemHoverText}}"/>
+            </Trigger>
+            <Trigger Property="IsSubmenuOpen" Value="true">
+                <Setter TargetName="Background" Property="BorderBrush"
+                        Value="{DynamicResource {x:Static colors:CommandBarColors.CommandBarMenuBorder}}"/>
+                <Setter TargetName="Background" Property="Background"
+                        Value="{DynamicResource {x:Static colors:CommandBarColors.CommandBarMenuBackground}}"/>
+                <Setter Property="Foreground"
+                        Value="{DynamicResource {x:Static colors:CommandBarColors.CommandBarTextActive}}"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
     </ControlTemplate>
 
     <ControlTemplate x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type controls:DynamicStyledMenuItem}, ResourceId=SubmenuHeaderTemplateKey}"
                     TargetType="{x:Type controls:DynamicStyledMenuItem}">
-        <Border Width="10" Height="10" Background="Green"/>
+        <Grid Background="Transparent" SnapsToDevicePixels="True">
+            <Grid MinHeight="22" MaxWidth="{x:Static themedControls:ThemedMenuItem.MaxMenuWidth}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="{StaticResource MenuItemIconWidth}" SharedSizeGroup="MenuItemIconColumnGroup"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="{StaticResource MenuItemNameKeyBindingSpacerWidth}"/>
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="MenuItemIGTColumnGroup"/>
+                    <ColumnDefinition Width="{StaticResource MenuItemSubMenuArrowWidth}"/>
+                </Grid.ColumnDefinitions>
+                <Rectangle x:Name="Background" Grid.ColumnSpan="5" Fill="Transparent" Stroke="Transparent" StrokeThickness="1"/>
+                <Border x:Name="IconPlaceholder" Grid.Column="0" SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"
+                                  Width="16" Height="16" Margin="2,1,4,1" VerticalAlignment="Center"/>
+                <ContentPresenter Grid.Column="1" Margin="8,1,0,1" VerticalAlignment="Center"
+                                  ContentSource="Header" RecognizesAccessKey="true" SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"/>
+                <Path x:Name="Arrow" Grid.Column="4" Margin="4,0,0,0" VerticalAlignment="Center"
+                      Data="{StaticResource RightArrowGeometry}"
+                      Fill="{DynamicResource {x:Static colors:CommandBarColors.CommandBarMenuItemGlyph}}"/>
+            </Grid>
+            <Popup x:Name="PART_Popup" Placement="Right" AllowsTransparency="true" Focusable="false" 
+                   HorizontalOffset="0" VerticalOffset="0" PopupAnimation="{DynamicResource {x:Static SystemParameters.MenuPopupAnimationKey}}">
+                <Popup.IsOpen>
+                    <Binding Path="IsSubmenuOpen" RelativeSource="{RelativeSource TemplatedParent}"/>
+                </Popup.IsOpen>
+                <themedControls:SystemDropShadowChrome x:Name="Shdw" Margin="0,0,5,5"
+                                                       Color="{DynamicResource {x:Static colors:CommandBarColors.DropShadowBackgroundColor}}">
+                    <Grid Background="{DynamicResource {x:Static colors:CommandBarColors.CommandBarMenuIconBackground}}">
+                        <themedControls:ThemedMenuScrollViewer>
+                            <Grid RenderOptions.BitmapScalingMode="{x:Static vsui:DpiHelper.BitmapScalingMode}" RenderOptions.ClearTypeHint="Enabled"
+                                  Background="{DynamicResource {x:Static colors:CommandBarColors.CommandBarMenuBackground}}">
+                                <imaging:ImageThemingUtilities.ImageBackgroundColor>
+                                    <Binding Path="Background" ElementName="IconBackground" Converter="{StaticResource BrushToColorConverter}"/>
+                                </imaging:ImageThemingUtilities.ImageBackgroundColor>
+                                <Border x:Name="IconBackground" Width="28" HorizontalAlignment="Left"
+                                        Background="{DynamicResource {x:Static colors:CommandBarColors.CommandBarMenuIconBackground}}"/>
+                                <ItemsPresenter Margin="3" Grid.IsSharedSizeScope="true" 
+                                                KeyboardNavigation.DirectionalNavigation="Cycle"
+                                                KeyboardNavigation.TabNavigation="Cycle" 
+                                                SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"/>
+                            </Grid>
+                        </themedControls:ThemedMenuScrollViewer>
+                        <Border BorderThickness="1"
+                                BorderBrush="{DynamicResource {x:Static colors:CommandBarColors.CommandBarMenuBorder}}"/>
+                    </Grid>
+                </themedControls:SystemDropShadowChrome>
+            </Popup>
+        </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsSuspendingPopupAnimation" Value="true">
+                <Setter TargetName="PART_Popup" Property="PopupAnimation" Value="None"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="false">
+                <Setter Property="Foreground"
+                        Value="{DynamicResource {x:Static colors:CommandBarColors.CommandBarTextInactive}}"/>
+                <Setter TargetName="Arrow" Property="Fill"
+                        Value="{DynamicResource {x:Static colors:CommandBarColors.CommandBarTextInactive}}"/>
+            </Trigger>
+            <Trigger Property="IsHighlighted" Value="true">
+                <Setter TargetName="Background" Property="Fill"
+                        Value="{DynamicResource {x:Static colors:CommandBarColors.CommandBarMenuItemHover}}"/>
+                <Setter TargetName="Background" Property="Stroke"
+                        Value="{DynamicResource {x:Static colors:CommandBarColors.CommandBarMenuItemHoverBorder}}"/>
+                <Setter Value="{DynamicResource {x:Static colors:CommandBarColors.CommandBarMenuItemHoverText}}"
+                        Property="TextElement.Foreground"/>
+                <Setter TargetName="Arrow"
+                        Value="{DynamicResource {x:Static colors:CommandBarColors.CommandBarMenuItemHoverGlyph}}"
+                        Property="Fill"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
     </ControlTemplate>
 
     <ControlTemplate x:Key="{ComponentResourceKey TypeInTargetAssembly={x:Type controls:DynamicStyledMenuItem}, ResourceId=SubmenuItemTemplateKey}"
                      TargetType="{x:Type controls:DynamicStyledMenuItem}">
-        <Grid MinHeight="22" MaxWidth="{x:Static vs:ThemedMenuItem.MaxMenuWidth}" Background="Transparent" SnapsToDevicePixels="true">
+        <Grid MinHeight="22" MaxWidth="{x:Static themedControls:ThemedMenuItem.MaxMenuWidth}" Background="Transparent" SnapsToDevicePixels="true">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="{StaticResource MenuItemIconWidth}" SharedSizeGroup="MenuItemIconColumnGroup"/>
                 <ColumnDefinition Width="*"/>
@@ -65,7 +214,6 @@
     </ControlTemplate>
 
 
-
     <Style x:Key="MenuItemBaseStyle" TargetType="{x:Type controls:DynamicStyledMenuItem}" BasedOn="{StaticResource {x:Type MenuItem}}">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Padding" Value="6,0,0,1"/>
@@ -92,9 +240,9 @@
         <Setter Property="Template"
                 Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type controls:DynamicStyledMenuItem}, ResourceId=TopLevelHeaderTemplateKey}}"/>
         <Style.Triggers>
-            <Trigger Property="MenuItem.Role" Value="SubmenuHeader">
-                <Setter Property="Control.Padding" Value="2,0,2,3"/>
-                <Setter Property="Control.Template"
+            <Trigger Property="Role" Value="SubmenuHeader">
+                <Setter Property="Padding" Value="2,0,2,3"/>
+                <Setter Property="Template"
                         Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type controls:DynamicStyledMenuItem}, ResourceId=SubmenuHeaderTemplateKey}}"/>
             </Trigger>
         </Style.Triggers>
@@ -114,7 +262,7 @@
         <Setter Property="SnapsToDevicePixels" Value="true"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Padding" Value="2,3,2,3"/>
-        <Setter Property="TextElement.Foreground" Value="{DynamicResource {x:Static colors:CommandBarColors.CommandBarTextActive}}"/>
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static colors:CommandBarColors.CommandBarTextActive}}"/>
         <Setter Property="Header" Value="{Binding Text, Mode=OneWay}"/>
         <Setter Property="InputGestureText" Value="{Binding ShortcutText, Mode=OneWay}"/>
         <Setter Property="ToolTip" Value="{Binding Tooltip, Mode=OneWay}"/>
@@ -131,6 +279,25 @@
             </Setter.Value>
         </Setter>
         <Setter Property="Template" Value="{DynamicResource {ComponentResourceKey TypeInTargetAssembly={x:Type controls:DynamicStyledMenuItem}, ResourceId=SubmenuItemTemplateKey}}"/>
+    </Style>
+
+    <Style x:Key="{x:Static controls:DynamicStyledMenuItem.SeparatorStyleKey}" TargetType="{x:Type controls:DynamicStyledMenuItem}">
+        <Setter Property="Focusable" Value="false"/>
+        <Setter Property="IsEnabled" Value="false"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Grid Background="Transparent" SnapsToDevicePixels="true">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="24" SharedSizeGroup="MenuItemIconColumnGroup"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Rectangle Grid.Column="1" Height="1" Margin="4,2,1,2"
+                                   Fill="{DynamicResource {x:Static colors:CommandBarColors.CommandBarMenuSeparatorBrush}}"/>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
 

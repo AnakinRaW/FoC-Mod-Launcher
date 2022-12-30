@@ -5,7 +5,7 @@ using Sklavenwalker.CommonUtilities.Wpf.Imaging;
 
 namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.CommandBar;
 
-public partial class ButtonViewModel : CommandBarControlViewModel, IExecutableCommandBarControlViewModel
+public sealed partial class ButtonViewModel : CommandBarControlViewModel, IExecutableCommandBarControlViewModel
 {
     [ObservableProperty] private string? _shortcutText;
     [ObservableProperty] private ImageKey? _imageKey;
@@ -21,4 +21,9 @@ public partial class ButtonViewModel : CommandBarControlViewModel, IExecutableCo
         ImageKey = commandDefinition.Image;
         Tooltip = commandDefinition.Tooltip;
     }
+}
+
+public sealed class SeparatorControlViewModel : CommandBarControlViewModel
+{
+    public override CommandBarType Type => CommandBarType.Separator;
 }

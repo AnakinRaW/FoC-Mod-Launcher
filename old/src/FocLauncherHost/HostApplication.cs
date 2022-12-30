@@ -6,7 +6,6 @@ using FocLauncher;
 using FocLauncherHost.Dialogs;
 using Microsoft.VisualStudio.Threading;
 using NLog;
-using TaskBasedUpdater;
 
 namespace FocLauncherHost
 {

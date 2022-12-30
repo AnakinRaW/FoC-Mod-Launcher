@@ -2,16 +2,14 @@
 using System.Windows;
 using System.Windows.Controls;
 using FocLauncher.Commands;
-using FocLauncher.Imaging;
 using FocLauncher.Themes;
 using Microsoft.Extensions.DependencyInjection;
+using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.CommandBar;
 using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Controls;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Input;
 using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Theming;
 using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
 using Sklavenwalker.CommonUtilities.Wpf.Input;
 using Validation;
-using ButtonViewModel = Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.CommandBar.ButtonViewModel;
 
 namespace FocLauncher;
 
@@ -34,7 +32,10 @@ public partial class MainWindow
     {
         var m = new StylingContextMenu();
 
-        var item = new ButtonViewModel(new TestCommand());
+       var item = new MenuItemViewModel();
+       item.Items.Add(new ButtonViewModel(new TestCommand()));
+       item.Items.Add(new SeparatorControlViewModel());
+       item.Items.Add(new ButtonViewModel(new TestCommand()));
 
         m.Items.Add(item);
         _menu = m;

@@ -50,6 +50,8 @@
     <SolidColorBrush x:Key="{x:Static colors:CommandBarColors.CommandBarMenuItemHover}" Color="#FF333334"/>
     <SolidColorBrush x:Key="{x:Static colors:CommandBarColors.CommandBarMenuItemHoverBorder}" Color="Transparent"/>
     <SolidColorBrush x:Key="{x:Static colors:CommandBarColors.CommandBarMenuItemHoverText}" Color="#FFF1F1F1"/>
+    <SolidColorBrush x:Key="{x:Static colors:CommandBarColors.CommandBarMenuItemGlyph}" Color="#FFD6D6D6"/>
+    <SolidColorBrush x:Key="{x:Static colors:CommandBarColors.CommandBarMenuItemHoverGlyph}" Color="#FFD6D6D6"/>
     <SolidColorBrush x:Key="{x:Static colors:CommandBarColors.CommandBarMenuScrollGlyph}" Color="#FF007ACC"/>
     <SolidColorBrush x:Key="{x:Static colors:CommandBarColors.CommandBarMenuSeparatorBrush}" Color="#FF333337"/>
     <Color x:Key="{x:Static colors:CommandBarColors.DropShadowBackgroundColor}" A="114" B="00" G="00" R="00"/>

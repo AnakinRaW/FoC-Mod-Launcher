@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace FocLauncher.Threading;
+namespace FocLauncher.Utilities;
 
 internal static class Extensions
 {

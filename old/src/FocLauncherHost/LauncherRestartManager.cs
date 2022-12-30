@@ -1,8 +1,6 @@
 ﻿using System.Diagnostics;
-using System.Linq;
 using System.Threading;
 using FocLauncherHost.Dialogs;
-using TaskBasedUpdater.Restart;
 
 namespace FocLauncherHost
 {
