@@ -2,7 +2,7 @@
 
 namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.CommandBar;
 
-public abstract partial class CommandBarControlViewModel : ObservableObject, ICommandBarControlViewModel
+internal abstract partial class CommandBarControlViewModel : ObservableObject, ICommandBarControlViewModel
 {
     public abstract CommandBarType Type { get; }
 

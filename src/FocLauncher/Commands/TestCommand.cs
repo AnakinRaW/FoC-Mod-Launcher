@@ -11,4 +11,5 @@ internal class TestCommand : CommandDefinition
     public override ImageKey Image => ImageKeys.Undo;
     public override string Text => "Test";
     public override ICommand Command => new DelegateCommand(() => {});
+    public override string Tooltip => "Tooltip";
 }

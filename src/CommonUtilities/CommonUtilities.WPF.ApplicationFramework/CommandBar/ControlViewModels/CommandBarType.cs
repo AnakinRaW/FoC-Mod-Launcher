@@ -1,6 +1,6 @@
 ﻿namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.CommandBar;
 
-public enum CommandBarType
+internal enum CommandBarType
 {
     Button,
     Menu,

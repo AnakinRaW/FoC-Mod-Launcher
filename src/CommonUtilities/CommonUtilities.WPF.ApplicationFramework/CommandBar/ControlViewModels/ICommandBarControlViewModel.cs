@@ -1,6 +1,6 @@
 ﻿namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.CommandBar;
 
-public interface ICommandBarControlViewModel
+internal interface ICommandBarControlViewModel
 {
     CommandBarType Type { get; }
 

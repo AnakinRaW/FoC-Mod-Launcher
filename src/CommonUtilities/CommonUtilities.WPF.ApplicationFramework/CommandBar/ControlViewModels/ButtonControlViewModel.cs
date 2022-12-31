@@ -5,7 +5,7 @@ using Sklavenwalker.CommonUtilities.Wpf.Imaging;
 
 namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.CommandBar;
 
-public sealed partial class ButtonViewModel : CommandBarControlViewModel, IExecutableCommandBarControlViewModel
+internal sealed partial class ButtonControlViewModel : CommandBarControlViewModel, IExecutableCommandBarControlViewModel
 {
     [ObservableProperty] private string? _shortcutText;
     [ObservableProperty] private ImageKey? _imageKey;
@@ -14,7 +14,7 @@ public sealed partial class ButtonViewModel : CommandBarControlViewModel, IExecu
 
     public ICommand Command { get; }
 
-    public ButtonViewModel(ICommandDefinition commandDefinition)
+    public ButtonControlViewModel(ICommandDefinition commandDefinition)
     {
         Text = commandDefinition.Text;
         Command = commandDefinition.Command;

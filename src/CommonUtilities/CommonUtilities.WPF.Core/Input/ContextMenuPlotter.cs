@@ -66,12 +66,6 @@ public sealed class ContextMenuPlotter : IContextMenuPlotter
         return true;
     }
 
-    private void UpdateContextMenuPlacementPosition(Point absolutePoint)
-    {
-        User32.SetWindowPos(new WindowInteropHelper(ContextMenuPlacementWindow).Handle, IntPtr.Zero,
-            (int)absolutePoint.X, (int)absolutePoint.Y, 0, 0, 17);
-    }
-
     private void UpdateContextMenuProperties(ContextMenu contextMenu, Point point)
     {
         UpdateContextMenuPlacementPosition(point);
@@ -81,6 +75,12 @@ public sealed class ContextMenuPlotter : IContextMenuPlotter
             contextMenu.PlacementTarget = ContextMenuPlacementWindow;
             contextMenu.IsOpen = true;
         }
+    }
+
+    private void UpdateContextMenuPlacementPosition(Point absolutePoint)
+    {
+        User32.SetWindowPos(new WindowInteropHelper(ContextMenuPlacementWindow).Handle, IntPtr.Zero,
+            (int)absolutePoint.X, (int)absolutePoint.Y, 0, 0, 17);
     }
 
     private static Point GetContextMenuLocation(ref UIElement? uiElement)

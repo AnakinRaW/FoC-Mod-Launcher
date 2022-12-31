@@ -5,7 +5,7 @@ using FocLauncher.Commands;
 using FocLauncher.Themes;
 using Microsoft.Extensions.DependencyInjection;
 using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.CommandBar;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Controls;
+using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.CommandBar.Models;
 using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Theming;
 using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
 using Sklavenwalker.CommonUtilities.Wpf.Input;
@@ -17,7 +17,7 @@ public partial class MainWindow
 {
     private readonly IServiceProvider _serviceProvider;
 
-    private ContextMenu _menu;
+    private ContextMenu? _menu;
 
     public MainWindow(IMainWindowViewModel viewModel, IServiceProvider serviceProvider) : base(viewModel, serviceProvider)
     {
@@ -30,19 +30,26 @@ public partial class MainWindow
 
     private void BuildContextMenu()
     {
-        var m = new StylingContextMenu();
+        var c = new TestCommand();
 
-       var item = new MenuItemControlViewModel("TestMenu");
-       item.Items.Add(new ButtonViewModel(new TestCommand()));
-       item.Items.Add(new SeparatorControlViewModel());
-       item.Items.Add(new ButtonViewModel(new TestCommand()));
+        var subMenu = MenuDefinition.Builder("Menu", enable: true, tooltip: "Test")
+            .AddItem(ButtonDefinition.FromCommandDefinition(c))
+            .Build();
 
-        m.Items.Add(item);
-        _menu = m;
+        var cModel = ContextMenuDefinition.Builder()
+            .AddItem(ButtonDefinition.FromCommandDefinition(c))
+            .AddSeparator()
+            .AddItem(subMenu)
+            .Build();
+
+        var p = new ModelBasedContextMenuProvider();
+        _menu = p.Provide(cModel);
     }
 
     protected override void OnContextMenuOpening(ContextMenuEventArgs e)
     {
+        if (_menu is null)
+            return;
         e.Handled = ContextMenuPlotter.Instance.ShowContextMenu(_menu, null);
     }
 

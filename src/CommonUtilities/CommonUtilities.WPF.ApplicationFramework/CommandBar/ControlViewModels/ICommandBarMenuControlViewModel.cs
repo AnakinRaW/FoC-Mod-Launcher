@@ -1,6 +1,6 @@
 ﻿namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.CommandBar;
 
-public interface ICommandBarMenuControlViewModel
+internal interface ICommandBarMenuControlViewModel
 {
     public bool IsEnabled { get; set; }
 }
