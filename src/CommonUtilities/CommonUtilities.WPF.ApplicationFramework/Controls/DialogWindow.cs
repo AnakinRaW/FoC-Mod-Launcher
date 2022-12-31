@@ -4,7 +4,7 @@ using Sklavenwalker.CommonUtilities.Wpf.Controls;
 
 namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Controls;
 
-public class DialogWindow : ModalWindow
+public class DialogWindow : AutoSizeModalWindow
 {
     static DialogWindow()
     {

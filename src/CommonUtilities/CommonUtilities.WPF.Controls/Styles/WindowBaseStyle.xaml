@@ -41,5 +41,16 @@
                 <Binding Path="MinMaxState" Mode="TwoWay"/>
             </Setter.Value>
         </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type controls:WindowBase}">
+                    <Grid Background="{TemplateBinding Control.Background}">
+                        <AdornerDecorator>
+                            <ContentPresenter x:Name="ContentPresenter" ContentSource="Content"/>
+                        </AdornerDecorator>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 </ResourceDictionary>

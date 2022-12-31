@@ -3,6 +3,7 @@
        
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Controls;component/Styles/AutoSizeModalWindowStyle.xaml"/>
                 <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Controls;component/Styles/CustomResizeGripStyle.xaml"/>
                 <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Controls;component/Styles/DialogButtonStyle.xaml"/>
                 <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Controls;component/Styles/GlyphButtonStyle.xaml"/>

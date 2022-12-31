@@ -10,10 +10,10 @@
                     xmlns:colors="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Themes.Colors;assembly=Sklavenwalker.CommonUtilities.WPF.Controls">
 
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Controls;component/Styles/ModalWindowStyle.xaml"/>
+        <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Controls;component/Styles/AutoSizeModalWindowStyle.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
-    <Style TargetType="{x:Type controls:DialogWindow}" BasedOn="{StaticResource {x:Type baseControls:ModalWindow}}">
+    <Style TargetType="{x:Type controls:DialogWindow}" BasedOn="{StaticResource {x:Type baseControls:AutoSizeModalWindow}}">
         <Style.Resources>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
             <coreConverters:BooleanToFlowDirectionConverter x:Key="BooleanToFlowDirectionConverter"/>
@@ -69,7 +69,6 @@
         </Style.Resources>
         <Setter Property="imaging:ImageThemingUtilities.ImageBackgroundColor"
                 Value="{Binding Background, RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToColorConverter}}"/>
-        <Setter Property="SizeToContent" Value="WidthAndHeight"/>
         <Setter Property="MinWidth" Value="280"/>
         <Setter Property="MinHeight" Value="175"/>
         <Setter Property="Background" Value="{DynamicResource {x:Static colors:WindowColors.DialogBackground}}"/>

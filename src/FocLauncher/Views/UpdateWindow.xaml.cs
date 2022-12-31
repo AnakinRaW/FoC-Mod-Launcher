@@ -1,15 +1,9 @@
-﻿using System.Windows.Controls;
+﻿namespace FocLauncher.Views;
 
-namespace FocLauncher.Views
+public partial class UpdateWindow
 {
-    /// <summary>
-    /// Interaktionslogik für UpdateWindow.xaml
-    /// </summary>
-    public partial class UpdateWindow : UserControl
+    public UpdateWindow()
     {
-        public UpdateWindow()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

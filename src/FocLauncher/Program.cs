@@ -82,7 +82,7 @@ internal static class Program
         serviceCollection.AddSingleton<IThemeManager>(sp => new ThemeManager(sp));
         serviceCollection.AddSingleton<IViewModelPresenter>(_ => new ViewModelPresenterService());
 
-        serviceCollection.AddSingleton<IModalWindowFactory>(sp => new ModalWindowFactory(sp));
+        serviceCollection.AddSingleton<IModalWindowFactory>(sp => new LauncherModalWindowFactory(sp));
         serviceCollection.AddSingleton<IDialogFactory>(sp => new LauncherDialogFactory(sp));
         serviceCollection.AddSingleton<IDialogButtonFactory>(_ => new DialogButtonFactory(true));
 

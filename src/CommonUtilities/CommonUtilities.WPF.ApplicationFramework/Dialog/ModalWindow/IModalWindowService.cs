@@ -1,96 +1,9 @@
-﻿using System;
-using System.ComponentModel;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Threading;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
+﻿using System.Threading.Tasks;
 using Sklavenwalker.CommonUtilities.Wpf.Controls;
-using Validation;
 
 namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 
 public interface IModalWindowService
 {
     Task ShowModal(IModalWindowViewModel viewModel);
-}
-
-public interface IModalWindowFactory
-{
-    ModalWindow Create(IModalWindowViewModel viewModel);
-}
-
-public class ModalWindowFactory : IModalWindowFactory
-{
-    private readonly IWindowService _windowService;
-
-    public ModalWindowFactory(IServiceProvider serviceProvider)
-    {
-        Requires.NotNull(serviceProvider, nameof(serviceProvider));
-        _windowService = serviceProvider.GetRequiredService<IWindowService>();
-    }
-
-    public ModalWindow Create(IModalWindowViewModel viewModel)
-    {
-        return Application.Current.Dispatcher.Invoke(() =>
-        {
-            _windowService.ShowWindow();
-            var window = CreateWindow(viewModel);
-            window.Content = viewModel;
-            _windowService.SetOwner(window);
-            return window;
-        });
-    }
-
-    protected virtual ModalWindow CreateWindow(IModalWindowViewModel viewModel)
-    {
-        return new ModalWindow(viewModel);
-    }
-}
-
-internal class ModalWindowService : IModalWindowService
-{
-    private readonly IModalWindowFactory _windowFactory;
-    private readonly IWindowService _windowService;
-    private readonly ILogger? _logger;
-
-    public ModalWindowService(IServiceProvider serviceProvider)
-    {
-        Requires.NotNull(serviceProvider, nameof(serviceProvider));
-        _windowFactory = serviceProvider.GetRequiredService<IModalWindowFactory>();
-        _windowService = serviceProvider.GetRequiredService<IWindowService>();
-        _logger = serviceProvider.GetService<ILoggerFactory>()?.CreateLogger(GetType());
-    }
-
-    public async Task ShowModal(IModalWindowViewModel viewModel)
-    {
-        var task = new TaskCompletionSource<bool>();
-
-        var window = _windowFactory.Create(viewModel);
-        _logger?.LogTrace($"Showing window: {viewModel}");
-        window.Closing += OnDialogClosing(window, viewModel, task);
-        Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, () =>
-        {
-            _windowService.DisableOwner(window);
-            window.ShowModal();
-        });
-
-        if (viewModel is IViewModel initializingViewModel)
-            await initializingViewModel.InitializeAsync();
-
-        await task.Task;
-    }
-
-    private CancelEventHandler OnDialogClosing(Window window, IModalWindowViewModel viewModel, TaskCompletionSource<bool> task)
-    {
-        return (_, e) =>
-        {
-            viewModel.OnClosing(e);
-            if (e.Cancel)
-                return;
-            _windowService.EnableOwner(window);
-            task.SetResult(true);
-        };
-    }
 }
