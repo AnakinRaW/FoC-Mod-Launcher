@@ -2,32 +2,35 @@
 using System.Windows.Input;
 using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.StatusBar;
 using Sklavenwalker.CommonUtilities.Wpf.Controls;
-using Validation;
 
 namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Controls;
 
-internal class WorkerThreadStatusBarContainer : WorkerThreadElementContainer
+public class WorkerThreadStatusBarContainer : WorkerThreadElementContainer
 {
-    private readonly IStatusBarFactory _factory;
 
-    private UIElement _statusBarElement = null!;
+    public static readonly DependencyProperty StatusBarFactoryProperty = DependencyProperty.Register(
+        nameof(StatusBarFactory), typeof(IThreadedStatusBarFactory), typeof(WorkerThreadStatusBarContainer), new PropertyMetadata(default(IThreadedStatusBarFactory)));
+
+    public IThreadedStatusBarFactory StatusBarFactory
+    {
+        get => (IThreadedStatusBarFactory) GetValue(StatusBarFactoryProperty);
+        set => SetValue(StatusBarFactoryProperty, value);
+    }
+
+    private FrameworkElement _statusBarElement = null!;
 
     private IHasMouseEvents? StatusBarWithMouseEvent { get; set; }
 
-    protected override string DispatcherGroup => "StatusBar";
+    protected override string DispatcherGroup => "StatusBarModel";
 
     protected override int StackSize => 262144;
-
-    public WorkerThreadStatusBarContainer(IStatusBarFactory factory)
+    
+    protected override FrameworkElement CreateRootUiElement()
     {
-        Requires.NotNull(factory, nameof(factory));
-        _factory = factory;
-    }
-
-    protected override UIElement CreateRootUiElement()
-    {
-        _statusBarElement = _factory.CreateStatusBar();
+        _statusBarElement = StatusBarFactory.CreateStatusBar();
+        var dataContext = Dispatcher.Invoke(() => DataContext);
         StatusBarWithMouseEvent = _statusBarElement as IHasMouseEvents;
+        _statusBarElement.DataContext = dataContext;
         return _statusBarElement;
     }
 

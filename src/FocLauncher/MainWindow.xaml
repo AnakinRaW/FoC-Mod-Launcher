@@ -7,11 +7,10 @@
                            xmlns:designer="clr-namespace:FocLauncher.ViewModels.Designer"
                            xmlns:controls="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Controls;assembly=Sklavenwalker.CommonUtilities.WPF.ApplicationFramework"
                            xmlns:themes="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Themes;assembly=Sklavenwalker.CommonUtilities.WPF.Controls"
-                           mc:Ignorable="d"
-                           Width="400" 
-                           Height="700" 
+                           mc:Ignorable="d" d:DataContext="{d:DesignInstance {x:Type designer:ApplicationViewModel}, IsDesignTimeCreatable=True}"
+                           Width="400" Height="700" 
                            Title="{x:Static focLauncher:LauncherEnvironment.LauncherProgramName}" 
-                           d:DataContext="{d:DesignInstance {x:Type designer:ApplicationViewModel}, IsDesignTimeCreatable=True}"
+                           Foreground="White"
                            themes:ScrollBarThemingUtilities.ThemeScrollBars="True">
     <ContentControl Focusable="False" Content="{Binding CurrentViewModel}" Margin="6"/>
 </controls:ApplicationMainWindow>

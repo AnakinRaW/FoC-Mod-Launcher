@@ -28,7 +28,7 @@ public abstract class WorkerThreadElementContainer : VisualWrapper
         PresentationSource.AddSourceChangedHandler(this, OnPresentationSourceChanged);
     }
 
-    protected abstract UIElement CreateRootUiElement();
+    protected abstract FrameworkElement CreateRootUiElement();
 
     protected override Size MeasureOverride(Size availableSize)
     {

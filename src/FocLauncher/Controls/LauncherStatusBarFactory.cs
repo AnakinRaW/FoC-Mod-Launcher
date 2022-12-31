@@ -5,7 +5,7 @@ namespace FocLauncher.Controls;
 
 internal class LauncherStatusBarFactory : IStatusBarFactory
 {
-    public UIElement CreateStatusBar()
+    public FrameworkElement CreateStatusBar(IStatusBarViewModel viewModel)
     {
         return new LauncherStatusBar();
     }

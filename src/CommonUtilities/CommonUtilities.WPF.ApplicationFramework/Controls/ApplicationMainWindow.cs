@@ -15,8 +15,11 @@ using Validation;
 namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Controls;
 
 public class ApplicationMainWindow : ThemedWindow
-{
+{ 
     public IServiceProvider ServiceProvider { get; }
+
+    public new IMainWindowViewModel ViewModel { get; }
+
     private ContentControl? _statusBarHost;
 
     protected readonly ILogger? Logger;
@@ -29,9 +32,11 @@ public class ApplicationMainWindow : ThemedWindow
 
     public ApplicationMainWindow(IMainWindowViewModel viewModel, IServiceProvider serviceProvider) : base(viewModel)
     {
+        ViewModel = viewModel;
         Requires.NotNull(serviceProvider, nameof(serviceProvider));
         ServiceProvider = serviceProvider;
         Logger = serviceProvider.GetService<ILoggerFactory>()?.CreateLogger(GetType());
+        serviceProvider.GetRequiredService<StatusBarService>().StatusBarModel = viewModel.StatusBar;
         SetBindings();
         DataContextChanged += OnDataContextChanged;
     }
@@ -40,8 +45,10 @@ public class ApplicationMainWindow : ThemedWindow
     {
         base.OnApplyTemplate();
         _statusBarHost = GetTemplateChild<ContentControl>("PART_StatusBarHost")!;
-        if (ViewModel is IMainWindowViewModel mwv && mwv.StatusBar.IsVisible)
+        if (ViewModel.StatusBar.IsVisible)
+        {
             _statusBarHost.Content = CreateStatusBarView();
+        }
     }
 
     private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -59,7 +66,7 @@ public class ApplicationMainWindow : ThemedWindow
             Logger?.LogTrace("No IStatusBarFactory registered.");
             return null;
         }
-        return new WorkerThreadStatusBarContainer(factory);
+        return factory.CreateStatusBar(ViewModel.StatusBar);
     }
 
     private void SetBindings()

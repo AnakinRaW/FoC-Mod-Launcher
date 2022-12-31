@@ -1,0 +1,50 @@
+﻿<StatusBar x:Class="FocLauncher.Controls.LauncherStatusBar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:FocLauncher.Controls"
+             mc:Ignorable="d">
+    <FrameworkElement.Resources>
+        <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="Margin" Value="1"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <Style BasedOn="{StaticResource {x:Type StatusBar}}" TargetType="{x:Type local:LauncherStatusBar}">
+            <Setter Property="TextElement.FontFamily">
+                <Setter.Value>
+                    <Binding Path="(TextElement.FontFamily)">
+                        <Binding.RelativeSource>
+                            <RelativeSource Mode="FindAncestor" AncestorType="{x:Type DependencyObject}" AncestorLevel="1"/>
+                        </Binding.RelativeSource>
+                    </Binding>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="TextElement.FontSize">
+                <Setter.Value>
+                    <Binding Path="(TextElement.FontSize)">
+                        <Binding.RelativeSource>
+                            <RelativeSource Mode="FindAncestor" AncestorType="{x:Type DependencyObject}" AncestorLevel="1"/>
+                        </Binding.RelativeSource>
+                    </Binding>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="TextElement.Foreground">
+                <Setter.Value>
+                    <Binding Path="(TextElement.Foreground)">
+                        <Binding.RelativeSource>
+                            <RelativeSource Mode="FindAncestor" AncestorType="{x:Type DependencyObject}" AncestorLevel="1"/>
+                        </Binding.RelativeSource>
+                    </Binding>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Background" Value="Transparent"/>
+        </Style>
+    </FrameworkElement.Resources>
+    <DockPanel Background="{TemplateBinding Panel.Background}">
+        <TextBlock Text="{Binding Text}"/>
+        <!--<StatusBarItem>
+            <Button Height="16" Width="16" VerticalContentAlignment="Center" VerticalAlignment="Center" Command="{Binding ClickCommand}">Click</Button>
+        </StatusBarItem>-->
+    </DockPanel>
+</StatusBar>

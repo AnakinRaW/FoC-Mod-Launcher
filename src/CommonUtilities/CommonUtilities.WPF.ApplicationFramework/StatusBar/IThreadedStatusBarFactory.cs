@@ -2,7 +2,7 @@
 
 namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.StatusBar;
 
-public interface IStatusBarFactory
+public interface IThreadedStatusBarFactory
 {
-    FrameworkElement CreateStatusBar(IStatusBarViewModel viewModel);
+    FrameworkElement CreateStatusBar();
 }
