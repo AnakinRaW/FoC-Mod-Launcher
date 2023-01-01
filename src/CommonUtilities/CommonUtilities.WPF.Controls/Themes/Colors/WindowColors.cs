@@ -38,6 +38,7 @@ public static class WindowColors
     private static ComponentResourceKey? _dialogContentText;
 
     private static ComponentResourceKey? _statusBarDefault;
+    private static ComponentResourceKey? _statusBarDefaultText;
 
 
     public static ComponentResourceKey MainWindowInactiveCaption => _mainWindowInactiveCaption ??=
@@ -124,4 +125,7 @@ public static class WindowColors
 
     public static ComponentResourceKey StatusBarDefault => _statusBarDefault ??=
         new ComponentResourceKey(typeof(WindowColors), nameof(StatusBarDefault));
+
+    public static ComponentResourceKey StatusBarDefaultText => _statusBarDefaultText ??=
+        new ComponentResourceKey(typeof(WindowColors), nameof(StatusBarDefaultText));
 }

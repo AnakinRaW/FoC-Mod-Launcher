@@ -9,10 +9,7 @@
         xmlns:controls="clr-namespace:FocLauncher.Controls"
         xmlns:baseControls="clr-namespace:FocLauncher.Controls;assembly=FocLauncher.BaseControls" 
         xmlns:focLauncher="clr-namespace:FocLauncher"
-        Title="FoC Mod Launcher" Width="400" 
-        Height="700" 
-        Foreground="White"
-        UseLayoutRounding="True"
+        Title="FoC Mod Launcher" Width="400" Height="700" UseLayoutRounding="True"
         Closing="MainWindow_OnClosing">
     <Window.Resources>
         <converters:GameTypeToStringConverter x:Key="GameTypeToStringConverter"/>

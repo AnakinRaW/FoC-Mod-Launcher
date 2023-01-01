@@ -10,7 +10,7 @@
                     xmlns:nativeMethods="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.NativeMethods;assembly=Sklavenwalker.CommonUtilities.WPF.Controls">
 
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Controls;component/Styles/ShadowChromeWindowStyle.xaml"/>
+        <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Controls;component/Styles/ThemedWindowStyle.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
     <Style TargetType="{x:Type controls:ApplicationMainWindow}" BasedOn="{StaticResource {x:Type baseControls:ThemedWindow}}">
@@ -30,14 +30,6 @@
             </DataTrigger>
         </Style.Triggers>
         <Setter Property="Background" Value="{DynamicResource {x:Static colors:WindowColors.EnvironmentBackground}}"/>
-        <Setter Property="imaging:ImageThemingUtilities.ImageBackgroundColor">
-            <Setter.Value>
-                <Binding Path="Background" RelativeSource="{RelativeSource Self}"
-                         Converter="{StaticResource BrushToColorConverter}"/>
-            </Setter.Value>
-        </Setter>
-        <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
-        <Setter Property="RenderOptions.BitmapScalingMode" Value="HighQuality"/>
         <Setter Property="ActiveGlowColor"
                 Value="{DynamicResource {x:Static colors:WindowColors.MainWindowActiveDefaultBorder}}"/>
         <Setter Property="InactiveGlowColor"
@@ -165,8 +157,7 @@
                                 <AdornerDecorator Grid.Row="1">
                                     <ContentPresenter/>
                                 </AdornerDecorator>
-                                <DockPanel x:Name="StatusBarPanel" Grid.Row="2" MinHeight="22"
-                                           Background="{DynamicResource {x:Static colors:WindowColors.StatusBarDefault}}">
+                                <DockPanel x:Name="StatusBarPanel" Grid.Row="2" Background="{DynamicResource {x:Static colors:WindowColors.StatusBarDefault}}">
                                     <DockPanel.Visibility>
                                         <Binding Path="StatusBar.IsVisible" Converter="{StaticResource BooleanToVisibilityConverter}"/>
                                     </DockPanel.Visibility>
@@ -177,7 +168,8 @@
                                     <baseControls:CustomResizeGrip x:Name="ResizeGripControl" DockPanel.Dock="Right" Padding="0" Cursor="SizeNWSE"
                                                                      VerticalAlignment="Bottom" Visibility="Collapsed">
                                     </baseControls:CustomResizeGrip>
-                                    <ContentControl x:Name="PART_StatusBarHost">
+                                    <ContentControl x:Name="PART_StatusBarHost" DockPanel.Dock="Right" Margin="0"
+                                                    Foreground="{DynamicResource {x:Static colors:WindowColors.StatusBarDefaultText}}">
                                         <FrameworkElement.DataContext>
                                             <Binding Path="StatusBar"/>
                                         </FrameworkElement.DataContext>

@@ -50,8 +50,8 @@ internal partial class MainPageViewModel : LoadingViewModelBase, IMainPageViewMo
                     _isInitialized = true;
                 }
 
-                var vm = new UpdateWindowViewModel(ServiceProvider);
-                await ServiceProvider.GetRequiredService<IModalWindowService>().ShowModal(vm);
+                //var vm = new UpdateWindowViewModel(ServiceProvider);
+                //await ServiceProvider.GetRequiredService<IModalWindowService>().ShowModal(vm);
 
                 IsLoading = false;
             }
