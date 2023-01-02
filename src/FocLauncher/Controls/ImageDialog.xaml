@@ -10,7 +10,11 @@
              d:DataContext="{d:DesignInstance {x:Type designer:ImageDialogViewModel}, IsDesignTimeCreatable=True}"
              MaxWidth="480" ResizeMode="NoResize">
     <Grid Margin="12">
-        <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="91*"/>
+            <ColumnDefinition Width="365*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>

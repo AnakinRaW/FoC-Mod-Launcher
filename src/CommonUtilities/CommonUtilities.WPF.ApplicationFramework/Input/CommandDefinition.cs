@@ -7,7 +7,7 @@ public abstract class CommandDefinition : ICommandDefinition
 {
     public virtual ImageKey Image => default;
 
-    public virtual string Tooltip => string.Empty;
+    public virtual string? Tooltip => null;
 
     public abstract string Text { get; }
 

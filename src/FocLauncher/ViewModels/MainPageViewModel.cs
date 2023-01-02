@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.DependencyInjection;
 using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
 using Validation;
 

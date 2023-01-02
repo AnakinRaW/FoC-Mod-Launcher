@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<OutputType>WinExe</OutputType>
-		<TargetFramework>net48</TargetFramework>
+		<TargetFramework>net6.0-windows</TargetFramework>
 		<ApplicationIcon>Resources\icon.ico</ApplicationIcon>
 		<PlatformTarget>AnyCPU</PlatformTarget>
 		<UseWPF>true</UseWPF>
@@ -43,6 +43,7 @@
 	  <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0" />
 	  <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="7.0.0" />
 	  <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
+	  <PackageReference Include="Microsoft.VisualStudio.VsixColorCompiler" Version="17.0.31709.430" />
 	  <PackageReference Include="PetroGlyph.Games.EawFoc.Clients.Steam.Windows" Version="1.1.1" />
 	  <PackageReference Include="Semver" Version="2.2.0" />
 	  <PackageReference Include="Serilog.Extensions.Logging.File" Version="3.0.0" />
@@ -51,6 +52,7 @@
 	  <PackageReference Include="Sklavenwalker.CommonUtilities.Registry.Windows" Version="2.1.1" />
 		<PackageReference Include="System.IO.Abstractions" Version="17.0.24" />
 	  <PackageReference Include="System.Runtime.Extensions" Version="4.3.1" />
+	  <PackageReference Include="Validation" Version="2.5.51" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(Configuration)' == 'Release'">
@@ -62,6 +64,8 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\CommonUtilities\CommonUtilities.WPF.ApplicationFramework\CommonUtilities.WPF.ApplicationFramework.csproj" />
+	  <ProjectReference Include="..\CommonUtilities\CommonUtilities.WPF.Core\CommonUtilities.WPF.Core.csproj" />
+	  <ProjectReference Include="..\CommonUtilities\CommonUtilities.WPF.Imaging\CommonUtilities.WPF.Imaging.csproj" />
 	  <ProjectReference Include="..\FocLauncher.AppUpdater\FocLauncher.AppUpdater.csproj" />
 	  <ProjectReference Include="..\ProductMetadata\ProductMetadata.csproj" />
 	  <ProjectReference Include="..\ProductUpdater\ProductUpdater.csproj" />

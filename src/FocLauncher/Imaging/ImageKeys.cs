@@ -9,4 +9,8 @@ internal static class ImageKeys
     public static ImageKey Github => new() { CatalogType = typeof(ImageCatalog), Name = "Github" };
 
     public static ImageKey Trooper => new() { CatalogType = typeof(ImageCatalog), Name = "Trooper" };
+
+    public static ImageKey UpdateIcon => new() { CatalogType = typeof(ImageCatalog), Name = nameof(UpdateIcon) };
+
+    public static ImageKey StatusHelpIcon => new() { CatalogType = typeof(ImageCatalog), Name = nameof(StatusHelpIcon) };
 }

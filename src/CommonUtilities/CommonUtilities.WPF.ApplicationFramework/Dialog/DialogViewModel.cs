@@ -40,7 +40,9 @@ public abstract class DialogViewModel : ModalWindowViewModel, IDialogViewModel
 
     protected virtual IList<IButtonViewModel> CreateButtons(IDialogButtonFactory buttonFactory)
     {
-        return new List<IButtonViewModel>();
+        var okButton = buttonFactory.CreateOk(true);
+        var buttons = new List<IButtonViewModel> { okButton };
+        return buttons;
     }
 
     private void Execute(IButtonViewModel? button)

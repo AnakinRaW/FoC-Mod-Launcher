@@ -41,6 +41,22 @@ internal class ImageCatalog : ImmutableImageCatalog
         CanTheme = true
     };
 
+    public static ImageDefinition UpdateIconDefinition => new()
+    {
+        Kind = ImageFileKind.Xaml,
+        ImakgeKey = ImageKeys.UpdateIcon,
+        Source = ResourcesUriCreator.Create("StatusUpdateAvailable", ImageFileKind.Xaml),
+        CanTheme = true
+    };
+
+    public static ImageDefinition HelpIconDefinition => new()
+    {
+        Kind = ImageFileKind.Xaml,
+        ImakgeKey = ImageKeys.StatusHelpIcon,
+        Source = ResourcesUriCreator.Create("StatusHelp", ImageFileKind.Xaml),
+        CanTheme = true
+    };
+
 
 
 
@@ -49,7 +65,9 @@ internal class ImageCatalog : ImmutableImageCatalog
         SettingsDefinition,
         UndoDefinition,
         GithubDefinition, 
-        TrooperDefinition
+        TrooperDefinition,
+        UpdateIconDefinition,
+        HelpIconDefinition
     };
 
     private ImageCatalog() : base(Definitions)

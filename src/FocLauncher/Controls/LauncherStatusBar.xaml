@@ -5,12 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:FocLauncher.Controls"
              xmlns:controls="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Imaging.Controls;assembly=Sklavenwalker.CommonUtilities.WPF.Imaging"
-             xmlns:imaging="clr-namespace:FocLauncher.Imaging"
-             xmlns:imaging1="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Imaging;assembly=Sklavenwalker.CommonUtilities.WPF.Imaging"
-             xmlns:converters="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Converters;assembly=Sklavenwalker.CommonUtilities.WPF.Core"
-             mc:Ignorable="d" d:DesignWidth="150">
+             xmlns:designer="clr-namespace:FocLauncher.ViewModels.Designer"
+             mc:Ignorable="d" d:DesignWidth="150"  d:DataContext="{d:DesignInstance {x:Type designer:StatusBarViewModel}, IsDesignTimeCreatable=True}">
     <FrameworkElement.Resources>
-        <converters:BrushToColorConverter x:Key="BrushToColorConverter"/>
         <Style TargetType="{x:Type TextBlock}">
             <Setter Property="Margin" Value="1"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
@@ -20,12 +17,14 @@
         </Style>
         <Style TargetType="{x:Type Button}">
             <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Command" Value="{Binding Command}"/>
+            <Setter Property="ToolTip" Value="{Binding Tooltip}"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Button}">
                         <Border x:Name="Background" Padding="2,0"
                                 IsHitTestVisible="True" Background="{TemplateBinding Background}">
-                            <controls:ThemedImage Width="16" Height="16" ImakgeKey="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}"/>
+                            <controls:ThemedImage Width="16" Height="16" ImakgeKey="{Binding Image}"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Value="True" Property="IsMouseOver">
@@ -42,12 +41,6 @@
         </Style>
         <Style BasedOn="{StaticResource {x:Type StatusBar}}" TargetType="{x:Type local:LauncherStatusBar}">
             <Setter Property="Panel.Background" Value="{Binding Background}"/>
-
-            <Setter Property="imaging1:ImageThemingUtilities.ImageBackgroundColor">
-                <Setter.Value>
-                    <Binding Path="Background" RelativeSource="{RelativeSource Self}" Converter="{StaticResource BrushToColorConverter}"></Binding>
-                </Setter.Value>
-            </Setter>
             <Setter Property="MinHeight" Value="22"/>
             <Setter Property="Focusable" Value="False"/>
             <Setter Property="TextElement.FontFamily">
@@ -89,9 +82,10 @@
         </Style>
     </FrameworkElement.Resources>
 
-    <Button Command="{Binding ClickCommand}" Content="{x:Static imaging:ImageKeys.Undo}"/>
-    <Button Command="{Binding ClickCommand}" Content="{x:Static imaging:ImageKeys.Undo}"/>
+    <Button DataContext="{Binding AboutCommand}"/>
+    <!--<Button Command="{Binding SettingsCommand}" Content="{x:Static imaging:ImageKeys.Settings}"/>
+    <Button Command="{Binding UpdateCommand}" Content="{x:Static imaging:ImageKeys.UpdateIcon}"/>-->
 
-    <TextBlock Text="123"/>
+    <TextBlock Text="{Binding InstalledGameType}"/>
 
 </StatusBar>

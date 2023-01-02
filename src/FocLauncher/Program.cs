@@ -2,7 +2,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.IO.Abstractions;
 using System.Threading.Tasks;
-using FocLauncher.Controls;
 using FocLauncher.Services;
 using FocLauncher.Update.ProductMetadata;
 using Microsoft.Extensions.DependencyInjection;

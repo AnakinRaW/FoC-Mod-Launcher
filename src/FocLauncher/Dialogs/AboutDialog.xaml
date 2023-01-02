@@ -1,0 +1,50 @@
+﻿<UserControl x:Class="FocLauncher.Dialogs.AboutDialog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FocLauncher.Dialogs"
+             mc:Ignorable="d" Width="350" MinHeight="150">
+    <Grid Margin="6,12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" Text="Launcher by AnakinSklavenwalker"/>
+        <Grid Grid.Row="1" TextElement.Foreground="SlateGray" Opacity=".8">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" Text="Copyright Information:"/>
+            <StackPanel Grid.Row="1" Margin="10,0,0,0">
+                <DockPanel VerticalAlignment="Stretch">
+                    <TextBlock Text="Splash Screen Image © by Exhumed"/>
+                    <TextBlock HorizontalAlignment="Right">           
+                        <Hyperlink NavigateUri="https://creativecommons.org/licenses/by-nc-nd/4.0/"
+                                   RequestNavigate="OpenLicenseSite">
+                            Licence
+                        </Hyperlink>
+                    </TextBlock>
+                </DockPanel>
+                <TextBlock Text="Palpatine, Anakin, Han, Cody Image © Lucasfilm Ltd. LLC"/>
+                <TextBlock Text="Vader Image © by Marvel Comics"/>
+                <TextBlock Text="EaW Font © by Petroglyph/Lucasarts"/>
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Row="3" Margin="0,5,0,0">
+            <StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Launcher Version: "/>
+                    <TextBlock Text="{Binding LauncherVersion}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Theme Version: "/>
+                    <TextBlock Text="{Binding ThemeVersion}"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>

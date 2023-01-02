@@ -39,7 +39,7 @@
     <SolidColorBrush x:Key="{x:Static colors:WindowColors.DialogContentText}" Color="#FFF1F1F1"/>
 
 
-    <SolidColorBrush x:Key="{x:Static colors:WindowColors.StatusBarDefault}" Color="#FF007ACC"/>
+    <SolidColorBrush x:Key="{x:Static colors:WindowColors.StatusBarDefault}" Color="#FF424242"/>
     <SolidColorBrush x:Key="{x:Static colors:WindowColors.StatusBarDefaultText}" Color="#FFF1F1F1"/>
 
 

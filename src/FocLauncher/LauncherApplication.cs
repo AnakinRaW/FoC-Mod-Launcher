@@ -22,7 +22,7 @@ internal class LauncherApplication : ApplicationBase
     }
     protected override IApplicationViewModel CreateApplicationViewModel()
     {
-        return new LauncherViewModel(ServiceProvider, new StatusBarViewModel())
+        return new LauncherViewModel(ServiceProvider, new StatusBarViewModel(ServiceProvider))
         {
             Title = LauncherConstants.ApplicationName,
             IsResizable = false,

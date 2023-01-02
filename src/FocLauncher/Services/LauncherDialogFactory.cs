@@ -1,5 +1,6 @@
 ﻿using System;
 using FocLauncher.Controls;
+using FocLauncher.ViewModels;
 using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Controls;
 using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 
@@ -13,6 +14,12 @@ internal class LauncherDialogFactory : DialogFactory
 
     protected override DialogWindow CreateDialog(IDialogViewModel viewModel)
     {
-        return new ImageDialog(viewModel);
+        if (viewModel is IImageDialogViewModel)
+            return new ImageDialog(viewModel);
+        var dialog = new DialogWindow(viewModel)
+        {
+            Content = viewModel
+        };
+        return dialog;
     }
 }
