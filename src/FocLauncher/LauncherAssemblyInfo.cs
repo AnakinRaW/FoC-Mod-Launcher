@@ -9,6 +9,8 @@ internal static class LauncherAssemblyInfo
     internal static string InformationalVersion { get; }
 
     internal static string FileVersion { get; }
+
+    internal static string AssemblyVersion { get; }
     
     internal static string Title { get; }
 
@@ -19,6 +21,7 @@ internal static class LauncherAssemblyInfo
         var executingAssembly = Assembly.GetExecutingAssembly();
         InformationalVersion = executingAssembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
         FileVersion = FileVersionInfo.GetVersionInfo(executingAssembly.Location).FileVersion;
+        AssemblyVersion = executingAssembly.GetName().Version.ToString();
         Title = executingAssembly.GetCustomAttribute<AssemblyTitleAttribute>().Title;
         AssemblyName = executingAssembly.GetName().Name;
     }

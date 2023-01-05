@@ -15,8 +15,6 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<VersionPrefix>2.0.0</VersionPrefix>
-		<AssemblyInformationalVersion>2.0.0-beta</AssemblyInformationalVersion>
 		<Description>Mod and game launcher for Star Wars Empire at War: Forces of Corruption.</Description>
 	</PropertyGroup>
 	
