@@ -17,44 +17,40 @@
 	<PropertyGroup>
 		<Description>Mod and game launcher for Star Wars Empire at War: Forces of Corruption.</Description>
 	</PropertyGroup>
-	
+
 	<ItemGroup>
-	  <None Remove="Resources\Fonts\EaW-bold.ttf" />
-	  <None Remove="Resources\icon.ico" />
-	  <None Remove="Resources\Icons\Png\GitHub_Mark_32px.png" />
-	  <None Remove="Resources\Icons\Png\sadTrooper.png" />
-	  <None Remove="Resources\Icons\Png\Undo_16x.png" />
+		<None Remove="Resources\Fonts\EaW-bold.ttf" />
+		<None Remove="Resources\icon.ico" />
+		<None Remove="Resources\Icons\Png\GitHub_Mark_32px.png" />
+		<None Remove="Resources\Icons\Png\sadTrooper.png" />
+		<None Remove="Resources\Icons\Png\Undo_16x.png" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Costura.Fody" Version="5.7.0">
-		  <PrivateAssets>all</PrivateAssets>
-		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Flurl" Version="3.0.7" />
 		<PackageReference Include="IsExternalInit" Version="1.0.3">
-		  <PrivateAssets>all</PrivateAssets>
-		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
-	  <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
-	  <PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
-	  <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0" />
-	  <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="7.0.0" />
-	  <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
-	  <PackageReference Include="Nerdbank.GitVersioning" Version="3.5.119">
-	    <PrivateAssets>all</PrivateAssets>
-	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-	  </PackageReference>
-	  <PackageReference Include="PetroGlyph.Games.EawFoc.Clients.Steam.Windows" Version="1.1.1" />
-	  <PackageReference Include="Semver" Version="2.2.0" />
-	  <PackageReference Include="Serilog.Extensions.Logging.File" Version="3.0.0" />
-	  <PackageReference Include="Sklavenwalker.CommonUtilities.FileSystem.Windows" Version="2.0.0" />
-	  <PackageReference Include="Sklavenwalker.CommonUtilities.Registry" Version="2.1.0" />
-	  <PackageReference Include="Sklavenwalker.CommonUtilities.Registry.Windows" Version="2.1.1" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="7.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
+		<PackageReference Include="PetroGlyph.Games.EawFoc.Clients.Steam.Windows" Version="1.1.1" />
+		<PackageReference Include="Semver" Version="2.2.0" />
+		<PackageReference Include="Serilog.Extensions.Logging.File" Version="3.0.0" />
+		<PackageReference Include="Sklavenwalker.CommonUtilities.FileSystem.Windows" Version="2.0.0" />
+		<PackageReference Include="Sklavenwalker.CommonUtilities.Registry" Version="2.1.0" />
+		<PackageReference Include="Sklavenwalker.CommonUtilities.Registry.Windows" Version="2.1.1" />
 		<PackageReference Include="System.IO.Abstractions" Version="17.0.24" />
-	  <PackageReference Include="System.Runtime.Extensions" Version="4.3.1" />
-	  <PackageReference Include="Validation" Version="2.5.51" />
+		<PackageReference Include="System.Runtime.Extensions" Version="4.3.1" />
+		<PackageReference Include="Validation" Version="2.5.51" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(Configuration)' == 'Release'">
@@ -65,27 +61,27 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\CommonUtilities\CommonUtilities.WPF.ApplicationFramework\CommonUtilities.WPF.ApplicationFramework.csproj" />
-	  <ProjectReference Include="..\CommonUtilities\CommonUtilities.WPF.Core\CommonUtilities.WPF.Core.csproj" />
-	  <ProjectReference Include="..\CommonUtilities\CommonUtilities.WPF.Imaging\CommonUtilities.WPF.Imaging.csproj" />
-	  <ProjectReference Include="..\FocLauncher.AppUpdater\FocLauncher.AppUpdater.csproj" />
-	  <ProjectReference Include="..\ProductMetadata\ProductMetadata.csproj" />
-	  <ProjectReference Include="..\ProductUpdater\ProductUpdater.csproj" />
+		<ProjectReference Include="..\CommonUtilities\CommonUtilities.WPF.ApplicationFramework\CommonUtilities.WPF.ApplicationFramework.csproj" />
+		<ProjectReference Include="..\CommonUtilities\CommonUtilities.WPF.Core\CommonUtilities.WPF.Core.csproj" />
+		<ProjectReference Include="..\CommonUtilities\CommonUtilities.WPF.Imaging\CommonUtilities.WPF.Imaging.csproj" />
+		<ProjectReference Include="..\FocLauncher.AppUpdater\FocLauncher.AppUpdater.csproj" />
+		<ProjectReference Include="..\ProductMetadata\ProductMetadata.csproj" />
+		<ProjectReference Include="..\ProductUpdater\ProductUpdater.csproj" />
 	</ItemGroup>
-	
+
 	<ItemGroup>
-	  <Resource Include="Resources\Fonts\EaW-bold.ttf" />
-	  <Resource Include="Resources\icon.ico" />
-	  <Resource Include="Resources\Icons\Png\GitHub_Mark_32px.png" />
-	  <Resource Include="Resources\Icons\Png\sadTrooper.png" />
-	  <Resource Include="Resources\Icons\Png\Undo_16x.png" />
+		<Resource Include="Resources\Fonts\EaW-bold.ttf" />
+		<Resource Include="Resources\icon.ico" />
+		<Resource Include="Resources\Icons\Png\GitHub_Mark_32px.png" />
+		<Resource Include="Resources\Icons\Png\sadTrooper.png" />
+		<Resource Include="Resources\Icons\Png\Undo_16x.png" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<Page Update="Themes\LauncherTheme.xaml">
-	    <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-	    <SubType>Designer</SubType>
-	  </Page>
+			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+			<SubType>Designer</SubType>
+		</Page>
 	</ItemGroup>
 
 	<Target Name="RemoveDuplicateAnalyzers" BeforeTargets="CoreCompile">
