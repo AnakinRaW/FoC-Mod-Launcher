@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
 using FocLauncher.Imaging;
+using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog.Buttons;
 using Sklavenwalker.CommonUtilities.Wpf.Imaging;
 
@@ -26,6 +27,8 @@ internal class ImageDialogViewModel : IImageDialogViewModel
     public event EventHandler? CloseDialogRequest;
     public string? ResultButton { get; }
     public IList<IButtonViewModel> Buttons { get; }
+    public IDialogAdditionalInformationViewModel? AdditionalInformation { get; }
+
     public void CloseDialog()
     {
     }

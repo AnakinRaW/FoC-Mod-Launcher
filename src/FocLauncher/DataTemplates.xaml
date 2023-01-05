@@ -27,4 +27,9 @@
         <views:UpdateWindow/>
     </DataTemplate>
 
+
+    <DataTemplate DataType="{x:Type viewModels:LauncherVersionViewModel}">
+        <views:LauncherVersionPanel/>
+    </DataTemplate>
+
 </ResourceDictionary>

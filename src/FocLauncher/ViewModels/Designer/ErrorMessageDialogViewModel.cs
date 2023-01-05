@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows;
 using FocLauncher.Imaging;
+using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog.Buttons;
 using Sklavenwalker.CommonUtilities.Wpf.Imaging;
 
@@ -26,6 +27,7 @@ internal class ErrorMessageDialogViewModel : IErrorMessageDialogViewModel
     public bool ShowIcon { get; set; }
     public string? ResultButton { get; }
     public IList<IButtonViewModel> Buttons { get; }
+    public IDialogAdditionalInformationViewModel? AdditionalInformation { get; }
     public bool HasDialogFrame { get; set; }
     public bool IsCloseButtonEnabled { get; set; }
 

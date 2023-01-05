@@ -4,16 +4,17 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:FocLauncher.Dialogs"
-             mc:Ignorable="d" Width="350" MinHeight="150">
-    <Grid Margin="6,12">
+             xmlns:themes="clr-namespace:FocLauncher.Themes"
+             mc:Ignorable="d" Width="350" 
+             HorizontalAlignment="Left"
+             Foreground="{DynamicResource {x:Static themes:LauncherColors.MainWindowText}}">
+    <Grid Margin="12,12">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" Text="Launcher by AnakinSklavenwalker"/>
-        <Grid Grid.Row="1" TextElement.Foreground="SlateGray" Opacity=".8">
+        <Grid Margin="0,6,0,0" Grid.Row="1" TextElement.Foreground="SlateGray" Opacity=".8">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
@@ -32,18 +33,6 @@
                 <TextBlock Text="Palpatine, Anakin, Han, Cody Image © Lucasfilm Ltd. LLC"/>
                 <TextBlock Text="Vader Image © by Marvel Comics"/>
                 <TextBlock Text="EaW Font © by Petroglyph/Lucasarts"/>
-            </StackPanel>
-        </Grid>
-        <Grid Grid.Row="3" Margin="0,5,0,0">
-            <StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Launcher Version: "/>
-                    <TextBlock Text="{Binding LauncherVersion}"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Theme Version: "/>
-                    <TextBlock Text="{Binding ThemeVersion}"/>
-                </StackPanel>
             </StackPanel>
         </Grid>
     </Grid>

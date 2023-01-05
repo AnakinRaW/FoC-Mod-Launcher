@@ -5,6 +5,9 @@ namespace FocLauncher.ViewModels;
 
 public class LauncherAboutDialogViewModel : DialogViewModel
 {
+    public override IDialogAdditionalInformationViewModel? AdditionalInformation { get; } =
+        new LauncherVersionViewModel();
+
     public LauncherAboutDialogViewModel(IServiceProvider serviceProvider) : base(serviceProvider)
     {
         Title = "About Foc Launcher";

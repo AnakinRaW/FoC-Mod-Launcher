@@ -29,6 +29,8 @@ public abstract class DialogViewModel : ModalWindowViewModel, IDialogViewModel
         }
     }
 
+    public virtual IDialogAdditionalInformationViewModel? AdditionalInformation => null;
+
     public IDelegateCommand<IButtonViewModel> UnifiedButtonCommand { get; }
 
     protected DialogViewModel(IServiceProvider serviceProvider)
