@@ -6,4 +6,6 @@
     <SolidColorBrush x:Key="{x:Static colors:WindowColors.MainWindowActiveCaptionText}" Color="#FFFFFFFF"/>
     <SolidColorBrush x:Key="{x:Static themes:LauncherColors.MainWindowText}" Color="#FFFFFFFF"/>
 
+    <SolidColorBrush x:Key="{x:Static themes:LauncherColors.AboutWindowPackagesText}" Color="#FF7A7A7A"/>
+
 </ResourceDictionary>

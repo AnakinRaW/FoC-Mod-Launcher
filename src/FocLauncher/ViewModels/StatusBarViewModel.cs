@@ -18,7 +18,7 @@ public partial class StatusBarViewModel : ObservableObject, ILauncherStatusBarVi
 
     public ICommandDefinition AboutCommand { get; }
     public ICommandDefinition SettingsCommand => null;
-    public ICommandDefinition UpdateCommand => null;
+    public ICommandDefinition UpdateCommand { get; }
 
     [ObservableProperty] private Brush _background = Brushes.Transparent;
 
@@ -26,6 +26,7 @@ public partial class StatusBarViewModel : ObservableObject, ILauncherStatusBarVi
     {
         Requires.NotNull(serviceProvider, nameof(serviceProvider));
         AboutCommand = new AboutDialogCommandDefinition(serviceProvider);
+        UpdateCommand = new UpdateWindowCommandDefinition(serviceProvider);
     }
 
 

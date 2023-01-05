@@ -3,7 +3,7 @@ using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 
 namespace FocLauncher.ViewModels;
 
-internal partial class LauncherVersionViewModel : ObservableObject, IDialogAdditionalInformationViewModel
+internal class LauncherVersionViewModel : ObservableObject, IDialogAdditionalInformationViewModel
 {
     public string LauncherVersion => LauncherAssemblyInfo.InformationalVersion;
 }

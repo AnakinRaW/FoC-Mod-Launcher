@@ -6,14 +6,6 @@ using Sklavenwalker.CommonUtilities.Wpf.Themes.Fonts;
 
 namespace FocLauncher.Themes;
 
-internal static class LauncherColors
-{
-    private static ComponentResourceKey? _mainWindowText;
-
-    public static ComponentResourceKey MainWindowText =>
-        _mainWindowText ??= new ComponentResourceKey(typeof(LauncherColors), nameof(MainWindowText));
-}
-
 internal class LauncherTheme : Theme
 {
     public override string Id => "LauncherDefaultTheme";
