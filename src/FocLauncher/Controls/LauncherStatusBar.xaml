@@ -84,7 +84,7 @@
     </FrameworkElement.Resources>
 
     <Button DataContext="{Binding AboutCommand}"/>
-    <Button DataContext="{Binding SettingsCommand}"/>
+    <!--<Button DataContext="{Binding SettingsCommand}"/>-->
     <Button DataContext="{Binding UpdateCommand}"/>
 
     <TextBlock Text="{Binding InstalledGameType}"/>

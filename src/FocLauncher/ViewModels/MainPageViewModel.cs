@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.DependencyInjection;
 using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework;
+using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
 using Validation;
 
@@ -49,8 +50,8 @@ internal partial class MainPageViewModel : LoadingViewModelBase, IMainPageViewMo
                     _isInitialized = true;
                 }
 
-                //var vm = new UpdateWindowViewModel(ServiceProvider);
-                //await ServiceProvider.GetRequiredService<IModalWindowService>().ShowModal(vm);
+                var vm = new UpdateWindowViewModel(ServiceProvider);
+                await ServiceProvider.GetRequiredService<IModalWindowService>().ShowModal(vm);
 
                 IsLoading = false;
             }
