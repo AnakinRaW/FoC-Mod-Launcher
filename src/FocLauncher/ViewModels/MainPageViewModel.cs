@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
+using FocLauncher.Update.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework;
 using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog;

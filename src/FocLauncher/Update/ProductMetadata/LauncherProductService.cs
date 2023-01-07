@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
+using System.Linq;
+using System.Net;
 using System.Reflection;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
@@ -54,21 +57,33 @@ internal class LauncherProductService : ProductServiceBase
 
 public class LauncherBranchManager : BranchManager
 {
+    internal const string StableBranchName = "stable";
+
     private const string BranchLookupFileName = "branches";
     private const string ManifestFileName = "manifest.json";
 
-    private static readonly Url BranchLookupUrl = new Url(LauncherConstants.LauncherRootUrl)
-        .AppendPathSegment(BranchLookupFileName);
-    
-    protected override string DefaultBranchName => "stable";
+    private static readonly Url BranchLookupUrl = Url.Combine(LauncherConstants.LauncherRootUrl, BranchLookupFileName);
+
+    protected override string DefaultBranchName => StableBranchName;
 
     public LauncherBranchManager(IServiceProvider serviceProvider) : base(serviceProvider)
     {
     }
 
-    public override Task<IEnumerable<ProductBranch>> GetAvailableBranches()
+    public override async Task<IEnumerable<ProductBranch>> GetAvailableBranches()
     {
-        throw new NotImplementedException();
+
+        var branchesData = await new WebClient().DownloadDataTaskAsync(BranchLookupUrl.ToUri());
+        var branchNames = Encoding.UTF8.GetString(branchesData).Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
+        if (!branchNames.Any())
+            throw new InvalidOperationException($"No branches detected in '{BranchLookupUrl}'");
+        var branches = new List<ProductBranch>();
+        foreach (var name in branchNames)
+        {
+            var isPrerelease = !name.Equals(DefaultBranchName, StringComparison.InvariantCultureIgnoreCase);
+            branches.Add(new ProductBranch(name, BuildManifestUri(name), isPrerelease));
+        }
+        return branches;
     }
 
     protected override Uri BuildManifestUri(string branchName)

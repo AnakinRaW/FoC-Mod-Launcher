@@ -117,6 +117,7 @@ internal static class Program
 
     private static void CreateUpdateProgramServices(IServiceCollection serviceCollection)
     {
+        serviceCollection.AddSingleton<IProductService>(sp => new LauncherProductService(sp));
         serviceCollection.AddSingleton<IProductUpdateProviderService>(sp => new ProductUpdateProviderService(sp));
         serviceCollection.AddSingleton<IBranchManager>(sp => new LauncherBranchManager(sp));
         serviceCollection.AddSingleton<IManifestLoader>(sp => new LauncherManifestLoader(sp));

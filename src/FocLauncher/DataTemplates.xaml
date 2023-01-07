@@ -2,7 +2,8 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:viewModels="clr-namespace:FocLauncher.ViewModels"
                     xmlns:views="clr-namespace:FocLauncher.Views"
-                    xmlns:dialogs="clr-namespace:FocLauncher.Dialogs">
+                    xmlns:dialogs="clr-namespace:FocLauncher.Dialogs"
+                    xmlns:updateViewModels="clr-namespace:FocLauncher.Update.ViewModels">
     
     <DataTemplate DataType="{x:Type viewModels:MainPageViewModel}">
         <views:MainPage/>
@@ -23,7 +24,7 @@
     </DataTemplate>
 
 
-    <DataTemplate DataType="{x:Type viewModels:UpdateWindowViewModel}">
+    <DataTemplate DataType="{x:Type updateViewModels:UpdateWindowViewModel}">
         <views:UpdateWindow/>
     </DataTemplate>
 

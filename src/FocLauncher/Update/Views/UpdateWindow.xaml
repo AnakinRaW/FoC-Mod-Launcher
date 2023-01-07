@@ -1,0 +1,67 @@
+﻿<UserControl x:Class="FocLauncher.Views.UpdateWindow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:designer="clr-namespace:FocLauncher.Update.ViewModels.Designer"
+             xmlns:viewModels="clr-namespace:FocLauncher.Update.ViewModels"
+             xmlns:views="clr-namespace:FocLauncher.Update.Views"
+             xmlns:productMetadata="clr-namespace:Sklavenwalker.ProductMetadata;assembly=Sklavenwalker.ProductMetadata"
+             xmlns:converters="clr-namespace:FocLauncher.Converters"
+             xmlns:wpfConverters="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Converters;assembly=Sklavenwalker.CommonUtilities.WPF.Core"
+             mc:Ignorable="d" d:DesignWidth="500"
+             d:DataContext="{d:DesignInstance {x:Type designer:UpdateWindowViewModel}, IsDesignTimeCreatable=True}">
+
+    <FrameworkElement.Resources>
+        <converters:ProductBranchNameConverter x:Key="ProductBranchNameConverter"/>
+        <wpfConverters:BooleanInverseConverter x:Key="BooleanInverseConverter"/>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </FrameworkElement.Resources>
+   
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" x:Name="UpdateInfoBox" Margin="0,0,0,12" BorderThickness="1" BorderBrush="DodgerBlue">
+            <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="DodgerBlue">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left">
+                    <Border x:Name="ProgressIndicator" Margin="12,0,0,0" Height="16" Width="16" HorizontalAlignment="Left" Background="Red"/>
+                    <TextBlock Text="Status" Margin="12,8,8,8" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" TextTrimming="None"/>
+                </StackPanel>
+                <Button Grid.Column="1" Width="32" Height="32">Search</Button>
+            </Grid>
+        </Border>
+
+        <ContentControl Grid.Row="1" Content="{Binding }" DataContext="{Binding InstalledProductViewModel}">
+            <ContentControl.ContentTemplate>
+                <DataTemplate DataType="{x:Type viewModels:IInstalledProductViewModel}">
+                    <views:InstalledProductView/>
+                </DataTemplate>
+            </ContentControl.ContentTemplate>
+        </ContentControl>
+
+        <Grid Grid.Row="2" Margin="0,12,0,0">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <TextBlock Margin="0,0,4,0" VerticalAlignment="Center" Text="Branch:"/>
+                <ComboBox MinWidth="125" IsEditable="False" IsReadOnly="True" Text=""
+                          IsEnabled="{Binding IsLoading, Converter={StaticResource BooleanInverseConverter}}"
+                          ItemsSource="{Binding Branches}"
+                          SelectedItem="{Binding CurrentBranch, Mode=TwoWay}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate DataType="{x:Type productMetadata:ProductBranch}">
+                            <TextBlock Text="{Binding Name, Converter={StaticResource ProductBranchNameConverter}}" VerticalAlignment="Center"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </StackPanel>
+        </Grid>
+
+    </Grid>
+</UserControl>

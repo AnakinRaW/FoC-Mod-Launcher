@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 using FocLauncher.Imaging;
+using FocLauncher.Update.ViewModels;
 using FocLauncher.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog;
@@ -18,6 +19,14 @@ public class UpdateWindowCommandDefinition : ICommandDefinition
     public ImageKey Image => ImageKeys.UpdateIcon;
     public ICommand Command { get; }
 
+    private IUpdateWindowViewModel? _updateWindowViewModel;
+
+    private IUpdateWindowViewModel UpdateWindowViewModel
+    {
+        get { return _updateWindowViewModel ??= new UpdateWindowViewModel(_serviceProvider); }
+
+    }
+
     public UpdateWindowCommandDefinition(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
@@ -26,6 +35,6 @@ public class UpdateWindowCommandDefinition : ICommandDefinition
 
     private void OpenAboutDialog()
     {
-        _serviceProvider.GetRequiredService<IModalWindowService>().ShowModal(new UpdateWindowViewModel(_serviceProvider));
+        _serviceProvider.GetRequiredService<IModalWindowService>().ShowModal(UpdateWindowViewModel);
     }
 }

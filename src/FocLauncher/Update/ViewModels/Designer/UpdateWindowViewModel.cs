@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows;
+using FocLauncher.Update.ViewModels;
+using Sklavenwalker.ProductMetadata;
 
-namespace FocLauncher.ViewModels.Designer;
+namespace FocLauncher.Update.ViewModels.Designer;
 
 [EditorBrowsable(EditorBrowsableState.Never)]
 internal class UpdateWindowViewModel : IUpdateWindowViewModel
@@ -38,4 +41,9 @@ internal class UpdateWindowViewModel : IUpdateWindowViewModel
     public bool IsCloseButtonEnabled { get; set; }
     public bool IsLoading { get; }
     public string? LoadingText { get; }
+    public IInstalledProductViewModel InstalledProductViewModel { get; set; } = new InstalledProductViewModel();
+    public ObservableCollection<ProductBranch> Branches { get; } = new();
+
+    public ProductBranch CurrentBranch { get; set; } =
+        new ProductBranch("Test", new Uri("http://example.org", UriKind.Absolute), false);
 }
