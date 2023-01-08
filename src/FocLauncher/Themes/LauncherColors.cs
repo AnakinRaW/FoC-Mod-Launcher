@@ -4,13 +4,13 @@ namespace FocLauncher.Themes;
 
 internal static class LauncherColors
 {
-    private static ComponentResourceKey? _mainWindowText;
+    public static ComponentResourceKey MainWindowText { get; } = new(typeof(LauncherColors), nameof(MainWindowText));
 
-    private static ComponentResourceKey? _aboutWindowPackagesText;
+    public static ComponentResourceKey AboutWindowPackagesText { get; } = new(typeof(LauncherColors), nameof(AboutWindowPackagesText));
 
-    public static ComponentResourceKey MainWindowText =>
-        _mainWindowText ??= new ComponentResourceKey(typeof(LauncherColors), nameof(MainWindowText));
 
-    public static ComponentResourceKey AboutWindowPackagesText =>
-        _aboutWindowPackagesText ??= new ComponentResourceKey(typeof(LauncherColors), nameof(AboutWindowPackagesText));
+    public static ComponentResourceKey UpdateProductBackground { get; } = new(typeof(LauncherColors), nameof(UpdateProductBackground));
+    public static ComponentResourceKey UpdateProductBorder { get; } = new(typeof(LauncherColors), nameof(UpdateProductBorder));
+    public static ComponentResourceKey UpdateInfoBarBackground { get; } = new(typeof(LauncherColors), nameof(UpdateInfoBarBackground));
+    public static ComponentResourceKey UpdateInfoBarBorder { get; } = new(typeof(LauncherColors), nameof(UpdateInfoBarBorder));
 }

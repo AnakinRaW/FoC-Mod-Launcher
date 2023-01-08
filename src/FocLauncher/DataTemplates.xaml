@@ -3,7 +3,8 @@
                     xmlns:viewModels="clr-namespace:FocLauncher.ViewModels"
                     xmlns:views="clr-namespace:FocLauncher.Views"
                     xmlns:dialogs="clr-namespace:FocLauncher.Dialogs"
-                    xmlns:updateViewModels="clr-namespace:FocLauncher.Update.ViewModels">
+                    xmlns:updateViewModels="clr-namespace:FocLauncher.Update.ViewModels"
+                    xmlns:views1="clr-namespace:FocLauncher.Update.Views">
     
     <DataTemplate DataType="{x:Type viewModels:MainPageViewModel}">
         <views:MainPage/>
@@ -25,7 +26,7 @@
 
 
     <DataTemplate DataType="{x:Type updateViewModels:UpdateWindowViewModel}">
-        <views:UpdateWindow/>
+        <views1:UpdateWindow/>
     </DataTemplate>
 
 

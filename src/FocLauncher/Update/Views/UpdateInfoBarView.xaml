@@ -4,13 +4,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:designer="clr-namespace:FocLauncher.Update.ViewModels.Designer"
+             xmlns:themes="clr-namespace:FocLauncher.Themes"
              mc:Ignorable="d" d:DesignWidth="300"
              d:DataContext="{d:DesignInstance {x:Type designer:DesignerInfoBarViewModel}, IsDesignTimeCreatable=True}">
     <FrameworkElement.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </FrameworkElement.Resources>
-    <Border BorderThickness="1" BorderBrush="DodgerBlue">
-        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="DodgerBlue">
+    <Border BorderThickness="1" BorderBrush="{DynamicResource {x:Static themes:LauncherColors.UpdateInfoBarBorder}}">
+        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="{DynamicResource {x:Static themes:LauncherColors.UpdateInfoBarBackground}}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>

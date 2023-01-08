@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
+using FocLauncher.Imaging;
 using FocLauncher.Services;
 using FocLauncher.Update.ProductMetadata;
 using FocLauncher.Utilities;
@@ -78,7 +79,7 @@ internal partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWind
         var productService = _serviceProvider.GetRequiredService<IProductService>();
         var launcher = productService.GetCurrentInstance();
         AppDispatcher.Invoke(() =>
-            InstalledProductViewModel = new InstalledProductViewModel(launcher.Name, default, _serviceProvider));
+            InstalledProductViewModel = new InstalledProductViewModel(launcher.Name, ImageKeys.AppIcon, _serviceProvider));
         return launcher;
     }
 

@@ -6,7 +6,7 @@
                               xmlns:controls="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Controls;assembly=Sklavenwalker.CommonUtilities.WPF.Controls"
                               xmlns:colors="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Themes.Colors;assembly=Sklavenwalker.CommonUtilities.WPF.Controls"
                               mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="600"
-                              Background="{DynamicResource {x:Static colors:WindowColors.DialogContentBackground}}"
+                              Background="{DynamicResource {x:Static colors:WindowColors.DialogBackground}}"
                               Foreground="{DynamicResource {x:Static colors:WindowColors.DialogContentText}}">
     <ContentPresenter Content="{Binding}" Margin="4"/>
 </controls:AutoSizeModalWindow>

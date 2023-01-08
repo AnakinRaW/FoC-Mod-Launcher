@@ -1,4 +1,4 @@
-﻿namespace FocLauncher.Views;
+﻿namespace FocLauncher.Update.Views;
 
 public partial class UpdateWindow
 {

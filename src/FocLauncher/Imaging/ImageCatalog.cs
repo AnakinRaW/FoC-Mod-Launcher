@@ -57,11 +57,20 @@ internal class ImageCatalog : ImmutableImageCatalog
         CanTheme = true
     };
 
+    public static ImageDefinition AppIconDefinition => new()
+    {
+        Kind = ImageFileKind.Png,
+        ImakgeKey = ImageKeys.AppIcon,
+        Source = ResourcesUriCreator.Create("AppIcon", ImageFileKind.Png),
+        CanTheme = false
+    };
+
 
 
 
     public static IEnumerable<ImageDefinition> Definitions = new List<ImageDefinition>
     {
+        AppIconDefinition,
         SettingsDefinition,
         UndoDefinition,
         GithubDefinition, 

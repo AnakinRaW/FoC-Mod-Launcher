@@ -6,17 +6,22 @@
              xmlns:designer="clr-namespace:FocLauncher.Update.ViewModels.Designer"
              xmlns:imaging="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Imaging;assembly=Sklavenwalker.CommonUtilities.WPF.Imaging"
              xmlns:converters="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Converters;assembly=Sklavenwalker.CommonUtilities.WPF.Core"
+             xmlns:themes="clr-namespace:FocLauncher.Themes"
+             xmlns:controls="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Imaging.Controls;assembly=Sklavenwalker.CommonUtilities.WPF.Imaging"
+             xmlns:wpfControls="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Controls;assembly=Sklavenwalker.CommonUtilities.WPF.Controls"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance {x:Type designer:DesignerInstalledProductViewModel}, IsDesignTimeCreatable=True}">
     <FrameworkElement.Resources>
         <converters:BrushToColorConverter x:Key="BrushToColorConverter"/>
     </FrameworkElement.Resources>
-    <Border x:Name="ProductInfo" Focusable="False" Background="Gray" BorderThickness="0">
+    <Border Focusable="False" 
+            Background="{DynamicResource {x:Static themes:LauncherColors.UpdateProductBackground}}"  
+            BorderBrush="{DynamicResource {x:Static themes:LauncherColors.UpdateProductBorder}}" BorderThickness="0">
         <Border.Effect>
             <DropShadowEffect BlurRadius="8" Opacity="0.1"/>
         </Border.Effect>
-        <Grid Background="Gray" 
-                  imaging:ImageThemingUtilities.ImageBackgroundColor="{Binding Background, RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToColorConverter}}">
+        <Grid Background="{DynamicResource {x:Static themes:LauncherColors.UpdateProductBackground}}" 
+              imaging:ImageThemingUtilities.ImageBackgroundColor="{Binding Background, RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToColorConverter}}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
@@ -32,12 +37,11 @@
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Border x:Name="Image" Background="Red" Grid.Column="0" Height="24" Width="24" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                    <controls:ThemedImage Grid.Column="0" Height="24" Width="24" VerticalAlignment="Center" Margin="0,0,12,0" ImakgeKey="{Binding Icon}"/>
                     <TextBlock Grid.Column="1" VerticalAlignment="Center" TextWrapping="Wrap" TextTrimming="None" FontSize="18" Text="{Binding DisplayName}"/>
                 </Grid>
                 <ContentControl Grid.Row="1" Margin="48,0,0,20" Focusable="False">
                     <StackPanel x:Name="ProductVersionInfo" >
-
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
                             <TextBlock VerticalAlignment="Center" Text="Current Version:" FontSize="13"/>
                             <TextBlock VerticalAlignment="Center" FontSize="13" Margin="12,0,0,0" Text="1.0.0.0"/>
@@ -50,9 +54,9 @@
                 </ContentControl>
             </Grid>
             <StackPanel Grid.Column="1" VerticalAlignment="Stretch" Width="150" Focusable="False" Margin="20,4,12,12">
-                <Button Margin="0,8,0,0" Padding="16,0" Height="23" MinWidth="64"
-                            HorizontalAlignment="Stretch" Focusable="False"
-                            VerticalContentAlignment="Center" HorizontalContentAlignment="Center">Update</Button>
+                <wpfControls:ThemedButton Margin="0,8,0,0" Padding="16,0" Height="23" MinWidth="64"
+                            HorizontalAlignment="Stretch" Focusable="False" VerticalContentAlignment="Center" 
+                            HorizontalContentAlignment="Center">Update</wpfControls:ThemedButton>
             </StackPanel>
         </Grid>
     </Border>
