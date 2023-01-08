@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Sklavenwalker.ProductMetadata.Catalog;
 using Sklavenwalker.ProductMetadata.Component;
 using Sklavenwalker.ProductUpdater.Catalog;
@@ -26,5 +28,15 @@ internal static class Extensions
                 result.Add(installable);
         }
         return result;
+    }
+
+    public static void RaiseAsync(this EventHandler? handler, object sender, EventArgs e)
+    {
+        Task.Run(() => handler?.Invoke(sender, e));
+    }
+
+    public static void RaiseAsync<T>(this EventHandler<T>? handler, object sender, T e)
+    {
+        Task.Run(() => handler?.Invoke(sender, e));
     }
 }

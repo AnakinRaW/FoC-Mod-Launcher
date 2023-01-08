@@ -5,15 +5,16 @@ using Sklavenwalker.CommonUtilities.Wpf.Controls;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading;
-using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using FocLauncher.Services;
 using FocLauncher.Update.ProductMetadata;
+using FocLauncher.Utilities;
 using Microsoft.Extensions.DependencyInjection;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Input;
 using Sklavenwalker.ProductMetadata;
 using Sklavenwalker.ProductMetadata.Services;
+using Sklavenwalker.ProductUpdater.Catalog;
 using Sklavenwalker.ProductUpdater.Services;
+using TaskCanceledException = System.Threading.Tasks.TaskCanceledException;
 
 namespace FocLauncher.Update.ViewModels;
 
@@ -25,19 +26,19 @@ internal partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWind
 
     private readonly CancellationTokenSource _updateWindowCancellationTokenSource = new();
 
-    [ObservableProperty]
-    private bool _isLoading = true;
+    private readonly IProductUpdateProviderService _updateService;
 
     [ObservableProperty]
-    private string? _loadingText;
-    
+    private bool _isLoadingBranches = true;
+
     [ObservableProperty]
     private ProductBranch _currentBranch = null!;
 
     [ObservableProperty] private IInstalledProductViewModel _installedProductViewModel = null!;
+    
+    public IUpdateInfoBarViewModel InfoBarViewModel { get; } 
 
     public ObservableCollection<ProductBranch> Branches { get; } = new();
-
 
     public UpdateWindowViewModel(IServiceProvider serviceProvider)
     {
@@ -46,48 +47,33 @@ internal partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWind
         HasMaximizeButton = false;
         HasMinimizeButton = false;
         IsResizable = false;
+        InfoBarViewModel = new UpdateInfoBarViewModel(serviceProvider);
+
+        _updateService = _serviceProvider.GetRequiredService<IProductUpdateProviderService>();
+        RegisterEvents();
     }
 
     public Task InitializeAsync()
     {
         return Task.Run(async () =>
         {
-            var launcher = LoadLauncherInformationAsync();
+            await InfoBarViewModel.InitializeAsync();
+            var launcher = LoadLauncherInformationAsync(null);
             await LoadBranches(launcher);
-            await CheckForUpdate();
-            IsLoading = false;
+            CheckForUpdate().Forget();
         });
     }
 
-    private async Task LoadBranches(IInstalledProduct launcher)
+    public override void OnClosing(CancelEventArgs e)
     {
-        AppDispatcher.Invoke(() =>
-        {
-            var loadingBranch = LoadingProductBranch;
-            Branches.Add(loadingBranch);
-            CurrentBranch = loadingBranch;
-        });
-
-        var branchManager = _serviceProvider.GetRequiredService<IBranchManager>();
-
-        var branches = (await branchManager.GetAvailableBranches()).ToList();
-
-        var stableBranch = branches.FirstOrDefault(b => b.Name == LauncherBranchManager.StableBranchName) ??
-                           throw new InvalidOperationException("No stable branch found. There is something wrong the deployment. Please call the author.");
-
-        var currentBranch = branches.FirstOrDefault(b => b.Equals(launcher.Branch)) ?? stableBranch;
-
-        AppDispatcher.Invoke(() =>
-        {
-            Branches.Clear();
-            foreach (var branch in branches)
-                Branches.Add(branch);
-            CurrentBranch = currentBranch;
-        });
+        if (e.Cancel)
+            return;
+        _updateWindowCancellationTokenSource.Cancel();
+        UnregisterEvents();
+        InfoBarViewModel.Dispose();
     }
 
-
-    private IInstalledProduct LoadLauncherInformationAsync()
+    private IInstalledProduct LoadLauncherInformationAsync(IUpdateCatalog? updateCatalog)
     {
         var productService = _serviceProvider.GetRequiredService<IProductService>();
         var launcher = productService.GetCurrentInstance();
@@ -96,29 +82,80 @@ internal partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWind
         return launcher;
     }
 
+
+    private async Task LoadBranches(IInstalledProduct launcher)
+    {
+        try
+        {
+            IsLoadingBranches = true;
+            AppDispatcher.Invoke(() =>
+            {
+                var loadingBranch = LoadingProductBranch;
+                Branches.Add(loadingBranch);
+                CurrentBranch = loadingBranch;
+            });
+
+            var branchManager = _serviceProvider.GetRequiredService<IBranchManager>();
+
+            var branches = (await branchManager.GetAvailableBranches()).ToList();
+
+            var stableBranch = branches.FirstOrDefault(b => b.Name == LauncherBranchManager.StableBranchName) ??
+                               throw new InvalidOperationException(
+                                   "No stable branch found. There is something wrong the deployment. Please call the author.");
+
+            var currentBranch = branches.FirstOrDefault(b => b.Equals(launcher.Branch)) ?? stableBranch;
+
+            AppDispatcher.Invoke(() =>
+            {
+                Branches.Clear();
+                foreach (var branch in branches)
+                    Branches.Add(branch);
+                CurrentBranch = currentBranch;
+            });
+
+            IsLoadingBranches = false;
+        }
+        catch (Exception)
+        {
+            InfoBarViewModel.Status = UpdateStatus.Failed;
+            AppDispatcher.Invoke(Branches.Clear);
+            throw;
+        }
+    }
+
     private async Task CheckForUpdate()
     {
-        using var searchUpdateCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(_updateWindowCancellationTokenSource.Token);
-
-        var updateService = _serviceProvider.GetRequiredService<IProductUpdateProviderService>();
-
-        //await updateService.CheckForUpdates(null, CancellationToken.None);
-
+        try
+        {
+            using var searchUpdateCancellationTokenSource =
+                CancellationTokenSource.CreateLinkedTokenSource(_updateWindowCancellationTokenSource.Token);
+                
+            await _updateService.CheckForUpdates(null, searchUpdateCancellationTokenSource.Token);
+        }
+        catch (TaskCanceledException)
+        {
+            // Ignore because cancelling checking is only possible by closing the window.
+            // No need to report to InfoBar in this case.
+        }
+        catch (Exception e)
+        {
+            InfoBarViewModel.Status = UpdateStatus.Failed;
+            // TODO: Error Dialog
+        }
     }
 
-    public void OnClosing(CancelEventArgs e)
+    private void OnUpdateCheckCompleted(object sender, IUpdateCatalog? e)
     {
-        _updateWindowCancellationTokenSource.Cancel();
+        LoadLauncherInformationAsync(e);
     }
-}
 
-public interface IUpdateInfoBarViewModel
-{
-    string InformationText { get; set; }
+    private void RegisterEvents()
+    {
+        _updateService.CheckingForUpdatesCompleted += OnUpdateCheckCompleted;
+    }
 
-    bool IsCheckingForUpdates { get; set; }
-
-    ICommandDefinition SearchForUpdateCommand { get; }
-
-    bool ShouldShowSearchButton { get; }
+    private void UnregisterEvents()
+    {
+        _updateService.CheckingForUpdatesCompleted -= OnUpdateCheckCompleted;
+    }
 }

@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel;
 using System.Threading.Tasks;
-using FocLauncher.Update.ViewModels;
 using Sklavenwalker.CommonUtilities.Wpf.Imaging;
 
 namespace FocLauncher.Update.ViewModels.Designer;
 
-public class InstalledProductViewModel : IInstalledProductViewModel
+[EditorBrowsable(EditorBrowsableState.Never)]
+public class DesignerInstalledProductViewModel : IInstalledProductViewModel
 {
     public event PropertyChangedEventHandler? PropertyChanged;
 

@@ -2,8 +2,8 @@
 
 	<PropertyGroup>
 		<Description>Provides infrastructure and controls for key-based themeable images.</Description>
-		<AssemblyVersion>1.0.0.0</AssemblyVersion>
-		<Version>1.0.0</Version>
+		<AssemblyVersion>2.0.0.0</AssemblyVersion>
+		<Version>2.0.0</Version>
 	</PropertyGroup>
 
 	<PropertyGroup>

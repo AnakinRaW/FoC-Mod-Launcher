@@ -5,11 +5,15 @@ using Sklavenwalker.ProductMetadata;
 
 namespace FocLauncher.Update.ViewModels;
 
-public interface IUpdateWindowViewModel : IModalWindowViewModel, ILoadingViewModel
+public interface IUpdateWindowViewModel : IModalWindowViewModel, IViewModel
 {
     IInstalledProductViewModel InstalledProductViewModel { get; set; }
+
+    IUpdateInfoBarViewModel InfoBarViewModel { get; }
 
     ObservableCollection<ProductBranch> Branches { get; }
 
     ProductBranch CurrentBranch { get; set; }
+
+    bool IsLoadingBranches { get; set; }
 }

@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,6 +22,12 @@ public abstract class ViewModelBase : ObservableObject, IViewModel, IDisposable
         Requires.NotNull(serviceProvider, nameof(serviceProvider));
         ServiceProvider = serviceProvider;
         Logger = serviceProvider.GetService<ILoggerFactory>()?.CreateLogger(GetType());
+
+        foreach (var property in GetType().GetProperties())
+        {
+            if (property.GetCustomAttribute(typeof(NotifyChangedIsLinkedToPropertyAttribute)) is NotifyChangedIsLinkedToPropertyAttribute customAttribute)
+                AddPropertyDependencies(property.Name, customAttribute.LinkedProperties);
+        }
     }
 
     ~ViewModelBase()
@@ -48,5 +57,17 @@ public abstract class ViewModelBase : ObservableObject, IViewModel, IDisposable
         if (disposing)
             OnDispose();
         _isDisposed = true;
+    }
+
+    private void AddPropertyDependencies(string dependentPropertyName, ICollection<string> propertyNames)
+    {
+        if (string.IsNullOrEmpty(dependentPropertyName) || !propertyNames.Any())
+            return;
+        PropertyChanged += (_, args) =>
+        {
+            if (propertyNames.All(name => name != args.PropertyName))
+                return;
+            OnPropertyChanged(dependentPropertyName);
+        };
     }
 }

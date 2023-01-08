@@ -27,7 +27,7 @@ public class ComponentUpdateComparer : IComponentComparer
         if (availableComponent is null)
             return UpdateAction.Delete;
         if (ReferenceEquals(installedComponent, availableComponent))
-            return 0;
+            return UpdateAction.Keep;
 
         if (!ProductComponentIdentityComparer.VersionAndBranchIndependent.Equals(installedComponent, availableComponent))
             throw new InvalidOperationException("Current and available components are not compatible.");
@@ -35,7 +35,7 @@ public class ComponentUpdateComparer : IComponentComparer
         if (installedComponent.DetectedState != DetectionState.Present)
             return UpdateAction.Update;
         if (availableComponent.DetectConditions.Count == 0)
-            return 0;
+            return UpdateAction.Keep;
 
         return !_evaluator.EvaluateConditions(availableComponent.DetectConditions, properties)
             ? UpdateAction.Update

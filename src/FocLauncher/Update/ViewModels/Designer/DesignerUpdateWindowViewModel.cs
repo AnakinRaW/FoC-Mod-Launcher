@@ -3,13 +3,12 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows;
-using FocLauncher.Update.ViewModels;
 using Sklavenwalker.ProductMetadata;
 
 namespace FocLauncher.Update.ViewModels.Designer;
 
 [EditorBrowsable(EditorBrowsableState.Never)]
-internal class UpdateWindowViewModel : IUpdateWindowViewModel
+internal class DesignerUpdateWindowViewModel : IUpdateWindowViewModel
 {
     public event PropertyChangedEventHandler? PropertyChanged;
     public Task InitializeAsync()
@@ -39,11 +38,12 @@ internal class UpdateWindowViewModel : IUpdateWindowViewModel
 
     public bool HasDialogFrame { get; set; }
     public bool IsCloseButtonEnabled { get; set; }
-    public bool IsLoading { get; }
-    public string? LoadingText { get; }
-    public IInstalledProductViewModel InstalledProductViewModel { get; set; } = new InstalledProductViewModel();
+    public IInstalledProductViewModel InstalledProductViewModel { get; set; } = new DesignerInstalledProductViewModel();
+    public IUpdateInfoBarViewModel InfoBarViewModel { get; } = new DesignerInfoBarViewModel();
     public ObservableCollection<ProductBranch> Branches { get; } = new();
 
     public ProductBranch CurrentBranch { get; set; } =
         new ProductBranch("Test", new Uri("http://example.org", UriKind.Absolute), false);
+
+    public bool IsLoadingBranches { get; set; }
 }
