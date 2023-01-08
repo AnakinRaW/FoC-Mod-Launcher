@@ -5,7 +5,7 @@ using System.Windows.Interop;
 using Sklavenwalker.CommonUtilities.Wpf.DPI;
 using Sklavenwalker.CommonUtilities.Wpf.NativeMethods;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Controls;
+namespace Sklavenwalker.CommonUtilities.Wpf.Utilities;
 
 internal static class WindowHelper
 {

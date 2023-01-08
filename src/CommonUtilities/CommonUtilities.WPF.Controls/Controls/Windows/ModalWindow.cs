@@ -39,7 +39,7 @@ public class ModalWindow : WindowBase
 
     public bool? ShowModal()
     {
-        return Controls.WindowHelper.ShowModal(this);
+        return Utilities.WindowHelper.ShowModal(this);
     }
 
     public void EnableOwner()

@@ -8,6 +8,7 @@
              xmlns:productMetadata="clr-namespace:Sklavenwalker.ProductMetadata;assembly=Sklavenwalker.ProductMetadata"
              xmlns:converters="clr-namespace:FocLauncher.Converters"
              xmlns:wpfConverters="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Converters;assembly=Sklavenwalker.CommonUtilities.WPF.Core"
+             xmlns:themes="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Themes;assembly=Sklavenwalker.CommonUtilities.WPF.Controls"
              mc:Ignorable="d" d:DesignWidth="500"
              d:DataContext="{d:DesignInstance {x:Type designer:DesignerUpdateWindowViewModel}, IsDesignTimeCreatable=True}">
 
@@ -30,7 +31,8 @@
         <Grid Grid.Row="2" Margin="0,12,0,0">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <TextBlock Margin="0,0,4,0" VerticalAlignment="Center" Text="Branch:"/>
-                <ComboBox MinWidth="125" IsEditable="False" IsReadOnly="True" Text=""
+                <ComboBox MinWidth="125" IsEditable="False" IsReadOnly="True"
+                          Style="{DynamicResource {x:Static themes:StyleResourceKeys.ThemedComboBoxStyleKey}}"
                           IsEnabled="{Binding IsLoadingBranches, Converter={StaticResource BooleanInverseConverter}}"
                           ItemsSource="{Binding Branches}"
                           SelectedItem="{Binding CurrentBranch, Mode=TwoWay}">

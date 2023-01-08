@@ -2,23 +2,16 @@
 
 namespace Sklavenwalker.CommonUtilities.Wpf.Themes
 {
-    internal static class StyleResourceKeys
+    public static class StyleResourceKeys
     {
-        private static object? _menuItemStyleKey;
-        private static object? _scrollBarStyleKey;
-        private static object? _scrollViewerStyleKey;
-        private static object? _customGridViewScrollViewerStyleKey;
-
-        public static object MenuItemStyleKey => _menuItemStyleKey ??= GetResourceKey(nameof(MenuItemStyleKey));
-
         public static object UnthemedScrollBarStyleKey => "DummyUnthemedScrollBarStyleKey";
         public static object UnthemedScrollViewerStyleKey => "DummyUnthemedScrollViewerStyleKey";
 
-        public static object ScrollViewerStyleKey => _scrollViewerStyleKey ??= GetResourceKey(nameof(ScrollViewerStyleKey));
-        public static object ScrollBarStyleKey => _scrollBarStyleKey ??= GetResourceKey(nameof(ScrollBarStyleKey));
-
-        public static object CustomGridViewScrollViewerStyleKey => _customGridViewScrollViewerStyleKey ??=
-            GetResourceKey(nameof(CustomGridViewScrollViewerStyleKey));
+        public static object MenuItemStyleKey { get; } = GetResourceKey(nameof(MenuItemStyleKey));
+        public static object ThemedComboBoxStyleKey { get; } = GetResourceKey(nameof(ThemedComboBoxStyleKey));
+        public static object ScrollViewerStyleKey { get; } = GetResourceKey(nameof(ScrollViewerStyleKey));
+        public static object ScrollBarStyleKey { get; } = GetResourceKey(nameof(ScrollBarStyleKey));
+        public static object CustomGridViewScrollViewerStyleKey { get; } = GetResourceKey(nameof(CustomGridViewScrollViewerStyleKey));
 
         public static object GetScrollBarStyleKey(bool themed)
         {

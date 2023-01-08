@@ -11,6 +11,7 @@
                 <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Controls;component/Styles/ShadowChromeWindowStyle.xaml"/>
                 <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Controls;component/Styles/SystemMenuStyle.xaml"/>
                 <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Controls;component/Styles/ThemedButtonStyle.xaml"/>
+                <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Controls;component/Styles/ThemedComboBoxStyle.xaml"/>
                 <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Controls;component/Styles/ThemedContextMenuStyle.xaml"/>
                 <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Controls;component/Styles/ThemedExpanderStyle.xaml"/>
                 <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Controls;component/Styles/ThemedScrollBarStyles.xaml"/>

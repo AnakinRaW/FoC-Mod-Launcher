@@ -137,4 +137,43 @@
     <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ScrollBarThumbPressedBorder}" Color="#FFEFEBEF" />
     <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.AutoHideResizeGrip}" Color="#FF2D2D30" />
 
+
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ComboBoxBackground}" Color="#FF383838" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ComboBoxBorder}" Color="#FF424242" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ComboBoxText}" Color="#FFFAFAFA" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ComboBoxListBackground}" Color="#FF2E2E2E" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ComboBoxListBorder}" Color="#FF424242" />
+    <Color x:Key="{x:Static colors:CommonControlsColors.ComboBoxListShadow}" A="77" B="00" G="00" R="00"/>
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ComboBoxGlyph}" Color="#FFD6D6D6" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ComboBoxGlyphBackground}" Color="#00000000" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ComboBoxSeparator}" Color="#00000000" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ComboBoxBackgroundFocused}" Color="#FF1F1F1F" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ComboBoxBorderFocused}" Color="#FF999999" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ComboBoxTextFocused}" Color="#FFFAFAFA" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ComboBoxGlyphFocused}" Color="#FFD6D6D6" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ComboBoxGlyphBackgroundFocused}" Color="#00000000" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ComboBoxSeparatorFocused}" Color="#00000000" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ComboBoxBackgroundHover}" Color="#FF3D3D3D" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ComboBoxBorderHover}" Color="#FF424242" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ComboBoxTextHover}" Color="#FFFAFAFA" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ComboBoxGlyphHover}" Color="#FFD6D6D6" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ComboBoxGlyphBackgroundHover}" Color="#00000000" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ComboBoxSeparatorHover}" Color="#00000000" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ComboBoxBackgroundPressed}" Color="#FF1F1F1F" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ComboBoxBorderPressed}" Color="#FF999999" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ComboBoxTextPressed}" Color="#FFFAFAFA" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ComboBoxGlyphBackgroundPressed}" Color="#00000000" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ComboBoxSeparatorPressed}" Color="#00000000" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ComboBoxGlyphPressed}" Color="#FFD6D6D6" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ComboBoxBackgroundDisabled}" Color="#FF3D3D3D" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ComboBoxBorderDisabled}" Color="#FF3D3D3D" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ComboBoxTextDisabled}" Color="#FF5C5C5C" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ComboBoxGlyphDisabled}" Color="#FF808080" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ComboBoxGlyphBackgroundDisabled}" Color="#00000000" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ComboBoxTextInputSelection}" Color="#FF006CBE" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ComboBoxListItemText}" Color="#FFFAFAFA" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ComboBoxListItemBackgroundHover}" Color="#FF2E2E2E" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ComboBoxListItemBorderHover}" Color="#FF808080" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ComboBoxListItemTextHover}" Color="#FFFAFAFA" />
+
 </ResourceDictionary>
