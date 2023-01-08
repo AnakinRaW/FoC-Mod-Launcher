@@ -46,40 +46,44 @@ public class ProductUpdateProviderService : IProductUpdateProviderService
 
         CheckingForUpdatesStarted.RaiseAsync(this, EventArgs.Empty);
 
-        try
-        {
-            IUpdateCatalog? updateCatalog = null;
-            try
-            {
-                if (productReference.Branch is null)
-                    throw new CatalogException("Product Reference does not have a branch.");
+        await Task.Delay(2000, token);
 
-                var manifestRepo = _serviceProvider.GetRequiredService<IBranchManager>();
-                var manifest = await manifestRepo.GetManifest(productReference, _updateCheckToken.Token).ConfigureAwait(false);
+        CheckingForUpdatesCompleted.RaiseAsync(this, null);
 
-                var productService = _serviceProvider.GetRequiredService<IProductService>();
-                var installedComponents = productService.GetInstalledProductCatalog();
+        //try
+        //{
+        //    IUpdateCatalog? updateCatalog = null;
+        //    try
+        //    {
+        //        if (productReference.Branch is null)
+        //            throw new CatalogException("Product Reference does not have a branch.");
 
-                var catalogBuilder = _serviceProvider.GetRequiredService<IUpdateCatalogBuilder>();
-                updateCatalog = catalogBuilder.Build(installedComponents, manifest);
-            }
-            finally
-            {
-                CheckingForUpdatesCompleted.RaiseAsync(this, updateCatalog);
-            }
-        }
-        catch (Exception ex)
-        {
-            _logger?.LogWarning(ex.Message);
-            throw;
-        }
-        finally
-        {
-            lock (_syncObject)
-            {
-                _updateCheckToken.Dispose();
-                _updateCheckToken = null;
-            }
-        }
+        //        var manifestRepo = _serviceProvider.GetRequiredService<IBranchManager>();
+        //        var manifest = await manifestRepo.GetManifest(productReference, _updateCheckToken.Token).ConfigureAwait(false);
+
+        //        var productService = _serviceProvider.GetRequiredService<IProductService>();
+        //        var installedComponents = productService.GetInstalledProductCatalog();
+
+        //        var catalogBuilder = _serviceProvider.GetRequiredService<IUpdateCatalogBuilder>();
+        //        updateCatalog = catalogBuilder.Build(installedComponents, manifest);
+        //    }
+        //    finally
+        //    {
+        //        CheckingForUpdatesCompleted.RaiseAsync(this, updateCatalog);
+        //    }
+        //}
+        //catch (Exception ex)
+        //{
+        //    _logger?.LogWarning(ex.Message);
+        //    throw;
+        //}
+        //finally
+        //{
+        //    lock (_syncObject)
+        //    {
+        //        _updateCheckToken.Dispose();
+        //        _updateCheckToken = null;
+        //    }
+        //}
     }
 }
