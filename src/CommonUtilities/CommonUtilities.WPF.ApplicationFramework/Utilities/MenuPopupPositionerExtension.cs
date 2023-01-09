@@ -1,15 +1,15 @@
 ﻿using System;
+using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Interop;
 using System.Windows.Markup;
-using System.Windows;
+using AnakinRaW.CommonUtilities.Wpf.DPI;
+using AnakinRaW.CommonUtilities.Wpf.NativeMethods;
+using AnakinRaW.CommonUtilities.Wpf.Utilities;
 using Microsoft.Extensions.DependencyInjection;
-using Sklavenwalker.CommonUtilities.Wpf.DPI;
-using Sklavenwalker.CommonUtilities.Wpf.NativeMethods;
-using Sklavenwalker.CommonUtilities.Wpf.Utilities;
 using Validation;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Utilities;
+namespace AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Utilities;
 
 internal class MenuPopupPositionerExtension : MarkupExtension
 {

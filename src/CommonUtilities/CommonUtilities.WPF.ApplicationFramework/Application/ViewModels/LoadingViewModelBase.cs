@@ -1,7 +1,7 @@
 ﻿using System;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
+namespace AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
 
 public abstract partial class LoadingViewModelBase : ViewModelBase, ILoadingViewModel
 {

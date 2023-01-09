@@ -1,10 +1,10 @@
 ﻿using System;
+using AnakinRaW.ProductMetadata.Component;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Sklavenwalker.ProductMetadata.Component;
 using Validation;
 
-namespace Sklavenwalker.ProductMetadata.Services.Detectors;
+namespace AnakinRaW.ProductMetadata.Services.Detectors;
 
 internal abstract class ComponentDetectorBase<T> : IComponentDetector where T : IInstallableComponent
 {

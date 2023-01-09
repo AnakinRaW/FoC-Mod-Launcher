@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Data;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Converters;
+namespace AnakinRaW.CommonUtilities.Wpf.Converters;
 
 public class BooleanOrConverter : IMultiValueConverter
 {

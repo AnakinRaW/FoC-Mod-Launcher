@@ -8,8 +8,8 @@
 
 	<PropertyGroup>
 		<TargetFrameworks>net6.0-windows;net48</TargetFrameworks>
-		<RootNamespace>Sklavenwalker.CommonUtilities.Wpf</RootNamespace>
-		<AssemblyName>Sklavenwalker.CommonUtilities.WPF.Core</AssemblyName>
+		<RootNamespace>AnakinRaW.CommonUtilities.Wpf</RootNamespace>
+		<AssemblyName>AnakinRaW.CommonUtilities.WPF.Core</AssemblyName>
 		<UseWPF>true</UseWPF>
 	</PropertyGroup>
 

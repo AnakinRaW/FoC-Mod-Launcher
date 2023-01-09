@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Sklavenwalker.ProductMetadata.Component;
+namespace AnakinRaW.ProductMetadata.Component;
 
 public sealed record OriginInfo
 {

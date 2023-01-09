@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:FocLauncher.Controls"
-             xmlns:controls="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Imaging.Controls;assembly=Sklavenwalker.CommonUtilities.WPF.Imaging"
+             xmlns:controls="clr-namespace:AnakinRaW.CommonUtilities.Wpf.Imaging.Controls;assembly=AnakinRaW.CommonUtilities.WPF.Imaging"
              xmlns:designer="clr-namespace:FocLauncher.ViewModels.Designer"
              xmlns:imaging="clr-namespace:FocLauncher.Imaging"
              mc:Ignorable="d" d:DesignWidth="150"  d:DataContext="{d:DesignInstance {x:Type designer:StatusBarViewModel}, IsDesignTimeCreatable=True}">

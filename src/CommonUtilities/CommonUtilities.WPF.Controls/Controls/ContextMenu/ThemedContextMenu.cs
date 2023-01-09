@@ -7,12 +7,12 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
-using Sklavenwalker.CommonUtilities.Wpf.Converters;
-using Sklavenwalker.CommonUtilities.Wpf.Imaging;
-using Sklavenwalker.CommonUtilities.Wpf.Utilities;
+using AnakinRaW.CommonUtilities.Wpf.Converters;
+using AnakinRaW.CommonUtilities.Wpf.Imaging;
+using AnakinRaW.CommonUtilities.Wpf.Utilities;
 using Validation;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Controls;
+namespace AnakinRaW.CommonUtilities.Wpf.Controls;
 
 public class ThemedContextMenu : ContextMenu
 {

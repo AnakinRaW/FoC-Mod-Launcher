@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.CommandBar;
+namespace AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.CommandBar;
 
 internal sealed partial class MenuItemControlViewModel : CommandBarControlViewModel, ICommandBarMenuControlViewModel
 {

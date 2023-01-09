@@ -1,4 +1,4 @@
-﻿namespace Sklavenwalker.CommonUtilities.Wpf.DPI;
+﻿namespace AnakinRaW.CommonUtilities.Wpf.DPI;
 
 public enum DpiAwarenessContext
 {

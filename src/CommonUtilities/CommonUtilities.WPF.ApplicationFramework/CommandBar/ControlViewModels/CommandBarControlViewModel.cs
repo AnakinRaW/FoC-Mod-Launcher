@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.CommandBar;
+namespace AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.CommandBar;
 
 internal abstract partial class CommandBarControlViewModel : ObservableObject, ICommandBarControlViewModel
 {

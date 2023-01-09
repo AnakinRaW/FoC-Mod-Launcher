@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Windows;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Controls;
 using Microsoft.Extensions.DependencyInjection;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Controls;
 using Validation;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog;
+namespace AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 
 public class DialogFactory : IDialogFactory
 {

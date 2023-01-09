@@ -1,7 +1,7 @@
 ﻿using System;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
+using AnakinRaW.CommonUtilities.Wpf.Controls;
 using FocLauncher.Controls;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog;
-using Sklavenwalker.CommonUtilities.Wpf.Controls;
 
 namespace FocLauncher.Services;
 

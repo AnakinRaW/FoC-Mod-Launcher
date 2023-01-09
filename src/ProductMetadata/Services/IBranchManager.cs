@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using AnakinRaW.ProductMetadata.Catalog;
 using Semver;
-using Sklavenwalker.ProductMetadata.Catalog;
 
-namespace Sklavenwalker.ProductMetadata.Services;
+namespace AnakinRaW.ProductMetadata.Services;
 
 public interface IBranchManager
 {

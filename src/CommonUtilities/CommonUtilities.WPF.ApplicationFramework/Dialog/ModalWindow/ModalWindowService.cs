@@ -3,13 +3,13 @@ using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
+using AnakinRaW.CommonUtilities.Wpf.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
-using Sklavenwalker.CommonUtilities.Wpf.Controls;
 using Validation;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog;
+namespace AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 
 internal class ModalWindowService : IModalWindowService
 {

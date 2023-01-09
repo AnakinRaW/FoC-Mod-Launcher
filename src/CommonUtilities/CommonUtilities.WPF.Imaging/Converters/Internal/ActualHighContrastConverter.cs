@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
-using Sklavenwalker.CommonUtilities.Wpf.Converters;
+using AnakinRaW.CommonUtilities.Wpf.Converters;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Imaging.Converters;
+namespace AnakinRaW.CommonUtilities.Wpf.Imaging.Converters;
 
 internal sealed class ActualHighContrastConverter : MultiValueConverter<bool?, bool, bool>
 {

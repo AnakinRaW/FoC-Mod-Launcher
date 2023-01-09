@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Imaging;
+namespace AnakinRaW.CommonUtilities.Wpf.Imaging;
 
 public static class ResourcesUriCreator
 {

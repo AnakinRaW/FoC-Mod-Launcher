@@ -5,11 +5,11 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using Sklavenwalker.CommonUtilities.Wpf.Imaging.Utilities;
+using AnakinRaW.CommonUtilities.Wpf.Imaging.Utilities;
 using Validation;
 using Color = System.Windows.Media.Color;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Imaging;
+namespace AnakinRaW.CommonUtilities.Wpf.Imaging;
 
 public static class ImageThemingUtilities
 {

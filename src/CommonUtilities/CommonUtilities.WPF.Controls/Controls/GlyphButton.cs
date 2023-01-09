@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Media;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Controls;
+namespace AnakinRaW.CommonUtilities.Wpf.Controls;
 
 public class GlyphButton : RoutedCommandButton, INonClientArea
 {

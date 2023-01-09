@@ -1,4 +1,4 @@
-﻿namespace Sklavenwalker.ProductMetadata.Catalog;
+﻿namespace AnakinRaW.ProductMetadata.Catalog;
 
 public interface IInstalledProductCatalog : IProductCatalog
 {

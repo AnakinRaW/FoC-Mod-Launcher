@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Controls;
+namespace AnakinRaW.CommonUtilities.Wpf.Controls;
 
 [Flags]
 public enum MenuShowOptions

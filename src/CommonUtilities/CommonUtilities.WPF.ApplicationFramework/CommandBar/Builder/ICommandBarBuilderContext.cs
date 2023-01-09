@@ -1,6 +1,6 @@
-﻿using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.CommandBar.Models;
+﻿using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.CommandBar.Models;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.CommandBar.Builder;
+namespace AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.CommandBar.Builder;
 
 public interface ICommandBarBuilderContext<T> where T : class, ICommandBarItemsSource
 {

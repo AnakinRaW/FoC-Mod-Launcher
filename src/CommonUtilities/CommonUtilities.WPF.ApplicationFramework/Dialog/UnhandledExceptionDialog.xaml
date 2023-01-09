@@ -1,14 +1,15 @@
-﻿<baseControls:ModalWindow x:Class="Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog.UnhandledExceptionDialog"
+﻿<controls:ModalWindow x:Class="AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog.UnhandledExceptionDialog"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         xmlns:system="clr-namespace:System;assembly=mscorlib"
-        xmlns:designer="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog.Designer"
-        xmlns:coreConverters="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Converters;assembly=Sklavenwalker.CommonUtilities.WPF.Core"
-        xmlns:baseControls="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Controls;assembly=Sklavenwalker.CommonUtilities.WPF.Controls"
-        xmlns:converters1="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Converters"
+        xmlns:coreConverters="clr-namespace:AnakinRaW.CommonUtilities.Wpf.Converters;assembly=AnakinRaW.CommonUtilities.WPF.Core"
+        xmlns:baseControls="clr-namespace:AnakinRaW.CommonUtilities.Wpf.Controls;assembly=AnakinRaW.CommonUtilities.WPF.Controls"
+        xmlns:designer="clr-namespace:AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog.Designer"
+        xmlns:converters="clr-namespace:AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Converters"
+        xmlns:controls="clr-namespace:AnakinRaW.CommonUtilities.Wpf.Controls;assembly=AnakinRaW.CommonUtilities.WPF.Controls"
         Title="{Binding WindowCaption}" 
         MinHeight="175" Width="650" SizeToContent="Height" 
         HasMaximizeButton="False" HasMinimizeButton="False" IsResizable="False"
@@ -17,7 +18,7 @@
         d:DataContext="{d:DesignInstance {x:Type designer:UnhandledExceptionDialogViewModel}, IsDesignTimeCreatable=True}">
     <Window.Resources>
         <coreConverters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
-        <converters1:ToTypeNameConverter x:Key="ToTypeNameConverter"/>
+        <converters:ToTypeNameConverter x:Key="ToTypeNameConverter"/>
 
         <Style x:Key="DialogButton" TargetType="{x:Type Button}">
             <Setter Property="MinWidth" Value="75" />
@@ -111,4 +112,4 @@
             </StackPanel>
         </Grid>
     </Grid>
-</baseControls:ModalWindow>
+</controls:ModalWindow>

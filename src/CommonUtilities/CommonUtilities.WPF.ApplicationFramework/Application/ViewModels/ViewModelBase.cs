@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Validation;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
+namespace AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
 
 public abstract class ViewModelBase : ObservableObject, IViewModel, IDisposable
 {

@@ -1,10 +1,10 @@
 ﻿using System;
+using AnakinRaW.ProductMetadata.Catalog;
+using AnakinRaW.ProductMetadata.Component;
 using Microsoft.Extensions.DependencyInjection;
-using Sklavenwalker.ProductMetadata.Catalog;
-using Sklavenwalker.ProductMetadata.Component;
 using Validation;
 
-namespace Sklavenwalker.ProductMetadata.Services.Detectors;
+namespace AnakinRaW.ProductMetadata.Services.Detectors;
 
 public class CatalogDetectionService : ICatalogDetectionService
 {

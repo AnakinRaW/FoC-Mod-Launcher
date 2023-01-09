@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Input;
+namespace AnakinRaW.CommonUtilities.Wpf.Input;
 
 /// <summary>
 /// Places a given context menu on the screen.

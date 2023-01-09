@@ -1,6 +1,6 @@
-﻿using Sklavenwalker.CommonUtilities.Wpf.Input;
+﻿using AnakinRaW.CommonUtilities.Wpf.Input;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Controls;
+namespace AnakinRaW.CommonUtilities.Wpf.Controls;
 
 public interface IHasContextMenu
 {

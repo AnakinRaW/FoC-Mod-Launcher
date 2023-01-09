@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Sklavenwalker.ProductMetadata.Component;
+using AnakinRaW.ProductMetadata.Component;
 using Validation;
 
-namespace Sklavenwalker.ProductMetadata.Services.Detectors;
+namespace AnakinRaW.ProductMetadata.Services.Detectors;
 
 internal class ComponentDetectorFactory : IComponentDetectorFactory
 {

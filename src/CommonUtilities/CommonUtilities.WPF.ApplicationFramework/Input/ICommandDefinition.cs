@@ -1,7 +1,7 @@
 ﻿using System.Windows.Input;
-using Sklavenwalker.CommonUtilities.Wpf.Imaging;
+using AnakinRaW.CommonUtilities.Wpf.Imaging;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Input;
+namespace AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Input;
 
 public interface ICommandDefinition
 {

@@ -1,8 +1,8 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.StatusBar;
-using WindowViewModel = Sklavenwalker.CommonUtilities.Wpf.Controls.WindowViewModel;
+﻿using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.StatusBar;
+using CommunityToolkit.Mvvm.ComponentModel;
+using WindowViewModel = AnakinRaW.CommonUtilities.Wpf.Controls.WindowViewModel;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
+namespace AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
 
 public partial class MainWindowViewModel : WindowViewModel, IMainWindowViewModel
 {

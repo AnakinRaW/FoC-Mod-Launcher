@@ -1,6 +1,6 @@
-﻿using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Input;
+﻿using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Input;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.CommandBar.Models;
+namespace AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.CommandBar.Models;
 
 public interface ICommandItemDefinition
 {

@@ -1,4 +1,4 @@
-﻿using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
+﻿using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
 
 namespace FocLauncher.ViewModels;
 

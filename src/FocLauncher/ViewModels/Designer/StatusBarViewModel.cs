@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Windows.Media;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Input;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Input;
 
 namespace FocLauncher.ViewModels.Designer;
 

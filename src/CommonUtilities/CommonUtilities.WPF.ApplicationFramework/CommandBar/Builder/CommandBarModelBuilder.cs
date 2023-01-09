@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.CommandBar.Models;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.CommandBar.Models;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.CommandBar.Builder;
+namespace AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.CommandBar.Builder;
 
 internal abstract class CommandBarModelBuilder<T> : 
     ICommandBarBuilderStartContext<T>, ICommandBarBuilderContext<T>, ICommandBarBuilderSeparatorContext<T>

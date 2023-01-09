@@ -2,7 +2,7 @@
 using System.Windows.Data;
 using Validation;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Utilities;
+namespace AnakinRaW.CommonUtilities.Wpf.Utilities;
 
 internal class ItemCollectionAdapter : CollectionAdapter<object, object>
 {

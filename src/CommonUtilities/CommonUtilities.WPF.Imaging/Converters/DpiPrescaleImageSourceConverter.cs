@@ -1,10 +1,10 @@
 ﻿using System.Globalization;
 using System.Windows;
 using System.Windows.Media;
-using Sklavenwalker.CommonUtilities.Wpf.Converters;
-using Sklavenwalker.CommonUtilities.Wpf.DPI;
+using AnakinRaW.CommonUtilities.Wpf.Converters;
+using AnakinRaW.CommonUtilities.Wpf.DPI;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Imaging.Converters;
+namespace AnakinRaW.CommonUtilities.Wpf.Imaging.Converters;
 
 // TODO: Can they be deleted?
 public class DpiPrescaleImageSourceConverter : ValueConverter<ImageSource, ImageSource>

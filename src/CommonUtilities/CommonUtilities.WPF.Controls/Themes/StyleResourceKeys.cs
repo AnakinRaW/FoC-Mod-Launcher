@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Themes
+namespace AnakinRaW.CommonUtilities.Wpf.Themes
 {
     public static class StyleResourceKeys
     {

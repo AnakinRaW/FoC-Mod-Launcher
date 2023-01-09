@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using Sklavenwalker.CommonUtilities.Wpf.NativeMethods;
+using AnakinRaW.CommonUtilities.Wpf.NativeMethods;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Utilities;
+namespace AnakinRaW.CommonUtilities.Wpf.Utilities;
 
 public static class IconHelper
 {
@@ -52,10 +52,12 @@ public static class IconHelper
 
     private static BitmapSource? ExtractIconsFromExecutable(ref BitmapSource? smallIcon, ref BitmapSource? largeIcon)
     {
-        var executablePath = Assembly.GetEntryAssembly().Location;
+        var executablePath = Assembly.GetEntryAssembly()?.Location;
+        if (string.IsNullOrEmpty(executablePath))
+            throw new InvalidOperationException("Unable to find entrypoint assembly.");
         IntPtr[] phiconLarge = { IntPtr.Zero };
         IntPtr[] phiconSmall = { IntPtr.Zero };
-        if (Shell32.ExtractIconEx(executablePath.Trim('"'), 0, phiconLarge, phiconSmall, 1) > 0)
+        if (Shell32.ExtractIconEx(executablePath!.Trim('"'), 0, phiconLarge, phiconSmall, 1) > 0)
         {
             smallIcon = BitmapSourceFromHIcon(phiconSmall[0]);
             largeIcon = BitmapSourceFromHIcon(phiconLarge[0]);

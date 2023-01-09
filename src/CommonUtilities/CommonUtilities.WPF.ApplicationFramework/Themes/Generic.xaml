@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.ApplicationFramework;component/Styles/ApplicationMainWindowStyle.xaml"/>
-        <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.ApplicationFramework;component/Styles/CommandBarStyles.xaml"/>
-        <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.ApplicationFramework;component/Styles/DialogWindowStyle.xaml"/>
+        <ResourceDictionary Source="/AnakinRaW.CommonUtilities.WPF.ApplicationFramework;component/Styles/ApplicationMainWindowStyle.xaml"/>
+        <ResourceDictionary Source="/AnakinRaW.CommonUtilities.WPF.ApplicationFramework;component/Styles/CommandBarStyles.xaml"/>
+        <ResourceDictionary Source="/AnakinRaW.CommonUtilities.WPF.ApplicationFramework;component/Styles/DialogWindowStyle.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

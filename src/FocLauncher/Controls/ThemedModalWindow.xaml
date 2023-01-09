@@ -3,8 +3,8 @@
                               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                               xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                               xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                              xmlns:controls="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Controls;assembly=Sklavenwalker.CommonUtilities.WPF.Controls"
-                              xmlns:colors="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Themes.Colors;assembly=Sklavenwalker.CommonUtilities.WPF.Controls"
+                              xmlns:controls="clr-namespace:AnakinRaW.CommonUtilities.Wpf.Controls;assembly=AnakinRaW.CommonUtilities.WPF.Controls"
+                              xmlns:colors="clr-namespace:AnakinRaW.CommonUtilities.Wpf.Themes.Colors;assembly=AnakinRaW.CommonUtilities.WPF.Controls"
                               mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="600"
                               Background="{DynamicResource {x:Static colors:WindowColors.DialogBackground}}"
                               Foreground="{DynamicResource {x:Static colors:WindowColors.DialogContentText}}">

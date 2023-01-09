@@ -1,7 +1,7 @@
-﻿using Sklavenwalker.ProductMetadata.Catalog;
-using Sklavenwalker.ProductUpdater.Catalog;
+﻿using AnakinRaW.ProductMetadata.Catalog;
+using AnakinRaW.ProductUpdater.Catalog;
 
-namespace Sklavenwalker.ProductUpdater.Services;
+namespace AnakinRaW.ProductUpdater.Services;
 
 internal interface IUpdateCatalogBuilder
 {

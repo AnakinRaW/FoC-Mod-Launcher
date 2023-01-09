@@ -4,15 +4,15 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Shell;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Converters;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.StatusBar;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
+using AnakinRaW.CommonUtilities.Wpf.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Converters;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.StatusBar;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
-using Sklavenwalker.CommonUtilities.Wpf.Controls;
 using Validation;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Controls;
+namespace AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Controls;
 
 public class ApplicationMainWindow : ThemedWindow
 { 

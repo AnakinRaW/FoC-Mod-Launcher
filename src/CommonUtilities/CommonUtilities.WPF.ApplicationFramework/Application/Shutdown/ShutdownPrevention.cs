@@ -1,4 +1,4 @@
-﻿namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework;
+﻿namespace AnakinRaW.CommonUtilities.Wpf.ApplicationFramework;
 
 public sealed class ShutdownPrevention
 {

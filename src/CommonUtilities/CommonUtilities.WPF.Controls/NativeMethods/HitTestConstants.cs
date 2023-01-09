@@ -1,4 +1,4 @@
-﻿namespace Sklavenwalker.CommonUtilities.Wpf.NativeMethods;
+﻿namespace AnakinRaW.CommonUtilities.Wpf.NativeMethods;
 
 public static class HitTestConstants
 {

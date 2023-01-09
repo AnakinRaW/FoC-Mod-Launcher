@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Controls;
+namespace AnakinRaW.CommonUtilities.Wpf.Controls;
 
 public class DialogButton : Button
 {

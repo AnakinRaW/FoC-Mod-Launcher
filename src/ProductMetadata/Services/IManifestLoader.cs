@@ -2,9 +2,9 @@
 using System.IO.Abstractions;
 using System.Threading;
 using System.Threading.Tasks;
-using Sklavenwalker.ProductMetadata.Catalog;
+using AnakinRaW.ProductMetadata.Catalog;
 
-namespace Sklavenwalker.ProductMetadata.Services;
+namespace AnakinRaW.ProductMetadata.Services;
 
 public interface IManifestLoader
 {

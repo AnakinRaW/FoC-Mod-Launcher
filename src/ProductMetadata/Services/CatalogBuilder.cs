@@ -1,9 +1,9 @@
 ﻿using System.IO;
 using System.IO.Abstractions;
-using Sklavenwalker.ProductMetadata.Catalog;
+using AnakinRaW.ProductMetadata.Catalog;
 using Validation;
 
-namespace Sklavenwalker.ProductMetadata.Services;
+namespace AnakinRaW.ProductMetadata.Services;
 
 public abstract class CatalogBuilder<T> : ICatalogBuilder where T: notnull
 {

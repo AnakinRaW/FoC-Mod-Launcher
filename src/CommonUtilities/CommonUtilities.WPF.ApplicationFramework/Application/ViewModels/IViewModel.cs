@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Threading.Tasks;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
+namespace AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
 
 public interface IViewModel : INotifyPropertyChanged
 {

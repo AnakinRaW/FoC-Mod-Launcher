@@ -2,16 +2,16 @@
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Controls;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Theming;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
+using AnakinRaW.CommonUtilities.Wpf.Imaging;
 using FocLauncher.Imaging;
 using FocLauncher.Themes;
 using FocLauncher.Utilities;
 using FocLauncher.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Controls;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Theming;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
-using Sklavenwalker.CommonUtilities.Wpf.Imaging;
 
 namespace FocLauncher;
 

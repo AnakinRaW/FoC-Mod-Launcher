@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.NativeMethods;
+namespace AnakinRaW.CommonUtilities.Wpf.NativeMethods;
 
 [Flags]
 public enum RedrawWindowFlags : uint

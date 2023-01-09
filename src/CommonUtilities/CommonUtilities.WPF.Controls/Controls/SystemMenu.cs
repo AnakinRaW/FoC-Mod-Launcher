@@ -5,12 +5,12 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using Sklavenwalker.CommonUtilities.Wpf.DPI;
-using Sklavenwalker.CommonUtilities.Wpf.Input;
-using Sklavenwalker.CommonUtilities.Wpf.NativeMethods;
-using Sklavenwalker.CommonUtilities.Wpf.Utilities;
+using AnakinRaW.CommonUtilities.Wpf.DPI;
+using AnakinRaW.CommonUtilities.Wpf.Input;
+using AnakinRaW.CommonUtilities.Wpf.NativeMethods;
+using AnakinRaW.CommonUtilities.Wpf.Utilities;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Controls;
+namespace AnakinRaW.CommonUtilities.Wpf.Controls;
 
 public sealed class SystemMenu : Control, INonClientArea
 {

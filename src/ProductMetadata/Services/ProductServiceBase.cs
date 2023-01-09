@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO.Abstractions;
+using AnakinRaW.ProductMetadata.Catalog;
+using AnakinRaW.ProductMetadata.Component;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Semver;
-using Sklavenwalker.ProductMetadata.Catalog;
-using Sklavenwalker.ProductMetadata.Component;
 using Validation;
 
-namespace Sklavenwalker.ProductMetadata.Services;
+namespace AnakinRaW.ProductMetadata.Services;
 
 public abstract class ProductServiceBase : IProductService
 {

@@ -1,8 +1,8 @@
 ﻿using System.Globalization;
-using Sklavenwalker.CommonUtilities.Wpf.Converters;
-using Sklavenwalker.CommonUtilities.Wpf.Imaging.Controls;
+using AnakinRaW.CommonUtilities.Wpf.Converters;
+using AnakinRaW.CommonUtilities.Wpf.Imaging.Controls;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Imaging.Converters;
+namespace AnakinRaW.CommonUtilities.Wpf.Imaging.Converters;
 
 internal sealed class ActualDpiConverter : ValueConverter<double, double>
 {

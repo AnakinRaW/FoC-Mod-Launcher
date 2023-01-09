@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.StatusBar;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.StatusBar;
 using Validation;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
+namespace AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
 
 public abstract partial class ApplicationViewModelBase : MainWindowViewModel, IApplicationViewModel
 {

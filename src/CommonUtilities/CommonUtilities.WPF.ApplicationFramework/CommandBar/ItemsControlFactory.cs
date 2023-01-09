@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.CommandBar.Models;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.CommandBar.Models;
 using Validation;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.CommandBar;
+namespace AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.CommandBar;
 
 internal class ItemsControlFactory
 {

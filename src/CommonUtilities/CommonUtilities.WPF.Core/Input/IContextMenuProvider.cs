@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Input;
+namespace AnakinRaW.CommonUtilities.Wpf.Input;
 
 /// <summary>
 /// A Provider to get a specific context menu

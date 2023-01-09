@@ -1,12 +1,12 @@
 <Project>
 	<PropertyGroup>
 		<Product>Forces of Corruption Game Launcher</Product>
-		<Copyright>Copyright © Anakin Sklavenwalker 2019-2022</Copyright>
-		<Authors>Anakin Sklavenwalker</Authors>
+		<Copyright>Copyright © AnakinRaW 2019-2023</Copyright>
+		<Authors>AnakinRaW</Authors>
 		<Company>Republic at War Modding Team</Company>
 		<PackageTags>petroglyph, alamo, glyphx, foc, eaw</PackageTags>
-		<PackageProjectUrl>https://github.com/AnakinSklavenwalker/FoC-Mod-Launcher</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/AnakinSklavenwalker/FoC-Mod-Launcher</RepositoryUrl>
+		<PackageProjectUrl>https://github.com/AnakinRaW/FoC-Mod-Launcher</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/AnakinRaW/FoC-Mod-Launcher</RepositoryUrl>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PublishRepositoryUrl>true</PublishRepositoryUrl>

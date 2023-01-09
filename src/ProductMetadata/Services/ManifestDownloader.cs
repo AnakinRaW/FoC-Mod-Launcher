@@ -8,7 +8,7 @@ using Sklavenwalker.CommonUtilities.DownloadManager;
 using Sklavenwalker.CommonUtilities.FileSystem;
 using Validation;
 
-namespace Sklavenwalker.ProductMetadata.Services;
+namespace AnakinRaW.ProductMetadata.Services;
 
 internal class ManifestDownloader : IManifestDownloader
 {

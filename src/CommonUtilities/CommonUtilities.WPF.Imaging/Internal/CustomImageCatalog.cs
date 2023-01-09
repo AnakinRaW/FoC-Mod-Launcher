@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Imaging;
+namespace AnakinRaW.CommonUtilities.Wpf.Imaging;
 
 internal class CustomImageCatalog : IImageCatalog
 {

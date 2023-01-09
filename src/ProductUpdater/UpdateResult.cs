@@ -1,4 +1,4 @@
-﻿namespace Sklavenwalker.ProductUpdater;
+﻿namespace AnakinRaW.ProductUpdater;
 
 public enum UpdateResult
 {

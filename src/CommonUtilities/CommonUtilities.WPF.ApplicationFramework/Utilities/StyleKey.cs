@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using System.Windows;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Utilities;
+namespace AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Utilities;
 
 internal class StyleKey<T> : ResourceKey
 {

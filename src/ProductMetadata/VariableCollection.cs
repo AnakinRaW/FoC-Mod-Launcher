@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading;
 using Validation;
 
-namespace Sklavenwalker.ProductMetadata;
+namespace AnakinRaW.ProductMetadata;
 
 public class VariableCollection : IReadOnlyDictionary<string, string?>
 {

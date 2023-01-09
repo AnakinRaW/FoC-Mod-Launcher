@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Windows;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Utilities;
+namespace AnakinRaW.CommonUtilities.Wpf.Utilities;
 
 internal abstract class CollectionAdapter<TSource, TTarget> : ReadOnlyObservableCollection<TTarget>, IWeakEventListener
 {

@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.NativeMethods;
+namespace AnakinRaW.CommonUtilities.Wpf.NativeMethods;
 
 internal static class Kernel32
 {

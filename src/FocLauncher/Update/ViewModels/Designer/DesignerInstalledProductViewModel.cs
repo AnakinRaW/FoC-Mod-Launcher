@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Threading.Tasks;
-using Sklavenwalker.CommonUtilities.Wpf.Imaging;
+using AnakinRaW.CommonUtilities.Wpf.Imaging;
 
 namespace FocLauncher.Update.ViewModels.Designer;
 

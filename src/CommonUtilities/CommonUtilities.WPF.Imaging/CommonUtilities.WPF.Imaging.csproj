@@ -8,8 +8,8 @@
 
 	<PropertyGroup>
 		<TargetFrameworks>net6.0-windows;net48</TargetFrameworks>
-		<RootNamespace>Sklavenwalker.CommonUtilities.Wpf.Imaging</RootNamespace>
-		<AssemblyName>Sklavenwalker.CommonUtilities.WPF.Imaging</AssemblyName>
+		<RootNamespace>AnakinRaW.CommonUtilities.Wpf.Imaging</RootNamespace>
+		<AssemblyName>AnakinRaW.CommonUtilities.WPF.Imaging</AssemblyName>
 		<UseWPF>true</UseWPF>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>

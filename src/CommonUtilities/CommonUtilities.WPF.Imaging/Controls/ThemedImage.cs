@@ -2,12 +2,12 @@
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
-using Sklavenwalker.CommonUtilities.Wpf.Converters;
-using Sklavenwalker.CommonUtilities.Wpf.DPI;
-using Sklavenwalker.CommonUtilities.Wpf.Imaging.Converters;
+using AnakinRaW.CommonUtilities.Wpf.Converters;
+using AnakinRaW.CommonUtilities.Wpf.DPI;
+using AnakinRaW.CommonUtilities.Wpf.Imaging.Converters;
 using Validation;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Imaging.Controls;
+namespace AnakinRaW.CommonUtilities.Wpf.Imaging.Controls;
 
 public class ThemedImage : Image
 { 

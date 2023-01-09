@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Imaging;
+namespace AnakinRaW.CommonUtilities.Wpf.Imaging;
 
 public interface IImageCatalog : IEnumerable<ImageDefinition>
 {

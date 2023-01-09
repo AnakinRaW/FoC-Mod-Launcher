@@ -2,11 +2,11 @@
 using System.Windows.Input;
 using Validation;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Input;
+namespace AnakinRaW.CommonUtilities.Wpf.Input;
 
 public class DelegateCommand : IDelegateCommand
 {
-    public event EventHandler CanExecuteChanged
+    public event EventHandler? CanExecuteChanged
     {
         add
         {
@@ -53,12 +53,12 @@ public class DelegateCommand : IDelegateCommand
         _canExecuteChanged?.Invoke(this, EventArgs.Empty);
     }
 
-    bool ICommand.CanExecute(object parameter)
+    bool ICommand.CanExecute(object? parameter)
     {
         return CanExecute();
     }
 
-    void ICommand.Execute(object parameter)
+    void ICommand.Execute(object? parameter)
     {
         Execute();
     }

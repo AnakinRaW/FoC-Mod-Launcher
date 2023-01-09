@@ -10,14 +10,14 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
+using AnakinRaW.ProductMetadata;
+using AnakinRaW.ProductMetadata.Catalog;
+using AnakinRaW.ProductMetadata.Component;
+using AnakinRaW.ProductMetadata.Services;
 using Flurl;
 using FocLauncher.Update.Manifest;
 using Microsoft.Extensions.DependencyInjection;
 using Semver;
-using Sklavenwalker.ProductMetadata;
-using Sklavenwalker.ProductMetadata.Catalog;
-using Sklavenwalker.ProductMetadata.Component;
-using Sklavenwalker.ProductMetadata.Services;
 
 namespace FocLauncher.Update.ProductMetadata;
 

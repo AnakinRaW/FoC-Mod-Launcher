@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using Validation;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Theming;
+namespace AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Theming;
 
 internal class ThemeResourceDictionary : ResourceDictionary, IEquatable<ThemeResourceDictionary>
 {

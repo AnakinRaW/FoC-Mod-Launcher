@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Sklavenwalker.ProductMetadata.Component;
+namespace AnakinRaW.ProductMetadata.Component;
 
 public interface IComponentGroup : IProductComponent
 {

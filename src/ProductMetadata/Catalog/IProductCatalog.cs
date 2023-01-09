@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using Sklavenwalker.ProductMetadata.Component;
+using AnakinRaW.ProductMetadata.Component;
 
-namespace Sklavenwalker.ProductMetadata.Catalog;
+namespace AnakinRaW.ProductMetadata.Catalog;
 
 public interface IProductCatalog
 {

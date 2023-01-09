@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Sklavenwalker.ProductMetadata;
+namespace AnakinRaW.ProductMetadata;
 
 public class ProductBranch : IEquatable<ProductBranch>
 {

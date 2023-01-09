@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Windows.Input;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Input;
+using AnakinRaW.CommonUtilities.Wpf.Imaging;
+using AnakinRaW.CommonUtilities.Wpf.Input;
 using FocLauncher.Imaging;
 using FocLauncher.Update.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Input;
-using Sklavenwalker.CommonUtilities.Wpf.Imaging;
-using Sklavenwalker.CommonUtilities.Wpf.Input;
 
 namespace FocLauncher.Commands;
 

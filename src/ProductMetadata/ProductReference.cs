@@ -1,7 +1,7 @@
 ﻿using Semver;
 using Validation;
 
-namespace Sklavenwalker.ProductMetadata;
+namespace AnakinRaW.ProductMetadata;
 
 public class ProductReference : IProductReference
 {

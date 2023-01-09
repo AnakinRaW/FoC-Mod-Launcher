@@ -1,9 +1,9 @@
 ﻿using System;
+using AnakinRaW.ProductMetadata.Catalog;
 using Semver;
-using Sklavenwalker.ProductMetadata.Catalog;
 using Validation;
 
-namespace Sklavenwalker.ProductMetadata;
+namespace AnakinRaW.ProductMetadata;
 
 public sealed class InstalledProduct : IInstalledProduct
 {

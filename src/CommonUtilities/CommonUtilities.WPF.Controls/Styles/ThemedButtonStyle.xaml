@@ -1,14 +1,14 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:controls="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Controls"
-                    xmlns:imaging="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Imaging;assembly=Sklavenwalker.CommonUtilities.WPF.Imaging"
-                    xmlns:coreConverters="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Converters;assembly=Sklavenwalker.CommonUtilities.WPF.Core"
-                    xmlns:themes="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Themes.Colors">
+                    xmlns:controls1="clr-namespace:AnakinRaW.CommonUtilities.Wpf.Controls"
+                    xmlns:themes="clr-namespace:AnakinRaW.CommonUtilities.Wpf.Themes.Colors"
+                    xmlns:imaging="clr-namespace:AnakinRaW.CommonUtilities.Wpf.Imaging;assembly=AnakinRaW.CommonUtilities.WPF.Imaging"
+                    xmlns:converters="clr-namespace:AnakinRaW.CommonUtilities.Wpf.Converters;assembly=AnakinRaW.CommonUtilities.WPF.Core">
 
-    <coreConverters:BrushToColorConverter x:Key="BrushToColorConverter"/>
-    <coreConverters:IsNullOrEmptyConverter x:Key="IsNullOrEmptyConverter"/>
+    <converters:BrushToColorConverter x:Key="BrushToColorConverter"/>
+    <converters:IsNullOrEmptyConverter x:Key="IsNullOrEmptyConverter"/>
 
-    <Style TargetType="{x:Type controls:ThemedButton}">
+    <Style TargetType="{x:Type controls1:ThemedButton}">
         <Setter Property="imaging:ImageThemingUtilities.ImageBackgroundColor"
                 Value="{Binding Background, RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToColorConverter}}"/>
         <Setter Property="BorderThickness" Value="1"/>
@@ -19,7 +19,7 @@
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type controls:ThemedButton}">
+                <ControlTemplate TargetType="{x:Type controls1:ThemedButton}">
                     <Border x:Name="Border" SnapsToDevicePixels="True"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"

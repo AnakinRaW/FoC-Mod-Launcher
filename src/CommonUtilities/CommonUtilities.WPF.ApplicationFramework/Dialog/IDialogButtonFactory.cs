@@ -1,6 +1,6 @@
-﻿using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog.Buttons;
+﻿using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog.Buttons;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog;
+namespace AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 
 public interface IDialogButtonFactory
 {

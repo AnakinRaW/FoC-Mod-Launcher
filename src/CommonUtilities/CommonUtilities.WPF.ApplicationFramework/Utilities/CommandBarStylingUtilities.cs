@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Windows;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.CommandBar;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Controls;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.CommandBar;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Controls;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Utilities;
+namespace AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Utilities;
 
 internal class CommandBarStylingUtilities
 {

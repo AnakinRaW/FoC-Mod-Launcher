@@ -5,7 +5,7 @@ using System.Text;
 using Sklavenwalker.CommonUtilities.FileSystem;
 using Validation;
 
-namespace Sklavenwalker.ProductMetadata.Services;
+namespace AnakinRaW.ProductMetadata.Services;
 
 internal static class ResolverExtensions
 {

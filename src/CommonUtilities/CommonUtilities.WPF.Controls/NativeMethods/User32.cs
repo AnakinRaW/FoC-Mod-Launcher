@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Windows;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.NativeMethods;
+namespace AnakinRaW.CommonUtilities.Wpf.NativeMethods;
 
 internal static class User32
 {

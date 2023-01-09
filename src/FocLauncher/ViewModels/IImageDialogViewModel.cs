@@ -1,5 +1,5 @@
-﻿using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog;
-using Sklavenwalker.CommonUtilities.Wpf.Imaging;
+﻿using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
+using AnakinRaW.CommonUtilities.Wpf.Imaging;
 
 namespace FocLauncher.ViewModels;
 

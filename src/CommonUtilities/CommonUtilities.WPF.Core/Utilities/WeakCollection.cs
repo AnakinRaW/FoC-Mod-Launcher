@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Utilities;
+namespace AnakinRaW.CommonUtilities.Wpf.Utilities;
 
 // From Stephen Cleary https://github.com/StephenCleary/Mvvm/blob/master/src/Nito.Mvvm.Core/WeakCollection.cs
 /// <summary>

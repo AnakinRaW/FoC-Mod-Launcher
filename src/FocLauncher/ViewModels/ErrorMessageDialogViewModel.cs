@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
+using AnakinRaW.CommonUtilities.Wpf.Imaging;
 using FocLauncher.Imaging;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog;
-using Sklavenwalker.CommonUtilities.Wpf.Imaging;
 
 namespace FocLauncher.ViewModels;
 

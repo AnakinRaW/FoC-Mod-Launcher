@@ -1,9 +1,9 @@
 ﻿using System.Windows.Input;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Input;
+using AnakinRaW.CommonUtilities.Wpf.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Input;
-using Sklavenwalker.CommonUtilities.Wpf.Imaging;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.CommandBar;
+namespace AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.CommandBar;
 
 internal sealed partial class ButtonControlViewModel : CommandBarControlViewModel, IExecutableCommandBarControlViewModel
 {

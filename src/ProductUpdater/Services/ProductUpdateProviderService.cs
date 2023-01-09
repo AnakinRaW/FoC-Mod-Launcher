@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using AnakinRaW.ProductMetadata;
+using AnakinRaW.ProductUpdater.Catalog;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Sklavenwalker.ProductMetadata;
-using Sklavenwalker.ProductMetadata.Catalog;
-using Sklavenwalker.ProductMetadata.Services;
-using Sklavenwalker.ProductUpdater.Catalog;
 
-namespace Sklavenwalker.ProductUpdater.Services;
+namespace AnakinRaW.ProductUpdater.Services;
 
 public class ProductUpdateProviderService : IProductUpdateProviderService
 {

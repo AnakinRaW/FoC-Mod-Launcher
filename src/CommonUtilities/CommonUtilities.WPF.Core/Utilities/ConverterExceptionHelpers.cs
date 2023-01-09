@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Runtime.CompilerServices;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Utilities;
+namespace AnakinRaW.CommonUtilities.Wpf.Utilities;
 
 internal static class ConverterExceptionHelpers
 {

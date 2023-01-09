@@ -4,8 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:designer="clr-namespace:FocLauncher.ViewModels.Designer"
-             xmlns:controls="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Controls;assembly=Sklavenwalker.CommonUtilities.WPF.ApplicationFramework"
-             xmlns:imaging="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Imaging.Controls;assembly=Sklavenwalker.CommonUtilities.WPF.Imaging"
+             xmlns:controls="clr-namespace:AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Controls;assembly=AnakinRaW.CommonUtilities.WPF.ApplicationFramework"
+             xmlns:imaging="clr-namespace:AnakinRaW.CommonUtilities.Wpf.Imaging.Controls;assembly=AnakinRaW.CommonUtilities.WPF.Imaging"
              mc:Ignorable="d" d:DesignWidth="480"
              d:DataContext="{d:DesignInstance {x:Type designer:ImageDialogViewModel}, IsDesignTimeCreatable=True}"
              MaxWidth="480" ResizeMode="NoResize">

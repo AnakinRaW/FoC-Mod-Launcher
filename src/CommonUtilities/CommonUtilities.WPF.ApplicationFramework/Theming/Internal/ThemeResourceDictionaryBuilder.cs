@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Theming;
+namespace AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Theming;
 
 internal class ThemeResourceDictionaryBuilder : IThemeResourceDictionaryBuilder
 {

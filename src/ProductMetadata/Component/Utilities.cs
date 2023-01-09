@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using Validation;
 
-namespace Sklavenwalker.ProductMetadata.Component;
+namespace AnakinRaW.ProductMetadata.Component;
 
 internal static class Utilities
 {

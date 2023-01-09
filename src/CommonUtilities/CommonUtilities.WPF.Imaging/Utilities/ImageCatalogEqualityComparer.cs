@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Imaging.Utilities;
+namespace AnakinRaW.CommonUtilities.Wpf.Imaging.Utilities;
 
 internal class ImageCatalogEqualityComparer : EqualityComparer<IImageCatalog>
 {

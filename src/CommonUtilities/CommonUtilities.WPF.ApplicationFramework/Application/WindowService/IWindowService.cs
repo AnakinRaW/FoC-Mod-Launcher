@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework;
+namespace AnakinRaW.CommonUtilities.Wpf.ApplicationFramework;
 
 public interface IWindowService
 {

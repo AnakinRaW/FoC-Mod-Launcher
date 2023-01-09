@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Sklavenwalker.ProductMetadata.Component;
+namespace AnakinRaW.ProductMetadata.Component;
 
 public class IntegrityInformationComparer : IEqualityComparer<ComponentIntegrityInformation>
 {

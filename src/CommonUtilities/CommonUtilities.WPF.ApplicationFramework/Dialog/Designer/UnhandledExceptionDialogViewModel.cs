@@ -2,9 +2,9 @@
 using System.Diagnostics;
 using System.Windows.Input;
 using System.Windows.Media;
-using Sklavenwalker.CommonUtilities.Wpf.Controls;
+using AnakinRaW.CommonUtilities.Wpf.Controls;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog.Designer;
+namespace AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog.Designer;
 
 internal class UnhandledExceptionDialogViewModel : ModalWindowViewModel, IUnhandledExceptionDialogViewModel
 {

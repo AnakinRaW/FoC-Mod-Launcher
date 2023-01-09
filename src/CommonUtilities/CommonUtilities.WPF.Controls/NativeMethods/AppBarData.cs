@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.NativeMethods;
+namespace AnakinRaW.CommonUtilities.Wpf.NativeMethods;
 
 internal struct AppBarData
 {

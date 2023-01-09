@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog;
+namespace AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 
 public interface IQueuedDialogService
 {

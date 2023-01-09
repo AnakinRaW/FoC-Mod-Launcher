@@ -1,6 +1,6 @@
-﻿using Sklavenwalker.ProductMetadata.Catalog;
+﻿using AnakinRaW.ProductMetadata.Catalog;
 
-namespace Sklavenwalker.ProductMetadata.Services;
+namespace AnakinRaW.ProductMetadata.Services;
 
 public interface ICatalogConverter<in TCatalogModel>
 {

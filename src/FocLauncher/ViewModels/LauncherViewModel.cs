@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.StatusBar;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.StatusBar;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
 
 namespace FocLauncher.ViewModels;
 

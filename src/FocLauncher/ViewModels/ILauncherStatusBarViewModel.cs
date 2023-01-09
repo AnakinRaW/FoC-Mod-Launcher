@@ -1,6 +1,6 @@
 ﻿using System.Windows.Media;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Input;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.StatusBar;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Input;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.StatusBar;
 
 namespace FocLauncher.ViewModels;
 

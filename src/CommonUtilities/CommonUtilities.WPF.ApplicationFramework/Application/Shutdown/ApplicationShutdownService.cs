@@ -4,7 +4,7 @@ using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework;
+namespace AnakinRaW.CommonUtilities.Wpf.ApplicationFramework;
 
 internal class ApplicationShutdownService : IApplicationShutdownService
 {

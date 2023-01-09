@@ -1,7 +1,7 @@
-﻿using Semver;
-using Sklavenwalker.ProductMetadata.Catalog;
+﻿using AnakinRaW.ProductMetadata.Catalog;
+using Semver;
 
-namespace Sklavenwalker.ProductMetadata.Services;
+namespace AnakinRaW.ProductMetadata.Services;
 
 public interface IProductService
 {

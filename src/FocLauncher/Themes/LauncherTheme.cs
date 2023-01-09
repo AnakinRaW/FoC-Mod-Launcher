@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Media;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Theming;
-using Sklavenwalker.CommonUtilities.Wpf.Themes.Fonts;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Theming;
+using AnakinRaW.CommonUtilities.Wpf.Themes.Fonts;
 
 namespace FocLauncher.Themes;
 

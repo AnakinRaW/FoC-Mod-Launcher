@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using Sklavenwalker.ProductMetadata.Component;
-using Sklavenwalker.ProductUpdater.Catalog;
+using AnakinRaW.ProductMetadata.Component;
+using AnakinRaW.ProductUpdater.Catalog;
 
-namespace Sklavenwalker.ProductUpdater.Services;
+namespace AnakinRaW.ProductUpdater.Services;
 
 internal interface IComponentComparer
 {

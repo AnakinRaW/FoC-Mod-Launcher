@@ -1,6 +1,6 @@
-﻿using Sklavenwalker.ProductMetadata.Component;
+﻿using AnakinRaW.ProductMetadata.Component;
 
-namespace Sklavenwalker.ProductUpdater.Catalog;
+namespace AnakinRaW.ProductUpdater.Catalog;
 
 public interface IUpdateItem
 {

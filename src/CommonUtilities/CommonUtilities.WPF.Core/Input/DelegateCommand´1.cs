@@ -2,12 +2,12 @@
 using System.Windows.Input;
 using Validation;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Input;
+namespace AnakinRaW.CommonUtilities.Wpf.Input;
 
 public class DelegateCommand<T> : IDelegateCommand<T>
 {
     private readonly Action<T> _execute;
-    private readonly Predicate<T>? _canExecute;
+    private readonly Predicate<T?>? _canExecute;
     private EventHandler? _canExecuteChanged;
 
     public DelegateCommand(Action<T?> execute)
@@ -15,14 +15,14 @@ public class DelegateCommand<T> : IDelegateCommand<T>
     {
     }
 
-    public DelegateCommand(Action<T> execute, Predicate<T>? canExecute)
+    public DelegateCommand(Action<T> execute, Predicate<T?>? canExecute)
     {
         Requires.NotNull((object)execute, nameof(execute));
         _execute = execute;
         _canExecute = canExecute;
     }
 
-    public event EventHandler CanExecuteChanged
+    public event EventHandler? CanExecuteChanged
     {
         add
         {
@@ -38,10 +38,10 @@ public class DelegateCommand<T> : IDelegateCommand<T>
 
     public void RaiseCanExecuteChanged()
     {
-        _canExecuteChanged?.Invoke(this, null);
+        _canExecuteChanged?.Invoke(this, null!);
     }
 
-    public bool CanExecute(T parameter)
+    public bool CanExecute(T? parameter)
     {
         return _canExecute == null || _canExecute(parameter);
     }

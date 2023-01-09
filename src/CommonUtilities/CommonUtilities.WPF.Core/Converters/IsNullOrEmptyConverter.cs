@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Converters;
+namespace AnakinRaW.CommonUtilities.Wpf.Converters;
 
 public sealed class IsNullOrEmptyConverter : ToBooleanValueConverter<string>
 {

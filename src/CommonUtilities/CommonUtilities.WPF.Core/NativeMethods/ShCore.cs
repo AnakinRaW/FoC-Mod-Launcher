@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using Sklavenwalker.CommonUtilities.Wpf.DPI;
+using AnakinRaW.CommonUtilities.Wpf.DPI;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.NativeMethods;
+namespace AnakinRaW.CommonUtilities.Wpf.NativeMethods;
 
 internal static class ShCore
 {

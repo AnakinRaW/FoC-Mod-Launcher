@@ -1,4 +1,4 @@
-﻿namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.CommandBar;
+﻿namespace AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.CommandBar;
 
 internal sealed class SeparatorControlViewModel : CommandBarControlViewModel
 {

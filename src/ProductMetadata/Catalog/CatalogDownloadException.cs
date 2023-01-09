@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Sklavenwalker.ProductMetadata.Catalog;
+namespace AnakinRaW.ProductMetadata.Catalog;
 
 public class CatalogDownloadException : CatalogException
 {

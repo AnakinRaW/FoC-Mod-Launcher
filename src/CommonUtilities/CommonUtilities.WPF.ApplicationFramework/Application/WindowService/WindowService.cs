@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Interop;
-using Sklavenwalker.CommonUtilities.Wpf.Controls;
+using AnakinRaW.CommonUtilities.Wpf.Controls;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework;
+namespace AnakinRaW.CommonUtilities.Wpf.ApplicationFramework;
 
 internal class WindowService : IWindowService
 {

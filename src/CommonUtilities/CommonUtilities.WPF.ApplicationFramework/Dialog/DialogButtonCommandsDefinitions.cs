@@ -1,8 +1,8 @@
 ﻿using System.Windows.Input;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Input;
-using Sklavenwalker.CommonUtilities.Wpf.Input;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Input;
+using AnakinRaW.CommonUtilities.Wpf.Input;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog;
+namespace AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 
 public static class DialogButtonCommandsDefinitions
 {

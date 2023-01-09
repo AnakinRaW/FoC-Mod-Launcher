@@ -1,8 +1,8 @@
 ﻿using System.Windows;
 using System.Windows.Controls.Primitives;
-using Sklavenwalker.CommonUtilities.Wpf.Utilities;
+using AnakinRaW.CommonUtilities.Wpf.Utilities;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Controls;
+namespace AnakinRaW.CommonUtilities.Wpf.Controls;
 
 public class RoutedCommandRepeatButton : RepeatButton
 {

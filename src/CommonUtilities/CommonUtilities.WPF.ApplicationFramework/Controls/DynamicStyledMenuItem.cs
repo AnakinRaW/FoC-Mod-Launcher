@@ -1,8 +1,8 @@
 ﻿using System.Windows;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Utilities;
-using Sklavenwalker.CommonUtilities.Wpf.Controls;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Utilities;
+using AnakinRaW.CommonUtilities.Wpf.Controls;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Controls;
+namespace AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Controls;
 
 public class DynamicStyledMenuItem : ThemedMenuItem, IHasCommandBarStyles
 {

@@ -1,5 +1,5 @@
 ﻿using System;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.NativeMethods;
+namespace AnakinRaW.CommonUtilities.Wpf.NativeMethods;
 
 public delegate bool EnumWindowsProc(IntPtr hWnd, IntPtr lParam);

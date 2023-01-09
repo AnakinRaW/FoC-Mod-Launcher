@@ -1,6 +1,6 @@
-﻿using Sklavenwalker.ProductMetadata.Component;
+﻿using AnakinRaW.ProductMetadata.Component;
 
-namespace Sklavenwalker.ProductMetadata.Services.Detectors;
+namespace AnakinRaW.ProductMetadata.Services.Detectors;
 
 internal interface IComponentDetector
 {

@@ -1,4 +1,4 @@
-﻿using Sklavenwalker.CommonUtilities.Wpf.Imaging;
+﻿using AnakinRaW.CommonUtilities.Wpf.Imaging;
 
 namespace FocLauncher.Imaging;
 

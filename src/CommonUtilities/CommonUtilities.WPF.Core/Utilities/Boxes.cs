@@ -1,4 +1,4 @@
-﻿namespace Sklavenwalker.CommonUtilities.Wpf.Utilities;
+﻿namespace AnakinRaW.CommonUtilities.Wpf.Utilities;
 
 public static class Boxes
 {

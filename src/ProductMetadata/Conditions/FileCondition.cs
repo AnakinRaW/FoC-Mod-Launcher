@@ -1,8 +1,8 @@
-﻿using Semver;
-using Sklavenwalker.ProductMetadata.Component;
+﻿using AnakinRaW.ProductMetadata.Component;
+using Semver;
 using Validation;
 
-namespace Sklavenwalker.ProductMetadata.Conditions;
+namespace AnakinRaW.ProductMetadata.Conditions;
 
 public sealed record FileCondition : ICondition
 {

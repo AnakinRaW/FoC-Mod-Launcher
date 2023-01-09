@@ -2,7 +2,7 @@
 using Sklavenwalker.CommonUtilities.Hashing;
 using Validation;
 
-namespace Sklavenwalker.ProductMetadata.Component;
+namespace AnakinRaW.ProductMetadata.Component;
 
 public readonly struct ComponentIntegrityInformation
 {

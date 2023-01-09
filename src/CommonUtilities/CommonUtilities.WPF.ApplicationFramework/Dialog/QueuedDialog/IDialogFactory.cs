@@ -1,6 +1,6 @@
-﻿using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Controls;
+﻿using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Controls;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog;
+namespace AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 
 public interface IDialogFactory
 {

@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:controls="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Controls"
-                    xmlns:theming="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Themes.Colors">
+                    xmlns:theming="clr-namespace:AnakinRaW.CommonUtilities.Wpf.Themes.Colors"
+                    xmlns:controls="clr-namespace:AnakinRaW.CommonUtilities.Wpf.Controls">
 
     <Style x:Key="ExpanderDownHeaderStyle" TargetType="{x:Type ToggleButton}">
         <Setter Property="Template">

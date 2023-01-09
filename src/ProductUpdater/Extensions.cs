@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Sklavenwalker.ProductMetadata.Catalog;
-using Sklavenwalker.ProductMetadata.Component;
-using Sklavenwalker.ProductUpdater.Catalog;
+using AnakinRaW.ProductMetadata.Catalog;
+using AnakinRaW.ProductMetadata.Component;
+using AnakinRaW.ProductUpdater.Catalog;
 using Validation;
 
-namespace Sklavenwalker.ProductUpdater;
+namespace AnakinRaW.ProductUpdater;
 
 internal static class Extensions
 {

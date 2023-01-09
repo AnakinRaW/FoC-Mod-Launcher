@@ -1,7 +1,7 @@
 ﻿using System;
-using Sklavenwalker.ProductMetadata.Component;
+using AnakinRaW.ProductMetadata.Component;
 
-namespace Sklavenwalker.ProductUpdater.Catalog;
+namespace AnakinRaW.ProductUpdater.Catalog;
 
 public class UpdateItem : IUpdateItem
 {

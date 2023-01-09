@@ -3,7 +3,7 @@ using System.IO.Abstractions;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Sklavenwalker.ProductMetadata.Services;
+namespace AnakinRaW.ProductMetadata.Services;
 
 public interface IManifestDownloader
 {

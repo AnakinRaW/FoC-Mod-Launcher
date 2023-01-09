@@ -1,4 +1,4 @@
-﻿namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.StatusBar;
+﻿namespace AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.StatusBar;
 
 internal class StatusBarService : IStatusBarService
 {

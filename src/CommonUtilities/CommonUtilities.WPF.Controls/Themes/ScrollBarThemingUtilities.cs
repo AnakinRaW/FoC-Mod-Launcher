@@ -2,9 +2,9 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using Sklavenwalker.CommonUtilities.Wpf.Utilities;
+using AnakinRaW.CommonUtilities.Wpf.Utilities;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Themes; 
+namespace AnakinRaW.CommonUtilities.Wpf.Themes; 
 
     public class ScrollBarThemingUtilities
     {

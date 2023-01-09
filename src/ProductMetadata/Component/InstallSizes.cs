@@ -1,4 +1,4 @@
-﻿namespace Sklavenwalker.ProductMetadata.Component;
+﻿namespace AnakinRaW.ProductMetadata.Component;
 
 public record struct InstallationSize(long SystemDrive, long ProductDrive)
 {

@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Controls;
+namespace AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Controls;
 
 public interface IHasCommandBarStyles
 {

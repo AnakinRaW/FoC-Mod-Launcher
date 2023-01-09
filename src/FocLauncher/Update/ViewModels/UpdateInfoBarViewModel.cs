@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
+using AnakinRaW.ProductUpdater.Catalog;
+using AnakinRaW.ProductUpdater.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.DependencyInjection;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
-using Sklavenwalker.ProductUpdater.Catalog;
-using Sklavenwalker.ProductUpdater.Services;
 
 namespace FocLauncher.Update.ViewModels;
 

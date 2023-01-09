@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Sklavenwalker.ProductMetadata;
-using Sklavenwalker.ProductUpdater.Catalog;
+using AnakinRaW.ProductMetadata;
+using AnakinRaW.ProductUpdater.Catalog;
 
-namespace Sklavenwalker.ProductUpdater.Services;
+namespace AnakinRaW.ProductUpdater.Services;
 
 public interface IProductUpdateProviderService
 {

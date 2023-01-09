@@ -1,7 +1,7 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog.Buttons;
+﻿using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Input;
+namespace AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog.Buttons;
 
 public partial class ButtonViewModel : ObservableObject, IButtonViewModel
 {

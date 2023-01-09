@@ -1,5 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog;
+﻿using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace FocLauncher.ViewModels;
 

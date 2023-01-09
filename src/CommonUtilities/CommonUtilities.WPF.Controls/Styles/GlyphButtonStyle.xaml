@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:controls="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Controls"
-                    xmlns:converters="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Converters;assembly=Sklavenwalker.CommonUtilities.WPF.Core">
+                    xmlns:controls="clr-namespace:AnakinRaW.CommonUtilities.Wpf.Controls"
+                    xmlns:converters="clr-namespace:AnakinRaW.CommonUtilities.Wpf.Converters;assembly=AnakinRaW.CommonUtilities.WPF.Core">
     <Style TargetType="{x:Type controls:GlyphButton}">
         <Style.Resources>
             <converters:BooleanOrConverter x:Key="BooleanOrConverter"/>

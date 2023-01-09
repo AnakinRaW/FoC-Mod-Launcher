@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using AnakinRaW.ProductMetadata.Catalog;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Semver;
 using Sklavenwalker.CommonUtilities.DownloadManager;
 using Sklavenwalker.CommonUtilities.FileSystem;
-using Sklavenwalker.ProductMetadata.Catalog;
 using Validation;
 
-namespace Sklavenwalker.ProductMetadata.Services;
+namespace AnakinRaW.ProductMetadata.Services;
 
 public abstract class BranchManager : IBranchManager
 {

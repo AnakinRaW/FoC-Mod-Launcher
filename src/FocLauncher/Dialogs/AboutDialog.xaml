@@ -13,7 +13,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" Text="Launcher by AnakinSklavenwalker"/>
+        <TextBlock Grid.Row="0" Text="Launcher by AnakinRaW"/>
         <Grid Margin="0,6,0,0" Grid.Row="1" TextElement.Foreground="{DynamicResource {x:Static themes:LauncherColors.AboutWindowPackagesText}}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>

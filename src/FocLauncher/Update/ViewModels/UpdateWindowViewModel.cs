@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using Sklavenwalker.CommonUtilities.Wpf.Controls;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading;
+using AnakinRaW.CommonUtilities.Wpf.Controls;
+using AnakinRaW.ProductMetadata;
+using AnakinRaW.ProductMetadata.Services;
+using AnakinRaW.ProductUpdater.Catalog;
+using AnakinRaW.ProductUpdater.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using FocLauncher.Imaging;
 using FocLauncher.Services;
 using FocLauncher.Update.ProductMetadata;
 using FocLauncher.Utilities;
 using Microsoft.Extensions.DependencyInjection;
-using Sklavenwalker.ProductMetadata;
-using Sklavenwalker.ProductMetadata.Services;
-using Sklavenwalker.ProductUpdater.Catalog;
-using Sklavenwalker.ProductUpdater.Services;
 using TaskCanceledException = System.Threading.Tasks.TaskCanceledException;
 
 namespace FocLauncher.Update.ViewModels;

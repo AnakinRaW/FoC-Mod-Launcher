@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO.Abstractions;
 using System.Linq;
+using AnakinRaW.ProductMetadata.Component;
+using AnakinRaW.ProductMetadata.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Semver;
 using Sklavenwalker.CommonUtilities.Hashing;
-using Sklavenwalker.ProductMetadata.Component;
-using Sklavenwalker.ProductMetadata.Services;
 using Validation;
 
-namespace Sklavenwalker.ProductMetadata.Conditions;
+namespace AnakinRaW.ProductMetadata.Conditions;
 
 public class FileConditionEvaluator : IConditionEvaluator
 {

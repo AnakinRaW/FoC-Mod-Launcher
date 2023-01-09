@@ -1,8 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.StatusBar;
+﻿using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.StatusBar;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework;
+namespace AnakinRaW.CommonUtilities.Wpf.ApplicationFramework;
 
 public static class LibraryInitialization
 {

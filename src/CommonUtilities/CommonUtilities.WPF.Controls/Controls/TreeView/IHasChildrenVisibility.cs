@@ -1,4 +1,4 @@
-﻿namespace Sklavenwalker.CommonUtilities.Wpf.Controls;
+﻿namespace AnakinRaW.CommonUtilities.Wpf.Controls;
 
 public interface IHasChildrenVisibility
 {

@@ -1,4 +1,4 @@
-﻿namespace Sklavenwalker.CommonUtilities.Wpf.Input;
+﻿namespace AnakinRaW.CommonUtilities.Wpf.Input;
 
 public interface IDelegateCommand<in T> : IDelegateCommand
 {

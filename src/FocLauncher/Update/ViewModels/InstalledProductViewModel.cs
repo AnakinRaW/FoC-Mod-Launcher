@@ -1,6 +1,6 @@
 ﻿using System;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
-using Sklavenwalker.CommonUtilities.Wpf.Imaging;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
+using AnakinRaW.CommonUtilities.Wpf.Imaging;
 
 namespace FocLauncher.Update.ViewModels;
 

@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Interop;
-using Sklavenwalker.CommonUtilities.Wpf.DPI;
-using Sklavenwalker.CommonUtilities.Wpf.NativeMethods;
+using AnakinRaW.CommonUtilities.Wpf.DPI;
+using AnakinRaW.CommonUtilities.Wpf.NativeMethods;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Utilities;
+namespace AnakinRaW.CommonUtilities.Wpf.Utilities;
 
 internal static class WindowHelper
 {

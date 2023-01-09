@@ -1,7 +1,7 @@
 ﻿using System.Windows.Controls;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.CommandBar.Models;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.CommandBar.Models;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.CommandBar;
+namespace AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.CommandBar;
 
 public abstract class CommandBarProvider<TModel, TControl> where TModel : ICommandBarItemsSource where TControl : ItemsControl
 {

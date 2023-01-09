@@ -1,6 +1,6 @@
 ﻿using System.Windows;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.StatusBar;
 using FocLauncher.Controls;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.StatusBar;
 
 namespace FocLauncher.Services;
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 using Validation;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Theming;
+namespace AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Theming;
 
 internal class ThemeResourceDictionaryCache : IThemeResourceDictionaryCache
 {

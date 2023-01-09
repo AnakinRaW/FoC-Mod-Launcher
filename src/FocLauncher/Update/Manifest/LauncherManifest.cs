@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Serialization;
+using AnakinRaW.ProductMetadata.Catalog;
+using AnakinRaW.ProductMetadata.Component;
+using AnakinRaW.ProductMetadata.Conditions;
 using FocLauncher.Utilities;
 using Semver;
 using Sklavenwalker.CommonUtilities.Hashing;
-using Sklavenwalker.ProductMetadata.Catalog;
-using Sklavenwalker.ProductMetadata.Component;
-using Sklavenwalker.ProductMetadata.Conditions;
 
 namespace FocLauncher.Update.Manifest;
 
@@ -113,14 +113,14 @@ public record OriginInfo(
     [property: JsonPropertyName("sha256")] string Sha256
 )
 {
-    public Sklavenwalker.ProductMetadata.Component.OriginInfo ToOriginInfo()
+    public AnakinRaW.ProductMetadata.Component.OriginInfo ToOriginInfo()
     {
         if (string.IsNullOrEmpty(FileName))
             throw new CatalogException($"Illegal manifest: {nameof(FileName)} must not be null or empty.");
         if (string.IsNullOrEmpty(Url))
             throw new CatalogException($"Illegal manifest: {nameof(Url)} must not be null or empty.");
 
-        return new Sklavenwalker.ProductMetadata.Component.OriginInfo(FileName, new Uri(Url, UriKind.Absolute))
+        return new AnakinRaW.ProductMetadata.Component.OriginInfo(FileName, new Uri(Url, UriKind.Absolute))
         {
             IntegrityInformation = ManifestHelpers.FromSha256(Sha256),
             Size = Size

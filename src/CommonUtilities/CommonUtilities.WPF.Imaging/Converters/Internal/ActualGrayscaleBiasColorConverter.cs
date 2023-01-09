@@ -1,8 +1,8 @@
 ﻿using System.Globalization;
 using System.Windows.Media;
-using Sklavenwalker.CommonUtilities.Wpf.Converters;
+using AnakinRaW.CommonUtilities.Wpf.Converters;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Imaging.Converters;
+namespace AnakinRaW.CommonUtilities.Wpf.Imaging.Converters;
 
 internal sealed class ActualGrayscaleBiasColorConverter : MultiValueConverter<Color?, bool, Color>
 {

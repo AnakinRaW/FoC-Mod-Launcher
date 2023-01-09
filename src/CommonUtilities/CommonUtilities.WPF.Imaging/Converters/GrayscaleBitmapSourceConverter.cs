@@ -3,10 +3,10 @@ using System.Buffers;
 using System.Globalization;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using Sklavenwalker.CommonUtilities.Wpf.Converters;
+using AnakinRaW.CommonUtilities.Wpf.Converters;
 using Validation;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Imaging.Converters;
+namespace AnakinRaW.CommonUtilities.Wpf.Imaging.Converters;
 
 public class GrayscaleBitmapSourceConverter : ValueConverter<BitmapSource, BitmapSource>
 {

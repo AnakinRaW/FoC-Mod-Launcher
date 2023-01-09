@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using System.Windows;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Converters;
+namespace AnakinRaW.CommonUtilities.Wpf.Converters;
 
 public class TreeViewItemIndentionConverter : MultiValueConverter<int, double, GridLength>
 {

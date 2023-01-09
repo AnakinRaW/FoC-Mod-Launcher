@@ -1,4 +1,4 @@
-﻿namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
+﻿namespace AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
 
 public interface ILoadingViewModel : IViewModel
 {

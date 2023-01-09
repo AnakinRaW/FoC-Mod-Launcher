@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using System.Windows.Media;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Converters;
+namespace AnakinRaW.CommonUtilities.Wpf.Converters;
 
 public class BrushToColorConverter : ValueConverter<Brush, Color>
 {

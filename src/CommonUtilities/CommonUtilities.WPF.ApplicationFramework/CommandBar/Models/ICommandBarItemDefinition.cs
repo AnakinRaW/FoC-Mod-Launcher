@@ -1,4 +1,4 @@
-﻿namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.CommandBar.Models;
+﻿namespace AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.CommandBar.Models;
 
 public interface ICommandBarItemDefinition
 {

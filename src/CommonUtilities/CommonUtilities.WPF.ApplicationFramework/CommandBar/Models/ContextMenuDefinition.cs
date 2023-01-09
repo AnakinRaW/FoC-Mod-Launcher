@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.CommandBar.Builder;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.CommandBar.Builder;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.CommandBar.Models;
+namespace AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.CommandBar.Models;
 
 public sealed class ContextMenuDefinition : ICommandBarRootDefinition
 {

@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Utils;
+namespace AnakinRaW.CommonUtilities.Wpf.Utilities;
 
 internal static class UtilityMethods
 {

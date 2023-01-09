@@ -1,6 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:colors="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Themes.Colors;assembly=Sklavenwalker.CommonUtilities.WPF.Controls"
+                    xmlns:colors="clr-namespace:AnakinRaW.CommonUtilities.Wpf.Themes.Colors;assembly=AnakinRaW.CommonUtilities.WPF.Controls"
                     xmlns:themes="clr-namespace:FocLauncher.Themes">
 
     <SolidColorBrush x:Key="{x:Static colors:WindowColors.MainWindowActiveCaptionText}" Color="#FFFFFFFF"/>

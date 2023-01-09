@@ -1,6 +1,6 @@
-﻿using Sklavenwalker.CommonUtilities.Wpf.Controls;
+﻿using AnakinRaW.CommonUtilities.Wpf.Controls;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog;
+namespace AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 
 public interface IModalWindowFactory
 {

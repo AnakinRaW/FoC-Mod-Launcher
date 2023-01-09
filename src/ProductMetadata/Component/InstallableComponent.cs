@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Sklavenwalker.ProductMetadata.Conditions;
+using AnakinRaW.ProductMetadata.Conditions;
 using Validation;
 
-namespace Sklavenwalker.ProductMetadata.Component;
+namespace AnakinRaW.ProductMetadata.Component;
 
 public abstract class InstallableComponent : ProductComponent, IInstallableComponent
 {

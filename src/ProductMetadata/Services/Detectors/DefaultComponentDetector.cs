@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
+using AnakinRaW.ProductMetadata.Component;
+using AnakinRaW.ProductMetadata.Conditions;
 using Microsoft.Extensions.Logging;
-using Sklavenwalker.ProductMetadata.Component;
-using Sklavenwalker.ProductMetadata.Conditions;
 
-namespace Sklavenwalker.ProductMetadata.Services.Detectors;
+namespace AnakinRaW.ProductMetadata.Services.Detectors;
 
 internal sealed class DefaultComponentDetector : ComponentDetectorBase<InstallableComponent>
 {

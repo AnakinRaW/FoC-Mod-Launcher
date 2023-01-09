@@ -6,14 +6,14 @@ using System.Windows;
 using System.Windows.Threading;
 using Validation;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Utilities;
+namespace AnakinRaW.CommonUtilities.Wpf.Utilities;
 
 public sealed class BackgroundDispatcher
 {
     private readonly string _name;
     private static readonly List<BackgroundDispatcher> SDispatchers = new();
 
-    private Dispatcher Dispatcher { get; set; }
+    private Dispatcher Dispatcher { get; set; } = null!;
     
     private BackgroundDispatcher(string name, int stackSize)
     {
@@ -39,7 +39,7 @@ public sealed class BackgroundDispatcher
 
     private void CreateDispatcher(int stackSize)
     {
-        var thread = new Thread(ThreadProc, stackSize)
+        var thread = new Thread(ThreadProc!, stackSize)
         {
             IsBackground = true,
             CurrentCulture = CultureInfo.CurrentCulture,
@@ -67,14 +67,14 @@ public sealed class BackgroundDispatcher
     {
         if (Application.Current != null)
             Application.Current.Exit += OnApplicationExit;
-        Dispatcher.CurrentDispatcher.ShutdownStarted += OnDispatcherShutdownStarted;
+        Dispatcher.CurrentDispatcher.ShutdownStarted += OnDispatcherShutdownStarted!;
     }
 
     private void UnhookEvents()
     {
         if (Application.Current != null)
             Application.Current.Exit -= OnApplicationExit;
-        Dispatcher.CurrentDispatcher.ShutdownStarted -= OnDispatcherShutdownStarted;
+        Dispatcher.CurrentDispatcher.ShutdownStarted -= OnDispatcherShutdownStarted!;
     }
 
     private void ThreadProc(object arg)
@@ -82,6 +82,6 @@ public sealed class BackgroundDispatcher
         Dispatcher = Dispatcher.CurrentDispatcher;
         ((EventWaitHandle)arg).Set();
         Dispatcher.Run();
-        Dispatcher = null;
+        Dispatcher = null!;
     }
 }

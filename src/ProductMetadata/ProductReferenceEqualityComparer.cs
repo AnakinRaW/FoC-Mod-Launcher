@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Sklavenwalker.ProductMetadata;
+namespace AnakinRaW.ProductMetadata;
 
 public class ProductReferenceEqualityComparer : IEqualityComparer<IProductReference>
 {

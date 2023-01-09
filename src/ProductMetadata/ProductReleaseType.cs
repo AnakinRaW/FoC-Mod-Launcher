@@ -1,4 +1,4 @@
-﻿namespace Sklavenwalker.ProductMetadata;
+﻿namespace AnakinRaW.ProductMetadata;
 
 public enum ProductReleaseType
 {

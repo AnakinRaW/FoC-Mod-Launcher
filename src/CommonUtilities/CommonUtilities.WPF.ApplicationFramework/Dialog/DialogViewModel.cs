@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog.Buttons;
+using AnakinRaW.CommonUtilities.Wpf.Controls;
+using AnakinRaW.CommonUtilities.Wpf.Input;
 using Microsoft.Extensions.DependencyInjection;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog.Buttons;
-using Sklavenwalker.CommonUtilities.Wpf.Controls;
-using Sklavenwalker.CommonUtilities.Wpf.Input;
 using Validation;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog;
+namespace AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 
 public abstract class DialogViewModel : ModalWindowViewModel, IDialogViewModel
 {

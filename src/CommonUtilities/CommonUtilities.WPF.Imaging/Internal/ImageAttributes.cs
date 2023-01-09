@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Media;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Imaging;
+namespace AnakinRaW.CommonUtilities.Wpf.Imaging;
 
 internal struct ImageAttributes : IEquatable<ImageAttributes>
 {

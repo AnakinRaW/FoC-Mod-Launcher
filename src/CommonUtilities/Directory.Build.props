@@ -1,9 +1,9 @@
 <Project>
 	<PropertyGroup>
 		<Product>.NET Common Utilities</Product>
-		<Copyright>Copyright © Anakin Sklavenwalker 2022</Copyright>
-		<RepositoryUrl>https://github.com/AnakinSklavenwalker/CommonUtilities</RepositoryUrl>
-		<Authors>Anakin Sklavenwalker</Authors>
+		<Copyright>Copyright © AnakinRaW 2023</Copyright>
+		<RepositoryUrl>https://github.com/AnakinRaW/CommonUtilities</RepositoryUrl>
+		<Authors>Anakin AnakinRaW</Authors>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PublishRepositoryUrl>true</PublishRepositoryUrl>

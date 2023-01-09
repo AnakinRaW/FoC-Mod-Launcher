@@ -6,10 +6,10 @@ using System.Windows.Controls;
 using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using Sklavenwalker.CommonUtilities.Wpf.Imaging.Converters;
+using AnakinRaW.CommonUtilities.Wpf.Imaging.Converters;
 using Validation;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Imaging.Utilities;
+namespace AnakinRaW.CommonUtilities.Wpf.Imaging.Utilities;
 
 internal static class ImagingUtilities
 {

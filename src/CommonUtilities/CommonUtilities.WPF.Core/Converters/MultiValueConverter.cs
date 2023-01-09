@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Globalization;
-using Sklavenwalker.CommonUtilities.Wpf.Utilities;
+using AnakinRaW.CommonUtilities.Wpf.Utilities;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Converters;
+namespace AnakinRaW.CommonUtilities.Wpf.Converters;
 
 public class MultiValueConverter<T1, T2, TTarget> : MultiValueConverterBase<TTarget>
 {

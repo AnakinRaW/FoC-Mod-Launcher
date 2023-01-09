@@ -1,6 +1,6 @@
 ﻿using System.Windows.Input;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Input;
+namespace AnakinRaW.CommonUtilities.Wpf.Input;
 
 public static class ViewCommands
 {

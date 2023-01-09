@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
-using Sklavenwalker.CommonUtilities.Wpf.Controls;
-using Sklavenwalker.ProductMetadata;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
+using AnakinRaW.CommonUtilities.Wpf.Controls;
+using AnakinRaW.ProductMetadata;
 
 namespace FocLauncher.Update.ViewModels;
 

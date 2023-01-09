@@ -1,4 +1,4 @@
-﻿namespace Sklavenwalker.CommonUtilities.Wpf.Themes.Fonts;
+﻿namespace AnakinRaW.CommonUtilities.Wpf.Themes.Fonts;
 
 public class EnvironmentFonts
 {

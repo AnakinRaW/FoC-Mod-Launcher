@@ -5,8 +5,8 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
-using Sklavenwalker.CommonUtilities.Wpf.Controls;
-using Sklavenwalker.CommonUtilities.Wpf.Input;
+using AnakinRaW.CommonUtilities.Wpf.Controls;
+using AnakinRaW.CommonUtilities.Wpf.Input;
 
 namespace FocLauncher.Views;
 

@@ -3,8 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using Sklavenwalker.CommonUtilities;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Utilities;
+namespace AnakinRaW.CommonUtilities.Wpf.Utilities;
 
 internal sealed class EnumerableModificationDetector : DisposableObject, IEnumerable
 {

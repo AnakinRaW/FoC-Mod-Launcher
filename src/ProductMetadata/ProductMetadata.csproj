@@ -6,16 +6,16 @@
   </PropertyGroup>
 
 	<PropertyGroup>
-		<RootNamespace>Sklavenwalker.ProductMetadata</RootNamespace>
-		<AssemblyName>Sklavenwalker.ProductMetadata</AssemblyName>
+		<RootNamespace>AnakinRaW.ProductMetadata</RootNamespace>
+		<AssemblyName>AnakinRaW.ProductMetadata</AssemblyName>
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
 	<PropertyGroup>
 		<VersionPrefix>1.0.0</VersionPrefix>
-		<Authors>Anakin Sklavenwalker</Authors>
+		<Authors>AnakinRaW</Authors>
 		<Description>Defines metadata to describe a software product and it's components.</Description>
-		<Copyright>Anakin Sklavenwalker</Copyright>
+		<Copyright>AnakinRaW</Copyright>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	</PropertyGroup>
 

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Immutable;
 using System.Windows.Media;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Imaging.Utilities;
+namespace AnakinRaW.CommonUtilities.Wpf.Imaging.Utilities;
 
 internal static class ExtensionMethods
 {

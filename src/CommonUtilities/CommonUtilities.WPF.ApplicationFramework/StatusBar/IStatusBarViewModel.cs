@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.StatusBar;
+namespace AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.StatusBar;
 
 public interface IStatusBarViewModel : INotifyPropertyChanged
 {

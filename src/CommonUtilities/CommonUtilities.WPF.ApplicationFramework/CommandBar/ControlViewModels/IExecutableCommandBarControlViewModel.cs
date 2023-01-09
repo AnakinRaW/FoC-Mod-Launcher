@@ -1,6 +1,6 @@
 ﻿using System.Windows.Input;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.CommandBar;
+namespace AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.CommandBar;
 
 internal interface IExecutableCommandBarControlViewModel : ICommandBarControlViewModel
 {

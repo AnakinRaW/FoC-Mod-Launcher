@@ -3,29 +3,29 @@
        
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Controls;component/Styles/AutoSizeModalWindowStyle.xaml"/>
-                <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Controls;component/Styles/CustomResizeGripStyle.xaml"/>
-                <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Controls;component/Styles/DialogButtonStyle.xaml"/>
-                <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Controls;component/Styles/GlyphButtonStyle.xaml"/>
-                <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Controls;component/Styles/ModalWindowStyle.xaml"/>
-                <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Controls;component/Styles/ShadowChromeWindowStyle.xaml"/>
-                <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Controls;component/Styles/SystemMenuStyle.xaml"/>
-                <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Controls;component/Styles/ThemedButtonStyle.xaml"/>
-                <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Controls;component/Styles/ThemedComboBoxStyle.xaml"/>
-                <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Controls;component/Styles/ThemedContextMenuStyle.xaml"/>
-                <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Controls;component/Styles/ThemedExpanderStyle.xaml"/>
-                <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Controls;component/Styles/ThemedScrollBarStyles.xaml"/>
-                <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Controls;component/Styles/ThemedVirtualizingTreeViewItemStyle.xaml"/>
-                <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Controls;component/Styles/ThemedVirtualizingTreeViewStyle.xaml"/>
-                <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Controls;component/Styles/ThemedWindowStyle.xaml"/>
-                <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Controls;component/Styles/VirtualizingTreeViewItemStyle.xaml"/>
-                <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Controls;component/Styles/VirtualizingTreeViewStyle.xaml"/>
-                <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Controls;component/Styles/WindowBaseStyle.xaml"/>
-                <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Controls;component/Styles/WindowTitleBarButtonStyle.xaml"/>
+                <ResourceDictionary Source="/AnakinRaW.CommonUtilities.WPF.Controls;component/Styles/AutoSizeModalWindowStyle.xaml"/>
+                <ResourceDictionary Source="/AnakinRaW.CommonUtilities.WPF.Controls;component/Styles/CustomResizeGripStyle.xaml"/>
+                <ResourceDictionary Source="/AnakinRaW.CommonUtilities.WPF.Controls;component/Styles/DialogButtonStyle.xaml"/>
+                <ResourceDictionary Source="/AnakinRaW.CommonUtilities.WPF.Controls;component/Styles/GlyphButtonStyle.xaml"/>
+                <ResourceDictionary Source="/AnakinRaW.CommonUtilities.WPF.Controls;component/Styles/ModalWindowStyle.xaml"/>
+                <ResourceDictionary Source="/AnakinRaW.CommonUtilities.WPF.Controls;component/Styles/ShadowChromeWindowStyle.xaml"/>
+                <ResourceDictionary Source="/AnakinRaW.CommonUtilities.WPF.Controls;component/Styles/SystemMenuStyle.xaml"/>
+                <ResourceDictionary Source="/AnakinRaW.CommonUtilities.WPF.Controls;component/Styles/ThemedButtonStyle.xaml"/>
+                <ResourceDictionary Source="/AnakinRaW.CommonUtilities.WPF.Controls;component/Styles/ThemedComboBoxStyle.xaml"/>
+                <ResourceDictionary Source="/AnakinRaW.CommonUtilities.WPF.Controls;component/Styles/ThemedContextMenuStyle.xaml"/>
+                <ResourceDictionary Source="/AnakinRaW.CommonUtilities.WPF.Controls;component/Styles/ThemedExpanderStyle.xaml"/>
+                <ResourceDictionary Source="/AnakinRaW.CommonUtilities.WPF.Controls;component/Styles/ThemedScrollBarStyles.xaml"/>
+                <ResourceDictionary Source="/AnakinRaW.CommonUtilities.WPF.Controls;component/Styles/ThemedVirtualizingTreeViewItemStyle.xaml"/>
+                <ResourceDictionary Source="/AnakinRaW.CommonUtilities.WPF.Controls;component/Styles/ThemedVirtualizingTreeViewStyle.xaml"/>
+                <ResourceDictionary Source="/AnakinRaW.CommonUtilities.WPF.Controls;component/Styles/ThemedWindowStyle.xaml"/>
+                <ResourceDictionary Source="/AnakinRaW.CommonUtilities.WPF.Controls;component/Styles/VirtualizingTreeViewItemStyle.xaml"/>
+                <ResourceDictionary Source="/AnakinRaW.CommonUtilities.WPF.Controls;component/Styles/VirtualizingTreeViewStyle.xaml"/>
+                <ResourceDictionary Source="/AnakinRaW.CommonUtilities.WPF.Controls;component/Styles/WindowBaseStyle.xaml"/>
+                <ResourceDictionary Source="/AnakinRaW.CommonUtilities.WPF.Controls;component/Styles/WindowTitleBarButtonStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
 
-        <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Controls;component/Themes/Colors/DefaultColors.xaml"/>
+        <ResourceDictionary Source="/AnakinRaW.CommonUtilities.WPF.Controls;component/Themes/Colors/DefaultColors.xaml"/>
 
     </ResourceDictionary.MergedDictionaries>
 

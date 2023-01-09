@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Validation;
 
-namespace Sklavenwalker.ProductMetadata.Component;
+namespace AnakinRaW.ProductMetadata.Component;
 
 public class ComponentGroup : ProductComponent, IComponentGroup
 {

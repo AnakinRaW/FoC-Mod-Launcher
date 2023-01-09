@@ -1,4 +1,4 @@
-﻿namespace Sklavenwalker.ProductMetadata.Conditions;
+﻿namespace AnakinRaW.ProductMetadata.Conditions;
 
 public enum ConditionJoin
 {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Utilities;
+namespace AnakinRaW.CommonUtilities.Wpf.Utilities;
 
 internal static class RoutedCommandUnsubscriber
 {

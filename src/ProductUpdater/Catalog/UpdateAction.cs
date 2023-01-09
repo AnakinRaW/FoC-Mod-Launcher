@@ -1,4 +1,4 @@
-﻿namespace Sklavenwalker.ProductUpdater.Catalog;
+﻿namespace AnakinRaW.ProductUpdater.Catalog;
 
 public enum UpdateAction
 {

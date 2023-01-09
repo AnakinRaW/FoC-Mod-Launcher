@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.CommandBar;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.CommandBar.Models;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Theming;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
+using AnakinRaW.CommonUtilities.Wpf.Input;
 using FocLauncher.Commands;
 using FocLauncher.Themes;
 using Microsoft.Extensions.DependencyInjection;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.CommandBar;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.CommandBar.Models;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Theming;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
-using Sklavenwalker.CommonUtilities.Wpf.Input;
 using Validation;
 
 namespace FocLauncher;

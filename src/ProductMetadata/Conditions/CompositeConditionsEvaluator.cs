@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 using Validation;
 
-namespace Sklavenwalker.ProductMetadata.Conditions;
+namespace AnakinRaW.ProductMetadata.Conditions;
 
 public class CompositeConditionsEvaluator
 {

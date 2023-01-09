@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using Sklavenwalker.ProductMetadata.Component;
+using AnakinRaW.ProductMetadata.Component;
 using Validation;
 
-namespace Sklavenwalker.ProductMetadata.Catalog;
+namespace AnakinRaW.ProductMetadata.Catalog;
 
 public class InstalledProductCatalog : ProductCatalog, IInstalledProductCatalog
 {

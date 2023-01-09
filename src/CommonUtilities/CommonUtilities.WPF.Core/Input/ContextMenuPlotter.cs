@@ -4,11 +4,11 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
-using Sklavenwalker.CommonUtilities.Wpf.DPI;
-using Sklavenwalker.CommonUtilities.Wpf.NativeMethods;
-using Sklavenwalker.CommonUtilities.Wpf.Utils;
+using AnakinRaW.CommonUtilities.Wpf.DPI;
+using AnakinRaW.CommonUtilities.Wpf.NativeMethods;
+using AnakinRaW.CommonUtilities.Wpf.Utilities;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Input;
+namespace AnakinRaW.CommonUtilities.Wpf.Input;
 
 public sealed class ContextMenuPlotter : IContextMenuPlotter
 {
@@ -30,7 +30,7 @@ public sealed class ContextMenuPlotter : IContextMenuPlotter
                 {
                     var mainWindow = Application.Current.MainWindow ??
                                      throw new InvalidOperationException("The application does not have a main window set");
-                    mainWindow.Closed += OnMainWindowClosed;
+                    mainWindow.Closed += OnMainWindowClosed!;
                     _currentMainWindow = mainWindow;
                 }
                 // There could be a race between registering the close event and the window really was closed.
@@ -107,7 +107,7 @@ public sealed class ContextMenuPlotter : IContextMenuPlotter
 
     private void OnMainWindowClosed(object sender, EventArgs e)
     {
-        _currentMainWindow!.Closed -= OnMainWindowClosed;
+        _currentMainWindow!.Closed -= OnMainWindowClosed!;
         _currentMainWindow = null;
         _contextMenuPlacementWindow?.Close();
         _contextMenuPlacementWindow = null;

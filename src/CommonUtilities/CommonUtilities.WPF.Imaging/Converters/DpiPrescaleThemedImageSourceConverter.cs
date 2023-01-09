@@ -1,9 +1,9 @@
 ﻿using System.Globalization;
 using System.Windows;
 using System.Windows.Media;
-using Sklavenwalker.CommonUtilities.Wpf.Converters;
+using AnakinRaW.CommonUtilities.Wpf.Converters;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Imaging.Converters;
+namespace AnakinRaW.CommonUtilities.Wpf.Imaging.Converters;
 
 // TODO: Can they be deleted?
 public class DpiPrescaleThemedImageSourceConverter : MultiValueConverter<ImageSource, Color, bool, ImageSource>

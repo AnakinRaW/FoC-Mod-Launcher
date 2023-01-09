@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Threading;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Controls;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Controls;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
 using Validation;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework;
+namespace AnakinRaW.CommonUtilities.Wpf.ApplicationFramework;
 
 public abstract class ApplicationBase : Application
 {

@@ -1,10 +1,10 @@
 ﻿using System.Windows.Controls;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.CommandBar.Models;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Controls;
-using Sklavenwalker.CommonUtilities.Wpf.Input;
-using Sklavenwalker.CommonUtilities.Wpf.Utilities;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.CommandBar.Models;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Controls;
+using AnakinRaW.CommonUtilities.Wpf.Input;
+using AnakinRaW.CommonUtilities.Wpf.Utilities;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.CommandBar;
+namespace AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.CommandBar;
 
 public sealed class ModelBasedContextMenuProvider : CommandBarProvider<ContextMenuDefinition, StylingContextMenu>, 
     IContextMenuProvider<ContextMenuDefinition>

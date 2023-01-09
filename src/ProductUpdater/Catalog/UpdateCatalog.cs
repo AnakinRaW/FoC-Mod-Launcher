@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Sklavenwalker.ProductMetadata;
+using AnakinRaW.ProductMetadata;
 using Validation;
 
-namespace Sklavenwalker.ProductUpdater.Catalog;
+namespace AnakinRaW.ProductUpdater.Catalog;
 
 public class UpdateCatalog : IUpdateCatalog
 {

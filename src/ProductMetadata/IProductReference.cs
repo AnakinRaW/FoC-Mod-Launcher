@@ -1,6 +1,6 @@
 ﻿using Semver;
 
-namespace Sklavenwalker.ProductMetadata;
+namespace AnakinRaW.ProductMetadata;
 
 public interface IProductReference
 {

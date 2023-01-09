@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using Sklavenwalker.ProductMetadata.Component;
+using AnakinRaW.ProductMetadata.Component;
 using Validation;
 
-namespace Sklavenwalker.ProductMetadata.Conditions;
+namespace AnakinRaW.ProductMetadata.Conditions;
 
 public sealed class ConditionEvaluatorStore : IConditionEvaluatorStore
 {

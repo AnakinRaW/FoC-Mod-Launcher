@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
+using AnakinRaW.CommonUtilities.Wpf.NativeMethods;
 using Microsoft.Win32;
-using Sklavenwalker.CommonUtilities.Wpf.NativeMethods;
 using Validation;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.DPI;
+namespace AnakinRaW.CommonUtilities.Wpf.DPI;
 
 public static class DisplayHelper
 {
@@ -19,7 +19,7 @@ public static class DisplayHelper
     
     static DisplayHelper()
     {
-        SystemEvents.DisplaySettingsChanged += OnDisplayChanged;
+        SystemEvents.DisplaySettingsChanged += OnDisplayChanged!;
         UpdateDisplays();
     }
 
@@ -132,7 +132,7 @@ public static class DisplayHelper
         window.Height = window.DeviceToLogicalUnitsY(windowBounds.Height);
     }
 
-    public static DisplayInfo? FindDisplayForWindowRect(Rect windowRect)
+    public static DisplayInfo FindDisplayForWindowRect(Rect windowRect)
     {
         DisplayInfo? displayForWindowRect = null;
         var rect = new RectStruct(windowRect);
@@ -149,10 +149,8 @@ public static class DisplayHelper
                 maxIntersectionArea = localIntersectionArea;
             }
         }
-
-        if (displayForWindowRect == null)
-            displayForWindowRect = FindDisplayForHmonitor(User32.MonitorFromRect(ref rect, 2));
-        return displayForWindowRect;
+        
+        return displayForWindowRect ?? FindDisplayForHmonitor(User32.MonitorFromRect(ref rect, 2));
     }
 
     public static DisplayInfo? FindDisplayForAbsolutePosition(Point absolutePosition)
@@ -176,7 +174,7 @@ public static class DisplayHelper
         relativePosition = (Point)(relativePosition - display.Position);
     }
 
-    internal static DisplayInfo FindDisplayForHmonitor(IntPtr hmonitor)
+    private static DisplayInfo FindDisplayForHmonitor(IntPtr hmonitor)
     {
         var display = DisplaysInternal.Find(HasSameMonitorHandle);
         if (display is null)

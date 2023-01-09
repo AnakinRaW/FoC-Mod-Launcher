@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
-using Sklavenwalker.CommonUtilities.Wpf.Converters;
+using AnakinRaW.CommonUtilities.Wpf.Converters;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Converters;
+namespace AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Converters;
 
 internal sealed class ToTypeNameConverter : ValueConverter<object?, string>
 {

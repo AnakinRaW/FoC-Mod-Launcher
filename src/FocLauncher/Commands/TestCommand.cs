@@ -1,8 +1,8 @@
 ﻿using System.Windows.Input;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Input;
+using AnakinRaW.CommonUtilities.Wpf.Imaging;
+using AnakinRaW.CommonUtilities.Wpf.Input;
 using FocLauncher.Imaging;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Input;
-using Sklavenwalker.CommonUtilities.Wpf.Imaging;
-using Sklavenwalker.CommonUtilities.Wpf.Input;
 
 namespace FocLauncher.Commands;
 

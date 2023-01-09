@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using Sklavenwalker.ProductMetadata.Conditions;
+using AnakinRaW.ProductMetadata.Conditions;
 
-namespace Sklavenwalker.ProductMetadata.Component;
+namespace AnakinRaW.ProductMetadata.Component;
 
 public interface IInstallableComponent : IProductComponent
 {

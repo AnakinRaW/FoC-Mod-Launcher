@@ -1,4 +1,4 @@
-﻿namespace Sklavenwalker.CommonUtilities.Wpf.Imaging;
+﻿namespace AnakinRaW.CommonUtilities.Wpf.Imaging;
 
 public enum ImageFileKind
 {

@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Converters;
+namespace AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Converters;
 
 internal class BiDirectionalEnumConverter : IValueConverter
 {

@@ -1,6 +1,6 @@
 ﻿using Validation;
 
-namespace Sklavenwalker.ProductMetadata.Component;
+namespace AnakinRaW.ProductMetadata.Component;
 
 /// <summary>
 /// A component representing a single file.

@@ -1,8 +1,8 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog.Buttons;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog.Buttons;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog;
+namespace AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 
 internal class DialogButtonTemplateSelector : DataTemplateSelector
 {

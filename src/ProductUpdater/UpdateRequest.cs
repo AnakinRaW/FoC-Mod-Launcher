@@ -1,6 +1,6 @@
-﻿using Sklavenwalker.ProductMetadata;
+﻿using AnakinRaW.ProductMetadata;
 
-namespace Sklavenwalker.ProductUpdater;
+namespace AnakinRaW.ProductUpdater;
 
 public class UpdateRequest
 {

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using Sklavenwalker.ProductMetadata.Component;
-using Sklavenwalker.ProductMetadata.Conditions;
-using Sklavenwalker.ProductUpdater.Catalog;
+using AnakinRaW.ProductMetadata.Component;
+using AnakinRaW.ProductMetadata.Conditions;
+using AnakinRaW.ProductUpdater.Catalog;
 
-namespace Sklavenwalker.ProductUpdater.Services;
+namespace AnakinRaW.ProductUpdater.Services;
 
 public class ComponentUpdateComparer : IComponentComparer
 {

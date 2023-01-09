@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Utilities;
+namespace AnakinRaW.CommonUtilities.Wpf.Utilities;
 
 [DebuggerDisplay("#Entries={Count}")]
 public class WeakValueDictionary<TKey, TValue> where TValue : class where TKey : notnull

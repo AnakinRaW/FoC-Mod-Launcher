@@ -5,10 +5,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media;
-using Sklavenwalker.CommonUtilities.Wpf.NativeMethods;
+using AnakinRaW.CommonUtilities.Wpf.NativeMethods;
 using Validation;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.DPI;
+namespace AnakinRaW.CommonUtilities.Wpf.DPI;
 
 public static class DpiHelper
 {

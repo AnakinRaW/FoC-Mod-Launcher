@@ -3,11 +3,11 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using Sklavenwalker.CommonUtilities.Wpf.Converters;
-using Sklavenwalker.CommonUtilities.Wpf.Imaging;
-using Sklavenwalker.CommonUtilities.Wpf.Utilities;
+using AnakinRaW.CommonUtilities.Wpf.Converters;
+using AnakinRaW.CommonUtilities.Wpf.Imaging;
+using AnakinRaW.CommonUtilities.Wpf.Utilities;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Controls;
+namespace AnakinRaW.CommonUtilities.Wpf.Controls;
 
 public class WindowTitleBarButton : GlyphButton
 {

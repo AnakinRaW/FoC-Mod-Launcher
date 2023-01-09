@@ -1,6 +1,6 @@
-﻿using Sklavenwalker.ProductMetadata.Component;
+﻿using AnakinRaW.ProductMetadata.Component;
 
-namespace Sklavenwalker.ProductMetadata.Conditions;
+namespace AnakinRaW.ProductMetadata.Conditions;
 
 public interface ICondition
 {

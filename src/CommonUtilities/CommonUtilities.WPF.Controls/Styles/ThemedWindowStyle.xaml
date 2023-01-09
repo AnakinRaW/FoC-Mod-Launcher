@@ -1,22 +1,22 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:controls="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Controls"
-                    xmlns:colors="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Themes.Colors"
-                    xmlns:nativeMethods="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.NativeMethods"
-                    xmlns:coreConverters="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Converters;assembly=Sklavenwalker.CommonUtilities.WPF.Core"
-                    xmlns:imaging="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Imaging;assembly=Sklavenwalker.CommonUtilities.WPF.Imaging"
-                    xmlns:fonts="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Themes.Fonts"
-                    xmlns:input="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Input;assembly=Sklavenwalker.CommonUtilities.WPF.Core">
+                    xmlns:controls1="clr-namespace:AnakinRaW.CommonUtilities.Wpf.Controls"
+                    xmlns:colors="clr-namespace:AnakinRaW.CommonUtilities.Wpf.Themes.Colors"
+                    xmlns:fonts="clr-namespace:AnakinRaW.CommonUtilities.Wpf.Themes.Fonts"
+                    xmlns:nativeMethods="clr-namespace:AnakinRaW.CommonUtilities.Wpf.NativeMethods"
+                    xmlns:converters="clr-namespace:AnakinRaW.CommonUtilities.Wpf.Converters;assembly=AnakinRaW.CommonUtilities.WPF.Core"
+                    xmlns:imaging="clr-namespace:AnakinRaW.CommonUtilities.Wpf.Imaging;assembly=AnakinRaW.CommonUtilities.WPF.Imaging"
+                    xmlns:input="clr-namespace:AnakinRaW.CommonUtilities.Wpf.Input;assembly=AnakinRaW.CommonUtilities.WPF.Core">
 
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Controls;component/Styles/ShadowChromeWindowStyle.xaml"/>
+        <ResourceDictionary Source="/AnakinRaW.CommonUtilities.WPF.Controls;component/Styles/ShadowChromeWindowStyle.xaml"/>
     </ResourceDictionary.MergedDictionaries>
     
-    <Style TargetType="{x:Type controls:ThemedWindow}" BasedOn="{StaticResource {x:Type controls:ShadowChromeWindow}}">
+    <Style TargetType="{x:Type controls1:ThemedWindow}" BasedOn="{StaticResource {x:Type controls1:ShadowChromeWindow}}">
         <Style.Resources>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-            <coreConverters:BrushToColorConverter x:Key="BrushToColorConverter"/>
-            <coreConverters:BooleanAndConverter x:Key="AndBooleanConverter"/>
+            <converters:BrushToColorConverter x:Key="BrushToColorConverter"/>
+            <converters:BooleanAndConverter x:Key="AndBooleanConverter"/>
         </Style.Resources>
         <Style.Triggers>
             <DataTrigger Binding="{Binding IsFullScreen}" Value="True">
@@ -43,7 +43,7 @@
                 Value="{DynamicResource {x:Static colors:WindowColors.MainWindowInactiveBorder}}"/>
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type controls:ThemedWindow}">
+                <ControlTemplate TargetType="{x:Type controls1:ThemedWindow}">
                     <AdornerDecorator>
                         <Border BorderBrush="{TemplateBinding Control.BorderBrush}"
                                 BorderThickness="{TemplateBinding Control.BorderThickness}"
@@ -54,7 +54,7 @@
                                     <RowDefinition Height="*"/>
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
-                                <controls:MainWindowTitleBar x:Name="MainWindowTitleBar" Grid.Row="0" Grid.Column="0"
+                                <controls1:MainWindowTitleBar x:Name="MainWindowTitleBar" Grid.Row="0" Grid.Column="0"
                                                              Background="{DynamicResource {x:Static colors:WindowColors.MainWindowActiveCaption}}"
                                                              TextElement.Foreground="{DynamicResource {x:Static colors:WindowColors.MainWindowActiveCaptionText}}">
                                     <imaging:ImageThemingUtilities.ImageBackgroundColor>
@@ -68,16 +68,16 @@
                                                 <ColumnDefinition Width="*"/>
                                                 <ColumnDefinition Width="Auto" SharedSizeGroup="Buttons"/>
                                             </Grid.ColumnDefinitions>
-                                            <controls:SystemMenu x:Name="SystemMenu" Source="{TemplateBinding Icon}"
+                                            <controls1:SystemMenu x:Name="SystemMenu" Source="{TemplateBinding Icon}"
                                                                  VectorFill="{DynamicResource {x:Static colors:WindowColors.MainWindowActiveIconDefault}}"
                                                                  Width="32" Height="32" Margin="12,7,0,0" Grid.Column="0" VerticalAlignment="Top">
-                                            </controls:SystemMenu>
+                                            </controls1:SystemMenu>
                                             <TextBlock Text="{TemplateBinding Window.Title}"
                                                        FontSize="{DynamicResource {x:Static fonts:EnvironmentFonts.CaptionFontSizeKey}}"
                                                        FontFamily="{DynamicResource {x:Static fonts:EnvironmentFonts.CaptionFontFamilyKey}}"
                                                        TextTrimming="CharacterEllipsis" VerticalAlignment="Center" Margin="6,7,0,4" Grid.Column="1"/>
                                             <StackPanel Orientation="Horizontal" Grid.Column="2">
-                                                <controls:WindowTitleBarButton x:Name="MinimizeButton" VerticalAlignment="Top"
+                                                <controls1:WindowTitleBarButton x:Name="MinimizeButton" VerticalAlignment="Top"
                                                                                Command="{x:Static input:ViewCommands.MinimizeWindow}"
                                                                                BorderBrush="{DynamicResource {x:Static colors:WindowColors.MainWindowButtonActiveBorder}}"
                                                                                BorderThickness="1,0,1,1" 
@@ -103,8 +103,8 @@
                                                             <Binding Path="(TextElement.Foreground)" RelativeSource="{RelativeSource Self}"/>
                                                         </Shape.Fill>
                                                     </Path>
-                                                </controls:WindowTitleBarButton>
-                                                <controls:WindowTitleBarButton x:Name="MaximizeRestoreButton" VerticalAlignment="Top"
+                                                </controls1:WindowTitleBarButton>
+                                                <controls1:WindowTitleBarButton x:Name="MaximizeRestoreButton" VerticalAlignment="Top"
                                                                                Command="{x:Static input:ViewCommands.ToggleMaximizeRestoreWindow}"
                                                                                BorderBrush="{DynamicResource {x:Static colors:WindowColors.MainWindowButtonActiveBorder}}"
                                                                                BorderThickness="1,0,1,1" 
@@ -131,8 +131,8 @@
                                                             <Binding Path="(TextElement.Foreground)" RelativeSource="{RelativeSource Self}"/>
                                                         </Shape.Fill>
                                                     </Path>
-                                                </controls:WindowTitleBarButton>
-                                                <controls:WindowTitleBarButton x:Name="CloseButton" VerticalAlignment="Top"
+                                                </controls1:WindowTitleBarButton>
+                                                <controls1:WindowTitleBarButton x:Name="CloseButton" VerticalAlignment="Top"
                                                                                Command="{x:Static input:ViewCommands.CloseWindow}"
                                                                                BorderBrush="{DynamicResource {x:Static colors:WindowColors.MainWindowButtonActiveBorder}}"
                                                                                BorderThickness="1,0,1,1" 
@@ -156,17 +156,17 @@
                                                             <Binding Path="(TextElement.Foreground)" RelativeSource="{RelativeSource Self}"/>
                                                         </Shape.Fill>
                                                     </Path>
-                                                </controls:WindowTitleBarButton>
+                                                </controls1:WindowTitleBarButton>
                                             </StackPanel>
                                         </Grid>
                                     </Grid>
-                                </controls:MainWindowTitleBar>
+                                </controls1:MainWindowTitleBar>
                                 <AdornerDecorator Grid.Row="1">
                                     <ContentPresenter/>
                                 </AdornerDecorator>
-                                <controls:CustomResizeGrip Grid.Row="2" x:Name="ResizeGripControl" HorizontalAlignment="Right" Padding="0" Cursor="SizeNWSE"
+                                <controls1:CustomResizeGrip Grid.Row="2" x:Name="ResizeGripControl" HorizontalAlignment="Right" Padding="0" Cursor="SizeNWSE"
                                                            VerticalAlignment="Bottom" Visibility="Collapsed">
-                                </controls:CustomResizeGrip>
+                                </controls1:CustomResizeGrip>
                             </Grid>
                         </Border>
                     </AdornerDecorator>
@@ -194,37 +194,37 @@
                             <Setter TargetName="MainWindowTitleBar" Value="{DynamicResource {x:Static colors:WindowColors.MainWindowInactiveCaptionText}}"
                                     Property="TextElement.Foreground"/>
                             <Setter TargetName="SystemMenu" Value="{DynamicResource {x:Static colors:WindowColors.MainWindowInactiveIconDefault}}" 
-                                    Property="controls:SystemMenu.VectorFill"/>
+                                    Property="controls1:SystemMenu.VectorFill"/>
                             <Setter TargetName="MinimizeButton" Value="{DynamicResource {x:Static colors:WindowColors.MainWindowButtonInactiveBorder}}" 
                                     Property="Control.BorderBrush"/>
                             <Setter TargetName="MinimizeButton" Value="{DynamicResource {x:Static colors:WindowColors.MainWindowButtonInactiveGlyph}}" 
-                                    Property="controls:GlyphButton.GlyphForeground"/>
+                                    Property="controls1:GlyphButton.GlyphForeground"/>
                             <Setter TargetName="MinimizeButton" Value="{DynamicResource {x:Static colors:WindowColors.MainWindowButtonHoverInactive}}" 
-                                    Property="controls:GlyphButton.HoverBackground"/>
+                                    Property="controls1:GlyphButton.HoverBackground"/>
                             <Setter TargetName="MinimizeButton" Value="{DynamicResource {x:Static colors:WindowColors.MainWindowButtonHoverInactiveBorder}}" 
-                                    Property="controls:GlyphButton.HoverBorderBrush"/>
+                                    Property="controls1:GlyphButton.HoverBorderBrush"/>
                             <Setter TargetName="MinimizeButton" Value="{DynamicResource {x:Static colors:WindowColors.MainWindowButtonHoverInactiveGlyph}}" 
-                                    Property="controls:GlyphButton.HoverForeground"/>
+                                    Property="controls1:GlyphButton.HoverForeground"/>
                             <Setter TargetName="MaximizeRestoreButton" Value="{DynamicResource {x:Static colors:WindowColors.MainWindowButtonInactiveBorder}}"
                                     Property="Control.BorderBrush"/>
                             <Setter TargetName="MaximizeRestoreButton" Value="{DynamicResource {x:Static colors:WindowColors.MainWindowButtonInactiveGlyph}}" 
-                                    Property="controls:GlyphButton.GlyphForeground"/>
+                                    Property="controls1:GlyphButton.GlyphForeground"/>
                             <Setter TargetName="MaximizeRestoreButton" Value="{DynamicResource {x:Static colors:WindowColors.MainWindowButtonHoverInactive}}" 
-                                    Property="controls:GlyphButton.HoverBackground"/>
+                                    Property="controls1:GlyphButton.HoverBackground"/>
                             <Setter TargetName="MaximizeRestoreButton" Value="{DynamicResource {x:Static colors:WindowColors.MainWindowButtonHoverInactiveBorder}}" 
-                                    Property="controls:GlyphButton.HoverBorderBrush"/>
+                                    Property="controls1:GlyphButton.HoverBorderBrush"/>
                             <Setter TargetName="MaximizeRestoreButton" Value="{DynamicResource {x:Static colors:WindowColors.MainWindowButtonHoverInactiveGlyph}}" 
-                                    Property="controls:GlyphButton.HoverForeground"/>
+                                    Property="controls1:GlyphButton.HoverForeground"/>
                             <Setter TargetName="CloseButton" Value="{DynamicResource {x:Static colors:WindowColors.MainWindowButtonInactiveBorder}}" 
                                     Property="Control.BorderBrush"/>
                             <Setter TargetName="CloseButton" Value="{DynamicResource {x:Static colors:WindowColors.MainWindowButtonInactiveGlyph}}" 
-                                    Property="controls:GlyphButton.GlyphForeground"/>
+                                    Property="controls1:GlyphButton.GlyphForeground"/>
                             <Setter TargetName="CloseButton" Value="{DynamicResource {x:Static colors:WindowColors.MainWindowButtonHoverInactive}}" 
-                                    Property="controls:GlyphButton.HoverBackground"/>
+                                    Property="controls1:GlyphButton.HoverBackground"/>
                             <Setter TargetName="CloseButton" Value="{DynamicResource {x:Static colors:WindowColors.MainWindowButtonHoverInactiveBorder}}" 
-                                    Property="controls:GlyphButton.HoverBorderBrush"/>
+                                    Property="controls1:GlyphButton.HoverBorderBrush"/>
                             <Setter TargetName="CloseButton" Value="{DynamicResource {x:Static colors:WindowColors.MainWindowButtonHoverInactiveGlyph}}"
-                                    Property="controls:GlyphButton.HoverForeground"/>
+                                    Property="controls1:GlyphButton.HoverForeground"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

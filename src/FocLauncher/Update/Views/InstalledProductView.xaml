@@ -4,11 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:designer="clr-namespace:FocLauncher.Update.ViewModels.Designer"
-             xmlns:imaging="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Imaging;assembly=Sklavenwalker.CommonUtilities.WPF.Imaging"
-             xmlns:converters="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Converters;assembly=Sklavenwalker.CommonUtilities.WPF.Core"
+             xmlns:imaging="clr-namespace:AnakinRaW.CommonUtilities.Wpf.Imaging;assembly=AnakinRaW.CommonUtilities.WPF.Imaging"
+             xmlns:converters="clr-namespace:AnakinRaW.CommonUtilities.Wpf.Converters;assembly=AnakinRaW.CommonUtilities.WPF.Core"
              xmlns:themes="clr-namespace:FocLauncher.Themes"
-             xmlns:controls="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Imaging.Controls;assembly=Sklavenwalker.CommonUtilities.WPF.Imaging"
-             xmlns:wpfControls="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Controls;assembly=Sklavenwalker.CommonUtilities.WPF.Controls"
+             xmlns:controls="clr-namespace:AnakinRaW.CommonUtilities.Wpf.Imaging.Controls;assembly=AnakinRaW.CommonUtilities.WPF.Imaging"
+             xmlns:wpfControls="clr-namespace:AnakinRaW.CommonUtilities.Wpf.Controls;assembly=AnakinRaW.CommonUtilities.WPF.Controls"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance {x:Type designer:DesignerInstalledProductViewModel}, IsDesignTimeCreatable=True}">
     <FrameworkElement.Resources>

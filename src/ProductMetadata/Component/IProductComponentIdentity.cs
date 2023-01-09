@@ -1,7 +1,7 @@
-﻿using Semver;
-using System;
+﻿using System;
+using Semver;
 
-namespace Sklavenwalker.ProductMetadata.Component;
+namespace AnakinRaW.ProductMetadata.Component;
 
 public interface IProductComponentIdentity : IEquatable<IProductComponentIdentity>
 {

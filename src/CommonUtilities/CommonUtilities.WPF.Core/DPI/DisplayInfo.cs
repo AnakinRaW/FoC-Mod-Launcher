@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Windows;
-using Sklavenwalker.CommonUtilities.Wpf.NativeMethods;
+using AnakinRaW.CommonUtilities.Wpf.NativeMethods;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.DPI;
+namespace AnakinRaW.CommonUtilities.Wpf.DPI;
 
 public class DisplayInfo : IComparable<DisplayInfo>, IEquatable<DisplayInfo>
 {
@@ -64,8 +64,10 @@ public class DisplayInfo : IComparable<DisplayInfo>, IEquatable<DisplayInfo>
         return MonitorHandle.GetHashCode();
     }
 
-    public int CompareTo(DisplayInfo other)
+    public int CompareTo(DisplayInfo? other)
     {
+        if (other is null)
+            return 1;
         if (Vector.IsOrigin && !other.Vector.IsOrigin)
             return -1;
         if (!Vector.IsOrigin && other.Vector.IsOrigin)

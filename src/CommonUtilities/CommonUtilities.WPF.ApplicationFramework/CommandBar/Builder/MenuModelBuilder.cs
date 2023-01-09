@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.CommandBar.Models;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.CommandBar.Models;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.CommandBar.Builder;
+namespace AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.CommandBar.Builder;
 
 internal class MenuModelBuilder : CommandBarModelBuilder<IMenuDefinition>
 {

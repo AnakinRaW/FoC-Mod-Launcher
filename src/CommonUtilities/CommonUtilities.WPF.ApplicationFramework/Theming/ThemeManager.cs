@@ -1,10 +1,10 @@
 ﻿using System;
+using AnakinRaW.CommonUtilities.Wpf.Imaging;
+using AnakinRaW.CommonUtilities.Wpf.Themes;
 using Microsoft.Extensions.DependencyInjection;
-using Sklavenwalker.CommonUtilities.Wpf.Imaging;
-using Sklavenwalker.CommonUtilities.Wpf.Themes;
 using Validation;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Theming;
+namespace AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Theming;
 
 public class ThemeManager : IThemeManager
 {

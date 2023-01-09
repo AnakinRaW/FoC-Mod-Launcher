@@ -1,6 +1,6 @@
-﻿using Sklavenwalker.ProductMetadata.Catalog;
+﻿using AnakinRaW.ProductMetadata.Catalog;
 
-namespace Sklavenwalker.ProductMetadata.Services.Detectors;
+namespace AnakinRaW.ProductMetadata.Services.Detectors;
 
 public interface ICatalogDetectionService
 {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Sklavenwalker.ProductMetadata.Services;
+namespace AnakinRaW.ProductMetadata.Services;
 
 public interface IVariableResolver
 {

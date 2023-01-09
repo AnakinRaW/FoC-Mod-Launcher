@@ -4,10 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using Sklavenwalker.CommonUtilities.Wpf.Imaging.Utilities;
+using AnakinRaW.CommonUtilities.Wpf.Imaging.Utilities;
 using Validation;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Imaging;
+namespace AnakinRaW.CommonUtilities.Wpf.Imaging;
 
 public class ImageLibrary
 {

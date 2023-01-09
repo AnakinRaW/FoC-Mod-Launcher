@@ -2,10 +2,9 @@
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
-using Sklavenwalker.CommonUtilities.Wpf.Utilities;
-using Sklavenwalker.CommonUtilities.Wpf.Utils;
+using AnakinRaW.CommonUtilities.Wpf.Utilities;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Controls;
+namespace AnakinRaW.CommonUtilities.Wpf.Controls;
 
 public class ThemedMenuItem : MenuItem, INonClientArea
 {

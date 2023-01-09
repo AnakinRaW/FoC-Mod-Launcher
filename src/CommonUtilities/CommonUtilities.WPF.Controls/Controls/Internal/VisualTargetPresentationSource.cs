@@ -4,7 +4,7 @@ using System.Security.Permissions;
 using System.Windows;
 using System.Windows.Media;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Controls;
+namespace AnakinRaW.CommonUtilities.Wpf.Controls;
 
 internal class VisualTargetPresentationSource : PresentationSource, IDisposable
 {

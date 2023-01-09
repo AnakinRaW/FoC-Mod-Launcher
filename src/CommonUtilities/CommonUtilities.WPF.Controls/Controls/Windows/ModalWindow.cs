@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Windows;
-using Sklavenwalker.CommonUtilities.Wpf.NativeMethods;
-using Sklavenwalker.CommonUtilities.Wpf.Utilities;
+using AnakinRaW.CommonUtilities.Wpf.NativeMethods;
+using AnakinRaW.CommonUtilities.Wpf.Utilities;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Controls;
+namespace AnakinRaW.CommonUtilities.Wpf.Controls;
 
 public class ModalWindow : WindowBase
 {

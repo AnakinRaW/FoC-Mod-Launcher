@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using Sklavenwalker.ProductMetadata;
+using AnakinRaW.ProductMetadata;
 
-namespace Sklavenwalker.ProductUpdater.Catalog;
+namespace AnakinRaW.ProductUpdater.Catalog;
 
 public interface IUpdateCatalog
 {

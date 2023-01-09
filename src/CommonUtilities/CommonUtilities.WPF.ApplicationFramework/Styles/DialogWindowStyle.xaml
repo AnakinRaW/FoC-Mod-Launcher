@@ -1,16 +1,16 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:imaging="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Imaging;assembly=Sklavenwalker.CommonUtilities.WPF.Imaging"
-                    xmlns:imageControls="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Imaging.Controls;assembly=Sklavenwalker.CommonUtilities.WPF.Imaging"
-                    xmlns:coreConverters="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Converters;assembly=Sklavenwalker.CommonUtilities.WPF.Core"
-                    xmlns:input="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Input"
-                    xmlns:controls="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Controls"
-                    xmlns:dialog="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog"
-                    xmlns:baseControls="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Controls;assembly=Sklavenwalker.CommonUtilities.WPF.Controls"
-                    xmlns:colors="clr-namespace:Sklavenwalker.CommonUtilities.Wpf.Themes.Colors;assembly=Sklavenwalker.CommonUtilities.WPF.Controls">
+                    xmlns:imaging="clr-namespace:AnakinRaW.CommonUtilities.Wpf.Imaging;assembly=AnakinRaW.CommonUtilities.WPF.Imaging"
+                    xmlns:imageControls="clr-namespace:AnakinRaW.CommonUtilities.Wpf.Imaging.Controls;assembly=AnakinRaW.CommonUtilities.WPF.Imaging"
+                    xmlns:coreConverters="clr-namespace:AnakinRaW.CommonUtilities.Wpf.Converters;assembly=AnakinRaW.CommonUtilities.WPF.Core"
+                    xmlns:baseControls="clr-namespace:AnakinRaW.CommonUtilities.Wpf.Controls;assembly=AnakinRaW.CommonUtilities.WPF.Controls"
+                    xmlns:colors="clr-namespace:AnakinRaW.CommonUtilities.Wpf.Themes.Colors;assembly=AnakinRaW.CommonUtilities.WPF.Controls"
+                    xmlns:controls="clr-namespace:AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Controls"
+                    xmlns:input1="clr-namespace:AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Input"
+                    xmlns:dialog="clr-namespace:AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog">
 
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/Sklavenwalker.CommonUtilities.WPF.Controls;component/Styles/AutoSizeModalWindowStyle.xaml"/>
+        <ResourceDictionary Source="/AnakinRaW.CommonUtilities.WPF.Controls;component/Styles/AutoSizeModalWindowStyle.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
     <Style TargetType="{x:Type controls:DialogWindow}" BasedOn="{StaticResource {x:Type baseControls:AutoSizeModalWindow}}">
@@ -20,7 +20,7 @@
             <coreConverters:IsNullOrEmptyConverter x:Key="IsNullOrEmptyConverter"/>
             <coreConverters:BrushToColorConverter x:Key="BrushToColorConverter"/>
 
-            <DataTemplate x:Key="ButtonContentTemplate" DataType="{x:Type input:ICommandDefinition}">
+            <DataTemplate x:Key="ButtonContentTemplate" DataType="{x:Type input1:ICommandDefinition}">
                 <Border>
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <imageControls:ThemedImage x:Name="Image" Margin="0,0,8,0" VerticalAlignment="Center" Focusable="False"

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog.Buttons;
+using AnakinRaW.CommonUtilities.Wpf.Imaging;
 using FocLauncher.Imaging;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog;
-using Sklavenwalker.CommonUtilities.Wpf.ApplicationFramework.Dialog.Buttons;
-using Sklavenwalker.CommonUtilities.Wpf.Imaging;
 
 namespace FocLauncher.ViewModels.Designer;
 

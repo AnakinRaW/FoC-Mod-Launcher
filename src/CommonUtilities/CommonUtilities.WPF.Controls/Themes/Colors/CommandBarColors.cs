@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace Sklavenwalker.CommonUtilities.Wpf.Themes.Colors;
+namespace AnakinRaW.CommonUtilities.Wpf.Themes.Colors;
 
 public static class CommandBarColors
 {
