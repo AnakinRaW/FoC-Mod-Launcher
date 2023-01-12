@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
-using AnakinRaW.CommonUtilities.Wpf.NativeMethods;
+using AnakinRaW.CommonUtilities.Wpf.Utilities;
+using Vanara.PInvoke;
 
 namespace AnakinRaW.CommonUtilities.Wpf.DPI;
 
@@ -12,21 +13,21 @@ public class DisplayInfo : IComparable<DisplayInfo>, IEquatable<DisplayInfo>
 
     public bool IsDpiFaulted { get; }
 
-    public bool IsPrimary => MonitorInfo.IsPrimary;
+    public bool IsPrimary => MonitorInfo.IsPrimary();
 
     public IntPtr MonitorHandle { get; }
 
-    public Size Size => MonitorInfo.RcMonitor.Size;
+    public Size Size => MonitorInfo.rcMonitor.ToSize();
 
-    internal MonitorInfoStruct MonitorInfo { get; }
+    internal User32.MONITORINFO MonitorInfo { get; }
 
-    internal Point Position => MonitorInfo.RcMonitor.Position;
+    internal Point Position => MonitorInfo.rcMonitor.GetPosition();
 
-    internal RectStruct Rect => MonitorInfo.RcMonitor;
+    internal RECT Rect => MonitorInfo.rcMonitor;
 
     private PolarVector Vector { get; }
 
-    internal DisplayInfo(IntPtr hMonitor, MonitorInfoStruct monitorInfo)
+    internal DisplayInfo(IntPtr hMonitor, User32.MONITORINFO monitorInfo)
     {
         MonitorHandle = hMonitor;
         MonitorInfo = monitorInfo;

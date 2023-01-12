@@ -18,4 +18,8 @@
 	  <ProjectReference Include="..\CommonUtilities.WPF.Imaging\CommonUtilities.WPF.Imaging.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Controls\Internal" />
+	</ItemGroup>
+
 </Project>

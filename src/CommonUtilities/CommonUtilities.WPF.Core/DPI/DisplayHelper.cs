@@ -5,9 +5,10 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
-using AnakinRaW.CommonUtilities.Wpf.NativeMethods;
+using AnakinRaW.CommonUtilities.Wpf.Utilities;
 using Microsoft.Win32;
 using Validation;
+using Vanara.PInvoke;
 
 namespace AnakinRaW.CommonUtilities.Wpf.DPI;
 
@@ -135,13 +136,13 @@ public static class DisplayHelper
     public static DisplayInfo FindDisplayForWindowRect(Rect windowRect)
     {
         DisplayInfo? displayForWindowRect = null;
-        var rect = new RectStruct(windowRect);
+        var rect = windowRect.ToRECT();
         long maxIntersectionArea = 0;
         
         foreach (var displayInfo in DisplaysInternal)
         {
-            var rcWork = displayInfo.MonitorInfo.RcWork;
-            User32.IntersectRect(out var lprcDst, ref rcWork, ref rect);
+            var rcWork = displayInfo.MonitorInfo.rcWork;
+            User32.IntersectRect(out var lprcDst, in rcWork, in rect);
             var localIntersectionArea = (long)(lprcDst.Width * lprcDst.Height);
             if (localIntersectionArea > maxIntersectionArea)
             {
@@ -150,7 +151,7 @@ public static class DisplayHelper
             }
         }
         
-        return displayForWindowRect ?? FindDisplayForHmonitor(User32.MonitorFromRect(ref rect, 2));
+        return displayForWindowRect ?? FindDisplayForHmonitor(User32.MonitorFromRect(in rect, User32.MonitorFlags.MONITOR_DEFAULTTONEAREST).DangerousGetHandle());
     }
 
     public static DisplayInfo? FindDisplayForAbsolutePosition(Point absolutePosition)
@@ -162,7 +163,7 @@ public static class DisplayHelper
                 rect.Bottom > absolutePosition.Y)
                 return display;
         }
-        return FindDisplayForHmonitor(User32.MonitorFromPoint(PointStruct.FromPoint(absolutePosition), 2));
+        return FindDisplayForHmonitor(User32.MonitorFromPoint(absolutePosition.ToPOINT(), User32.MonitorFlags.MONITOR_DEFAULTTONEAREST));
     }
 
     public static void AbsolutePositionToRelativePosition(double left, double top, out DisplayInfo? display, out Point relativePosition)
@@ -174,7 +175,7 @@ public static class DisplayHelper
         relativePosition = (Point)(relativePosition - display.Position);
     }
 
-    private static DisplayInfo FindDisplayForHmonitor(IntPtr hmonitor)
+    private static DisplayInfo FindDisplayForHmonitor(HMONITOR hmonitor)
     {
         var display = DisplaysInternal.Find(HasSameMonitorHandle);
         if (display is null)
@@ -188,10 +189,10 @@ public static class DisplayHelper
 
         bool HasSameMonitorHandle(DisplayInfo? displayInfo)
         {
-            return displayInfo != null && displayInfo.MonitorHandle == hmonitor;
+            return displayInfo != null && displayInfo.MonitorHandle == hmonitor.DangerousGetHandle();
         }
     }
-
+    
     internal static Rect GetOnScreenPosition(Rect windowRect, 
         DisplayInfo? fallbackDisplay = null, bool forceOnScreen = false, bool topOnly = false)
     {
@@ -201,7 +202,7 @@ public static class DisplayHelper
         {
             Rect workAreaRect;
             if (fallbackDisplay is null)
-                FindMonitorRectsFromPoint(User32.GetCursorPos(), out _, out workAreaRect);
+                FindMonitorRectsFromPoint(GetCursorPos(), out _, out workAreaRect);
             else
                 FindMonitorRectsFromPoint(RelativePositionToAbsolutePosition(fallbackDisplay, 0.0, 0.0), out _, out workAreaRect);
             if (windowRect.Width > workAreaRect.Width)
@@ -226,11 +227,11 @@ public static class DisplayHelper
     internal static Point RelativePositionToAbsolutePosition(DisplayInfo display, double left, double top)
     {
         if (display is null) throw new ArgumentNullException(nameof(display));
-        RectStruct rect1;
+        RECT rect1;
         if (DisplaysInternal.Contains(display))
         {
             var rect2 = DisplaysInternal.Last().Rect;
-            rect1 = new RectStruct(rect2.Left + rect2.Width, rect2.Top, rect2.Right + rect2.Width, rect2.Bottom);
+            rect1 = new RECT(rect2.Left + rect2.Width, rect2.Top, rect2.Right + rect2.Width, rect2.Bottom);
         }
         else
             rect1 = display.Rect;
@@ -240,9 +241,9 @@ public static class DisplayHelper
     internal static void FindMonitorRectsFromPoint(Point point, out Rect monitorRect, out Rect workAreaRect)
     {
         var display = FindDisplayForAbsolutePosition(point);
-        var monitorInfo = new MonitorInfoStruct();
+        var monitorInfo = new User32.MONITORINFO();
         if (display is null)
-            GetMonitorInfo(User32.MonitorFromPoint(PointStruct.FromPoint(point), 2), ref monitorInfo);
+            GetMonitorInfo(User32.MonitorFromPoint(point.ToPOINT(), User32.MonitorFlags.MONITOR_DEFAULTTONEAREST), ref monitorInfo);
         else
             monitorInfo = display.MonitorInfo;
         GetMonitorRects(monitorInfo, out monitorRect, out workAreaRect);
@@ -250,43 +251,29 @@ public static class DisplayHelper
 
     private static void FindMaximumSingleMonitorRectangle(Rect windowRect, out Rect screenSubRect, out Rect monitorRect)
     {
-        FindMaximumSingleMonitorRectangle(new RectStruct(windowRect), out var screenSubRect1, out var monitorRect1);
-        screenSubRect = new Rect(screenSubRect1.Position, screenSubRect1.Size);
-        monitorRect = new Rect(monitorRect1.Position, monitorRect1.Size);
+        FindMaximumSingleMonitorRectangle(windowRect.ToRECT(), out var screenSubRect1, out var monitorRect1);
+        screenSubRect = new Rect(screenSubRect1.GetPosition(), screenSubRect1.ToSize());
+        monitorRect = new Rect(monitorRect1.GetPosition(), monitorRect1.ToSize());
     }
 
-    private static void FindMaximumSingleMonitorRectangle(RectStruct windowRect, out RectStruct screenSubRect, out RectStruct monitorRect)
+    private static void FindMaximumSingleMonitorRectangle(RECT windowRect, out RECT screenSubRect, out RECT monitorRect)
     {
-        var display = FindDisplayForWindowRect(windowRect.ToRect());
-        screenSubRect = new RectStruct
-        {
-            Left = 0,
-            Right = 0,
-            Top = 0,
-            Bottom = 0
-        };
-        monitorRect = new RectStruct
-        {
-            Left = 0,
-            Right = 0,
-            Top = 0,
-            Bottom = 0
-        };
-        if (display is null)
-            return;
+        var display = FindDisplayForWindowRect(windowRect.ToWpfRect());
+        screenSubRect = new RECT();
+        monitorRect = new RECT();
         var monitorInfo = display.MonitorInfo;
-        var rcWork = monitorInfo.RcWork;
-        User32.IntersectRect(out var lprcDst, ref rcWork, ref windowRect);
+        var rcWork = monitorInfo.rcWork;
+        User32.IntersectRect(out var lprcDst, in rcWork, in windowRect);
         screenSubRect = lprcDst;
-        monitorRect = monitorInfo.RcWork;
+        monitorRect = monitorInfo.rcWork;
     }
 
-    private static void GetMonitorRects(MonitorInfoStruct monitorInfo, out Rect monitorRect, out Rect workAreaRect)
+    private static void GetMonitorRects(User32.MONITORINFO monitorInfo, out Rect monitorRect, out Rect workAreaRect)
     {
-        if (monitorInfo.CbSize != 0U)
+        if (monitorInfo.cbSize != 0)
         {
-            monitorRect = new Rect(monitorInfo.RcMonitor.Position, monitorInfo.RcMonitor.Size);
-            workAreaRect = new Rect(monitorInfo.RcWork.Position, monitorInfo.RcWork.Size);
+            monitorRect = new Rect(monitorInfo.rcMonitor.GetPosition(), monitorInfo.rcMonitor.ToSize());
+            workAreaRect = new Rect(monitorInfo.rcWork.GetPosition(), monitorInfo.rcWork.ToSize());
         }
         else
         {
@@ -299,18 +286,17 @@ public static class DisplayHelper
     {
         UpdateDisplays();
     }
-
+    
     private static void UpdateDisplays()
     {
         DisplaysInternal.Clear();
         using (DpiHelper.EnterDpiScope(DpiHelper.ProcessDpiAwarenessContext))
         {
-            var dpiHwnd = User32.CreateWindowEx(0, "static", "DpiTrackingWindow", 0, 0, 0, 0, 0, IntPtr.Zero,
-                IntPtr.Zero, IntPtr.Zero, IntPtr.Zero);
-            User32.EnumDisplayMonitors(IntPtr.Zero, IntPtr.Zero,
-                (IntPtr hMonitor, IntPtr hdcMonitor, ref RectStruct rect, IntPtr lpData) =>
+            var dpiHwnd = User32.CreateWindowEx(0, "static", "DpiTrackingWindow");
+            User32.EnumDisplayMonitors(IntPtr.Zero, null, 
+                (hMonitor, _, _, _) =>
                 {
-                    var monitorInfo = new MonitorInfoStruct();
+                    var monitorInfo = new User32.MONITORINFO();
                     GetMonitorInfo(hMonitor, ref monitorInfo);
                     var displayInfo = new DisplayInfo(hMonitor, monitorInfo);
                     DisplaysInternal.Add(displayInfo);
@@ -322,24 +308,24 @@ public static class DisplayHelper
         DisplaysInternal.Sort();
     }
 
-    private static void GetMonitorInfo(IntPtr monitor, ref MonitorInfoStruct monitorInfo)
+    private static void GetMonitorInfo(HMONITOR monitor, ref User32.MONITORINFO monitorInfo)
     {
         if (!(monitor != IntPtr.Zero))
             return;
-        monitorInfo.CbSize = (uint)Marshal.SizeOf(typeof(MonitorInfoStruct));
+        monitorInfo.cbSize = (uint)Marshal.SizeOf(typeof(User32.MONITORINFO));
         User32.GetMonitorInfo(monitor, ref monitorInfo);
     }
 
     private static void SetWindowDpi(IntPtr hwnd, Window window, Int32Rect windowBounds)
-    { 
-        var rect = RectStruct.FromInt32Rect(windowBounds);
+    {
+        var rect = windowBounds.AsRECT();
         var monitorDpiScale = GetMonitorDpiScale(rect);
         var wParam = new IntPtr((int)monitorDpiScale.PixelsPerInchX | (int)monitorDpiScale.PixelsPerInchY << 16);
         var num = Marshal.AllocCoTaskMem(Marshal.SizeOf(rect));
         try
         {
             Marshal.StructureToPtr(rect, num, false);
-            User32.SendMessage(hwnd, 736, wParam, num);
+            User32.SendMessage(hwnd, User32.WindowMessage.WM_DPICHANGED);
             VisualTreeHelper.SetRootDpi(window, monitorDpiScale);
         }
         finally
@@ -348,9 +334,9 @@ public static class DisplayHelper
         }
     }
 
-    private static DpiScale GetMonitorDpiScale(RectStruct nativeRect)
+    private static DpiScale GetMonitorDpiScale(RECT nativeRect)
     {
-        var displayForWindowRect = FindDisplayForWindowRect(nativeRect.ToRect());
+        var displayForWindowRect = FindDisplayForWindowRect(nativeRect.ToWpfRect());
         return new DpiScale(LogicalToDeviceUnitsX(displayForWindowRect, 1.0), LogicalToDeviceUnitsY(displayForWindowRect, 1.0));
     }
 
@@ -375,5 +361,16 @@ public static class DisplayHelper
             dpiX = 96.0;
             dpiY = 96.0;
         }
+    }
+    
+    private static Point GetCursorPos()
+    {
+        var cursorPos = new Point();
+        if (User32.GetCursorPos(out var point))
+        {
+            cursorPos.X = point.X;
+            cursorPos.Y = point.Y;
+        }
+        return cursorPos;
     }
 }

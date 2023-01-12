@@ -27,7 +27,7 @@ internal class LauncherApplication : ApplicationBase
             Title = LauncherConstants.ApplicationName,
             IsResizable = false,
             HasMaximizeButton = false,
-            HasMinimizeButton = false
+            HasMinimizeButton = true
         };
     }
 

@@ -5,8 +5,8 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using AnakinRaW.CommonUtilities.Wpf.DPI;
-using AnakinRaW.CommonUtilities.Wpf.NativeMethods;
 using AnakinRaW.CommonUtilities.Wpf.Utilities;
+using Vanara.PInvoke;
 
 namespace AnakinRaW.CommonUtilities.Wpf.Input;
 
@@ -57,7 +57,7 @@ public sealed class ContextMenuPlotter : IContextMenuPlotter
     }
 
 
-    public bool ShowContextMenu(ContextMenu contextMenu, Point position, UIElement? placementTarget)
+    public bool ShowContextMenu(ContextMenu? contextMenu, Point position, UIElement? placementTarget)
     {
         if (contextMenu is null)
             return false;
@@ -80,7 +80,7 @@ public sealed class ContextMenuPlotter : IContextMenuPlotter
     private void UpdateContextMenuPlacementPosition(Point absolutePoint)
     {
         User32.SetWindowPos(new WindowInteropHelper(ContextMenuPlacementWindow).Handle, IntPtr.Zero,
-            (int)absolutePoint.X, (int)absolutePoint.Y, 0, 0, 17);
+            (int)absolutePoint.X, (int)absolutePoint.Y, 0, 0, User32.SetWindowPosFlags.SWP_NOSIZE | User32.SetWindowPosFlags.SWP_NOACTIVATE);
     }
 
     private static Point GetContextMenuLocation(ref UIElement? uiElement)
@@ -99,7 +99,7 @@ public sealed class ContextMenuPlotter : IContextMenuPlotter
         else
         {
             var messagePos = User32.GetMessagePos();
-            p = new Point(User32.LoWord(messagePos), User32.HiWord(messagePos));
+            p = new Point(LoWord(messagePos), HiWord(messagePos));
         }
 
         return uiElement?.DeviceToLogicalPoint(p) ?? DpiHelper.PointLogicalPoint(p);
@@ -112,6 +112,9 @@ public sealed class ContextMenuPlotter : IContextMenuPlotter
         _contextMenuPlacementWindow?.Close();
         _contextMenuPlacementWindow = null;
     }
+    
+    private static int HiWord(uint value) => (short)(value >> 16);
+    private static int LoWord(uint value) => (short)(value & ushort.MaxValue);
 
     private class PlacementTargetWindow : Window
     {

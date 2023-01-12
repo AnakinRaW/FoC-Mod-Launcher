@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using AnakinRaW.CommonUtilities.Wpf.NativeMethods;
+using Vanara.PInvoke;
 
 namespace AnakinRaW.CommonUtilities.Wpf.Utilities;
 
@@ -55,22 +55,24 @@ public static class IconHelper
         var executablePath = Assembly.GetEntryAssembly()?.Location;
         if (string.IsNullOrEmpty(executablePath))
             throw new InvalidOperationException("Unable to find entrypoint assembly.");
-        IntPtr[] phiconLarge = { IntPtr.Zero };
-        IntPtr[] phiconSmall = { IntPtr.Zero };
-        if (Shell32.ExtractIconEx(executablePath!.Trim('"'), 0, phiconLarge, phiconSmall, 1) > 0)
+
+        HICON[] handleIconLarge = { HICON.NULL};
+        HICON[] handleIconSmall = { HICON.NULL};
+
+        if (Shell32.ExtractIconEx(executablePath!.Trim('"'), 0, handleIconLarge, handleIconSmall, 1) > 0)
         {
-            smallIcon = BitmapSourceFromHIcon(phiconSmall[0]);
-            largeIcon = BitmapSourceFromHIcon(phiconLarge[0]);
+            smallIcon = BitmapSourceFromHIcon(handleIconSmall[0]);
+            largeIcon = BitmapSourceFromHIcon(handleIconLarge[0]);
         }
         return null;
     }
 
-    private static BitmapSource? BitmapSourceFromHIcon(IntPtr iconHandle)
+    private static BitmapSource? BitmapSourceFromHIcon(HICON iconHandle)
     {
         BitmapSource? image = null;
         if (iconHandle != IntPtr.Zero)
         {
-            image = System.Windows.Interop.Imaging.CreateBitmapSourceFromHIcon(iconHandle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+            image = System.Windows.Interop.Imaging.CreateBitmapSourceFromHIcon(iconHandle.DangerousGetHandle(), Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
             User32.DestroyIcon(iconHandle);
             FreezeImage(image);
         }

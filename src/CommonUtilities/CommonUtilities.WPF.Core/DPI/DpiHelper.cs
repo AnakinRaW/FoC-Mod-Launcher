@@ -5,8 +5,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media;
-using AnakinRaW.CommonUtilities.Wpf.NativeMethods;
 using Validation;
+using Vanara.PInvoke;
+using Gdi32 = Vanara.PInvoke.Gdi32;
+using User32 = Vanara.PInvoke.User32;
 
 namespace AnakinRaW.CommonUtilities.Wpf.DPI;
 
@@ -38,13 +40,13 @@ public static class DpiHelper
                 var awarenessContext = DpiAwarenessContext.Unaware;
                 try
                 {
-                    ShCore.GetProcessDpiAwareness(Process.GetCurrentProcess().Handle, out var awareness);
+                    SHCore.GetProcessDpiAwareness(Process.GetCurrentProcess().Handle, out var awareness);
                     switch (awareness)
                     {
-                        case ProcessDpiAwareness.ProcessSystemDpiAware:
+                        case SHCore.PROCESS_DPI_AWARENESS.PROCESS_SYSTEM_DPI_AWARE:
                             awarenessContext = DpiAwarenessContext.SystemAware;
                             break;
-                        case ProcessDpiAwareness.ProcessPerMonitorDpiAware:
+                        case SHCore.PROCESS_DPI_AWARENESS.PROCESS_PER_MONITOR_DPI_AWARE:
                             try
                             {
                                 var threadContext = User32.GetThreadDpiAwarenessContext();
@@ -120,8 +122,8 @@ public static class DpiHelper
         {
             try
             {
-                var index = getDpiX ? DeviceCaps.LogPixelsX : DeviceCaps.LogPixelsY;
-                systemDpi = Gdi32.GetDeviceCaps(dc, (int)index);
+                var index = getDpiX ? Gdi32.DeviceCap.LOGPIXELSX : Gdi32.DeviceCap.LOGPIXELSY;
+                systemDpi = Gdi32.GetDeviceCaps(dc, index);
             }
             finally
             {
@@ -216,7 +218,7 @@ public static class DpiHelper
     {
         var dpiForMonitor = new Dpi
         {
-            HResult = ShCore.GetDpiForMonitor(hmonitor, MonitorDpiType.MdtEffectiveDpi, out var dpiX, out var dpiY)
+            HResult = SHCore.GetDpiForMonitor(hmonitor, SHCore.MONITOR_DPI_TYPE.MDT_EFFECTIVE_DPI, out var dpiX, out var dpiY).Code
         };
         if (dpiForMonitor.HResult == 0)
         {
@@ -422,7 +424,7 @@ public static class DpiHelper
             _originalThread = Thread.CurrentThread;
             if (!IsPerMonitorAwarenessEnabled)
                 return;
-            _originalAwareness = User32.SetThreadDpiAwarenessContext(awareness);
+            _originalAwareness = User32.SetThreadDpiAwarenessContext(awareness).DangerousGetHandle();
         }
 
         public void Dispose()
