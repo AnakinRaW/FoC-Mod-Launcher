@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<Description>Contains all sorts of controls.</Description>
@@ -14,12 +14,17 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\CommonUtilities.WPF.Core\CommonUtilities.WPF.Core.csproj" />
-	  <ProjectReference Include="..\CommonUtilities.WPF.Imaging\CommonUtilities.WPF.Imaging.csproj" />
+		<ProjectReference Include="..\CommonUtilities.WPF.Core\CommonUtilities.WPF.Core.csproj" />
+		<ProjectReference Include="..\CommonUtilities.WPF.Imaging\CommonUtilities.WPF.Imaging.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Controls\Internal" />
+		<PackageReference Include="Vanara.PInvoke.Shell32" Version="3.4.11" PrivateAssets="all" />
+		<PackageReference Include="Vanara.PInvoke.User32" Version="3.4.11" PrivateAssets="all" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="Controls\Internal" />
 	</ItemGroup>
 
 </Project>

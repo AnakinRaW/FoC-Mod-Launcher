@@ -25,8 +25,8 @@ internal class LauncherApplication : ApplicationBase
         return new LauncherViewModel(ServiceProvider, new StatusBarViewModel(ServiceProvider))
         {
             Title = LauncherConstants.ApplicationName,
-            IsResizable = false,
-            HasMaximizeButton = false,
+            IsResizable = true,
+            HasMaximizeButton = true,
             HasMinimizeButton = true
         };
     }

@@ -11,6 +11,9 @@ using AnakinRaW.CommonUtilities.Wpf.DPI;
 using AnakinRaW.CommonUtilities.Wpf.NativeMethods;
 using AnakinRaW.CommonUtilities.Wpf.Utilities;
 using Validation;
+using Vanara.PInvoke;
+using static Vanara.PInvoke.Shell32;
+using User32 = AnakinRaW.CommonUtilities.Wpf.NativeMethods.User32;
 
 namespace AnakinRaW.CommonUtilities.Wpf.Controls;
 
@@ -242,11 +245,13 @@ public class ShadowChromeWindow : WindowBase
             if (monitorInfo.RcMonitor.Height == monitorInfo.RcWork.Height &&
                 monitorInfo.RcMonitor.Width == monitorInfo.RcWork.Width)
             {
-                var pData = new AppBarData();
-                pData.CbSize = Marshal.SizeOf(typeof(AppBarData));
+                var pData = new APPBARDATA
+                {
+                    cbSize = (uint) Marshal.SizeOf(typeof(APPBARDATA))
+                };
                 switch (Convert.ToBoolean(
-                            (int)Shell32.SHAppBarMessage(5U, ref pData))
-                            ? (int)pData.UEdge
+                            (int)SHAppBarMessage(ABM.ABM_GETTASKBARPOS, ref pData))
+                            ? (int)pData.uEdge
                             : -1)
                 {
                     case 0:

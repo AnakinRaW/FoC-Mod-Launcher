@@ -325,7 +325,7 @@ public static class DisplayHelper
         try
         {
             Marshal.StructureToPtr(rect, num, false);
-            User32.SendMessage(hwnd, User32.WindowMessage.WM_DPICHANGED);
+            User32.SendMessage(hwnd, (uint) User32.WindowMessage.WM_DPICHANGED, wParam, num);
             VisualTreeHelper.SetRootDpi(window, monitorDpiScale);
         }
         finally
