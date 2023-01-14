@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Interop;
-using AnakinRaW.CommonUtilities.Wpf.NativeMethods;
+using Vanara.PInvoke;
 
 namespace AnakinRaW.CommonUtilities.Wpf.Controls;
 

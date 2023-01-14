@@ -19,12 +19,14 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Vanara.PInvoke.Shell32" Version="3.4.11" PrivateAssets="all" />
-		<PackageReference Include="Vanara.PInvoke.User32" Version="3.4.11" PrivateAssets="all" />
+		<PackageReference Include="Vanara.PInvoke.DwmApi" Version="3.4.12" />
+		<PackageReference Include="Vanara.PInvoke.Shell32" Version="3.4.12" PrivateAssets="all" />
+		<PackageReference Include="Vanara.PInvoke.User32" Version="3.4.12" PrivateAssets="all" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<Folder Include="Controls\Internal" />
+		<Folder Include="NativeMethods\" />
 	</ItemGroup>
 
 </Project>

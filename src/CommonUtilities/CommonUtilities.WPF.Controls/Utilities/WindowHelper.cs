@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
 using AnakinRaW.CommonUtilities.Wpf.DPI;
-using AnakinRaW.CommonUtilities.Wpf.NativeMethods;
+using Vanara.PInvoke;
 
 namespace AnakinRaW.CommonUtilities.Wpf.Utilities;
 
@@ -33,7 +34,7 @@ internal static class WindowHelper
                             return;
                         var deviceSize = handle.LogicalToDeviceSize(window.RenderSize);
                         var rect = CenterRectOnSingleMonitor(lpRect, (int)deviceSize.Width, (int)deviceSize.Height);
-                        var logicalPoint = handle.DeviceToLogicalPoint(rect.Position);
+                        var logicalPoint = handle.DeviceToLogicalPoint(rect.GetPosition());
                         window.WindowStartupLocation = WindowStartupLocation.Manual;
                         window.Left = logicalPoint.X;
                         window.Top = logicalPoint.Y;
@@ -44,15 +45,15 @@ internal static class WindowHelper
         
     }
 
-    private static RectStruct CenterRectOnSingleMonitor(RectStruct parentRect, int childWidth, int childHeight)
+    private static RECT CenterRectOnSingleMonitor(RECT parentRect, int childWidth, int childHeight)
     {
-        User32.FindMaximumSingleMonitorRectangle(parentRect, out var screenSubRect, out var monitorRect);
+        FindMaximumSingleMonitorRectangle(parentRect, out var screenSubRect, out var monitorRect);
         return CenterInRect(screenSubRect, childWidth, childHeight, monitorRect);
     }
 
-    private static RectStruct CenterInRect(RectStruct parentRect, int childWidth, int childHeight, RectStruct monitorClippingRect)
+    private static RECT CenterInRect(RECT parentRect, int childWidth, int childHeight, RECT monitorClippingRect)
     {
-        var rect = new RectStruct
+        var rect = new RECT
         {
             Left = parentRect.Left + (parentRect.Width - childWidth) / 2,
             Top = parentRect.Top + (parentRect.Height - childHeight) / 2,
@@ -68,9 +69,51 @@ internal static class WindowHelper
 
     private static IntPtr GetDialogOwnerHandle()
     {
-        return User32.GetActiveWindow();
+        return User32.GetActiveWindow().DangerousGetHandle();
     }
-    
+
+    internal static void FindMaximumSingleMonitorRectangle(RECT windowRect, out RECT screenSubRect, out RECT monitorRect)
+    {
+        var rects = new List<RECT>();
+        User32.EnumDisplayMonitors(IntPtr.Zero, null, (hMonitor, _, _, _) =>
+        {
+            var monitorInfo = new User32.MONITORINFO
+            {
+                cbSize = (uint)Marshal.SizeOf(typeof(User32.MONITORINFO))
+            };
+            User32.GetMonitorInfo(hMonitor, ref monitorInfo);
+            rects.Add(monitorInfo.rcWork);
+            return true;
+        }, IntPtr.Zero);
+        long currentArea = 0;
+        screenSubRect = new RECT
+        {
+            Left = 0,
+            Right = 0,
+            Top = 0,
+            Bottom = 0
+        };
+        monitorRect = new RECT
+        {
+            Left = 0,
+            Right = 0,
+            Top = 0,
+            Bottom = 0
+        };
+        foreach (var rect in rects)
+        {
+            var lprcSrc1 = rect;
+            User32.IntersectRect(out var lprcDst, in lprcSrc1, in windowRect);
+            var area = (long)(lprcDst.Width * lprcDst.Height);
+            if (area > currentArea)
+            {
+                screenSubRect = lprcDst;
+                monitorRect = rect;
+                currentArea = area;
+            }
+        }
+    }
+
     private class WindowModalessScope : IDisposable
     {
         private readonly bool _enable;

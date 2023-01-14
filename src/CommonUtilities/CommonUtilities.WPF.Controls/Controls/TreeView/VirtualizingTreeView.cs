@@ -12,8 +12,8 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using AnakinRaW.CommonUtilities.Wpf.DPI;
 using AnakinRaW.CommonUtilities.Wpf.Input;
-using AnakinRaW.CommonUtilities.Wpf.NativeMethods;
 using AnakinRaW.CommonUtilities.Wpf.Utilities;
+using Vanara.PInvoke;
 
 namespace AnakinRaW.CommonUtilities.Wpf.Controls;
 
@@ -605,7 +605,7 @@ public class VirtualizingTreeView : ListBox
         if (InputManager.Current.MostRecentInputDevice is KeyboardDevice && Keyboard.FocusedElement is UIElement focusedElement)
             return focusedElement.PointToScreen(new Point(0.0, focusedElement.RenderSize.Height));
         var messagePos = User32.GetMessagePos();
-        return this.DeviceToLogicalPoint(new Point(User32.LoWord(messagePos), User32.HiWord(messagePos)));
+        return this.DeviceToLogicalPoint(new Point(NativeExtensions.LoWord(messagePos), NativeExtensions.HiWord(messagePos)));
     }
 
     private static void SetIsContextMenuOpen(UIElement element, bool value)

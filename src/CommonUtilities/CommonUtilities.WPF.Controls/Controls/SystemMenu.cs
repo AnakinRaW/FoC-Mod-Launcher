@@ -7,8 +7,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using AnakinRaW.CommonUtilities.Wpf.DPI;
 using AnakinRaW.CommonUtilities.Wpf.Input;
-using AnakinRaW.CommonUtilities.Wpf.NativeMethods;
 using AnakinRaW.CommonUtilities.Wpf.Utilities;
+using Vanara.PInvoke;
 
 namespace AnakinRaW.CommonUtilities.Wpf.Controls;
 
@@ -72,7 +72,7 @@ public sealed class SystemMenu : Control, INonClientArea
         {
             var handle = new WindowInteropHelper(this.FindAncestor<Window>()).Handle;
             var point = new Point(PointToScreen(new Point()).X, PointToScreen(new Point(0.0, ActualHeight)).Y);
-            User32.SendMessage(handle, 787, IntPtr.Zero, User32.MakeParam((int)point.X, (int)point.Y));
+            User32.SendMessage(handle, 787, IntPtr.Zero, NativeExtensions.MakeParam((int)point.X, (int)point.Y));
         }
         else
         {
@@ -90,7 +90,7 @@ public sealed class SystemMenu : Control, INonClientArea
             return;
         var handle = new WindowInteropHelper(this.FindAncestor<Window>()).Handle;
         var screen = PointToScreen(e.MouseDevice.GetPosition(this));
-        User32.SendMessage(handle, 787, IntPtr.Zero, User32.MakeParam((int)screen.X, (int)screen.Y));
+        User32.SendMessage(handle, 787, IntPtr.Zero, NativeExtensions.MakeParam((int)screen.X, (int)screen.Y));
         e.Handled = true;
     }
 

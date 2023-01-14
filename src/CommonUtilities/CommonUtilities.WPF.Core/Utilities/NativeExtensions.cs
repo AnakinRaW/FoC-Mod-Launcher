@@ -1,4 +1,5 @@
 using System.Windows;
+using System.Windows.Media.Media3D;
 using Vanara.PInvoke;
 
 namespace AnakinRaW.CommonUtilities.Wpf.Utilities;
@@ -42,5 +43,10 @@ internal static class NativeExtensions
             X = (int)point.X,
             Y = (int)point.Y
         };
+    }
+
+    public static Int32Rect ToInt32Rect(this RECT rect)
+    {
+        return new(rect.Left, rect.Top, rect.Width, rect.Height);
     }
 }

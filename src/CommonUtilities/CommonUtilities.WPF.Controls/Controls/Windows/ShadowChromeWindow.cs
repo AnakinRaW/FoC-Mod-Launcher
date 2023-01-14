@@ -12,8 +12,6 @@ using AnakinRaW.CommonUtilities.Wpf.NativeMethods;
 using AnakinRaW.CommonUtilities.Wpf.Utilities;
 using Validation;
 using Vanara.PInvoke;
-using static Vanara.PInvoke.Shell32;
-using User32 = AnakinRaW.CommonUtilities.Wpf.NativeMethods.User32;
 
 namespace AnakinRaW.CommonUtilities.Wpf.Controls;
 
@@ -86,41 +84,49 @@ public class ShadowChromeWindow : WindowBase
         ShowWindowMenu(source, screen, canMinimize, canMaximize);
     }
 
+    private static User32.WINDOWPLACEMENT GetWindowPlacement(IntPtr hwnd)
+    {
+        var lpwndpl = new User32.WINDOWPLACEMENT();
+        return User32.GetWindowPlacement(hwnd, ref lpwndpl) ? lpwndpl : throw new Win32Exception(Marshal.GetLastWin32Error());
+    }
+
     protected static void ShowWindowMenu(HwndSource source, Point screenPoint, bool canMinimize, bool canMaximize)
     {
-        var systemMetrics = User32.GetSystemMetrics(40);
+        var systemMetrics = User32.GetSystemMetrics(User32.SystemMetric.SM_MENUDROPALIGNMENT);
         var systemMenu = User32.GetSystemMenu(source.Handle, false);
-        var windowPlacement = User32.GetWindowPlacement(source.Handle);
+        var windowPlacement = GetWindowPlacement(source.Handle);
         using (new SuppressRedrawScope(source.Handle))
         {
-            var minFalg = canMinimize ? 0U : 1U;
-            var maxFalg = canMaximize ? 0U : 1U;
-            if (windowPlacement.showCmd == 1)
+            var minFalg = canMinimize ? User32.MenuFlags.MF_ENABLED : User32.MenuFlags.MF_GRAYED;
+            var maxFalg = canMaximize ? User32.MenuFlags.MF_ENABLED : User32.MenuFlags.MF_GRAYED;
+            if (windowPlacement.showCmd == ShowWindowCommand.SW_SHOWNORMAL)
             {
-                User32.EnableMenuItem(systemMenu, 61728U, 1U);
-                User32.EnableMenuItem(systemMenu, 61456U, 0U);
-                User32.EnableMenuItem(systemMenu, 61440U, 0U);
-                User32.EnableMenuItem(systemMenu, 61488U, 0U | maxFalg);
-                User32.EnableMenuItem(systemMenu, 61472U, 0U | minFalg);
-                User32.EnableMenuItem(systemMenu, 61536U, 0U);
+                User32.EnableMenuItem(systemMenu, (uint)User32.SysCommand.SC_RESTORE, User32.MenuFlags.MF_GRAYED);
+                User32.EnableMenuItem(systemMenu, (uint)User32.SysCommand.SC_MOVE, User32.MenuFlags.MF_ENABLED);
+                User32.EnableMenuItem(systemMenu, (uint)User32.SysCommand.SC_SIZE, User32.MenuFlags.MF_ENABLED);
+                User32.EnableMenuItem(systemMenu, (uint)User32.SysCommand.SC_MAXIMIZE, User32.MenuFlags.MF_ENABLED | maxFalg);
+                User32.EnableMenuItem(systemMenu, (uint)User32.SysCommand.SC_MINIMIZE, User32.MenuFlags.MF_ENABLED | minFalg);
+                User32.EnableMenuItem(systemMenu, (uint)User32.SysCommand.SC_CLOSE, User32.MenuFlags.MF_STRING);
             }
-            else if (windowPlacement.showCmd == 3)
+            else if (windowPlacement.showCmd == ShowWindowCommand.SW_MAXIMIZE)
             {
-                User32.EnableMenuItem(systemMenu, 61728U, 0U);
-                User32.EnableMenuItem(systemMenu, 61456U, 1U);
-                User32.EnableMenuItem(systemMenu, 61440U, 1U);
-                User32.EnableMenuItem(systemMenu, 61488U, 1U | maxFalg);
-                User32.EnableMenuItem(systemMenu, 61472U, 0U | minFalg);
-                User32.EnableMenuItem(systemMenu, 61536U, 0U);
+                User32.EnableMenuItem(systemMenu, (uint)User32.SysCommand.SC_RESTORE, User32.MenuFlags.MF_ENABLED);
+                User32.EnableMenuItem(systemMenu, (uint)User32.SysCommand.SC_MOVE, User32.MenuFlags.MF_GRAYED);
+                User32.EnableMenuItem(systemMenu, (uint)User32.SysCommand.SC_SIZE, User32.MenuFlags.MF_GRAYED);
+                User32.EnableMenuItem(systemMenu, (uint)User32.SysCommand.SC_MAXIMIZE, User32.MenuFlags.MF_GRAYED | maxFalg);
+                User32.EnableMenuItem(systemMenu, (uint)User32.SysCommand.SC_MINIMIZE, User32.MenuFlags.MF_ENABLED | minFalg);
+                User32.EnableMenuItem(systemMenu, (uint)User32.SysCommand.SC_CLOSE, User32.MenuFlags.MF_ENABLED);
             }
         }
 
-        var fuFlags = (uint)(systemMetrics | 256 | 128 | 2);
-        var num1 = User32.TrackPopupMenuEx(systemMenu, fuFlags,
-            (int)screenPoint.X, (int)screenPoint.Y, source.Handle, IntPtr.Zero);
-        if (num1 == 0)
+        var fuFlags = (User32.TrackPopupMenuFlags) systemMetrics | 
+                      User32.TrackPopupMenuFlags.TPM_RETURNCMD | 
+                      User32.TrackPopupMenuFlags.TPM_NONOTIFY | 
+                      User32.TrackPopupMenuFlags.TPM_RIGHTBUTTON;
+        var selectedItem = User32.TrackPopupMenuEx(systemMenu, fuFlags, (int)screenPoint.X, (int)screenPoint.Y, source.Handle);
+        if (selectedItem == 0)
             return;
-        User32.PostMessage(source.Handle, 274, new IntPtr(num1), IntPtr.Zero);
+        User32.PostMessage(source.Handle, 274, new IntPtr(selectedItem), IntPtr.Zero);
     }
 
     protected virtual void OnWindowPosChanged(IntPtr hWnd, int showCmd, Int32Rect rcNormalPosition)
@@ -134,13 +140,22 @@ public class ShadowChromeWindow : WindowBase
 
     protected void UpdateGlowBorder(bool activate, bool maximized)
     {
+        
         if (WindowHelper.Handle == IntPtr.Zero)
             return;
         var color = activate ? ActiveGlowColor : InactiveGlowColor;
-        var colorRef = new ColorRef(color);
-        var attrValue = maximized ? -2 : (int)colorRef.DwColor;
-        DwmOwnsBorder = DwmApi.DwmSetWindowAttribute(WindowHelper.Handle,
-            DwmWindowAttribute.DwmwaBorderColor, ref attrValue, 4) == 0;
+        var colorRef = maximized ? new COLORREF() : new COLORREF(color.R, color.G, color.B);
+        IntPtr pnt = Marshal.AllocHGlobal(Marshal.SizeOf(colorRef));
+        try
+        {
+            Marshal.StructureToPtr(colorRef, pnt, false);
+            DwmOwnsBorder = DwmApi.DwmSetWindowAttribute(WindowHelper.Handle, DwmApi.DWMWINDOWATTRIBUTE.DWMWA_BORDER_COLOR,
+                pnt, sizeof(uint)).Code == 0;
+        }
+        finally
+        {
+            Marshal.FreeHGlobal(pnt);
+        }
         if (DwmOwnsBorder)
             return;
         var solidColorBrush = new SolidColorBrush(color);
@@ -221,7 +236,7 @@ public class ShadowChromeWindow : WindowBase
         using (new SuppressRedrawScope(hWnd))
         {
             handled = true;
-            return User32.DefWindowProc(hWnd, msg, wParam, lParam);
+            return User32.DefWindowProc(hWnd, (uint)msg, wParam, lParam);
         }
     }
 
@@ -233,24 +248,24 @@ public class ShadowChromeWindow : WindowBase
     private IntPtr WmNcCalcSize(IntPtr hWnd, IntPtr wParam, IntPtr lParam, ref bool handled)
     {
         handled = true;
-        var structure = (RectStruct)Marshal.PtrToStructure(lParam, typeof(RectStruct));
+        var structure = (RECT)Marshal.PtrToStructure(lParam, typeof(RECT));
         var maximized = User32.IsZoomed(hWnd);
         UpdateGlowBorder(IsActive, maximized);
         if (maximized)
         {
             User32.DefWindowProc(hWnd, 131, wParam, lParam);
-            structure = (RectStruct)Marshal.PtrToStructure(lParam, typeof(RectStruct));
+            structure = (RECT)Marshal.PtrToStructure(lParam, typeof(RECT));
             structure.Top -= (int)Math.Ceiling(this.LogicalToDeviceUnitsY(SystemParameters.CaptionHeight) + 1.0);
             var monitorInfo = MonitorInfoFromWindow(hWnd);
-            if (monitorInfo.RcMonitor.Height == monitorInfo.RcWork.Height &&
-                monitorInfo.RcMonitor.Width == monitorInfo.RcWork.Width)
+            if (monitorInfo.rcMonitor.Height == monitorInfo.rcWork.Height &&
+                monitorInfo.rcMonitor.Width == monitorInfo.rcWork.Width)
             {
-                var pData = new APPBARDATA
+                var pData = new Shell32.APPBARDATA
                 {
-                    cbSize = (uint) Marshal.SizeOf(typeof(APPBARDATA))
+                    cbSize = (uint) Marshal.SizeOf(typeof(Shell32.APPBARDATA))
                 };
                 switch (Convert.ToBoolean(
-                            (int)SHAppBarMessage(ABM.ABM_GETTASKBARPOS, ref pData))
+                            (int)Shell32.SHAppBarMessage(Shell32.ABM.ABM_GETTASKBARPOS, ref pData))
                             ? (int)pData.uEdge
                             : -1)
                 {
@@ -285,8 +300,8 @@ public class ShadowChromeWindow : WindowBase
     {
         if (!this.IsConnectedToPresentationSource())
             return new IntPtr(0);
-        var point1 = new Point(User32.GetXLParam(lParam.ToInt32Unchecked()),
-            User32.GetYLParam(lParam.ToInt32Unchecked()));
+        var point1 = new Point(NativeExtensions.GetXLParam(lParam.ToInt32Unchecked()),
+            NativeExtensions.GetYLParam(lParam.ToInt32Unchecked()));
         var point2 = PointFromScreen(point1);
         DependencyObject? visualHit = null;
         UtilityMethods.HitTestVisibleElements(this, target =>
@@ -363,8 +378,8 @@ public class ShadowChromeWindow : WindowBase
                     UpdateBorderPlacement(borderThickness);
             }
 
-            var windowPlacement = User32.GetWindowPlacement(hWnd);
-            OnWindowPosChanged(hWnd, windowPlacement.showCmd, windowPlacement.rcNormalPosition.ToInt32Rect());
+            var windowPlacement = GetWindowPlacement(hWnd);
+            OnWindowPosChanged(hWnd, (int)windowPlacement.showCmd, windowPlacement.rcNormalPosition.ToInt32Rect());
             UpdateZOrderOfThisAndOwner();
         }
         catch (Win32Exception)
@@ -382,12 +397,12 @@ public class ShadowChromeWindow : WindowBase
         }
     }
 
-    private static MonitorInfoStruct MonitorInfoFromWindow(IntPtr hWnd)
+    private static User32.MONITORINFO MonitorInfoFromWindow(IntPtr hWnd)
     {
-        var hMonitor = User32.MonitorFromWindow(hWnd, 2);
-        var monitorInfo = new MonitorInfoStruct
+        var hMonitor = User32.MonitorFromWindow(hWnd, User32.MonitorFlags.MONITOR_DEFAULTTONEAREST);
+        var monitorInfo = new User32.MONITORINFO
         {
-            CbSize = (uint)Marshal.SizeOf(typeof(MonitorInfoStruct))
+            cbSize = (uint)Marshal.SizeOf(typeof(User32.MONITORINFO))
         };
         User32.GetMonitorInfo(hMonitor, ref monitorInfo);
         return monitorInfo;
@@ -417,8 +432,14 @@ public class ShadowChromeWindow : WindowBase
 
         public void Resize(int left, int top, int width, int height)
         {
-            User32.SetWindowPos(Hwnd, IntPtr.Zero, left, top, 0, 0, 21);
-            User32.SetWindowPos(Hwnd, IntPtr.Zero, 0, 0, width, height, 22);
+            User32.SetWindowPos(Hwnd, IntPtr.Zero, left, top, 0, 0,
+                User32.SetWindowPosFlags.SWP_NOACTIVATE | 
+                User32.SetWindowPosFlags.SWP_NOSIZE |
+                User32.SetWindowPosFlags.SWP_NOZORDER);
+            User32.SetWindowPos(Hwnd, IntPtr.Zero, 0, 0, width, height,
+                User32.SetWindowPosFlags.SWP_NOACTIVATE | 
+                User32.SetWindowPosFlags.SWP_NOMOVE |
+                User32.SetWindowPosFlags.SWP_NOZORDER);
         }
 
 
@@ -442,20 +463,20 @@ public class ShadowChromeWindow : WindowBase
                     User32.SetFocus(wParam);
                     break;
                 case 36:
-                    Marshal.StructureToPtr(Marshal.PtrToStructure<MinMaxInfoStruct>(lParam) with
+                    Marshal.StructureToPtr(Marshal.PtrToStructure<User32.MINMAXINFO>(lParam) with
                     {
-                        PtMinTrackSize = new PointStruct()
+                        minTrackSize = new SIZE()
                     }, lParam, true);
                     break;
                 case 124:
-                    var int64 = (GWL)wParam.ToInt64();
+                    var int64 = (User32.WindowLongFlags)wParam.ToInt64();
                     var structure = Marshal.PtrToStructure<StyleStruct>(lParam);
                     switch (int64)
                     {
-                        case GWL.ExStyle:
+                        case User32.WindowLongFlags.GWL_EXSTYLE:
                             structure.StyleNew = 134217856;
                             break;
-                        case GWL.Style:
+                        case User32.WindowLongFlags.GWL_STYLE:
                             structure.StyleNew = (structure.StyleNew & 268435456) > 0 ? 268435456 : 0;
                             structure.StyleNew |= -2046820352;
                             break;
@@ -533,20 +554,20 @@ public class ShadowChromeWindow : WindowBase
                 : visualHit.FindAncestorOrSelf<WindowTitleBarButton>();
 
             Point LogicalPointFromLParam(IntPtr lParam) => Owner.PointFromScreen(
-                new Point(User32.GetXLParam(lParam.ToInt32Unchecked()),
-                    User32.GetYLParam(lParam.ToInt32Unchecked())));
+                new Point(NativeExtensions.GetXLParam(lParam.ToInt32Unchecked()),
+                    NativeExtensions.GetYLParam(lParam.ToInt32Unchecked())));
         }
     }
 
     private class SuppressRedrawScope : IDisposable
     {
-        private readonly IntPtr _hwnd;
+        private readonly HWND _hwnd;
         private readonly bool _suppressedRedraw;
 
-        public SuppressRedrawScope(IntPtr hwnd)
+        public SuppressRedrawScope(HWND hwnd)
         {
             _hwnd = hwnd;
-            if ((User32.GetWindowLong(hwnd, GWL.Style) & 268435456) == 0)
+            if ((User32.GetWindowLong(hwnd, User32.WindowLongFlags.GWL_STYLE) & 268435456) == 0)
                 return;
             SetRedraw(false);
             _suppressedRedraw = true;
@@ -557,10 +578,13 @@ public class ShadowChromeWindow : WindowBase
             if (!_suppressedRedraw)
                 return;
             SetRedraw(true);
-            const RedrawWindowFlags flags = RedrawWindowFlags.Invalidate | RedrawWindowFlags.AllChildren | RedrawWindowFlags.Frame;
-            User32.RedrawWindow(_hwnd, IntPtr.Zero, IntPtr.Zero, flags);
+            const User32.RedrawWindowFlags flags = User32.RedrawWindowFlags.RDW_INVALIDATE | User32.RedrawWindowFlags.RDW_ALLCHILDREN | User32.RedrawWindowFlags.RDW_FRAME;
+            User32.RedrawWindow(_hwnd, null, IntPtr.Zero, flags);
         }
 
-        private void SetRedraw(bool state) => User32.SendMessage(_hwnd, 11, new IntPtr(Convert.ToInt32(state)));
+        private void SetRedraw(bool state)
+        {
+            User32.SendMessage(_hwnd, 11, new IntPtr(Convert.ToInt32(state)));
+        }
     }
 }

@@ -4,10 +4,10 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Interop;
 using System.Windows.Markup;
 using AnakinRaW.CommonUtilities.Wpf.DPI;
-using AnakinRaW.CommonUtilities.Wpf.NativeMethods;
 using AnakinRaW.CommonUtilities.Wpf.Utilities;
 using Microsoft.Extensions.DependencyInjection;
 using Validation;
+using Vanara.PInvoke;
 
 namespace AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Utilities;
 

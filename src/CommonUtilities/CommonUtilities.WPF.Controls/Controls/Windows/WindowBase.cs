@@ -9,6 +9,7 @@ using AnakinRaW.CommonUtilities.Wpf.Input;
 using AnakinRaW.CommonUtilities.Wpf.NativeMethods;
 using AnakinRaW.CommonUtilities.Wpf.Utilities;
 using Validation;
+using Vanara.PInvoke;
 
 namespace AnakinRaW.CommonUtilities.Wpf.Controls;
 
@@ -19,6 +20,8 @@ public class WindowBase : Window
     private bool _isDragging;
     private bool _updatingZOrder;
     private IntPtr _ownerForActivate;
+
+    private static uint _notifyOwnerActivate;
 
     private protected HwndSource? HwndSource;
 
@@ -61,17 +64,27 @@ public class WindowBase : Window
         get
         {
             var pressedMouseButtons = 0;
-            if (User32.IsKeyPressed(1))
+            if (IsKeyPressed(1))
                 pressedMouseButtons |= 1;
-            if (User32.IsKeyPressed(2))
+            if (IsKeyPressed(2))
                 pressedMouseButtons |= 2;
-            if (User32.IsKeyPressed(4))
+            if (IsKeyPressed(4))
                 pressedMouseButtons |= 16;
-            if (User32.IsKeyPressed(5))
+            if (IsKeyPressed(5))
                 pressedMouseButtons |= 32;
-            if (User32.IsKeyPressed(6))
+            if (IsKeyPressed(6))
                 pressedMouseButtons |= 64;
             return pressedMouseButtons;
+        }
+    }
+
+    private static uint NotifyOwnerActive
+    {
+        get
+        {
+            if (_notifyOwnerActivate == 0)
+                _notifyOwnerActivate = User32.RegisterWindowMessage("NotifyOwnerActive{A982313C-756C-4da9-8BD0-0C375A45784B}");
+            return _notifyOwnerActivate;
         }
     }
 
@@ -134,10 +147,10 @@ public class WindowBase : Window
         var handle = HwndSource.Handle;
         if (handle == IntPtr.Zero)
             return;
-        var currentStyle = User32.GetWindowLong(handle, GWL.Style);
-        var newStyle = !HasMaximizeButton ? currentStyle & -65537 : currentStyle | 65536;
-        newStyle = !HasMinimizeButton ? newStyle & -131073 : newStyle | 131072;
-        User32.SetWindowLong(handle, -16, newStyle);
+        var currentStyle = (User32.WindowStyles) User32.GetWindowLong(handle, User32.WindowLongFlags.GWL_STYLE);
+        var newStyle = !HasMaximizeButton ? currentStyle & ~User32.WindowStyles.WS_TABSTOP : currentStyle | User32.WindowStyles.WS_TABSTOP;
+        newStyle = !HasMinimizeButton ? newStyle & ~User32.WindowStyles.WS_GROUP : newStyle | User32.WindowStyles.WS_GROUP;
+        User32.SetWindowLong(handle, User32.WindowLongFlags.GWL_STYLE, (int)newStyle);
     }
 
     protected virtual IntPtr WndProcHook(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
@@ -191,7 +204,8 @@ public class WindowBase : Window
         var displayForWindowRect = DisplayHelper.FindDisplayForWindowRect(deviceRect);
         var onScreenPosition = DisplayHelper.GetOnScreenPosition(deviceRect, displayForWindowRect, true);
         User32.SetWindowPos(WindowHelper.Handle, IntPtr.Zero, (int)onScreenPosition.Left,
-            (int)onScreenPosition.Top, (int)onScreenPosition.Width, (int)onScreenPosition.Height, 20);
+            (int)onScreenPosition.Top, (int)onScreenPosition.Width, (int)onScreenPosition.Height,
+            User32.SetWindowPosFlags.SWP_NOACTIVATE | User32.SetWindowPosFlags.SWP_NOZORDER);
     }
 
     protected T? GetTemplateChild<T>(string name) where T : class
@@ -282,17 +296,17 @@ public class WindowBase : Window
         var handle = HwndSource.Handle;
         if (handle == IntPtr.Zero)
             return;
-        var newStyle = User32.GetWindowLong(handle, -16);
+        var newStyle = User32.GetWindowLong(handle, User32.WindowLongFlags.GWL_STYLE);
         if (resizable)
             newStyle |= 262144;
         else
             newStyle &= ~262144;
-        User32.SetWindowLong(handle, -16, newStyle);
+        User32.SetWindowLong(handle, User32.WindowLongFlags.GWL_STYLE, newStyle);
     }
 
     private void WmWindowPosChanging(IntPtr hwnd, IntPtr lParam)
     {
-        var structure = (WindowPosStruct)Marshal.PtrToStructure(lParam, typeof(WindowPosStruct));
+        var structure = (User32.WINDOWPOS)Marshal.PtrToStructure(lParam, typeof(User32.WINDOWPOS));
         if (((int)structure.flags & 2) != 0 || ((int)structure.flags & 1) != 0 || structure.cx <= 0 ||
             structure.cy <= 0)
             return;
@@ -348,17 +362,17 @@ public class WindowBase : Window
             var monitorInfo = MonitorInfoFromWindow(hWnd);
             var rect = new Rect(Left, Top, Width, Height);
             var deviceRect = hWnd.LogicalToDeviceRect(rect);
-            return monitorInfo.RcWork.Height == deviceRect.Height &&
-                   monitorInfo.RcWork.Top == deviceRect.Top;
+            return monitorInfo.rcWork.Height == deviceRect.Height &&
+                   monitorInfo.rcWork.Top == deviceRect.Top;
         }
     }
 
-    private static MonitorInfoStruct MonitorInfoFromWindow(IntPtr hWnd)
+    private static User32.MONITORINFO MonitorInfoFromWindow(IntPtr hWnd)
     {
-        var hMonitor = User32.MonitorFromWindow(hWnd, 2);
-        var monitorInfo = new MonitorInfoStruct
+        var hMonitor = User32.MonitorFromWindow(hWnd, User32.MonitorFlags.MONITOR_DEFAULTTONEAREST);
+        var monitorInfo = new User32.MONITORINFO
         {
-            CbSize = (uint)Marshal.SizeOf(typeof(MonitorInfoStruct))
+            cbSize = (uint)Marshal.SizeOf(typeof(User32.MONITORINFO))
         };
         User32.GetMonitorInfo(hMonitor, ref monitorInfo);
         return monitorInfo;
@@ -367,7 +381,7 @@ public class WindowBase : Window
     private void WmActivate(IntPtr hwnd, IntPtr wParam, IntPtr lParam)
     {
         if (_ownerForActivate != IntPtr.Zero)
-            User32.SendMessage(_ownerForActivate, User32.NotifyOwnerActive, wParam, lParam);
+            User32.SendMessage(_ownerForActivate, NotifyOwnerActive, wParam, lParam);
     }
 
     private static void UpdateZOrderOfOwner(IntPtr hwndOwner)
@@ -376,29 +390,36 @@ public class WindowBase : Window
         User32.EnumThreadWindows(Kernel32.GetCurrentThreadId(), (hwnd, _) =>
         {
             if (User32.GetWindow(hwnd, 4) == hwndOwner)
-                lastOwnedWindow = hwnd;
+                lastOwnedWindow = hwnd.DangerousGetHandle();
             return true;
         }, IntPtr.Zero);
         if (lastOwnedWindow == IntPtr.Zero || !(User32.GetWindow(hwndOwner, 3) != lastOwnedWindow))
             return;
-        User32.SetWindowPos(hwndOwner, lastOwnedWindow, 0, 0, 0, 0, 19);
+        User32.SetWindowPos(hwndOwner, lastOwnedWindow, 0, 0, 0, 0,
+            User32.SetWindowPosFlags.SWP_NOACTIVATE | User32.SetWindowPosFlags.SWP_NOMOVE |
+            User32.SetWindowPosFlags.SWP_NOSIZE);
     }
 
     private static void RaiseNonClientMouseMessageAsClient(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam)
     {
-        var point = new PointStruct
+        var point = new POINT
         {
-            X = User32.GetXLParam(lParam.ToInt32Unchecked()),
-            Y = User32.GetYLParam(lParam.ToInt32Unchecked())
+            X = NativeExtensions.GetXLParam(lParam.ToInt32Unchecked()),
+            Y = NativeExtensions.GetYLParam(lParam.ToInt32Unchecked())
         };
         User32.ScreenToClient(hWnd, ref point);
         User32.SendMessage(hWnd, msg + 513 - 161, new IntPtr(PressedMouseButtons),
-            User32.MakeParam(point.X, point.Y));
+            NativeExtensions.MakeParam(point.X, point.Y));
     }
 
     private void SetWindowIcon()
     {
         if (ViewModel.ShowIcon)
             IconHelper.UseWindowIconAsync(windowIcon => Icon = windowIcon);
+    }
+
+    private static bool IsKeyPressed(int vKey)
+    {
+        return User32.GetKeyState(vKey) < 0;
     }
 }

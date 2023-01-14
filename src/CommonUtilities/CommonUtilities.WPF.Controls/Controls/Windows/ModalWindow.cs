@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
-using AnakinRaW.CommonUtilities.Wpf.NativeMethods;
 using AnakinRaW.CommonUtilities.Wpf.Utilities;
+using Vanara.PInvoke;
 
 namespace AnakinRaW.CommonUtilities.Wpf.Controls;
 
@@ -62,18 +62,21 @@ public class ModalWindow : WindowBase
         if (handle == IntPtr.Zero)
             return;
 
-        var extendedStyle = User32.GetWindowLong(handle, -20);
-        var newExStyle = !HasDialogFrame ? extendedStyle & -2 : extendedStyle | 1;
-        User32.SetWindowLong(handle, -20, newExStyle);
+        var extendedStyle = (User32.WindowStylesEx)User32.GetWindowLong(handle, User32.WindowLongFlags.GWL_EXSTYLE);
+        var newExStyle = !HasDialogFrame ? extendedStyle & ~User32.WindowStylesEx.WS_EX_DLGMODALFRAME : extendedStyle | User32.WindowStylesEx.WS_EX_DLGMODALFRAME;
+        User32.SetWindowLong(handle, User32.WindowLongFlags.GWL_EXSTYLE, (int)newExStyle);
         User32.SendMessage(handle, 128, new IntPtr(1), IntPtr.Zero);
         User32.SendMessage(handle, 128, new IntPtr(0), IntPtr.Zero);
         var systemMenu = User32.GetSystemMenu(handle, false);
         if (systemMenu != IntPtr.Zero)
         {
-            var num5 = IsCloseButtonEnabled ? 0U : 1U;
-            User32.EnableMenuItem(systemMenu, 61536U, 0U | num5);
+            var closeEnabled = IsCloseButtonEnabled ? User32.MenuFlags.MF_ENABLED : User32.MenuFlags.MF_GRAYED;
+            User32.EnableMenuItem(systemMenu, 61536U, closeEnabled);
         }
-        User32.SetWindowPos(handle, IntPtr.Zero, 0, 0, 0, 0, 35);
+
+        User32.SetWindowPos(handle, IntPtr.Zero, 0, 0, 0, 0,
+            User32.SetWindowPosFlags.SWP_DRAWFRAME | User32.SetWindowPosFlags.SWP_NOMOVE |
+            User32.SetWindowPosFlags.SWP_NOSIZE);
     }
 
     private static void OnWindowStyleChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
