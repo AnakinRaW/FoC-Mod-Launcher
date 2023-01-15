@@ -306,7 +306,7 @@ public class WindowBase : Window
 
     private void WmWindowPosChanging(IntPtr hwnd, IntPtr lParam)
     {
-        var structure = (User32.WINDOWPOS)Marshal.PtrToStructure(lParam, typeof(User32.WINDOWPOS));
+        var structure = (User32.WINDOWPOS)Marshal.PtrToStructure(lParam, typeof(User32.WINDOWPOS))!;
         if (((int)structure.flags & 2) != 0 || ((int)structure.flags & 1) != 0 || structure.cx <= 0 ||
             structure.cy <= 0)
             return;
@@ -415,7 +415,9 @@ public class WindowBase : Window
     private void SetWindowIcon()
     {
         if (ViewModel.ShowIcon)
+#pragma warning disable CS4014
             IconHelper.UseWindowIconAsync(windowIcon => Icon = windowIcon);
+#pragma warning restore CS4014
     }
 
     private static bool IsKeyPressed(int vKey)

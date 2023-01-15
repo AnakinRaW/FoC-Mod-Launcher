@@ -121,14 +121,14 @@ public class ThemedContextMenu : ContextMenu
         UnsubscribeFromBorderBackgroundChanges();
         if (_iconBorder == null)
             return;
-        _iconBorder.AddPropertyChangeHandler(Border.BackgroundProperty, OnBorderBackgroundChanged);
+        _iconBorder.AddPropertyChangeHandler(Border.BackgroundProperty, OnBorderBackgroundChanged!);
         OnBorderBackgroundChanged(_iconBorder, EventArgs.Empty);
     }
 
     private void UnsubscribeFromBorderBackgroundChanges()
     {
         var border = _iconBorder;
-        border?.RemovePropertyChangeHandler(Border.BackgroundProperty, OnBorderBackgroundChanged);
+        border?.RemovePropertyChangeHandler(Border.BackgroundProperty, OnBorderBackgroundChanged!);
     }
 
     private void OnBorderBackgroundChanged(object sender, EventArgs e)

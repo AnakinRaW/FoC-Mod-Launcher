@@ -78,14 +78,14 @@ public class WindowTitleBarButton : GlyphButton
         _border = GetTemplateChild("PART_Border") as Border;
         if (_border == null)
             return;
-        _border.AddPropertyChangeHandler(Border.BackgroundProperty, OnBorderBackgroundChanged);
+        _border.AddPropertyChangeHandler(Border.BackgroundProperty, OnBorderBackgroundChanged!);
         OnBorderBackgroundChanged(_border, EventArgs.Empty);
     }
 
     private void UnsubscribeFromBorderBackgroundChanges()
     {
         var border = _border;
-        border?.RemovePropertyChangeHandler(Border.BackgroundProperty, OnBorderBackgroundChanged);
+        border?.RemovePropertyChangeHandler(Border.BackgroundProperty, OnBorderBackgroundChanged!);
     }
 
     private void OnBorderBackgroundChanged(object sender, EventArgs e)

@@ -14,7 +14,7 @@ public class DynamicStyledMenuItem : ThemedMenuItem, IHasCommandBarStyles
 
     public static ResourceKey MenuStyleKey => _menuStyleKey ??= new StyleKey<DynamicStyledMenuItem>();
 
-    public static ResourceKey SeparatorStyleKey => _separatorStyleKey ??= new StyleKey<DynamicStyledMenuItem>();
+    public new static ResourceKey SeparatorStyleKey => _separatorStyleKey ??= new StyleKey<DynamicStyledMenuItem>();
 
     ResourceKey IHasCommandBarStyles.ButtonStyleKey => ButtonStyleKey;
 
@@ -33,7 +33,8 @@ public class DynamicStyledMenuItem : ThemedMenuItem, IHasCommandBarStyles
 
     protected override void PrepareContainerForItemOverride(DependencyObject element, object item)
     {
-        var frameworkElement = element as FrameworkElement;
+        if (element is not FrameworkElement frameworkElement)
+            return;
         CommandBarStylingUtilities.SelectStyleForItem(frameworkElement, item, this);
     }
 }

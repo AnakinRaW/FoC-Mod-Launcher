@@ -128,11 +128,7 @@ public class ShadowChromeWindow : WindowBase
             return;
         User32.PostMessage(source.Handle, 274, new IntPtr(selectedItem), IntPtr.Zero);
     }
-
-    protected virtual void OnWindowPosChanged(IntPtr hWnd, int showCmd, Int32Rect rcNormalPosition)
-    {
-    }
-
+    
     protected virtual bool ShouldHaveBorderThickness(IntPtr hWnd)
     {
         return User32.IsWindowVisible(hWnd) && !User32.IsZoomed(hWnd) && !User32.IsIconic(hWnd);
@@ -248,13 +244,13 @@ public class ShadowChromeWindow : WindowBase
     private IntPtr WmNcCalcSize(IntPtr hWnd, IntPtr wParam, IntPtr lParam, ref bool handled)
     {
         handled = true;
-        var structure = (RECT)Marshal.PtrToStructure(lParam, typeof(RECT));
+        var structure = (RECT)Marshal.PtrToStructure(lParam, typeof(RECT))!;
         var maximized = User32.IsZoomed(hWnd);
         UpdateGlowBorder(IsActive, maximized);
         if (maximized)
         {
             User32.DefWindowProc(hWnd, 131, wParam, lParam);
-            structure = (RECT)Marshal.PtrToStructure(lParam, typeof(RECT));
+            structure = (RECT)Marshal.PtrToStructure(lParam, typeof(RECT))!;
             structure.Top -= (int)Math.Ceiling(this.LogicalToDeviceUnitsY(SystemParameters.CaptionHeight) + 1.0);
             var monitorInfo = MonitorInfoFromWindow(hWnd);
             if (monitorInfo.rcMonitor.Height == monitorInfo.rcWork.Height &&
@@ -377,9 +373,6 @@ public class ShadowChromeWindow : WindowBase
                 else
                     UpdateBorderPlacement(borderThickness);
             }
-
-            var windowPlacement = GetWindowPlacement(hWnd);
-            OnWindowPosChanged(hWnd, (int)windowPlacement.showCmd, windowPlacement.rcNormalPosition.ToInt32Rect());
             UpdateZOrderOfThisAndOwner();
         }
         catch (Win32Exception)

@@ -23,11 +23,11 @@ internal sealed class EnumerableModificationDetector : DisposableObject, IEnumer
             if (_changeSource == value)
                 return;
             if (_changeSource != null)
-                _changeSource.CollectionChanged -= OnCollectionChanged;
+                _changeSource.CollectionChanged -= OnCollectionChanged!;
             _changeSource = value;
             if (_changeSource == null)
                 return;
-            _changeSource.CollectionChanged += OnCollectionChanged;
+            _changeSource.CollectionChanged += OnCollectionChanged!;
         }
     }
 

@@ -7,7 +7,7 @@ namespace AnakinRaW.CommonUtilities.Wpf.ApplicationFramework;
 
 internal class WindowService : IWindowService
 {
-    private Window _mainWindow;
+    private Window _mainWindow = null!;
     private readonly object _syncObject = new();
 
     public void SetMainWindow(Window window)

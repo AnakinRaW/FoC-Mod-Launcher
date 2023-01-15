@@ -9,7 +9,7 @@ public interface ITreeNode
 
     bool IsExpandable { get; }
 
-    object Item { get; }
+    object? Item { get; }
 
     IEnumerable? ItemsSource { get; }
 

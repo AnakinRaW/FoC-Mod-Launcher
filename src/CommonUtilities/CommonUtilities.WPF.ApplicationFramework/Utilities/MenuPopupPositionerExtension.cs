@@ -28,8 +28,8 @@ internal class MenuPopupPositionerExtension : MarkupExtension
             popup.Opened += (_, _) =>
             {
                 var name = border.FindName(ElementName) as FrameworkElement;
-                var screen = name.PointToScreen(new Point(0.0, 0.0));
-                User32.GetWindowRect(((HwndSource)PresentationSource.FromVisual(popup.Child)).Handle, out var lpRect);
+                var screen = name!.PointToScreen(new Point(0.0, 0.0));
+                User32.GetWindowRect(((HwndSource)PresentationSource.FromVisual(popup.Child)!).Handle, out var lpRect);
                 if (popup.Placement is PlacementMode.Left or PlacementMode.Right)
                 {
                     border.Visibility = Visibility.Collapsed;

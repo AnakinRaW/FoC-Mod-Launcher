@@ -2,9 +2,9 @@
 
 public sealed class ShutdownPrevention
 {
-    public string ReasonId { get; }
+    public string? ReasonId { get; }
 
-    public ShutdownPrevention(string reasonId)
+    public ShutdownPrevention(string? reasonId)
     {
         ReasonId = reasonId;
     }

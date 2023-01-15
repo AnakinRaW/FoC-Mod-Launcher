@@ -59,9 +59,9 @@ internal class ApplicationShutdownService : IApplicationShutdownService
     {
         private ApplicationShutdownService _owner;
 
-        public string ReasonId { get; }
+        public string? ReasonId { get; }
 
-        public ShutdownPreventionLock(string reasonId, ApplicationShutdownService owner)
+        public ShutdownPreventionLock(string? reasonId, ApplicationShutdownService owner)
         {
             ReasonId = reasonId;
             lock (owner._lockHandles) 

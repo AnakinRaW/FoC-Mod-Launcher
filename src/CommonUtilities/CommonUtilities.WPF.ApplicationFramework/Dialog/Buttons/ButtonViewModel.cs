@@ -18,6 +18,7 @@ public partial class ButtonViewModel : ObservableObject, IButtonViewModel
 
     public ButtonViewModel(string id, ICommandDefinition commandDefinition)
     {
+        Validation.Requires.NotNullOrEmpty(id, nameof(id));
         Id = id;
         CommandDefinition = commandDefinition;
     }

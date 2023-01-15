@@ -29,6 +29,8 @@ public class StylingContextMenu : ThemedContextMenu, IHasCommandBarStyles
 
     protected override void PrepareContainerForItemOverride(DependencyObject element, object item)
     {
-        CommandBarStylingUtilities.SelectStyleForItem(element as FrameworkElement, item, this);
+        if (element is not FrameworkElement frameworkElement)
+            return;
+        CommandBarStylingUtilities.SelectStyleForItem(frameworkElement, item, this);
     }
 }

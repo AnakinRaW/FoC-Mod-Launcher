@@ -193,7 +193,7 @@ public static class DisplayHelper
         }
     }
     
-    internal static Rect GetOnScreenPosition(Rect windowRect, 
+    public static Rect GetOnScreenPosition(Rect windowRect, 
         DisplayInfo? fallbackDisplay = null, bool forceOnScreen = false, bool topOnly = false)
     {
         FindMaximumSingleMonitorRectangle(windowRect, out var screenSubRect, out _);

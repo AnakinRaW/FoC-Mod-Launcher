@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace AnakinRaW.CommonUtilities.Wpf.Controls;
 
-internal class ItemsProviderCollector<TPattern, TController>
+internal class ItemsProviderCollector<TPattern, TController> where TController : notnull
 {
     protected static Dictionary<TController, IList<TPattern>> CollectProviders(
         IEnumerable<TPattern> items, Func<TPattern, TController> selectController)
@@ -12,6 +12,8 @@ internal class ItemsProviderCollector<TPattern, TController>
         foreach (var pattern in items)
         {
             var key = selectController(pattern);
+
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
             if (key != null)
             {
                 if (!dictionary.TryGetValue(key, out var patternList))

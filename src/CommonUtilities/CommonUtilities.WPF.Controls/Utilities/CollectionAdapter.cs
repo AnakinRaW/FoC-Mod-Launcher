@@ -81,19 +81,19 @@ internal abstract class CollectionAdapter<TSource, TTarget> : ReadOnlyObservable
         switch (e.Action)
         {
             case NotifyCollectionChangedAction.Add:
-                for (var index = 0; index < e.NewItems.Count; ++index)
-                    InsertSourceItem(e.NewStartingIndex + index, (TSource)e.NewItems[index]);
+                for (var index = 0; index < e.NewItems!.Count; ++index)
+                    InsertSourceItem(e.NewStartingIndex + index, (TSource)e.NewItems[index]!);
                 break;
             case NotifyCollectionChangedAction.Remove:
-                for (var index = 0; index < e.OldItems.Count; ++index)
+                for (var index = 0; index < e.OldItems!.Count; ++index)
                     RemoveSourceItem(e.OldStartingIndex);
                 break;
             case NotifyCollectionChangedAction.Replace:
-                for (var index = 0; index < e.NewItems.Count; ++index)
-                    ReplaceSourceItem(e.OldStartingIndex + index, (TSource)e.NewItems[index]);
+                for (var index = 0; index < e.NewItems!.Count; ++index)
+                    ReplaceSourceItem(e.OldStartingIndex + index, (TSource)e.NewItems[index]!);
                 break;
             case NotifyCollectionChangedAction.Move:
-                for (var index = 0; index < e.NewItems.Count; ++index)
+                for (var index = 0; index < e.NewItems!.Count; ++index)
                     MoveSourceItem(e.OldStartingIndex + index, e.NewStartingIndex + index);
                 break;
             case NotifyCollectionChangedAction.Reset:

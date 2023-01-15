@@ -20,7 +20,10 @@ internal static class UtilityMethods
                 : HitTestFilterBehavior.Continue;
     }
 
-    public static void InvalidateRecursive(UIElement? parent) => InvalidateRecursiveToType<ItemsPresenter>(parent);
+    public static void InvalidateRecursive(UIElement? parent)
+    {
+        InvalidateRecursiveToType<ItemsPresenter>(parent);
+    }
 
     public static void InvalidateRecursiveToType<T>(UIElement? parent)
     {

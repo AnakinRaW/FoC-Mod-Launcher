@@ -32,11 +32,13 @@ internal class ModalWindowService : IModalWindowService
         var window = _windowFactory.Create(viewModel);
         _logger?.LogTrace($"Showing window: {viewModel}");
         window.Closing += OnDialogClosing(window, viewModel, task);
+#pragma warning disable CS4014
         Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, () =>
         {
             _windowService.DisableOwner(window);
             window.ShowModal();
         });
+#pragma warning restore CS4014
 
         if (viewModel is IViewModel initializingViewModel)
             await initializingViewModel.InitializeAsync();

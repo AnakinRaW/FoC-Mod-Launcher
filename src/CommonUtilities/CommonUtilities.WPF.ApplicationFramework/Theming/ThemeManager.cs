@@ -10,8 +10,8 @@ public class ThemeManager : IThemeManager
 {
     public event EventHandler<ThemeChangedEventArgs>? ThemeChanged;
 
-    private System.Windows.Application _application;
-    private ITheme _theme;
+    private System.Windows.Application _application = null!;
+    private ITheme _theme = null!;
 
     private readonly IThemeResourceDictionaryCache _cache;
 
