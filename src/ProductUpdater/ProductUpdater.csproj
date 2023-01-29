@@ -23,4 +23,12 @@
 	  <ProjectReference Include="..\ProductMetadata\ProductMetadata.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <PackageReference Include="Vanara.PInvoke.NetListMgr" Version="3.4.12" PrivateAssets="build;compile"/>
+	</ItemGroup>
+
+	<PropertyGroup>
+		<SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+	</PropertyGroup>
+
 </Project>

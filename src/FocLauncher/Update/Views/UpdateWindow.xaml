@@ -33,7 +33,7 @@
                 <TextBlock Margin="0,0,4,0" VerticalAlignment="Center" Text="Branch:"/>
                 <ComboBox MinWidth="125" IsEditable="False" IsReadOnly="True"
                           Style="{DynamicResource {x:Static themes:StyleResourceKeys.ThemedComboBoxStyleKey}}"
-                          IsEnabled="{Binding IsLoadingBranches, Converter={StaticResource BooleanInverseConverter}}"
+                          IsEnabled="{Binding CanSwitchBranches}"
                           ItemsSource="{Binding Branches}"
                           SelectedItem="{Binding CurrentBranch, Mode=TwoWay}">
                     <ComboBox.ItemTemplate>

@@ -9,7 +9,7 @@ using Validation;
 
 namespace AnakinRaW.ProductUpdater;
 
-internal static class Extensions
+public static class Extensions
 {
     public static bool RequiresUpdate(this IUpdateCatalog updateCatalog)
     {
@@ -17,7 +17,7 @@ internal static class Extensions
         return updateCatalog.UpdateItems.Any() && updateCatalog.UpdateItems.Any(i => i.Action != UpdateAction.Update);
     }
 
-    public static IEnumerable<IInstallableComponent> GetInstallableComponents(this IProductCatalog catalog)
+    internal static IEnumerable<IInstallableComponent> GetInstallableComponents(this IProductCatalog catalog)
     {
         if (!catalog.Items.Any())
             return Enumerable.Empty<IInstallableComponent>();
@@ -30,12 +30,12 @@ internal static class Extensions
         return result;
     }
 
-    public static void RaiseAsync(this EventHandler? handler, object sender, EventArgs e)
+    internal static void RaiseAsync(this EventHandler? handler, object sender, EventArgs e)
     {
         Task.Run(() => handler?.Invoke(sender, e));
     }
 
-    public static void RaiseAsync<T>(this EventHandler<T>? handler, object sender, T e)
+    internal static void RaiseAsync<T>(this EventHandler<T>? handler, object sender, T e)
     {
         Task.Run(() => handler?.Invoke(sender, e));
     }

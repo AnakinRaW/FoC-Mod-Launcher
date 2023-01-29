@@ -2,6 +2,8 @@
 using System.Threading;
 using System.Threading.Tasks;
 using AnakinRaW.ProductMetadata;
+using AnakinRaW.ProductMetadata.Catalog;
+using AnakinRaW.ProductMetadata.Services;
 using AnakinRaW.ProductUpdater.Catalog;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -43,45 +45,41 @@ public class ProductUpdateProviderService : IProductUpdateProviderService
         }
 
         CheckingForUpdatesStarted.RaiseAsync(this, EventArgs.Empty);
-
-        await Task.Delay(2000, token);
-
-        CheckingForUpdatesCompleted.RaiseAsync(this, null);
-
-        //try
-        //{
-        //    IUpdateCatalog? updateCatalog = null;
-        //    try
-        //    {
-        //        if (productReference.Branch is null)
-        //            throw new CatalogException("Product Reference does not have a branch.");
-
-        //        var manifestRepo = _serviceProvider.GetRequiredService<IBranchManager>();
-        //        var manifest = await manifestRepo.GetManifest(productReference, _updateCheckToken.Token).ConfigureAwait(false);
-
-        //        var productService = _serviceProvider.GetRequiredService<IProductService>();
-        //        var installedComponents = productService.GetInstalledProductCatalog();
-
-        //        var catalogBuilder = _serviceProvider.GetRequiredService<IUpdateCatalogBuilder>();
-        //        updateCatalog = catalogBuilder.Build(installedComponents, manifest);
-        //    }
-        //    finally
-        //    {
-        //        CheckingForUpdatesCompleted.RaiseAsync(this, updateCatalog);
-        //    }
-        //}
-        //catch (Exception ex)
-        //{
-        //    _logger?.LogWarning(ex.Message);
-        //    throw;
-        //}
-        //finally
-        //{
-        //    lock (_syncObject)
-        //    {
-        //        _updateCheckToken.Dispose();
-        //        _updateCheckToken = null;
-        //    }
-        //}
+        
+        try
+        {
+            IUpdateCatalog? updateCatalog = null;
+            try
+            {
+                if (productReference.Branch is null)
+                    throw new CatalogException("Product Reference does not have a branch.");
+                
+                var manifestRepo = _serviceProvider.GetRequiredService<IBranchManager>();
+                var manifest = await manifestRepo.GetManifest(productReference, _updateCheckToken.Token).ConfigureAwait(false);
+                
+                //var productService = _serviceProvider.GetRequiredService<IProductService>();
+                // var installedComponents = productService.GetInstalledProductCatalog();
+                //
+                // var catalogBuilder = _serviceProvider.GetRequiredService<IUpdateCatalogBuilder>();
+                // updateCatalog = catalogBuilder.Build(installedComponents, manifest);
+            }
+            finally
+            {
+                CheckingForUpdatesCompleted.RaiseAsync(this, updateCatalog);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger?.LogWarning(ex.Message);
+            throw;
+        }
+        finally
+        {
+            lock (_syncObject)
+            {
+                _updateCheckToken.Dispose();
+                _updateCheckToken = null;
+            }
+        }
     }
 }

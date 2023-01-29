@@ -24,11 +24,11 @@ public class UpdateWindowCommandDefinition : ICommandDefinition
         Command = new DelegateCommand(OpenAboutDialog);
     }
 
-    private void OpenAboutDialog()
+    private async void OpenAboutDialog()
     {
         // Singletone instance of this view model drastically increases closing/cancellation complexity.
         // Creating a new model for each request should be good enough. 
         var viewModel = new UpdateWindowViewModel(_serviceProvider);
-        _serviceProvider.GetRequiredService<IModalWindowService>().ShowModal(viewModel);
+        await _serviceProvider.GetRequiredService<IModalWindowService>().ShowModal(viewModel);
     }
 }

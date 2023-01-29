@@ -31,7 +31,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="Controls\Internal" />
 		<Folder Include="NativeMethods\" />
 	</ItemGroup>
 

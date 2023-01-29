@@ -15,5 +15,5 @@ public interface IUpdateWindowViewModel : IModalWindowViewModel, IViewModel
 
     ProductBranch CurrentBranch { get; set; }
 
-    bool IsLoadingBranches { get; set; }
+    bool CanSwitchBranches { get; }
 }

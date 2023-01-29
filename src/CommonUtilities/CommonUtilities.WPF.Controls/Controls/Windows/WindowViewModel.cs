@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
+using System.Reflection;
 using System.Windows;
+using AnakinRaW.CommonUtilities.Wpf.Utilities;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace AnakinRaW.CommonUtilities.Wpf.Controls;
@@ -35,7 +39,6 @@ public partial class WindowViewModel : ObservableObject, IWindowViewModel
 
     [ObservableProperty]
     private bool _showIcon = true;
-
     public void CloseDialog()
     {
         OnCloseRequested();

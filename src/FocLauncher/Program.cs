@@ -7,6 +7,7 @@ using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.StatusBar;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Theming;
 using AnakinRaW.ProductMetadata.Services;
+using AnakinRaW.ProductUpdater;
 using AnakinRaW.ProductUpdater.Services;
 using FocLauncher.Services;
 using FocLauncher.Update.ProductMetadata;
@@ -117,6 +118,8 @@ internal static class Program
 
     private static void CreateUpdateProgramServices(IServiceCollection serviceCollection)
     {
+        serviceCollection.AddProductUpdater();
+        
         serviceCollection.AddSingleton<IProductService>(sp => new LauncherProductService(sp));
         serviceCollection.AddSingleton<IProductUpdateProviderService>(sp => new ProductUpdateProviderService(sp));
         serviceCollection.AddSingleton<IBranchManager>(sp => new LauncherBranchManager(sp));

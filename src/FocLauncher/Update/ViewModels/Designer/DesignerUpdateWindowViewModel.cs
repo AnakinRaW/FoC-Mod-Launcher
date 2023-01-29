@@ -45,5 +45,5 @@ internal class DesignerUpdateWindowViewModel : IUpdateWindowViewModel
     public ProductBranch CurrentBranch { get; set; } =
         new ProductBranch("Test", new Uri("http://example.org", UriKind.Absolute), false);
 
-    public bool IsLoadingBranches { get; set; }
+    public bool CanSwitchBranches { get; set; }
 }
