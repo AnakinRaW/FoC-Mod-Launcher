@@ -19,7 +19,7 @@ internal class LauncherEnvironment : ILauncherEnvironment
     public string ApplicationLocalPath => LazyInitializer.EnsureInitialized(ref _launcherLocalPath, BuildLocalPath)!;
 
     public IDirectoryInfo ApplicationLocalDirectory =>
-        _localDirectory ??= _fileSystem.DirectoryInfo.FromDirectoryName(ApplicationLocalPath);
+        _localDirectory ??= _fileSystem.DirectoryInfo.New(ApplicationLocalPath);
 
     public LauncherEnvironment(IFileSystem fileSystem)
     {

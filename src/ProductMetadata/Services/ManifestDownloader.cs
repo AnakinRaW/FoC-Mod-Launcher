@@ -39,9 +39,9 @@ internal class ManifestDownloader : IManifestDownloader
     public async Task<IFileInfo> GetManifest(Uri manifestPath, CancellationToken token = default)
     {
         var destPath = CreateRandomFile();
-        using var manifest = _fileSystem.FileStream.Create(destPath, FileMode.Create, FileAccess.ReadWrite, FileShare.None);
+        using var manifest = _fileSystem.FileStream.New(destPath, FileMode.Create, FileAccess.ReadWrite, FileShare.None);
         await _downloadManager.DownloadAsync(manifestPath, manifest, null , null, token);
-        return _fileSystem.FileInfo.FromFileName(destPath);
+        return _fileSystem.FileInfo.New(destPath);
     }
 
 

@@ -33,7 +33,7 @@ public class FileConditionEvaluator : IConditionEvaluator
             return false;
         if (fileCondition.IntegrityInformation.HashType != HashType.None)
         {
-            if (!EvaluateFileHash(hashingService, fileSystem.FileInfo.FromFileName(filePath),
+            if (!EvaluateFileHash(hashingService, fileSystem.FileInfo.New(filePath),
                     fileCondition.IntegrityInformation.HashType, fileCondition.IntegrityInformation.Hash))
                 return false;
         }

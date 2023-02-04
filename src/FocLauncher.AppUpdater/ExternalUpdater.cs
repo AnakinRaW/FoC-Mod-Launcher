@@ -43,7 +43,7 @@ internal class ExternalUpdater
                 _logger?.LogDebug($"Processing item: {item}");
                 if (string.IsNullOrEmpty(item.File))
                     continue;
-                var fileInfo = _fileSystem.FileInfo.FromFileName(item.File);
+                var fileInfo = _fileSystem.FileInfo.New(item.File);
                 _fileUtilities.MoveFile(fileInfo, item.Destination!, true);
             }
             return ExternalUpdaterResult.UpdateSuccess;
@@ -59,9 +59,9 @@ internal class ExternalUpdater
                 {
                     _logger?.LogDebug($"Restore item: {backup}");
                     if (string.IsNullOrEmpty(backup.Value))
-                        _fileUtilities.DeleteFileWithRetry(_fileSystem.FileInfo.FromFileName(backup.Key));
+                        _fileUtilities.DeleteFileWithRetry(_fileSystem.FileInfo.New(backup.Key));
                     else
-                        _fileUtilities.MoveFile(_fileSystem.FileInfo.FromFileName(backup.Value), backup.Key, true);
+                        _fileUtilities.MoveFile(_fileSystem.FileInfo.New(backup.Value), backup.Key, true);
                 }
                 return ExternalUpdaterResult.UpdateFailedWithRestore;
             }
@@ -84,9 +84,9 @@ internal class ExternalUpdater
             foreach (var item in UpdaterItems)
             {
                 if (!string.IsNullOrEmpty(item.File))
-                    _fileUtilities.DeleteFileWithRetry(_fileSystem.FileInfo.FromFileName(item.File));
+                    _fileUtilities.DeleteFileWithRetry(_fileSystem.FileInfo.New(item.File));
                 if (!string.IsNullOrEmpty(item.Backup))
-                    _fileUtilities.DeleteFileWithRetry(_fileSystem.FileInfo.FromFileName(item.Backup));
+                    _fileUtilities.DeleteFileWithRetry(_fileSystem.FileInfo.New(item.Backup));
             }
         }
         catch (Exception e)
