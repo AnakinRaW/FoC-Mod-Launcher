@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using AnakinRaW.CommonUtilities.DownloadManager;
+using AnakinRaW.CommonUtilities.FileSystem;
 using AnakinRaW.ProductMetadata.Catalog;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Semver;
-using Sklavenwalker.CommonUtilities.DownloadManager;
-using Sklavenwalker.CommonUtilities.FileSystem;
 using Validation;
 
 namespace AnakinRaW.ProductMetadata.Services;

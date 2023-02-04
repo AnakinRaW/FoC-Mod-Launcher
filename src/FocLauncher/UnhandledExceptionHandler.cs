@@ -5,7 +5,7 @@ using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 using FocLauncher.Utilities;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Sklavenwalker.CommonUtilities;
+using AnakinRaW.CommonUtilities;
 using Validation;
 using UnhandledExceptionDialogViewModel = FocLauncher.ViewModels.UnhandledExceptionDialogViewModel;
 

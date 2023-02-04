@@ -23,10 +23,10 @@
 	  <PackageReference Include="Microsoft.Bcl.HashCode" Version="1.1.1" />
 	  <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
 	  <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0" />
-	  <PackageReference Include="Semver" Version="2.2.0" />
-	  <PackageReference Include="Sklavenwalker.CommonUtilities" Version="2.1.1" />
-	  <PackageReference Include="Sklavenwalker.CommonUtilities.DownloadManager" Version="2.0.0" />
-	  <PackageReference Include="Sklavenwalker.CommonUtilities.FileSystem" Version="2.0.2" />
+	  <PackageReference Include="Semver" Version="2.3.0-beta.0" />
+	  <PackageReference Include="AnakinRaW.CommonUtilities" Version="4.0.1" />
+	  <PackageReference Include="AnakinRaW.CommonUtilities.DownloadManager" Version="4.0.1" />
+	  <PackageReference Include="AnakinRaW.CommonUtilities.FileSystem" Version="4.0.1" />
 	  <PackageReference Include="Validation" Version="2.5.51" />
 	</ItemGroup>
 

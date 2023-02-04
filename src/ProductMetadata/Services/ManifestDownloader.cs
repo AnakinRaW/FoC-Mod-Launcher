@@ -3,9 +3,9 @@ using System.IO;
 using System.IO.Abstractions;
 using System.Threading;
 using System.Threading.Tasks;
+using AnakinRaW.CommonUtilities.DownloadManager;
+using AnakinRaW.CommonUtilities.FileSystem;
 using Microsoft.Extensions.DependencyInjection;
-using Sklavenwalker.CommonUtilities.DownloadManager;
-using Sklavenwalker.CommonUtilities.FileSystem;
 using Validation;
 
 namespace AnakinRaW.ProductMetadata.Services;

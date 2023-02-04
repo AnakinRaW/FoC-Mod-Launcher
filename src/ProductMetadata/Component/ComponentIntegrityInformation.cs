@@ -1,5 +1,5 @@
 ﻿using System;
-using Sklavenwalker.CommonUtilities.Hashing;
+using AnakinRaW.CommonUtilities.Hashing;
 using Validation;
 
 namespace AnakinRaW.ProductMetadata.Component;

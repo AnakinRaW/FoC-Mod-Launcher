@@ -24,7 +24,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="Vanara.PInvoke.NetListMgr" Version="3.4.12" PrivateAssets="build;compile"/>
+	  <PackageReference Include="Vanara.PInvoke.NetListMgr" Version="3.4.13" PrivateAssets="build;compile" />
 	</ItemGroup>
 
 	<PropertyGroup>

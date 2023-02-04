@@ -41,6 +41,6 @@ public partial class UnhandledExceptionDialogViewModel : ModalWindowViewModel, I
 
     private static void OnCreateIssue()
     {
-        Process.Start("https://github.com/AnakinSklavenwalker/FoC-Mod-Launcher/issues");
+        Process.Start("https://github.com/AnakinRaW/FoC-Mod-Launcher/issues");
     }
 }

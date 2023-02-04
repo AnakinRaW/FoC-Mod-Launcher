@@ -6,8 +6,8 @@ using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 using FocLauncher.Services;
 using FocLauncher.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
-using Sklavenwalker.CommonUtilities.FileSystem;
-using Sklavenwalker.CommonUtilities.FileSystem.Windows;
+using AnakinRaW.CommonUtilities.FileSystem;
+using AnakinRaW.CommonUtilities.FileSystem.Windows;
 using Validation;
 
 namespace FocLauncher;

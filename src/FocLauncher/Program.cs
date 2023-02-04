@@ -2,6 +2,11 @@
 using System.Diagnostics.CodeAnalysis;
 using System.IO.Abstractions;
 using System.Threading.Tasks;
+using AnakinRaW.CommonUtilities.DownloadManager;
+using AnakinRaW.CommonUtilities.DownloadManager.Configuration;
+using AnakinRaW.CommonUtilities.DownloadManager.Verification;
+using AnakinRaW.CommonUtilities.Registry;
+using AnakinRaW.CommonUtilities.Registry.Windows;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.StatusBar;
@@ -15,13 +20,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Debug;
 using Serilog.Extensions.Logging;
-using Sklavenwalker.CommonUtilities.DownloadManager;
-using Sklavenwalker.CommonUtilities.DownloadManager.Configuration;
-using Sklavenwalker.CommonUtilities.DownloadManager.Verification;
-using Sklavenwalker.CommonUtilities.FileSystem;
-using Sklavenwalker.CommonUtilities.FileSystem.Windows;
-using Sklavenwalker.CommonUtilities.Registry;
-using Sklavenwalker.CommonUtilities.Registry.Windows;
+using AnakinRaW.CommonUtilities.FileSystem;
+using AnakinRaW.CommonUtilities.FileSystem.Windows;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace FocLauncher;

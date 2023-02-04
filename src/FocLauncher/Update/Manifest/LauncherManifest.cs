@@ -7,7 +7,7 @@ using AnakinRaW.ProductMetadata.Component;
 using AnakinRaW.ProductMetadata.Conditions;
 using FocLauncher.Utilities;
 using Semver;
-using Sklavenwalker.CommonUtilities.Hashing;
+using AnakinRaW.CommonUtilities.Hashing;
 
 namespace FocLauncher.Update.Manifest;
 

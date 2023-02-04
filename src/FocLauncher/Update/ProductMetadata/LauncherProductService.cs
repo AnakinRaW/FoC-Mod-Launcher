@@ -88,8 +88,8 @@ public class LauncherBranchManager : BranchManager
 
     protected override Uri BuildManifestUri(string branchName)
     {
-        return new Uri(@"C:\Users\Anakin\Desktop\manifest.json", UriKind.Absolute);
-        //return LauncherConstants.LauncherRootUrl.AppendPathSegments(branchName, ManifestFileName).ToUri();
+        //return new Uri(@"C:\Users\Anakin\Desktop\manifest.json", UriKind.Absolute);
+        return LauncherConstants.LauncherRootUrl.AppendPathSegments(branchName, ManifestFileName).ToUri();
     }
 }
 

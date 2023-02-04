@@ -1,6 +1,6 @@
 ﻿using System;
+using AnakinRaW.CommonUtilities.Registry;
 using Microsoft.Extensions.DependencyInjection;
-using Sklavenwalker.CommonUtilities.Registry;
 using Validation;
 
 namespace FocLauncher.Services;

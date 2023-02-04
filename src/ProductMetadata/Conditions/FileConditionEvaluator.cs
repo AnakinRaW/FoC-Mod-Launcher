@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO.Abstractions;
 using System.Linq;
+using AnakinRaW.CommonUtilities.Hashing;
 using AnakinRaW.ProductMetadata.Component;
 using AnakinRaW.ProductMetadata.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Semver;
-using Sklavenwalker.CommonUtilities.Hashing;
 using Validation;
 
 namespace AnakinRaW.ProductMetadata.Conditions;

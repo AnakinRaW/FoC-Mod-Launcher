@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.IO.Abstractions;
 using System.Linq;
+using AnakinRaW.CommonUtilities.FileSystem;
 using FocLauncher.Shared;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Sklavenwalker.CommonUtilities.FileSystem;
 
 namespace FocLauncher.AppUpdater;
 
