@@ -62,7 +62,8 @@ public class LauncherBranchManager : BranchManager
     private const string BranchLookupFileName = "branches";
     private const string ManifestFileName = "manifest.json";
 
-    private static readonly Url BranchLookupUrl = Url.Combine(LauncherConstants.LauncherRootUrl, BranchLookupFileName);
+    private static readonly Url BranchLookupUrl =
+        LauncherConstants.LauncherRootUrl.AppendPathSegment(BranchLookupFileName);
 
     protected override string DefaultBranchName => StableBranchName;
 
@@ -88,8 +89,8 @@ public class LauncherBranchManager : BranchManager
 
     protected override Uri BuildManifestUri(string branchName)
     {
-        //return new Uri(@"C:\Users\Anakin\Desktop\manifest.json", UriKind.Absolute);
-        return LauncherConstants.LauncherRootUrl.AppendPathSegments(branchName, ManifestFileName).ToUri();
+        return new Uri(@"C:\Users\Anakin\Desktop\manifest.json", UriKind.Absolute);
+        //return LauncherConstants.LauncherRootUrl.AppendPathSegments(branchName, ManifestFileName).ToUri();
     }
 }
 
