@@ -1,18 +1,10 @@
-﻿using System;
-
-namespace AnakinRaW.ProductMetadata;
+﻿namespace AnakinRaW.ProductMetadata;
 
 public interface IInstalledProduct : IProductReference
 { 
     string InstallationPath { get; }
-
-    string? Author { get; }
-
-    DateTime? UpdateDate { get; }
-
-    DateTime? InstallDate { get; }
-
-    ProductReleaseType ReleaseType { get; }
-
+    
     VariableCollection ProductVariables { get; }
+
+    ProductInstallState InstallState { get; }
 }

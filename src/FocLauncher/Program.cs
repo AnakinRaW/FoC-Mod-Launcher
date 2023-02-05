@@ -23,6 +23,7 @@ using Serilog.Extensions.Logging;
 using AnakinRaW.CommonUtilities.FileSystem;
 using AnakinRaW.CommonUtilities.FileSystem.Windows;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
+using FocLauncher.Update.ViewModels;
 
 namespace FocLauncher;
 
@@ -126,6 +127,7 @@ internal static class Program
         serviceCollection.AddSingleton<IManifestLoader>(sp => new LauncherManifestLoader(sp));
         serviceCollection.AddSingleton<IDownloadManager>(sp => new DownloadManager(sp));
         serviceCollection.AddSingleton<IVerificationManager>(sp => new VerificationManager(sp));
+        serviceCollection.AddSingleton<IInstalledProductViewModelFactory>(sp => new InstalledProductViewModelFactory());
         serviceCollection.AddSingleton(CreateDownloadConfiguration());
     }
 

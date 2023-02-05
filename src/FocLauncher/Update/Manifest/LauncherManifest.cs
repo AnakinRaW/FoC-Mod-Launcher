@@ -57,8 +57,8 @@ public record LauncherComponent(
             throw new CatalogException($"Illegal manifest: {nameof(OriginInfo)} must not be null.");
 
         var installationSize = InstallSize.HasValue
-            ? default
-            : new InstallationSize(InstallSize!.Value.SystemDrive, InstallSize.Value.ProductDrive);
+            ? new InstallationSize(InstallSize!.Value.SystemDrive, InstallSize.Value.ProductDrive)
+            : default;
 
         IReadOnlyList<ICondition> conditions;
         if (DetectConditions is null)

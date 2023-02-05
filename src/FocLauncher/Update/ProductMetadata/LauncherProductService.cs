@@ -35,7 +35,7 @@ internal class LauncherProductService : ProductServiceBase
     protected override IInstalledProduct BuildProduct()
     {
         var productRef = CreateCurrentProductReference();
-        var installLocation = _fileSystem.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        var installLocation = _fileSystem.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
         return new InstalledProduct(productRef, new ProductCatalog(productRef, Array.Empty<IProductComponent>()), installLocation);
     }
 

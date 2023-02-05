@@ -2,6 +2,6 @@
 
 namespace FocLauncher.Update.ViewModels;
 
-public interface IProductInformationViewModel : IViewModel
+public interface IInstalledProductStateViewModel : IViewModel
 {
 }

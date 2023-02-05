@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Threading.Tasks;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Input;
 using AnakinRaW.CommonUtilities.Wpf.Imaging;
 
 namespace FocLauncher.Update.ViewModels.Designer;
@@ -11,6 +12,8 @@ public class DesignerInstalledProductViewModel : IInstalledProductViewModel
 
     public string DisplayName => "Test Product";
     public ImageKey Icon { get; }
+    public ICommandDefinition? Action { get; }
+    public IInstalledProductStateViewModel StateViewModel { get; }
 
     public Task InitializeAsync()
     {

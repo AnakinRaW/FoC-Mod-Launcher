@@ -1,5 +1,4 @@
-﻿using System;
-using AnakinRaW.ProductMetadata.Catalog;
+﻿using AnakinRaW.ProductMetadata.Catalog;
 using Semver;
 using Validation;
 
@@ -15,11 +14,8 @@ public sealed class InstalledProduct : IInstalledProduct
 
     public string InstallationPath { get; }
     public IProductCatalog Manifest { get; }
-    public string? Author { get; init; }
-    public DateTime? UpdateDate { get; init; }
-    public DateTime? InstallDate { get; init; }
-    public ProductReleaseType ReleaseType { get; init; }
     public VariableCollection ProductVariables { get; }
+    public ProductInstallState InstallState { get; }
 
     public InstalledProduct(IProductReference reference, IProductCatalog manifest, string installationPath)
     {

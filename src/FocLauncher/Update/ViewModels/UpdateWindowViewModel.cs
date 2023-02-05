@@ -34,6 +34,7 @@ internal partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWind
     private readonly ILogger? _logger;
     private readonly IConnectionManager _connectionManager;
     private readonly IProductService _productService;
+    private readonly IInstalledProductViewModelFactory _installedProductViewModelFactory;
 
     [ObservableProperty]
     private bool _isLoadingBranches = true;
@@ -65,6 +66,7 @@ internal partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWind
         _logger = serviceProvider.GetService<LoggerFactory>()?.CreateLogger(GetType());
         _connectionManager = serviceProvider.GetRequiredService<IConnectionManager>();
         _productService = _serviceProvider.GetRequiredService<IProductService>();
+        _installedProductViewModelFactory = _serviceProvider.GetRequiredService<IInstalledProductViewModelFactory>();
         RegisterEvents();
     }
 
@@ -94,7 +96,7 @@ internal partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWind
         var launcher = _productService.GetCurrentInstance();
         Application.Current.Dispatcher.Invoke(() =>
             InstalledProductViewModel =
-                new InstalledProductViewModel(launcher.Name, ImageKeys.AppIcon, _serviceProvider));
+                _installedProductViewModelFactory.Create(launcher, updateCatalog, _serviceProvider));
     }
 
 
