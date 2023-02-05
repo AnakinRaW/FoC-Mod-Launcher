@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading;
+using System.Windows;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 using AnakinRaW.CommonUtilities.Wpf.Controls;
 using AnakinRaW.ProductMetadata;
@@ -32,6 +33,7 @@ internal partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWind
     private readonly IProductUpdateProviderService _updateService;
     private readonly ILogger? _logger;
     private readonly IConnectionManager _connectionManager;
+    private readonly IProductService _productService;
 
     [ObservableProperty]
     private bool _isLoadingBranches = true;
@@ -45,7 +47,7 @@ internal partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWind
     private ProductBranch _currentBranch = null!;
 
     [ObservableProperty] private IInstalledProductViewModel _installedProductViewModel = null!;
-    
+
     public IUpdateInfoBarViewModel InfoBarViewModel { get; } 
 
     public ObservableCollection<ProductBranch> Branches { get; } = new();
@@ -62,6 +64,7 @@ internal partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWind
         _updateService = serviceProvider.GetRequiredService<IProductUpdateProviderService>();
         _logger = serviceProvider.GetService<LoggerFactory>()?.CreateLogger(GetType());
         _connectionManager = serviceProvider.GetRequiredService<IConnectionManager>();
+        _productService = _serviceProvider.GetRequiredService<IProductService>();
         RegisterEvents();
     }
 
@@ -70,8 +73,8 @@ internal partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWind
         return Task.Run(async () =>
         {
             await InfoBarViewModel.InitializeAsync();
-            var launcher = LoadLauncherInformationAsync(null);
-            var downloaded = await LoadBranches(launcher);
+            LoadLauncherInformationAsync(null);
+            var downloaded = await LoadBranches();
             if (downloaded)
                 CheckForUpdate().Forget();
         });
@@ -86,18 +89,19 @@ internal partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWind
         InfoBarViewModel.Dispose();
     }
 
-    private IInstalledProduct LoadLauncherInformationAsync(IUpdateCatalog? updateCatalog)
+    private void LoadLauncherInformationAsync(IUpdateCatalog? updateCatalog)
     {
-        var productService = _serviceProvider.GetRequiredService<IProductService>();
-        var launcher = productService.GetCurrentInstance();
-        AppDispatcher.Invoke(() =>
-            InstalledProductViewModel = new InstalledProductViewModel(launcher.Name, ImageKeys.AppIcon, _serviceProvider));
-        return launcher;
+        var launcher = _productService.GetCurrentInstance();
+        Application.Current.Dispatcher.Invoke(() =>
+            InstalledProductViewModel =
+                new InstalledProductViewModel(launcher.Name, ImageKeys.AppIcon, _serviceProvider));
     }
 
 
-    private async Task<bool> LoadBranches(IInstalledProduct launcher)
+    private async Task<bool> LoadBranches()
     {
+        var launcher = _productService.GetCurrentInstance();
+
         if (launcher.Branch is null)
             throw new InvalidOperationException("Current installation does not have a branch.");
 
@@ -166,8 +170,6 @@ internal partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWind
             
             var updateRef = _serviceProvider.GetRequiredService<IProductService>().CreateProductReference(null, CurrentBranch);
             await _updateService.CheckForUpdates(updateRef, searchUpdateCancellationTokenSource.Token);
-
-            throw new InvalidOperationException();
         }
         catch (TaskCanceledException)
         {
