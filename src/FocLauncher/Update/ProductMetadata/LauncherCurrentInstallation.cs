@@ -5,6 +5,7 @@ using System.IO.Abstractions;
 using System.Reflection;
 using AnakinRaW.ProductMetadata.Component;
 using AnakinRaW.ProductMetadata.Services;
+using AnakinRaW.ProductMetadata.Services.Detectors;
 using Microsoft.Extensions.DependencyInjection;
 using Validation;
 
@@ -31,6 +32,7 @@ internal class LauncherCurrentInstallation : ICurrentInstallation
     public IReadOnlyCollection<IProductComponent> FindInstalledComponents()
     {
         var manifest = GetManifestComponents();
+        ICatalogDetectionService service;
         return Array.Empty<IProductComponent>();
     }
 

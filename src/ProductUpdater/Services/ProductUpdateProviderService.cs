@@ -56,12 +56,12 @@ public class ProductUpdateProviderService : IProductUpdateProviderService
                 
                 var manifestRepo = _serviceProvider.GetRequiredService<IBranchManager>();
                 var manifest = await manifestRepo.GetManifest(productReference, _updateCheckToken.Token).ConfigureAwait(false);
-                
-                //var productService = _serviceProvider.GetRequiredService<IProductService>();
-                // var installedComponents = productService.GetInstalledProductCatalog();
-                //
-                // var catalogBuilder = _serviceProvider.GetRequiredService<IUpdateCatalogBuilder>();
-                // updateCatalog = catalogBuilder.Build(installedComponents, manifest);
+
+                var productService = _serviceProvider.GetRequiredService<IProductService>();
+                var installedComponents = productService.GetInstalledProductCatalog();
+
+                //var catalogBuilder = _serviceProvider.GetRequiredService<IUpdateCatalogBuilder>();
+                //updateCatalog = catalogBuilder.Build(installedComponents, manifest);
             }
             finally
             {

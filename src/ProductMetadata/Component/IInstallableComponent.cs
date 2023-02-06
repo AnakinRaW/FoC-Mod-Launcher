@@ -7,7 +7,7 @@ public interface IInstallableComponent : IProductComponent
 {
     long DownloadSize { get; }
 
-    OriginInfo OriginInfo { get; }
+    OriginInfo? OriginInfo { get; }
 
     IReadOnlyList<ICondition> DetectConditions { get; }
 
