@@ -7,7 +7,7 @@ using Validation;
 
 namespace AnakinRaW.ProductMetadata;
 
-public class VariableCollection : IReadOnlyDictionary<string, string?>
+public sealed class VariableCollection : IReadOnlyDictionary<string, string?>
 {
     internal static readonly StringComparer Comparer = StringComparer.OrdinalIgnoreCase;
     private readonly ReaderWriterLockSlim _collectionLock = new();

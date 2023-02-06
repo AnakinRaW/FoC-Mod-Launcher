@@ -24,6 +24,7 @@ using AnakinRaW.CommonUtilities.FileSystem;
 using AnakinRaW.CommonUtilities.FileSystem.Windows;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
 using FocLauncher.Update.ViewModels;
+using AnakinRaW.ProductMetadata.Services.Detectors;
 
 namespace FocLauncher;
 
@@ -122,7 +123,6 @@ internal static class Program
         serviceCollection.AddProductUpdater();
         
         serviceCollection.AddSingleton<IProductService>(sp => new LauncherProductService(sp));
-        serviceCollection.AddSingleton<IProductUpdateProviderService>(sp => new ProductUpdateProviderService(sp));
         serviceCollection.AddSingleton<IBranchManager>(sp => new LauncherBranchManager(sp));
         serviceCollection.AddSingleton<IManifestLoader>(sp => new LauncherManifestLoader(sp));
         serviceCollection.AddSingleton<IDownloadManager>(sp => new DownloadManager(sp));

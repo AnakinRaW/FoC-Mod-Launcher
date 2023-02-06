@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
 using System.Reflection;
+using AnakinRaW.ProductMetadata;
 using AnakinRaW.ProductMetadata.Component;
 using AnakinRaW.ProductMetadata.Services;
 using AnakinRaW.ProductMetadata.Services.Detectors;
@@ -21,7 +22,7 @@ internal class LauncherCurrentInstallation : ICurrentInstallation
     public LauncherCurrentInstallation(IServiceProvider serviceProvider)
     {
         Requires.NotNull(serviceProvider, nameof(serviceProvider));
-        _serviceProvider = serviceProvider;
+        _serviceProvider = serviceProvider; ILauncherEnvironment
     }
 
     public IReadOnlyCollection<IProductComponent> GetManifestComponents()
@@ -32,8 +33,9 @@ internal class LauncherCurrentInstallation : ICurrentInstallation
     public IReadOnlyCollection<IProductComponent> FindInstalledComponents()
     {
         var manifest = GetManifestComponents();
-        ICatalogDetectionService service;
-        return Array.Empty<IProductComponent>();
+        var detectionService = _serviceProvider.GetRequiredService<ICatalogDetectionService>();
+        detectionService.UpdateDetectionState(manifest, new VariableCollection());
+        return manifest;
     }
 
     private IDirectoryInfo GetInstallLocation()

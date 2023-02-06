@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using AnakinRaW.ProductMetadata.Catalog;
 using AnakinRaW.ProductMetadata.Component;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,13 +18,19 @@ public class CatalogDetectionService : ICatalogDetectionService
         _componentDetectorFactory = serviceProvider.GetService<IComponentDetectorFactory>() ?? new ComponentDetectorFactory();
     }
 
-    public void UpdateDetectionState(IProductCatalog catalog, VariableCollection productVariables, bool forceInvalidate = false)
+    public void UpdateDetectionState(IProductCatalog catalog, VariableCollection? productVariables = null)
     {
         Requires.NotNull(catalog, nameof(catalog));
-        Requires.NotNull(productVariables, nameof(productVariables));
-        foreach (var component in catalog.Items)
+        UpdateDetectionState(catalog.Items);
+    }
+
+    public void UpdateDetectionState(IReadOnlyCollection<IProductComponent> catalog, VariableCollection? productVariables = null)
+    {
+        Requires.NotNull(catalog, nameof(catalog));
+        productVariables ??= new VariableCollection();
+        foreach (var component in catalog)
         {
-            if (forceInvalidate || component is not IInstallableComponent installable || component.DetectedState != DetectionState.None)
+            if (component is not IInstallableComponent installable || component.DetectedState != DetectionState.None)
                 continue;
             var installed = IsInstalled(installable, productVariables);
             installable.DetectedState = installed ? DetectionState.Present : DetectionState.Absent;
