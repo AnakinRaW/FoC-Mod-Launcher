@@ -18,7 +18,8 @@ internal sealed class DefaultComponentDetector : ComponentDetectorBase<Installab
             return true;
         try
         {
-            return new CompositeConditionsEvaluator(ServiceProvider).EvaluateConditions(component.DetectConditions, productVariables.ToDictionary());
+            return new CompositeConditionsEvaluator(ServiceProvider)
+                .EvaluateConditions(component.DetectConditions, productVariables.ToDictionary());
         }
         catch (Exception e)
         {
