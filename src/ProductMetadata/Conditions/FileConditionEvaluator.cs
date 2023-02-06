@@ -54,7 +54,7 @@ public class FileConditionEvaluator : IConditionEvaluator
 
     private static bool EvaluateFileVersion(string filePath, SemVersion version)
     {
-        return SemVersion.TryParse(FileVersionInfo.GetVersionInfo(filePath).ProductVersion, SemVersionStyles.Any, out var fileProductVersion) 
+        return SemVersion.TryParse(FileVersionInfo.GetVersionInfo(filePath).FileVersion, SemVersionStyles.Any, out var fileProductVersion) 
                && version.Equals(fileProductVersion);
     }
 }
