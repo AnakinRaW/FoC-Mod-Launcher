@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
+using System.Linq;
 using System.Reflection;
 using AnakinRaW.ProductMetadata;
 using AnakinRaW.ProductMetadata.Component;
@@ -11,6 +12,33 @@ using Microsoft.Extensions.DependencyInjection;
 using Validation;
 
 namespace FocLauncher.Update.ProductMetadata;
+
+internal static class CurrentInstalledManifest
+{
+    // Because we don't store an external manifest we have a few limitations:
+    // a) We cannot add a HashCode or FileSize to this manifest, since it's not known at compile time.
+    // b) We cannot use AppVars
+    // For dependencies of this repository e.g., the AppUpdater we assume the same FileVersion as this assembly.
+    public static IReadOnlyCollection<IProductComponent> Components { get; }
+
+    private static readonly ICollection<(string componentName, string location)> ExpectedComponents =
+        new List<(string componentName, string location)>
+        {
+
+        };
+
+    static CurrentInstalledManifest()
+    {
+        var components = new List<IProductComponent>();
+        var version = LauncherAssemblyInfo.FileVersion;
+
+        foreach (var expectedComponent in ExpectedComponents)
+        {
+        }
+
+        Components = components;
+    }
+}
 
 internal class LauncherCurrentInstallation : ICurrentInstallation
 {
@@ -29,7 +57,7 @@ internal class LauncherCurrentInstallation : ICurrentInstallation
 
     public IReadOnlyCollection<IProductComponent> GetManifestComponents()
     {
-        return Array.Empty<IProductComponent>();
+        return CurrentInstalledManifest.Components;
     }
 
     public IReadOnlyCollection<IProductComponent> FindInstalledComponents()
@@ -37,7 +65,7 @@ internal class LauncherCurrentInstallation : ICurrentInstallation
         var manifest = GetManifestComponents();
         var detectionService = _serviceProvider.GetRequiredService<ICatalogDetectionService>();
         detectionService.UpdateDetectionState(manifest, new VariableCollection());
-        return manifest;
+        return manifest.Where(x => x.DetectedState == DetectionState.Present).ToList();
     }
 
     private IDirectoryInfo GetInstallLocation()
