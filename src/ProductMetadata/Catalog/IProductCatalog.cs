@@ -7,5 +7,5 @@ public interface IProductCatalog
 {
     IProductReference Product { get; }
 
-    IReadOnlyList<IProductComponent> Items { get; }
+    IReadOnlyCollection<IProductComponent> Items { get; }
 }

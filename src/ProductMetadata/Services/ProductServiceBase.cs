@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO.Abstractions;
 using AnakinRaW.ProductMetadata.Catalog;
-using AnakinRaW.ProductMetadata.Component;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Semver;
@@ -15,21 +13,34 @@ public abstract class ProductServiceBase : IProductService
     private readonly IServiceProvider _serviceProvider;
     private bool _isInitialized;
     private IInstalledProduct? _installedProduct;
-    protected ILogger? Logger;
-    protected readonly IFileSystem FileSystem;
+
+    private readonly object _syncLock = new();
+   
+    protected ILogger? Logger { get; }
+
+    protected ICurrentInstallation CurrentInstallation { get; }
 
     protected ProductServiceBase(IServiceProvider serviceProvider)
     {
         Requires.NotNull(serviceProvider, nameof(serviceProvider));
         _serviceProvider = serviceProvider;
-        FileSystem = serviceProvider.GetRequiredService<IFileSystem>();
         Logger = serviceProvider.GetService<ILoggerFactory>()?.CreateLogger(GetType());
+        CurrentInstallation = serviceProvider.GetRequiredService<ICurrentInstallation>();
     }
 
     public IInstalledProduct GetCurrentInstance()
     {
         Initialize();
-        return _installedProduct!;
+        lock (_syncLock)
+        {
+            return _installedProduct!;
+        }
+    }
+
+    public IInstalledProductCatalog GetInstalledProductCatalog()
+    {
+        Initialize();
+        return new InstalledProductCatalog(GetCurrentInstance(), CurrentInstallation.FindInstalledComponents());
     }
 
     public virtual IProductReference CreateProductReference(SemVersion? newVersion, ProductBranch? newBranch)
@@ -44,30 +55,46 @@ public abstract class ProductServiceBase : IProductService
         return new ProductReference(current.Name, version, branch);
     }
 
-    public IInstalledProductCatalog GetInstalledProductCatalog()
-    {
-        Initialize();
-        return new InstalledProductCatalog(_installedProduct!, FindInstalledComponents());
-    }
-    
-    protected abstract IInstalledProduct BuildProduct();
-
-    protected abstract IReadOnlyList<IProductComponent> FindInstalledComponents();
-
     public virtual bool IsProductCompatible(IProductReference product)
     {
-        return !ProductReferenceEqualityComparer.NameOnly.Equals(_installedProduct!, product);
+        var installed = GetCurrentInstance();
+        return !ProductReferenceEqualityComparer.NameOnly.Equals(installed, product);
+    }
+
+    public void RevalidateInstallation()
+    {
+        Logger?.LogDebug("Requested revalidation of current installation.");
+        Reset();
+    }
+
+    protected abstract IInstalledProduct BuildProduct();
+    
+    protected virtual void AddAdditionalProductVariables(IInstalledProduct product)
+    {
     }
 
     private void Initialize()
     {
         if (_isInitialized)
             return;
-        _installedProduct ??= BuildProduct();
-        AddProductVariables(_installedProduct);
-        if (_installedProduct is null)
-            throw new InvalidOperationException("Created Product must not be null!");
+        Reset();
         _isInitialized = true;
+    }
+
+    private void Reset()
+    {
+        lock (_syncLock)
+        {
+            var installedProduct = BuildProduct();
+            if (installedProduct is null)
+            {
+                var ex = new InvalidOperationException("Created Product must not be null!");
+                Logger?.LogError(ex, ex.Message);
+                throw ex;
+            }
+            AddProductVariables(installedProduct);
+            _installedProduct = installedProduct;
+        }
     }
 
     private void AddProductVariables(IInstalledProduct product)
@@ -76,9 +103,5 @@ public abstract class ProductServiceBase : IProductService
         product.ProductVariables.Add(KnownProductVariablesKeys.InstallDir, product.InstallationPath);
         product.ProductVariables.Add(KnownProductVariablesKeys.InstallDrive, fs.Path.GetPathRoot(product.InstallationPath));
         AddAdditionalProductVariables(product);
-    }
-
-    protected virtual void AddAdditionalProductVariables(IInstalledProduct product)
-    {
     }
 }

@@ -9,11 +9,12 @@ namespace FocLauncher.Update.Commands;
 internal class UpdateCommand : CommandDefinition
 {
     public override ImageKey Image => default;
-    public override string Text => "Update";
+    public override string Text { get; }
     public override ICommand Command => new DelegateCommand(() => {});
     public override string? Tooltip => null;
 
-    public UpdateCommand(IServiceProvider serviceProvider)
+    public UpdateCommand(IServiceProvider serviceProvider, bool isRepair)
     {
+        Text = isRepair ? "Repair" : "Update";
     }
 }
