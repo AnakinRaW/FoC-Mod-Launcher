@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using AnakinRaW.ProductMetadata.Catalog;
 using AnakinRaW.ProductMetadata.Component;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,25 +22,22 @@ internal class ManifestInstallationDetector : IManifestInstallationDetector
     public IReadOnlyCollection<IInstallableComponent> DetectInstalledComponents(IProductManifest manifest, VariableCollection? productVariables = null)
     {
         Requires.NotNull(manifest, nameof(manifest));
-        throw new NotImplementedException();
-    }
-
-    public void UpdateDetectionState(IReadOnlyCollection<IProductComponent> catalog, VariableCollection? productVariables = null)
-    {
-        Requires.NotNull(catalog, nameof(catalog));
         productVariables ??= new VariableCollection();
-        foreach (var component in catalog)
+
+        var installedComponents = new HashSet<IInstallableComponent>(ProductComponentIdentityComparer.VersionAndBranchIndependent);
+        foreach (var manifestItem in manifest.Items)
         {
-            if (component is not IInstallableComponent installable || component.DetectedState != DetectionState.None)
+            if (manifestItem is not IInstallableComponent installable || manifestItem.DetectedState != DetectionState.None)
                 continue;
-            var installed = IsInstalled(installable, productVariables);
-            installable.DetectedState = installed ? DetectionState.Present : DetectionState.Absent;
+            installable.DetectedState = IsInstalled(installable, productVariables);
+            installedComponents.Add(installable);
         }
+        return installedComponents.ToList();
     }
 
-    internal bool IsInstalled(IInstallableComponent installable, VariableCollection productVariables)
+    private DetectionState IsInstalled(IInstallableComponent installable, VariableCollection productVariables)
     {
         var detector = _componentDetectorFactory.GetDetector(installable.Type, _serviceProvider);
-        return detector.GetCurrentInstalledState(installable, productVariables);
+        return detector.GetCurrentInstalledState(installable, productVariables) ? DetectionState.Present : DetectionState.Absent;
     }
 }

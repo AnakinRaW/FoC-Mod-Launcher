@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using AnakinRaW.ProductMetadata.Conditions;
-using Validation;
 
 namespace AnakinRaW.ProductMetadata.Component;
 
