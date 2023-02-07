@@ -11,7 +11,7 @@ public abstract class InstallableComponent : ProductComponent, IInstallableCompo
     public IReadOnlyList<ICondition> DetectConditions { get; init; } = Array.Empty<ICondition>();
     public InstallationSize InstallationSize { get; init; }
         
-    protected InstallableComponent(IProductComponentIdentity identity, OriginInfo originInfo) 
+    protected InstallableComponent(IProductComponentIdentity identity, OriginInfo? originInfo) 
         : base(identity)
     {
         OriginInfo = originInfo;

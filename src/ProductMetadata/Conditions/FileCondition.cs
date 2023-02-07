@@ -18,9 +18,9 @@ public sealed record FileCondition : ICondition
 
     public SemVersion? Version { get; init; }
     
-    public FileCondition(string file)
+    public FileCondition(string filePath)
     {
-        Requires.NotNullOrEmpty(file, nameof(file));
-        FilePath = file;
+        Requires.NotNullOrEmpty(filePath, nameof(filePath));
+        FilePath = filePath;
     }
 }
