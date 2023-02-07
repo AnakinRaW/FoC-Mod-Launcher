@@ -7,7 +7,6 @@ using AnakinRaW.CommonUtilities.Hashing;
 using AnakinRaW.ProductMetadata.Component;
 using AnakinRaW.ProductMetadata.Services;
 using Microsoft.Extensions.DependencyInjection;
-using Semver;
 using Validation;
 
 namespace AnakinRaW.ProductMetadata.Conditions;
@@ -40,7 +39,7 @@ public class FileConditionEvaluator : IConditionEvaluator
 
         if (fileCondition.Version != null)
         {
-            if (!EvaluateFileVersion(filePath, fileCondition.Version))
+            if (!EvaluateFileVersion(fileSystem, filePath, fileCondition.Version))
                 return false;
         }
         return true;
@@ -52,9 +51,8 @@ public class FileConditionEvaluator : IConditionEvaluator
         return actualHash.SequenceEqual(expectedHash);
     }
 
-    private static bool EvaluateFileVersion(string filePath, SemVersion version)
+    private static bool EvaluateFileVersion(IFileSystem fileSystem, string filePath, Version version)
     {
-        return SemVersion.TryParse(FileVersionInfo.GetVersionInfo(filePath).FileVersion, SemVersionStyles.Any, out var fileProductVersion) 
-               && version.Equals(fileProductVersion);
+        return Version.Parse(FileVersionInfo.GetVersionInfo(filePath).FileVersion).Equals(version);
     }
 }

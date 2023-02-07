@@ -1,16 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO.Abstractions;
 using System.Linq;
 using AnakinRaW.ProductMetadata;
 using AnakinRaW.ProductMetadata.Catalog;
 using AnakinRaW.ProductMetadata.Component;
 using AnakinRaW.ProductMetadata.Conditions;
 using AnakinRaW.ProductMetadata.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace FocLauncher.Update.ProductMetadata;
 
 internal class LauncherInstalledManifestProvider : IInstalledManifestProvider
 {
+    private readonly IFileSystem _fileSystem;
+
+    public LauncherInstalledManifestProvider(IServiceProvider serviceProvider)
+    {
+        _fileSystem = serviceProvider.GetRequiredService<IFileSystem>();
+    }
+
     public IProductManifest ProvideManifest(IProductReference installedProduct, VariableCollection variables)
     {
         var components = BuildManifestComponents(installedProduct, variables).ToList();
@@ -28,33 +37,11 @@ internal class LauncherInstalledManifestProvider : IInstalledManifestProvider
         var launcherExeId = new ProductComponentIdentity("Launcher.Executable", identityVersion);
         var launcherUpdaterId = new ProductComponentIdentity("Launcher.Updater", identityVersion);
 
-        var currentDir = variables[KnownProductVariablesKeys.InstallDir];
-        if (string.IsNullOrEmpty(currentDir))
-            throw new InvalidOperationException(
-                $"Unable to resolve required variable: '{KnownProductVariablesKeys.InstallDir}'");
 
-        
-        var launcherExecutable = new SingleFileComponent(launcherExeId, currentDir!, null, null)
-        {
-            DetectConditions = new []
-            {
-                new FileCondition($"[{KnownProductVariablesKeys.InstallDir}]FocLauncher.exe")
-                {
-                    Version = fileVersion
-                }
-            }
-        };
-
-        var launcherUpdater = new SingleFileComponent(launcherUpdaterId, currentDir!, null, null)
-        {
-            DetectConditions = new[]
-            {
-                new FileCondition($"[{KnownProductVariablesKeys.InstallDir}]FocLauncher.exe")
-                {
-                    Version = fileVersion
-                }
-            }
-        };
+        var launcherExecutable = BuildFileComponent(launcherExeId, KnownProductVariablesKeys.InstallDir,
+            "FocLauncher.exe", fileVersion, variables);
+        var launcherUpdater = BuildFileComponent(launcherUpdaterId, KnownProductVariablesKeys.AppDataPath,
+            "FocLauncher.AppUpdater", fileVersion, variables);
 
 
         yield return new ComponentGroup(new ProductComponentIdentity("Launcher.CoreApplicationGroup", identityVersion), new List<IProductComponentIdentity>
@@ -64,5 +51,30 @@ internal class LauncherInstalledManifestProvider : IInstalledManifestProvider
         });
         yield return launcherExecutable;
         yield return launcherUpdater;
+    }
+
+
+    private SingleFileComponent BuildFileComponent(IProductComponentIdentity identity, string directoryKey, string fileName, string version, VariableCollection variables)
+    {
+        var installDirectory = EnsureVariable(variables, directoryKey);
+        var filePath = _fileSystem.Path.Combine(installDirectory, fileName);
+        return new SingleFileComponent(identity, installDirectory, null)
+        {
+            DetectConditions = new[]
+            {
+                new FileCondition(filePath)
+                {
+                    Version =  Version.Parse(version)
+                }
+            }
+        };
+    }
+
+    private static string EnsureVariable(VariableCollection collection, string key)
+    {
+        var value = collection[key];
+        if (string.IsNullOrEmpty(value))
+            throw new InvalidOperationException($"Unable to resolve required variable: '{key}'");
+        return value!;
     }
 }

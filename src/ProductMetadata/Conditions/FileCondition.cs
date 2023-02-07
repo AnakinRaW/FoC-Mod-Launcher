@@ -1,5 +1,5 @@
-﻿using AnakinRaW.ProductMetadata.Component;
-using Semver;
+﻿using System;
+using AnakinRaW.ProductMetadata.Component;
 using Validation;
 
 namespace AnakinRaW.ProductMetadata.Conditions;
@@ -16,7 +16,7 @@ public sealed record FileCondition : ICondition
 
     public ComponentIntegrityInformation IntegrityInformation { get; init; }
 
-    public SemVersion? Version { get; init; }
+    public Version? Version { get; init; }
     
     public FileCondition(string filePath)
     {

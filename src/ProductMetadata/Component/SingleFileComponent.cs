@@ -22,7 +22,7 @@ public class SingleFileComponent : InstallableComponent
     /// </summary>
     public string? FilePath { get; }
 
-    public SingleFileComponent(IProductComponentIdentity identity, string installPath, OriginInfo? originInfo, string? filePath) 
+    public SingleFileComponent(IProductComponentIdentity identity, string installPath, OriginInfo? originInfo, string? filePath = null) 
         : base(identity, originInfo)
     {
         Requires.NotNullOrEmpty(installPath, nameof(installPath));

@@ -19,7 +19,7 @@ public abstract record LauncherComponentBase(
     public IProductComponentIdentity ToIdentity()
     {
         return !string.IsNullOrEmpty(Version)
-            ? new ProductComponentIdentity(Id, ManifestHelpers.CreateNullableVersion(Version))
+            ? new ProductComponentIdentity(Id, ManifestHelpers.CreateNullableSemVersion(Version))
             : new ProductComponentIdentity(Id);
     }
 }
@@ -66,7 +66,7 @@ public record LauncherComponent(
         else
             conditions = DetectConditions.Select(c => c.ToCondition()).ToList();
 
-        return new SingleFileComponent(ToIdentity(), InstallPath!, OriginInfo.ToOriginInfo(), null)
+        return new SingleFileComponent(ToIdentity(), InstallPath!, OriginInfo.ToOriginInfo())
         {
             InstallationSize = installationSize,
             DetectConditions = conditions
@@ -137,8 +137,13 @@ internal static class ManifestHelpers
             : new ComponentIntegrityInformation(HexTools.StringToByteArray(hashValue!), HashType.Sha256);
     }
 
-    public static SemVersion? CreateNullableVersion(string? version)
+    public static SemVersion? CreateNullableSemVersion(string? version)
     {
         return string.IsNullOrEmpty(version) ? null : SemVersion.Parse(version, SemVersionStyles.Any);
+    }
+
+    public static Version? CreateNullableVersion(string? version)
+    {
+        return string.IsNullOrEmpty(version) ? null : Version.Parse(version);
     }
 }

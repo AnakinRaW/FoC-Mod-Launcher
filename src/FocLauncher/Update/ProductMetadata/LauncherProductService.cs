@@ -34,7 +34,8 @@ internal class LauncherProductService : ProductServiceBase
 
     protected override void AddAdditionalProductVariables(VariableCollection variables, IProductReference product)
     {
-        base.AddAdditionalProductVariables(variables, product);
+        var env = ServiceProvider.GetRequiredService<ILauncherEnvironment>();
+        variables.Add(KnownProductVariablesKeys.AppDataPath, env.ApplicationLocalPath);
     }
 
     protected override ProductInstallState FetchInstallState(IProductReference productReference)
