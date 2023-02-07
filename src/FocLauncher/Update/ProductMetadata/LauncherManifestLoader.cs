@@ -26,7 +26,7 @@ internal class LauncherManifestLoader : ManifestLoaderBase
     {
     }
 
-    protected override async Task<IProductCatalog> LoadManifestCore(Stream manifest, IProductReference productReference, CancellationToken cancellationToken)
+    protected override async Task<IProductManifest> LoadManifestCore(Stream manifest, IProductReference productReference, CancellationToken cancellationToken)
     {
         var launcherManifest = await JsonSerializer.DeserializeAsync<LauncherManifest>(manifest, JsonSerializerOptions, cancellationToken);
         if (launcherManifest is null)
@@ -35,7 +35,7 @@ internal class LauncherManifestLoader : ManifestLoaderBase
         var availProduct = BuildReference(launcherManifest);
         ValidateCompatibleManifest(availProduct, productReference);
         var catalog = BuildCatalog(launcherManifest.Components);
-        return new ProductCatalog(availProduct, catalog);
+        return new ProductManifest(availProduct, catalog);
     }
 
     private IProductReference BuildReference(LauncherManifest launcherManifest)

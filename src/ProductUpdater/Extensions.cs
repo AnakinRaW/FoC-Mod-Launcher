@@ -17,7 +17,7 @@ public static class Extensions
         return updateCatalog.UpdateItems.Any() && updateCatalog.UpdateItems.Any(i => i.Action != UpdateAction.Update);
     }
 
-    internal static IEnumerable<IInstallableComponent> GetInstallableComponents(this IProductCatalog catalog)
+    internal static IEnumerable<IInstallableComponent> GetInstallableComponents(this IProductCatalog<IProductComponent> catalog)
     {
         if (!catalog.Items.Any())
             return Enumerable.Empty<IInstallableComponent>();

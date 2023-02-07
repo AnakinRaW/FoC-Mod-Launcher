@@ -43,7 +43,7 @@ public abstract class BranchManager : IBranchManager
         return new ProductBranch(branchName, manifestUri, version.IsPrerelease);
     }
 
-    public async Task<IProductCatalog> GetManifest(IProductReference productReference, CancellationToken token = default)
+    public async Task<IProductManifest> GetManifest(IProductReference productReference, CancellationToken token = default)
     {
         token.ThrowIfCancellationRequested();
         Requires.NotNull(productReference, nameof(productReference));

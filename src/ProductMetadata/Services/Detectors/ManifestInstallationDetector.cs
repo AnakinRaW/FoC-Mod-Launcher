@@ -7,21 +7,21 @@ using Validation;
 
 namespace AnakinRaW.ProductMetadata.Services.Detectors;
 
-public class CatalogDetectionService : ICatalogDetectionService
+internal class ManifestInstallationDetector : IManifestInstallationDetector
 {
     private readonly IServiceProvider _serviceProvider;
     private readonly IComponentDetectorFactory _componentDetectorFactory;
 
-    public CatalogDetectionService(IServiceProvider serviceProvider)
+    public ManifestInstallationDetector(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
         _componentDetectorFactory = serviceProvider.GetService<IComponentDetectorFactory>() ?? new ComponentDetectorFactory();
     }
 
-    public void UpdateDetectionState(IProductCatalog catalog, VariableCollection? productVariables = null)
+    public IReadOnlyCollection<IInstallableComponent> DetectInstalledComponents(IProductManifest manifest, VariableCollection? productVariables = null)
     {
-        Requires.NotNull(catalog, nameof(catalog));
-        UpdateDetectionState(catalog.Items);
+        Requires.NotNull(manifest, nameof(manifest));
+        throw new NotImplementedException();
     }
 
     public void UpdateDetectionState(IReadOnlyCollection<IProductComponent> catalog, VariableCollection? productVariables = null)

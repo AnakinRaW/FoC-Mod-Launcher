@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO.Abstractions;
 using AnakinRaW.ProductMetadata.Catalog;
+using AnakinRaW.ProductMetadata.Services.Detectors;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Semver;
@@ -9,23 +10,23 @@ using Validation;
 namespace AnakinRaW.ProductMetadata.Services;
 
 public abstract class ProductServiceBase : IProductService
-{
-    private readonly IServiceProvider _serviceProvider;
+{ 
     private bool _isInitialized;
     private IInstalledProduct? _installedProduct;
 
     private readonly object _syncLock = new();
-   
+
+    public abstract IDirectoryInfo InstallLocation { get; }
+
     protected ILogger? Logger { get; }
 
-    protected ICurrentInstallation CurrentInstallation { get; }
+    protected IServiceProvider ServiceProvider { get; }
 
     protected ProductServiceBase(IServiceProvider serviceProvider)
     {
         Requires.NotNull(serviceProvider, nameof(serviceProvider));
-        _serviceProvider = serviceProvider;
+        ServiceProvider = serviceProvider;
         Logger = serviceProvider.GetService<ILoggerFactory>()?.CreateLogger(GetType());
-        CurrentInstallation = serviceProvider.GetRequiredService<ICurrentInstallation>();
     }
 
     public IInstalledProduct GetCurrentInstance()
@@ -40,7 +41,10 @@ public abstract class ProductServiceBase : IProductService
     public IInstalledProductCatalog GetInstalledProductCatalog()
     {
         Initialize();
-        return new InstalledProductCatalog(GetCurrentInstance(), CurrentInstallation.FindInstalledComponents());
+        var currentInstance = GetCurrentInstance();
+        var detectionService = ServiceProvider.GetRequiredService<IManifestInstallationDetector>();
+        var installedComponents = detectionService.DetectInstalledComponents(currentInstance.Manifest, currentInstance.ProductVariables);
+        return new InstalledProductCatalog(currentInstance, installedComponents);
     }
 
     public virtual IProductReference CreateProductReference(SemVersion? newVersion, ProductBranch? newBranch)
@@ -66,10 +70,16 @@ public abstract class ProductServiceBase : IProductService
         Logger?.LogDebug("Requested revalidation of current installation.");
         Reset();
     }
-
-    protected abstract IInstalledProduct BuildProduct();
     
-    protected virtual void AddAdditionalProductVariables(IInstalledProduct product)
+    protected abstract IProductReference CreateCurrentProductReference();
+
+    protected virtual ProductInstallState FetchInstallState(IProductReference productReference)
+    {
+        return ProductInstallState.Installed;
+    }
+
+
+    protected virtual void AddAdditionalProductVariables(VariableCollection variables, IProductReference product)
     {
     }
 
@@ -85,23 +95,26 @@ public abstract class ProductServiceBase : IProductService
     {
         lock (_syncLock)
         {
-            var installedProduct = BuildProduct();
-            if (installedProduct is null)
-            {
-                var ex = new InvalidOperationException("Created Product must not be null!");
-                Logger?.LogError(ex, ex.Message);
-                throw ex;
-            }
-            AddProductVariables(installedProduct);
-            _installedProduct = installedProduct;
+            _installedProduct = BuildProduct();
         }
     }
 
-    private void AddProductVariables(IInstalledProduct product)
+    private IInstalledProduct BuildProduct()
     {
-        var fs = _serviceProvider.GetService<IFileSystem>() ?? new FileSystem();
-        product.ProductVariables.Add(KnownProductVariablesKeys.InstallDir, product.InstallationPath);
-        product.ProductVariables.Add(KnownProductVariablesKeys.InstallDrive, fs.Path.GetPathRoot(product.InstallationPath));
-        AddAdditionalProductVariables(product);
+        var productReference = CreateCurrentProductReference();
+        var variables = AddProductVariables(productReference);
+        var manifest = ServiceProvider.GetRequiredService<IInstalledManifestProvider>().ProvideManifest(productReference, variables);
+        var state = FetchInstallState(productReference);
+        return new InstalledProduct(productReference, InstallLocation.FullName, manifest, variables, state);
+    }
+
+    private VariableCollection AddProductVariables(IProductReference product)
+    {
+        var variables = new VariableCollection();
+        var installLocation = InstallLocation;
+        variables.Add(KnownProductVariablesKeys.InstallDir, installLocation.FullName);
+        variables.Add(KnownProductVariablesKeys.InstallDrive, installLocation.Root.FullName);
+        AddAdditionalProductVariables(variables, product);
+        return variables;
     }
 }

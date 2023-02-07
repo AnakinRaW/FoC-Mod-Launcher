@@ -1,4 +1,6 @@
-﻿namespace AnakinRaW.ProductMetadata;
+﻿using AnakinRaW.ProductMetadata.Catalog;
+
+namespace AnakinRaW.ProductMetadata;
 
 public interface IInstalledProduct : IProductReference
 { 
@@ -7,4 +9,6 @@ public interface IInstalledProduct : IProductReference
     VariableCollection ProductVariables { get; }
 
     ProductInstallState InstallState { get; }
+
+    IProductManifest Manifest { get; }
 }

@@ -23,7 +23,7 @@ internal class UpdateCatalogBuilder : IUpdateCatalogBuilder
         _comparer = comparer;
     }
 
-    public IUpdateCatalog Build(IInstalledProductCatalog installedCatalog, IProductCatalog availableCatalog)
+    public IUpdateCatalog Build(IInstalledProductCatalog installedCatalog, IProductManifest availableCatalog)
     {
         Requires.NotNull(installedCatalog, nameof(installedCatalog));
         Requires.NotNull(availableCatalog, nameof(availableCatalog));

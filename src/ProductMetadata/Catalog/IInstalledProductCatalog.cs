@@ -1,6 +1,8 @@
-﻿namespace AnakinRaW.ProductMetadata.Catalog;
+﻿using AnakinRaW.ProductMetadata.Component;
 
-public interface IInstalledProductCatalog : IProductCatalog
+namespace AnakinRaW.ProductMetadata.Catalog;
+
+public interface IInstalledProductCatalog : IProductCatalog<IInstallableComponent>
 {
     new IInstalledProduct Product { get; }
 }

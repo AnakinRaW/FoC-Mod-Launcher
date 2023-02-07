@@ -17,7 +17,7 @@ public abstract class ManifestLoaderBase : IManifestLoader
         ServiceProvider = serviceProvider;
     }
 
-    public async Task<IProductCatalog> LoadManifest(IFileInfo manifestFile, IProductReference productReference, CancellationToken cancellationToken)
+    public async Task<IProductManifest> LoadManifest(IFileInfo manifestFile, IProductReference productReference, CancellationToken cancellationToken)
     {
         Requires.NotNull(manifestFile, nameof(manifestFile));
         Requires.NotNull(productReference, nameof(productReference));
@@ -25,7 +25,7 @@ public abstract class ManifestLoaderBase : IManifestLoader
         return await LoadManifestCore(manifest, productReference, cancellationToken);
     }
 
-    public async Task<IProductCatalog> LoadManifest(Stream manifest, IProductReference productReference, CancellationToken cancellationToken, bool keepOpen = false)
+    public async Task<IProductManifest> LoadManifest(Stream manifest, IProductReference productReference, CancellationToken cancellationToken, bool keepOpen = false)
     {
         Requires.NotNull(manifest, nameof(manifest));
         Requires.NotNull(productReference, nameof(productReference));
@@ -40,7 +40,7 @@ public abstract class ManifestLoaderBase : IManifestLoader
         }
     }
 
-    protected abstract Task<IProductCatalog> LoadManifestCore(Stream manifest, IProductReference productReference, CancellationToken cancellationToken);
+    protected abstract Task<IProductManifest> LoadManifestCore(Stream manifest, IProductReference productReference, CancellationToken cancellationToken);
 
     protected void ValidateCompatibleManifest(IProductReference manifestProduct, IProductReference installedProduct)
     {

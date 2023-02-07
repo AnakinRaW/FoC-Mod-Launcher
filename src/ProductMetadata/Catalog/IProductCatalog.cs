@@ -3,9 +3,13 @@ using AnakinRaW.ProductMetadata.Component;
 
 namespace AnakinRaW.ProductMetadata.Catalog;
 
-public interface IProductCatalog
+public interface IProductCatalog<out T> where T : IProductComponent
 {
     IProductReference Product { get; }
 
-    IReadOnlyCollection<IProductComponent> Items { get; }
+    IReadOnlyCollection<T> Items { get; }
+}
+
+public interface IProductManifest : IProductCatalog<IProductComponent>
+{
 }

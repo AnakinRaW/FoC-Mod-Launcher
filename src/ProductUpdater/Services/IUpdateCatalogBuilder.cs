@@ -5,5 +5,5 @@ namespace AnakinRaW.ProductUpdater.Services;
 
 internal interface IUpdateCatalogBuilder
 {
-    IUpdateCatalog Build(IInstalledProductCatalog installedCatalog, IProductCatalog availableCatalog);
+    IUpdateCatalog Build(IInstalledProductCatalog installedCatalog, IProductManifest availableManifest);
 }

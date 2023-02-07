@@ -12,5 +12,5 @@ public interface IBranchManager
 
     ProductBranch GetBranchFromVersion(SemVersion version);
 
-    Task<IProductCatalog> GetManifest(IProductReference branch, CancellationToken token = default);
+    Task<IProductManifest> GetManifest(IProductReference branch, CancellationToken token = default);
 }
