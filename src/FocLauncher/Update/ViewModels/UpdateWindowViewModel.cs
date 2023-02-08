@@ -75,7 +75,7 @@ internal partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWind
         return Task.Run(async () =>
         {
             await InfoBarViewModel.InitializeAsync();
-            LoadLauncherInformationAsync(null);
+            LoadLauncherInformation(null);
 
             await ExtractAssemblies();
 
@@ -94,10 +94,14 @@ internal partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWind
         InfoBarViewModel.Dispose();
     }
 
-    private void LoadLauncherInformationAsync(IUpdateCatalog? updateCatalog)
+    private void LoadLauncherInformation(IUpdateCatalog? updateCatalog)
     {
-        var launcher = _productService.GetCurrentInstance();
-        Application.Current.Dispatcher.Invoke(() =>
+       var launcher = _productService.GetCurrentInstance();
+       if (updateCatalog?.Action is UpdateCatalogAction.Install or UpdateCatalogAction.Uninstall)
+       {
+           // TODO: Show error, as Install and Uninstall are not supported
+       } 
+       Application.Current.Dispatcher.Invoke(() =>
             InstalledProductViewModel =
                 _installedProductViewModelFactory.Create(launcher, updateCatalog, _serviceProvider));
     }
@@ -220,7 +224,7 @@ internal partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWind
 
     private void OnUpdateCheckCompleted(object sender, IUpdateCatalog? e)
     {
-        LoadLauncherInformationAsync(e);
+        LoadLauncherInformation(e);
     }
 
     private void RegisterEvents()

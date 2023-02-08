@@ -49,10 +49,14 @@ public partial class UpdateInfoBarViewModel : ViewModelBase, IUpdateInfoBarViewM
     {
         return Task.Run(() =>
         {
-            if (e is null || !e.RequiresUpdate())
+            if (e is null || e.Action == UpdateCatalogAction.None)
                 Status = UpdateStatus.NoUpdate;
-            else
+            else if (e.Action == UpdateCatalogAction.Update)
                 Status = UpdateStatus.UpdateAvailable;
+            else
+            {
+                Status = UpdateStatus.Failed;
+            }
         });
     }
 

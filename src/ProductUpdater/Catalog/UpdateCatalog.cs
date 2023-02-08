@@ -11,15 +11,18 @@ public class UpdateCatalog : IUpdateCatalog
 
     public IReadOnlyCollection<IUpdateItem> UpdateItems { get; }
 
-    public UpdateCatalog(IProductReference product, IEnumerable<IUpdateItem> updateItems)
+    public UpdateCatalogAction Action { get; }
+
+    public UpdateCatalog(IProductReference product, IEnumerable<IUpdateItem> updateItems, UpdateCatalogAction action = UpdateCatalogAction.Update)
     {
         Requires.NotNull(product, nameof(product));
         Product = product;
         UpdateItems = updateItems.ToList();
+        Action = action;
     }
 
     public static UpdateCatalog CreateEmpty(IProductReference product)
     {
-        return new UpdateCatalog(product, Enumerable.Empty<IUpdateItem>());
+        return new UpdateCatalog(product, Enumerable.Empty<IUpdateItem>(), UpdateCatalogAction.None);
     }
 }

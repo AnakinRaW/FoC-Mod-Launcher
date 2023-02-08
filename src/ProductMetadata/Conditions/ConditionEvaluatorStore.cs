@@ -4,7 +4,7 @@ using Validation;
 
 namespace AnakinRaW.ProductMetadata.Conditions;
 
-public sealed class ConditionEvaluatorStore : IConditionEvaluatorStore
+internal sealed class ConditionEvaluatorStore : IConditionEvaluatorStore
 {
     private readonly IDictionary<ConditionType, IConditionEvaluator> _conditionEvaluators =
         new Dictionary<ConditionType, IConditionEvaluator>();

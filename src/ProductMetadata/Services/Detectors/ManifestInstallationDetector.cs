@@ -27,9 +27,10 @@ internal class ManifestInstallationDetector : IManifestInstallationDetector
         var installedComponents = new HashSet<IInstallableComponent>(ProductComponentIdentityComparer.VersionAndBranchIndependent);
         foreach (var manifestItem in manifest.Items)
         {
-            if (manifestItem is not IInstallableComponent installable || manifestItem.DetectedState != DetectionState.None)
+            if (manifestItem is not IInstallableComponent installable)
                 continue;
-            installable.DetectedState = IsInstalled(installable, productVariables);
+            if (manifestItem.DetectedState == DetectionState.None)
+                installable.DetectedState = IsInstalled(installable, productVariables);
             installedComponents.Add(installable);
         }
         return installedComponents.ToList();

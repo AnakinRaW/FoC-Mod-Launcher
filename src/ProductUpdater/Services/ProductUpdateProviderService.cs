@@ -60,8 +60,8 @@ public class ProductUpdateProviderService : IProductUpdateProviderService
                 var productService = _serviceProvider.GetRequiredService<IProductService>();
                 var installedComponents = productService.GetInstalledProductCatalog();
 
-                //var catalogBuilder = _serviceProvider.GetRequiredService<IUpdateCatalogBuilder>();
-                //updateCatalog = catalogBuilder.Build(installedComponents, manifest);
+                var catalogBuilder = _serviceProvider.GetRequiredService<IUpdateCatalogBuilder>();
+                updateCatalog = catalogBuilder.Build(installedComponents, manifest);
             }
             finally
             {

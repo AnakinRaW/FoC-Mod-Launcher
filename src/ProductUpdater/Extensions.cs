@@ -4,19 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using AnakinRaW.ProductMetadata.Catalog;
 using AnakinRaW.ProductMetadata.Component;
-using AnakinRaW.ProductUpdater.Catalog;
-using Validation;
 
 namespace AnakinRaW.ProductUpdater;
 
 public static class Extensions
 {
-    public static bool RequiresUpdate(this IUpdateCatalog updateCatalog)
-    {
-        Requires.NotNull(updateCatalog, nameof(updateCatalog));
-        return updateCatalog.UpdateItems.Any() && updateCatalog.UpdateItems.Any(i => i.Action != UpdateAction.Update);
-    }
-
     internal static IEnumerable<IInstallableComponent> GetInstallableComponents(this IProductCatalog<IProductComponent> catalog)
     {
         if (!catalog.Items.Any())

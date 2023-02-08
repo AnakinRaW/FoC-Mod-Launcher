@@ -11,5 +11,6 @@ public static class LibraryInitialization
         serviceCollection.AddProductMetadata();
         serviceCollection.AddSingleton<IConnectionManager>(_ => new ConnectionManager());
         serviceCollection.AddSingleton<IProductUpdateProviderService>(sp => new ProductUpdateProviderService(sp));
+        serviceCollection.AddSingleton<IUpdateCatalogBuilder>(sp => new UpdateCatalogBuilder(sp));
     }
 }

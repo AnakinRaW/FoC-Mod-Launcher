@@ -4,7 +4,7 @@ using AnakinRaW.ProductMetadata.Component;
 
 namespace AnakinRaW.ProductMetadata.Services.Detectors;
 
-internal interface IManifestInstallationDetector
+public interface IManifestInstallationDetector
 {
     IReadOnlyCollection<IInstallableComponent> DetectInstalledComponents(IProductManifest catalog, VariableCollection? productVariables = null);
 }

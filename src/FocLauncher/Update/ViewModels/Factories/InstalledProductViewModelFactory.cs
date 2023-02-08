@@ -13,7 +13,7 @@ internal class InstalledProductViewModelFactory : IInstalledProductViewModelFact
     {
         IInstalledProductStateViewModel stateViewModel;
         ICommandDefinition? action = null;
-        if (updateCatalog is null)
+        if (updateCatalog is null || updateCatalog.Action == UpdateCatalogAction.None)
         {
             if (product.InstallState == ProductInstallState.RestartPending)
                 action = new RestartCommand(serviceProvider);

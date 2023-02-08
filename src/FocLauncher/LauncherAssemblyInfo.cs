@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
 using Semver;
 
@@ -25,7 +26,7 @@ internal static class LauncherAssemblyInfo
         FileVersion = FileVersionInfo.GetVersionInfo(executingAssembly.Location).FileVersion;
         AssemblyVersion = executingAssembly.GetName().Version.ToString();
         Title = executingAssembly.GetCustomAttribute<AssemblyTitleAttribute>().Title;
-        AssemblyName = executingAssembly.GetName().Name;
+        AssemblyName = executingAssembly.Modules.First().Name;
     }
 
     internal static SemVersion? InformationalAsSemVer()

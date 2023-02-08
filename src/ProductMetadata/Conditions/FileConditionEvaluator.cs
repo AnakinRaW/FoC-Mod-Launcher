@@ -23,7 +23,6 @@ public class FileConditionEvaluator : IConditionEvaluator
             throw new ArgumentException("condition is not FileCondition", nameof(condition));
 
         var fileSystem = services.GetRequiredService<IFileSystem>();
-        var hashingService = services.GetRequiredService<IHashingService>();
         var variableResolver = services.GetService<IVariableResolver>();
 
         var filePath = fileCondition.FilePath;
@@ -32,6 +31,7 @@ public class FileConditionEvaluator : IConditionEvaluator
             return false;
         if (fileCondition.IntegrityInformation.HashType != HashType.None)
         {
+            var hashingService = services.GetRequiredService<IHashingService>();
             if (!EvaluateFileHash(hashingService, fileSystem.FileInfo.New(filePath),
                     fileCondition.IntegrityInformation.HashType, fileCondition.IntegrityInformation.Hash))
                 return false;

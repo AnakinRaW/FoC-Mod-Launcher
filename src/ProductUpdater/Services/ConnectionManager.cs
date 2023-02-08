@@ -8,16 +8,11 @@ internal class ConnectionManager : IConnectionManager
 
     public ConnectionManager()
     {
-        _networkListManager = (INetworkListManager) new NetworkListManager();
+        _networkListManager = (INetworkListManager)new NetworkListManager();
     }
     
     public bool HasInternetConnection()
     {
         return _networkListManager.IsConnectedToInternet;
     }
-}
-
-public interface IConnectionManager
-{
-    bool HasInternetConnection();
 }
