@@ -11,7 +11,6 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<Version>2.0.0</Version>
 		<Description>An external updater that allows updating an application and restarting it.</Description>
 	</PropertyGroup>
 

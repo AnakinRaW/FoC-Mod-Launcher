@@ -25,6 +25,7 @@ using AnakinRaW.CommonUtilities.FileSystem.Windows;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
 using FocLauncher.Update.ViewModels;
 using AnakinRaW.ProductMetadata.Services.Detectors;
+using FocLauncher.Utilities;
 
 namespace FocLauncher;
 
@@ -107,6 +108,8 @@ internal static class Program
         serviceCollection.AddSingleton(windowsFileSystemService);
         serviceCollection.AddSingleton<IWindowsPathService>(windowsPathService);
         serviceCollection.AddSingleton<IPathHelperService>(new PathHelperService(fileSystem));
+        serviceCollection.AddSingleton<ICosturaAssemblyExtractor>(sp =>
+            new FileVersionBasedAssemblyExtractor(LauncherAssemblyInfo.CurrentAssembly, sp));
 
         var environment = new LauncherEnvironment(fileSystem);
         serviceCollection.AddSingleton<ILauncherEnvironment>(environment);

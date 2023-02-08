@@ -76,6 +76,9 @@ internal partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWind
         {
             await InfoBarViewModel.InitializeAsync();
             LoadLauncherInformationAsync(null);
+
+            await ExtractAssemblies();
+
             var downloaded = await LoadBranches();
             if (downloaded)
                 CheckForUpdate().Forget();
@@ -189,6 +192,13 @@ internal partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWind
         {
             IsCheckingForUpdate = false;
         }
+    }
+
+    private async Task ExtractAssemblies()
+    {
+        var env = _serviceProvider.GetRequiredService<ILauncherEnvironment>();
+        await _serviceProvider.GetRequiredService<ICosturaAssemblyExtractor>()
+            .ExtractAssemblyAsync(LauncherConstants.AppUpdaterAssemblyName, env.ApplicationLocalPath);
     }
 
     partial void OnCurrentBranchChanged(ProductBranch value)

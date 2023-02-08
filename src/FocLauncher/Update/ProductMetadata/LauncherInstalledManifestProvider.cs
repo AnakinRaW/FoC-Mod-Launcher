@@ -39,9 +39,9 @@ internal class LauncherInstalledManifestProvider : IInstalledManifestProvider
 
 
         var launcherExecutable = BuildFileComponent(launcherExeId, KnownProductVariablesKeys.InstallDir,
-            "FocLauncher.exe", fileVersion, variables);
+            LauncherAssemblyInfo.AssemblyName, fileVersion, variables);
         var launcherUpdater = BuildFileComponent(launcherUpdaterId, KnownProductVariablesKeys.AppDataPath,
-            "FocLauncher.AppUpdater", fileVersion, variables);
+            LauncherConstants.AppUpdaterAssemblyName, fileVersion, variables);
 
 
         yield return new ComponentGroup(new ProductComponentIdentity("Launcher.CoreApplicationGroup", identityVersion), new List<IProductComponentIdentity>
