@@ -1,4 +1,4 @@
-﻿namespace AnakinRaW.ProductUpdater.Services;
+﻿namespace AnakinRaW.AppUpaterFramework.Services;
 
 public interface IConnectionManager
 {

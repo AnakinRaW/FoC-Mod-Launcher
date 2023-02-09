@@ -1,6 +1,6 @@
 ﻿using System;
+using AnakinRaW.AppUpaterFramework.Catalog;
 using AnakinRaW.ProductMetadata;
-using AnakinRaW.ProductUpdater.Catalog;
 
 namespace FocLauncher.Update.ViewModels;
 

@@ -3,7 +3,7 @@ using System.Linq;
 using AnakinRaW.ProductMetadata;
 using Validation;
 
-namespace AnakinRaW.ProductUpdater.Catalog;
+namespace AnakinRaW.AppUpaterFramework.Catalog;
 
 public class UpdateCatalog : IUpdateCatalog
 {

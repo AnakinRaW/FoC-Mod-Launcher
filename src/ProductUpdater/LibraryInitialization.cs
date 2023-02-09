@@ -1,8 +1,8 @@
-﻿using AnakinRaW.ProductMetadata;
-using AnakinRaW.ProductUpdater.Services;
+﻿using AnakinRaW.AppUpaterFramework.Services;
+using AnakinRaW.ProductMetadata;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AnakinRaW.ProductUpdater;
+namespace AnakinRaW.AppUpaterFramework;
 
 public static class LibraryInitialization
 {
@@ -11,6 +11,6 @@ public static class LibraryInitialization
         serviceCollection.AddProductMetadata();
         serviceCollection.AddSingleton<IConnectionManager>(_ => new ConnectionManager());
         serviceCollection.AddSingleton<IProductUpdateProviderService>(sp => new ProductUpdateProviderService(sp));
-        serviceCollection.AddSingleton<IUpdateCatalogBuilder>(sp => new UpdateCatalogBuilder(sp));
+        serviceCollection.AddSingleton<IUpdateCatalogProvider>(sp => new UpdateCatalogProvider(sp));
     }
 }

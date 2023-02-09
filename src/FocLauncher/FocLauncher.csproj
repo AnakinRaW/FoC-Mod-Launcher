@@ -67,7 +67,7 @@
 		<ProjectReference Include="..\CommonUtilities\CommonUtilities.WPF.Imaging\CommonUtilities.WPF.Imaging.csproj" />
 		<ProjectReference Include="..\FocLauncher.AppUpdater\FocLauncher.AppUpdater.csproj" />
 		<ProjectReference Include="..\ProductMetadata\ProductMetadata.csproj" />
-		<ProjectReference Include="..\ProductUpdater\ProductUpdater.csproj" />
+		<ProjectReference Include="..\ProductUpdater\AppUpdaterFramework.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

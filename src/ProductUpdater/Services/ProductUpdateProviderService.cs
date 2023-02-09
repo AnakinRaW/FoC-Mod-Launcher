@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using AnakinRaW.AppUpaterFramework.Catalog;
 using AnakinRaW.ProductMetadata;
 using AnakinRaW.ProductMetadata.Catalog;
 using AnakinRaW.ProductMetadata.Services;
-using AnakinRaW.ProductUpdater.Catalog;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace AnakinRaW.ProductUpdater.Services;
+namespace AnakinRaW.AppUpaterFramework.Services;
 
 public class ProductUpdateProviderService : IProductUpdateProviderService
 {
@@ -58,10 +58,11 @@ public class ProductUpdateProviderService : IProductUpdateProviderService
                 var manifest = await manifestRepo.GetManifest(productReference, _updateCheckToken.Token).ConfigureAwait(false);
 
                 var productService = _serviceProvider.GetRequiredService<IProductService>();
-                var installedComponents = productService.GetInstalledProductCatalog();
+                var installedComponents = productService.GetInstalledComponents();
+                var variables = productService.GetCurrentInstance().ProductVariables;
 
-                var catalogBuilder = _serviceProvider.GetRequiredService<IUpdateCatalogBuilder>();
-                updateCatalog = catalogBuilder.Build(installedComponents, manifest);
+                var updateCatalogBuilder = _serviceProvider.GetRequiredService<IUpdateCatalogProvider>();
+                updateCatalog = updateCatalogBuilder.Create(installedComponents, manifest, variables);
             }
             finally
             {

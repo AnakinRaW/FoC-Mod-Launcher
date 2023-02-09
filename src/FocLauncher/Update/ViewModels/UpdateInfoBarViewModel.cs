@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
+using AnakinRaW.AppUpaterFramework.Catalog;
+using AnakinRaW.AppUpaterFramework.Services;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
-using AnakinRaW.ProductUpdater;
-using AnakinRaW.ProductUpdater.Catalog;
-using AnakinRaW.ProductUpdater.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using FocLauncher.Utilities;
 using Microsoft.Extensions.DependencyInjection;

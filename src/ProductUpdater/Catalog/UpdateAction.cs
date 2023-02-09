@@ -1,4 +1,4 @@
-﻿namespace AnakinRaW.ProductUpdater.Catalog;
+﻿namespace AnakinRaW.AppUpaterFramework.Catalog;
 
 public enum UpdateAction
 {

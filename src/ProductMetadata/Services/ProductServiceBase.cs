@@ -38,13 +38,13 @@ public abstract class ProductServiceBase : IProductService
         }
     }
 
-    public IInstalledProductCatalog GetInstalledProductCatalog()
+    public IInstalledComponentsCatalog GetInstalledComponents()
     {
         Initialize();
         var currentInstance = GetCurrentInstance();
         var detectionService = ServiceProvider.GetRequiredService<IManifestInstallationDetector>();
         var installedComponents = detectionService.DetectInstalledComponents(currentInstance.Manifest, currentInstance.ProductVariables);
-        return new InstalledProductCatalog(currentInstance, installedComponents);
+        return new InstalledComponentsCatalog(currentInstance, installedComponents);
     }
 
     public virtual IProductReference CreateProductReference(SemVersion? newVersion, ProductBranch? newBranch)

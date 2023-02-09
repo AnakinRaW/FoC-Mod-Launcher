@@ -1,6 +1,6 @@
 ﻿using AnakinRaW.ProductMetadata.Component;
 
-namespace AnakinRaW.ProductUpdater.Catalog;
+namespace AnakinRaW.AppUpaterFramework.Catalog;
 
 public interface IUpdateItem
 {

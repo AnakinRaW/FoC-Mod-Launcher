@@ -4,15 +4,13 @@ using Validation;
 
 namespace AnakinRaW.ProductMetadata.Catalog;
 
-public class InstalledProductCatalog : IInstalledProductCatalog
+public class InstalledComponentsCatalog : IInstalledComponentsCatalog
 {
-    public IInstalledProduct Product { get; }
+    public IProductReference Product { get; }
 
     public IReadOnlyCollection<IInstallableComponent> Items { get; }
 
-    IProductReference IProductCatalog<IInstallableComponent>.Product => Product;
-
-    public InstalledProductCatalog(IInstalledProduct product, IReadOnlyCollection<IInstallableComponent> items)
+    public InstalledComponentsCatalog(IProductReference product, IReadOnlyCollection<IInstallableComponent> items)
     {
         Requires.NotNull(product, nameof(product));
         Product = product;

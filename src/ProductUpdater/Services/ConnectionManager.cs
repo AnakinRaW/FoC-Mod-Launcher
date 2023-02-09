@@ -1,6 +1,6 @@
 ﻿using Vanara.PInvoke.NetListMgr;
 
-namespace AnakinRaW.ProductUpdater.Services;
+namespace AnakinRaW.AppUpaterFramework.Services;
 
 internal class ConnectionManager : IConnectionManager
 {

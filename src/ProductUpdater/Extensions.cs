@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using AnakinRaW.ProductMetadata.Catalog;
 using AnakinRaW.ProductMetadata.Component;
 
-namespace AnakinRaW.ProductUpdater;
+namespace AnakinRaW.AppUpaterFramework;
 
 public static class Extensions
 {

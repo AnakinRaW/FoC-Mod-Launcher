@@ -1,7 +1,7 @@
 ﻿using System;
 using AnakinRaW.ProductMetadata.Component;
 
-namespace AnakinRaW.ProductUpdater.Catalog;
+namespace AnakinRaW.AppUpaterFramework.Catalog;
 
 public class UpdateItem : IUpdateItem
 {

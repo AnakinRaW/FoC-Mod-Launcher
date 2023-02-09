@@ -6,13 +6,12 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<RootNamespace>AnakinRaW.ProductUpdater</RootNamespace>
-		<AssemblyName>AnakinRaW.ProductUpdater</AssemblyName>
+		<RootNamespace>AnakinRaW.AppUpaterFramework</RootNamespace>
+		<AssemblyName>AnakinRaW.AppUpaterFramework</AssemblyName>
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<VersionPrefix>1.0.0</VersionPrefix>
 		<Authors>AnakinRaW</Authors>
 		<Description>Update service for .NET applications.</Description>
 		<Copyright>AnakinRaW</Copyright>

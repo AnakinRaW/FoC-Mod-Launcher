@@ -9,7 +9,3 @@ public interface IProductCatalog<out T> where T : IProductComponent
 
     IReadOnlyCollection<T> Items { get; }
 }
-
-public interface IProductManifest : IProductCatalog<IProductComponent>
-{
-}

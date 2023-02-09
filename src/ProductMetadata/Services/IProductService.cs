@@ -12,7 +12,7 @@ public interface IProductService
 
     IProductReference CreateProductReference(SemVersion? newVersion, ProductBranch? branch);
 
-    IInstalledProductCatalog GetInstalledProductCatalog();
+    IInstalledComponentsCatalog GetInstalledComponents();
 
     bool IsProductCompatible(IProductReference product);
 

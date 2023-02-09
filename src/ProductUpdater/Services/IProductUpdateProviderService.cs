@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using AnakinRaW.AppUpaterFramework.Catalog;
 using AnakinRaW.ProductMetadata;
-using AnakinRaW.ProductUpdater.Catalog;
 
-namespace AnakinRaW.ProductUpdater.Services;
+namespace AnakinRaW.AppUpaterFramework.Services;
 
 public interface IProductUpdateProviderService
 {

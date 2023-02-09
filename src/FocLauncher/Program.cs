@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.IO.Abstractions;
 using System.Threading.Tasks;
+using AnakinRaW.AppUpaterFramework;
 using AnakinRaW.CommonUtilities.DownloadManager;
 using AnakinRaW.CommonUtilities.DownloadManager.Configuration;
 using AnakinRaW.CommonUtilities.DownloadManager.Verification;
@@ -12,8 +13,6 @@ using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.StatusBar;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Theming;
 using AnakinRaW.ProductMetadata.Services;
-using AnakinRaW.ProductUpdater;
-using AnakinRaW.ProductUpdater.Services;
 using FocLauncher.Services;
 using FocLauncher.Update.ProductMetadata;
 using Microsoft.Extensions.DependencyInjection;
