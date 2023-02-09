@@ -17,10 +17,8 @@ namespace AnakinRaW.AppUpaterFramework.Product;
 public abstract class BranchManager : IBranchManager
 {
     private readonly ILogger? _logger;
-
     private readonly IFileSystemService _fileSystemHelper;
-
-    protected readonly IManifestDownloader ManifestDownloader;
+    private readonly IManifestDownloader _manifestDownloader;
 
     protected readonly IManifestLoader ManifestLoader;
 
@@ -30,7 +28,7 @@ public abstract class BranchManager : IBranchManager
     {
         _logger = serviceProvider.GetService<ILoggerFactory>()?.CreateLogger(GetType());
         _fileSystemHelper = serviceProvider.GetRequiredService<IFileSystemService>();
-        ManifestDownloader = serviceProvider.GetService<IManifestDownloader>() ?? new ManifestDownloader(serviceProvider);
+        _manifestDownloader = serviceProvider.GetService<IManifestDownloader>() ?? new ManifestDownloader(serviceProvider);
         ManifestLoader = serviceProvider.GetRequiredService<IManifestLoader>();
     }
 
@@ -57,7 +55,7 @@ public abstract class BranchManager : IBranchManager
 
         try
         {
-            var manifestFile = await ManifestDownloader.GetManifest(branch.ManifestLocation, token);
+            var manifestFile = await _manifestDownloader.GetManifest(branch.ManifestLocation, token);
             try
             {
                 var manifest = await ManifestLoader.LoadManifest(manifestFile, productReference, token);

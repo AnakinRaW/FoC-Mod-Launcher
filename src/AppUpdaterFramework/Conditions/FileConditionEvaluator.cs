@@ -10,7 +10,7 @@ using Validation;
 
 namespace AnakinRaW.AppUpaterFramework.Conditions;
 
-public class FileConditionEvaluator : IConditionEvaluator
+internal sealed class FileConditionEvaluator : IConditionEvaluator
 {
     public ConditionType Type => ConditionType.File;
 

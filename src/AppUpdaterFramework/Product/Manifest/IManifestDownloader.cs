@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace AnakinRaW.AppUpaterFramework.Product.Manifest;
 
-public interface IManifestDownloader
+internal interface IManifestDownloader
 {
     Task<IFileInfo> GetManifest(Uri manifestPath, CancellationToken token = default);
 }

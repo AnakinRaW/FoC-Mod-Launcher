@@ -5,7 +5,7 @@ using Validation;
 
 namespace AnakinRaW.AppUpaterFramework.Conditions;
 
-public class CompositeConditionsEvaluator
+internal class CompositeConditionsEvaluator
 {
     private readonly IServiceProvider _services;
     private readonly IConditionEvaluatorStore _evaluatorStore;

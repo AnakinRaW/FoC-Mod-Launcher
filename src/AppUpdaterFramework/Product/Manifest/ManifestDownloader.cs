@@ -15,7 +15,7 @@ internal class ManifestDownloader : IManifestDownloader
     private readonly IFileSystem _fileSystem;
     private readonly IFileSystemService _fileSystemHelper;
     private readonly IDownloadManager _downloadManager;
-    private string _temporaryDownloadDirectory;
+    private string? _temporaryDownloadDirectory;
 
     private string TemporaryDownloadDirectory
     {
