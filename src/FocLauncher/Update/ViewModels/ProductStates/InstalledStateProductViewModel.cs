@@ -2,7 +2,7 @@
 using AnakinRaW.AppUpaterFramework.Metadata.Product;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
 
-namespace FocLauncher.Update.ViewModels;
+namespace FocLauncher.Update.ViewModels.ProductStates;
 
 public class InstalledStateProductViewModel : ViewModelBase, IInstalledProductStateViewModel
 {

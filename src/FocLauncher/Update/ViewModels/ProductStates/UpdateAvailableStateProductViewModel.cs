@@ -4,7 +4,7 @@ using AnakinRaW.AppUpaterFramework.Metadata.Update;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
 using Validation;
 
-namespace FocLauncher.Update.ViewModels;
+namespace FocLauncher.Update.ViewModels.ProductStates;
 
 public class UpdateAvailableStateProductViewModel : ViewModelBase, IInstalledProductStateViewModel
 {

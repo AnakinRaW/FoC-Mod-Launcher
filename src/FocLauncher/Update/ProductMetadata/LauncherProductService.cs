@@ -41,7 +41,7 @@ internal class LauncherProductService : ProductServiceBase
 
     protected override ProductInstallState FetchInstallState(IProductReference productReference)
     {
-        return ProductInstallState.RestartPending;
+        return ProductInstallState.Installed;
     }
 
     private IDirectoryInfo GetInstallLocation()

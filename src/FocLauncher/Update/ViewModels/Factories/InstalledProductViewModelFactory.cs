@@ -4,6 +4,7 @@ using AnakinRaW.AppUpaterFramework.Metadata.Update;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Input;
 using FocLauncher.Imaging;
 using FocLauncher.Update.Commands;
+using FocLauncher.Update.ViewModels.ProductStates;
 
 namespace FocLauncher.Update.ViewModels;
 
@@ -18,6 +19,10 @@ internal class InstalledProductViewModelFactory : IInstalledProductViewModelFact
             if (product.InstallState == ProductInstallState.RestartPending)
                 action = new RestartCommand(serviceProvider);
             stateViewModel = new InstalledStateProductViewModel(product, serviceProvider);
+        }
+        else if (updateCatalog.Action is UpdateCatalogAction.Install or UpdateCatalogAction.Uninstall)
+        {
+            stateViewModel = new ErrorStateProductViewModel(product, "Unable to get update information.", serviceProvider);
         }
         else
         {

@@ -10,6 +10,8 @@
              xmlns:controls="clr-namespace:AnakinRaW.CommonUtilities.Wpf.Imaging.Controls;assembly=AnakinRaW.CommonUtilities.WPF.Imaging"
              xmlns:wpfControls="clr-namespace:AnakinRaW.CommonUtilities.Wpf.Controls;assembly=AnakinRaW.CommonUtilities.WPF.Controls"
              xmlns:viewModels="clr-namespace:FocLauncher.Update.ViewModels"
+             xmlns:productStates="clr-namespace:FocLauncher.Update.ViewModels.ProductStates"
+             xmlns:launcherImage="clr-namespace:FocLauncher.Imaging"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance {x:Type designer:DesignerInstalledProductViewModel}, IsDesignTimeCreatable=True}">
     <FrameworkElement.Resources>
@@ -45,10 +47,10 @@
                 <ContentControl Grid.Row="1" Margin="48,0,0,20" Focusable="False"
                                 Content="{Binding StateViewModel}">
                     <FrameworkElement.Resources>
-                        <DataTemplate DataType="{x:Type viewModels:InstalledStateProductViewModel}">
+                        <DataTemplate DataType="{x:Type productStates:InstalledStateProductViewModel}">
                             <TextBlock Margin="0,0,0,6" TextWrapping="Wrap" TextTrimming="None" Text="{Binding Version}"/>
                         </DataTemplate>
-                        <DataTemplate DataType="{x:Type viewModels:UpdateAvailableStateProductViewModel}">
+                        <DataTemplate DataType="{x:Type productStates:UpdateAvailableStateProductViewModel}">
                             <StackPanel x:Name="ProductVersionInfo" >
                                 <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
                                     <TextBlock VerticalAlignment="Center" Text="Current Version:" FontSize="13"/>
@@ -57,6 +59,17 @@
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock VerticalAlignment="Center" Text="Available Version:" FontSize="13"/>
                                     <TextBlock VerticalAlignment="Center" FontSize="13" Margin="12,0,0,0" Text="{Binding AvailableVersion}"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </DataTemplate>
+                        <DataTemplate DataType="{x:Type productStates:ErrorStateProductViewModel}">
+                            <StackPanel>
+                                <TextBlock Margin="0,0,0,12" TextWrapping="Wrap" TextTrimming="None" Text="{Binding Version}"/>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                                    <controls:ThemedImage VerticalAlignment="Top" ImakgeKey="{x:Static launcherImage:ImageKeys.StatusError}"/>
+                                    <StackPanel Margin="8,0,0,0" Orientation="Horizontal">
+                                        <TextBlock Text="{Binding ErrorMessage}" FontWeight="SemiBold"/>
+                                    </StackPanel>
                                 </StackPanel>
                             </StackPanel>
                         </DataTemplate>

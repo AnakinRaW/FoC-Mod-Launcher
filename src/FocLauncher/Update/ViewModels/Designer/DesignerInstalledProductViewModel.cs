@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Input;
 using AnakinRaW.CommonUtilities.Wpf.Imaging;
+using FocLauncher.Update.ViewModels.ProductStates;
 
 namespace FocLauncher.Update.ViewModels.Designer;
 

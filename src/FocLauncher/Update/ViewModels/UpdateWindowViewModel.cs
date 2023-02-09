@@ -96,12 +96,17 @@ internal partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWind
     private void LoadLauncherInformation(IUpdateCatalog? updateCatalog)
     {
        var launcher = _productService.GetCurrentInstance();
+
+       AppDispatcher.Invoke(() => InstalledProductViewModel =
+           _installedProductViewModelFactory.Create(launcher, updateCatalog, _serviceProvider));
+       
        if (updateCatalog?.Action is UpdateCatalogAction.Install or UpdateCatalogAction.Uninstall)
        {
-           // TODO: Show error, as Install and Uninstall are not supported
+           _serviceProvider.GetRequiredService<IQueuedDialogService>()
+               .ShowDialog(new ErrorMessageDialogViewModel(
+                   "Update Error", "Update information has invalid data:\r\n" + 
+                                   "The launcher cannot be uninstalled or re-installed through this dialog.", _serviceProvider)).Forget();
        }
-       AppDispatcher.Invoke(() => InstalledProductViewModel =
-                _installedProductViewModelFactory.Create(launcher, updateCatalog, _serviceProvider));
     }
 
 
