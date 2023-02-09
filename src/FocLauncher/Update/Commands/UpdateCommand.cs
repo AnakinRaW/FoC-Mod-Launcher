@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Input;
+using AnakinRaW.AppUpaterFramework.Metadata.Update;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Input;
 using AnakinRaW.CommonUtilities.Wpf.Imaging;
 using AnakinRaW.CommonUtilities.Wpf.Input;
@@ -13,7 +14,7 @@ internal class UpdateCommand : CommandDefinition
     public override ICommand Command => new DelegateCommand(() => {});
     public override string? Tooltip => null;
 
-    public UpdateCommand(IServiceProvider serviceProvider, bool isRepair)
+    public UpdateCommand(IUpdateCatalog updateCatalog, IServiceProvider serviceProvider, bool isRepair)
     {
         Text = isRepair ? "Repair" : "Update";
     }

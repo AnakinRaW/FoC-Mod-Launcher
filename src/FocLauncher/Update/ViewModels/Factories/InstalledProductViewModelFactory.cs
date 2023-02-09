@@ -28,7 +28,7 @@ internal class InstalledProductViewModelFactory : IInstalledProductViewModelFact
         {
             stateViewModel = new UpdateAvailableStateProductViewModel(product, updateCatalog, serviceProvider);
             var isRepair = ProductReferenceEqualityComparer.VersionAware.Equals(product, updateCatalog.Product);
-            action = new UpdateCommand(serviceProvider, isRepair);
+            action = new UpdateCommand(updateCatalog, serviceProvider, isRepair);
         }
 
         return new InstalledProductViewModel(product.Name, ImageKeys.AppIcon, stateViewModel, action, serviceProvider);

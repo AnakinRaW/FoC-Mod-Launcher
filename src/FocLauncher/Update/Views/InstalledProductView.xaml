@@ -9,7 +9,6 @@
              xmlns:themes="clr-namespace:FocLauncher.Themes"
              xmlns:controls="clr-namespace:AnakinRaW.CommonUtilities.Wpf.Imaging.Controls;assembly=AnakinRaW.CommonUtilities.WPF.Imaging"
              xmlns:wpfControls="clr-namespace:AnakinRaW.CommonUtilities.Wpf.Controls;assembly=AnakinRaW.CommonUtilities.WPF.Controls"
-             xmlns:viewModels="clr-namespace:FocLauncher.Update.ViewModels"
              xmlns:productStates="clr-namespace:FocLauncher.Update.ViewModels.ProductStates"
              xmlns:launcherImage="clr-namespace:FocLauncher.Imaging"
              mc:Ignorable="d" 
@@ -78,8 +77,9 @@
             </Grid>
             <StackPanel Grid.Column="1" VerticalAlignment="Stretch" Width="150" Focusable="False" Margin="20,4,12,12">
                 <wpfControls:ThemedButton Margin="0,8,0,0" Padding="16,0" Height="23" MinWidth="64"
-                            HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-                            Focusable="False" Visibility="{Binding Action, Converter={StaticResource NullToVisibilityConverter}}"
+                            HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"  Focusable="False" 
+                            Command="{Binding Action.Command}"
+                            Visibility="{Binding Action, Converter={StaticResource NullToVisibilityConverter}}"
                             Content="{Binding Action.Text}"/>
             </StackPanel>
         </Grid>
