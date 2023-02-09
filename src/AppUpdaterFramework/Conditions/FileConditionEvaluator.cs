@@ -22,10 +22,10 @@ public class FileConditionEvaluator : IConditionEvaluator
             throw new ArgumentException("condition is not FileCondition", nameof(condition));
 
         var fileSystem = services.GetRequiredService<IFileSystem>();
-        var variableResolver = services.GetService<IVariableResolver>();
+        var variableResolver = services.GetRequiredService<IVariableResolver>();
 
         var filePath = fileCondition.FilePath;
-        filePath = variableResolver?.ResolveVariables(filePath, properties) ?? filePath;
+        filePath = variableResolver.ResolveVariables(filePath, properties) ?? filePath;
         if (string.IsNullOrEmpty(filePath) || !fileSystem.File.Exists(filePath))
             return false;
         if (fileCondition.IntegrityInformation.HashType != HashType.None)
@@ -38,7 +38,7 @@ public class FileConditionEvaluator : IConditionEvaluator
 
         if (fileCondition.Version != null)
         {
-            if (!EvaluateFileVersion(fileSystem, filePath, fileCondition.Version))
+            if (!EvaluateFileVersion(filePath, fileCondition.Version))
                 return false;
         }
         return true;
@@ -50,7 +50,7 @@ public class FileConditionEvaluator : IConditionEvaluator
         return actualHash.SequenceEqual(expectedHash);
     }
 
-    private static bool EvaluateFileVersion(IFileSystem fileSystem, string filePath, Version version)
+    private static bool EvaluateFileVersion(string filePath, Version version)
     {
         return Version.Parse(FileVersionInfo.GetVersionInfo(filePath).FileVersion).Equals(version);
     }

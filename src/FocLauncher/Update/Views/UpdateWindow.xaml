@@ -6,15 +6,13 @@
              xmlns:designer="clr-namespace:FocLauncher.Update.ViewModels.Designer"
              xmlns:views="clr-namespace:FocLauncher.Update.Views"
              xmlns:converters="clr-namespace:FocLauncher.Converters"
-             xmlns:wpfConverters="clr-namespace:AnakinRaW.CommonUtilities.Wpf.Converters;assembly=AnakinRaW.CommonUtilities.WPF.Core"
              xmlns:themes="clr-namespace:AnakinRaW.CommonUtilities.Wpf.Themes;assembly=AnakinRaW.CommonUtilities.WPF.Controls"
              xmlns:product="clr-namespace:AnakinRaW.AppUpaterFramework.Metadata.Product;assembly=AnakinRaW.AppUpaterFramework"
-             mc:Ignorable="d" d:DesignWidth="500"
+             mc:Ignorable="d" d:DesignWidth="500" MinWidth="500"
              d:DataContext="{d:DesignInstance {x:Type designer:DesignerUpdateWindowViewModel}, IsDesignTimeCreatable=True}">
 
     <FrameworkElement.Resources>
         <converters:ProductBranchNameConverter x:Key="ProductBranchNameConverter"/>
-        <wpfConverters:BooleanInverseConverter x:Key="BooleanInverseConverter"/>
     </FrameworkElement.Resources>
    
     <Grid Margin="12">

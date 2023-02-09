@@ -40,7 +40,7 @@ internal class LauncherInstalledManifestProvider : IInstalledManifestProvider
 
         var launcherExecutable = BuildFileComponent(launcherExeId, KnownProductVariablesKeys.InstallDir,
             LauncherAssemblyInfo.AssemblyName, fileVersion, variables);
-        var launcherUpdater = BuildFileComponent(launcherUpdaterId, KnownProductVariablesKeys.AppDataPath,
+        var launcherUpdater = BuildFileComponent(launcherUpdaterId, LauncherVariablesKeys.LauncherAppData,
             LauncherConstants.AppUpdaterAssemblyName, fileVersion, variables);
 
 

@@ -35,7 +35,8 @@ internal class LauncherProductService : ProductServiceBase
     protected override void AddAdditionalProductVariables(ProductVariables variables, IProductReference product)
     {
         var env = ServiceProvider.GetRequiredService<ILauncherEnvironment>();
-        variables.Add(KnownProductVariablesKeys.AppDataPath, env.ApplicationLocalPath);
+        variables.Add(LauncherVariablesKeys.LauncherAppData, env.ApplicationLocalPath);
+        variables.Add(LauncherVariablesKeys.LauncherFileName, LauncherAssemblyInfo.AssemblyName);
     }
 
     protected override ProductInstallState FetchInstallState(IProductReference productReference)
@@ -52,4 +53,10 @@ internal class LauncherProductService : ProductServiceBase
             throw new DirectoryNotFoundException("Unable to find location of current assembly.");
         return directory;
     }
+}
+
+internal static class LauncherVariablesKeys
+{
+    public const string LauncherAppData = "LauncherAppData";
+    public const string LauncherFileName = "LauncherFileName";
 }

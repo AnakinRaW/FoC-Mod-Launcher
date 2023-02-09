@@ -3,7 +3,6 @@ using System.Linq;
 using AnakinRaW.AppUpaterFramework.Conditions;
 using AnakinRaW.AppUpaterFramework.Metadata.Component;
 using AnakinRaW.AppUpaterFramework.Metadata.Product;
-using Microsoft.Extensions.Logging;
 
 namespace AnakinRaW.AppUpaterFramework.Product.Detectors;
 
@@ -17,15 +16,7 @@ internal sealed class DefaultComponentDetector : ComponentDetectorBase<Installab
     {
         if (!component.DetectConditions.Any())
             return true;
-        try
-        {
-            return new CompositeConditionsEvaluator(ServiceProvider)
-                .EvaluateConditions(component.DetectConditions, productVariables.ToDictionary());
-        }
-        catch (Exception e)
-        {
-            Logger?.LogWarning($"Error evaluating detection condition for {component.Id}. Error: {e}");
-            return false;
-        }
+        return new CompositeConditionsEvaluator(ServiceProvider)
+            .EvaluateConditions(component.DetectConditions, productVariables.ToDictionary());
     }
 }
