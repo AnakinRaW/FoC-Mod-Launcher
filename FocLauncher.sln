@@ -25,7 +25,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FocLauncher.AppUpdater", "s
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "FocLauncher.Shared", "src\FocLauncher.Shared\FocLauncher.Shared.shproj", "{948C37FD-3947-41B0-8FA6-8654A0658756}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppUpdaterFramework", "src\ProductUpdater\AppUpdaterFramework.csproj", "{653031D4-C5BC-4718-B3F5-2E4A5BB71B9A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppUpdaterFramework", "src\AppUpdaterFramework\AppUpdaterFramework.csproj", "{653031D4-C5BC-4718-B3F5-2E4A5BB71B9A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonUtilities.WPF.ApplicationFramework", "src\CommonUtilities\CommonUtilities.WPF.ApplicationFramework\CommonUtilities.WPF.ApplicationFramework.csproj", "{1F8E49DF-C8CD-425B-99AE-211CCBD5FAA4}"
 EndProject
