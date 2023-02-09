@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.IO.Abstractions;
 using System.Linq;
-using AnakinRaW.ProductMetadata;
-using AnakinRaW.ProductMetadata.Catalog;
-using AnakinRaW.ProductMetadata.Component;
-using AnakinRaW.ProductMetadata.Conditions;
-using AnakinRaW.ProductMetadata.Services;
+using AnakinRaW.AppUpaterFramework.Conditions;
+using AnakinRaW.AppUpaterFramework.Metadata.Component;
+using AnakinRaW.AppUpaterFramework.Metadata.Component.Catalog;
+using AnakinRaW.AppUpaterFramework.Metadata.Product;
+using AnakinRaW.AppUpaterFramework.Product.Manifest;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FocLauncher.Update.ProductMetadata;
@@ -20,7 +20,7 @@ internal class LauncherInstalledManifestProvider : IInstalledManifestProvider
         _fileSystem = serviceProvider.GetRequiredService<IFileSystem>();
     }
 
-    public IProductManifest ProvideManifest(IProductReference installedProduct, VariableCollection variables)
+    public IProductManifest ProvideManifest(IProductReference installedProduct, ProductVariables variables)
     {
         var components = BuildManifestComponents(installedProduct, variables).ToList();
         return new ProductManifest(installedProduct, components);
@@ -29,7 +29,7 @@ internal class LauncherInstalledManifestProvider : IInstalledManifestProvider
     // Because we don't store an external manifest we have a few limitations:
     // a) We cannot add a HashCode or FileSize to this manifest, since it's not known at compile time.
     // b) For dependencies of this repository e.g., the AppUpdater we need to assume the same FileVersion as this assembly.
-    private IEnumerable<IProductComponent> BuildManifestComponents(IProductReference installedProduct, VariableCollection variables)
+    private IEnumerable<IProductComponent> BuildManifestComponents(IProductReference installedProduct, ProductVariables variables)
     {
         var identityVersion = installedProduct.Version;
         var fileVersion = LauncherAssemblyInfo.FileVersion;
@@ -54,7 +54,7 @@ internal class LauncherInstalledManifestProvider : IInstalledManifestProvider
     }
 
 
-    private SingleFileComponent BuildFileComponent(IProductComponentIdentity identity, string directoryKey, string fileName, string version, VariableCollection variables)
+    private SingleFileComponent BuildFileComponent(IProductComponentIdentity identity, string directoryKey, string fileName, string version, ProductVariables variables)
     {
         var installDirectory = EnsureVariable(variables, directoryKey);
         var filePath = _fileSystem.Path.Combine(installDirectory, fileName);
@@ -70,7 +70,7 @@ internal class LauncherInstalledManifestProvider : IInstalledManifestProvider
         };
     }
 
-    private static string EnsureVariable(VariableCollection collection, string key)
+    private static string EnsureVariable(ProductVariables collection, string key)
     {
         var value = collection[key];
         if (string.IsNullOrEmpty(value))

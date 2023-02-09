@@ -1,7 +1,7 @@
 ﻿using System;
-using AnakinRaW.AppUpaterFramework.Catalog;
+using AnakinRaW.AppUpaterFramework.Metadata.Product;
+using AnakinRaW.AppUpaterFramework.Metadata.Update;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
-using AnakinRaW.ProductMetadata;
 using Validation;
 
 namespace FocLauncher.Update.ViewModels;

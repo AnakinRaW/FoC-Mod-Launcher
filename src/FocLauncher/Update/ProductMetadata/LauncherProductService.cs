@@ -2,8 +2,8 @@
 using System.IO.Abstractions;
 using System.IO;
 using System.Reflection;
-using AnakinRaW.ProductMetadata;
-using AnakinRaW.ProductMetadata.Services;
+using AnakinRaW.AppUpaterFramework.Metadata.Product;
+using AnakinRaW.AppUpaterFramework.Product;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FocLauncher.Update.ProductMetadata;
@@ -32,7 +32,7 @@ internal class LauncherProductService : ProductServiceBase
         return new ProductReference(name, version, branch);
     }
 
-    protected override void AddAdditionalProductVariables(VariableCollection variables, IProductReference product)
+    protected override void AddAdditionalProductVariables(ProductVariables variables, IProductReference product)
     {
         var env = ServiceProvider.GetRequiredService<ILauncherEnvironment>();
         variables.Add(KnownProductVariablesKeys.AppDataPath, env.ApplicationLocalPath);

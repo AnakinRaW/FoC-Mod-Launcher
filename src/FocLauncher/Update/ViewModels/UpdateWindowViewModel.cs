@@ -5,15 +5,14 @@ using System.Threading.Tasks;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading;
-using System.Windows;
-using AnakinRaW.AppUpaterFramework.Catalog;
+using AnakinRaW.AppUpaterFramework.Metadata.Product;
+using AnakinRaW.AppUpaterFramework.Metadata.Update;
+using AnakinRaW.AppUpaterFramework.Product;
 using AnakinRaW.AppUpaterFramework.Services;
+using AnakinRaW.AppUpaterFramework.Updater;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 using AnakinRaW.CommonUtilities.Wpf.Controls;
-using AnakinRaW.ProductMetadata;
-using AnakinRaW.ProductMetadata.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
-using FocLauncher.Imaging;
 using FocLauncher.Services;
 using FocLauncher.Update.ProductMetadata;
 using FocLauncher.Utilities;
@@ -30,7 +29,7 @@ internal partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWind
     
     private readonly IServiceProvider _serviceProvider;
     private readonly CancellationTokenSource _updateWindowCancellationTokenSource = new();
-    private readonly IProductUpdateProviderService _updateService;
+    private readonly IUpdateProviderService _updateService;
     private readonly ILogger? _logger;
     private readonly IConnectionManager _connectionManager;
     private readonly IProductService _productService;
@@ -62,7 +61,7 @@ internal partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWind
         IsResizable = false;
         InfoBarViewModel = new UpdateInfoBarViewModel(serviceProvider);
 
-        _updateService = serviceProvider.GetRequiredService<IProductUpdateProviderService>();
+        _updateService = serviceProvider.GetRequiredService<IUpdateProviderService>();
         _logger = serviceProvider.GetService<LoggerFactory>()?.CreateLogger(GetType());
         _connectionManager = serviceProvider.GetRequiredService<IConnectionManager>();
         _productService = _serviceProvider.GetRequiredService<IProductService>();
@@ -100,9 +99,8 @@ internal partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWind
        if (updateCatalog?.Action is UpdateCatalogAction.Install or UpdateCatalogAction.Uninstall)
        {
            // TODO: Show error, as Install and Uninstall are not supported
-       } 
-       Application.Current.Dispatcher.Invoke(() =>
-            InstalledProductViewModel =
+       }
+       AppDispatcher.Invoke(() => InstalledProductViewModel =
                 _installedProductViewModelFactory.Create(launcher, updateCatalog, _serviceProvider));
     }
 

@@ -52,6 +52,7 @@
 		<PackageReference Include="System.IO.Abstractions" Version="19.1.14" />
 		<PackageReference Include="System.Runtime.Extensions" Version="4.3.1" />
 		<PackageReference Include="Validation" Version="2.5.51" />
+		<PackageReference Include="Vanara.PInvoke.NetListMgr" Version="3.4.13" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(Configuration)' == 'Release'">
@@ -66,7 +67,6 @@
 		<ProjectReference Include="..\CommonUtilities\CommonUtilities.WPF.Core\CommonUtilities.WPF.Core.csproj" />
 		<ProjectReference Include="..\CommonUtilities\CommonUtilities.WPF.Imaging\CommonUtilities.WPF.Imaging.csproj" />
 		<ProjectReference Include="..\FocLauncher.AppUpdater\FocLauncher.AppUpdater.csproj" />
-		<ProjectReference Include="..\ProductMetadata\ProductMetadata.csproj" />
 		<ProjectReference Include="..\ProductUpdater\AppUpdaterFramework.csproj" />
 	</ItemGroup>
 

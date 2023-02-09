@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using AnakinRaW.AppUpaterFramework.Catalog;
-using AnakinRaW.AppUpaterFramework.Services;
+using AnakinRaW.AppUpaterFramework.Metadata.Update;
+using AnakinRaW.AppUpaterFramework.Updater;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
 using CommunityToolkit.Mvvm.ComponentModel;
 using FocLauncher.Utilities;
@@ -39,7 +39,7 @@ public partial class UpdateInfoBarViewModel : ViewModelBase, IUpdateInfoBarViewM
     public UpdateInfoBarViewModel(IServiceProvider serviceProvider) : base(serviceProvider)
     {
         _serviceProvider = serviceProvider;
-        var updateService = serviceProvider.GetRequiredService<IProductUpdateProviderService>();
+        var updateService = serviceProvider.GetRequiredService<IUpdateProviderService>();
         updateService.CheckingForUpdatesStarted += OnCheckingUpdatesStarted;
         updateService.CheckingForUpdatesCompleted += OnCheckingUpdatesCompleted;
     }

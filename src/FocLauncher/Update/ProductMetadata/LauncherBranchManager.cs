@@ -4,8 +4,8 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using AnakinRaW.ProductMetadata;
-using AnakinRaW.ProductMetadata.Services;
+using AnakinRaW.AppUpaterFramework.Metadata.Product;
+using AnakinRaW.AppUpaterFramework.Product;
 using Flurl;
 
 namespace FocLauncher.Update.ProductMetadata;

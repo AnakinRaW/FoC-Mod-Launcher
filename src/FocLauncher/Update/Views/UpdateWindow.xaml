@@ -5,10 +5,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:designer="clr-namespace:FocLauncher.Update.ViewModels.Designer"
              xmlns:views="clr-namespace:FocLauncher.Update.Views"
-             xmlns:productMetadata="clr-namespace:AnakinRaW.ProductMetadata;assembly=AnakinRaW.ProductMetadata"
              xmlns:converters="clr-namespace:FocLauncher.Converters"
              xmlns:wpfConverters="clr-namespace:AnakinRaW.CommonUtilities.Wpf.Converters;assembly=AnakinRaW.CommonUtilities.WPF.Core"
              xmlns:themes="clr-namespace:AnakinRaW.CommonUtilities.Wpf.Themes;assembly=AnakinRaW.CommonUtilities.WPF.Controls"
+             xmlns:product="clr-namespace:AnakinRaW.AppUpaterFramework.Metadata.Product;assembly=AnakinRaW.AppUpaterFramework"
              mc:Ignorable="d" d:DesignWidth="500"
              d:DataContext="{d:DesignInstance {x:Type designer:DesignerUpdateWindowViewModel}, IsDesignTimeCreatable=True}">
 
@@ -37,7 +37,7 @@
                           ItemsSource="{Binding Branches}"
                           SelectedItem="{Binding CurrentBranch, Mode=TwoWay}">
                     <ComboBox.ItemTemplate>
-                        <DataTemplate DataType="{x:Type productMetadata:ProductBranch}">
+                        <DataTemplate DataType="{x:Type product:ProductBranch}">
                             <TextBlock Text="{Binding Name, Converter={StaticResource ProductBranchNameConverter}}" VerticalAlignment="Center"/>
                         </DataTemplate>
                     </ComboBox.ItemTemplate>

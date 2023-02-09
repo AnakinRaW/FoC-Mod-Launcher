@@ -1,7 +1,7 @@
 ﻿using System;
-using AnakinRaW.AppUpaterFramework.Catalog;
+using AnakinRaW.AppUpaterFramework.Metadata.Product;
+using AnakinRaW.AppUpaterFramework.Metadata.Update;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Input;
-using AnakinRaW.ProductMetadata;
 using FocLauncher.Imaging;
 using FocLauncher.Update.Commands;
 
