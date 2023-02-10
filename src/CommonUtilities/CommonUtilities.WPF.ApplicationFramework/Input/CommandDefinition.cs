@@ -13,7 +13,3 @@ public abstract class CommandDefinition : ICommandDefinition
 
     public abstract ICommand Command { get; }
 }
-
-public abstract class CommandDefinition<T> : CommandDefinition where T : ICommandHandler
-{
-}

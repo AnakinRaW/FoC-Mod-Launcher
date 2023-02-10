@@ -102,7 +102,7 @@ internal partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWind
         {
             var launcher = _productService.GetCurrentInstance();
             AppDispatcher.Invoke(() => ProductViewModel =
-                _productViewModelFactory.Create(launcher, updateCatalog, _serviceProvider));
+                _productViewModelFactory.Create(launcher, updateCatalog));
 
             if (updateCatalog?.Action is UpdateCatalogAction.Install or UpdateCatalogAction.Uninstall)
             {
@@ -123,7 +123,8 @@ internal partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWind
         await _semaphoreLock.WaitAsync();
         try
         {
-           
+            AppDispatcher.Invoke(() => ProductViewModel =
+                _productViewModelFactory.Create(updateSession));
         }
         finally
         {
@@ -257,15 +258,22 @@ internal partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWind
         LoadUpdatingLauncherInformation(e).Forget();
     }
 
+    private void OnUpdateCompleted(object sender, EventArgs e)
+    {
+        LoadInstalledLauncherInformation(null).Forget();
+    }
+
     private void RegisterEvents()
     {
         _updateService.CheckingForUpdatesCompleted += OnUpdateCheckCompleted;
         _updateService.UpdateStarted += OnUpdateStarted;
+        _updateService.UpdateCompleted += OnUpdateCompleted;
     }
 
     private void UnregisterEvents()
     {
         _updateService.CheckingForUpdatesCompleted -= OnUpdateCheckCompleted;
         _updateService.UpdateStarted -= OnUpdateStarted;
+        _updateService.UpdateCompleted -= OnUpdateCompleted;
     }
 }

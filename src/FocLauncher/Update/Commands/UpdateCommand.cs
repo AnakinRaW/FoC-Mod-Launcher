@@ -11,7 +11,7 @@ using Microsoft.Extensions.Logging;
 
 namespace FocLauncher.Update.Commands;
 
-internal class UpdateCommand : CommandDefinition<IUpdateCommandHandler>
+internal class UpdateCommand : CommandDefinition
 {
     public IUpdateCatalog UpdateCatalog { get; }
 
@@ -25,10 +25,10 @@ internal class UpdateCommand : CommandDefinition<IUpdateCommandHandler>
 
     public UpdateCommand(IUpdateCatalog updateCatalog, IServiceProvider serviceProvider, bool isRepair)
     {
-        var hanlder = serviceProvider.GetRequiredService<IUpdateCommandHandler>();
+        var handler = serviceProvider.GetRequiredService<IUpdateCommandHandler>();
 
-        Command = new DelegateCommand(() => hanlder.Command.Execute(updateCatalog),
-            () => hanlder.Command.CanExecute(updateCatalog));
+        Command = new DelegateCommand(() => handler.Command.Execute(updateCatalog),
+            () => handler.Command.CanExecute(updateCatalog));
 
         UpdateCatalog = updateCatalog;
         Text = isRepair ? "Repair" : "Update";

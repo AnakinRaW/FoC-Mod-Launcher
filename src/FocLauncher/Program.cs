@@ -132,7 +132,7 @@ internal static class Program
         serviceCollection.AddSingleton<IManifestLoader>(sp => new LauncherManifestLoader(sp));
         serviceCollection.AddSingleton<IDownloadManager>(sp => new DownloadManager(sp));
         serviceCollection.AddSingleton<IVerificationManager>(sp => new VerificationManager(sp));
-        serviceCollection.AddSingleton<IProductViewModelFactory>(sp => new ProductViewModelFactory());
+        serviceCollection.AddSingleton<IProductViewModelFactory>(sp => new ProductViewModelFactory(sp));
         serviceCollection.AddSingleton<IInstalledManifestProvider>(sp => new LauncherInstalledManifestProvider(sp));
         serviceCollection.AddSingleton(CreateDownloadConfiguration());
 
