@@ -12,5 +12,11 @@ public interface IUpdateProviderService
 
     event EventHandler<IUpdateCatalog?> CheckingForUpdatesCompleted;
 
+    event EventHandler<IUpdateSession> UpdateStarted;
+
+    event EventHandler UpdateCompleted;
+
     Task CheckForUpdates(IProductReference productReference, CancellationToken token = default);
+
+    Task<object> Update(IUpdateCatalog updateCatalog, CancellationToken token = default);
 }

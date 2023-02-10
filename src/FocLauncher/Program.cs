@@ -23,6 +23,7 @@ using Microsoft.Extensions.Logging.Debug;
 using Serilog.Extensions.Logging;
 using AnakinRaW.CommonUtilities.FileSystem;
 using AnakinRaW.CommonUtilities.FileSystem.Windows;
+using FocLauncher.Update.Commands;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
 using FocLauncher.Update.ViewModels;
 using FocLauncher.Utilities;
@@ -118,7 +119,7 @@ internal static class Program
         serviceCollection.AddTransient<IRegistry>(_ => new WindowsRegistry());
         serviceCollection.AddSingleton<ILauncherRegistry>(sp => new LauncherRegistry(sp));
         serviceCollection.AddSingleton<IConnectionManager>(_ => new ConnectionManager());
-
+        
         return serviceCollection;
     }
 
@@ -134,6 +135,8 @@ internal static class Program
         serviceCollection.AddSingleton<IInstalledProductViewModelFactory>(sp => new InstalledProductViewModelFactory());
         serviceCollection.AddSingleton<IInstalledManifestProvider>(sp => new LauncherInstalledManifestProvider(sp));
         serviceCollection.AddSingleton(CreateDownloadConfiguration());
+
+        serviceCollection.AddScoped<IUpdateCommandHandler>(sp => new UpdateCommandHandler(sp));
     }
 
     private static IDownloadManagerConfiguration CreateDownloadConfiguration()

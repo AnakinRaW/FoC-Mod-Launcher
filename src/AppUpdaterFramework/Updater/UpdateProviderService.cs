@@ -8,6 +8,7 @@ using AnakinRaW.AppUpaterFramework.Product;
 using AnakinRaW.AppUpaterFramework.Utilities;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Validation;
 
 namespace AnakinRaW.AppUpaterFramework.Updater;
 
@@ -15,6 +16,8 @@ public class UpdateProviderService : IUpdateProviderService
 {
     public event EventHandler? CheckingForUpdatesStarted;
     public event EventHandler<IUpdateCatalog?>? CheckingForUpdatesCompleted;
+    public event EventHandler<IUpdateSession>? UpdateStarted;
+    public event EventHandler? UpdateCompleted;
 
     private readonly IServiceProvider _serviceProvider;
     private readonly object _syncObject = new();
@@ -45,7 +48,7 @@ public class UpdateProviderService : IUpdateProviderService
             _updateCheckToken = CancellationTokenSource.CreateLinkedTokenSource(token);
         }
 
-        CheckingForUpdatesStarted.RaiseAsync(this, EventArgs.Empty);
+        CheckingForUpdatesStarted?.RaiseAsync(this, EventArgs.Empty);
 
         try
         {
@@ -67,7 +70,7 @@ public class UpdateProviderService : IUpdateProviderService
             }
             finally
             {
-                CheckingForUpdatesCompleted.RaiseAsync(this, updateCatalog);
+                CheckingForUpdatesCompleted?.RaiseAsync(this, updateCatalog);
             }
         }
         catch (Exception ex)
@@ -83,5 +86,25 @@ public class UpdateProviderService : IUpdateProviderService
                 _updateCheckToken = null;
             }
         }
+    }
+
+    public async Task<object> Update(IUpdateCatalog updateCatalog, CancellationToken token = default)
+    {
+        Requires.NotNull(updateCatalog, nameof(updateCatalog));
+
+        var updateSession = new UpdateSession();
+
+        try
+        {
+            UpdateStarted?.RaiseAsync(this, updateSession);
+
+            await Task.Delay(5000).ConfigureAwait(false);
+        }
+        finally
+        {
+            UpdateCompleted?.RaiseAsync(this, EventArgs.Empty);
+        }
+
+        return null;
     }
 }

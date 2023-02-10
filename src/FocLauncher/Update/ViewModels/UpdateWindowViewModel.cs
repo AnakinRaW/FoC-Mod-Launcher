@@ -26,7 +26,8 @@ namespace FocLauncher.Update.ViewModels;
 internal partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWindowViewModel
 {
     private static readonly ProductBranch LoadingProductBranch = new ("Loading...", null!, true);
-    
+
+    private readonly SemaphoreSlim _semaphoreLock;
     private readonly IServiceProvider _serviceProvider;
     private readonly CancellationTokenSource _updateWindowCancellationTokenSource = new();
     private readonly IUpdateProviderService _updateService;
@@ -66,6 +67,7 @@ internal partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWind
         _connectionManager = serviceProvider.GetRequiredService<IConnectionManager>();
         _productService = _serviceProvider.GetRequiredService<IProductService>();
         _installedProductViewModelFactory = _serviceProvider.GetRequiredService<IInstalledProductViewModelFactory>();
+        _semaphoreLock = new SemaphoreSlim(1);
         RegisterEvents();
     }
 
@@ -74,7 +76,7 @@ internal partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWind
         return Task.Run(async () =>
         {
             await InfoBarViewModel.InitializeAsync();
-            LoadLauncherInformation(null);
+            await LoadInstalledLauncherInformation(null);
 
             await ExtractAssemblies();
 
@@ -93,20 +95,40 @@ internal partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWind
         InfoBarViewModel.Dispose();
     }
 
-    private void LoadLauncherInformation(IUpdateCatalog? updateCatalog)
+    private async Task LoadInstalledLauncherInformation(IUpdateCatalog? updateCatalog)
     {
-       var launcher = _productService.GetCurrentInstance();
+        await _semaphoreLock.WaitAsync();
+        try
+        {
+            var launcher = _productService.GetCurrentInstance();
+            AppDispatcher.Invoke(() => InstalledProductViewModel =
+                _installedProductViewModelFactory.Create(launcher, updateCatalog, _serviceProvider));
 
-       AppDispatcher.Invoke(() => InstalledProductViewModel =
-           _installedProductViewModelFactory.Create(launcher, updateCatalog, _serviceProvider));
-       
-       if (updateCatalog?.Action is UpdateCatalogAction.Install or UpdateCatalogAction.Uninstall)
-       {
-           _serviceProvider.GetRequiredService<IQueuedDialogService>()
-               .ShowDialog(new ErrorMessageDialogViewModel(
-                   "Update Error", "Update information has invalid data:\r\n" + 
-                                   "The launcher cannot be uninstalled or re-installed through this dialog.", _serviceProvider)).Forget();
-       }
+            if (updateCatalog?.Action is UpdateCatalogAction.Install or UpdateCatalogAction.Uninstall)
+            {
+                _serviceProvider.GetRequiredService<IQueuedDialogService>()
+                    .ShowDialog(new ErrorMessageDialogViewModel(
+                        "Update Error", "Update information has invalid data:\r\n" +
+                                        "The launcher cannot be uninstalled or re-installed through this dialog.", _serviceProvider)).Forget();
+            }
+        }
+        finally
+        {
+            _semaphoreLock.Release();
+        }
+    }
+
+    private async Task LoadUpdatingLauncherInformation(IUpdateSession updateSession)
+    {
+        await _semaphoreLock.WaitAsync();
+        try
+        {
+           
+        }
+        finally
+        {
+            _semaphoreLock.Release();
+        }
     }
 
 
@@ -227,16 +249,23 @@ internal partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWind
 
     private void OnUpdateCheckCompleted(object sender, IUpdateCatalog? e)
     {
-        LoadLauncherInformation(e);
+        LoadInstalledLauncherInformation(e).Forget();
+    }
+
+    private void OnUpdateStarted(object sender, IUpdateSession e)
+    {
+        LoadUpdatingLauncherInformation(e).Forget();
     }
 
     private void RegisterEvents()
     {
         _updateService.CheckingForUpdatesCompleted += OnUpdateCheckCompleted;
+        _updateService.UpdateStarted += OnUpdateStarted;
     }
 
     private void UnregisterEvents()
     {
         _updateService.CheckingForUpdatesCompleted -= OnUpdateCheckCompleted;
+        _updateService.UpdateStarted -= OnUpdateStarted;
     }
 }

@@ -79,6 +79,7 @@
                 <wpfControls:ThemedButton Margin="0,8,0,0" Padding="16,0" Height="23" MinWidth="64"
                             HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"  Focusable="False" 
                             Command="{Binding Action.Command}"
+                            CommandParameter="{Binding Action.UpdateCatalog}"
                             Visibility="{Binding Action, Converter={StaticResource NullToVisibilityConverter}}"
                             Content="{Binding Action.Text}"/>
             </StackPanel>
