@@ -38,7 +38,7 @@ internal class DesignerUpdateWindowViewModel : IUpdateWindowViewModel
 
     public bool HasDialogFrame { get; set; }
     public bool IsCloseButtonEnabled { get; set; }
-    public IInstalledProductViewModel InstalledProductViewModel { get; set; } = new DesignerInstalledProductViewModel();
+    public IProductViewModel ProductViewModel { get; set; } = new DesignerProductViewModel();
     public IUpdateInfoBarViewModel InfoBarViewModel { get; } = new DesignerInfoBarViewModel();
     public ObservableCollection<ProductBranch> Branches { get; } = new();
 

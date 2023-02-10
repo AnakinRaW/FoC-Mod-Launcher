@@ -5,7 +5,7 @@ using FocLauncher.Update.ViewModels.ProductStates;
 
 namespace FocLauncher.Update.ViewModels;
 
-public interface IInstalledProductViewModel : IViewModel
+public interface IProductViewModel : IViewModel
 {
     string DisplayName { get; }
 
@@ -13,5 +13,5 @@ public interface IInstalledProductViewModel : IViewModel
 
     ICommandDefinition? Action { get; }
 
-    IInstalledProductStateViewModel StateViewModel { get; }
+    IProductStateViewModel StateViewModel { get; }
 }

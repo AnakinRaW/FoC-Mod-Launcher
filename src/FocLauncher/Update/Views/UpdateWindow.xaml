@@ -24,7 +24,7 @@
 
         <views:UpdateInfoBarView DataContext="{Binding InfoBarViewModel}" Margin="0,0,0,12"/>
 
-        <views:InstalledProductView Grid.Row="1" DataContext="{Binding InstalledProductViewModel}"/>
+        <views:InstalledProductView Grid.Row="1" DataContext="{Binding ProductViewModel}"/>
 
         <Grid Grid.Row="2" Margin="0,12,0,0">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">

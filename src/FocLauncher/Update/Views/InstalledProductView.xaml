@@ -10,12 +10,24 @@
              xmlns:controls="clr-namespace:AnakinRaW.CommonUtilities.Wpf.Imaging.Controls;assembly=AnakinRaW.CommonUtilities.WPF.Imaging"
              xmlns:wpfControls="clr-namespace:AnakinRaW.CommonUtilities.Wpf.Controls;assembly=AnakinRaW.CommonUtilities.WPF.Controls"
              xmlns:productStates="clr-namespace:FocLauncher.Update.ViewModels.ProductStates"
-             xmlns:launcherImage="clr-namespace:FocLauncher.Imaging"
+             xmlns:views="clr-namespace:FocLauncher.Update.Views"
              mc:Ignorable="d" 
-             d:DataContext="{d:DesignInstance {x:Type designer:DesignerInstalledProductViewModel}, IsDesignTimeCreatable=True}">
+             d:DataContext="{d:DesignInstance {x:Type designer:DesignerProductViewModel}, IsDesignTimeCreatable=True}">
     <FrameworkElement.Resources>
         <converters:BrushToColorConverter x:Key="BrushToColorConverter"/>
         <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
+
+        <Style x:Key="ProductViewButtonStyle" TargetType="{x:Type wpfControls:ThemedButton}">
+            <Setter Property="Margin" Value="0,8,0,0"/>
+            <Setter Property="Padding" Value="16,0"/>
+            <Setter Property="MinWidth" Value="64"/>
+            <Setter Property="Height" Value="23"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Focusable" Value="False"/>
+        </Style>
+
     </FrameworkElement.Resources>
     <Border Focusable="False" 
             Background="{DynamicResource {x:Static themes:LauncherColors.UpdateProductBackground}}"  
@@ -43,45 +55,26 @@
                     <controls:ThemedImage Grid.Column="0" Height="24" Width="24" VerticalAlignment="Center" Margin="0,0,12,0" ImakgeKey="{Binding Icon}"/>
                     <TextBlock Grid.Column="1" VerticalAlignment="Center" TextWrapping="Wrap" TextTrimming="None" FontSize="18" Text="{Binding DisplayName}"/>
                 </Grid>
-                <ContentControl Grid.Row="1" Margin="48,0,0,20" Focusable="False"
-                                Content="{Binding StateViewModel}">
+                <ContentControl Grid.Row="1" Margin="48,0,0,20" Focusable="False" Content="{Binding StateViewModel}">
                     <FrameworkElement.Resources>
-                        <DataTemplate DataType="{x:Type productStates:InstalledStateProductViewModel}">
-                            <TextBlock Margin="0,0,0,6" TextWrapping="Wrap" TextTrimming="None" Text="{Binding Version}"/>
+                        <DataTemplate DataType="{x:Type productStates:InstalledStateViewModel}">
+                            <views:InstalledStateView/>
                         </DataTemplate>
-                        <DataTemplate DataType="{x:Type productStates:UpdateAvailableStateProductViewModel}">
-                            <StackPanel x:Name="ProductVersionInfo" >
-                                <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
-                                    <TextBlock VerticalAlignment="Center" Text="Current Version:" FontSize="13"/>
-                                    <TextBlock VerticalAlignment="Center" FontSize="13" Margin="12,0,0,0" Text="{Binding CurrentVersion}"/>
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock VerticalAlignment="Center" Text="Available Version:" FontSize="13"/>
-                                    <TextBlock VerticalAlignment="Center" FontSize="13" Margin="12,0,0,0" Text="{Binding AvailableVersion}"/>
-                                </StackPanel>
-                            </StackPanel>
+                        <DataTemplate DataType="{x:Type productStates:UpdateAvailableStateViewModel}">
+                            <views:UpdateAvailableStateView/>
                         </DataTemplate>
-                        <DataTemplate DataType="{x:Type productStates:ErrorStateProductViewModel}">
-                            <StackPanel>
-                                <TextBlock Margin="0,0,0,12" TextWrapping="Wrap" TextTrimming="None" Text="{Binding Version}"/>
-                                <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
-                                    <controls:ThemedImage VerticalAlignment="Top" ImakgeKey="{x:Static launcherImage:ImageKeys.StatusError}"/>
-                                    <StackPanel Margin="8,0,0,0" Orientation="Horizontal">
-                                        <TextBlock Text="{Binding ErrorMessage}" FontWeight="SemiBold"/>
-                                    </StackPanel>
-                                </StackPanel>
-                            </StackPanel>
+                        <DataTemplate DataType="{x:Type productStates:ErrorStateViewModel}">
+                            <views:ErrorStateView/>
                         </DataTemplate>
                     </FrameworkElement.Resources>
                 </ContentControl>
             </Grid>
             <StackPanel Grid.Column="1" VerticalAlignment="Stretch" Width="150" Focusable="False" Margin="20,4,12,12">
-                <wpfControls:ThemedButton Margin="0,8,0,0" Padding="16,0" Height="23" MinWidth="64"
-                            HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"  Focusable="False" 
-                            Command="{Binding Action.Command}"
-                            CommandParameter="{Binding Action.UpdateCatalog}"
-                            Visibility="{Binding Action, Converter={StaticResource NullToVisibilityConverter}}"
-                            Content="{Binding Action.Text}"/>
+                <wpfControls:ThemedButton Style="{StaticResource ProductViewButtonStyle}"
+                    DataContext="{Binding Action}"
+                            Command="{Binding Command}"
+                            Visibility="{Binding Converter={StaticResource NullToVisibilityConverter}}"
+                            Content="{Binding Text}"/>
             </StackPanel>
         </Grid>
     </Border>

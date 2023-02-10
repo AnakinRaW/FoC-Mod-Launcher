@@ -4,8 +4,8 @@ using AnakinRaW.AppUpaterFramework.Metadata.Update;
 
 namespace FocLauncher.Update.ViewModels;
 
-internal interface IInstalledProductViewModelFactory
+internal interface IProductViewModelFactory
 {
-    IInstalledProductViewModel Create(IInstalledProduct product, IUpdateCatalog? updateCatalog,
+    IProductViewModel Create(IInstalledProduct product, IUpdateCatalog? updateCatalog,
         IServiceProvider serviceProvider);
 }

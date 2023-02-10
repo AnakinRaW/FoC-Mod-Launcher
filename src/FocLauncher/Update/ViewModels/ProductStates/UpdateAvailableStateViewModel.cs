@@ -6,7 +6,7 @@ using Validation;
 
 namespace FocLauncher.Update.ViewModels.ProductStates;
 
-public class UpdateAvailableStateProductViewModel : ViewModelBase, IInstalledProductStateViewModel
+public class UpdateAvailableStateViewModel : ViewModelBase, IUpdateAvailableStateViewModel
 {
     public IUpdateCatalog UpdateCatalog { get; }
 
@@ -14,7 +14,7 @@ public class UpdateAvailableStateProductViewModel : ViewModelBase, IInstalledPro
 
     public string? AvailableVersion { get; }
 
-    public UpdateAvailableStateProductViewModel(IInstalledProduct installedProduct, IUpdateCatalog updateCatalog, IServiceProvider serviceProvider) : base(serviceProvider)
+    public UpdateAvailableStateViewModel(IInstalledProduct installedProduct, IUpdateCatalog updateCatalog, IServiceProvider serviceProvider) : base(serviceProvider)
     {
         Requires.NotNull(updateCatalog, nameof(updateCatalog));
         UpdateCatalog = updateCatalog;

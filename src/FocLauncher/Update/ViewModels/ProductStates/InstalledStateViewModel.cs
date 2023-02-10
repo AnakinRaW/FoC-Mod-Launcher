@@ -4,11 +4,11 @@ using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
 
 namespace FocLauncher.Update.ViewModels.ProductStates;
 
-public class InstalledStateProductViewModel : ViewModelBase, IInstalledProductStateViewModel
+public class InstalledStateViewModel : ViewModelBase, IInstalledStateViewModel
 {
     public string? Version { get; }
 
-    public InstalledStateProductViewModel(IInstalledProduct installedProduct, IServiceProvider serviceProvider) : base(serviceProvider)
+    public InstalledStateViewModel(IInstalledProduct installedProduct, IServiceProvider serviceProvider) : base(serviceProvider)
     {
         Version = installedProduct.Version?.ToString();
     }

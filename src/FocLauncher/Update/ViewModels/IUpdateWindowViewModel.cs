@@ -7,7 +7,7 @@ namespace FocLauncher.Update.ViewModels;
 
 public interface IUpdateWindowViewModel : IModalWindowViewModel, IViewModel
 {
-    IInstalledProductViewModel InstalledProductViewModel { get; set; }
+    IProductViewModel ProductViewModel { get; set; }
 
     IUpdateInfoBarViewModel InfoBarViewModel { get; }
 

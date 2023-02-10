@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using AnakinRaW.AppUpaterFramework.Metadata.Update;
 using AnakinRaW.AppUpaterFramework.Updater;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Input;
 using AnakinRaW.CommonUtilities.Wpf.Imaging;
+using AnakinRaW.CommonUtilities.Wpf.Input;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -15,12 +17,19 @@ internal class UpdateCommand : CommandDefinition<IUpdateCommandHandler>
 
     public override ImageKey Image => default;
 
+    public override ICommand Command { get; }
+
     public override string Text { get; }
 
     public override string? Tooltip => null;
 
-    public UpdateCommand(IUpdateCatalog updateCatalog, IServiceProvider serviceProvider, bool isRepair) : base(serviceProvider)
+    public UpdateCommand(IUpdateCatalog updateCatalog, IServiceProvider serviceProvider, bool isRepair)
     {
+        var hanlder = serviceProvider.GetRequiredService<IUpdateCommandHandler>();
+
+        Command = new DelegateCommand(() => hanlder.Command.Execute(updateCatalog),
+            () => hanlder.Command.CanExecute(updateCatalog));
+
         UpdateCatalog = updateCatalog;
         Text = isRepair ? "Repair" : "Update";
     }

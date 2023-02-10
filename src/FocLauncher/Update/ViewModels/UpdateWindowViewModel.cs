@@ -34,7 +34,7 @@ internal partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWind
     private readonly ILogger? _logger;
     private readonly IConnectionManager _connectionManager;
     private readonly IProductService _productService;
-    private readonly IInstalledProductViewModelFactory _installedProductViewModelFactory;
+    private readonly IProductViewModelFactory _productViewModelFactory;
 
     [ObservableProperty]
     private bool _isLoadingBranches = true;
@@ -47,7 +47,7 @@ internal partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWind
     [ObservableProperty]
     private ProductBranch _currentBranch = null!;
 
-    [ObservableProperty] private IInstalledProductViewModel _installedProductViewModel = null!;
+    [ObservableProperty] private IProductViewModel _productViewModel = null!;
 
     public IUpdateInfoBarViewModel InfoBarViewModel { get; } 
 
@@ -66,7 +66,7 @@ internal partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWind
         _logger = serviceProvider.GetService<LoggerFactory>()?.CreateLogger(GetType());
         _connectionManager = serviceProvider.GetRequiredService<IConnectionManager>();
         _productService = _serviceProvider.GetRequiredService<IProductService>();
-        _installedProductViewModelFactory = _serviceProvider.GetRequiredService<IInstalledProductViewModelFactory>();
+        _productViewModelFactory = _serviceProvider.GetRequiredService<IProductViewModelFactory>();
         _semaphoreLock = new SemaphoreSlim(1);
         RegisterEvents();
     }
@@ -101,8 +101,8 @@ internal partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWind
         try
         {
             var launcher = _productService.GetCurrentInstance();
-            AppDispatcher.Invoke(() => InstalledProductViewModel =
-                _installedProductViewModelFactory.Create(launcher, updateCatalog, _serviceProvider));
+            AppDispatcher.Invoke(() => ProductViewModel =
+                _productViewModelFactory.Create(launcher, updateCatalog, _serviceProvider));
 
             if (updateCatalog?.Action is UpdateCatalogAction.Install or UpdateCatalogAction.Uninstall)
             {
