@@ -72,6 +72,14 @@ internal class ImageCatalog : ImmutableImageCatalog
         Source = ResourcesUriCreator.Create("StatusError", ImageFileKind.Xaml),
         CanTheme = true
     };
+    
+    public static ImageDefinition StatusOkDefinition => new()
+    {
+        Kind = ImageFileKind.Xaml,
+        ImakgeKey = ImageKeys.StatusOK,
+        Source = ResourcesUriCreator.Create("StatusOK", ImageFileKind.Xaml),
+        CanTheme = true
+    };
 
 
     public static IEnumerable<ImageDefinition> Definitions = new List<ImageDefinition>
@@ -83,7 +91,8 @@ internal class ImageCatalog : ImmutableImageCatalog
         TrooperDefinition,
         UpdateIconDefinition,
         HelpIconDefinition,
-        StatusErrorDefinition
+        StatusErrorDefinition,
+        StatusOkDefinition
     };
 
     private ImageCatalog() : base(Definitions)

@@ -1,16 +1,9 @@
-﻿using System;
-using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
+﻿using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.ProgressBar;
 
 namespace FocLauncher.Update.ViewModels.ProductStates;
 
 public interface IUpdatingStateViewModel : IProductStateViewModel
 {
-
-}
-
-public class UpdatingStateViewModel : ViewModelBase, IUpdatingStateViewModel
-{
-    public UpdatingStateViewModel(IServiceProvider serviceProvider) : base(serviceProvider)
-    {
-    }
+    IProgressBarViewModel DownloadProgressBarViewModel { get; }
+    IProgressBarViewModel UpdateProgressBarViewModel { get; }
 }

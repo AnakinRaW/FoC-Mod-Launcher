@@ -33,4 +33,8 @@
 	  <ProjectReference Include="..\CommonUtilities.WPF.Core\CommonUtilities.WPF.Core.csproj" />
 	  <ProjectReference Include="..\CommonUtilities.WPF.Imaging\CommonUtilities.WPF.Imaging.csproj" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="ProgressBar\" />
+	</ItemGroup>
 </Project>

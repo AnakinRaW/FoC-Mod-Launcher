@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using System.Windows.Threading;
 using AnakinRaW.AppUpaterFramework.Metadata.Update;
 using AnakinRaW.AppUpaterFramework.Updater;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
 using CommunityToolkit.Mvvm.ComponentModel;
+using FocLauncher.Services;
 using FocLauncher.Utilities;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -42,6 +45,19 @@ public partial class UpdateInfoBarViewModel : ViewModelBase, IUpdateInfoBarViewM
         var updateService = serviceProvider.GetRequiredService<IUpdateProviderService>();
         updateService.CheckingForUpdatesStarted += OnCheckingUpdatesStarted;
         updateService.CheckingForUpdatesCompleted += OnCheckingUpdatesCompleted;
+        updateService.UpdateStarted += OnUpdateStarted;
+        updateService.UpdateCompleted += OnUpdateCompleted;
+    }
+
+    private void OnUpdateCompleted(object sender, EventArgs e)
+    {
+        Refresh(null).Forget();
+    }
+
+    private void OnUpdateStarted(object sender, IUpdateSession e)
+    {
+        Status = UpdateStatus.Updating;
+        AppDispatcher.BeginInvoke(DispatcherPriority.Background, CommandManager.InvalidateRequerySuggested);
     }
 
     private Task Refresh(IUpdateCatalog? e)

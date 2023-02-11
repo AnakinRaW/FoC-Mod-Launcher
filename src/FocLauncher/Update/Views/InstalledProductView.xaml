@@ -66,6 +66,9 @@
                         <DataTemplate DataType="{x:Type productStates:ErrorStateViewModel}">
                             <views:ErrorStateView/>
                         </DataTemplate>
+                        <DataTemplate DataType="{x:Type productStates:UpdatingStateViewModel}">
+                            <views:UpdatingStateView/>
+                        </DataTemplate>
                     </FrameworkElement.Resources>
                 </ContentControl>
             </Grid>

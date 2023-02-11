@@ -6,6 +6,7 @@ using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Input;
 using FocLauncher.Imaging;
 using FocLauncher.Update.Commands;
 using FocLauncher.Update.ViewModels.ProductStates;
+using Validation;
 
 namespace FocLauncher.Update.ViewModels;
 
@@ -44,6 +45,10 @@ internal class ProductViewModelFactory : IProductViewModelFactory
 
     public IProductViewModel Create(IUpdateSession updateSession)
     {
-        return new ProductViewModel("Test", ImageKeys.AppIcon, new UpdatingStateViewModel(_serviceProvider), null, _serviceProvider);
+        Requires.NotNull(updateSession, nameof(updateSession));
+
+        var cancelCommand = new CancelUpdateCommand(updateSession);
+
+        return new ProductViewModel("Test", ImageKeys.AppIcon, new UpdatingStateViewModel(_serviceProvider, updateSession), cancelCommand, _serviceProvider);
     }
 }

@@ -176,5 +176,10 @@
     <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ComboBoxListItemBackgroundHover}" Color="#FF2E2E2E" />
     <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ComboBoxListItemBorderHover}" Color="#FF808080" />
     <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ComboBoxListItemTextHover}" Color="#FFFAFAFA" />
+
+
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ProgressBarBackground}" Color="#734D4D4D" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ProgressBarBorder}" Color="#734D4D4D" />
+    <SolidColorBrush x:Key="{x:Static colors:CommonControlsColors.ProgressBarValue}" Color="#FF7160E8" />
     
 </ResourceDictionary>

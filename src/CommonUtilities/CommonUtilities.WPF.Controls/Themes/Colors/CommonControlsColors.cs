@@ -116,4 +116,9 @@ public class CommonControlsColors
     public static ComponentResourceKey ComboBoxListItemBackgroundHover { get; } = new(typeof(CommonControlsColors), nameof(ComboBoxListItemBackgroundHover));
     public static ComponentResourceKey ComboBoxListItemBorderHover { get; } = new(typeof(CommonControlsColors), nameof(ComboBoxListItemBorderHover));
     public static ComponentResourceKey ComboBoxListItemTextHover { get; } = new(typeof(CommonControlsColors), nameof(ComboBoxListItemTextHover));
+
+
+    public static ComponentResourceKey ProgressBarBackground { get; } = new(typeof(CommonControlsColors), nameof(ProgressBarBackground));
+    public static ComponentResourceKey ProgressBarBorder { get; } = new(typeof(CommonControlsColors), nameof(ProgressBarBorder));
+    public static ComponentResourceKey ProgressBarValue { get; } = new(typeof(CommonControlsColors), nameof(ProgressBarValue));
 }

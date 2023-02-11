@@ -1,0 +1,27 @@
+﻿<UserControl x:Class="FocLauncher.Update.Views.UpdatingStateView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:designer="clr-namespace:FocLauncher.Update.ViewModels.Designer"
+             xmlns:controls="clr-namespace:AnakinRaW.CommonUtilities.Wpf.Controls;assembly=AnakinRaW.CommonUtilities.WPF.Controls"
+             xmlns:imaging="clr-namespace:FocLauncher.Imaging"
+             mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance {x:Type designer:DesignerUpdatingStateViewModel}, IsDesignTimeCreatable=True}">
+    <Grid VerticalAlignment="Top" HorizontalAlignment="Stretch" Focusable="False">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <controls:ThemedProgressBar Grid.Row="0" DataContext="{Binding DownloadProgressBarViewModel}"
+                                    FooterMessage="{Binding FooterText}" Value="{Binding ProgressValue}" 
+                                    FinishedIcon="{x:Static imaging:ImageKeys.StatusOK}"
+                                    HeaderLeft="{Binding LeftHeaderText}"
+                                    HeaderRight="{Binding RightHeaderText}"/>
+        <controls:ThemedProgressBar Grid.Row="1" Margin="0,4,0,0" DataContext="{Binding UpdateProgressBarViewModel}"
+                                    FooterMessage="{Binding FooterText}" Value="{Binding ProgressValue}" 
+                                    FinishedIcon="{x:Static imaging:ImageKeys.StatusOK}"
+                                    HeaderLeft="{Binding LeftHeaderText}"
+                                    HeaderRight="{Binding RightHeaderText}"/>
+    </Grid>
+</UserControl>
