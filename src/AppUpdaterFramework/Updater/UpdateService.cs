@@ -12,7 +12,7 @@ using Validation;
 
 namespace AnakinRaW.AppUpaterFramework.Updater;
 
-public class UpdateProviderService : IUpdateProviderService
+public class UpdateService : IUpdateService
 {
     public event EventHandler? CheckingForUpdatesStarted;
     public event EventHandler<IUpdateCatalog?>? CheckingForUpdatesCompleted;
@@ -33,7 +33,7 @@ public class UpdateProviderService : IUpdateProviderService
         }
     }
 
-    public UpdateProviderService(IServiceProvider serviceProvider)
+    public UpdateService(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
         _logger = serviceProvider.GetService<ILoggerFactory>()?.CreateLogger(GetType());
@@ -88,23 +88,111 @@ public class UpdateProviderService : IUpdateProviderService
         }
     }
 
-    public async Task<object> Update(IUpdateCatalog updateCatalog, CancellationToken token = default)
+    public async Task<object> Update(IUpdateCatalog updateCatalog)
     {
-        Requires.NotNull(updateCatalog, nameof(updateCatalog));
-
-        var updateSession = new UpdateSession();
-
+        var updater = CreateUpdater(updateCatalog);
+        var updateSession = new UpdateSession(updateCatalog.Product, updater);
         try
         {
             UpdateStarted?.RaiseAsync(this, updateSession);
-
-            await Task.Delay(5000).ConfigureAwait(false);
+            return await updateSession.StartUpdate();
         }
         finally
         {
             UpdateCompleted?.RaiseAsync(this, EventArgs.Empty);
+            updater.Dispose();
+        }
+    }
+
+
+    private IApplicationUpdater CreateUpdater(IUpdateCatalog updateCatalog)
+    {
+        return new ApplicationUpdater();
+    }
+}
+
+internal class ApplicationUpdater : IApplicationUpdater
+{
+    public event EventHandler<ProgressEventArgs?>? Progress;
+
+    public async Task<object> UpdateAsync(CancellationToken token)
+    {
+        for (int i = 0; i < 100; i++)
+        {
+            Progress?.Invoke(this, new ProgressEventArgs("C", (double) i / 100, ProgressType.Install));
+            await Task.Delay(50, token);
         }
 
         return null;
     }
+
+    public void Dispose()
+    {
+    }
+}
+
+internal interface IApplicationUpdater : IDisposable
+{
+    event EventHandler<ProgressEventArgs?> Progress;
+
+    Task<object> UpdateAsync(CancellationToken token);
+}
+
+public class ProgressEventArgs : EventArgs
+{
+    public string Component { get; }
+
+    public double Progress { get; }
+
+    public ProgressType Type { get; }
+
+    public ProgressInfo DetailedProgress { get; }
+
+    public ProgressEventArgs(string component, double progress, ProgressType type)
+        : this(component, progress, type, new ProgressInfo())
+    {
+    }
+
+    public ProgressEventArgs(string component, double progress, ProgressType type, ProgressInfo detailedProgress)
+    {
+        Requires.NotNullOrEmpty(component, nameof(component));
+        Component = component;
+        Progress = progress;
+        Type = type;
+        DetailedProgress = detailedProgress;
+    }
+}
+
+public enum ProgressType
+{
+    None = -1,
+    Install = 0,
+    Download = 1,
+    Verify = 2,
+    Clean = 3
+}
+
+public struct ProgressInfo
+{
+    public ProgressInfo(int currentComponent, int totalComponents, long downloadedSize, long totalSize, long downloadSpeed)
+    {
+        CurrentComponent = currentComponent;
+        TotalComponents = totalComponents;
+        DownloadedSize = downloadedSize;
+        TotalSize = totalSize;
+        DownloadSpeed = downloadSpeed;
+    }
+
+    public int CurrentComponent { get; internal set; }
+
+    public int TotalComponents { get; internal set; }
+
+    public long DownloadedSize { get; internal set; }
+
+    public long TotalSize { get; internal set; }
+
+    public long DownloadSpeed { get; internal set; }
+
+    public override string ToString() =>
+        $"Package={CurrentComponent},TotalComponents={TotalComponents},DownloadedSize={DownloadedSize},Total={TotalSize},DownloadSpeed={DownloadSpeed}";
 }

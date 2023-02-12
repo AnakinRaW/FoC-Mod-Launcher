@@ -6,7 +6,7 @@ using AnakinRaW.AppUpaterFramework.Metadata.Update;
 
 namespace AnakinRaW.AppUpaterFramework.Updater;
 
-public interface IUpdateProviderService
+public interface IUpdateService
 {
     event EventHandler CheckingForUpdatesStarted;
 
@@ -18,5 +18,5 @@ public interface IUpdateProviderService
 
     Task CheckForUpdates(IProductReference productReference, CancellationToken token = default);
 
-    Task<object> Update(IUpdateCatalog updateCatalog, CancellationToken token = default);
+    Task<object> Update(IUpdateCatalog updateCatalog);
 }

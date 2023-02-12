@@ -30,19 +30,24 @@ internal partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWind
     private readonly SemaphoreSlim _semaphoreLock;
     private readonly IServiceProvider _serviceProvider;
     private readonly CancellationTokenSource _updateWindowCancellationTokenSource = new();
-    private readonly IUpdateProviderService _updateService;
+    private readonly IUpdateService _updateService;
     private readonly ILogger? _logger;
     private readonly IConnectionManager _connectionManager;
     private readonly IProductService _productService;
     private readonly IProductViewModelFactory _productViewModelFactory;
+
+    private IUpdateSession? _currentUpdateSession;
 
     [ObservableProperty]
     private bool _isLoadingBranches = true;
     
     [ObservableProperty]
     private bool _isCheckingForUpdate;
-    
-    public bool CanSwitchBranches => !IsLoadingBranches && !IsCheckingForUpdate;
+
+    [ObservableProperty]
+    private bool _isUpdating;
+
+    public bool CanSwitchBranches => !IsLoadingBranches && !IsCheckingForUpdate && !IsUpdating;
 
     [ObservableProperty]
     private ProductBranch _currentBranch = null!;
@@ -55,6 +60,8 @@ internal partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWind
 
     public UpdateWindowViewModel(IServiceProvider serviceProvider)
     {
+        var s = serviceProvider.CreateScope();
+
         _serviceProvider = serviceProvider;
         Title = "Launcher Update";
         HasMaximizeButton = false;
@@ -62,7 +69,7 @@ internal partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWind
         IsResizable = false;
         InfoBarViewModel = new UpdateInfoBarViewModel(serviceProvider);
 
-        _updateService = serviceProvider.GetRequiredService<IUpdateProviderService>();
+        _updateService = serviceProvider.GetRequiredService<IUpdateService>();
         _logger = serviceProvider.GetService<LoggerFactory>()?.CreateLogger(GetType());
         _connectionManager = serviceProvider.GetRequiredService<IConnectionManager>();
         _productService = _serviceProvider.GetRequiredService<IProductService>();
@@ -90,7 +97,15 @@ internal partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWind
     {
         if (e.Cancel)
             return;
-        _updateWindowCancellationTokenSource.Cancel();
+        try
+        {
+            _updateWindowCancellationTokenSource.Cancel();
+            _currentUpdateSession?.Cancel();
+        }
+        catch (TaskCanceledException)
+        {
+            // Ignore
+        }
         UnregisterEvents();
         InfoBarViewModel.Dispose();
     }
@@ -131,7 +146,6 @@ internal partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWind
             _semaphoreLock.Release();
         }
     }
-
 
     private async Task<bool> LoadBranches()
     {
@@ -255,11 +269,15 @@ internal partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWind
 
     private void OnUpdateStarted(object sender, IUpdateSession e)
     {
+        IsUpdating = true;
+        _currentUpdateSession = e;
         LoadUpdatingLauncherInformation(e).Forget();
     }
 
     private void OnUpdateCompleted(object sender, EventArgs e)
     {
+        IsUpdating = false;
+        _currentUpdateSession = null;
         LoadInstalledLauncherInformation(null).Forget();
     }
 

@@ -13,12 +13,12 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <controls:ThemedProgressBar Grid.Row="0" DataContext="{Binding DownloadProgressBarViewModel}"
+        <controls:ThemedProgressBar Grid.Row="0" DataContext="{Binding ProgressViewModel.DownloadProgressBarViewModel}"
                                     FooterMessage="{Binding FooterText}" Value="{Binding ProgressValue}" 
                                     FinishedIcon="{x:Static imaging:ImageKeys.StatusOK}"
                                     HeaderLeft="{Binding LeftHeaderText}"
                                     HeaderRight="{Binding RightHeaderText}"/>
-        <controls:ThemedProgressBar Grid.Row="1" Margin="0,4,0,0" DataContext="{Binding UpdateProgressBarViewModel}"
+        <controls:ThemedProgressBar Grid.Row="1" Margin="0,4,0,0" DataContext="{Binding ProgressViewModel.InstallProgressBarViewModel}"
                                     FooterMessage="{Binding FooterText}" Value="{Binding ProgressValue}" 
                                     FinishedIcon="{x:Static imaging:ImageKeys.StatusOK}"
                                     HeaderLeft="{Binding LeftHeaderText}"

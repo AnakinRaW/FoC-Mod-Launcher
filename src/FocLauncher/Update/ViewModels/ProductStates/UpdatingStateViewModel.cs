@@ -1,16 +1,16 @@
 ﻿using System;
-using AnakinRaW.AppUpaterFramework.Updater;
-using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.ProgressBar;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
+using Validation;
 
 namespace FocLauncher.Update.ViewModels.ProductStates;
 
-public class UpdatingStateViewModel : ViewModelBase, IUpdatingStateViewModel
+internal class UpdatingStateViewModel : ViewModelBase, IUpdatingStateViewModel
 {
-    public IProgressBarViewModel DownloadProgressBarViewModel { get; }
-    public IProgressBarViewModel UpdateProgressBarViewModel { get; }
+    public IProgressViewModel ProgressViewModel { get; }
 
-    public UpdatingStateViewModel(IServiceProvider serviceProvider, IUpdateSession updateSession) : base(serviceProvider)
+    public UpdatingStateViewModel(IProgressViewModel progressViewModel, IServiceProvider serviceProvider) : base(serviceProvider)
     {
+        Requires.NotNull(progressViewModel, nameof(progressViewModel));
+        ProgressViewModel = progressViewModel;
     }
 }

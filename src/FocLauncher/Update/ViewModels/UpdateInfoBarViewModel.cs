@@ -42,7 +42,7 @@ public partial class UpdateInfoBarViewModel : ViewModelBase, IUpdateInfoBarViewM
     public UpdateInfoBarViewModel(IServiceProvider serviceProvider) : base(serviceProvider)
     {
         _serviceProvider = serviceProvider;
-        var updateService = serviceProvider.GetRequiredService<IUpdateProviderService>();
+        var updateService = serviceProvider.GetRequiredService<IUpdateService>();
         updateService.CheckingForUpdatesStarted += OnCheckingUpdatesStarted;
         updateService.CheckingForUpdatesCompleted += OnCheckingUpdatesCompleted;
         updateService.UpdateStarted += OnUpdateStarted;

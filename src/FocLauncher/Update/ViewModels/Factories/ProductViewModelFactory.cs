@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Threading;
 using AnakinRaW.AppUpaterFramework.Metadata.Product;
 using AnakinRaW.AppUpaterFramework.Metadata.Update;
 using AnakinRaW.AppUpaterFramework.Updater;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Input;
 using FocLauncher.Imaging;
+using FocLauncher.Services;
 using FocLauncher.Update.Commands;
 using FocLauncher.Update.ViewModels.ProductStates;
 using Validation;
@@ -48,7 +50,19 @@ internal class ProductViewModelFactory : IProductViewModelFactory
         Requires.NotNull(updateSession, nameof(updateSession));
 
         var cancelCommand = new CancelUpdateCommand(updateSession);
+        var progressViewModel = CreateProgressViewModel(updateSession);
+        var updatingViewModel = new UpdatingStateViewModel(progressViewModel, _serviceProvider);
 
-        return new ProductViewModel("Test", ImageKeys.AppIcon, new UpdatingStateViewModel(_serviceProvider, updateSession), cancelCommand, _serviceProvider);
+        return new ProductViewModel(updateSession.Product.Name, ImageKeys.AppIcon, updatingViewModel, cancelCommand, _serviceProvider);
+    }
+
+    private IProgressViewModel CreateProgressViewModel(IUpdateSession updateSession)
+    {
+        return AppDispatcher.Invoke(() =>
+        {
+            var downloadProgressBarViewModel = new DownloadingProgressBarViewModel(updateSession, _serviceProvider);
+            var installProgressBarViewModel = new InstallingProgressBarViewModel(updateSession, _serviceProvider);
+            return new ProgressViewModel(_serviceProvider, downloadProgressBarViewModel, installProgressBarViewModel);
+        });
     }
 }

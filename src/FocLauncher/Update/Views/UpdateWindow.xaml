@@ -8,7 +8,7 @@
              xmlns:converters="clr-namespace:FocLauncher.Converters"
              xmlns:themes="clr-namespace:AnakinRaW.CommonUtilities.Wpf.Themes;assembly=AnakinRaW.CommonUtilities.WPF.Controls"
              xmlns:product="clr-namespace:AnakinRaW.AppUpaterFramework.Metadata.Product;assembly=AnakinRaW.AppUpaterFramework"
-             mc:Ignorable="d" d:DesignWidth="500" Width="500"
+             mc:Ignorable="d" d:DesignWidth="500" Width="550"
              d:DataContext="{d:DesignInstance {x:Type designer:DesignerUpdateWindowViewModel}, IsDesignTimeCreatable=True}">
 
     <FrameworkElement.Resources>

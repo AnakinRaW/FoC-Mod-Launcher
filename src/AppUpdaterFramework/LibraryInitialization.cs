@@ -11,7 +11,7 @@ public static class LibraryInitialization
     public static void AddUpdateFramework(this IServiceCollection serviceCollection)
     {
         serviceCollection.AddScoped<IVariableResolver>(_ => new VariableResolver());
-        serviceCollection.AddSingleton<IUpdateProviderService>(sp => new UpdateProviderService(sp));
+        serviceCollection.AddSingleton<IUpdateService>(sp => new UpdateService(sp));
         serviceCollection.AddSingleton<IUpdateCatalogProvider>(sp => new UpdateCatalogProvider(sp));
 
         serviceCollection.AddSingleton<IManifestInstallationDetector>(sp => new ManifestInstallationDetector(sp));
