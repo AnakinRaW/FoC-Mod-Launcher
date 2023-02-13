@@ -6,17 +6,6 @@ using Validation;
 
 namespace AnakinRaW.AppUpaterFramework.Updater;
 
-public interface IUpdateSession
-{
-    event EventHandler<ProgressEventArgs?> DownloadProgress;
-
-    event EventHandler<ProgressEventArgs?> InstallProgress;
-
-    IProductReference Product { get; }
-
-    void Cancel();
-}
-
 internal class UpdateSession : IUpdateSession
 {
     private readonly IApplicationUpdater _updater;

@@ -3,8 +3,10 @@ using AnakinRaW.AppUpaterFramework.Metadata.Component;
 
 namespace AnakinRaW.AppUpaterFramework.Metadata.Update;
 
-public class UpdateItem : IUpdateItem
+public sealed class UpdateItem : IUpdateItem
 {
+    public string ComponentId { get; }
+
     public IInstallableComponent? InstalledComponent { get; }
 
     public IInstallableComponent? UpdateComponent { get; }
@@ -21,8 +23,25 @@ public class UpdateItem : IUpdateItem
             throw new InvalidOperationException(
                 $"Cannot get action from not-matching product components {installedComponent.Id}:{updateComponent.Id}");
         }
+
+        ComponentId = installedComponent?.Id ?? updateComponent!.GetUniqueId();
         InstalledComponent = installedComponent;
         UpdateComponent = updateComponent;
         Action = action;
+    }
+
+    public bool Equals(IUpdateItem other)
+    {
+        return ComponentId == other.ComponentId;
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return ReferenceEquals(this, obj) || obj is UpdateItem other && Equals(other);
+    }
+
+    public override int GetHashCode()
+    {
+        return ComponentId.GetHashCode();
     }
 }

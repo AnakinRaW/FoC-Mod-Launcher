@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AnakinRaW.AppUpaterFramework.Metadata.Component;
 using AnakinRaW.AppUpaterFramework.Metadata.Component.Catalog;
+using AnakinRaW.AppUpaterFramework.Updater.Tasks;
 
 namespace AnakinRaW.AppUpaterFramework.Utilities;
 
@@ -47,4 +48,9 @@ internal static class Extensions
 
     internal static bool IsOperationCanceledException(this Exception error) =>
         error.IsExceptionType<OperationCanceledException>();
+
+    public static bool IsSuccess(this InstallResult result)
+    {
+        return result is InstallResult.Success or InstallResult.SuccessRestartRequired;
+    }
 }
