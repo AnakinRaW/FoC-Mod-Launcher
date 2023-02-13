@@ -19,6 +19,6 @@ public class UpdateAvailableStateViewModel : ViewModelBase, IUpdateAvailableStat
         Requires.NotNull(updateCatalog, nameof(updateCatalog));
         UpdateCatalog = updateCatalog;
         CurrentVersion = installedProduct.Version?.ToString();
-        AvailableVersion = updateCatalog.Product.Version?.ToString();
+        AvailableVersion = updateCatalog.UpdateReference.Version?.ToString();
     }
 }

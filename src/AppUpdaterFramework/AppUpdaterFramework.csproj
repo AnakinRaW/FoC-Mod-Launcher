@@ -31,7 +31,8 @@
 		<PackageReference Include="AnakinRaW.CommonUtilities" Version="4.0.1" />
 		<PackageReference Include="AnakinRaW.CommonUtilities.DownloadManager" Version="4.0.1" />
 		<PackageReference Include="AnakinRaW.CommonUtilities.FileSystem" Version="4.0.1" />
-		<PackageReference Include="Validation" Version="2.5.51" />
+		<PackageReference Include="AnakinRaW.CommonUtilities.TaskPipeline" Version="4.0.1"/>
+		<PackageReference Include="Validation" Version="2.5.51" PrivateAssets="build;compile" />
 		<PackageReference Include="Vanara.PInvoke.NetListMgr" Version="3.4.13" PrivateAssets="build;compile" />
 	</ItemGroup>
 

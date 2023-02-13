@@ -6,7 +6,7 @@
              xmlns:designer="clr-namespace:FocLauncher.Update.ViewModels.Designer"
              xmlns:controls="clr-namespace:AnakinRaW.CommonUtilities.Wpf.Controls;assembly=AnakinRaW.CommonUtilities.WPF.Controls"
              xmlns:imaging="clr-namespace:FocLauncher.Imaging"
-             mc:Ignorable="d" 
+             mc:Ignorable="d" d:DesignWidth="100"
              d:DataContext="{d:DesignInstance {x:Type designer:DesignerUpdatingStateViewModel}, IsDesignTimeCreatable=True}">
     <Grid VerticalAlignment="Top" HorizontalAlignment="Stretch" Focusable="False">
         <Grid.RowDefinitions>

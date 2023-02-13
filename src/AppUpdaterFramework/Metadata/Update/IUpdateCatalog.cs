@@ -5,7 +5,9 @@ namespace AnakinRaW.AppUpaterFramework.Metadata.Update;
 
 public interface IUpdateCatalog
 {
-    IProductReference Product { get; }
+    IInstalledProduct InstalledProduct { get; }
+
+    IProductReference UpdateReference { get; }
 
     IReadOnlyCollection<IUpdateItem> UpdateItems { get; }
 

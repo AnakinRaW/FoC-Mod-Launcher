@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 using AnakinRaW.AppUpaterFramework.Metadata.Product;
 using AnakinRaW.AppUpaterFramework.Metadata.Update;
 using AnakinRaW.AppUpaterFramework.Updater;
@@ -38,7 +37,7 @@ internal class ProductViewModelFactory : IProductViewModelFactory
         else
         {
             stateViewModel = new UpdateAvailableStateViewModel(product, updateCatalog, _serviceProvider);
-            var isRepair = ProductReferenceEqualityComparer.VersionAware.Equals(product, updateCatalog.Product);
+            var isRepair = ProductReferenceEqualityComparer.VersionAware.Equals(product, updateCatalog.UpdateReference);
             action = new UpdateCommand(updateCatalog, _serviceProvider, isRepair);
         }
 

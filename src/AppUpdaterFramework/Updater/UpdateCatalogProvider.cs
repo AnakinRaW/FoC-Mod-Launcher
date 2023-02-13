@@ -21,7 +21,7 @@ internal class UpdateCatalogProvider : IUpdateCatalogProvider
         _detector = serviceProvider.GetRequiredService<IManifestInstallationDetector>();
     }
 
-    public IUpdateCatalog Create(IInstalledComponentsCatalog currentCatalog, IProductManifest availableCatalog, ProductVariables productVariables)
+    public IUpdateCatalog Create(IInstalledProduct installedProduct, IInstalledComponentsCatalog currentCatalog, IProductManifest availableCatalog)
     {
         Requires.NotNull(currentCatalog, nameof(currentCatalog));
         Requires.NotNull(availableCatalog, nameof(availableCatalog));
@@ -36,21 +36,21 @@ internal class UpdateCatalogProvider : IUpdateCatalogProvider
             ProductComponentIdentityComparer.VersionIndependent);
 
         if (!currentInstalledComponents.Any() && !availableInstallableComponents.Any())
-            return UpdateCatalog.CreateEmpty(availableCatalog.Product);
+            return UpdateCatalog.CreateEmpty(installedProduct, availableCatalog.Product);
 
         // Empty available catalog: Uninstall
         if (!availableInstallableComponents.Any())
-            return new UpdateCatalog(availableCatalog.Product, currentInstalledComponents
+            return new UpdateCatalog(installedProduct, availableCatalog.Product, currentInstalledComponents
                 .Select(c => new UpdateItem(c, null, UpdateAction.Delete)), UpdateCatalogAction.Uninstall);
 
         // Empty current catalog: Fresh install
         if (!currentInstalledComponents.Any())
-            return new UpdateCatalog(availableCatalog.Product, availableInstallableComponents
+            return new UpdateCatalog(installedProduct, availableCatalog.Product, availableInstallableComponents
                     .Select(c => new UpdateItem(null, c, UpdateAction.Update)), UpdateCatalogAction.Install);
 
 
         var availableInstalledComponents =
-            _detector.DetectInstalledComponents(availableCatalog, productVariables);
+            _detector.DetectInstalledComponents(availableCatalog, installedProduct.Variables);
 
 
         var updateItems = Compare(currentCatalog, availableInstalledComponents);
@@ -59,7 +59,7 @@ internal class UpdateCatalogProvider : IUpdateCatalogProvider
             ? UpdateCatalogAction.Update
             : UpdateCatalogAction.None;
 
-        return new UpdateCatalog(availableCatalog.Product, updateItems, action);
+        return new UpdateCatalog(installedProduct, availableCatalog.Product, updateItems, action);
     }
 
 
