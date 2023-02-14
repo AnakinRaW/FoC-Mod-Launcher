@@ -61,8 +61,8 @@ internal class ApplicationUpdater : IApplicationUpdater, IProgressReporter
 
             await Task.Run(() =>
             {
-                var updateJob = new UpdateJob(_updateCatalog, this, _serviceProvider);
-                updateJob.Schedule();
+                using var updateJob = new UpdateJob(_updateCatalog, this, _serviceProvider);
+                updateJob.Plan();
                 _logger?.LogTrace("Starting update");
                 updateJob.Run(token);
             }, CancellationToken.None).ConfigureAwait(false);

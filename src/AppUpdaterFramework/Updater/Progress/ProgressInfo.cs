@@ -1,4 +1,4 @@
-﻿namespace AnakinRaW.AppUpaterFramework.Updater;
+﻿namespace AnakinRaW.AppUpaterFramework.Updater.Progress;
 
 public struct ProgressInfo
 {

@@ -1,5 +1,6 @@
 ﻿using System;
 using AnakinRaW.AppUpaterFramework.Metadata.Product;
+using AnakinRaW.AppUpaterFramework.Updater.Progress;
 
 namespace AnakinRaW.AppUpaterFramework.Updater;
 

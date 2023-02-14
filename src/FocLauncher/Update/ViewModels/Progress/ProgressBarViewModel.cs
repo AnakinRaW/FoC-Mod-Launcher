@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using AnakinRaW.AppUpaterFramework.Updater;
+using AnakinRaW.AppUpaterFramework.Updater.Progress;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
 using CommunityToolkit.Mvvm.ComponentModel;
 

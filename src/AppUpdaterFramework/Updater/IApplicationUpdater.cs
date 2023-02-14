@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using AnakinRaW.AppUpaterFramework.Updater.Progress;
 
 namespace AnakinRaW.AppUpaterFramework.Updater;
 

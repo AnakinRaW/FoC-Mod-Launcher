@@ -1,7 +1,7 @@
 ﻿using System;
 using Validation;
 
-namespace AnakinRaW.AppUpaterFramework.Updater;
+namespace AnakinRaW.AppUpaterFramework.Updater.Progress;
 
 public class ProgressEventArgs : EventArgs
 {

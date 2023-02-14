@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using AnakinRaW.AppUpaterFramework.Metadata.Product;
+using AnakinRaW.AppUpaterFramework.Updater.Progress;
 using Validation;
 
 namespace AnakinRaW.AppUpaterFramework.Updater;

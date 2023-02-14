@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,41 +15,29 @@ using Validation;
 
 namespace AnakinRaW.AppUpaterFramework.Updater;
 
-internal class UpdateJob : JobBase
+internal sealed class UpdateJob : JobBase, IDisposable
 {
-    private readonly IProgressReporter? _progressReporter;
+    private bool _disposed;
+    private CancellationTokenSource? _linkedCancellationTokenSource;
+
+    private readonly IProgressReporter _progressReporter;
     private readonly IServiceProvider _serviceProvider;
     private readonly ILogger? _logger;
 
     private readonly HashSet<IUpdateItem> _itemsToProcess;
 
-    private readonly List<IComponentTask> _componentsToInstall = new();
-    private readonly List<IComponentTask> _componentsToRemove = new();
+    private readonly AggregatedComponentProgressReporter _installProgress;
+    private readonly AggregatedComponentProgressReporter _downloadProgress;
+
     private readonly List<DownloadTask> _componentsToDownload = new();
-    private readonly List<IComponentTask> _installsOrRemoves = new();
+    private readonly List<InstallTask> _installsOrRemoves = new();
 
-    private bool _scheduled;
-    private ParallelTaskRunner? _downloadsRunner;
-    private TaskRunner? _installsRunner;
-    private TaskRunner? _cancelCleanupRunner;
-    private ReadOnlyCollection<IComponentTask>? _componentsToInstallRo;
-    private ReadOnlyCollection<IComponentTask>? _componentsToRemoveRo;
-    private ReadOnlyCollection<DownloadTask>? _componentsToDownloadRo;
+    private readonly ParallelTaskRunner _downloadsRunner;
+    private readonly TaskRunner _installsRunner;
 
-    private CancellationTokenSource? _linkedCancellationTokenSource;
+    private bool IsCancelled { get; set; }
 
-    internal bool IsCancelled { get; private set; }
-
-    private IReadOnlyCollection<IComponentTask> ComponentsToInstall => 
-        _componentsToInstallRo ??= new ReadOnlyCollection<IComponentTask>(_componentsToInstall);
-
-    private IReadOnlyCollection<IComponentTask> ComponentsToRemove =>
-        _componentsToRemoveRo ??= new ReadOnlyCollection<IComponentTask>(_componentsToRemove);
-
-    private IReadOnlyCollection<IComponentTask> ComponentsToDownload => 
-        _componentsToDownloadRo ??= new ReadOnlyCollection<DownloadTask>(_componentsToDownload);
-
-    public UpdateJob(IUpdateCatalog updateCatalog, IProgressReporter? progressReporter, IServiceProvider serviceProvider)
+    public UpdateJob(IUpdateCatalog updateCatalog, IProgressReporter progressReporter, IServiceProvider serviceProvider)
     {
         Requires.NotNull(updateCatalog, nameof(updateCatalog));
         Requires.NotNull(serviceProvider, nameof(serviceProvider));
@@ -60,55 +47,42 @@ internal class UpdateJob : JobBase
         _logger = _serviceProvider.GetService<ILoggerFactory>()?.CreateLogger(GetType());
 
         _itemsToProcess = new HashSet<IUpdateItem>(updateCatalog.UpdateItems);
+
+        _installsRunner = new TaskRunner(_serviceProvider);
+        _installProgress = new AggregatedComponentProgressReporter(progressReporter, serviceProvider);
+        _downloadsRunner = new ParallelTaskRunner(2, _serviceProvider);
+        _downloadProgress = new AggregatedComponentProgressReporter(progressReporter, serviceProvider);
+
+        RegisterEvents();
     }
 
-    internal void Schedule()
+    private void RegisterEvents()
     {
-        if (_scheduled)
-            return;
-        Initialize();
-        if (!Plan())
-            return;
-
-        foreach (var d in _componentsToDownload) 
-            _downloadsRunner!.Queue(d);
-        foreach (var installsOrRemove in _installsOrRemoves) 
-            _installsRunner!.Queue(installsOrRemove);
-
-        _scheduled = true;
+        _downloadsRunner.Error += OnError;
+        _installsRunner.Error += OnError;
     }
 
-    protected override void Initialize()
+    private void UnregisterEvents()
     {
-        base.Initialize();
-        if (_downloadsRunner is null)
-        {
-            _downloadsRunner = new ParallelTaskRunner(2, _serviceProvider);
-            _downloadsRunner.Error += OnError;
-        }
-
-        if (_installsRunner is null)
-        {
-            _installsRunner = new TaskRunner(_serviceProvider);
-            _installsRunner.Error += OnError;
-        }
-
-        if (_cancelCleanupRunner is null)
-        {
-            _cancelCleanupRunner = new TaskRunner(_serviceProvider);
-            _cancelCleanupRunner.Error += OnError;
-        }
+        _downloadsRunner.Error -= OnError;
+        _installsRunner.Error -= OnError;
     }
 
     protected override bool PlanCore()
     {
+        if (_disposed)
+            throw new ObjectDisposedException("Job already disposed");
+
         if (_itemsToProcess.Count == 0)
         {
             var ex = new InvalidOperationException("No items to update/remove.");
             _logger?.LogError(ex, ex.Message);
             return false;
         }
-        
+
+        _componentsToDownload.Clear();
+        _installsOrRemoves.Clear();
+
         foreach (var updateItem in _itemsToProcess)
         {
             var installedComponent = updateItem.InstalledComponent;
@@ -121,56 +95,54 @@ internal class UpdateJob : JobBase
                 var installTask = new InstallTask(updateComponent, UpdateAction.Update, _serviceProvider);
                 var downloadTask = new DownloadTask(updateComponent, _serviceProvider);
 
-                _componentsToInstall.Add(installTask);
+                _installsOrRemoves.Add(installTask);
                 _componentsToDownload.Add(downloadTask);
             }
 
             if (updateItem.Action == UpdateAction.Delete && installedComponent != null)
             {
                 var removeTask = new InstallTask(installedComponent, UpdateAction.Delete, _serviceProvider);
-                _componentsToRemove.Add(removeTask);
+                _installsOrRemoves.Add(removeTask);
             }
         }
 
-        _componentsToRemove.Reverse();
-        _installsOrRemoves.Clear();
-        _installsOrRemoves.AddRange(_componentsToRemove.Concat(_componentsToInstall));
+        foreach (var d in _componentsToDownload)
+            _downloadsRunner.Queue(d);
+        foreach (var installsOrRemove in _installsOrRemoves)
+            _installsRunner.Queue(installsOrRemove);
 
         return true;
     }
 
     protected override void RunCore(CancellationToken token)
     {
-        Schedule();
-        var installs = _installsOrRemoves.OfType<InstallTask>().ToList();
-            
+        if (_disposed)
+            throw new ObjectDisposedException("Job already disposed");
 
-        _progressReporter?.Report("Starting update...", 0.0, ProgressType.Install, new ProgressInfo());
+        _progressReporter.Report("Starting update...", 0.0, ProgressType.Install, new ProgressInfo());
 
-        if (ComponentsToDownload.Any())
-        {
-            // TODO: Progress
-        }
+        var componentsToDownload = _componentsToDownload.ToList();
+        var componentsToInstallOrRemove = _installsOrRemoves.ToList();
+
+        if (componentsToDownload.Any())
+            _downloadProgress.StartReporting(componentsToDownload);
         else
-            _progressReporter?.Report("_", 1.0, ProgressType.Download, new ProgressInfo());
+            _progressReporter.Report("_", 1.0, ProgressType.Download, new ProgressInfo());
 
-        if (installs.Any())
-        {
-            // TODO: Progress
-        }
+        if (componentsToInstallOrRemove.Any())
+            _installProgress.StartReporting(componentsToInstallOrRemove);
         else
-            _progressReporter?.Report("_", 1.0, ProgressType.Install, new ProgressInfo());
+            _progressReporter.Report("_", 1.0, ProgressType.Install, new ProgressInfo());
 
-        
         try
         {
             _logger?.LogTrace("Starting update job.");
             _linkedCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(token);
-            _downloadsRunner!.Run(_linkedCancellationTokenSource.Token);
+            _downloadsRunner.Run(_linkedCancellationTokenSource.Token);
 #if DEBUG
             _downloadsRunner.Wait();
 #endif
-            _installsRunner!.Run(_linkedCancellationTokenSource.Token);
+            _installsRunner.Run(_linkedCancellationTokenSource.Token);
             try
             {
                 _downloadsRunner.Wait();
@@ -194,10 +166,10 @@ internal class UpdateJob : JobBase
             throw new OperationCanceledException(token);
         token.ThrowIfCancellationRequested();
 
-        var failedDownloads = _componentsToDownload.Where(p =>
+        var failedDownloads = componentsToDownload.Where(p =>
             p.Error != null && !p.Error.IsExceptionType<OperationCanceledException>());
 
-        var failedInstalls = installs
+        var failedInstalls = componentsToInstallOrRemove
             .Where(installTask => !installTask.Result.IsSuccess()).ToList();
 
         if (failedDownloads.Any() || failedInstalls.Any())
@@ -206,7 +178,7 @@ internal class UpdateJob : JobBase
 
         //var requiresRestart = LockedFilesWatcher.Instance.LockedFiles.Any();
         //if (requiresRestart)
-        //    _logger?.LogInformation("The operation finished. A restart is pedning.");
+        //    _logger?.LogInformation("The operation finished. A restart is pending.");
 
         Task.Delay(5000, token).Wait(token);
     }
@@ -233,5 +205,15 @@ internal class UpdateJob : JobBase
         {
             _logger?.LogError(ex, ex.Message);
         }
+    }
+
+    public void Dispose()
+    {
+        if (_disposed)
+            return;
+        UnregisterEvents();
+        _downloadProgress.Dispose();
+        _installProgress.Dispose();
+        _disposed = true;
     }
 }
