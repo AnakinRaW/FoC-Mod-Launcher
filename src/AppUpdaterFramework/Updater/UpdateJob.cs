@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using AnakinRaW.AppUpaterFramework.Metadata.Update;
 using AnakinRaW.AppUpaterFramework.Updater.Progress;
 using AnakinRaW.AppUpaterFramework.Updater.Tasks;
@@ -49,9 +48,9 @@ internal sealed class UpdateJob : JobBase, IDisposable
         _itemsToProcess = new HashSet<IUpdateItem>(updateCatalog.UpdateItems);
 
         _installsRunner = new TaskRunner(_serviceProvider);
-        _installProgress = new AggregatedComponentProgressReporter(progressReporter, serviceProvider);
+        _installProgress = new AggregatedComponentProgressReporter(progressReporter);
         _downloadsRunner = new ParallelTaskRunner(2, _serviceProvider);
-        _downloadProgress = new AggregatedComponentProgressReporter(progressReporter, serviceProvider);
+        _downloadProgress = new AggregatedComponentProgressReporter(progressReporter);
 
         RegisterEvents();
     }
@@ -92,8 +91,8 @@ internal sealed class UpdateJob : JobBase, IDisposable
                 if (updateComponent.OriginInfo is null)
                     throw new InvalidOperationException($"OriginInfo is missing for '{updateComponent}'");
                 
-                var installTask = new InstallTask(updateComponent, UpdateAction.Update, _serviceProvider);
-                var downloadTask = new DownloadTask(updateComponent, _serviceProvider);
+                var installTask = new InstallTask(updateComponent, UpdateAction.Update, _installProgress, _serviceProvider);
+                var downloadTask = new DownloadTask(updateComponent, _downloadProgress, _serviceProvider);
 
                 _installsOrRemoves.Add(installTask);
                 _componentsToDownload.Add(downloadTask);
@@ -101,7 +100,7 @@ internal sealed class UpdateJob : JobBase, IDisposable
 
             if (updateItem.Action == UpdateAction.Delete && installedComponent != null)
             {
-                var removeTask = new InstallTask(installedComponent, UpdateAction.Delete, _serviceProvider);
+                var removeTask = new InstallTask(installedComponent, UpdateAction.Delete, _installProgress, _serviceProvider);
                 _installsOrRemoves.Add(removeTask);
             }
         }
@@ -124,15 +123,15 @@ internal sealed class UpdateJob : JobBase, IDisposable
         var componentsToDownload = _componentsToDownload.ToList();
         var componentsToInstallOrRemove = _installsOrRemoves.ToList();
 
-        if (componentsToDownload.Any())
-            _downloadProgress.StartReporting(componentsToDownload);
-        else
+        if (!componentsToDownload.Any())
             _progressReporter.Report("_", 1.0, ProgressType.Download, new ProgressInfo());
-
-        if (componentsToInstallOrRemove.Any())
-            _installProgress.StartReporting(componentsToInstallOrRemove);
         else
+            _downloadProgress.Initialize(componentsToDownload);
+
+        if (!componentsToInstallOrRemove.Any())
             _progressReporter.Report("_", 1.0, ProgressType.Install, new ProgressInfo());
+        else
+            _installProgress.Initialize(componentsToInstallOrRemove);
 
         try
         {
@@ -179,8 +178,6 @@ internal sealed class UpdateJob : JobBase, IDisposable
         //var requiresRestart = LockedFilesWatcher.Instance.LockedFiles.Any();
         //if (requiresRestart)
         //    _logger?.LogInformation("The operation finished. A restart is pending.");
-
-        Task.Delay(5000, token).Wait(token);
     }
 
     private void OnError(object sender, TaskErrorEventArgs e)
@@ -212,8 +209,6 @@ internal sealed class UpdateJob : JobBase, IDisposable
         if (_disposed)
             return;
         UnregisterEvents();
-        _downloadProgress.Dispose();
-        _installProgress.Dispose();
         _disposed = true;
     }
 }

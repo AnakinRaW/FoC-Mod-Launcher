@@ -6,9 +6,7 @@ internal interface IProgressTask : IComponentTask
 {
     public ITaskProgressReporter ProgressReporter { get; }
 
-    //long Weight { get; }
+    ProgressType Type { get; }
 
-    //long Size { get; }
-
-    //ProgressType Type { get; }
+    long Size { get; }
 }

@@ -38,7 +38,7 @@ public record LauncherComponent(
     [property: JsonPropertyName("items")] IReadOnlyList<ComponentId>? Items,
     [property: JsonPropertyName("originInfo")] OriginInfo? OriginInfo,
     [property: JsonPropertyName("installPath")] string? InstallPath,
-    [property: JsonPropertyName("installSize")] InstallSize? InstallSize,
+    [property: JsonPropertyName("installSizes")] InstallSize? InstallSize,
     [property: JsonPropertyName("detectConditions")] IReadOnlyList<DetectCondition>? DetectConditions
 ) : LauncherComponentBase(Id, Version)
 {
