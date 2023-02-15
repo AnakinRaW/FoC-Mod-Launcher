@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading;
-using System.Threading.Tasks;
 using AnakinRaW.AppUpaterFramework.Metadata.Component;
 using AnakinRaW.AppUpaterFramework.Updater.Progress;
 using AnakinRaW.CommonUtilities.TaskPipeline.Tasks;
@@ -13,6 +12,8 @@ internal class DownloadTask : SynchronizedTask, IProgressTask
     public ProgressType Type => ProgressType.Download;
     public long Size { get; }
 
+    public Uri Uri { get; }
+
     public IProductComponent Component { get; }
 
     public DownloadTask(IInstallableComponent installable, ITaskProgressReporter progressReporter, IServiceProvider serviceProvider) : base(serviceProvider)
@@ -20,14 +21,30 @@ internal class DownloadTask : SynchronizedTask, IProgressTask
         Component = installable;
         ProgressReporter = progressReporter;
         Size = installable.DownloadSize;
+        Uri = installable.OriginInfo!.Url;
+    }
+
+    public override string ToString()
+    {
+        return $"Downloading component '{Component.GetUniqueId()}' form \"{Uri}\"";
     }
 
     protected override void SynchronizedInvoke(CancellationToken token)
     {
-        for (int i = 0; i < 100; i++)
+        if (token.IsCancellationRequested)
+            return;
+        try
         {
-            ProgressReporter.Report(this, (double)i / 100, new ProgressInfo());
-            Task.Delay(25, token).Wait(token);
+            ReportProgress(0.0);
         }
+        finally
+        {
+            ReportProgress(1.0);
+        }
+    }
+
+    private void ReportProgress(double progress)
+    {
+        ProgressReporter.Report(this, progress, new ProgressInfo());
     }
 }

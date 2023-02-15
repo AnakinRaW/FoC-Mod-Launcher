@@ -33,7 +33,6 @@ internal class InstallTask : RunnerTask, IProgressTask
     {
         for (int i = 0; i < 100; i++)
         {
-            ProgressReporter.Report(this, (double)i / 100, new ProgressInfo());
             Task.Delay(50, token).Wait(token);
         }
     }

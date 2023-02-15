@@ -8,6 +8,9 @@
              xmlns:imaging="clr-namespace:FocLauncher.Imaging"
              mc:Ignorable="d" d:DesignWidth="100"
              d:DataContext="{d:DesignInstance {x:Type designer:DesignerUpdatingStateViewModel}, IsDesignTimeCreatable=True}">
+    <FrameworkElement.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </FrameworkElement.Resources>
     <Grid VerticalAlignment="Top" HorizontalAlignment="Stretch" Focusable="False">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -18,10 +21,14 @@
                                     FinishedIcon="{x:Static imaging:ImageKeys.StatusOK}"
                                     HeaderLeft="{Binding LeftHeaderText}"
                                     HeaderRight="{Binding RightHeaderText}"/>
+        <TextBlock Grid.Row="1" Margin="0,4,0,0" TextTrimming="CharacterEllipsis" TextWrapping="Wrap"
+                   Text="The installation will start after all components have been downloaded."
+                   Visibility="{Binding ProgressViewModel.ShowDownloadThenInstallText, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}"/>
         <controls:ThemedProgressBar Grid.Row="1" Margin="0,4,0,0" DataContext="{Binding ProgressViewModel.InstallProgressBarViewModel}"
                                     FooterMessage="{Binding FooterText}" Value="{Binding ProgressValue}" 
                                     FinishedIcon="{x:Static imaging:ImageKeys.StatusOK}"
                                     HeaderLeft="{Binding LeftHeaderText}"
+                                    Visibility="{Binding Path=DataContext.ProgressViewModel.ShowInstallProgressBar, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
                                     HeaderRight="{Binding RightHeaderText}"/>
     </Grid>
 </UserControl>

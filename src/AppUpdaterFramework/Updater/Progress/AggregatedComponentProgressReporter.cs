@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using AnakinRaW.AppUpaterFramework.Updater.Tasks;
 using Validation;
 
@@ -10,6 +12,18 @@ internal class AggregatedComponentProgressReporter : ITaskProgressReporter
     private readonly IProgressReporter _progressReporter;
 
     private readonly object _syncLock = new();
+
+    private long _totalProgressSize;
+
+    private int _completedPackageCount;
+    private long _completedSize;
+    private long _completedSizeForSpeedCalculation;
+    private long _previousCompletedSizeForSpeedCalculation;
+
+    private readonly IDictionary<string, long>? _progressTable = new Dictionary<string, long>(StringComparer.OrdinalIgnoreCase);
+    private DateTime _downloadTime = DateTime.Now;
+    private int _reportTimes = 1;
+    private long _byteRate;
 
     private HashSet<IProgressTask>? PackageProgressCollection { get; set; }
 
@@ -24,23 +38,6 @@ internal class AggregatedComponentProgressReporter : ITaskProgressReporter
     {
         PackageProgressCollection = new HashSet<IProgressTask>(progressTasks, ProgressTaskComparer.Default);
         TotalSize = PackageProgressCollection.Sum(x => x.Size);
-
-        //var progressTable = new Dictionary<string, long>(PackageProgressCollection.Count, StringComparer.OrdinalIgnoreCase);
-        //if (this.PreviousTotalPackageCount > PackageProgressCollection.Count)
-        //{
-        //    this.totalPackageCount = this.PreviousTotalPackageCount;
-        //    this.completedPackageCount = this.PreviousTotalPackageCount - PackageProgressCollection.Count;
-        //}
-        //else
-        //    this.totalPackageCount = PackageProgressCollection.Count;
-        //if (this.PreviousTotalSize > TotalSize)
-        //{
-        //    this.totalPackageSize = this.PreviousTotalSize;
-        //    this.completedSize = this.PreviousTotalSize - TotalSize;
-        //}
-        //else
-        //    this.totalPackageSize = TotalSize;
-
     }
 
     public void Report(IProgressTask task, double progress, ProgressInfo progressInfo)
@@ -48,81 +45,91 @@ internal class AggregatedComponentProgressReporter : ITaskProgressReporter
         Requires.NotNull(task, nameof(task));
 
         var actualProgressInfo = new ProgressInfo();
+        var currentProgress = 0.0;
 
         if (TotalSize > 0)
         {
             if (task.Type == ProgressType.Download)
             {
-                //var now = DateTime.Now;
-                //var num2 = (long)(progress * task.Size);
-                //if (string.IsNullOrEmpty(individualProgressData.PayloadUrl))
-                //{
-                //    if (progress == 1.0)
-                //        Interlocked.Increment(ref this.completedPackageCount);
-                //}
+                var now = DateTime.Now;
+                var key = task.Component.GetUniqueId();
+                var totalTaskProgressSize = (long)(progress * task.Size);
+                
+                if (progress >= 1.0)
+                    Interlocked.Increment(ref _completedPackageCount);
 
-                //lock (_syncLock)
-                //{
-                //    long num4 = num2 - this.progressTable[key];
-                //    long num5 = 0;
-                //    if (task.Size < num2)
-                //        num5 = this.progressTable[key] <= packageProgress.Size ? num2 - packageProgress.Size : num4;
-                //    this.TotalSize += num5;
-                //    this.totalPackageSize += num5;
-                //    this.progressTable[key] = num2;
-                //    this.completedSize += num4;
-                //    this.completedSizeForSpeedCalculation += num4;
+                lock (_syncLock)
+                {
+                    if (!_progressTable.ContainsKey(key))
+                    {
+                        _progressTable.Add(key, totalTaskProgressSize);
+                        _completedSize += totalTaskProgressSize;
+                        _completedSizeForSpeedCalculation += totalTaskProgressSize;
+                    }
+                    else
+                    {
+                        var deltaSize = totalTaskProgressSize - _progressTable[key];
+                        _progressTable[key] = totalTaskProgressSize;
+                        _completedSize += deltaSize;
+                        _completedSizeForSpeedCalculation += deltaSize;
+                    }
 
-                //    if (this.completedSize < 0L)
-                //        this.completedSize = 0L;
-                //    if (this.completedSizeForSpeedCalculation < 0L)
-                //        this.completedSizeForSpeedCalculation = 0L;
-                //    num1 = (double)this.completedSize / (double)this.totalPackageSize;
-                //    num1 = Math.Min(num1, 1.0);
-                //    long num6 = this.completedSizeForSpeedCalculation - this.previousCompletedSizeForSpeedCalculation;
-                //    double totalSeconds = (now - this.downloadTime).TotalSeconds;
-                //    if (totalSeconds > 10.0)
-                //    {
-                //        this.previousCompletedSizeForSpeedCalculation = this.completedSizeForSpeedCalculation;
-                //        this.downloadTime = now;
-                //    }
-                //    if (num6 >= 0L && totalSeconds != 0.0)
-                //    {
-                //        long currentByteRate = (long)((double)num6 / totalSeconds);
-                //        if (this.reportTimes > 1000)
-                //            this.reportTimes = 1;
-                //        this.byteRate = ProgressAggregator.CalculateMovingAverage(currentByteRate, this.byteRate, this.reportTimes);
-                //        ++this.reportTimes;
-                //    }
-                //    progressInfo.DownloadedSize = this.completedSize;
-                //    progressInfo.DownloadSpeed = this.byteRate;
-                //    progressInfo.TotalSize = this.totalPackageSize;
-                //}
+                    if (_completedSize < 0)
+                        _completedSize = 0;
+                    if (_completedSizeForSpeedCalculation < 0L)
+                        _completedSizeForSpeedCalculation = 0L;
+                    currentProgress = (double)_completedSize / TotalSize;
+                    currentProgress = Math.Min(currentProgress, 1.0);
 
-                //if (this.completedPackageCount >= this.totalPackageCount && individualProgressData.Progress == 1.0)
-                //{
-                //    num1 = 1.0;
-                //    progressInfo.DownloadSpeed = 0L;
-                //}
-                //else
-                //    num1 *= 0.99;
+                    var deltaDownloadSpeed = _completedSizeForSpeedCalculation - _previousCompletedSizeForSpeedCalculation;
+                    var totalSeconds = (now - _downloadTime).TotalSeconds;
+                    if (totalSeconds > 10.0)
+                    {
+                        _previousCompletedSizeForSpeedCalculation = _completedSizeForSpeedCalculation;
+                        _downloadTime = now;
+                    }
+                    if (deltaDownloadSpeed >= 0 && totalSeconds != 0.0)
+                    {
+                        var currentByteRate = (long)(deltaDownloadSpeed / totalSeconds);
+                        if (_reportTimes > 1000)
+                            _reportTimes = 1;
+                        _byteRate += CalculateMovingAverage(currentByteRate, _byteRate, _reportTimes);
+                        ++_reportTimes;
+                    }
+                    actualProgressInfo.DownloadedSize = _completedSize;
+                    actualProgressInfo.DownloadSpeed = _byteRate;
+                    actualProgressInfo.TotalSize = TotalSize;
+                }
+
+                var totalPackageCount = PackageProgressCollection?.Count ?? 0;
+                if (_completedPackageCount >= totalPackageCount && progress >= 1.0)
+                {
+                    currentProgress = 1.0;
+                    actualProgressInfo.DownloadSpeed = 0L;
+                }
+                else
+                    currentProgress *= 0.99;
             }
             else if (task.Type == ProgressType.Install)
             {
                 lock (_syncLock)
-                {
-                    var uniqueId = task.Component.GetUniqueId();
-                    long totalTaskProgressSize = (long)(progress * task.Size);
-                    //this.progressTable[uniqueId] = totalTaskProgress;
-                    //num1 = (double)(this.progressTable.Values.Sum() + this.completedSize) / (double)this.totalPackageSize;
-                    //num1 = Math.Min(num1, 1.0);
-                    //num1 = num1 >= 1.0 ? 0.99 : num1;
-                    //progressInfo.TotalComponents = this.totalPackageCount;
-                    //progressInfo.CurrentComponent = this.progressTable.Count + this.completedPackageCount;
+                { 
+                    var totalTaskProgressSize = (long)(progress * task.Size);
+                     _totalProgressSize += totalTaskProgressSize;
+                     var totalProgress = (double)_totalProgressSize / TotalSize;
+                     totalProgress = Math.Min(totalProgress, 1.0);
+                     currentProgress = totalProgress >= 1.0 ? 0.99 : totalProgress;
+                     actualProgressInfo.TotalComponents = PackageProgressCollection?.Count ?? 0;
+                     actualProgressInfo.CurrentComponent = 1;
                 }
             }
         }
 
-        _progressReporter.Report(task.Component.Id, progress, task.Type, actualProgressInfo);
+        _progressReporter.Report(task.Component.Id, currentProgress, task.Type, actualProgressInfo);
+
+        static long CalculateMovingAverage(long currentByteRate, long previousByteRate, int reportTimes)
+        {
+            return previousByteRate + (currentByteRate - previousByteRate) / reportTimes;
+        }
     }
 }
