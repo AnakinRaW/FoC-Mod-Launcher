@@ -4,5 +4,5 @@ namespace AnakinRaW.AppUpaterFramework.Updater.Progress;
 
 internal interface ITaskProgressReporter
 {
-    void Report(IProgressTask task, double progress, ProgressInfo progressInfo);
+    void Report(IProgressTask task, double progress);
 }

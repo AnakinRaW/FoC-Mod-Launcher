@@ -45,6 +45,6 @@ internal class DownloadTask : SynchronizedTask, IProgressTask
 
     private void ReportProgress(double progress)
     {
-        ProgressReporter.Report(this, progress, new ProgressInfo());
+        ProgressReporter.Report(this, progress);
     }
 }

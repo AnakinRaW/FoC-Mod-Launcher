@@ -31,9 +31,5 @@ internal class InstallTask : RunnerTask, IProgressTask
 
     protected override void RunCore(CancellationToken token)
     {
-        for (int i = 0; i < 100; i++)
-        {
-            Task.Delay(50, token).Wait(token);
-        }
     }
 }

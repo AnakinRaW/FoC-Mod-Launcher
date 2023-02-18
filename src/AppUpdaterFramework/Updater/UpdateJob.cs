@@ -48,9 +48,9 @@ internal sealed class UpdateJob : JobBase, IDisposable
         _itemsToProcess = new HashSet<IUpdateItem>(updateCatalog.UpdateItems);
 
         _installsRunner = new TaskRunner(_serviceProvider);
-        _installProgress = new AggregatedComponentProgressReporter(progressReporter);
+        _installProgress = new AggregatedInstallProgressReporter(progressReporter);
         _downloadsRunner = new ParallelTaskRunner(2, _serviceProvider);
-        _downloadProgress = new AggregatedComponentProgressReporter(progressReporter);
+        _downloadProgress = new AggregatedDownloadProgressReporter(progressReporter);
 
         RegisterEvents();
     }

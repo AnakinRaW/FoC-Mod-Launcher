@@ -125,7 +125,7 @@ public class UpdateService : IUpdateService
 
 //    }
 
-//    public void Report(string package, double progress, ProgressType type, ProgressInfo detailedProgress)
+//    public void CalculateAggregatedProgress(string package, double progress, ProgressType type, ProgressInfo detailedProgress)
 //    {
 
 //    }
