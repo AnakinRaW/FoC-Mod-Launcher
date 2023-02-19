@@ -14,7 +14,7 @@ using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 using AnakinRaW.CommonUtilities.Wpf.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using FocLauncher.Services;
-using FocLauncher.Update.ProductMetadata;
+using FocLauncher.Update.LauncherImplementations;
 using FocLauncher.Utilities;
 using FocLauncher.ViewModels;
 using Microsoft.Extensions.DependencyInjection;

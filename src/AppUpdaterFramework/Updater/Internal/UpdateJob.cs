@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using AnakinRaW.AppUpaterFramework.Metadata.Update;
+using AnakinRaW.AppUpaterFramework.Updater.Configuration;
 using AnakinRaW.AppUpaterFramework.Updater.Progress;
 using AnakinRaW.AppUpaterFramework.Updater.Tasks;
 using AnakinRaW.AppUpaterFramework.Utilities;
@@ -82,6 +83,9 @@ internal sealed class UpdateJob : JobBase, IDisposable
         _componentsToDownload.Clear();
         _installsOrRemoves.Clear();
 
+        var configuration = _serviceProvider.GetService<IUpdateConfigurationProvider>()?.GetConfiguration() ??
+                            UpdateConfiguration.Default;
+
         foreach (var updateItem in _itemsToProcess)
         {
             var installedComponent = updateItem.InstalledComponent;
@@ -92,7 +96,7 @@ internal sealed class UpdateJob : JobBase, IDisposable
                     throw new InvalidOperationException($"OriginInfo is missing for '{updateComponent}'");
                 
                 var installTask = new InstallTask(updateComponent, UpdateAction.Update, _installProgress, _serviceProvider);
-                var downloadTask = new DownloadTask(updateComponent, _downloadProgress, _serviceProvider);
+                var downloadTask = new DownloadTask(updateComponent, _downloadProgress, configuration, _serviceProvider);
 
                 _installsOrRemoves.Add(installTask);
                 _componentsToDownload.Add(downloadTask);

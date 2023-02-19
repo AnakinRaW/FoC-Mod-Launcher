@@ -9,7 +9,7 @@ using AnakinRaW.AppUpaterFramework.Metadata.Product;
 using AnakinRaW.AppUpaterFramework.Product.Manifest;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace FocLauncher.Update.ProductMetadata;
+namespace FocLauncher.Update.LauncherImplementations;
 
 internal class LauncherInstalledManifestProvider : IInstalledManifestProvider
 {
@@ -38,28 +38,32 @@ internal class LauncherInstalledManifestProvider : IInstalledManifestProvider
         var launcherUpdaterId = new ProductComponentIdentity("Launcher.Updater", identityVersion);
 
 
-        var launcherExecutable = BuildFileComponent(launcherExeId, KnownProductVariablesKeys.InstallDir,
+        var launcherExecutable = BuildFileComponent(launcherExeId, "FoC Mod Launcher", KnownProductVariablesKeys.InstallDir,
             LauncherAssemblyInfo.AssemblyName, fileVersion, variables);
-        var launcherUpdater = BuildFileComponent(launcherUpdaterId, LauncherVariablesKeys.LauncherAppData,
+        var launcherUpdater = BuildFileComponent(launcherUpdaterId, "Launcher Updater", LauncherVariablesKeys.LauncherAppData,
             LauncherConstants.AppUpdaterAssemblyName, fileVersion, variables);
 
 
-        yield return new ComponentGroup(new ProductComponentIdentity("Launcher.CoreApplicationGroup", identityVersion), new List<IProductComponentIdentity>
+        yield return new ComponentGroup(new ProductComponentIdentity(LauncherConstants.ApplicationCoreGroupId, identityVersion), new List<IProductComponentIdentity>
         {
             launcherExeId,
             launcherUpdaterId
-        });
+        })
+        {
+            Name = $"{LauncherAssemblyInfo.ProductName}"
+        };
         yield return launcherExecutable;
         yield return launcherUpdater;
     }
 
 
-    private SingleFileComponent BuildFileComponent(IProductComponentIdentity identity, string directoryKey, string fileName, string version, ProductVariables variables)
+    private SingleFileComponent BuildFileComponent(IProductComponentIdentity identity, string name, string directoryKey, string fileName, string version, ProductVariables variables)
     {
         var installDirectory = EnsureVariable(variables, directoryKey);
         var filePath = _fileSystem.Path.Combine(installDirectory, fileName);
         return new SingleFileComponent(identity, installDirectory, null)
         {
+            Name = name,
             DetectConditions = new[]
             {
                 new FileCondition(filePath)

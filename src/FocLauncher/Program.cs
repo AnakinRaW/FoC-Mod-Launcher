@@ -6,6 +6,7 @@ using AnakinRaW.AppUpaterFramework;
 using AnakinRaW.AppUpaterFramework.Product;
 using AnakinRaW.AppUpaterFramework.Product.Manifest;
 using AnakinRaW.AppUpaterFramework.Services;
+using AnakinRaW.AppUpaterFramework.Updater.Configuration;
 using AnakinRaW.CommonUtilities.DownloadManager;
 using AnakinRaW.CommonUtilities.DownloadManager.Configuration;
 using AnakinRaW.CommonUtilities.DownloadManager.Verification;
@@ -16,7 +17,6 @@ using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.StatusBar;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Theming;
 using FocLauncher.Services;
-using FocLauncher.Update.ProductMetadata;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Debug;
@@ -24,6 +24,7 @@ using Serilog.Extensions.Logging;
 using AnakinRaW.CommonUtilities.FileSystem;
 using AnakinRaW.CommonUtilities.FileSystem.Windows;
 using FocLauncher.Update.Commands;
+using FocLauncher.Update.LauncherImplementations;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
 using FocLauncher.Update.ViewModels;
 using FocLauncher.Utilities;
@@ -135,8 +136,8 @@ internal static class Program
         serviceCollection.AddSingleton<IProductViewModelFactory>(sp => new ProductViewModelFactory(sp));
         serviceCollection.AddSingleton<IInstalledManifestProvider>(sp => new LauncherInstalledManifestProvider(sp));
         serviceCollection.AddSingleton(CreateDownloadConfiguration());
-
-        serviceCollection.AddScoped<IUpdateCommandHandler>(sp => new UpdateCommandHandler(sp));
+        serviceCollection.AddSingleton<IUpdateCommandHandler>(sp => new UpdateCommandHandler(sp));
+        serviceCollection.AddSingleton<IUpdateConfigurationProvider>(sp => new LauncherUpdateConfigurationProvider(sp));
     }
 
     private static IDownloadManagerConfiguration CreateDownloadConfiguration()

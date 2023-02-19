@@ -8,6 +8,9 @@ namespace FocLauncher;
 internal static class LauncherAssemblyInfo
 {
     internal static Assembly CurrentAssembly { get; }
+
+    internal static string ProductName { get; }
+
     internal static string InformationalVersion { get; }
 
     internal static string FileVersion { get; }
@@ -23,7 +26,10 @@ internal static class LauncherAssemblyInfo
         var executingAssembly = Assembly.GetExecutingAssembly();
         CurrentAssembly = executingAssembly;
         InformationalVersion = executingAssembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
-        FileVersion = FileVersionInfo.GetVersionInfo(executingAssembly.Location).FileVersion;
+
+        var fv = FileVersionInfo.GetVersionInfo(executingAssembly.Location);
+        FileVersion = fv.FileVersion;
+        ProductName = fv.ProductName;
         AssemblyVersion = executingAssembly.GetName().Version.ToString();
         Title = executingAssembly.GetCustomAttribute<AssemblyTitleAttribute>().Title;
         AssemblyName = executingAssembly.Modules.First().Name;

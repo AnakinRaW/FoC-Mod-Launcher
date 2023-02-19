@@ -17,7 +17,8 @@ public sealed class DownloadingProgressBarViewModel : ProgressBarViewModel
                 return null;
             if (progressInformation.Progress >= 1.0)
                 return "Downloaded";
-            return $"Downloading and verifying: {progressInformation.DetailedProgress.DownloadedSize} of {progressInformation.DetailedProgress.TotalSize}";
+            return
+                $"Downloading: {UpdateUtilities.ToHumanReadableSize(progressInformation.DetailedProgress.DownloadedSize)} of {UpdateUtilities.ToHumanReadableSize(progressInformation.DetailedProgress.TotalSize)}";
         }
     }
 
@@ -31,7 +32,7 @@ public sealed class DownloadingProgressBarViewModel : ProgressBarViewModel
             if (progressInformation.Progress >= 1.0)
                 return null;
             var speed = progressInformation.DetailedProgress.DownloadSpeed;
-            return speed > 0L ? $"( {UpdateUtilities.ToHumanReadableSize(speed)}/sec )" : null;
+            return speed > 0 ? $"( {UpdateUtilities.ToHumanReadableSize(speed)}/sec )" : null;
         }
     }
 

@@ -8,7 +8,7 @@ using AnakinRaW.AppUpaterFramework.Metadata.Product;
 using AnakinRaW.AppUpaterFramework.Product;
 using Flurl;
 
-namespace FocLauncher.Update.ProductMetadata;
+namespace FocLauncher.Update.LauncherImplementations;
 
 public class LauncherBranchManager : BranchManager
 {
@@ -44,7 +44,7 @@ public class LauncherBranchManager : BranchManager
 
     protected override Uri BuildManifestUri(string branchName)
     {
-        return new Uri(@"C:\manifest.json", UriKind.Absolute);
+        return new Uri(@"C:\Users\Anakin\Desktop\manifest.json", UriKind.Absolute);
         //return LauncherConstants.LauncherRootUrl.AppendPathSegments(branchName, ManifestFileName).ToUri();
     }
 }

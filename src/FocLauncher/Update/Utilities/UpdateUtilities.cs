@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FocLauncher.Update.Utilities;
 
@@ -17,28 +13,30 @@ internal static class UpdateUtilities
     {
         string unit;
         double sizeInUnit;
+        var useRounding = false;
         if (sizeInBytes >= GigaByteThreshold)
         {
             sizeInUnit = (double) sizeInBytes / GigaByteThreshold;
             unit = "GB";
+            useRounding = true;
         }
         else if (sizeInBytes >= MegaByteThreshold)
         {
-            sizeInUnit = (double)sizeInBytes / GigaByteThreshold;
+            sizeInUnit = (double)sizeInBytes / MegaByteThreshold;
             unit = "MB";
         }
         else if (sizeInBytes >= KiloByteThreshold)
         {
-            sizeInUnit = (double)sizeInBytes / GigaByteThreshold;
+            sizeInUnit = (double)sizeInBytes / KiloByteThreshold;
             unit = "KB";
         }
         else
         {
-            sizeInUnit = (double)sizeInBytes / GigaByteThreshold;
+            sizeInUnit = sizeInBytes;
             unit = "B";
         }
 
-        var approximatedSize = Math.Round(Math.Ceiling(sizeInUnit * 100.0) / 100.0, 2);
+        var approximatedSize = useRounding ? Math.Round(Math.Ceiling(sizeInUnit * 100.0) / 100.0, 2) : Math.Ceiling(sizeInUnit);
         var f = FormattableString.Invariant($"{approximatedSize:#,##0.##} {unit}");
         return f.ToString(CultureInfo.CurrentCulture);
     }

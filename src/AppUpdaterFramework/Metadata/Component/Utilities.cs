@@ -21,4 +21,9 @@ internal static class Utilities
         }
         return stringBuilder.ToString();
     }
+
+    public static string GetDisplayName(this IProductComponent component)
+    {
+        return component.Name ?? component.Id;
+    }
 }

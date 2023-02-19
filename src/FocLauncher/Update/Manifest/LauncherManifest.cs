@@ -13,7 +13,8 @@ namespace FocLauncher.Update.Manifest;
 
 public abstract record LauncherComponentBase(
     [property: JsonPropertyName("id")] string Id,
-    [property: JsonPropertyName("version")] string? Version
+    [property: JsonPropertyName("version")] string? Version,
+    [property: JsonPropertyName("name")] string? Name
 )
 {
     public IProductComponentIdentity ToIdentity()
@@ -34,18 +35,22 @@ public record LauncherManifest(
 public record LauncherComponent(
     string Id,
     string? Version,
+    string? Name,
     [property: JsonPropertyName("type")] ComponentType Type,
     [property: JsonPropertyName("items")] IReadOnlyList<ComponentId>? Items,
     [property: JsonPropertyName("originInfo")] OriginInfo? OriginInfo,
     [property: JsonPropertyName("installPath")] string? InstallPath,
     [property: JsonPropertyName("installSizes")] InstallSize? InstallSize,
     [property: JsonPropertyName("detectConditions")] IReadOnlyList<DetectCondition>? DetectConditions
-) : LauncherComponentBase(Id, Version)
+) : LauncherComponentBase(Id, Version, Name)
 {
     public IComponentGroup ToGroup()
     {
         var items = Items ?? Array.Empty<ComponentId>();
-        return new ComponentGroup(ToIdentity(), items.Select(i => i.ToIdentity()).ToList());
+        return new ComponentGroup(ToIdentity(), items.Select(i => i.ToIdentity()).ToList())
+        {
+            Name = Name
+        };
     }
 
     public IInstallableComponent ToInstallable()
@@ -68,19 +73,20 @@ public record LauncherComponent(
 
         return new SingleFileComponent(ToIdentity(), InstallPath!, OriginInfo.ToOriginInfo())
         {
+            Name = Name,
             InstallationSize = installationSize,
             DetectConditions = conditions
         };
     }
 }
 
-public record ComponentId(string Id, string? Version) : LauncherComponentBase(Id, Version);
+public record ComponentId(string Id, string? Version) : LauncherComponentBase(Id, Version, null);
 
 public record DetectCondition(
     [property: JsonPropertyName("type")] ConditionType Type,
     [property: JsonPropertyName("filePath")] string FilePath,
     [property: JsonPropertyName("version")] string Version,
-    [property: JsonPropertyName("size")] int Size,
+    [property: JsonPropertyName("size")] long Size,
     [property: JsonPropertyName("sha256")] string Sha256
 )
 {
@@ -102,14 +108,14 @@ public record DetectCondition(
 }
 
 public record struct InstallSize(
-    [property: JsonPropertyName("systemDrive")] int SystemDrive,
-    [property: JsonPropertyName("productDrive")] int ProductDrive
+    [property: JsonPropertyName("systemDrive")] long SystemDrive,
+    [property: JsonPropertyName("productDrive")] long ProductDrive
 );
 
 public record OriginInfo(
     [property: JsonPropertyName("fileName")] string FileName,
     [property: JsonPropertyName("url")] string Url,
-    [property: JsonPropertyName("size")] int? Size,
+    [property: JsonPropertyName("size")] long? Size,
     [property: JsonPropertyName("sha256")] string Sha256
 )
 {
@@ -133,7 +139,7 @@ internal static class ManifestHelpers
     public static ComponentIntegrityInformation FromSha256(string? hashValue)
     {
         return string.IsNullOrEmpty(hashValue)
-            ? default
+            ? ComponentIntegrityInformation.None
             : new ComponentIntegrityInformation(HexTools.StringToByteArray(hashValue!), HashType.Sha256);
     }
 

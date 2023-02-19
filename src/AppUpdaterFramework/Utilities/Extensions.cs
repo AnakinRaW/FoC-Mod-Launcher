@@ -53,4 +53,16 @@ internal static class Extensions
     {
         return result is InstallResult.Success or InstallResult.SuccessRestartRequired;
     }
+
+    public static Exception? TryGetWrappedException(this Exception exception)
+    {
+        var wrappedExceptions = exception.TryGetWrappedExceptions();
+        return wrappedExceptions != null && wrappedExceptions.Count == 1 ? wrappedExceptions.Single() : null;
+    }
+
+    public static IReadOnlyCollection<Exception>? TryGetWrappedExceptions(
+        this Exception exception)
+    {
+        return exception is AggregateException aggregateException ? aggregateException.Flatten().InnerExceptions : null;
+    }
 }

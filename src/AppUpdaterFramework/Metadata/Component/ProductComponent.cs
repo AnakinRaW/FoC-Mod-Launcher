@@ -8,6 +8,7 @@ public abstract class ProductComponent : IProductComponent
     public string Id { get; }
     public SemVersion? Version { get; }
     public string? Branch { get; }
+    public string? Name { get; init; }
     public abstract ComponentType Type { get; }
     public DetectionState DetectedState { get; set; }
 

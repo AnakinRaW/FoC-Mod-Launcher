@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using AnakinRaW.AppUpaterFramework.Metadata.Component;
 using AnakinRaW.AppUpaterFramework.Updater.Tasks;
 using Validation;
 
@@ -34,13 +35,16 @@ internal abstract class AggregatedComponentProgressReporter : ITaskProgressRepor
     {
         Requires.NotNull(task, nameof(task));
 
+        if (!_componentProgressCollection.Contains(task))
+            return;
+
         var actualProgressInfo = new ProgressInfo();
         var currentProgress = 0.0;
-        
+
         if (TotalSize > 0) 
             currentProgress = CalculateAggregatedProgress(task, progress, ref actualProgressInfo);
-
-        _progressReporter.Report(task.Component.Id, currentProgress, Type, actualProgressInfo);
+        
+        _progressReporter.Report(task.Component.GetDisplayName(), currentProgress, Type, actualProgressInfo);
     }
 
     protected abstract double CalculateAggregatedProgress(IProgressTask task, double taskProgress, ref ProgressInfo progressInfo);

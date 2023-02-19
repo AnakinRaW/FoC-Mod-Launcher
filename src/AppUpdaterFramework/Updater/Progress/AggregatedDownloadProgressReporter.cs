@@ -7,6 +7,8 @@ namespace AnakinRaW.AppUpaterFramework.Updater.Progress;
 
 internal class AggregatedDownloadProgressReporter : AggregatedComponentProgressReporter
 {
+    private const int MovingAverageCalculationWindow = 1000;
+
     private readonly object _syncLock = new();
     private readonly IDictionary<string, long> _progressTable = new Dictionary<string, long>(StringComparer.OrdinalIgnoreCase);
 
@@ -60,18 +62,19 @@ internal class AggregatedDownloadProgressReporter : AggregatedComponentProgressR
             currentProgress = Math.Min(currentProgress, 1.0);
 
             var deltaDownloadSpeed = _completedSizeForSpeedCalculation - _previousCompletedSizeForSpeedCalculation;
-            var totalSeconds = (now - _downloadTime).TotalSeconds;
-            if (totalSeconds > 10.0)
+            var totalMilliseconds = (now - _downloadTime).TotalMilliseconds;
+            
+            if (totalMilliseconds > 10000.0)
             {
                 _previousCompletedSizeForSpeedCalculation = _completedSizeForSpeedCalculation;
                 _downloadTime = now;
             }
-            if (deltaDownloadSpeed >= 0 && totalSeconds != 0.0)
+            if (deltaDownloadSpeed >= 0 && totalMilliseconds != 0.0)
             {
-                var currentByteRate = (long)(deltaDownloadSpeed / totalSeconds);
-                if (_reportTimes > 1000)
+                var currentByteRate = (long)(deltaDownloadSpeed * MovingAverageCalculationWindow / totalMilliseconds);
+                if (_reportTimes > MovingAverageCalculationWindow)
                     _reportTimes = 1;
-                _byteRate += CalculateMovingAverage(currentByteRate, _byteRate, _reportTimes);
+                _byteRate = CalculateMovingAverage(currentByteRate, _byteRate, _reportTimes);
                 ++_reportTimes;
             }
             progressInfo.DownloadedSize = _completedSize;
@@ -82,7 +85,7 @@ internal class AggregatedDownloadProgressReporter : AggregatedComponentProgressR
         if (_completedPackageCount >= TotalComponentCount && taskProgress >= 1.0)
         {
             currentProgress = 1.0;
-            progressInfo.DownloadSpeed = 0L;
+            progressInfo.DownloadSpeed = 0;
         }
         else
             currentProgress *= 0.99;

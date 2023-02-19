@@ -1,12 +1,12 @@
 ﻿using System;
-using System.IO.Abstractions;
 using System.IO;
+using System.IO.Abstractions;
 using System.Reflection;
 using AnakinRaW.AppUpaterFramework.Metadata.Product;
 using AnakinRaW.AppUpaterFramework.Product;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace FocLauncher.Update.ProductMetadata;
+namespace FocLauncher.Update.LauncherImplementations;
 
 internal class LauncherProductService : ProductServiceBase
 {

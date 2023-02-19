@@ -14,7 +14,7 @@ using FocLauncher.Update.Manifest;
 using Microsoft.Extensions.DependencyInjection;
 using Semver;
 
-namespace FocLauncher.Update.ProductMetadata;
+namespace FocLauncher.Update.LauncherImplementations;
 
 internal class LauncherManifestLoader : ManifestLoaderBase
 {
