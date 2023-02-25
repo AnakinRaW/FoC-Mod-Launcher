@@ -10,6 +10,7 @@ using AnakinRaW.AppUpaterFramework.Updater.Configuration;
 using AnakinRaW.CommonUtilities.DownloadManager;
 using AnakinRaW.CommonUtilities.DownloadManager.Configuration;
 using AnakinRaW.CommonUtilities.DownloadManager.Verification;
+using AnakinRaW.CommonUtilities.DownloadManager.Verification.HashVerification;
 using AnakinRaW.CommonUtilities.Registry;
 using AnakinRaW.CommonUtilities.Registry.Windows;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework;
@@ -132,7 +133,12 @@ internal static class Program
         serviceCollection.AddSingleton<IBranchManager>(sp => new LauncherBranchManager(sp));
         serviceCollection.AddSingleton<IManifestLoader>(sp => new LauncherManifestLoader(sp));
         serviceCollection.AddSingleton<IDownloadManager>(sp => new DownloadManager(sp));
-        serviceCollection.AddSingleton<IVerificationManager>(sp => new VerificationManager(sp));
+        serviceCollection.AddSingleton<IVerificationManager>(sp =>
+        {
+            var vm = new VerificationManager(sp);
+            vm.RegisterVerifier("*", new HashVerifier(sp));
+            return vm;
+        });
         serviceCollection.AddSingleton<IProductViewModelFactory>(sp => new ProductViewModelFactory(sp));
         serviceCollection.AddSingleton<IInstalledManifestProvider>(sp => new LauncherInstalledManifestProvider(sp));
         serviceCollection.AddSingleton(CreateDownloadConfiguration());

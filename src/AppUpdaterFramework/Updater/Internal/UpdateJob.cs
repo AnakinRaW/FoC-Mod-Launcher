@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using AnakinRaW.AppUpaterFramework.Metadata.Product;
 using AnakinRaW.AppUpaterFramework.Metadata.Update;
 using AnakinRaW.AppUpaterFramework.Updater.Configuration;
 using AnakinRaW.AppUpaterFramework.Updater.Progress;
@@ -23,6 +24,7 @@ internal sealed class UpdateJob : JobBase, IDisposable
     private readonly IProgressReporter _progressReporter;
     private readonly IServiceProvider _serviceProvider;
     private readonly ILogger? _logger;
+    private readonly IInstalledProduct _installedProduct;
 
     private readonly HashSet<IUpdateItem> _itemsToProcess;
 
@@ -45,6 +47,7 @@ internal sealed class UpdateJob : JobBase, IDisposable
         _progressReporter = progressReporter;
         _serviceProvider = serviceProvider;
         _logger = _serviceProvider.GetService<ILoggerFactory>()?.CreateLogger(GetType());
+        _installedProduct = updateCatalog.InstalledProduct;
 
         _itemsToProcess = new HashSet<IUpdateItem>(updateCatalog.UpdateItems);
 
@@ -95,8 +98,8 @@ internal sealed class UpdateJob : JobBase, IDisposable
                 if (updateComponent.OriginInfo is null)
                     throw new InvalidOperationException($"OriginInfo is missing for '{updateComponent}'");
                 
-                var installTask = new InstallTask(updateComponent, UpdateAction.Update, _installProgress, _serviceProvider);
                 var downloadTask = new DownloadTask(updateComponent, _downloadProgress, configuration, _serviceProvider);
+                var installTask = new InstallTask(updateComponent, installedComponent, downloadTask, _installProgress, configuration, _installedProduct.Variables, _serviceProvider);
 
                 _installsOrRemoves.Add(installTask);
                 _componentsToDownload.Add(downloadTask);
@@ -104,7 +107,7 @@ internal sealed class UpdateJob : JobBase, IDisposable
 
             if (updateItem.Action == UpdateAction.Delete && installedComponent != null)
             {
-                var removeTask = new InstallTask(installedComponent, UpdateAction.Delete, _installProgress, _serviceProvider);
+                var removeTask = new InstallTask(installedComponent, _installProgress, configuration, _installedProduct.Variables, _serviceProvider);
                 _installsOrRemoves.Add(removeTask);
             }
         }
@@ -142,9 +145,9 @@ internal sealed class UpdateJob : JobBase, IDisposable
             _logger?.LogTrace("Starting update job.");
             _linkedCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(token);
             _downloadsRunner.Run(_linkedCancellationTokenSource.Token);
-#if DEBUG
-            _downloadsRunner.Wait();
-#endif
+//#if DEBUG
+//            _downloadsRunner.Wait();
+//#endif
             _installsRunner.Run(_linkedCancellationTokenSource.Token);
             try
             {

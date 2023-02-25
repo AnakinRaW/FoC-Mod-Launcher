@@ -1,6 +1,7 @@
 ﻿using AnakinRaW.AppUpaterFramework.Conditions;
 using AnakinRaW.AppUpaterFramework.Product.Manifest;
 using AnakinRaW.AppUpaterFramework.Updater;
+using AnakinRaW.AppUpaterFramework.Updater.Installer;
 using AnakinRaW.AppUpaterFramework.Utilities;
 using AnakinRaW.CommonUtilities.Hashing;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,5 +23,9 @@ public static class LibraryInitialization
         var conditionEvaluator = new ConditionEvaluatorStore();
         conditionEvaluator.AddConditionEvaluator(new FileConditionEvaluator());
         serviceCollection.AddSingleton<IConditionEvaluatorStore>(_ => conditionEvaluator);
+
+        serviceCollection.AddSingleton<IInstallerFactory>(sp => new InstallerFactory(sp));
+
+        serviceCollection.AddSingleton<IDiskSpaceCalculator>(sp => new DiskSpaceCalculator(sp));
     }
 }

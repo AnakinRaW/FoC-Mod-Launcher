@@ -10,6 +10,7 @@ using AnakinRaW.AppUpaterFramework.Utilities;
 using AnakinRaW.CommonUtilities.DownloadManager;
 using AnakinRaW.CommonUtilities.DownloadManager.Verification;
 using AnakinRaW.CommonUtilities.DownloadManager.Verification.HashVerification;
+using AnakinRaW.CommonUtilities.Hashing;
 using AnakinRaW.CommonUtilities.TaskPipeline.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -148,7 +149,8 @@ internal class DownloadTask : SynchronizedTask, IProgressTask
     private async Task DownloadAndVerifyAsync(IDownloadManager downloadManager, string downloadPath, CancellationToken token)
     {
         var integrityInformation = Component.OriginInfo!.IntegrityInformation;
-        var hashContext = new HashVerificationContext(integrityInformation.Hash, integrityInformation.HashType);
+        var hashContext = new HashVerificationContext(integrityInformation.Hash, HashType.None);
+
         try
         {
             using var file = new FileStream(downloadPath, FileMode.Create, FileAccess.ReadWrite, FileShare.Read);
