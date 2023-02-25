@@ -15,10 +15,14 @@ public class SingleFileComponent : InstallableComponent, IPhysicalInstallable
     /// <inheritdoc/>
     public string InstallPath { get; }
 
-    public SingleFileComponent(IProductComponentIdentity identity, string installPath, OriginInfo? originInfo) 
+    public string FileName { get; }
+
+    public SingleFileComponent(IProductComponentIdentity identity, string installPath, string fileName, OriginInfo? originInfo) 
         : base(identity, originInfo)
     {
         Requires.NotNullOrEmpty(installPath, nameof(installPath));
+        Requires.NotNullOrEmpty(fileName, nameof(fileName));
         InstallPath = installPath;
+        FileName = fileName;
     }
 }

@@ -40,6 +40,7 @@ public record LauncherComponent(
     [property: JsonPropertyName("items")] IReadOnlyList<ComponentId>? Items,
     [property: JsonPropertyName("originInfo")] OriginInfo? OriginInfo,
     [property: JsonPropertyName("installPath")] string? InstallPath,
+    [property: JsonPropertyName("fileName")] string? FileName,
     [property: JsonPropertyName("installSizes")] InstallSize? InstallSize,
     [property: JsonPropertyName("detectConditions")] IReadOnlyList<DetectCondition>? DetectConditions
 ) : LauncherComponentBase(Id, Version, Name)
@@ -58,6 +59,9 @@ public record LauncherComponent(
         if (string.IsNullOrEmpty(InstallPath))
             throw new CatalogException($"Illegal manifest: {nameof(InstallPath)} must not be null or empty.");
 
+        if (string.IsNullOrEmpty(FileName))
+            throw new CatalogException($"Illegal manifest: {nameof(FileName)} must not be null.");
+
         if (OriginInfo is null)
             throw new CatalogException($"Illegal manifest: {nameof(OriginInfo)} must not be null.");
 
@@ -71,7 +75,7 @@ public record LauncherComponent(
         else
             conditions = DetectConditions.Select(c => c.ToCondition()).ToList();
 
-        return new SingleFileComponent(ToIdentity(), InstallPath!, OriginInfo.ToOriginInfo())
+        return new SingleFileComponent(ToIdentity(), InstallPath!, FileName!, OriginInfo.ToOriginInfo())
         {
             Name = Name,
             InstallationSize = installationSize,

@@ -61,7 +61,7 @@ internal class LauncherInstalledManifestProvider : IInstalledManifestProvider
     {
         var installDirectory = EnsureVariable(variables, directoryKey);
         var filePath = _fileSystem.Path.Combine(installDirectory, fileName);
-        return new SingleFileComponent(identity, installDirectory, null)
+        return new SingleFileComponent(identity, installDirectory, fileName, null)
         {
             Name = name,
             DetectConditions = new[]
