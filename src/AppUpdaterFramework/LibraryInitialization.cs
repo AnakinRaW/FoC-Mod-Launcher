@@ -1,6 +1,7 @@
 ﻿using AnakinRaW.AppUpaterFramework.Conditions;
 using AnakinRaW.AppUpaterFramework.Product.Manifest;
 using AnakinRaW.AppUpaterFramework.Updater;
+using AnakinRaW.AppUpaterFramework.Updater.Backup;
 using AnakinRaW.AppUpaterFramework.Updater.Installer;
 using AnakinRaW.AppUpaterFramework.Utilities;
 using AnakinRaW.CommonUtilities.Hashing;
@@ -27,5 +28,7 @@ public static class LibraryInitialization
         serviceCollection.AddSingleton<IInstallerFactory>(sp => new InstallerFactory(sp));
 
         serviceCollection.AddSingleton<IDiskSpaceCalculator>(sp => new DiskSpaceCalculator(sp));
+
+        serviceCollection.AddSingleton<IBackupManager>(sp => new BackupManager(sp));
     }
 }

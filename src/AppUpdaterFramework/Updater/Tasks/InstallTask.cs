@@ -4,6 +4,7 @@ using AnakinRaW.CommonUtilities.TaskPipeline.Tasks;
 using System.Threading;
 using System;
 using AnakinRaW.AppUpaterFramework.Metadata.Product;
+using AnakinRaW.AppUpaterFramework.Updater.Backup;
 using AnakinRaW.AppUpaterFramework.Updater.Progress;
 using AnakinRaW.AppUpaterFramework.Updater.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -139,16 +140,24 @@ internal class InstallTask : RunnerTask, IProgressTask
 
     private void BackupComponent()
     {
-        //try {
-        //    BackupManager.Instance.CreateBackup(Component);
-        //}
-        //catch (Exception ex) {
-        //    Logger?.LogWarning(ex, $"Creating backup of {Component.Name} failed.");
-        //    if (_updateConfiguration.BackupPolicy == BackupPolicy.Required) {
-        //        Logger?.LogError("Stopping install due to BackupPolicy");
-        //        throw;
-        //    }
-        //}
+        if (_currentComponent is null)
+            return;
+        
+        var backupManager = Services.GetRequiredService<IBackupManager>();
+        
+        try
+        {
+            backupManager.BackupComponent(_currentComponent);
+        }
+        catch (Exception ex)
+        {
+            Logger?.LogWarning(ex, $"Creating backup of {Component.Id} failed.");
+            if (_updateConfiguration.BackupPolicy == BackupPolicy.Required)
+            {
+                Logger?.LogError("Stopping install due to BackupPolicy");
+                throw;
+            }
+        }
     }
 
     private void ValidateEnoughDiskSpaceAvailable()

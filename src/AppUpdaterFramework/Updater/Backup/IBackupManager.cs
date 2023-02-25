@@ -7,6 +7,10 @@ internal interface IBackupManager
 {
     void BackupComponent(IInstallableComponent component);
 
+    void RestoreBackup(IInstallableComponent component);
+
+    void RestoreAll();
+
     void RemoveBackups();
 }
 
@@ -18,6 +22,15 @@ internal class BackupManager : IBackupManager
     }
 
     public void BackupComponent(IInstallableComponent component)
+    {
+    }
+
+    public void RestoreBackup(IInstallableComponent component)
+    {
+        
+    }
+
+    public void RestoreAll()
     {
     }
 
