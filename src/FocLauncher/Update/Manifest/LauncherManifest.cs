@@ -90,7 +90,6 @@ public record DetectCondition(
     [property: JsonPropertyName("type")] ConditionType Type,
     [property: JsonPropertyName("filePath")] string FilePath,
     [property: JsonPropertyName("version")] string Version,
-    [property: JsonPropertyName("size")] long Size,
     [property: JsonPropertyName("sha256")] string Sha256
 )
 {
