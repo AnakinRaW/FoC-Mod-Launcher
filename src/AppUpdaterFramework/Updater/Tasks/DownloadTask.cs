@@ -68,10 +68,7 @@ internal class DownloadTask : SynchronizedTask, IProgressTask
         try
         {
             ReportProgress(0.0);
-
-            var destination = _fileSystem.DirectoryInfo.New("C:\\Test");
-            destination.Create();
-
+            
             Exception? lastException = null;
             if (!token.IsCancellationRequested)
                 DownloadAction(token, out lastException);
