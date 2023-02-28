@@ -28,11 +28,9 @@ internal class InstallTask : RunnerTask, IProgressTask
 
     IProductComponent IComponentTask.Component => Component;
 
-    internal InstallResult Result { get; set; } = InstallResult.Success;
+    internal InstallResult Result { get; private set; } = InstallResult.Success;
 
     public ITaskProgressReporter ProgressReporter { get; }
-
-    public ProgressType Type => ProgressType.Install;
 
     public long Size => Component.InstallationSize.Total;
 
@@ -48,8 +46,8 @@ internal class InstallTask : RunnerTask, IProgressTask
 
     public InstallTask(
         IInstallableComponent installable,
-        IInstallableComponent? currentComponent,
-    DownloadTask download, 
+        IInstallableComponent? currentComponent, 
+        DownloadTask download, 
         ITaskProgressReporter progressReporter, 
         IUpdateConfiguration updateConfiguration,
         ProductVariables productVariables,

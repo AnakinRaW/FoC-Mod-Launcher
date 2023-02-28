@@ -138,16 +138,16 @@ internal sealed class UpdateJob : JobBase, IDisposable
         if (!componentsToInstallOrRemove.Any())
             _progressReporter.Report("_", 1.0, ProgressType.Install, new ProgressInfo());
         else
-            _installProgress.Initialize(componentsToInstallOrRemove);
-
+            _installProgress.Initialize(componentsToInstallOrRemove); 
+        
         try
         {
             _logger?.LogTrace("Starting update job.");
             _linkedCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(token);
             _downloadsRunner.Run(_linkedCancellationTokenSource.Token);
-//#if DEBUG
-//            _downloadsRunner.Wait();
-//#endif
+#if DEBUG
+            _downloadsRunner.Wait();
+#endif
             _installsRunner.Run(_linkedCancellationTokenSource.Token);
             try
             {
@@ -192,23 +192,6 @@ internal sealed class UpdateJob : JobBase, IDisposable
         IsCancelled |= e.Cancel;
         if (e.Cancel && _linkedCancellationTokenSource is not null) 
             _linkedCancellationTokenSource.Cancel();
-        try
-        {
-            if (e.Cancel || e.Task is not IComponentTask)
-                return;
-            if (e.Task is InstallTask)
-            {
-                // TODO
-            }
-            if (e.Task is DownloadTask)
-            {
-                // TODO
-            }
-        }
-        catch (Exception ex)
-        {
-            _logger?.LogError(ex, ex.Message);
-        }
     }
 
     public void Dispose()

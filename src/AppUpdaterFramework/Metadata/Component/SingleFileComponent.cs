@@ -1,4 +1,7 @@
-﻿using Validation;
+﻿using System.IO.Abstractions;
+using AnakinRaW.AppUpaterFramework.Metadata.Product;
+using AnakinRaW.AppUpaterFramework.Utilities;
+using Validation;
 
 namespace AnakinRaW.AppUpaterFramework.Metadata.Component;
 
@@ -24,5 +27,13 @@ public class SingleFileComponent : InstallableComponent, IPhysicalInstallable
         Requires.NotNullOrEmpty(fileName, nameof(fileName));
         InstallPath = installPath;
         FileName = fileName;
+    }
+
+    internal IFileInfo GetFilePath(IFileSystem fileSystem, ProductVariables? variables = null)
+    {
+        var variablesDict = variables?.ToDictionary();
+        var fileName = VariableResolver.Default.ResolveVariables(FileName, variablesDict);
+        var installPath = VariableResolver.Default.ResolveVariables(InstallPath, variablesDict);
+        return fileSystem.FileInfo.New(fileSystem.Path.Combine(installPath, fileName));
     }
 }

@@ -63,7 +63,7 @@ internal class UpdateCatalogProvider : IUpdateCatalogProvider
     }
 
 
-    public ICollection<IUpdateItem> Compare(IInstalledComponentsCatalog currentCatalog, IReadOnlyCollection<IInstallableComponent> availableComponents)
+    private static ICollection<IUpdateItem> Compare(IInstalledComponentsCatalog currentCatalog, IEnumerable<IInstallableComponent> availableComponents)
     {
         var updateItems = new List<IUpdateItem>();
 
