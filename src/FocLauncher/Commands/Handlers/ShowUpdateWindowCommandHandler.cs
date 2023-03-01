@@ -18,6 +18,9 @@ using FocLauncher.Update.LauncherImplementations;
 using FocLauncher.Update.ViewModels;
 using FocLauncher.Utilities;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging.Debug;
+using Microsoft.Extensions.Logging;
+using Serilog.Extensions.Logging;
 
 namespace FocLauncher.Commands.Handlers;
 
@@ -102,10 +105,48 @@ internal class ShowUpdateWindowCommandHandler : AsyncCommandHandlerBase, IShowUp
         var modalWindowService = _parentServiceProvider.GetRequiredService<IModalWindowService>();
         var launcherEnvironment = _parentServiceProvider.GetRequiredService<ILauncherEnvironment>();
 
+        SetLogging(serviceCollection, fileSystem, launcherEnvironment);
+
         serviceCollection.AddSingleton(_connectionManager);
         serviceCollection.AddSingleton(fileSystem);
         serviceCollection.AddSingleton(fileSystemService);
         serviceCollection.AddSingleton(modalWindowService);
         serviceCollection.AddSingleton(launcherEnvironment);
+    }
+
+    private static void SetLogging(IServiceCollection serviceCollection, IFileSystem fileSystem, ILauncherEnvironment environment)
+    {
+        serviceCollection.AddLogging(l =>
+        {
+#if DEBUG
+            l.AddDebug();
+#endif
+            l.AddConsole();
+            SetFileLogging(l);
+        }).Configure<LoggerFilterOptions>(o =>
+        {
+#if DEBUG
+            o.AddFilter<DebugLoggerProvider>(null, LogLevel.Trace);
+#endif
+            o.AddFilter<SerilogLoggerProvider>(null, LogLevel.Trace);
+        });
+
+
+        void SetFileLogging(ILoggingBuilder builder)
+        {
+            var logPath = fileSystem.Path.Combine(
+                fileSystem.Path.GetTempPath(),
+                LauncherEnvironment.LauncherLogDirectoryName,
+                "launcher_update.log");
+            var fileLogLevel = LogLevel.Information;
+            var version = LauncherAssemblyInfo.InformationalAsSemVer();
+            if (version is not null && version.IsPrerelease)
+                fileLogLevel = LogLevel.Debug;
+#if DEBUG
+            logPath = "log_update.txt";
+            fileLogLevel = LogLevel.Trace;
+#endif
+            builder.AddFile(logPath, fileLogLevel);
+        }
     }
 }
