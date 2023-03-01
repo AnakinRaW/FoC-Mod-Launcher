@@ -111,11 +111,11 @@ internal class InstallTask : RunnerTask, IProgressTask
                 {
                     Assumes.NotNull(_download);
                     var localPath = _download.DownloadPath;
-                    //Result = installer.Install(Component, token, localPath);
+                    Result = installer.Install(Component, localPath, _productVariables, token);
                     break;
                 }
                 case UpdateAction.Delete:
-                    //Result = installer.Remove(Component, token);
+                    Result = installer.Remove(Component, _productVariables, token);
                     break;
             }
 
