@@ -87,7 +87,7 @@ public class UpdateService : IUpdateService
         }
     }
 
-    public async Task<object> Update(IUpdateCatalog updateCatalog)
+    public async Task<UpdateResult> Update(IUpdateCatalog updateCatalog)
     {
         var updater = CreateUpdater(updateCatalog);
         var updateSession = new UpdateSession(updateCatalog.UpdateReference, updater);

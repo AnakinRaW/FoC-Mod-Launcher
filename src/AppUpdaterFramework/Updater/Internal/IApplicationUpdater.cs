@@ -9,5 +9,5 @@ internal interface IApplicationUpdater
 {
     event EventHandler<ProgressEventArgs?> Progress;
 
-    Task<object> UpdateAsync(CancellationToken token);
+    Task<UpdateResult> UpdateAsync(CancellationToken token);
 }

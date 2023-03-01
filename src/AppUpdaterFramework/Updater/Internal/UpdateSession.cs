@@ -24,7 +24,7 @@ internal class UpdateSession : IUpdateSession
         _updater = updater;
     }
 
-    internal async Task<object> StartUpdate()
+    internal async Task<UpdateResult> StartUpdate()
     {
         try
         {

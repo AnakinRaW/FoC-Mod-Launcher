@@ -39,15 +39,17 @@ internal class UpdateCommandHandler : AsyncCommandHandlerBase<IUpdateCatalog>, I
 
     public override async Task HandleAsync(IUpdateCatalog parameter)
     {
+        UpdateResult updateResult;
         try
         {
-            var result = await UpdateAsync(parameter).ConfigureAwait(false);
+            updateResult = await UpdateAsync(parameter).ConfigureAwait(false);
         }
         catch (Exception e)
         {
             _logger?.LogError(e, $"Unhandled exception {e.GetType()} encountered: {e.Message}");
-            // TODO: Handle error state
+            updateResult = new UpdateResult(); // TODO
         }
+        // TODO: Handle result
     }
 
     public override bool CanHandle(IUpdateCatalog? parameter)
@@ -55,7 +57,7 @@ internal class UpdateCommandHandler : AsyncCommandHandlerBase<IUpdateCatalog>, I
         return !_isUpdateInProgress;
     }
 
-    private Task<object> UpdateAsync(IUpdateCatalog parameter)
+    private Task<UpdateResult> UpdateAsync(IUpdateCatalog parameter)
     {
         return _updateService.Update(parameter);
     }

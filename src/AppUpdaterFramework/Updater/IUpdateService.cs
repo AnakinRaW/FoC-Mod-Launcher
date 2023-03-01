@@ -18,5 +18,5 @@ public interface IUpdateService
 
     Task CheckForUpdates(IProductReference productReference, CancellationToken token = default);
 
-    Task<object> Update(IUpdateCatalog updateCatalog);
+    Task<UpdateResult> Update(IUpdateCatalog updateCatalog);
 }

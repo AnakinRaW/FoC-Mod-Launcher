@@ -34,22 +34,39 @@ internal class ApplicationUpdater : IApplicationUpdater, IProgressReporter
         Progress?.Invoke(this, new ProgressEventArgs(package, progress, type, detailedProgress));
     }
 
-    public async Task<object> UpdateAsync(CancellationToken token)
+    public async Task<UpdateResult> UpdateAsync(CancellationToken token)
     {
         try
         {
-            token.ThrowIfCancellationRequested();
-            await UpdateCoreAsync(token);
-            return null;
+            try
+            {
+                token.ThrowIfCancellationRequested();
+                await UpdateCoreAsync(token).ConfigureAwait(false);
+                return await CreateInstallOperationResultAsync();
+            }
+            catch (Exception e)
+            {
+                _logger?.LogError(e, $"Update failed: {e.Message}");
+                if (ShouldRethrowEngineException(e))
+                    ExceptionDispatchInfo.Capture(e).Throw();
+                return await CreateInstallOperationResultAsync(e);
+            }
+        }
+        catch (Exception e) when (e.IsOperationCanceledException())
+        {
+            _logger?.LogTrace("User canceled the update.");
+            return new UpdateResult(); // TODO
         }
         catch (Exception e)
         {
-            _logger?.LogError($"Update failed: {e.Message}");
-            if (ShouldRethrowEngineException(e)) 
-                ExceptionDispatchInfo.Capture(e).Throw();
-
-            return null; // TODO
+            _logger?.LogError(e, $"Update operation failed with error: {e.Message}");
+            return new UpdateResult(); // TODO
         }
+    }
+
+    private async Task<UpdateResult> CreateInstallOperationResultAsync(Exception? exception = null)
+    {
+        return null;
     }
 
     private async Task UpdateCoreAsync(CancellationToken token)
@@ -63,10 +80,22 @@ internal class ApplicationUpdater : IApplicationUpdater, IProgressReporter
             {
                 using var updateJob = new UpdateJob(_updateCatalog, this, _serviceProvider);
                 updateJob.Plan();
-                _logger?.LogTrace("Starting update");
-                updateJob.Run(token);
+                // TODO: PreChecks
+                try
+                {
+                    _logger?.LogTrace("Starting update");
+                    updateJob.Run(token);
+                }
+                catch (Exception e)
+                {
+                    _logger?.LogError(e, "Failed update: " + e.Message);
+                    throw;
+                }
+                finally
+                {
+                    _logger?.LogTrace("Completed update");
+                }
             }, CancellationToken.None).ConfigureAwait(false);
-
         }
         catch (OperationCanceledException)
         {
