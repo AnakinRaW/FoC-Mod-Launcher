@@ -9,7 +9,7 @@ using FocLauncher.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace FocLauncher.Update.Commands;
+namespace FocLauncher.Update.Commands.Handlers;
 
 internal class UpdateCommandHandler : AsyncCommandHandlerBase<IUpdateCatalog>, IUpdateCommandHandler
 {

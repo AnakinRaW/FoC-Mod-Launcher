@@ -25,7 +25,7 @@
                     <ControlTemplate TargetType="{x:Type Button}">
                         <Border x:Name="Background" Padding="2,0"
                                 IsHitTestVisible="True" Background="{TemplateBinding Background}">
-                            <controls:ThemedImage Width="16" Height="16" ImakgeKey="{Binding Image}"/>
+                            <controls:ThemedImage x:Name="Image" Width="16" Height="16" ImakgeKey="{Binding Image}"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Value="True" Property="IsMouseOver">
@@ -34,6 +34,9 @@
                                         <SolidColorBrush Opacity="0.2" Color="White"/>
                                     </Setter.Value>
                                 </Setter>
+                            </Trigger>
+                            <Trigger Value="False" Property="IsEnabled">
+                                <Setter TargetName="Image" Property="Grayscale" Value="True"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>

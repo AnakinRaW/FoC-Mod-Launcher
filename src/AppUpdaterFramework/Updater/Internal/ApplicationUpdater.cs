@@ -66,7 +66,7 @@ internal class ApplicationUpdater : IApplicationUpdater, IProgressReporter
 
     private async Task<UpdateResult> CreateInstallOperationResultAsync(Exception? exception = null)
     {
-        return null;
+        return new UpdateResult();
     }
 
     private async Task UpdateCoreAsync(CancellationToken token)

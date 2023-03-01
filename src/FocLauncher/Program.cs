@@ -1,16 +1,7 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.IO.Abstractions;
 using System.Threading.Tasks;
-using AnakinRaW.AppUpaterFramework;
-using AnakinRaW.AppUpaterFramework.Product;
-using AnakinRaW.AppUpaterFramework.Product.Manifest;
 using AnakinRaW.AppUpaterFramework.Services;
-using AnakinRaW.AppUpaterFramework.Updater.Configuration;
-using AnakinRaW.CommonUtilities.DownloadManager;
-using AnakinRaW.CommonUtilities.DownloadManager.Configuration;
-using AnakinRaW.CommonUtilities.DownloadManager.Verification;
-using AnakinRaW.CommonUtilities.DownloadManager.Verification.HashVerification;
 using AnakinRaW.CommonUtilities.Registry;
 using AnakinRaW.CommonUtilities.Registry.Windows;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework;
@@ -24,11 +15,9 @@ using Microsoft.Extensions.Logging.Debug;
 using Serilog.Extensions.Logging;
 using AnakinRaW.CommonUtilities.FileSystem;
 using AnakinRaW.CommonUtilities.FileSystem.Windows;
-using FocLauncher.Update.Commands;
-using FocLauncher.Update.LauncherImplementations;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
-using FocLauncher.Update.ViewModels;
 using FocLauncher.Utilities;
+using FocLauncher.Commands.Handlers;
 
 namespace FocLauncher;
 
@@ -94,8 +83,6 @@ internal static class Program
 
         serviceCollection.AddTransient<IStatusBarFactory>(_ => new LauncherStatusBarFactory()); 
 
-        CreateUpdateProgramServices(serviceCollection);
-
         _serviceCollection.MakeReadOnly();
     }
     
@@ -121,37 +108,12 @@ internal static class Program
         serviceCollection.AddTransient<IRegistry>(_ => new WindowsRegistry());
         serviceCollection.AddSingleton<ILauncherRegistry>(sp => new LauncherRegistry(sp));
         serviceCollection.AddSingleton<IConnectionManager>(_ => new ConnectionManager());
-        
+
+        serviceCollection.AddSingleton<IShowUpdateWindowCommandHandler>(sp => new ShowUpdateWindowCommandHandler(sp));
+
         return serviceCollection;
     }
 
-    private static void CreateUpdateProgramServices(IServiceCollection serviceCollection)
-    {
-        serviceCollection.AddUpdateFramework();
-        
-        serviceCollection.AddSingleton<IProductService>(sp => new LauncherProductService(sp));
-        serviceCollection.AddSingleton<IBranchManager>(sp => new LauncherBranchManager(sp));
-        serviceCollection.AddSingleton<IManifestLoader>(sp => new LauncherManifestLoader(sp));
-        serviceCollection.AddSingleton<IDownloadManager>(sp => new DownloadManager(sp));
-        serviceCollection.AddSingleton<IVerificationManager>(sp =>
-        {
-            var vm = new VerificationManager(sp);
-            vm.RegisterVerifier("*", new HashVerifier(sp));
-            return vm;
-        });
-        serviceCollection.AddSingleton<IProductViewModelFactory>(sp => new ProductViewModelFactory(sp));
-        serviceCollection.AddSingleton<IInstalledManifestProvider>(sp => new LauncherInstalledManifestProvider(sp));
-        serviceCollection.AddSingleton(CreateDownloadConfiguration());
-        serviceCollection.AddSingleton<IUpdateCommandHandler>(sp => new UpdateCommandHandler(sp));
-        serviceCollection.AddSingleton<IUpdateConfigurationProvider>(sp => new LauncherUpdateConfigurationProvider(sp));
-    }
-
-    private static IDownloadManagerConfiguration CreateDownloadConfiguration()
-    {
-        return new DownloadManagerConfiguration { VerificationPolicy = VerificationPolicy.Optional };
-    }
-
-    [SuppressMessage("ReSharper", "RedundantAssignment")]
     private static void SetLogging(IServiceCollection serviceCollection, IFileSystem fileSystem, ILauncherEnvironment environment)
     {
         serviceCollection.AddLogging(l =>

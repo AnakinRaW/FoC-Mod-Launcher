@@ -6,6 +6,7 @@ using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
 using CommunityToolkit.Mvvm.ComponentModel;
+using FocLauncher.Commands.Handlers;
 using FocLauncher.Update.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using Validation;
@@ -51,9 +52,8 @@ internal partial class MainPageViewModel : LoadingViewModelBase, IMainPageViewMo
                     _isInitialized = true;
                 }
 
-                var vm = new UpdateWindowViewModel(ServiceProvider);
-                await ServiceProvider.GetRequiredService<IModalWindowService>().ShowModal(vm);
-
+                await ServiceProvider.GetRequiredService<IShowUpdateWindowCommandHandler>().HandleAsync();
+                
                 IsLoading = false;
             }
             finally

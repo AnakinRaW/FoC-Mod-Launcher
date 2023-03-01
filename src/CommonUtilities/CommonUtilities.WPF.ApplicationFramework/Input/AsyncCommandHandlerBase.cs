@@ -8,3 +8,10 @@ public abstract class AsyncCommandHandlerBase<T> : CommandHandlerBase<T>
 
     public abstract override Task HandleAsync(T parameter);
 }
+
+public abstract class AsyncCommandHandlerBase : CommandHandlerBase
+{
+    public override void Handle() => Task.Run(HandleAsync);
+
+    public abstract override Task HandleAsync();
+}

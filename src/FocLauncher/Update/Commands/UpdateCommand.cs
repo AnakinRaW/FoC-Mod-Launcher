@@ -4,6 +4,7 @@ using AnakinRaW.AppUpaterFramework.Metadata.Update;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Input;
 using AnakinRaW.CommonUtilities.Wpf.Imaging;
 using AnakinRaW.CommonUtilities.Wpf.Input;
+using FocLauncher.Update.Commands.Handlers;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FocLauncher.Update.Commands;
