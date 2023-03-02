@@ -29,7 +29,7 @@ public class SingleFileComponent : InstallableComponent, IPhysicalInstallable
         FileName = fileName;
     }
 
-    internal IFileInfo GetFilePath(IFileSystem fileSystem, ProductVariables? variables = null)
+    internal IFileInfo GetFile(IFileSystem fileSystem, ProductVariables? variables = null)
     {
         var variablesDict = variables?.ToDictionary();
         var fileName = VariableResolver.Default.ResolveVariables(FileName, variablesDict);

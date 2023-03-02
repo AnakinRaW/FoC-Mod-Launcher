@@ -138,14 +138,20 @@ internal class InstallTask : RunnerTask, IProgressTask
 
     private void BackupComponent()
     {
-        if (_currentComponent is null)
+        IInstallableComponent? componentToBackup = null;
+        if (_action == UpdateAction.Update)
+            componentToBackup = _currentComponent;
+        else if (_action == UpdateAction.Delete)
+            componentToBackup = Component;
+
+        if (componentToBackup is null)
             return;
-        
+
         var backupManager = Services.GetRequiredService<IBackupManager>();
         
         try
         {
-            backupManager.BackupComponent(_currentComponent);
+            backupManager.BackupComponent(componentToBackup);
         }
         catch (Exception ex)
         {

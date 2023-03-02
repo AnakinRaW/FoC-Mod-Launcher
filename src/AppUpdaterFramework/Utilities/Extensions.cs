@@ -49,12 +49,14 @@ internal static class Extensions
     internal static bool IsOperationCanceledException(this Exception error) =>
         error.IsExceptionType<OperationCanceledException>();
 
-    public static bool IsSuccess(this InstallResult result) {
+    public static bool IsSuccess(this InstallResult result)
+    {
         return result is InstallResult.Success or InstallResult.SuccessRestartRequired;
     }
 
-    public static bool IsFailure(this InstallResult result) {
-        return result is InstallResult.Failure or InstallResult.FailureException;
+    public static bool IsFailure(this InstallResult result)
+    {
+        return result is InstallResult.Failure;
     }
 
     public static Exception? TryGetWrappedException(this Exception exception)
@@ -63,8 +65,7 @@ internal static class Extensions
         return wrappedExceptions != null && wrappedExceptions.Count == 1 ? wrappedExceptions.Single() : null;
     }
 
-    public static IReadOnlyCollection<Exception>? TryGetWrappedExceptions(
-        this Exception exception)
+    public static IReadOnlyCollection<Exception>? TryGetWrappedExceptions(this Exception exception)
     {
         return exception is AggregateException aggregateException ? aggregateException.Flatten().InnerExceptions : null;
     }

@@ -42,31 +42,43 @@ internal class ApplicationUpdater : IApplicationUpdater, IProgressReporter
             {
                 token.ThrowIfCancellationRequested();
                 await UpdateCoreAsync(token).ConfigureAwait(false);
-                return await CreateInstallOperationResultAsync();
+                return CreateResult();
             }
             catch (Exception e)
             {
                 _logger?.LogError(e, $"Update failed: {e.Message}");
                 if (ShouldRethrowEngineException(e))
                     ExceptionDispatchInfo.Capture(e).Throw();
-                return await CreateInstallOperationResultAsync(e);
+                return CreateResult(e);
             }
         }
         catch (Exception e) when (e.IsOperationCanceledException())
         {
             _logger?.LogTrace("User canceled the update.");
-            return new UpdateResult(); // TODO
+            return new UpdateResult
+            {
+                IsCanceled = true,
+                Exception = e
+            };
         }
         catch (Exception e)
         {
             _logger?.LogError(e, $"Update operation failed with error: {e.Message}");
-            return new UpdateResult(); // TODO
+            return new UpdateResult
+            {
+                Exception = e
+            };
         }
     }
 
-    private async Task<UpdateResult> CreateInstallOperationResultAsync(Exception? exception = null)
+    private static UpdateResult CreateResult(Exception? exception = null)
     {
-        return new UpdateResult();
+        var result = new UpdateResult
+        {
+            Exception = exception,
+            IsCanceled = exception?.IsOperationCanceledException() ?? false
+        };
+        return result;
     }
 
     private async Task UpdateCoreAsync(CancellationToken token)

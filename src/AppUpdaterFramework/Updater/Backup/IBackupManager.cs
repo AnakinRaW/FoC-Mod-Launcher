@@ -50,7 +50,7 @@ internal class BackupManager : IBackupManager
             throw new NotSupportedException($"argument '{nameof(component)}' must be of type '{nameof(SingleFileComponent)}'");
 
 
-        var filePath = singleFileComponent.GetFilePath(_fileSystem, _currentInstance.Variables);
+        var filePath = singleFileComponent.GetFile(_fileSystem, _currentInstance.Variables);
 
         if (component.DetectedState == DetectionState.Absent)
             return;

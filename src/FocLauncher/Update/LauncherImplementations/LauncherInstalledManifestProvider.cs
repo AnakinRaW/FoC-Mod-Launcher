@@ -38,22 +38,31 @@ internal class LauncherInstalledManifestProvider : IInstalledManifestProvider
         var launcherUpdaterId = new ProductComponentIdentity("Launcher.Updater", identityVersion);
 
 
+
+
         var launcherExecutable = BuildFileComponent(launcherExeId, "FoC Mod Launcher", KnownProductVariablesKeys.InstallDir,
             LauncherAssemblyInfo.AssemblyName, fileVersion, variables);
         var launcherUpdater = BuildFileComponent(launcherUpdaterId, "Launcher Updater", LauncherVariablesKeys.LauncherAppData,
             LauncherConstants.AppUpdaterAssemblyName, fileVersion, variables);
 
 
+        var testExeId = new ProductComponentIdentity("Launcher.Test", identityVersion);
+        var testExe = BuildFileComponent(testExeId, "Launcher Test", LauncherVariablesKeys.LauncherAppData,
+            "Test.exe", fileVersion, variables);
+
+
         yield return new ComponentGroup(new ProductComponentIdentity(LauncherConstants.ApplicationCoreGroupId, identityVersion), new List<IProductComponentIdentity>
         {
             launcherExeId,
-            launcherUpdaterId
+            launcherUpdaterId,
+            testExeId
         })
         {
             Name = $"{LauncherAssemblyInfo.ProductName}"
         };
         yield return launcherExecutable;
         yield return launcherUpdater;
+        yield return testExe;
     }
 
 
