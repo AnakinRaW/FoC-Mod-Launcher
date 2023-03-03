@@ -27,7 +27,7 @@ internal class FileInstaller : InstallerBase
         _logger = serviceProvider.GetService<ILoggerFactory>()?.CreateLogger(GetType());
         _fileSystem = serviceProvider.GetRequiredService<IFileSystem>();
         _fileSystemHelper = serviceProvider.GetRequiredService<IFileSystemService>();
-        //_interactionHandler = serviceProvider.GetRequiredService<IInteractionHandler>();
+        _interactionHandler = serviceProvider.GetService<IInteractionHandler>() ?? new NullInteractionHandler();
     }
     
     protected override InstallResult RemoveCore(IInstallableComponent component, ProductVariables variables, CancellationToken token)
@@ -47,7 +47,22 @@ internal class FileInstaller : InstallerBase
         if (operationResult != InstallOperationResult.LockedFile)
             throw new NotSupportedException($"OperationResult '{operationResult}' is not supported by this installer");
 
-        return new InstallerInteractionResult(InstallResult.Failure, true);
+        var supportedStates = new SupportedInteractions(
+            new SupportedInteractionState(InteractionStatus.Retry, ""));
+
+        var interactionStatus = _interactionHandler.HandleLockedFile(file, supportedStates);
+
+        if (!supportedStates.Contains(interactionStatus))
+            throw new InvalidOperationException("Obtained interaction status was not expected.");
+
+
+        if (interactionStatus == InteractionStatus.Retry)
+        {
+            return new InstallerInteractionResult(InstallResult.Failure, true);
+        }
+
+        // TODO
+        return new InstallerInteractionResult(InstallResult.Success); 
     }
 
     protected override InstallResult InstallCore(IInstallableComponent component, string source, ProductVariables variables, CancellationToken token)
