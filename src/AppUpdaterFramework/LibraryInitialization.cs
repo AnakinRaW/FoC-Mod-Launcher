@@ -1,11 +1,13 @@
 ﻿using AnakinRaW.AppUpaterFramework.Conditions;
+using AnakinRaW.AppUpaterFramework.Installer;
+using AnakinRaW.AppUpaterFramework.Interaction;
 using AnakinRaW.AppUpaterFramework.Product.Manifest;
 using AnakinRaW.AppUpaterFramework.Updater;
 using AnakinRaW.AppUpaterFramework.Updater.Backup;
-using AnakinRaW.AppUpaterFramework.Updater.Installer;
 using AnakinRaW.AppUpaterFramework.Utilities;
 using AnakinRaW.CommonUtilities.Hashing;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace AnakinRaW.AppUpaterFramework;
 
@@ -30,5 +32,9 @@ public static class LibraryInitialization
         serviceCollection.AddSingleton<IDiskSpaceCalculator>(sp => new DiskSpaceCalculator(sp));
 
         serviceCollection.AddSingleton<IBackupManager>(sp => new BackupManager(sp));
+
+        serviceCollection.AddSingleton<ILockedFileHandler>(sp => new LockedFileHandler(sp));
+
+        serviceCollection.AddSingleton<IInteractionHandler>(sp => new DefaultInteractionHandler(sp));
     }
 }

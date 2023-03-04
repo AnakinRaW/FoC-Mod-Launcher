@@ -1,4 +1,4 @@
-﻿namespace AnakinRaW.AppUpaterFramework.Updater.Installer;
+﻿namespace AnakinRaW.AppUpaterFramework.Installer;
 
 internal enum InstallOperationResult
 {

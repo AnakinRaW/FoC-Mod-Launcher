@@ -5,7 +5,7 @@ using AnakinRaW.AppUpaterFramework.Metadata.Product;
 using AnakinRaW.AppUpaterFramework.Updater.Progress;
 using AnakinRaW.AppUpaterFramework.Updater.Tasks;
 
-namespace AnakinRaW.AppUpaterFramework.Updater.Installer;
+namespace AnakinRaW.AppUpaterFramework.Installer;
 
 internal interface IInstaller
 {

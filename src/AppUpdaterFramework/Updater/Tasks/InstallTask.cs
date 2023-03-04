@@ -9,9 +9,9 @@ using AnakinRaW.AppUpaterFramework.Updater.Progress;
 using AnakinRaW.AppUpaterFramework.Updater.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Validation;
-using AnakinRaW.AppUpaterFramework.Updater.Installer;
 using AnakinRaW.AppUpaterFramework.Utilities;
 using Microsoft.Extensions.Logging;
+using AnakinRaW.AppUpaterFramework.Installer;
 
 namespace AnakinRaW.AppUpaterFramework.Updater.Tasks;
 
@@ -30,6 +30,7 @@ internal class InstallTask : RunnerTask, IProgressTask
 
     internal InstallResult Result { get; private set; } = InstallResult.Success;
 
+    public ProgressType Type => ProgressType.Install;
     public ITaskProgressReporter ProgressReporter { get; }
 
     public long Size => Component.InstallationSize.Total;
@@ -120,7 +121,7 @@ internal class InstallTask : RunnerTask, IProgressTask
             }
 
             if (Result.IsFailure())
-                throw new ComponentFailedException(new[] { Component });
+                throw new ComponentFailedException(new[] { this });
             if (Result == InstallResult.Cancel)
                 throw new OperationCanceledException();
 

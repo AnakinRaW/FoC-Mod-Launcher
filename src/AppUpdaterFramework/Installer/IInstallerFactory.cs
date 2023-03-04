@@ -1,6 +1,6 @@
 ﻿using AnakinRaW.AppUpaterFramework.Metadata.Component;
 
-namespace AnakinRaW.AppUpaterFramework.Updater.Installer;
+namespace AnakinRaW.AppUpaterFramework.Installer;
 
 internal interface IInstallerFactory
 {

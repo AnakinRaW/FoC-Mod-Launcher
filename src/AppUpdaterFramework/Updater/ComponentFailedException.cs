@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using AnakinRaW.AppUpaterFramework.Metadata.Component;
+using AnakinRaW.AppUpaterFramework.Updater.Tasks;
 
 namespace AnakinRaW.AppUpaterFramework.Updater;
 
 [Serializable]
 public class ComponentFailedException : UpdaterException
 {
-    private readonly IEnumerable<IProductComponent>? _failedComponents;
+    private readonly IEnumerable<IProgressTask>? _failedComponentTasks;
     private string? _error;
 
     public override string Message => Error;
@@ -20,19 +20,19 @@ public class ComponentFailedException : UpdaterException
             if (_error != null)
                 return _error;
             var stringBuilder = new StringBuilder();
-            if (_failedComponents != null)
+            if (_failedComponentTasks != null)
             {
                 // TODO: Not sure if IUpdateItem or IProductComponent
-                foreach (var component in _failedComponents)
-                    stringBuilder.Append("Package '" + component.Id + "' failed to " + component + ";");
+                foreach (var task in _failedComponentTasks)
+                    stringBuilder.Append("Package '" + task.Component.Id + "' failed to " + task.Type.ToString("G") + ";");
             }
             return stringBuilder.ToString().TrimEnd(';');
         }
     }
 
-    public ComponentFailedException(IEnumerable<IProductComponent> failedComponents) : base()
+    internal ComponentFailedException(IEnumerable<IProgressTask> failedComponentTasks)
     {
-        _failedComponents = failedComponents;
+        _failedComponentTasks = failedComponentTasks;
         HResult = 1603;
     }
 

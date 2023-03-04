@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Validation;
 
-namespace AnakinRaW.AppUpaterFramework.Updater.Installer;
+namespace AnakinRaW.AppUpaterFramework.Installer;
 
 internal abstract class InstallerBase : IInstaller
 {
@@ -35,7 +35,7 @@ internal abstract class InstallerBase : IInstaller
     protected abstract InstallResult RemoveCore(IInstallableComponent component, ProductVariables variables, CancellationToken token);
 
     protected abstract InstallResult InstallCore(IInstallableComponent component, string source, ProductVariables variables, CancellationToken token);
-    
+
 
     private InstallResult ExecuteInstallerAction(IInstallableComponent component, string? source, InstallAction action, ProductVariables variables, CancellationToken token)
     {
@@ -78,8 +78,8 @@ internal abstract class InstallerBase : IInstaller
 
     protected InstallResult ExecuteWithInteractiveRetry(
         IInstallableComponent component,
-        Func<InstallOperationResult> action, 
-        Func<InstallOperationResult, InstallerInteractionResult> interaction, 
+        Func<InstallOperationResult> action,
+        Func<InstallOperationResult, InstallerInteractionResult> interaction,
         CancellationToken token)
     {
         InstallResult result;
@@ -126,7 +126,7 @@ internal abstract class InstallerBase : IInstaller
 
     private enum InstallAction
     {
-        Install, 
+        Install,
         Remove
     }
 }

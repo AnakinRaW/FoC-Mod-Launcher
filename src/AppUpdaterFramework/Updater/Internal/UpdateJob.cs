@@ -178,9 +178,11 @@ internal sealed class UpdateJob : JobBase, IDisposable
         var failedInstalls = componentsToInstallOrRemove
             .Where(installTask => !installTask.Result.IsSuccess()).ToList();
 
-        if (failedDownloads.Any() || failedInstalls.Any())
-            throw new ComponentFailedException(
-                "Update failed because one or more downloads or installs had an error.");
+        var failedTasks = failedDownloads.Concat<IProgressTask>(failedInstalls).ToList();
+        
+        if (failedTasks.Any() || failedInstalls.Any())
+            throw new ComponentFailedException(failedTasks);
+
 
         //var requiresRestart = LockedFilesWatcher.Instance.LockedFiles.Any();
         //if (requiresRestart)

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using AnakinRaW.AppUpaterFramework.Metadata.Component;
 using Validation;
 
-namespace AnakinRaW.AppUpaterFramework.Updater.Installer;
+namespace AnakinRaW.AppUpaterFramework.Installer;
 
 internal class InstallerFactory : IInstallerFactory
 {

@@ -25,6 +25,7 @@ internal class DownloadTask : SynchronizedTask, IProgressTask
     private readonly IUpdateConfiguration _updateConfiguration;
     private readonly IFileSystem _fileSystem;
 
+    public ProgressType Type => ProgressType.Download;
     public ITaskProgressReporter ProgressReporter { get; }
 
     public string DownloadPath { get; private set; } = null!;
