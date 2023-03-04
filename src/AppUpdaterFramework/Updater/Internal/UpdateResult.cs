@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AnakinRaW.AppUpaterFramework.Updater;
+namespace AnakinRaW.AppUpdaterFramework.Updater;
 
 public record UpdateResult
 {

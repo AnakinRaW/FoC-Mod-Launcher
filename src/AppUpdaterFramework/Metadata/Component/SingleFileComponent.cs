@@ -1,9 +1,9 @@
 ﻿using System.IO.Abstractions;
-using AnakinRaW.AppUpaterFramework.Metadata.Product;
-using AnakinRaW.AppUpaterFramework.Utilities;
+using AnakinRaW.AppUpdaterFramework.Metadata.Product;
+using AnakinRaW.AppUpdaterFramework.Utilities;
 using Validation;
 
-namespace AnakinRaW.AppUpaterFramework.Metadata.Component;
+namespace AnakinRaW.AppUpdaterFramework.Metadata.Component;
 
 /// <summary>
 /// A component representing a single file.

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using AnakinRaW.AppUpaterFramework.Updater.Tasks;
+using AnakinRaW.AppUpdaterFramework.Updater.Tasks;
 
-namespace AnakinRaW.AppUpaterFramework.Updater.Progress;
+namespace AnakinRaW.AppUpdaterFramework.Updater.Progress;
 
 internal class AggregatedDownloadProgressReporter : AggregatedComponentProgressReporter
 {

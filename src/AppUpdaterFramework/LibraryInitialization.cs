@@ -1,15 +1,14 @@
-﻿using AnakinRaW.AppUpaterFramework.Conditions;
-using AnakinRaW.AppUpaterFramework.Installer;
-using AnakinRaW.AppUpaterFramework.Interaction;
-using AnakinRaW.AppUpaterFramework.Product.Manifest;
-using AnakinRaW.AppUpaterFramework.Updater;
-using AnakinRaW.AppUpaterFramework.Updater.Backup;
-using AnakinRaW.AppUpaterFramework.Utilities;
+﻿using AnakinRaW.AppUpdaterFramework.Conditions;
+using AnakinRaW.AppUpdaterFramework.Installer;
+using AnakinRaW.AppUpdaterFramework.Interaction;
+using AnakinRaW.AppUpdaterFramework.Product.Manifest;
+using AnakinRaW.AppUpdaterFramework.Updater;
+using AnakinRaW.AppUpdaterFramework.Updater.Backup;
+using AnakinRaW.AppUpdaterFramework.Utilities;
 using AnakinRaW.CommonUtilities.Hashing;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace AnakinRaW.AppUpaterFramework;
+namespace AnakinRaW.AppUpdaterFramework;
 
 public static class LibraryInitialization
 {

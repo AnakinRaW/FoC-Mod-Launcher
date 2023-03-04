@@ -1,4 +1,4 @@
-﻿namespace AnakinRaW.AppUpaterFramework.Metadata.Component;
+﻿namespace AnakinRaW.AppUpdaterFramework.Metadata.Component;
 
 public enum DetectionState
 {

@@ -2,8 +2,8 @@
 using System.IO;
 using System.IO.Abstractions;
 using System.Reflection;
-using AnakinRaW.AppUpaterFramework.Metadata.Product;
-using AnakinRaW.AppUpaterFramework.Product;
+using AnakinRaW.AppUpdaterFramework.Metadata.Product;
+using AnakinRaW.AppUpdaterFramework.Product;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FocLauncher.Update.LauncherImplementations;

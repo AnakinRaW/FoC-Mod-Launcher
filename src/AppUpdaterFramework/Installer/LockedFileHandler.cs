@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO.Abstractions;
-using AnakinRaW.AppUpaterFramework.Interaction;
-using AnakinRaW.AppUpaterFramework.Metadata.Component;
+using AnakinRaW.AppUpdaterFramework.Interaction;
+using AnakinRaW.AppUpdaterFramework.Metadata.Component;
 
-namespace AnakinRaW.AppUpaterFramework.Installer;
+namespace AnakinRaW.AppUpdaterFramework.Installer;
 
 internal class LockedFileHandler : ILockedFileHandler
 {

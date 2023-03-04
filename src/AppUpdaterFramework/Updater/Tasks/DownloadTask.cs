@@ -3,10 +3,10 @@ using System.IO;
 using System.IO.Abstractions;
 using System.Threading;
 using System.Threading.Tasks;
-using AnakinRaW.AppUpaterFramework.Metadata.Component;
-using AnakinRaW.AppUpaterFramework.Updater.Configuration;
-using AnakinRaW.AppUpaterFramework.Updater.Progress;
-using AnakinRaW.AppUpaterFramework.Utilities;
+using AnakinRaW.AppUpdaterFramework.Metadata.Component;
+using AnakinRaW.AppUpdaterFramework.Updater.Configuration;
+using AnakinRaW.AppUpdaterFramework.Updater.Progress;
+using AnakinRaW.AppUpdaterFramework.Utilities;
 using AnakinRaW.CommonUtilities.DownloadManager;
 using AnakinRaW.CommonUtilities.DownloadManager.Verification;
 using AnakinRaW.CommonUtilities.DownloadManager.Verification.HashVerification;
@@ -16,7 +16,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Validation;
 
-namespace AnakinRaW.AppUpaterFramework.Updater.Tasks;
+namespace AnakinRaW.AppUpdaterFramework.Updater.Tasks;
 
 internal class DownloadTask : SynchronizedTask, IProgressTask
 {

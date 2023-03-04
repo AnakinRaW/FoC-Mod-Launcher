@@ -1,5 +1,5 @@
 ﻿using System;
-using AnakinRaW.AppUpaterFramework.Updater;
+using AnakinRaW.AppUpdaterFramework.Updater;
 using Validation;
 
 namespace FocLauncher.Update.ViewModels;

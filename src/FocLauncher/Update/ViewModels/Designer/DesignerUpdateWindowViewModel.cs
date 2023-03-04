@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows;
-using AnakinRaW.AppUpaterFramework.Metadata.Product;
+using AnakinRaW.AppUpdaterFramework.Metadata.Product;
 
 namespace FocLauncher.Update.ViewModels.Designer;
 

@@ -1,5 +1,5 @@
 ﻿using System.Windows.Input;
-using AnakinRaW.AppUpaterFramework.Updater;
+using AnakinRaW.AppUpdaterFramework.Updater;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Input;
 using AnakinRaW.CommonUtilities.Wpf.Imaging;
 using AnakinRaW.CommonUtilities.Wpf.Input;

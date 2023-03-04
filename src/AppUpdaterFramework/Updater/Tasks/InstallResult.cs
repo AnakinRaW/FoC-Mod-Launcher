@@ -1,4 +1,4 @@
-﻿namespace AnakinRaW.AppUpaterFramework.Updater.Tasks;
+﻿namespace AnakinRaW.AppUpdaterFramework.Updater.Tasks;
 
 public enum InstallResult
 {

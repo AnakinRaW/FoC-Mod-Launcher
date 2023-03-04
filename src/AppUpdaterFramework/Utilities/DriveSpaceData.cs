@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AnakinRaW.AppUpaterFramework.Utilities;
+namespace AnakinRaW.AppUpdaterFramework.Utilities;
 
 public class DriveSpaceData : IEquatable<DriveSpaceData>
 {

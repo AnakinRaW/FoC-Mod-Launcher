@@ -3,7 +3,7 @@ using System.IO.Abstractions;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AnakinRaW.AppUpaterFramework.Product.Manifest;
+namespace AnakinRaW.AppUpdaterFramework.Product.Manifest;
 
 internal interface IManifestDownloader
 {

@@ -1,6 +1,6 @@
 ﻿using Semver;
 
-namespace AnakinRaW.AppUpaterFramework.Metadata.Product;
+namespace AnakinRaW.AppUpdaterFramework.Metadata.Product;
 
 public interface IProductReference
 {

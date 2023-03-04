@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using AnakinRaW.AppUpaterFramework.Metadata.Product;
-using AnakinRaW.AppUpaterFramework.Updater.Progress;
+using AnakinRaW.AppUpdaterFramework.Metadata.Product;
+using AnakinRaW.AppUpdaterFramework.Updater.Progress;
 using Validation;
 
-namespace AnakinRaW.AppUpaterFramework.Updater;
+namespace AnakinRaW.AppUpdaterFramework.Updater;
 
 internal class UpdateSession : IUpdateSession
 {

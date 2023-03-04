@@ -1,6 +1,6 @@
-﻿using AnakinRaW.AppUpaterFramework.Metadata.Component;
+﻿using AnakinRaW.AppUpdaterFramework.Metadata.Component;
 
-namespace AnakinRaW.AppUpaterFramework.Utilities;
+namespace AnakinRaW.AppUpdaterFramework.Utilities;
 
 internal interface IDiskSpaceCalculator
 {

@@ -1,4 +1,4 @@
-﻿namespace AnakinRaW.AppUpaterFramework.Metadata.Update;
+﻿namespace AnakinRaW.AppUpdaterFramework.Metadata.Update;
 
 public enum UpdateCatalogAction
 {

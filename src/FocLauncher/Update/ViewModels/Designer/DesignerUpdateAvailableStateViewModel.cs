@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Threading.Tasks;
-using AnakinRaW.AppUpaterFramework.Metadata.Update;
+using AnakinRaW.AppUpdaterFramework.Metadata.Update;
 using FocLauncher.Update.ViewModels.ProductStates;
 
 namespace FocLauncher.Update.ViewModels.Designer;

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AnakinRaW.AppUpaterFramework.Interaction;
+namespace AnakinRaW.AppUpdaterFramework.Interaction;
 
 public class SupportedInteractions : IEnumerable<SupportedInteractionState>
 {

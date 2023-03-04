@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using AnakinRaW.AppUpaterFramework.Metadata.Product;
-using AnakinRaW.AppUpaterFramework.Metadata.Update;
+using AnakinRaW.AppUpdaterFramework.Metadata.Product;
+using AnakinRaW.AppUpdaterFramework.Metadata.Update;
 
-namespace AnakinRaW.AppUpaterFramework.Updater;
+namespace AnakinRaW.AppUpdaterFramework.Updater;
 
 public interface IUpdateService
 {

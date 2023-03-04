@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO.Abstractions;
 using System.Linq;
-using AnakinRaW.AppUpaterFramework.Utilities;
+using AnakinRaW.AppUpdaterFramework.Utilities;
 using AnakinRaW.CommonUtilities.Hashing;
 using Microsoft.Extensions.DependencyInjection;
 using Validation;
 
-namespace AnakinRaW.AppUpaterFramework.Conditions;
+namespace AnakinRaW.AppUpdaterFramework.Conditions;
 
 internal sealed class FileConditionEvaluator : IConditionEvaluator
 {

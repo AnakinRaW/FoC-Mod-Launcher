@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using AnakinRaW.AppUpaterFramework.Updater.Progress;
+using AnakinRaW.AppUpdaterFramework.Updater.Progress;
 
-namespace AnakinRaW.AppUpaterFramework.Updater;
+namespace AnakinRaW.AppUpdaterFramework.Updater;
 
 internal interface IApplicationUpdater
 {

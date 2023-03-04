@@ -2,19 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using AnakinRaW.AppUpaterFramework.Metadata.Product;
-using AnakinRaW.AppUpaterFramework.Metadata.Update;
-using AnakinRaW.AppUpaterFramework.Updater.Configuration;
-using AnakinRaW.AppUpaterFramework.Updater.Progress;
-using AnakinRaW.AppUpaterFramework.Updater.Tasks;
-using AnakinRaW.AppUpaterFramework.Utilities;
+using AnakinRaW.AppUpdaterFramework.Metadata.Product;
+using AnakinRaW.AppUpdaterFramework.Metadata.Update;
+using AnakinRaW.AppUpdaterFramework.Updater.Configuration;
+using AnakinRaW.AppUpdaterFramework.Updater.Progress;
+using AnakinRaW.AppUpdaterFramework.Updater.Tasks;
+using AnakinRaW.AppUpdaterFramework.Utilities;
 using AnakinRaW.CommonUtilities.TaskPipeline;
 using AnakinRaW.CommonUtilities.TaskPipeline.Runners;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Validation;
 
-namespace AnakinRaW.AppUpaterFramework.Updater;
+namespace AnakinRaW.AppUpdaterFramework.Updater;
 
 internal sealed class UpdateJob : JobBase, IDisposable
 {

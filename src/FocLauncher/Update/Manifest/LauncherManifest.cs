@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Serialization;
-using AnakinRaW.AppUpaterFramework.Conditions;
-using AnakinRaW.AppUpaterFramework.Metadata.Component;
-using AnakinRaW.AppUpaterFramework.Metadata.Component.Catalog;
+using AnakinRaW.AppUpdaterFramework.Conditions;
+using AnakinRaW.AppUpdaterFramework.Metadata.Component;
+using AnakinRaW.AppUpdaterFramework.Metadata.Component.Catalog;
 using FocLauncher.Utilities;
 using Semver;
 using AnakinRaW.CommonUtilities.Hashing;
@@ -121,12 +121,12 @@ public record OriginInfo(
     [property: JsonPropertyName("sha256")] string Sha256
 )
 {
-    public AnakinRaW.AppUpaterFramework.Metadata.Component.OriginInfo ToOriginInfo()
+    public AnakinRaW.AppUpdaterFramework.Metadata.Component.OriginInfo ToOriginInfo()
     {
         if (string.IsNullOrEmpty(Url))
             throw new CatalogException($"Illegal manifest: {nameof(Url)} must not be null or empty.");
 
-        return new AnakinRaW.AppUpaterFramework.Metadata.Component.OriginInfo(new Uri(Url, UriKind.Absolute))
+        return new AnakinRaW.AppUpdaterFramework.Metadata.Component.OriginInfo(new Uri(Url, UriKind.Absolute))
         {
             IntegrityInformation = ManifestHelpers.FromSha256(Sha256),
             Size = Size

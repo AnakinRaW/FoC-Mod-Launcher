@@ -1,4 +1,4 @@
-﻿namespace AnakinRaW.AppUpaterFramework.Metadata.Component.Catalog;
+﻿namespace AnakinRaW.AppUpdaterFramework.Metadata.Component.Catalog;
 
 public interface IInstalledComponentsCatalog : IProductCatalog<IInstallableComponent>
 {

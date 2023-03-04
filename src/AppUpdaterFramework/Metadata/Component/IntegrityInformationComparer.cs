@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AnakinRaW.AppUpaterFramework.Metadata.Component;
+namespace AnakinRaW.AppUpdaterFramework.Metadata.Component;
 
 public class IntegrityInformationComparer : IEqualityComparer<ComponentIntegrityInformation>
 {

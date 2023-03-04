@@ -3,14 +3,14 @@ using System.Linq;
 using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Threading.Tasks;
-using AnakinRaW.AppUpaterFramework.Metadata.Update;
-using AnakinRaW.AppUpaterFramework.Updater.Progress;
-using AnakinRaW.AppUpaterFramework.Utilities;
+using AnakinRaW.AppUpdaterFramework.Metadata.Update;
+using AnakinRaW.AppUpdaterFramework.Updater.Progress;
+using AnakinRaW.AppUpdaterFramework.Utilities;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Validation;
 
-namespace AnakinRaW.AppUpaterFramework.Updater;
+namespace AnakinRaW.AppUpdaterFramework.Updater;
 
 internal class ApplicationUpdater : IApplicationUpdater, IProgressReporter
 {

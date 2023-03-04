@@ -1,14 +1,14 @@
 ﻿using System;
 using System.IO.Abstractions;
-using AnakinRaW.AppUpaterFramework.Metadata.Component.Catalog;
-using AnakinRaW.AppUpaterFramework.Metadata.Product;
-using AnakinRaW.AppUpaterFramework.Product.Manifest;
+using AnakinRaW.AppUpdaterFramework.Metadata.Component.Catalog;
+using AnakinRaW.AppUpdaterFramework.Metadata.Product;
+using AnakinRaW.AppUpdaterFramework.Product.Manifest;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Semver;
 using Validation;
 
-namespace AnakinRaW.AppUpaterFramework.Product;
+namespace AnakinRaW.AppUpdaterFramework.Product;
 
 public abstract class ProductServiceBase : IProductService
 { 

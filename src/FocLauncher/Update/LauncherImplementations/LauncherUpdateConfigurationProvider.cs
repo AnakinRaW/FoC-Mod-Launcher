@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO.Abstractions;
-using AnakinRaW.AppUpaterFramework.Updater.Configuration;
+using AnakinRaW.AppUpdaterFramework.Updater.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Validation;
 

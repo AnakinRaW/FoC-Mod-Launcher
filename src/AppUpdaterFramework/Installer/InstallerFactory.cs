@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using AnakinRaW.AppUpaterFramework.Metadata.Component;
+using AnakinRaW.AppUpdaterFramework.Metadata.Component;
 using Validation;
 
-namespace AnakinRaW.AppUpaterFramework.Installer;
+namespace AnakinRaW.AppUpdaterFramework.Installer;
 
 internal class InstallerFactory : IInstallerFactory
 {

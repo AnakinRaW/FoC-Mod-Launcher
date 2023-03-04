@@ -1,6 +1,6 @@
-﻿using AnakinRaW.AppUpaterFramework.Metadata.Product;
-using AnakinRaW.AppUpaterFramework.Metadata.Update;
-using AnakinRaW.AppUpaterFramework.Updater;
+﻿using AnakinRaW.AppUpdaterFramework.Metadata.Product;
+using AnakinRaW.AppUpdaterFramework.Metadata.Update;
+using AnakinRaW.AppUpdaterFramework.Updater;
 
 namespace FocLauncher.Update.ViewModels;
 

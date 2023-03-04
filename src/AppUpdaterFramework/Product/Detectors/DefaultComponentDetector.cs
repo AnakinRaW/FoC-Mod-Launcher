@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
-using AnakinRaW.AppUpaterFramework.Conditions;
-using AnakinRaW.AppUpaterFramework.Metadata.Component;
-using AnakinRaW.AppUpaterFramework.Metadata.Product;
+using AnakinRaW.AppUpdaterFramework.Conditions;
+using AnakinRaW.AppUpdaterFramework.Metadata.Component;
+using AnakinRaW.AppUpdaterFramework.Metadata.Product;
 
-namespace AnakinRaW.AppUpaterFramework.Product.Detectors;
+namespace AnakinRaW.AppUpdaterFramework.Product.Detectors;
 
 internal sealed class DefaultComponentDetector : ComponentDetectorBase<InstallableComponent>
 {

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using AnakinRaW.AppUpaterFramework.Metadata.Product;
+using AnakinRaW.AppUpdaterFramework.Metadata.Product;
 using Validation;
 
-namespace AnakinRaW.AppUpaterFramework.Metadata.Update;
+namespace AnakinRaW.AppUpdaterFramework.Metadata.Update;
 
 public class UpdateCatalog : IUpdateCatalog
 {

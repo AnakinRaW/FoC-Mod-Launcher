@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO.Abstractions;
-using AnakinRaW.AppUpaterFramework.Metadata.Component;
-using AnakinRaW.AppUpaterFramework.Updater;
-using AnakinRaW.AppUpaterFramework.Updater.Configuration;
+using AnakinRaW.AppUpdaterFramework.Metadata.Component;
+using AnakinRaW.AppUpdaterFramework.Updater;
+using AnakinRaW.AppUpdaterFramework.Updater.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Validation;
 
-namespace AnakinRaW.AppUpaterFramework.Utilities;
+namespace AnakinRaW.AppUpdaterFramework.Utilities;
 
 internal class DiskSpaceCalculator : IDiskSpaceCalculator 
 {

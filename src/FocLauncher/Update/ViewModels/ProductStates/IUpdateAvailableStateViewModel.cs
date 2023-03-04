@@ -1,4 +1,4 @@
-﻿using AnakinRaW.AppUpaterFramework.Metadata.Update;
+﻿using AnakinRaW.AppUpdaterFramework.Metadata.Update;
 
 namespace FocLauncher.Update.ViewModels.ProductStates;
 

@@ -2,16 +2,16 @@
 using System.Collections.Concurrent;
 using System.IO;
 using System.IO.Abstractions;
-using AnakinRaW.AppUpaterFramework.Metadata.Component;
-using AnakinRaW.AppUpaterFramework.Metadata.Product;
-using AnakinRaW.AppUpaterFramework.Product;
-using AnakinRaW.AppUpaterFramework.Updater.Configuration;
+using AnakinRaW.AppUpdaterFramework.Metadata.Component;
+using AnakinRaW.AppUpdaterFramework.Metadata.Product;
+using AnakinRaW.AppUpdaterFramework.Product;
+using AnakinRaW.AppUpdaterFramework.Updater.Configuration;
 using AnakinRaW.CommonUtilities.FileSystem;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Validation;
 
-namespace AnakinRaW.AppUpaterFramework.Updater.Backup;
+namespace AnakinRaW.AppUpdaterFramework.Updater.Backup;
 
 internal interface IBackupManager
 {

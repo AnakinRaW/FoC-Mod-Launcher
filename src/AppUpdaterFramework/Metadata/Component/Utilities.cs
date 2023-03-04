@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using Validation;
 
-namespace AnakinRaW.AppUpaterFramework.Metadata.Component;
+namespace AnakinRaW.AppUpdaterFramework.Metadata.Component;
 
 internal static class Utilities
 {

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using AnakinRaW.AppUpaterFramework.Metadata.Product;
+using AnakinRaW.AppUpdaterFramework.Metadata.Product;
 using Validation;
 
-namespace AnakinRaW.AppUpaterFramework.Metadata.Component.Catalog;
+namespace AnakinRaW.AppUpdaterFramework.Metadata.Component.Catalog;
 
 public class ProductManifest : IProductManifest
 {

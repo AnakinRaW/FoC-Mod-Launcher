@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace AnakinRaW.AppUpaterFramework.Metadata.Component;
+namespace AnakinRaW.AppUpdaterFramework.Metadata.Component;
 
 public interface IComponentGroup : IProductComponent
 {

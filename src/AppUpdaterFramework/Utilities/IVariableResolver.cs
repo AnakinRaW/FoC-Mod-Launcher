@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace AnakinRaW.AppUpaterFramework.Utilities;
+namespace AnakinRaW.AppUpdaterFramework.Utilities;
 
 internal interface IVariableResolver
 {

@@ -1,6 +1,6 @@
-﻿using AnakinRaW.AppUpaterFramework.Updater.Progress;
+﻿using AnakinRaW.AppUpdaterFramework.Updater.Progress;
 
-namespace AnakinRaW.AppUpaterFramework.Updater.Tasks;
+namespace AnakinRaW.AppUpdaterFramework.Updater.Tasks;
 
 internal interface IProgressTask : IComponentTask
 {

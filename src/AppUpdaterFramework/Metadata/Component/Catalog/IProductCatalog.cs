@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using AnakinRaW.AppUpaterFramework.Metadata.Product;
+using AnakinRaW.AppUpdaterFramework.Metadata.Product;
 
-namespace AnakinRaW.AppUpaterFramework.Metadata.Component.Catalog;
+namespace AnakinRaW.AppUpdaterFramework.Metadata.Component.Catalog;
 
 public interface IProductCatalog<out T> where T : IProductComponent
 {

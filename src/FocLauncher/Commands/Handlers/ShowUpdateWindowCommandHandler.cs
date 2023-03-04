@@ -2,10 +2,11 @@
 using System.IO.Abstractions;
 using System.Threading.Tasks;
 using AnakinRaW.AppUpaterFramework;
-using AnakinRaW.AppUpaterFramework.Product;
-using AnakinRaW.AppUpaterFramework.Product.Manifest;
 using AnakinRaW.AppUpaterFramework.Services;
-using AnakinRaW.AppUpaterFramework.Updater.Configuration;
+using AnakinRaW.AppUpdaterFramework;
+using AnakinRaW.AppUpdaterFramework.Product;
+using AnakinRaW.AppUpdaterFramework.Product.Manifest;
+using AnakinRaW.AppUpdaterFramework.Updater.Configuration;
 using AnakinRaW.CommonUtilities.DownloadManager;
 using AnakinRaW.CommonUtilities.DownloadManager.Configuration;
 using AnakinRaW.CommonUtilities.DownloadManager.Verification;

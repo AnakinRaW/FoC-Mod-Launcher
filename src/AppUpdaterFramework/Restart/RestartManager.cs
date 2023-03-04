@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AnakinRaW.AppUpaterFramework.Restart;
+namespace AnakinRaW.AppUpdaterFramework.Restart;
 
 internal interface IRestartManager
 {

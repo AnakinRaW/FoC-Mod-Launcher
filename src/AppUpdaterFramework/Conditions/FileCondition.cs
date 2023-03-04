@@ -1,8 +1,8 @@
 ﻿using System;
-using AnakinRaW.AppUpaterFramework.Metadata.Component;
+using AnakinRaW.AppUpdaterFramework.Metadata.Component;
 using Validation;
 
-namespace AnakinRaW.AppUpaterFramework.Conditions;
+namespace AnakinRaW.AppUpdaterFramework.Conditions;
 
 public sealed record FileCondition : ICondition
 {

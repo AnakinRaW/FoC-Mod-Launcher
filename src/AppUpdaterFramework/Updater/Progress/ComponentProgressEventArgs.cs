@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AnakinRaW.AppUpaterFramework.Updater.Progress;
+namespace AnakinRaW.AppUpdaterFramework.Updater.Progress;
 
 internal class ComponentProgressEventArgs : EventArgs
 {

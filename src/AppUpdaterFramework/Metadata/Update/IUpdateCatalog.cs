@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using AnakinRaW.AppUpaterFramework.Metadata.Product;
+using AnakinRaW.AppUpdaterFramework.Metadata.Product;
 
-namespace AnakinRaW.AppUpaterFramework.Metadata.Update;
+namespace AnakinRaW.AppUpdaterFramework.Metadata.Update;
 
 public interface IUpdateCatalog
 {

@@ -5,7 +5,7 @@ using System.Text;
 using AnakinRaW.CommonUtilities.FileSystem;
 using Validation;
 
-namespace AnakinRaW.AppUpaterFramework.Utilities;
+namespace AnakinRaW.AppUpdaterFramework.Utilities;
 
 internal static class ResolverExtensions
 {

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using AnakinRaW.AppUpaterFramework.Updater.Tasks;
+using AnakinRaW.AppUpdaterFramework.Updater.Tasks;
 
-namespace AnakinRaW.AppUpaterFramework.Updater;
+namespace AnakinRaW.AppUpdaterFramework.Updater;
 
 [Serializable]
 public class ComponentFailedException : UpdaterException

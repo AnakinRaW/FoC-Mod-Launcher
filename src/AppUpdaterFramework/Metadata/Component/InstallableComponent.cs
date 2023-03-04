@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using AnakinRaW.AppUpaterFramework.Conditions;
+using AnakinRaW.AppUpdaterFramework.Conditions;
 
-namespace AnakinRaW.AppUpaterFramework.Metadata.Component;
+namespace AnakinRaW.AppUpdaterFramework.Metadata.Component;
 
 public abstract class InstallableComponent : ProductComponent, IInstallableComponent
 {

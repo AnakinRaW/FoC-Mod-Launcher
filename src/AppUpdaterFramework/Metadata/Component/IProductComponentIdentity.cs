@@ -1,7 +1,7 @@
 ﻿using System;
 using Semver;
 
-namespace AnakinRaW.AppUpaterFramework.Metadata.Component;
+namespace AnakinRaW.AppUpdaterFramework.Metadata.Component;
 
 public interface IProductComponentIdentity : IEquatable<IProductComponentIdentity>
 {

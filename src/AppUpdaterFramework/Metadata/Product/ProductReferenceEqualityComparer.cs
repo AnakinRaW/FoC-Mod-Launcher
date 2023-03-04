@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace AnakinRaW.AppUpaterFramework.Metadata.Product;
+namespace AnakinRaW.AppUpdaterFramework.Metadata.Product;
 
 public class ProductReferenceEqualityComparer : IEqualityComparer<IProductReference>
 {

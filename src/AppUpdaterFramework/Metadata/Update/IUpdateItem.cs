@@ -1,7 +1,7 @@
 ﻿using System;
-using AnakinRaW.AppUpaterFramework.Metadata.Component;
+using AnakinRaW.AppUpdaterFramework.Metadata.Component;
 
-namespace AnakinRaW.AppUpaterFramework.Metadata.Update;
+namespace AnakinRaW.AppUpdaterFramework.Metadata.Update;
 
 public interface IUpdateItem : IEquatable<IUpdateItem>
 {

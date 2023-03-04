@@ -8,7 +8,7 @@ using AnakinRaW.CommonUtilities.FileSystem;
 using Microsoft.Extensions.DependencyInjection;
 using Validation;
 
-namespace AnakinRaW.AppUpaterFramework.Product.Manifest;
+namespace AnakinRaW.AppUpdaterFramework.Product.Manifest;
 
 internal class ManifestDownloader : IManifestDownloader
 {

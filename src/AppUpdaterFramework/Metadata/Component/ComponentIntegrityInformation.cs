@@ -2,7 +2,7 @@
 using AnakinRaW.CommonUtilities.Hashing;
 using Validation;
 
-namespace AnakinRaW.AppUpaterFramework.Metadata.Component;
+namespace AnakinRaW.AppUpdaterFramework.Metadata.Component;
 
 public readonly struct ComponentIntegrityInformation
 {

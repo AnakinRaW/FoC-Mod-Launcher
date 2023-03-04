@@ -1,6 +1,6 @@
-﻿using AnakinRaW.AppUpaterFramework.Updater.Tasks;
+﻿using AnakinRaW.AppUpdaterFramework.Updater.Tasks;
 
-namespace AnakinRaW.AppUpaterFramework.Installer;
+namespace AnakinRaW.AppUpdaterFramework.Installer;
 
 internal struct InstallerInteractionResult
 {

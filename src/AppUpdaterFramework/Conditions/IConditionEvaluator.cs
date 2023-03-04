@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace AnakinRaW.AppUpaterFramework.Conditions;
+namespace AnakinRaW.AppUpdaterFramework.Conditions;
 
 public interface IConditionEvaluator
 {

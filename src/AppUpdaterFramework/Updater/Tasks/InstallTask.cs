@@ -1,19 +1,19 @@
-﻿using AnakinRaW.AppUpaterFramework.Metadata.Component;
-using AnakinRaW.AppUpaterFramework.Metadata.Update;
-using AnakinRaW.CommonUtilities.TaskPipeline.Tasks;
+﻿using System;
 using System.Threading;
-using System;
-using AnakinRaW.AppUpaterFramework.Metadata.Product;
-using AnakinRaW.AppUpaterFramework.Updater.Backup;
-using AnakinRaW.AppUpaterFramework.Updater.Progress;
-using AnakinRaW.AppUpaterFramework.Updater.Configuration;
+using AnakinRaW.AppUpdaterFramework.Installer;
+using AnakinRaW.AppUpdaterFramework.Metadata.Component;
+using AnakinRaW.AppUpdaterFramework.Metadata.Product;
+using AnakinRaW.AppUpdaterFramework.Metadata.Update;
+using AnakinRaW.AppUpdaterFramework.Updater.Backup;
+using AnakinRaW.AppUpdaterFramework.Updater.Configuration;
+using AnakinRaW.AppUpdaterFramework.Updater.Progress;
+using AnakinRaW.AppUpdaterFramework.Utilities;
+using AnakinRaW.CommonUtilities.TaskPipeline.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using Validation;
-using AnakinRaW.AppUpaterFramework.Utilities;
 using Microsoft.Extensions.Logging;
-using AnakinRaW.AppUpaterFramework.Installer;
+using Validation;
 
-namespace AnakinRaW.AppUpaterFramework.Updater.Tasks;
+namespace AnakinRaW.AppUpdaterFramework.Updater.Tasks;
 
 internal class InstallTask : RunnerTask, IProgressTask
 { 

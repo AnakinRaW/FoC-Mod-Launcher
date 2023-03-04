@@ -1,6 +1,6 @@
 ﻿using System.IO.Abstractions;
 
-namespace AnakinRaW.AppUpaterFramework.Interaction;
+namespace AnakinRaW.AppUpdaterFramework.Interaction;
 
 public interface IInteractionHandler
 {

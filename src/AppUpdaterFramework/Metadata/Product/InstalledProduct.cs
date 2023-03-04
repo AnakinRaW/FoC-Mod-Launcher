@@ -1,8 +1,8 @@
-﻿using AnakinRaW.AppUpaterFramework.Metadata.Component.Catalog;
+﻿using AnakinRaW.AppUpdaterFramework.Metadata.Component.Catalog;
 using Semver;
 using Validation;
 
-namespace AnakinRaW.AppUpaterFramework.Metadata.Product;
+namespace AnakinRaW.AppUpdaterFramework.Metadata.Product;
 
 public sealed class InstalledProduct : IInstalledProduct
 {

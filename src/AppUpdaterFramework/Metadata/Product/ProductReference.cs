@@ -1,7 +1,7 @@
 ﻿using Semver;
 using Validation;
 
-namespace AnakinRaW.AppUpaterFramework.Metadata.Product;
+namespace AnakinRaW.AppUpdaterFramework.Metadata.Product;
 
 public class ProductReference : IProductReference
 {

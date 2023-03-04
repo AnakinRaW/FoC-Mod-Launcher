@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AnakinRaW.AppUpaterFramework.Interaction;
+namespace AnakinRaW.AppUpdaterFramework.Interaction;
 
 public struct SupportedInteractionState : IEquatable<SupportedInteractionState>
 {

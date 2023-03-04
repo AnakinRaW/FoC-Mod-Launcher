@@ -2,16 +2,16 @@
 using System.IO;
 using System.IO.Abstractions;
 using System.Threading;
-using AnakinRaW.AppUpaterFramework.Metadata.Component;
-using AnakinRaW.AppUpaterFramework.Metadata.Product;
-using AnakinRaW.AppUpaterFramework.Updater.Tasks;
+using AnakinRaW.AppUpdaterFramework.Metadata.Component;
+using AnakinRaW.AppUpdaterFramework.Metadata.Product;
+using AnakinRaW.AppUpdaterFramework.Updater.Tasks;
 using AnakinRaW.CommonUtilities.FileSystem;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Validation;
 using Vanara.PInvoke;
 
-namespace AnakinRaW.AppUpaterFramework.Installer;
+namespace AnakinRaW.AppUpdaterFramework.Installer;
 
 internal class FileInstaller : InstallerBase
 {

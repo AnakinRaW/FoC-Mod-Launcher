@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AnakinRaW.AppUpaterFramework.Metadata.Product;
+namespace AnakinRaW.AppUpdaterFramework.Metadata.Product;
 
 public class ProductBranch : IEquatable<ProductBranch>
 {

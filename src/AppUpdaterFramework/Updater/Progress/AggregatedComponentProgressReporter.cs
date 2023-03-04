@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using AnakinRaW.AppUpaterFramework.Metadata.Component;
-using AnakinRaW.AppUpaterFramework.Updater.Tasks;
+using AnakinRaW.AppUpdaterFramework.Metadata.Component;
+using AnakinRaW.AppUpdaterFramework.Updater.Tasks;
 using Validation;
 
-namespace AnakinRaW.AppUpaterFramework.Updater.Progress;
+namespace AnakinRaW.AppUpdaterFramework.Updater.Progress;
 
 internal abstract class AggregatedComponentProgressReporter : ITaskProgressReporter
 {

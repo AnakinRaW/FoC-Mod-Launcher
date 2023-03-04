@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Validation;
 
-namespace AnakinRaW.AppUpaterFramework.Metadata.Component;
+namespace AnakinRaW.AppUpdaterFramework.Metadata.Component;
 
 public class ComponentGroup : ProductComponent, IComponentGroup
 {

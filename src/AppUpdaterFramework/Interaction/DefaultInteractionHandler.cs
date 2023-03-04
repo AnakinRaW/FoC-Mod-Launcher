@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO.Abstractions;
 
-namespace AnakinRaW.AppUpaterFramework.Interaction;
+namespace AnakinRaW.AppUpdaterFramework.Interaction;
 
 internal class DefaultInteractionHandler : IInteractionHandler
 {

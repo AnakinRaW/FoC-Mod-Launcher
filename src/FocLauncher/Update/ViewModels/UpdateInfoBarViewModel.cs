@@ -2,8 +2,8 @@
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Threading;
-using AnakinRaW.AppUpaterFramework.Metadata.Update;
-using AnakinRaW.AppUpaterFramework.Updater;
+using AnakinRaW.AppUpdaterFramework.Metadata.Update;
+using AnakinRaW.AppUpdaterFramework.Updater;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
 using CommunityToolkit.Mvvm.ComponentModel;
 using FocLauncher.Services;

@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using Validation;
 
-namespace AnakinRaW.AppUpaterFramework.Updater.Configuration;
+namespace AnakinRaW.AppUpdaterFramework.Updater.Configuration;
 
 public abstract class UpdateConfigurationProviderBase : IUpdateConfigurationProvider
 {

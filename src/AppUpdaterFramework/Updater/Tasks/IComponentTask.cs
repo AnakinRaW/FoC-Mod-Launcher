@@ -1,7 +1,7 @@
-﻿using AnakinRaW.AppUpaterFramework.Metadata.Component;
+﻿using AnakinRaW.AppUpdaterFramework.Metadata.Component;
 using AnakinRaW.CommonUtilities.TaskPipeline;
 
-namespace AnakinRaW.AppUpaterFramework.Updater.Tasks;
+namespace AnakinRaW.AppUpdaterFramework.Updater.Tasks;
 
 internal interface IComponentTask : ITask
 {

@@ -1,4 +1,4 @@
-﻿namespace AnakinRaW.AppUpaterFramework.Updater.Progress;
+﻿namespace AnakinRaW.AppUpdaterFramework.Updater.Progress;
 
 public enum ProgressType
 {

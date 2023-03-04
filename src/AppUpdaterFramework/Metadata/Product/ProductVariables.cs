@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading;
 using Validation;
 
-namespace AnakinRaW.AppUpaterFramework.Metadata.Product;
+namespace AnakinRaW.AppUpdaterFramework.Metadata.Product;
 
 public sealed class ProductVariables: IReadOnlyDictionary<string, string?>
 {

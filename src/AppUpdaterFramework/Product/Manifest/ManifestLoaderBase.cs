@@ -3,11 +3,11 @@ using System.IO;
 using System.IO.Abstractions;
 using System.Threading;
 using System.Threading.Tasks;
-using AnakinRaW.AppUpaterFramework.Metadata.Component.Catalog;
-using AnakinRaW.AppUpaterFramework.Metadata.Product;
+using AnakinRaW.AppUpdaterFramework.Metadata.Component.Catalog;
+using AnakinRaW.AppUpdaterFramework.Metadata.Product;
 using Validation;
 
-namespace AnakinRaW.AppUpaterFramework.Product.Manifest;
+namespace AnakinRaW.AppUpdaterFramework.Product.Manifest;
 
 public abstract class ManifestLoaderBase : IManifestLoader
 {

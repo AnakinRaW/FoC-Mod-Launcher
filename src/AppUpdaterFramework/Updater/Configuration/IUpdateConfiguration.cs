@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace AnakinRaW.AppUpaterFramework.Updater.Configuration;
+namespace AnakinRaW.AppUpdaterFramework.Updater.Configuration;
 
 public interface IUpdateConfiguration
 {

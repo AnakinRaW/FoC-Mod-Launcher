@@ -1,4 +1,4 @@
-﻿namespace AnakinRaW.AppUpaterFramework.Interaction;
+﻿namespace AnakinRaW.AppUpdaterFramework.Interaction;
 
 public enum InteractionStatus
 {

@@ -1,4 +1,4 @@
-﻿namespace AnakinRaW.AppUpaterFramework.Metadata.Product;
+﻿namespace AnakinRaW.AppUpdaterFramework.Metadata.Product;
 
 public enum ProductInstallState
 {

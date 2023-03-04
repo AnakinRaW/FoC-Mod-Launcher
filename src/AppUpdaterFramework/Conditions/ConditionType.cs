@@ -1,4 +1,4 @@
-﻿namespace AnakinRaW.AppUpaterFramework.Conditions;
+﻿namespace AnakinRaW.AppUpdaterFramework.Conditions;
 
 public enum ConditionType
 {

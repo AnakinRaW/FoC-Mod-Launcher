@@ -1,11 +1,11 @@
 ﻿using System;
-using AnakinRaW.AppUpaterFramework.Metadata.Component;
-using AnakinRaW.AppUpaterFramework.Metadata.Product;
+using AnakinRaW.AppUpdaterFramework.Metadata.Component;
+using AnakinRaW.AppUpdaterFramework.Metadata.Product;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Validation;
 
-namespace AnakinRaW.AppUpaterFramework.Product.Detectors;
+namespace AnakinRaW.AppUpdaterFramework.Product.Detectors;
 
 internal abstract class ComponentDetectorBase<T> : IComponentDetector where T : IInstallableComponent
 {

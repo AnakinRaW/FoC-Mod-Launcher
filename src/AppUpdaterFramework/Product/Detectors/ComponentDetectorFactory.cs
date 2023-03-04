@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using AnakinRaW.AppUpaterFramework.Metadata.Component;
+using AnakinRaW.AppUpdaterFramework.Metadata.Component;
 using Validation;
 
-namespace AnakinRaW.AppUpaterFramework.Product.Detectors;
+namespace AnakinRaW.AppUpdaterFramework.Product.Detectors;
 
 internal class ComponentDetectorFactory : IComponentDetectorFactory
 {

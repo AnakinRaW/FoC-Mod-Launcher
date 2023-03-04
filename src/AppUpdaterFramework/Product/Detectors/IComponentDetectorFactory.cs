@@ -1,7 +1,7 @@
 ﻿using System;
-using AnakinRaW.AppUpaterFramework.Metadata.Component;
+using AnakinRaW.AppUpdaterFramework.Metadata.Component;
 
-namespace AnakinRaW.AppUpaterFramework.Product.Detectors;
+namespace AnakinRaW.AppUpdaterFramework.Product.Detectors;
 
 internal interface IComponentDetectorFactory
 {

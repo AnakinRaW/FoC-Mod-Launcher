@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 using Validation;
 
-namespace AnakinRaW.AppUpaterFramework.Conditions;
+namespace AnakinRaW.AppUpdaterFramework.Conditions;
 
 internal class CompositeConditionsEvaluator
 {

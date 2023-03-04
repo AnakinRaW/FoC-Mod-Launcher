@@ -1,4 +1,4 @@
-﻿namespace AnakinRaW.AppUpaterFramework.Metadata.Component;
+﻿namespace AnakinRaW.AppUpdaterFramework.Metadata.Component;
 
 public record struct InstallationSize(long SystemDrive, long ProductDrive)
 {

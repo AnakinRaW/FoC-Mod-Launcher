@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Validation;
 
-namespace AnakinRaW.AppUpaterFramework.Conditions;
+namespace AnakinRaW.AppUpdaterFramework.Conditions;
 
 internal sealed class ConditionEvaluatorStore : IConditionEvaluatorStore
 {

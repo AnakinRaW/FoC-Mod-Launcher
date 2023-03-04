@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AnakinRaW.AppUpaterFramework.Metadata.Component.Catalog;
+namespace AnakinRaW.AppUpdaterFramework.Metadata.Component.Catalog;
 
 public class CatalogException : Exception
 {

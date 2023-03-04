@@ -1,6 +1,6 @@
-﻿using AnakinRaW.AppUpaterFramework.Metadata.Component.Catalog;
+﻿using AnakinRaW.AppUpdaterFramework.Metadata.Component.Catalog;
 
-namespace AnakinRaW.AppUpaterFramework.Metadata.Product;
+namespace AnakinRaW.AppUpdaterFramework.Metadata.Product;
 
 public interface IInstalledProduct : IProductReference
 { 
