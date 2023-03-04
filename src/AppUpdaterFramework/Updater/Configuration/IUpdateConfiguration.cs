@@ -11,6 +11,8 @@ public interface IUpdateConfiguration
     string BackupLocation { get; }
 
     BackupPolicy BackupPolicy { get; }
+
+    bool SupportsRestart { get; }
 }
 
 public sealed record UpdateConfiguration : IUpdateConfiguration
@@ -28,6 +30,8 @@ public sealed record UpdateConfiguration : IUpdateConfiguration
     public required string TempDownloadLocation { get; init; }
 
     public BackupPolicy BackupPolicy { get; init; }
+    
+    public bool SupportsRestart { get; init; }
 
     public string BackupLocation { get; init; }
 }

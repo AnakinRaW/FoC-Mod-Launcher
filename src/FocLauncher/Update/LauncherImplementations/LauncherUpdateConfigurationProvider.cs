@@ -27,7 +27,8 @@ internal class LauncherUpdateConfigurationProvider : UpdateConfigurationProvider
             DownloadRetryCount = 3,
             TempDownloadLocation = downloadLocation,
             BackupLocation = backupsLocation,
-            BackupPolicy = BackupPolicy.Required
+            BackupPolicy = BackupPolicy.Required,
+            SupportsRestart = true
         };
     }
 }

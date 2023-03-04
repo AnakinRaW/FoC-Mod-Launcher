@@ -1,4 +1,5 @@
 ﻿using AnakinRaW.AppUpdaterFramework.Conditions;
+using AnakinRaW.AppUpdaterFramework.FileLocking;
 using AnakinRaW.AppUpdaterFramework.Installer;
 using AnakinRaW.AppUpdaterFramework.Interaction;
 using AnakinRaW.AppUpdaterFramework.Product.Manifest;
@@ -35,5 +36,7 @@ public static class LibraryInitialization
         serviceCollection.AddSingleton<ILockedFileHandler>(sp => new LockedFileHandler(sp));
 
         serviceCollection.AddSingleton<IInteractionHandler>(sp => new DefaultInteractionHandler(sp));
+
+        serviceCollection.AddSingleton<ILockingProcessManagerFactory>(_ => new LockingProcessManagerFactory());
     }
 }

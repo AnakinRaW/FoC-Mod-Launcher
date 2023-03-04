@@ -4,6 +4,7 @@ using AnakinRaW.AppUpdaterFramework.Installer;
 using AnakinRaW.AppUpdaterFramework.Metadata.Component;
 using AnakinRaW.AppUpdaterFramework.Metadata.Product;
 using AnakinRaW.AppUpdaterFramework.Metadata.Update;
+using AnakinRaW.AppUpdaterFramework.Restart;
 using AnakinRaW.AppUpdaterFramework.Updater.Backup;
 using AnakinRaW.AppUpdaterFramework.Updater.Configuration;
 using AnakinRaW.AppUpdaterFramework.Updater.Progress;
@@ -118,6 +119,12 @@ internal class InstallTask : RunnerTask, IProgressTask
                 case UpdateAction.Delete:
                     Result = installer.Remove(Component, _productVariables, token);
                     break;
+            }
+
+            if (Result == InstallResult.SuccessRestartRequired)
+            {
+                var restartManager = Services.GetRequiredService<IRestartManager>();
+                restartManager.SetRestart(RestartType.ApplicationRestart);
             }
 
             if (Result.IsFailure())

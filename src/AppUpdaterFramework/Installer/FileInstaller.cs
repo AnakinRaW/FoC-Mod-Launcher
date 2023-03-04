@@ -2,6 +2,7 @@
 using System.IO;
 using System.IO.Abstractions;
 using System.Threading;
+using AnakinRaW.AppUpdaterFramework.FileLocking;
 using AnakinRaW.AppUpdaterFramework.Metadata.Component;
 using AnakinRaW.AppUpdaterFramework.Metadata.Product;
 using AnakinRaW.AppUpdaterFramework.Updater.Tasks;
@@ -46,20 +47,32 @@ internal class FileInstaller : InstallerBase
         if (operationResult != InstallOperationResult.LockedFile)
             throw new NotSupportedException($"OperationResult '{operationResult}' is not supported by this installer");
 
-        var result = _interactionHandler.Handle(component, file);
-
-        return result switch
+        try
         {
-            // The file was unlocked --> We can try again
-            ILockedFileHandler.Result.Unlocked => new InstallerInteractionResult(InstallResult.Failure, true),
-            
-            // The file is still locked --> We cannot proceed.
-            ILockedFileHandler.Result.Locked => new InstallerInteractionResult(InstallResult.Failure),
-            
-            // The file is still locked but an application restart can solve the problem
-            ILockedFileHandler.Result.RequiresRestart => new InstallerInteractionResult(InstallResult.SuccessRestartRequired),
-            _ => throw new ArgumentOutOfRangeException()
-        };
+            var result = _interactionHandler.Handle(component, file);
+
+            return result switch
+            {
+                // The file was unlocked --> We can try again
+                ILockedFileHandler.Result.Unlocked => new InstallerInteractionResult(InstallResult.Failure, true),
+
+                // The file is still locked --> We cannot proceed.
+                ILockedFileHandler.Result.Locked => new InstallerInteractionResult(InstallResult.Failure),
+
+                // The file is still locked but an application restart can solve the problem
+                ILockedFileHandler.Result.RequiresRestart => new InstallerInteractionResult(InstallResult.SuccessRestartRequired),
+
+                _ => throw new ArgumentOutOfRangeException()
+            };
+        }
+        catch (Exception e)
+        {
+            _logger?.LogWarning(e, e.Message);
+            return new InstallerInteractionResult(InstallResult.Failure);
+        }
+       
+
+        
     }
 
     protected override InstallResult InstallCore(IInstallableComponent component, string source, ProductVariables variables, CancellationToken token)

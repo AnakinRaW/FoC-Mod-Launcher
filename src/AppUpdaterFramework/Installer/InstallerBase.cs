@@ -109,6 +109,12 @@ internal abstract class InstallerBase : IInstaller
                     break;
             }
         } while (retry);
+
+        if (result != InstallResult.SuccessRestartRequired)
+        {
+            // TODO: Add action to pending
+        }
+
         return result;
     }
 

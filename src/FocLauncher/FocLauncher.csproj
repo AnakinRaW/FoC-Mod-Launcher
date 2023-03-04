@@ -44,7 +44,7 @@
 		<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="7.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
 		<PackageReference Include="PetroGlyph.Games.EawFoc.Clients.Steam.Windows" Version="2.0.10-beta" />
-		<PackageReference Include="Semver" Version="2.3.0-beta.0" />
+		<PackageReference Include="Semver" Version="2.3.0" />
 		<PackageReference Include="Serilog.Extensions.Logging.File" Version="3.0.0" />
 		<PackageReference Include="AnakinRaW.CommonUtilities.FileSystem.Windows" Version="4.0.1" />
 		<PackageReference Include="AnakinRaW.CommonUtilities.Registry" Version="4.0.1" />

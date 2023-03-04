@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using System.Text;
 using AnakinRaW.AppUpdaterFramework.Updater.Tasks;
 
@@ -42,5 +43,17 @@ public class ComponentFailedException : UpdaterException
             throw new ArgumentNullException(nameof(error));
         _error = error;
         HResult = errorCode;
+    }
+
+    protected ComponentFailedException(SerializationInfo info, StreamingContext context)
+        : base(info, context)
+    {
+        _error = info.GetString(nameof(Error));
+    }
+
+    public override void GetObjectData(SerializationInfo info, StreamingContext context)
+    {
+        base.GetObjectData(info, context);
+        info.AddValue("Error", Error);
     }
 }
