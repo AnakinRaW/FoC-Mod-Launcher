@@ -3,6 +3,7 @@ using System.IO.Abstractions;
 using AnakinRaW.AppUpdaterFramework.Metadata.Component.Catalog;
 using AnakinRaW.AppUpdaterFramework.Metadata.Product;
 using AnakinRaW.AppUpdaterFramework.Product.Manifest;
+using AnakinRaW.AppUpdaterFramework.Restart;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Semver;
@@ -13,9 +14,10 @@ namespace AnakinRaW.AppUpdaterFramework.Product;
 public abstract class ProductServiceBase : IProductService
 { 
     private bool _isInitialized;
-    private IInstalledProduct? _installedProduct;
+    private InstalledProduct? _installedProduct;
 
     private readonly object _syncLock = new();
+    private readonly IRestartManager _restartManager;
 
     public abstract IDirectoryInfo InstallLocation { get; }
 
@@ -28,6 +30,7 @@ public abstract class ProductServiceBase : IProductService
         Requires.NotNull(serviceProvider, nameof(serviceProvider));
         ServiceProvider = serviceProvider;
         Logger = serviceProvider.GetService<ILoggerFactory>()?.CreateLogger(GetType());
+        _restartManager = serviceProvider.GetRequiredService<IRestartManager>();
     }
 
     public IInstalledProduct GetCurrentInstance()
@@ -66,12 +69,6 @@ public abstract class ProductServiceBase : IProductService
         return !ProductReferenceEqualityComparer.NameOnly.Equals(installed, product);
     }
 
-    public void RevalidateInstallation()
-    {
-        Logger?.LogDebug("Requested revalidation of current installation.");
-        Reset();
-    }
-    
     protected abstract IProductReference CreateCurrentProductReference();
 
     protected virtual ProductInstallState FetchInstallState(IProductReference productReference)
@@ -88,19 +85,22 @@ public abstract class ProductServiceBase : IProductService
     {
         if (_isInitialized)
             return;
-        Reset();
-        _isInitialized = true;
-    }
-
-    private void Reset()
-    {
         lock (_syncLock)
         {
             _installedProduct = BuildProduct();
         }
+        _restartManager.RebootRequired += OnRebootRequired;
+        _isInitialized = true;
     }
 
-    private IInstalledProduct BuildProduct()
+    private void OnRebootRequired(object sender, EventArgs e)
+    {
+        _installedProduct!.RequiresRestart = true;
+        Logger?.LogTrace("Restart required for current instance.");
+        _restartManager.RebootRequired -= OnRebootRequired;
+    }
+
+    private InstalledProduct BuildProduct()
     {
         var productReference = CreateCurrentProductReference();
         var variables = AddProductVariables(productReference);

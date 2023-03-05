@@ -16,6 +16,4 @@ public interface IProductService
     IInstalledComponentsCatalog GetInstalledComponents();
 
     bool IsProductCompatible(IProductReference product);
-
-    void RevalidateInstallation();
 }

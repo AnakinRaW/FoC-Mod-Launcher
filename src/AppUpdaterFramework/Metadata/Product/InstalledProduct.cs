@@ -22,6 +22,8 @@ public sealed class InstalledProduct : IInstalledProduct
 
     public IProductManifest Manifest { get; }
 
+    public bool RequiresRestart { get; internal set; }
+
     public InstalledProduct(IProductReference reference, string installationPath, IProductManifest manifest, ProductVariables? variables, ProductInstallState state = ProductInstallState.Installed)
     {
         Requires.NotNull(reference, nameof(reference));

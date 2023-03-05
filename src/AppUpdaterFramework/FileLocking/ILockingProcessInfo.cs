@@ -1,10 +1,20 @@
-﻿namespace AnakinRaW.AppUpdaterFramework.FileLocking;
+﻿using System;
 
-public interface ILockingProcessInfo
+namespace AnakinRaW.AppUpdaterFramework.FileLocking;
+
+internal interface ILockingProcessInfo
 {
-    int Id { get; }
+    uint Id { get; }
+
+    DateTime StartTime { get; }
+
+    string Description { get; }
+
+    string ServiceName { get; }
 
     Vanara.PInvoke.RstrtMgr.RM_APP_TYPE ApplicationType { get; }
 
     Vanara.PInvoke.RstrtMgr.RM_APP_STATUS ApplicationStatus { get; }
+
+    bool IsRestartable { get; }
 }

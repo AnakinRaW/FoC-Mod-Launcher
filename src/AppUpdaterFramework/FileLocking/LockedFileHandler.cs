@@ -34,7 +34,7 @@ internal class LockedFileHandler : InteractiveHandlerBase, ILockedFileHandler
 
         var lockingProcesses = lockingProcessManager.GetProcesses().ToList();
 
-        if (!lockingProcesses.Any())
+        if (!lockingProcesses.AnyRunning())
         {
             var e = new InvalidOperationException($"The file '{file}' is not locked by any process.");
             Logger?.LogTrace(e, e.Message);
@@ -66,7 +66,7 @@ internal class LockedFileHandler : InteractiveHandlerBase, ILockedFileHandler
         lockingProcessManagerWithoutSelf.TerminateRegisteredProcesses();
 
         // File is still locked
-        if (lockingProcessManagerWithoutSelf.GetProcesses().Any())
+        if (!lockingProcessManagerWithoutSelf.GetProcesses().AllStopped())
             return ILockedFileHandler.Result.Locked;
 
 
@@ -75,7 +75,7 @@ internal class LockedFileHandler : InteractiveHandlerBase, ILockedFileHandler
             if (_updateConfiguration.SupportsRestart)
                 return ILockedFileHandler.Result.Locked;
 
-            Logger?.LogTrace($"File '{file}' is locked by current application and get schedule for restart.");
+            Logger?.LogTrace($"File '{file}' is locked by current application. Restart is required.");
             return ILockedFileHandler.Result.RequiresRestart;
         }
 
@@ -90,6 +90,6 @@ internal class LockedFileHandler : InteractiveHandlerBase, ILockedFileHandler
         //if (!supportedStates.Contains(interactionStatus))
         //    throw new InvalidOperationException("Retrieved interaction status was not expected.");
 
-        return false;
+        return true;
     }
 }

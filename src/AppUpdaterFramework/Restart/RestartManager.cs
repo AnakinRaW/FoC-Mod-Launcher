@@ -2,26 +2,32 @@
 
 namespace AnakinRaW.AppUpdaterFramework.Restart;
 
-internal interface IRestartManager
-{
-    event EventHandler<EventArgs> RebootRequired;
-
-    RestartType RequiredRestartType { get; }
-
-    void SetRestart(RestartType restartType);
-}
-
-internal class RestartManager : IRestartManager
+internal sealed class RestartManager : IRestartManager
 {
     public event EventHandler<EventArgs>? RebootRequired;
-    public RestartType RequiredRestartType { get; }
+
+    public RestartType RequiredRestartType { get; private set; }
+
     public void SetRestart(RestartType restartType)
     {
+        if (restartType.IsRestartRequired())
+            OnRebootRequired();
+        if (ShouldOverride()) 
+            RequiredRestartType = restartType;
     }
-}
 
-internal enum RestartType
-{
-    None,
-    ApplicationRestart
+    private bool ShouldOverride()
+    {
+        return RequiredRestartType switch
+        {
+            RestartType.None => true,
+            RestartType.ApplicationRestart => false,
+            _ => false
+        };
+    }
+
+    private void OnRebootRequired()
+    {
+        RebootRequired?.Invoke(this, EventArgs.Empty);
+    }
 }

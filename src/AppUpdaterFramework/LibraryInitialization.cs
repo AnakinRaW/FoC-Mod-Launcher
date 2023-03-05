@@ -3,6 +3,7 @@ using AnakinRaW.AppUpdaterFramework.FileLocking;
 using AnakinRaW.AppUpdaterFramework.Installer;
 using AnakinRaW.AppUpdaterFramework.Interaction;
 using AnakinRaW.AppUpdaterFramework.Product.Manifest;
+using AnakinRaW.AppUpdaterFramework.Restart;
 using AnakinRaW.AppUpdaterFramework.Updater;
 using AnakinRaW.AppUpdaterFramework.Updater.Backup;
 using AnakinRaW.AppUpdaterFramework.Utilities;
@@ -38,5 +39,7 @@ public static class LibraryInitialization
         serviceCollection.AddSingleton<IInteractionHandler>(sp => new DefaultInteractionHandler(sp));
 
         serviceCollection.AddSingleton<ILockingProcessManagerFactory>(_ => new LockingProcessManagerFactory());
+
+        serviceCollection.AddSingleton<IRestartManager>(_ => new RestartManager());
     }
 }

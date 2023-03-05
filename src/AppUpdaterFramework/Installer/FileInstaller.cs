@@ -70,9 +70,6 @@ internal class FileInstaller : InstallerBase
             _logger?.LogWarning(e, e.Message);
             return new InstallerInteractionResult(InstallResult.Failure);
         }
-       
-
-        
     }
 
     protected override InstallResult InstallCore(IInstallableComponent component, string source, ProductVariables variables, CancellationToken token)

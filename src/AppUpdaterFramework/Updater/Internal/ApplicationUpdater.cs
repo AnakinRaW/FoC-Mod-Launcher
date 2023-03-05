@@ -4,6 +4,7 @@ using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Threading.Tasks;
 using AnakinRaW.AppUpdaterFramework.Metadata.Update;
+using AnakinRaW.AppUpdaterFramework.Restart;
 using AnakinRaW.AppUpdaterFramework.Updater.Progress;
 using AnakinRaW.AppUpdaterFramework.Utilities;
 using Microsoft.Extensions.DependencyInjection;
@@ -71,12 +72,14 @@ internal class ApplicationUpdater : IApplicationUpdater, IProgressReporter
         }
     }
 
-    private static UpdateResult CreateResult(Exception? exception = null)
+    private UpdateResult CreateResult(Exception? exception = null)
     {
+        var restartType = _serviceProvider.GetRequiredService<IRestartManager>().RequiredRestartType;
         var result = new UpdateResult
         {
             Exception = exception,
-            IsCanceled = exception?.IsOperationCanceledException() ?? false
+            IsCanceled = exception?.IsOperationCanceledException() ?? false,
+            RestartType = restartType
         };
         return result;
     }

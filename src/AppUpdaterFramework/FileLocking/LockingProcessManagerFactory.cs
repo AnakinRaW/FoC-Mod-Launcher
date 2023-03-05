@@ -11,6 +11,6 @@ internal class LockingProcessManagerFactory : ILockingProcessManagerFactory
         var result = Vanara.PInvoke.RstrtMgr.RmStartSession(out var pSessionHandle, 0, strSessionKey);
         if (result != 0)
             throw new Win32Exception(result.ToHRESULT().Code);
-        return new LockingProcessManager((int)pSessionHandle, strSessionKey.ToString());
+        return new LockingProcessManager(pSessionHandle, strSessionKey.ToString());
     }
 }

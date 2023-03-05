@@ -125,6 +125,7 @@ internal class InstallTask : RunnerTask, IProgressTask
             {
                 var restartManager = Services.GetRequiredService<IRestartManager>();
                 restartManager.SetRestart(RestartType.ApplicationRestart);
+                // TODO: Push somewhere to remember this component and necessary information
             }
 
             if (Result.IsFailure())
