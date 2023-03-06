@@ -1,9 +1,0 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-
-    <ResourceDictionary.MergedDictionaries>
-        <!-- TODO: Make sure to change the namespace here as well.-->
-        <ResourceDictionary Source="/SampleTheme;component/LauncherBrushes.xaml"/>
-    </ResourceDictionary.MergedDictionaries>
-
-
-</ResourceDictionary>

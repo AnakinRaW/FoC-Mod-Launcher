@@ -1,9 +1,0 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-
-    <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/FocLauncher.BaseControls;component/Themes/Styles/GlyphButton.xaml" />
-        <ResourceDictionary Source="/FocLauncher.BaseControls;component/Themes/Styles/WindowTitleBarButton.xaml" />
-        <ResourceDictionary Source="/FocLauncher.BaseControls;component/Themes/Styles/SystemMenu.xaml" />
-    </ResourceDictionary.MergedDictionaries>
-
-</ResourceDictionary>
