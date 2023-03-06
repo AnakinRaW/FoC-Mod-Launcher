@@ -27,6 +27,11 @@ public class DialogButtonFactory : IDialogButtonFactory
         return CreateButton(DefaultDialogButtonIdentifiers.Retry, DialogButtonCommandsDefinitions.RetryCommandDefinition, isDefault, false);
     }
 
+    public IButtonViewModel CreateCustom(string id, ICommandDefinition command, bool isDefault)
+    {
+        return CreateButton(id, command, isDefault, false);
+    }
+
     protected virtual IButtonViewModel CreateButton(string id, ICommandDefinition commandDefinition, bool isDefault, bool cancel)
     {
         return new ButtonViewModel(id, commandDefinition)

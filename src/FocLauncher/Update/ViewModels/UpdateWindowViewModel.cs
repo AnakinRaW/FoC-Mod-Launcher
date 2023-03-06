@@ -17,6 +17,7 @@ using FocLauncher.Services;
 using FocLauncher.Update.LauncherImplementations;
 using FocLauncher.Utilities;
 using FocLauncher.ViewModels;
+using FocLauncher.ViewModels.Dialogs;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using TaskCanceledException = System.Threading.Tasks.TaskCanceledException;

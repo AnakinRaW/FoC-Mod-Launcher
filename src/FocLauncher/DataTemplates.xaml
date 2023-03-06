@@ -1,20 +1,22 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:viewModels="clr-namespace:FocLauncher.ViewModels"
+                    xmlns:dialogViewModels="clr-namespace:FocLauncher.ViewModels.Dialogs"
                     xmlns:views="clr-namespace:FocLauncher.Views"
                     xmlns:dialogs="clr-namespace:FocLauncher.Dialogs"
                     xmlns:updateViewModels="clr-namespace:FocLauncher.Update.ViewModels"
-                    xmlns:views1="clr-namespace:FocLauncher.Update.Views">
+                    xmlns:updateViews="clr-namespace:FocLauncher.Update.Views"
+                    xmlns:updateDialogs="clr-namespace:FocLauncher.Update.ViewModels.Dialogs">
     
     <DataTemplate DataType="{x:Type viewModels:MainPageViewModel}">
         <views:MainPage/>
     </DataTemplate>
-    
-    <DataTemplate DataType="{x:Type viewModels:ErrorMessageDialogViewModel}">
+
+    <DataTemplate DataType="{x:Type dialogViewModels:ErrorMessageDialogViewModel}">
         <dialogs:ErrorDialog/>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type viewModels:LauncherAboutDialogViewModel}">
+    <DataTemplate DataType="{x:Type dialogViewModels:LauncherAboutDialogViewModel}">
         <dialogs:AboutDialog/>
     </DataTemplate>
 
@@ -24,14 +26,22 @@
         </StackPanel>
     </DataTemplate>
 
-
-    <DataTemplate DataType="{x:Type updateViewModels:UpdateWindowViewModel}">
-        <views1:UpdateWindow/>
-    </DataTemplate>
-
-
     <DataTemplate DataType="{x:Type viewModels:LauncherVersionViewModel}">
         <views:LauncherVersionPanel/>
+    </DataTemplate>
+
+    <!-- Update -->
+
+    <DataTemplate DataType="{x:Type updateViewModels:UpdateWindowViewModel}">
+        <updateViews:UpdateWindow/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type updateDialogs:UpdateErrorDialog}">
+        <dialogs:ErrorDialog/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type updateDialogs:KillProcessDialog}">
+        <dialogs:ErrorDialog/>
     </DataTemplate>
 
 </ResourceDictionary>

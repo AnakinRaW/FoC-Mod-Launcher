@@ -4,7 +4,7 @@ using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 using AnakinRaW.CommonUtilities.Wpf.Imaging;
 using FocLauncher.Imaging;
 
-namespace FocLauncher.ViewModels;
+namespace FocLauncher.ViewModels.Dialogs;
 
 public class ErrorMessageDialogViewModel : DialogViewModel, IErrorMessageDialogViewModel
 {

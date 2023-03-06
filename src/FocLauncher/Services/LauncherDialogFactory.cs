@@ -2,7 +2,7 @@
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Controls;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 using FocLauncher.Controls;
-using FocLauncher.ViewModels;
+using FocLauncher.ViewModels.Dialogs;
 
 namespace FocLauncher.Services;
 

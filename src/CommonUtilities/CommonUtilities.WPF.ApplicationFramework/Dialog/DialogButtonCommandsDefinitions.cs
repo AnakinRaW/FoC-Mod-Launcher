@@ -15,6 +15,11 @@ public static class DialogButtonCommandsDefinitions
 
     public static ICommandDefinition RetryCommandDefinition { get; } = new DialogCommand("Retry", CloseDialogCommand);
 
+    public static ICommandDefinition Create(string name)
+    {
+        return new DialogCommand(name, CloseDialogCommand);
+    }
+
     private class DialogCommand : CommandDefinition
     {
         public override string Text { get; }

@@ -57,7 +57,7 @@ internal class FileInstaller : InstallerBase
                 ILockedFileHandler.Result.Unlocked => new InstallerInteractionResult(InstallResult.Failure, true),
 
                 // The file is still locked --> We cannot proceed.
-                ILockedFileHandler.Result.Locked => new InstallerInteractionResult(InstallResult.Failure),
+                ILockedFileHandler.Result.Locked => new InstallerInteractionResult(InstallResult.Cancel),
 
                 // The file is still locked but an application restart can solve the problem
                 ILockedFileHandler.Result.RequiresRestart => new InstallerInteractionResult(InstallResult.SuccessRestartRequired),

@@ -1,7 +1,7 @@
 ﻿using System;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 
-namespace FocLauncher.ViewModels;
+namespace FocLauncher.ViewModels.Dialogs;
 
 public class LauncherAboutDialogViewModel : DialogViewModel
 {

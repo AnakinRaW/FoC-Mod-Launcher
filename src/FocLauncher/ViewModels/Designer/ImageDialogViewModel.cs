@@ -6,6 +6,7 @@ using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog.Buttons;
 using AnakinRaW.CommonUtilities.Wpf.Imaging;
 using FocLauncher.Imaging;
+using FocLauncher.ViewModels.Dialogs;
 
 namespace FocLauncher.ViewModels.Designer;
 

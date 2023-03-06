@@ -1,9 +1,9 @@
 ﻿namespace AnakinRaW.AppUpdaterFramework.Interaction;
 
-public enum InteractionStatus
+public enum InteractionResult
 {
     Ok,
     Cancel,
     Retry,
-    Abort
+    Ignore
 }

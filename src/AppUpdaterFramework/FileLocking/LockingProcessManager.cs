@@ -10,14 +10,12 @@ namespace AnakinRaW.AppUpdaterFramework.FileLocking;
 internal class LockingProcessManager : ILockingProcessManager
 {
     private readonly uint _sessionId;
-    private readonly string _sessionKey;
     private bool _isDisposed;
     private bool _registered;
 
-    public LockingProcessManager(uint sessionId, string sessionKey)
+    public LockingProcessManager(uint sessionId)
     {
         _sessionId = sessionId;
-        _sessionKey = sessionKey;
     }
 
     ~LockingProcessManager()
@@ -107,37 +105,8 @@ internal class LockingProcessManager : ILockingProcessManager
         };
         return new RstrtMgr.RM_UNIQUE_PROCESS
         {
-            dwProcessId = (uint) process.Id,
+            dwProcessId = process.Id,
             ProcessStartTime = fileTime
         };
     }
-}
-
-internal class LockingProcessInfo : ILockingProcessInfo
-{
-    public uint Id { get; }
-
-    public DateTime StartTime { get; }
-
-    public string Description { get; }
-
-    public string ServiceName { get; }
-    
-    public RstrtMgr.RM_APP_TYPE ApplicationType { get; }
-    public RstrtMgr.RM_APP_STATUS ApplicationStatus { get; }
-
-    public bool IsRestartable { get; }
-
-    internal LockingProcessInfo(RstrtMgr.RM_PROCESS_INFO process)
-    {
-        var fileTime = ((long)process.Process.ProcessStartTime.dwHighDateTime << 32) + process.Process.ProcessStartTime.dwLowDateTime;
-        Id = process.Process.dwProcessId;
-        StartTime = DateTime.FromFileTime(fileTime);
-        Description = process.strAppName;
-        ServiceName = process.strServiceShortName;
-        ApplicationType = process.ApplicationType;
-        ApplicationStatus = process.AppStatus;
-        IsRestartable = process.bRestartable;
-    }
-
 }

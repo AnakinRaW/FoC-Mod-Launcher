@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO.Abstractions;
 using System.Linq;
+using AnakinRaW.AppUpdaterFramework.FileLocking.Interaction;
 using AnakinRaW.AppUpdaterFramework.Interaction;
 using AnakinRaW.AppUpdaterFramework.Metadata.Component;
 using AnakinRaW.AppUpdaterFramework.Updater.Configuration;
@@ -50,25 +51,36 @@ internal class LockedFileHandler : InteractiveHandlerBase, ILockedFileHandler
             return ILockedFileHandler.Result.Locked;
         }
 
-
         Logger?.LogTrace($"Handling locked file '{file}'");
 
-        var processesWithoutSelf = lockingProcesses.Where(x => !x.IsCurrentProcess());
+        var processesWithoutSelf = lockingProcesses.Where(x => !x.IsCurrentProcess()).ToList();
         using var lockingProcessManagerWithoutSelf = _lockingProcessManagerFactory.Create();
         lockingProcessManagerWithoutSelf.Register(null, processesWithoutSelf);
 
-        if (!PromptProcessKill(file, lockingProcesses))
+
+        LockedFileHandlerInteractionResult interactionResult;
+        while ((interactionResult = PromptProcessKill(file, processesWithoutSelf)) == LockedFileHandlerInteractionResult.Retry)
+        {
+            interactionResult = PromptProcessKill(file, processesWithoutSelf);
+            processesWithoutSelf = lockingProcessManagerWithoutSelf.GetProcesses().ToList();
+            if (processesWithoutSelf.AllStopped())
+                break;
+        }
+
+        // Interaction indicated to abort handling
+        if (interactionResult == LockedFileHandlerInteractionResult.Cancel)
         {
             Logger?.LogTrace($"Interaction result: Locked file '{file}' shall not be unlocked.");
             return ILockedFileHandler.Result.Locked;
         }
 
-        lockingProcessManagerWithoutSelf.TerminateRegisteredProcesses();
+        // Interaction indicated to kill the processes
+        if (interactionResult == LockedFileHandlerInteractionResult.Kill)
+            lockingProcessManagerWithoutSelf.TerminateRegisteredProcesses();
 
         // File is still locked
         if (!lockingProcessManagerWithoutSelf.GetProcesses().AllStopped())
             return ILockedFileHandler.Result.Locked;
-
 
         if (isLockedByApplication)
         {
@@ -82,14 +94,9 @@ internal class LockedFileHandler : InteractiveHandlerBase, ILockedFileHandler
         return ILockedFileHandler.Result.Unlocked;
     }
 
-    private bool PromptProcessKill(IFileInfo file, List<ILockingProcessInfo> lockingProcesses)
+    private LockedFileHandlerInteractionResult PromptProcessKill(IFileInfo file, List<ILockingProcessInfo> lockingProcesses)
     {
-        //var supportedStates = new SupportedInteractions(
-        //    new SupportedInteractionState(InteractionStatus.Retry, ""));
-
-        //if (!supportedStates.Contains(interactionStatus))
-        //    throw new InvalidOperationException("Retrieved interaction status was not expected.");
-
-        return true;
+        var processes = lockingProcesses.Select(x => new ILockingProcess.LockingProcess(x.ServiceName, x.Id));
+        return InteractionHandler.HandleLockedFile(file, processes);
     }
 }

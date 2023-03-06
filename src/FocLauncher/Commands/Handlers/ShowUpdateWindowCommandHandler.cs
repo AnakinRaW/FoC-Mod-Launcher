@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AnakinRaW.AppUpaterFramework;
 using AnakinRaW.AppUpaterFramework.Services;
 using AnakinRaW.AppUpdaterFramework;
+using AnakinRaW.AppUpdaterFramework.Interaction;
 using AnakinRaW.AppUpdaterFramework.Product;
 using AnakinRaW.AppUpdaterFramework.Product.Manifest;
 using AnakinRaW.AppUpdaterFramework.Updater.Configuration;
@@ -19,6 +20,7 @@ using FocLauncher.Update.LauncherImplementations;
 using FocLauncher.Update.ViewModels;
 using FocLauncher.Utilities;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging.Debug;
 using Microsoft.Extensions.Logging;
 using Serilog.Extensions.Logging;
@@ -91,6 +93,8 @@ internal class ShowUpdateWindowCommandHandler : AsyncCommandHandlerBase, IShowUp
         serviceCollection.AddSingleton(CreateDownloadConfiguration());
         serviceCollection.AddSingleton<IUpdateCommandHandler>(sp => new UpdateCommandHandler(sp));
 
+        serviceCollection.Replace(ServiceDescriptor.Scoped<IInteractionHandler>(sp => new LauncherInteractionHandler(sp)));
+
         return serviceCollection.BuildServiceProvider();
     }
 
@@ -105,6 +109,8 @@ internal class ShowUpdateWindowCommandHandler : AsyncCommandHandlerBase, IShowUp
         var fileSystemService = _parentServiceProvider.GetRequiredService<IFileSystemService>();
         var modalWindowService = _parentServiceProvider.GetRequiredService<IModalWindowService>();
         var launcherEnvironment = _parentServiceProvider.GetRequiredService<ILauncherEnvironment>();
+        var dialogService = _parentServiceProvider.GetRequiredService<IQueuedDialogService>();
+        var buttonFactory = _parentServiceProvider.GetRequiredService<IDialogButtonFactory>();
 
         SetLogging(serviceCollection, fileSystem, launcherEnvironment);
 
@@ -113,6 +119,8 @@ internal class ShowUpdateWindowCommandHandler : AsyncCommandHandlerBase, IShowUp
         serviceCollection.AddSingleton(fileSystemService);
         serviceCollection.AddSingleton(modalWindowService);
         serviceCollection.AddSingleton(launcherEnvironment);
+        serviceCollection.AddSingleton(dialogService);
+        serviceCollection.AddSingleton(buttonFactory);
     }
 
     private static void SetLogging(IServiceCollection serviceCollection, IFileSystem fileSystem, ILauncherEnvironment environment)

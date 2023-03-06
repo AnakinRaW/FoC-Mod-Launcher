@@ -1,4 +1,5 @@
 ﻿using System;
+using Vanara.PInvoke;
 
 namespace AnakinRaW.AppUpdaterFramework.FileLocking;
 
@@ -8,13 +9,11 @@ internal interface ILockingProcessInfo
 
     DateTime StartTime { get; }
 
-    string Description { get; }
+    public string Description { get; }
 
-    string ServiceName { get; }
+    public string ServiceName { get; }
 
-    Vanara.PInvoke.RstrtMgr.RM_APP_TYPE ApplicationType { get; }
+    RstrtMgr.RM_APP_TYPE ApplicationType { get; }
 
-    Vanara.PInvoke.RstrtMgr.RM_APP_STATUS ApplicationStatus { get; }
-
-    bool IsRestartable { get; }
+    RstrtMgr.RM_APP_STATUS ApplicationStatus { get; }
 }

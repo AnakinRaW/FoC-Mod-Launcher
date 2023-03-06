@@ -17,6 +17,6 @@ internal abstract class InteractiveHandlerBase
 
     protected void PromptError(string message)
     {
-
+        InteractionHandler.HandleError(message);
     }
 }

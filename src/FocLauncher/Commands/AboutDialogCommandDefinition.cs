@@ -5,7 +5,7 @@ using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Input;
 using AnakinRaW.CommonUtilities.Wpf.Imaging;
 using AnakinRaW.CommonUtilities.Wpf.Input;
 using FocLauncher.Imaging;
-using FocLauncher.ViewModels;
+using FocLauncher.ViewModels.Dialogs;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FocLauncher.Commands;

@@ -4,6 +4,7 @@ using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.StatusBar;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
+using FocLauncher.ViewModels.Dialogs;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 

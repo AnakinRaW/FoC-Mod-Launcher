@@ -1,7 +1,7 @@
 ﻿using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 using AnakinRaW.CommonUtilities.Wpf.Imaging;
 
-namespace FocLauncher.ViewModels;
+namespace FocLauncher.ViewModels.Dialogs;
 
 public interface IImageDialogViewModel : IDialogViewModel
 {
