@@ -45,15 +45,29 @@ internal partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWind
     [ObservableProperty]
     private bool _isCheckingForUpdate;
 
+    private bool RequiresRestart
+
+    {
+        get => _requiresRestart;
+        set
+        {
+            if (_requiresRestart == value)
+                return;
+            _requiresRestart = value;
+            OnPropertyChanged(nameof(CanSwitchBranches));
+        }
+    }
+
     [ObservableProperty]
     private bool _isUpdating;
 
-    public bool CanSwitchBranches => !IsLoadingBranches && !IsCheckingForUpdate && !IsUpdating;
+    public bool CanSwitchBranches => !IsLoadingBranches && !IsCheckingForUpdate && !IsUpdating && !RequiresRestart;
 
     [ObservableProperty]
     private ProductBranch _currentBranch = null!;
 
     [ObservableProperty] private IProductViewModel _productViewModel = null!;
+    private bool _requiresRestart;
 
     public IUpdateInfoBarViewModel InfoBarViewModel { get; } 
 
@@ -115,6 +129,10 @@ internal partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWind
         try
         {
             var launcher = _productService.GetCurrentInstance();
+            
+            if (launcher.InstallState == ProductInstallState.RestartRequired)
+                RequiresRestart = true;
+
             AppDispatcher.Invoke(() => ProductViewModel =
                 _productViewModelFactory.Create(launcher, updateCatalog));
 
@@ -195,7 +213,7 @@ internal partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWind
         }
         catch (Exception e)
         {
-            InfoBarViewModel.Status = UpdateStatus.Failed;
+            InfoBarViewModel.Status = UpdateStatus.FailedChecking;
             _logger?.LogError(e, e.Message);
             AppDispatcher.Invoke(Branches.Clear);
             throw;
@@ -226,7 +244,7 @@ internal partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWind
         }
         catch (Exception e)
         {
-            InfoBarViewModel.Status = UpdateStatus.Failed;
+            InfoBarViewModel.Status = UpdateStatus.FailedChecking;
             _logger?.LogError(e, e.Message);
             var evm = new ErrorMessageDialogViewModel("Checking for updates failed.", e.Message, _serviceProvider);
             await _serviceProvider.GetRequiredService<IQueuedDialogService>().ShowDialog(evm);

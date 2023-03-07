@@ -23,8 +23,11 @@
 		<None Remove="Resources\icon.ico" />
 		<None Remove="Resources\Icons\Png\AppIcon.png" />
 		<None Remove="Resources\Icons\Png\GitHub_Mark_32px.png" />
+		<None Remove="Resources\Icons\Png\kill.png" />
 		<None Remove="Resources\Icons\Png\sadTrooper.png" />
+		<None Remove="Resources\Icons\Png\senat.png" />
 		<None Remove="Resources\Icons\Png\Undo_16x.png" />
+		<None Remove="Resources\Icons\Png\vader.jpg" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -79,8 +82,11 @@
 		<Resource Include="Resources\icon.ico" />
 		<Resource Include="Resources\Icons\Png\AppIcon.png" />
 		<Resource Include="Resources\Icons\Png\GitHub_Mark_32px.png" />
+		<Resource Include="Resources\Icons\Png\kill.png" />
 		<Resource Include="Resources\Icons\Png\sadTrooper.png" />
+		<Resource Include="Resources\Icons\Png\senat.png" />
 		<Resource Include="Resources\Icons\Png\Undo_16x.png" />
+		<Resource Include="Resources\Icons\Png\vader.jpg" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -4,6 +4,7 @@ using AnakinRaW.AppUpdaterFramework.Metadata.Component.Catalog;
 using AnakinRaW.AppUpdaterFramework.Metadata.Product;
 using AnakinRaW.AppUpdaterFramework.Product.Manifest;
 using AnakinRaW.AppUpdaterFramework.Restart;
+using AnakinRaW.AppUpdaterFramework.Updater;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Semver;
@@ -31,6 +32,8 @@ public abstract class ProductServiceBase : IProductService
         ServiceProvider = serviceProvider;
         Logger = serviceProvider.GetService<ILoggerFactory>()?.CreateLogger(GetType());
         _restartManager = serviceProvider.GetRequiredService<IRestartManager>();
+        _restartManager.RebootRequired += OnRebootRequired;
+        serviceProvider.GetRequiredService<IUpdateService>().UpdateCompleted += OnUpdateCompleted;
     }
 
     public IInstalledProduct GetCurrentInstance()
@@ -71,9 +74,11 @@ public abstract class ProductServiceBase : IProductService
 
     protected abstract IProductReference CreateCurrentProductReference();
 
-    protected virtual ProductInstallState FetchInstallState(IProductReference productReference)
+    private ProductInstallState FetchInstallState()
     {
-        return ProductInstallState.Installed;
+        return _restartManager.RequiredRestartType == RestartType.ApplicationRestart
+            ? ProductInstallState.RestartRequired
+            : ProductInstallState.Installed;
     }
 
 
@@ -85,19 +90,23 @@ public abstract class ProductServiceBase : IProductService
     {
         if (_isInitialized)
             return;
-        lock (_syncLock)
-        {
-            _installedProduct = BuildProduct();
-        }
-        _restartManager.RebootRequired += OnRebootRequired;
+        Reset();
         _isInitialized = true;
     }
 
-    private void OnRebootRequired(object sender, EventArgs e)
+    private void Reset()
     {
-        _installedProduct!.RequiresRestart = true;
-        Logger?.LogTrace("Restart required for current instance.");
-        _restartManager.RebootRequired -= OnRebootRequired;
+        lock (_syncLock)
+        {
+            var installedProduct = BuildProduct();
+            if (installedProduct is null)
+            {
+                var ex = new InvalidOperationException("Created Product must not be null!");
+                Logger?.LogError(ex, ex.Message);
+                throw ex;
+            }
+            _installedProduct = installedProduct;
+        }
     }
 
     private InstalledProduct BuildProduct()
@@ -105,7 +114,7 @@ public abstract class ProductServiceBase : IProductService
         var productReference = CreateCurrentProductReference();
         var variables = AddProductVariables(productReference);
         var manifest = ServiceProvider.GetRequiredService<IInstalledManifestProvider>().ProvideManifest(productReference, variables);
-        var state = FetchInstallState(productReference);
+        var state = FetchInstallState();
         return new InstalledProduct(productReference, InstallLocation.FullName, manifest, variables, state);
     }
 
@@ -117,5 +126,25 @@ public abstract class ProductServiceBase : IProductService
         variables.Add(KnownProductVariablesKeys.InstallDrive, installLocation.Root.FullName);
         AddAdditionalProductVariables(variables, product);
         return variables;
+    }
+
+    private void OnRebootRequired(object sender, EventArgs e)
+    {
+        try
+        {
+            if (_installedProduct is null)
+                return;
+            _installedProduct!.InstallState = ProductInstallState.RestartRequired;
+            Logger?.LogTrace("Restart required for current instance.");
+        }
+        finally
+        {
+            _restartManager.RebootRequired -= OnRebootRequired;
+        }
+    }
+
+    private void OnUpdateCompleted(object sender, EventArgs e)
+    {
+        Reset();
     }
 }

@@ -39,10 +39,6 @@ internal class LauncherProductService : ProductServiceBase
         variables.Add(LauncherVariablesKeys.LauncherFileName, LauncherAssemblyInfo.AssemblyName);
     }
 
-    protected override ProductInstallState FetchInstallState(IProductReference productReference)
-    {
-        return ProductInstallState.Installed;
-    }
 
     private IDirectoryInfo GetInstallLocation()
     {

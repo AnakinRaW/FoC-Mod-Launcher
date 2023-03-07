@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO.Abstractions;
 using System.Threading.Tasks;
-using AnakinRaW.AppUpaterFramework;
 using AnakinRaW.AppUpaterFramework.Services;
 using AnakinRaW.AppUpdaterFramework;
 using AnakinRaW.AppUpdaterFramework.Interaction;
@@ -13,6 +12,7 @@ using AnakinRaW.CommonUtilities.DownloadManager.Configuration;
 using AnakinRaW.CommonUtilities.DownloadManager.Verification;
 using AnakinRaW.CommonUtilities.DownloadManager.Verification.HashVerification;
 using AnakinRaW.CommonUtilities.FileSystem;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Input;
 using FocLauncher.Update.Commands.Handlers;
@@ -111,6 +111,7 @@ internal class ShowUpdateWindowCommandHandler : AsyncCommandHandlerBase, IShowUp
         var launcherEnvironment = _parentServiceProvider.GetRequiredService<ILauncherEnvironment>();
         var dialogService = _parentServiceProvider.GetRequiredService<IQueuedDialogService>();
         var buttonFactory = _parentServiceProvider.GetRequiredService<IDialogButtonFactory>();
+        var shutService = _parentServiceProvider.GetRequiredService<IApplicationShutdownService>();
 
         SetLogging(serviceCollection, fileSystem, launcherEnvironment);
 
@@ -121,6 +122,7 @@ internal class ShowUpdateWindowCommandHandler : AsyncCommandHandlerBase, IShowUp
         serviceCollection.AddSingleton(launcherEnvironment);
         serviceCollection.AddSingleton(dialogService);
         serviceCollection.AddSingleton(buttonFactory);
+        serviceCollection.AddSingleton(shutService);
     }
 
     private static void SetLogging(IServiceCollection serviceCollection, IFileSystem fileSystem, ILauncherEnvironment environment)

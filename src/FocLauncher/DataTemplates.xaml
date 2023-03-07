@@ -6,7 +6,8 @@
                     xmlns:dialogs="clr-namespace:FocLauncher.Dialogs"
                     xmlns:updateViewModels="clr-namespace:FocLauncher.Update.ViewModels"
                     xmlns:updateViews="clr-namespace:FocLauncher.Update.Views"
-                    xmlns:updateDialogs="clr-namespace:FocLauncher.Update.ViewModels.Dialogs">
+                    xmlns:updateDialogs="clr-namespace:FocLauncher.Update.ViewModels.Dialogs"
+                    xmlns:updateDialogViews="clr-namespace:FocLauncher.Update.Views.Dialogs">
     
     <DataTemplate DataType="{x:Type viewModels:MainPageViewModel}">
         <views:MainPage/>
@@ -41,7 +42,11 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type updateDialogs:KillProcessDialog}">
-        <dialogs:ErrorDialog/>
+        <updateDialogViews:KillProcessesDialog/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type updateDialogs:UpdateRestartDialog}">
+        <updateDialogViews:RestartDialog/>
     </DataTemplate>
 
 </ResourceDictionary>

@@ -2,6 +2,7 @@
 
 namespace FocLauncher.Update.ViewModels.Dialogs;
 
-public interface IUpdateErrorDialog : IErrorMessageDialogViewModel
+internal interface IUpdateRestartDialog : IImageDialogViewModel
 {
+
 }

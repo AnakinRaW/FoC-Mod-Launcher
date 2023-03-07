@@ -7,6 +7,6 @@ public enum UpdateStatus
     UpdateAvailable,
     NoUpdate,
     Updating,
-    Failed,
+    FailedChecking,
     Cancelled
 }

@@ -115,7 +115,7 @@ namespace FocLauncher
   /// void ShowError(string message, params object[] args) { /* do something */ }
   /// 
   /// void Foo() {
-  ///   ShowError("Failed: {0}"); // Warning: Non-existing argument in format string
+  ///   ShowError("FailedChecking: {0}"); // Warning: Non-existing argument in format string
   /// }
   /// </code></example>
   [AttributeUsage(

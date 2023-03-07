@@ -18,11 +18,9 @@ public sealed class InstalledProduct : IInstalledProduct
 
     public ProductVariables Variables { get; }
 
-    public ProductInstallState InstallState { get; }
+    public ProductInstallState InstallState { get; internal set; }
 
     public IProductManifest Manifest { get; }
-
-    public bool RequiresRestart { get; internal set; }
 
     public InstalledProduct(IProductReference reference, string installationPath, IProductManifest manifest, ProductVariables? variables, ProductInstallState state = ProductInstallState.Installed)
     {

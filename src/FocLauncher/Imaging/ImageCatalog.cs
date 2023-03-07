@@ -81,8 +81,32 @@ internal class ImageCatalog : ImmutableImageCatalog
         CanTheme = true
     };
 
+    public static ImageDefinition VaderDefinition => new()
+    {
+        Kind = ImageFileKind.Png,
+        ImakgeKey = ImageKeys.Vader,
+        Source = ResourcesUriCreator.Create("vader", ImageFileKind.Png),
+        CanTheme = false
+    };
 
-    public static IEnumerable<ImageDefinition> Definitions = new List<ImageDefinition>
+    public static ImageDefinition PalpatineDefinition => new()
+    {
+        Kind = ImageFileKind.Png,
+        ImakgeKey = ImageKeys.Palpatine,
+        Source = ResourcesUriCreator.Create("senat", ImageFileKind.Png),
+        CanTheme = false
+    };
+
+    public static ImageDefinition SwPulpDefinition => new()
+    {
+        Kind = ImageFileKind.Png,
+        ImakgeKey = ImageKeys.SwPulp,
+        Source = ResourcesUriCreator.Create("kill", ImageFileKind.Png),
+        CanTheme = false
+    };
+
+
+    public static readonly IEnumerable<ImageDefinition> Definitions = new List<ImageDefinition>
     {
         AppIconDefinition,
         SettingsDefinition,
@@ -92,7 +116,10 @@ internal class ImageCatalog : ImmutableImageCatalog
         UpdateIconDefinition,
         HelpIconDefinition,
         StatusErrorDefinition,
-        StatusOkDefinition
+        StatusOkDefinition,
+        VaderDefinition,
+        PalpatineDefinition, 
+        SwPulpDefinition
     };
 
     private ImageCatalog() : base(Definitions)

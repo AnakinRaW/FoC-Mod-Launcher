@@ -17,7 +17,7 @@ internal class KillProcessDialog : UpdateImageDialog, IKillProcessDialog
 
     public IEnumerable<ILockingProcess> LockingProcesses { get; }
 
-    public override ImageKey Image => ImageKeys.Trooper;
+    public override ImageKey Image => ImageKeys.SwPulp;
 
     public KillProcessDialog(IFileInfo lockedFile, IEnumerable<ILockingProcess> lockingProcesses, IServiceProvider serviceProvider) : base(serviceProvider)
     {

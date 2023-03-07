@@ -11,5 +11,5 @@ public interface IDialogButtonFactory
 
     IButtonViewModel CreateRetry(bool isDefault);
 
-    IButtonViewModel CreateCustom(string id, ICommandDefinition command, bool isDefault);
+    IButtonViewModel CreateCustom(string id, ICommandDefinition command, bool isDefault = false);
 }

@@ -11,6 +11,4 @@ public interface IInstalledProduct : IProductReference
     ProductInstallState InstallState { get; }
 
     IProductManifest Manifest { get; }
-
-    bool RequiresRestart { get; }
 }

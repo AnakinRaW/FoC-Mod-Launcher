@@ -26,7 +26,7 @@ internal class ProductViewModelFactory : IProductViewModelFactory
         ICommandDefinition? action = null;
         if (updateCatalog is null || updateCatalog.Action == UpdateCatalogAction.None)
         {
-            if (product.InstallState == ProductInstallState.RestartPending)
+            if (product.InstallState == ProductInstallState.RestartRequired)
                 action = new RestartCommand(_serviceProvider);
             stateViewModel = new InstalledStateViewModel(product, _serviceProvider);
         }

@@ -20,7 +20,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <imaging:ThemedImage ImakgeKey="{Binding Image}" Height="92" Width="92"
-                                   Stretch="Fill" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                                   Stretch="UniformToFill" VerticalAlignment="Top" HorizontalAlignment="Left"/>
             <ContentPresenter Grid.Column="1" Content="{Binding}" Margin="10,0,0,0"/>
         </Grid>
     </Grid>

@@ -3,5 +3,5 @@
 public enum ProductInstallState
 {
     Installed,
-    RestartPending
+    RestartRequired
 }

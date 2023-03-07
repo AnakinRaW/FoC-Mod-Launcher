@@ -14,8 +14,6 @@ namespace FocLauncher.Update.ViewModels;
 
 public partial class UpdateInfoBarViewModel : ViewModelBase, IUpdateInfoBarViewModel
 {
-    private readonly IServiceProvider _serviceProvider;
-
     [ObservableProperty] private UpdateStatus _status;
 
     [NotifyChangedIsLinkedToProperty(nameof(Status))]
@@ -29,8 +27,7 @@ public partial class UpdateInfoBarViewModel : ViewModelBase, IUpdateInfoBarViewM
                 UpdateStatus.UpdateAvailable => "Updates are available.",
                 UpdateStatus.NoUpdate => "No update available.",
                 UpdateStatus.Updating => "Updating Product...",
-                UpdateStatus.Failed => "Failed to update or get update information.",
-                UpdateStatus.Cancelled => "Operation cancelled.",
+                UpdateStatus.FailedChecking => "FailedChecking to get update information.",
                 _ => "No update available."
             };
         }
@@ -41,7 +38,6 @@ public partial class UpdateInfoBarViewModel : ViewModelBase, IUpdateInfoBarViewM
 
     public UpdateInfoBarViewModel(IServiceProvider serviceProvider) : base(serviceProvider)
     {
-        _serviceProvider = serviceProvider;
         var updateService = serviceProvider.GetRequiredService<IUpdateService>();
         updateService.CheckingForUpdatesStarted += OnCheckingUpdatesStarted;
         updateService.CheckingForUpdatesCompleted += OnCheckingUpdatesCompleted;
@@ -69,9 +65,7 @@ public partial class UpdateInfoBarViewModel : ViewModelBase, IUpdateInfoBarViewM
             else if (e.Action == UpdateCatalogAction.Update)
                 Status = UpdateStatus.UpdateAvailable;
             else
-            {
-                Status = UpdateStatus.Failed;
-            }
+                Status = UpdateStatus.FailedChecking;
         });
     }
 
