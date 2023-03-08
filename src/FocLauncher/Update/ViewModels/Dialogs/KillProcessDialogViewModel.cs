@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO.Abstractions;
+using System.Linq;
 using AnakinRaW.AppUpdaterFramework.FileLocking.Interaction;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog.Buttons;
@@ -9,9 +10,11 @@ using FocLauncher.Imaging;
 
 namespace FocLauncher.Update.ViewModels.Dialogs;
 
-internal class KillProcessDialog : UpdateImageDialog, IKillProcessDialog
+internal class KillProcessDialogViewModel : UpdateImageDialog, IKillProcessDialogViewModel
 {
     internal const string KillButtonIdentifier = "kill";
+
+    public string Header => $"File '{LockedFile.Name}' is locked.";
 
     public IFileInfo LockedFile { get; }
 
@@ -19,7 +22,7 @@ internal class KillProcessDialog : UpdateImageDialog, IKillProcessDialog
 
     public override ImageKey Image => ImageKeys.SwPulp;
 
-    public KillProcessDialog(IFileInfo lockedFile, IEnumerable<ILockingProcess> lockingProcesses, IServiceProvider serviceProvider) : base(serviceProvider)
+    public KillProcessDialogViewModel(IFileInfo lockedFile, IEnumerable<ILockingProcess> lockingProcesses, IServiceProvider serviceProvider) : base(serviceProvider)
     {
         LockedFile = lockedFile;
         LockingProcesses = lockingProcesses;
@@ -27,9 +30,10 @@ internal class KillProcessDialog : UpdateImageDialog, IKillProcessDialog
 
     protected override IList<IButtonViewModel> CreateButtons(IDialogButtonFactory buttonFactory)
     {
+        var killText = LockingProcesses.Count() == 1 ? "Kill Process" : "Kill Processes";
         var buttons = new List<IButtonViewModel>
         {
-            buttonFactory.CreateCustom(KillButtonIdentifier, DialogButtonCommandsDefinitions.Create("Kill"), false),
+            buttonFactory.CreateCustom(KillButtonIdentifier, DialogButtonCommandsDefinitions.Create(killText)),
             buttonFactory.CreateRetry(false),
             buttonFactory.CreateCancel(true)
         };

@@ -3,10 +3,26 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:FocLauncher.Update.Views.Dialogs"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
-    </Grid>
+             xmlns:designer="clr-namespace:FocLauncher.Update.ViewModels.Designer"
+             xmlns:interaction="clr-namespace:AnakinRaW.AppUpdaterFramework.FileLocking.Interaction;assembly=AnakinRaW.AppUpdaterFramework"
+             xmlns:converters="clr-namespace:FocLauncher.Converters"
+             mc:Ignorable="d" d:DesignWidth="300"
+             d:DataContext="{d:DesignInstance {x:Type designer:DesignerKillProcessDialogViewModel}, IsDesignTimeCreatable=True}">
+
+    <FrameworkElement.Resources>
+
+        <converters:LockingProcessInfoTextConverter x:Key="LockingProcessInfoTextConverter"/>
+
+        <DataTemplate x:Key="ProcessItemTemplate" DataType="{x:Type interaction:ILockingProcess}">
+            <TextBlock Margin="12,0,0,0" Text="{Binding ., Converter={StaticResource LockingProcessInfoTextConverter}}" FontStyle="Italic"/>
+        </DataTemplate>
+    </FrameworkElement.Resources>
+
+    <StackPanel Margin="12,0,10,3" Orientation="Vertical">
+        <TextBlock Text="{Binding Header}" FontSize="16" FontWeight="Bold"/>
+        <TextBlock Margin="0, 6, 0, 0" Text="Please end the following processes to continue the update." TextWrapping="Wrap" TextTrimming="CharacterEllipsis" FontSize="13"/>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="12, 12, 0, 0">
+            <ItemsControl ItemsSource="{Binding LockingProcesses}" ItemTemplate="{StaticResource ProcessItemTemplate}"/>
+        </ScrollViewer>
+    </StackPanel>
 </UserControl>

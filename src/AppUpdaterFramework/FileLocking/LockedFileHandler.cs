@@ -56,7 +56,7 @@ internal class LockedFileHandler : InteractiveHandlerBase, ILockedFileHandler
         var processesWithoutSelf = lockingProcesses.Where(x => !x.IsCurrentProcess()).ToList();
         using var lockingProcessManagerWithoutSelf = _lockingProcessManagerFactory.Create();
         lockingProcessManagerWithoutSelf.Register(null, processesWithoutSelf);
-
+        
 
         LockedFileHandlerInteractionResult interactionResult;
         while ((interactionResult = PromptProcessKill(file, processesWithoutSelf)) == LockedFileHandlerInteractionResult.Retry)
@@ -96,7 +96,7 @@ internal class LockedFileHandler : InteractiveHandlerBase, ILockedFileHandler
 
     private LockedFileHandlerInteractionResult PromptProcessKill(IFileInfo file, List<ILockingProcessInfo> lockingProcesses)
     {
-        var processes = lockingProcesses.Select(x => new ILockingProcess.LockingProcess(x.ServiceName, x.Id));
+        var processes = lockingProcesses.Select(x => new ILockingProcess.LockingProcess(x.Description, x.Id));
         return InteractionHandler.HandleLockedFile(file, processes);
     }
 }

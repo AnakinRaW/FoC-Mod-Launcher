@@ -5,8 +5,10 @@ using FocLauncher.ViewModels.Dialogs;
 
 namespace FocLauncher.Update.ViewModels.Dialogs;
 
-internal interface IKillProcessDialog : IImageDialogViewModel
+internal interface IKillProcessDialogViewModel : IImageDialogViewModel
 {
+    string Header { get; }
+
     IFileInfo LockedFile { get; }
 
     IEnumerable<ILockingProcess> LockingProcesses { get; }

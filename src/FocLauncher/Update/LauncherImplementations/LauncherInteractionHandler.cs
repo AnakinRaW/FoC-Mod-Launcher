@@ -25,11 +25,11 @@ public class LauncherInteractionHandler : IInteractionHandler
 
     public LockedFileHandlerInteractionResult HandleLockedFile(IFileInfo file, IEnumerable<ILockingProcess> lockingProcesses)
     {
-        var result = ShowDialog(new KillProcessDialog(file, lockingProcesses, _serviceProvider));
+        var result = ShowDialog(new KillProcessDialogViewModel(file, lockingProcesses, _serviceProvider));
         return result switch
         {
             DefaultDialogButtonIdentifiers.Retry => LockedFileHandlerInteractionResult.Retry,
-            KillProcessDialog.KillButtonIdentifier => LockedFileHandlerInteractionResult.Kill,
+            KillProcessDialogViewModel.KillButtonIdentifier => LockedFileHandlerInteractionResult.Kill,
             _ => LockedFileHandlerInteractionResult.Cancel
         };
     }

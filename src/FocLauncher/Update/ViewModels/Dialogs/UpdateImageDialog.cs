@@ -15,5 +15,6 @@ internal abstract class UpdateImageDialog : DialogViewModel, IImageDialogViewMod
         IsResizable = false;
         HasMaximizeButton = false;
         HasMinimizeButton = false;
+        Title = "Launcher Update";
     }
 }
