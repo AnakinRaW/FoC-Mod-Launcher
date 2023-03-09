@@ -53,34 +53,38 @@ internal class LockedFileHandler : InteractiveHandlerBase, ILockedFileHandler
 
         Logger?.LogTrace($"Handling locked file '{file}'");
 
-        var processesWithoutSelf = lockingProcesses.Where(x => !x.IsCurrentProcess()).ToList();
-        using var lockingProcessManagerWithoutSelf = _lockingProcessManagerFactory.Create();
-        lockingProcessManagerWithoutSelf.Register(null, processesWithoutSelf);
-        
+        var processesWithoutSelf = lockingProcesses.WithoutCurrentProcess().WithoutStopped().ToList();
 
-        LockedFileHandlerInteractionResult interactionResult;
-        while ((interactionResult = PromptProcessKill(file, processesWithoutSelf)) == LockedFileHandlerInteractionResult.Retry)
+        if (processesWithoutSelf.Any())
         {
-            interactionResult = PromptProcessKill(file, processesWithoutSelf);
-            processesWithoutSelf = lockingProcessManagerWithoutSelf.GetProcesses().ToList();
-            if (processesWithoutSelf.AllStopped())
-                break;
+            var interactionResult = LockedFileHandlerInteractionResult.Retry;
+            do
+            {
+                processesWithoutSelf = lockingProcessManager.GetProcesses().WithoutCurrentProcess().WithoutStopped().ToList();
+                if (!processesWithoutSelf.Any())
+                    break;
+                interactionResult = PromptProcessKill(file, processesWithoutSelf);
+            } while (interactionResult == LockedFileHandlerInteractionResult.Retry);
+
+            // Interaction indicated to abort handling
+            if (interactionResult == LockedFileHandlerInteractionResult.Cancel)
+            {
+                Logger?.LogTrace($"Interaction result: Locked file '{file}' shall not be unlocked.");
+                return ILockedFileHandler.Result.Locked;
+            }
+
+            // Interaction indicated to kill the processes
+            if (interactionResult == LockedFileHandlerInteractionResult.Kill)
+            {
+                using var managerWithoutSelf = _lockingProcessManagerFactory.Create();
+                managerWithoutSelf.Register(null, processesWithoutSelf);
+                managerWithoutSelf.TerminateRegisteredProcesses();
+            }
+
+            // File is still locked
+            if (!lockingProcessManager.GetProcesses().WithoutCurrentProcess().AllStopped())
+                return ILockedFileHandler.Result.Locked;
         }
-
-        // Interaction indicated to abort handling
-        if (interactionResult == LockedFileHandlerInteractionResult.Cancel)
-        {
-            Logger?.LogTrace($"Interaction result: Locked file '{file}' shall not be unlocked.");
-            return ILockedFileHandler.Result.Locked;
-        }
-
-        // Interaction indicated to kill the processes
-        if (interactionResult == LockedFileHandlerInteractionResult.Kill)
-            lockingProcessManagerWithoutSelf.TerminateRegisteredProcesses();
-
-        // File is still locked
-        if (!lockingProcessManagerWithoutSelf.GetProcesses().AllStopped())
-            return ILockedFileHandler.Result.Locked;
 
         if (isLockedByApplication)
         {

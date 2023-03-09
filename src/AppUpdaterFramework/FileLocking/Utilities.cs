@@ -14,9 +14,19 @@ internal static class Utilities
         return processes.Any(x => x.IsCurrentProcess());
     }
 
-    public static bool AllStopped(this IEnumerable<ILockingProcessInfo> processes)
+    public static IEnumerable<ILockingProcessInfo> WithoutCurrentProcess(this IEnumerable<ILockingProcessInfo> processes)
     {
-        return processes.All(x => x.ApplicationStatus is RstrtMgr.RM_APP_STATUS.RmStatusStopped or RstrtMgr.RM_APP_STATUS.RmStatusStoppedOther);
+        return processes.Where(x => !x.IsCurrentProcess()).ToList();
+    }
+
+    public static IEnumerable<ILockingProcessInfo> WithoutStopped(this IEnumerable<ILockingProcessInfo> processes)
+    {
+        return processes.Where(x => !x.IsStopped()).ToList();
+    }
+
+    public static bool AllStopped(this IEnumerable<ILockingProcessInfo> processes)
+    { 
+        return processes.All(x => x.IsStopped());
     }
 
     public static bool AnyRunning(this IEnumerable<ILockingProcessInfo> processes)
@@ -27,5 +37,11 @@ internal static class Utilities
     public static bool IsCurrentProcess(this ILockingProcessInfo process)
     {
         return process.Id == CurrentProcess.Id;
+    }
+
+    public static bool IsStopped(this ILockingProcessInfo process)
+    {
+        return process.ApplicationStatus is RstrtMgr.RM_APP_STATUS.RmStatusStopped
+            or RstrtMgr.RM_APP_STATUS.RmStatusStoppedOther;
     }
 }
