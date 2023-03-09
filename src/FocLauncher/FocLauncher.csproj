@@ -9,6 +9,10 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
+		<AssemblyName>Foc Launcher</AssemblyName>
+	</PropertyGroup>
+
+	<PropertyGroup>
 		<Nullable>enable</Nullable>
 		<EnableNETAnalyzers>True</EnableNETAnalyzers>
 		<AnalysisLevel>latest</AnalysisLevel>
