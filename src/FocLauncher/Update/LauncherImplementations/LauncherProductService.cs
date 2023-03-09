@@ -36,7 +36,7 @@ internal class LauncherProductService : ProductServiceBase
     {
         var env = ServiceProvider.GetRequiredService<ILauncherEnvironment>();
         variables.Add(LauncherVariablesKeys.LauncherAppData, env.ApplicationLocalPath);
-        variables.Add(LauncherVariablesKeys.LauncherFileName, LauncherAssemblyInfo.AssemblyName);
+        variables.Add(LauncherVariablesKeys.LauncherFileName, LauncherAssemblyInfo.ExecutableFileName);
     }
 
 

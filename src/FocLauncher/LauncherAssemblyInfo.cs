@@ -19,7 +19,7 @@ internal static class LauncherAssemblyInfo
     
     internal static string Title { get; }
 
-    internal static string AssemblyName { get; }
+    internal static string ExecutableFileName { get; }
 
     static LauncherAssemblyInfo()
     {
@@ -32,7 +32,7 @@ internal static class LauncherAssemblyInfo
         ProductName = fv.ProductName;
         AssemblyVersion = executingAssembly.GetName().Version.ToString();
         Title = executingAssembly.GetCustomAttribute<AssemblyTitleAttribute>().Title;
-        AssemblyName = executingAssembly.Modules.First().Name;
+        ExecutableFileName = executingAssembly.Modules.First().Name;
     }
 
     internal static SemVersion? InformationalAsSemVer()

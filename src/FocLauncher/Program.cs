@@ -29,7 +29,7 @@ internal static class Program
     [STAThread]
     private static int Main(string[] args)
     {
-        Task.Run(() => LauncherAssemblyInfo.AssemblyName);
+        Task.Run(() => LauncherAssemblyInfo.ExecutableFileName);
         
         _serviceCollection = CreateCoreServices();
         _coreServices = _serviceCollection.BuildServiceProvider();
