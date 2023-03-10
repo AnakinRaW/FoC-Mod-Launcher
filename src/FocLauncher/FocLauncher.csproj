@@ -32,6 +32,7 @@
 		<None Remove="Resources\Icons\Png\senat.png" />
 		<None Remove="Resources\Icons\Png\Undo_16x.png" />
 		<None Remove="Resources\Icons\Png\vader.jpg" />
+		<None Remove="Resources\Icons\Png\vader.png" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -90,7 +91,7 @@
 		<Resource Include="Resources\Icons\Png\sadTrooper.png" />
 		<Resource Include="Resources\Icons\Png\senat.png" />
 		<Resource Include="Resources\Icons\Png\Undo_16x.png" />
-		<Resource Include="Resources\Icons\Png\vader.jpg" />
+		<Resource Include="Resources\Icons\Png\vader.png" />
 	</ItemGroup>
 
 	<ItemGroup>

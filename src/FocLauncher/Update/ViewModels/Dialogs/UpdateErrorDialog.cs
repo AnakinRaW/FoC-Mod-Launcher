@@ -9,7 +9,7 @@ internal class UpdateErrorDialog : UpdateImageDialog, IUpdateErrorDialog
 {
     public override ImageKey Image => ImageKeys.Vader;
 
-    public string Header => "Error while updating";
+    public string Header => "Error while updating!";
 
     public string Message { get; }
 
