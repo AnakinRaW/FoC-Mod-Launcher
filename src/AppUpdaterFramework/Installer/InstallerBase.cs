@@ -48,7 +48,7 @@ internal abstract class InstallerBase : IInstaller
                 switch (action)
                 {
                     case InstallAction.Install:
-                        return InstallCore(component, source, variables, token);
+                        return InstallCore(component, source!, variables, token);
                     case InstallAction.Remove:
                         return RemoveCore(component, variables, token);
                     default:
@@ -109,11 +109,6 @@ internal abstract class InstallerBase : IInstaller
                     break;
             }
         } while (retry);
-
-        if (result != InstallResult.SuccessRestartRequired)
-        {
-            // TODO: Add action to pending
-        }
 
         return result;
     }
