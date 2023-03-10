@@ -5,5 +5,6 @@ public enum InstallResult
     Success,
     SuccessRestartRequired,
     Failure,
+    FailureElevationRequired,
     Cancel
 }

@@ -128,6 +128,11 @@ internal class InstallTask : RunnerTask, IProgressTask
                 // TODO: Push somewhere to remember this component and necessary information
             }
 
+            if (Result == InstallResult.FailureElevationRequired)
+            {
+                // TODO: 
+            }
+
             if (Result.IsFailure())
                 throw new ComponentFailedException(new[] { this });
             if (Result == InstallResult.Cancel)

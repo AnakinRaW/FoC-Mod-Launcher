@@ -16,18 +16,30 @@ namespace AnakinRaW.AppUpdaterFramework.Installer;
 
 internal class FileInstaller : InstallerBase
 {
-    private readonly ILogger? _logger;
     private readonly IFileSystem _fileSystem;
     private readonly IFileSystemService _fileSystemHelper;
-    private readonly ILockedFileHandler _interactionHandler;
+    private readonly ILockedFileHandler _lockedFileHandler;
 
     public FileInstaller(IServiceProvider serviceProvider) : base(serviceProvider)
     {
         Requires.NotNull(serviceProvider, nameof(serviceProvider));
-        _logger = serviceProvider.GetService<ILoggerFactory>()?.CreateLogger(GetType());
         _fileSystem = serviceProvider.GetRequiredService<IFileSystem>();
         _fileSystemHelper = serviceProvider.GetRequiredService<IFileSystemService>();
-        _interactionHandler = serviceProvider.GetRequiredService<ILockedFileHandler>();
+        _lockedFileHandler = serviceProvider.GetRequiredService<ILockedFileHandler>();
+    }
+
+    protected override InstallResult InstallCore(IInstallableComponent component, string source, ProductVariables variables, CancellationToken token)
+    {
+        Requires.NotNullOrEmpty(source, nameof(source));
+        if (component is not SingleFileComponent singleFileComponent)
+            throw new NotSupportedException($"Component must be of type {nameof(SingleFileComponent)}");
+
+        var filePath = singleFileComponent.GetFile(_fileSystem, variables);
+
+        return ExecuteWithInteractiveRetry(component,
+            () => CopyFile(filePath, source),
+            interaction => HandlerInteraction(component, filePath, interaction),
+            token);
     }
 
     protected override InstallResult RemoveCore(IInstallableComponent component, ProductVariables variables, CancellationToken token)
@@ -38,18 +50,102 @@ internal class FileInstaller : InstallerBase
         var filePath = singleFileComponent.GetFile(_fileSystem, variables);
         return ExecuteWithInteractiveRetry(component,
             () => DeleteFile(filePath),
-            interaction => HandleLockedFile(component, filePath, interaction),
+            interaction => HandlerInteraction(component, filePath, interaction),
             token);
     }
 
-    private InstallerInteractionResult HandleLockedFile(IInstallableComponent component, IFileInfo file, InstallOperationResult operationResult)
+    private InstallOperationResult CopyFile(IFileInfo destination, string source)
     {
-        if (operationResult != InstallOperationResult.LockedFile)
-            throw new NotSupportedException($"OperationResult '{operationResult}' is not supported by this installer");
+        var sourceFile = _fileSystem.FileInfo.New(source);
 
+        if (!sourceFile.Exists)
+            throw new FileNotFoundException($"Source file '{destination.FullName}' not found.");
+
+        if (destination.Directory is null)
+            throw new InvalidOperationException("destination directory must not be null");
+
+        destination.Directory.Create();
+
+        Stream? destinationStream = null;
+
+        var fileCreateResult = DoFileAction(destination, InstallAction.Remove, file =>
+        {
+            destinationStream = _fileSystemHelper.CreateFileWithRetry(destination.FullName);
+            if (destinationStream is null)
+            {
+                Logger?.LogTrace($"Creation of file '{file.FullName}' failed.");
+                return InstallOperationResult.Failed;
+            }
+            return InstallOperationResult.Success;
+        });
+
+        if (fileCreateResult != InstallOperationResult.Success)
+            return fileCreateResult;
+        
+        Assumes.NotNull(destinationStream);
+
+        using (destinationStream) 
+            sourceFile.OpenRead().CopyTo(destinationStream);
+
+        return InstallOperationResult.Success;
+    }
+
+    private InstallOperationResult DeleteFile(IFileInfo file)
+    {
+        if (!file.Exists)
+        {
+            Logger?.LogTrace($"'{file}' file is already deleted.");
+            return InstallOperationResult.Success;
+        }
+
+        return DoFileAction(file, InstallAction.Remove, fileToDelete =>
+        {
+            var deleteSuccess = _fileSystemHelper.DeleteFileWithRetry(fileToDelete, 2, 500, (ex, _) =>
+            {
+                Logger?.LogTrace(
+                    $"Error occurred while deleting file '{fileToDelete}'. Error details: {ex.Message}. Retrying after {0.5f} seconds...");
+                return true;
+            });
+            Logger?.LogTrace(deleteSuccess ? $"File '{fileToDelete}' deleted." : $"File '{fileToDelete}' was not deleted");
+            return deleteSuccess ? InstallOperationResult.Success : InstallOperationResult.Failed;
+        });
+    }
+
+    private InstallOperationResult DoFileAction(IFileInfo file, InstallAction action, Func<IFileInfo, InstallOperationResult> fileOperation)
+    {
         try
         {
-            var result = _interactionHandler.Handle(component, file);
+            return fileOperation(file);
+        }
+        catch (IOException e) when (new HRESULT(e.HResult).Code == Win32Error.ERROR_SHARING_VIOLATION)
+        {
+            Logger?.LogWarning($"File '{file}' is locked");
+            return InstallOperationResult.LockedFile;
+        }
+        catch (Exception e)
+        {
+            Logger?.LogError(e, $"Unable to perform {action} on file '{file}': {e.Message}");
+            return InstallOperationResult.Failed;
+        }
+    }
+
+    private InstallerInteractionResult HandlerInteraction(IInstallableComponent component, IFileInfo file, InstallOperationResult operationResult)
+    {
+        return operationResult switch
+        {
+            InstallOperationResult.LockedFile => HandleLockedFile(component, file),
+            InstallOperationResult.Success => new InstallerInteractionResult(InstallResult.Success),
+            InstallOperationResult.Failed => new InstallerInteractionResult(InstallResult.Failure),
+            InstallOperationResult.Canceled => new InstallerInteractionResult(InstallResult.Cancel),
+            _ => throw new NotSupportedException($"OperationResult '{operationResult}' is not supported by this installer")
+        };
+    }
+
+    private InstallerInteractionResult HandleLockedFile(IInstallableComponent component, IFileInfo file)
+    { 
+        try
+        {
+            var result = _lockedFileHandler.Handle(component, file);
 
             return result switch
             {
@@ -67,44 +163,8 @@ internal class FileInstaller : InstallerBase
         }
         catch (Exception e)
         {
-            _logger?.LogWarning(e, e.Message);
+            Logger?.LogWarning(e, e.Message);
             return new InstallerInteractionResult(InstallResult.Failure);
-        }
-    }
-
-    protected override InstallResult InstallCore(IInstallableComponent component, string source, ProductVariables variables, CancellationToken token)
-    {
-        Requires.NotNull(source, nameof(source));
-        return InstallResult.Success;
-    }
-
-    private InstallOperationResult DeleteFile(IFileInfo file)
-    {
-        if (!file.Exists)
-        {
-            _logger?.LogTrace($"'{file}' file is already deleted.");
-            return InstallOperationResult.Success;
-        }
-        try
-        {
-            var deleteSuccess = _fileSystemHelper.DeleteFileWithRetry(file, 2, 500, (ex, _) =>
-            {
-                _logger?.LogTrace(
-                    $"Error occurred while deleting file '{file}'. Error details: {ex.Message}. Retrying after {0.5f} seconds...");
-                return true;
-            });
-            _logger?.LogTrace(deleteSuccess ? $"File '{file}' deleted." : $"File '{file}' was not deleted");
-            return deleteSuccess ? InstallOperationResult.Success : InstallOperationResult.Failed;
-        }
-        catch (IOException e) when (new HRESULT(e.HResult).Code == Win32Error.ERROR_SHARING_VIOLATION)
-        {
-            _logger?.LogWarning($"File '{file}' is locked");
-            return InstallOperationResult.LockedFile;
-        }
-        catch (Exception e)
-        {
-            _logger?.LogError(e, $"File '{file}' could not be deleted: {e.Message}");
-            return InstallOperationResult.Failed;
         }
     }
 }

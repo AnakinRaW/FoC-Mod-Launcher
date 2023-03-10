@@ -36,12 +36,7 @@ internal sealed class FileConditionEvaluator : IConditionEvaluator
                 return false;
         }
 
-        if (fileCondition.Version != null)
-        {
-            if (!EvaluateFileVersion(filePath, fileCondition.Version))
-                return false;
-        }
-        return true;
+        return fileCondition.Version == null || EvaluateFileVersion(filePath, fileCondition.Version);
     }
 
     private static bool EvaluateFileHash(IHashingService hashingService, IFileInfo file, HashType hashType, byte[] expectedHash)
@@ -52,6 +47,13 @@ internal sealed class FileConditionEvaluator : IConditionEvaluator
 
     private static bool EvaluateFileVersion(string filePath, Version version)
     {
-        return Version.Parse(FileVersionInfo.GetVersionInfo(filePath).FileVersion).Equals(version);
+        try
+        {
+            return Version.Parse(FileVersionInfo.GetVersionInfo(filePath).FileVersion).Equals(version);
+        }
+        catch (Exception)
+        {
+            return false;
+        }
     }
 }

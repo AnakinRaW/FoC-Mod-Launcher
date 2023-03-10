@@ -1,4 +1,5 @@
 ﻿using AnakinRaW.AppUpdaterFramework.Conditions;
+using AnakinRaW.AppUpdaterFramework.Elevation;
 using AnakinRaW.AppUpdaterFramework.FileLocking;
 using AnakinRaW.AppUpdaterFramework.Installer;
 using AnakinRaW.AppUpdaterFramework.Interaction;
@@ -41,5 +42,7 @@ public static class LibraryInitialization
         serviceCollection.AddSingleton<ILockingProcessManagerFactory>(_ => new LockingProcessManagerFactory());
 
         serviceCollection.AddSingleton<IRestartManager>(_ => new RestartManager());
+
+        serviceCollection.AddSingleton<IElevationManager>(_ => new ElevationManager());
     }
 }

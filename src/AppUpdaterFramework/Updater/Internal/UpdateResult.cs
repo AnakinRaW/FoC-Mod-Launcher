@@ -9,5 +9,7 @@ public record UpdateResult
 
     public bool IsCanceled { get; init; }
 
+    public bool RequiresElevation { get; init; }
+
     public RestartType RestartType { get; init; }
 }

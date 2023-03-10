@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using AnakinRaW.AppUpdaterFramework.Elevation;
 using AnakinRaW.AppUpdaterFramework.Metadata.Product;
 using AnakinRaW.AppUpdaterFramework.Metadata.Update;
 using AnakinRaW.AppUpdaterFramework.Updater.Configuration;
@@ -36,6 +37,7 @@ internal sealed class UpdateJob : JobBase, IDisposable
 
     private readonly ParallelTaskRunner _downloadsRunner;
     private readonly TaskRunner _installsRunner;
+    private readonly IElevationManager _elevationManager;
 
     private bool IsCancelled { get; set; }
 
@@ -48,6 +50,7 @@ internal sealed class UpdateJob : JobBase, IDisposable
         _serviceProvider = serviceProvider;
         _logger = _serviceProvider.GetService<ILoggerFactory>()?.CreateLogger(GetType());
         _installedProduct = updateCatalog.InstalledProduct;
+        _elevationManager = serviceProvider.GetRequiredService<IElevationManager>();
 
         _itemsToProcess = new HashSet<IUpdateItem>(updateCatalog.UpdateItems);
 
@@ -63,12 +66,14 @@ internal sealed class UpdateJob : JobBase, IDisposable
     {
         _downloadsRunner.Error += OnError;
         _installsRunner.Error += OnError;
+        _elevationManager.ElevationRequested += OnElevationRequest;
     }
 
     private void UnregisterEvents()
     {
         _downloadsRunner.Error -= OnError;
         _installsRunner.Error -= OnError;
+        _elevationManager.ElevationRequested -= OnElevationRequest;
     }
 
     protected override bool PlanCore()
@@ -168,6 +173,9 @@ internal sealed class UpdateJob : JobBase, IDisposable
             _logger?.LogTrace("Completed update job.");
         }
 
+        if (_elevationManager.IsElevationRequested)
+            throw new ElevationRequireException();
+
         if (IsCancelled)
             throw new OperationCanceledException(token);
         token.ThrowIfCancellationRequested();
@@ -182,11 +190,6 @@ internal sealed class UpdateJob : JobBase, IDisposable
         
         if (failedTasks.Any() || failedInstalls.Any())
             throw new ComponentFailedException(failedTasks);
-
-
-        //var requiresRestart = LockedFilesWatcher.Instance.LockedFiles.Any();
-        //if (requiresRestart)
-        //    _logger?.LogInformation("The operation finished. A restart is pending.");
     }
 
     private void OnError(object sender, TaskErrorEventArgs e)
@@ -202,5 +205,12 @@ internal sealed class UpdateJob : JobBase, IDisposable
             return;
         UnregisterEvents();
         _disposed = true;
+    }
+
+    private void OnElevationRequest(object? sender, EventArgs e)
+    {
+        _logger?.LogWarning("Elevation requested. Update gets cancelled");
+        _linkedCancellationTokenSource?.Cancel();
+        _elevationManager.ElevationRequested -= OnElevationRequest;
     }
 }

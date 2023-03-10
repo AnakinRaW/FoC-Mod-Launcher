@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -59,12 +60,18 @@ internal class UpdateCommandHandler : AsyncCommandHandlerBase<IUpdateCatalog>, I
             updateResult = new UpdateResult(); // TODO
         }
 
+        if (updateResult.RequiresElevation)
+        {
+            await HandleElevation();
+            return;
+        }
+
         if (updateResult.RestartType == RestartType.ApplicationRestart)
         {
             await HandleRestartRequired();
             return;
         }
-        
+
         if (updateResult.Exception is null || updateResult.IsCanceled)
             return;
         
@@ -78,10 +85,21 @@ internal class UpdateCommandHandler : AsyncCommandHandlerBase<IUpdateCatalog>, I
 
     private async Task ShowError(UpdateResult updateResult)
     {
-        await _dialogService.ShowDialog(new UpdateErrorDialog(updateResult.Exception!.Message, _serviceProvider));
+        var message = updateResult.Exception is AggregateException aggregateException
+            ? aggregateException.InnerExceptions.First().Message
+            : updateResult.Exception!.Message;
+        await _dialogService.ShowDialog(new UpdateErrorDialog(message, _serviceProvider));
     }
 
     private async Task HandleRestartRequired()
+    {
+        var result = await _dialogService.ShowDialog(new UpdateRestartDialog(_serviceProvider));
+        if (result != UpdateRestartDialog.RestartButtonIdentifier)
+            return;
+        new RestartCommand(_serviceProvider).Command.Execute(null);
+    }
+
+    private async Task HandleElevation()
     {
         var result = await _dialogService.ShowDialog(new UpdateRestartDialog(_serviceProvider));
         if (result != UpdateRestartDialog.RestartButtonIdentifier)

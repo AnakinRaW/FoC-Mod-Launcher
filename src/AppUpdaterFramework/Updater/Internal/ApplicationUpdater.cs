@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
-using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Threading.Tasks;
+using AnakinRaW.AppUpdaterFramework.Elevation;
 using AnakinRaW.AppUpdaterFramework.Metadata.Update;
 using AnakinRaW.AppUpdaterFramework.Restart;
 using AnakinRaW.AppUpdaterFramework.Updater.Progress;
@@ -39,47 +39,32 @@ internal class ApplicationUpdater : IApplicationUpdater, IProgressReporter
     {
         try
         {
-            try
-            {
-                token.ThrowIfCancellationRequested();
-                await UpdateCoreAsync(token).ConfigureAwait(false);
-                return CreateResult();
-            }
-            catch (Exception e)
-            {
-                _logger?.LogError(e, $"Update failed: {e.Message}");
-                if (ShouldRethrowEngineException(e))
-                    ExceptionDispatchInfo.Capture(e).Throw();
-                return CreateResult(e);
-            }
+            token.ThrowIfCancellationRequested();
+            await UpdateCoreAsync(token).ConfigureAwait(false);
+            return CreateResult();
         }
         catch (Exception e) when (e.IsOperationCanceledException())
         {
             _logger?.LogTrace("User canceled the update.");
-            return new UpdateResult
-            {
-                IsCanceled = true,
-                Exception = e
-            };
+            return CreateResult(e);
         }
         catch (Exception e)
         {
             _logger?.LogError(e, $"Update operation failed with error: {e.Message}");
-            return new UpdateResult
-            {
-                Exception = e
-            };
+            return CreateResult(e);
         }
     }
 
     private UpdateResult CreateResult(Exception? exception = null)
     {
         var restartType = _serviceProvider.GetRequiredService<IRestartManager>().RequiredRestartType;
+        var requiresElevation = _serviceProvider.GetRequiredService<IElevationManager>().IsElevationRequested;
         var result = new UpdateResult
         {
             Exception = exception,
             IsCanceled = exception?.IsOperationCanceledException() ?? false,
-            RestartType = restartType
+            RestartType = restartType,
+            RequiresElevation = requiresElevation
         };
         return result;
     }
@@ -121,10 +106,5 @@ internal class ApplicationUpdater : IApplicationUpdater, IProgressReporter
             _logger?.LogError(ex, ex.Message);
             throw;
         }
-    }
-
-    private static bool ShouldRethrowEngineException(Exception ex)
-    {
-        return ex is not ComponentFailedException && !ex.IsOperationCanceledException();
     }
 }
