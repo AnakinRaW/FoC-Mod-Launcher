@@ -27,10 +27,10 @@ internal class ProductViewModelFactory : IProductViewModelFactory
         if (updateCatalog is null || updateCatalog.Action == UpdateCatalogAction.None)
         {
             if (product.State == ProductState.RestartRequired)
-                action = new RestartCommand(_serviceProvider);
+                action = new UpdateRestartCommand(_serviceProvider);
 
-            if (product.State.HasFlag(ProductState.RestartRequired))
-                action = new RestartCommand(_serviceProvider); // TODO
+            if (product.State.HasFlag(ProductState.ElevationRequired))
+                action = new ElevateApplicationCommand(_serviceProvider);
 
             stateViewModel = new InstalledStateViewModel(product, _serviceProvider);
         }

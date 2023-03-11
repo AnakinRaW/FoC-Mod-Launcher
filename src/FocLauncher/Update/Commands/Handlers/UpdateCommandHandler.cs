@@ -99,7 +99,7 @@ internal class UpdateCommandHandler : AsyncCommandHandlerBase<IUpdateCatalog>, I
         var result = await _dialogService.ShowDialog(UpdateRestartDialog.CreateRestart(_serviceProvider));
         if (result != UpdateRestartDialog.RestartButtonIdentifier)
             return;
-        new RestartCommand(_serviceProvider).Command.Execute(null);
+        new UpdateRestartCommand(_serviceProvider).Command.Execute(null);
     }
 
     private async Task HandleElevation()
@@ -107,7 +107,7 @@ internal class UpdateCommandHandler : AsyncCommandHandlerBase<IUpdateCatalog>, I
         var result = await _dialogService.ShowDialog(UpdateRestartDialog.CreateElevationRestart(_serviceProvider));
         if (result != UpdateRestartDialog.RestartButtonIdentifier)
             return;
-        new RestartCommand(_serviceProvider).Command.Execute(null);
+        new ElevateApplicationCommand(_serviceProvider).Command.Execute(null);
     }
 
 

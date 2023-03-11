@@ -11,18 +11,30 @@
              xmlns:wpfControls="clr-namespace:AnakinRaW.CommonUtilities.Wpf.Controls;assembly=AnakinRaW.CommonUtilities.WPF.Controls"
              xmlns:productStates="clr-namespace:FocLauncher.Update.ViewModels.ProductStates"
              xmlns:views="clr-namespace:FocLauncher.Update.Views"
+             xmlns:input="clr-namespace:AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Input;assembly=AnakinRaW.CommonUtilities.WPF.ApplicationFramework"
+             xmlns:imageConverters="clr-namespace:AnakinRaW.CommonUtilities.Wpf.Imaging.Converters;assembly=AnakinRaW.CommonUtilities.WPF.Imaging"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance {x:Type designer:DesignerProductViewModel}, IsDesignTimeCreatable=True}">
     <FrameworkElement.Resources>
         <converters:BrushToColorConverter x:Key="BrushToColorConverter"/>
         <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
+        <imageConverters:ImageKeyToVisibilityConverter x:Key="ImageKeyToVisibilityConverter"/>
+
+        <DataTemplate x:Key="ButtonContent" DataType="{x:Type input:ICommandDefinition}">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <controls:ThemedImage Margin="0,0,8,0" VerticalAlignment="Center" 
+                                      SnapsToDevicePixels="True" UseLayoutRounding="True" Focusable="False" 
+                                      ImakgeKey="{Binding Image}"
+                                      Visibility="{Binding Image, Converter={StaticResource ImageKeyToVisibilityConverter}}"/>
+                <AccessText VerticalAlignment="Center" SnapsToDevicePixels="True" Text="{Binding Text}"/>
+            </StackPanel>
+        </DataTemplate>
 
         <Style x:Key="ProductViewButtonStyle" TargetType="{x:Type wpfControls:ThemedButton}">
             <Setter Property="Margin" Value="0,8,0,0"/>
-            <Setter Property="Padding" Value="16,0"/>
-            <Setter Property="MinWidth" Value="64"/>
+            <Setter Property="Padding" Value="0,0"/>
+            <Setter Property="MinWidth" Value="75"/>
             <Setter Property="Height" Value="23"/>
-            <Setter Property="HorizontalAlignment" Value="Stretch"/>
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="Focusable" Value="False"/>
@@ -74,10 +86,11 @@
             </Grid>
             <StackPanel Grid.Column="1" VerticalAlignment="Stretch" Width="150" Focusable="False" Margin="20,4,12,12">
                 <wpfControls:ThemedButton Style="{StaticResource ProductViewButtonStyle}"
-                    DataContext="{Binding Action}"
-                            Command="{Binding Command}"
-                            Visibility="{Binding Converter={StaticResource NullToVisibilityConverter}}"
-                            Content="{Binding Text}"/>
+                                          DataContext="{Binding Action}"
+                                          Command="{Binding Command}"
+                                          Visibility="{Binding Converter={StaticResource NullToVisibilityConverter}}"
+                                          ContentTemplate="{StaticResource ButtonContent}"
+                                          Content="{Binding }"/>
             </StackPanel>
         </Grid>
     </Border>

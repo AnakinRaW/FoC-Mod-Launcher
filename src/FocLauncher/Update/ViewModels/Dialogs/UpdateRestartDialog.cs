@@ -33,7 +33,8 @@ internal class UpdateRestartDialog : UpdateImageDialog, IUpdateRestartDialog
     {
         var buttons = new List<IButtonViewModel>
         {
-            buttonFactory.CreateCustom(RestartButtonIdentifier, DialogButtonCommandsDefinitions.Create("Restart")),
+            buttonFactory.CreateCustom(RestartButtonIdentifier,
+                DialogButtonCommandsDefinitions.Create("Restart", _restartElevated ? ImageKeys.UACShield : default)),
             buttonFactory.CreateCustom(NotNowButtonIdentifier, DialogButtonCommandsDefinitions.Create("Not Now"), true)
         };
         return buttons;

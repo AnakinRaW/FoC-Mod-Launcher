@@ -4,10 +4,10 @@ using System.Security.AccessControl;
 using System.Windows.Input;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 using FocLauncher.Services;
-using FocLauncher.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using AnakinRaW.CommonUtilities.FileSystem;
 using AnakinRaW.CommonUtilities.FileSystem.Windows;
+using FocLauncher.ViewModels.Dialogs;
 using Validation;
 
 namespace FocLauncher;

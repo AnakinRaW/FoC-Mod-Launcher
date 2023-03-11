@@ -92,6 +92,8 @@ internal class ShowUpdateWindowCommandHandler : AsyncCommandHandlerBase, IShowUp
         serviceCollection.AddSingleton<IProductViewModelFactory>(sp => new ProductViewModelFactory(sp));
         serviceCollection.AddSingleton(CreateDownloadConfiguration());
         serviceCollection.AddSingleton<IUpdateCommandHandler>(sp => new UpdateCommandHandler(sp));
+        serviceCollection.AddSingleton<IElevateApplicationCommandHandler>(sp => new ElevateApplicationCommandHandler(sp));
+        serviceCollection.AddSingleton<IUpdateRestartCommandHandler>(sp => new UpdateRestartCommandHandler(sp));
 
         serviceCollection.Replace(ServiceDescriptor.Scoped<IInteractionHandler>(sp => new LauncherInteractionHandler(sp)));
 

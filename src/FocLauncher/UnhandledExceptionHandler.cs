@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using AnakinRaW.CommonUtilities;
 using Validation;
-using UnhandledExceptionDialogViewModel = FocLauncher.ViewModels.UnhandledExceptionDialogViewModel;
+using UnhandledExceptionDialogViewModel = FocLauncher.ViewModels.Dialogs.UnhandledExceptionDialogViewModel;
 
 namespace FocLauncher;
 

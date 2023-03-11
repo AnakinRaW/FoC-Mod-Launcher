@@ -6,7 +6,7 @@
                     xmlns:baseControls="clr-namespace:AnakinRaW.CommonUtilities.Wpf.Controls;assembly=AnakinRaW.CommonUtilities.WPF.Controls"
                     xmlns:colors="clr-namespace:AnakinRaW.CommonUtilities.Wpf.Themes.Colors;assembly=AnakinRaW.CommonUtilities.WPF.Controls"
                     xmlns:controls="clr-namespace:AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Controls"
-                    xmlns:input1="clr-namespace:AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Input"
+                    xmlns:input="clr-namespace:AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Input"
                     xmlns:dialog="clr-namespace:AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog">
 
     <ResourceDictionary.MergedDictionaries>
@@ -20,7 +20,7 @@
             <coreConverters:IsNullOrEmptyConverter x:Key="IsNullOrEmptyConverter"/>
             <coreConverters:BrushToColorConverter x:Key="BrushToColorConverter"/>
 
-            <DataTemplate x:Key="ButtonContentTemplate" DataType="{x:Type input1:ICommandDefinition}">
+            <DataTemplate x:Key="ButtonContentTemplate" DataType="{x:Type input:ICommandDefinition}">
                 <Border>
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <imageControls:ThemedImage x:Name="Image" Margin="0,0,8,0" VerticalAlignment="Center" Focusable="False"

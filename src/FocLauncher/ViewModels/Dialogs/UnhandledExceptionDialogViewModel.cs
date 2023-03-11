@@ -10,12 +10,12 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using FocLauncher.Imaging;
 using Validation;
 
-namespace FocLauncher.ViewModels;
+namespace FocLauncher.ViewModels.Dialogs;
 
 public partial class UnhandledExceptionDialogViewModel : ModalWindowViewModel, IUnhandledExceptionDialogViewModel
 {
     [ObservableProperty]
-    private Exception _exception;
+    private Exception _exception = null!;
 
     public string WindowCaption => LauncherEnvironment.LauncherProgramName;
 

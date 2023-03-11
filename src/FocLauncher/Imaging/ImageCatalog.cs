@@ -17,20 +17,20 @@ internal class ImageCatalog : ImmutableImageCatalog
         CanTheme = true
     };
 
+    public static ImageDefinition UACShieldDefinition => new()
+    {
+        Kind = ImageFileKind.Xaml,
+        ImakgeKey = ImageKeys.UACShield,
+        Source = ResourcesUriCreator.Create("UacShield", ImageFileKind.Xaml),
+        CanTheme = true
+    };
+
     public static ImageDefinition TrooperDefinition => new()
     {
         Kind = ImageFileKind.Png,
         ImakgeKey = ImageKeys.Trooper,
         Source = ResourcesUriCreator.Create("sadTrooper", ImageFileKind.Png),
         CanTheme = false
-    };
-
-    public static ImageDefinition UndoDefinition => new()
-    {
-        Kind = ImageFileKind.Png,
-        ImakgeKey = ImageKeys.Undo,
-        Source = ResourcesUriCreator.Create("Undo_16x", ImageFileKind.Png),
-        CanTheme = true
     };
 
     public static ImageDefinition GithubDefinition => new()
@@ -109,8 +109,8 @@ internal class ImageCatalog : ImmutableImageCatalog
     public static readonly IEnumerable<ImageDefinition> Definitions = new List<ImageDefinition>
     {
         AppIconDefinition,
+        UACShieldDefinition,
         SettingsDefinition,
-        UndoDefinition,
         GithubDefinition, 
         TrooperDefinition,
         UpdateIconDefinition,

@@ -6,7 +6,7 @@ using Vanara.PInvoke;
 
 namespace AnakinRaW.AppUpdaterFramework.Elevation;
 
-internal class ElevationManager : IElevationManager
+internal sealed class ElevationManager : IElevationManager
 {
     public event EventHandler? ElevationRequested;
 
@@ -28,6 +28,7 @@ internal class ElevationManager : IElevationManager
         if (IsElevated)
             throw new InvalidOperationException("Process is already elevated");
         IsElevationRequested = true;
+        OnElevationRequested();
     }
 
     private static bool IsProcessElevated()
@@ -52,6 +53,10 @@ internal class ElevationManager : IElevationManager
         return handle;
     }
 
+    private void OnElevationRequested()
+    {
+        ElevationRequested?.Invoke(this, EventArgs.Empty);
+    }
 }
 
 internal interface IElevationManager

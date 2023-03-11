@@ -80,9 +80,13 @@ public abstract class ProductServiceBase : IProductService
 
     private ProductState FetchInstallState()
     {
-        return _restartManager.RequiredRestartType == RestartType.ApplicationRestart
-            ? ProductState.RestartRequired
-            : ProductState.Installed;
+        var state = ProductState.Installed;
+
+        if (_restartManager.RequiredRestartType == RestartType.ApplicationRestart)
+            state |= ProductState.RestartRequired;
+        if (_elevationManager.IsElevationRequested)
+            state |= ProductState.ElevationRequired;
+        return state;
     }
 
 
