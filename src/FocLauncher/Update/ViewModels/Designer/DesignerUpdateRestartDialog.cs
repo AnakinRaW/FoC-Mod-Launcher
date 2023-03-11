@@ -39,4 +39,6 @@ internal class DesignerUpdateRestartDialog : IUpdateRestartDialog
     public IList<IButtonViewModel> Buttons { get; }
     public IDialogAdditionalInformationViewModel? AdditionalInformation { get; }
     public ImageKey Image { get; }
+    public string Header => "Header";
+    public string Message => "Restart Reason Message";
 }

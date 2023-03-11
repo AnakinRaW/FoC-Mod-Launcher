@@ -35,6 +35,7 @@
 		<PackageReference Include="Validation" Version="2.5.51" PrivateAssets="build;compile" />
 		<PackageReference Include="Vanara.PInvoke.NetListMgr" Version="3.4.13" PrivateAssets="build;compile" />
 		<PackageReference Include="Vanara.PInvoke.RstrtMgr" Version="3.4.13" />
+		<PackageReference Include="Vanara.PInvoke.Security" Version="3.4.13" />
 	</ItemGroup>
 
 	<PropertyGroup>

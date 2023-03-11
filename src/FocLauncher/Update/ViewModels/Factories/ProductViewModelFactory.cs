@@ -26,8 +26,12 @@ internal class ProductViewModelFactory : IProductViewModelFactory
         ICommandDefinition? action = null;
         if (updateCatalog is null || updateCatalog.Action == UpdateCatalogAction.None)
         {
-            if (product.InstallState == ProductInstallState.RestartRequired)
+            if (product.State == ProductState.RestartRequired)
                 action = new RestartCommand(_serviceProvider);
+
+            if (product.State.HasFlag(ProductState.RestartRequired))
+                action = new RestartCommand(_serviceProvider); // TODO
+
             stateViewModel = new InstalledStateViewModel(product, _serviceProvider);
         }
         else if (updateCatalog.Action is UpdateCatalogAction.Install or UpdateCatalogAction.Uninstall)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO.Abstractions;
+using AnakinRaW.AppUpdaterFramework.Elevation;
 using AnakinRaW.AppUpdaterFramework.Metadata.Component.Catalog;
 using AnakinRaW.AppUpdaterFramework.Metadata.Product;
 using AnakinRaW.AppUpdaterFramework.Product.Manifest;
@@ -19,6 +20,7 @@ public abstract class ProductServiceBase : IProductService
 
     private readonly object _syncLock = new();
     private readonly IRestartManager _restartManager;
+    private readonly IElevationManager _elevationManager;
 
     public abstract IDirectoryInfo InstallLocation { get; }
 
@@ -32,8 +34,10 @@ public abstract class ProductServiceBase : IProductService
         ServiceProvider = serviceProvider;
         Logger = serviceProvider.GetService<ILoggerFactory>()?.CreateLogger(GetType());
         _restartManager = serviceProvider.GetRequiredService<IRestartManager>();
-        _restartManager.RebootRequired += OnRebootRequired;
-        serviceProvider.GetRequiredService<IUpdateService>().UpdateCompleted += OnUpdateCompleted;
+        _restartManager.RebootRequired += OnRebootRequired!;
+        _elevationManager = serviceProvider.GetRequiredService<IElevationManager>();
+        _elevationManager.ElevationRequested += OnElevationRequested;
+        serviceProvider.GetRequiredService<IUpdateService>().UpdateCompleted += OnUpdateCompleted!;
     }
 
     public IInstalledProduct GetCurrentInstance()
@@ -74,11 +78,11 @@ public abstract class ProductServiceBase : IProductService
 
     protected abstract IProductReference CreateCurrentProductReference();
 
-    private ProductInstallState FetchInstallState()
+    private ProductState FetchInstallState()
     {
         return _restartManager.RequiredRestartType == RestartType.ApplicationRestart
-            ? ProductInstallState.RestartRequired
-            : ProductInstallState.Installed;
+            ? ProductState.RestartRequired
+            : ProductState.Installed;
     }
 
 
@@ -134,12 +138,27 @@ public abstract class ProductServiceBase : IProductService
         {
             if (_installedProduct is null)
                 return;
-            _installedProduct!.InstallState = ProductInstallState.RestartRequired;
+            _installedProduct!.State |= ProductState.RestartRequired;
             Logger?.LogTrace("Restart required for current instance.");
         }
         finally
         {
             _restartManager.RebootRequired -= OnRebootRequired;
+        }
+    }
+
+    private void OnElevationRequested(object? sender, EventArgs e)
+    {
+        try
+        {
+            if (_installedProduct is null)
+                return;
+            _installedProduct!.State |= ProductState.ElevationRequired;
+            Logger?.LogTrace("Elevation required for current instance.");
+        }
+        finally
+        {
+            _elevationManager.ElevationRequested -= OnElevationRequested;
         }
     }
 

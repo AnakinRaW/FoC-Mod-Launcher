@@ -8,7 +8,7 @@ public interface IInstalledProduct : IProductReference
     
     ProductVariables Variables { get; }
 
-    ProductInstallState InstallState { get; }
+    ProductState State { get; }
 
     IProductManifest Manifest { get; }
 }

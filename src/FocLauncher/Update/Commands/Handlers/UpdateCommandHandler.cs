@@ -57,7 +57,10 @@ internal class UpdateCommandHandler : AsyncCommandHandlerBase<IUpdateCatalog>, I
         catch (Exception e)
         {
             _logger?.LogError(e, $"Unhandled exception {e.GetType()} encountered: {e.Message}");
-            updateResult = new UpdateResult(); // TODO
+            updateResult = new UpdateResult
+            {
+                Exception = e
+            };
         }
 
         if (updateResult.RequiresElevation)
@@ -93,7 +96,7 @@ internal class UpdateCommandHandler : AsyncCommandHandlerBase<IUpdateCatalog>, I
 
     private async Task HandleRestartRequired()
     {
-        var result = await _dialogService.ShowDialog(new UpdateRestartDialog(_serviceProvider));
+        var result = await _dialogService.ShowDialog(UpdateRestartDialog.CreateRestart(_serviceProvider));
         if (result != UpdateRestartDialog.RestartButtonIdentifier)
             return;
         new RestartCommand(_serviceProvider).Command.Execute(null);
@@ -101,7 +104,7 @@ internal class UpdateCommandHandler : AsyncCommandHandlerBase<IUpdateCatalog>, I
 
     private async Task HandleElevation()
     {
-        var result = await _dialogService.ShowDialog(new UpdateRestartDialog(_serviceProvider));
+        var result = await _dialogService.ShowDialog(UpdateRestartDialog.CreateElevationRestart(_serviceProvider));
         if (result != UpdateRestartDialog.RestartButtonIdentifier)
             return;
         new RestartCommand(_serviceProvider).Command.Execute(null);

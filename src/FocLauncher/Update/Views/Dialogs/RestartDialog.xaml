@@ -3,9 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:designer="clr-namespace:FocLauncher.Update.ViewModels.Designer"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance {x:Type designer:DesignerUpdateRestartDialog}, IsDesignTimeCreatable=True}">
     <Grid>
-            
+        <StackPanel Margin="12,0,10,3">
+            <TextBlock Text="{Binding Header}" FontSize="16" FontWeight="Bold"/>
+            <TextBlock Text="{Binding Message}" TextWrapping="Wrap" TextTrimming="CharacterEllipsis" FontSize="13"/>
+        </StackPanel>
     </Grid>
 </UserControl>

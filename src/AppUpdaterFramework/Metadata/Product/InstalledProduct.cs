@@ -18,18 +18,18 @@ public sealed class InstalledProduct : IInstalledProduct
 
     public ProductVariables Variables { get; }
 
-    public ProductInstallState InstallState { get; internal set; }
+    public ProductState State { get; internal set; }
 
     public IProductManifest Manifest { get; }
 
-    public InstalledProduct(IProductReference reference, string installationPath, IProductManifest manifest, ProductVariables? variables, ProductInstallState state = ProductInstallState.Installed)
+    public InstalledProduct(IProductReference reference, string installationPath, IProductManifest manifest, ProductVariables? variables, ProductState state = ProductState.Installed)
     {
         Requires.NotNull(reference, nameof(reference));
         Requires.NotNull(manifest, nameof(manifest));
         Requires.NotNullOrEmpty(installationPath, nameof(installationPath));
         _reference = reference;
         InstallationPath = installationPath;
-        InstallState = state;
+        State = state;
         Manifest = manifest;
         Variables = variables ?? new ProductVariables();
     }

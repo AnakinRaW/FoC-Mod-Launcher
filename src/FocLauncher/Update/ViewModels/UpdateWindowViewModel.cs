@@ -16,7 +16,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using FocLauncher.Services;
 using FocLauncher.Update.LauncherImplementations;
 using FocLauncher.Utilities;
-using FocLauncher.ViewModels;
 using FocLauncher.ViewModels.Dialogs;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -38,12 +37,23 @@ internal partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWind
     private readonly IProductViewModelFactory _productViewModelFactory;
 
     private IUpdateSession? _currentUpdateSession;
+    private bool _requiresRestart;
+    private bool _requiresElevation;
+
+    [ObservableProperty]
+    private ProductBranch _currentBranch = null!;
+
+    [ObservableProperty]
+    private IProductViewModel _productViewModel = null!;
 
     [ObservableProperty]
     private bool _isLoadingBranches = true;
     
     [ObservableProperty]
     private bool _isCheckingForUpdate;
+
+    [ObservableProperty]
+    private bool _isUpdating;
 
     private bool RequiresRestart
 
@@ -58,17 +68,21 @@ internal partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWind
         }
     }
 
-    [ObservableProperty]
-    private bool _isUpdating;
+    private bool RequiresElevation
 
-    public bool CanSwitchBranches => !IsLoadingBranches && !IsCheckingForUpdate && !IsUpdating && !RequiresRestart;
+    {
+        get => _requiresElevation;
+        set
+        {
+            if (_requiresElevation == value)
+                return;
+            _requiresElevation = value;
+            OnPropertyChanged(nameof(CanSwitchBranches));
+        }
+    }
 
-    [ObservableProperty]
-    private ProductBranch _currentBranch = null!;
-
-    [ObservableProperty] private IProductViewModel _productViewModel = null!;
-    private bool _requiresRestart;
-
+    public bool CanSwitchBranches => !IsLoadingBranches && !IsCheckingForUpdate && !IsUpdating && !RequiresRestart && !RequiresElevation;
+    
     public IUpdateInfoBarViewModel InfoBarViewModel { get; } 
 
     public ObservableCollection<ProductBranch> Branches { get; } = new();
@@ -129,9 +143,12 @@ internal partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWind
         try
         {
             var launcher = _productService.GetCurrentInstance();
-            
-            if (launcher.InstallState == ProductInstallState.RestartRequired)
+
+            if (launcher.State.HasFlag(ProductState.RestartRequired))
                 RequiresRestart = true;
+
+            if (launcher.State.HasFlag(ProductState.ElevationRequired))
+                RequiresElevation = true;
 
             AppDispatcher.Invoke(() => ProductViewModel =
                 _productViewModelFactory.Create(launcher, updateCatalog));
@@ -226,8 +243,9 @@ internal partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWind
 
     private async Task CheckForUpdate()
     {
-        if (!_connectionManager.HasInternetConnection())
+        if (RequiresRestart || RequiresElevation || !_connectionManager.HasInternetConnection())
             return;
+
         try
         {
             IsCheckingForUpdate = true;
