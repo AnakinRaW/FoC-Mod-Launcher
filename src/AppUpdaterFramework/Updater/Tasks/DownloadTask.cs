@@ -1,8 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.IO.Abstractions;
+using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Threading.Tasks;
+using AnakinRaW.AppUpdaterFramework.Elevation;
 using AnakinRaW.AppUpdaterFramework.Metadata.Component;
 using AnakinRaW.AppUpdaterFramework.Updater.Configuration;
 using AnakinRaW.AppUpdaterFramework.Updater.Progress;
@@ -99,48 +101,63 @@ internal class DownloadTask : SynchronizedTask, IProgressTask
         lastException = null;
         var downloadManager = Services.GetRequiredService<IDownloadManager>();
 
-        var downloadPath = CalculateDownloadPath();
-        DownloadPath = downloadPath;
-
-        for (var i = 0; i < _updateConfiguration.DownloadRetryCount; i++)
+        try
         {
-            if (token.IsCancellationRequested)
-                break;
+           var downloadPath = GetDownloadPath();
+            DownloadPath = downloadPath;
 
-            try
+            for (var i = 0; i < _updateConfiguration.DownloadRetryCount; i++)
             {
-                DownloadAndVerifyAsync(downloadManager, DownloadPath, token).Wait(CancellationToken.None);
-                if (!_fileSystem.File.Exists(DownloadPath))
-                {
-                    var message = "File not found after being successfully downloaded and verified: " +
-                                  DownloadPath + ", package: " + Component.GetDisplayName();
-                    Logger?.LogWarning(message);
-                    throw new FileNotFoundException(message, DownloadPath);
-                }
-                lastException = null;
+                if (token.IsCancellationRequested)
+                    break;
 
-                break;
-            }
-            catch (OperationCanceledException ex)
-            {
-                lastException = ex;
-                Logger?.LogWarning($"Download of '{Uri}' was cancelled.");
-                break;
-            }
-            catch (Exception ex)
-            {
-                if (ex is AggregateException && ex.IsExceptionType<OperationCanceledException>())
+                try
                 {
-                    lastException = ex;
-                    Logger?.LogWarning($"Download of {Uri} was cancelled.");
+                    DownloadAndVerifyAsync(downloadManager, DownloadPath, token).Wait(CancellationToken.None);
+                    if (!_fileSystem.File.Exists(DownloadPath))
+                    {
+                        var message = "File not found after being successfully downloaded and verified: " +
+                                      DownloadPath + ", package: " + Component.GetDisplayName();
+                        Logger?.LogWarning(message);
+                        throw new FileNotFoundException(message, DownloadPath);
+                    }
+
+                    lastException = null;
+
                     break;
                 }
-                var wrappedException = ex.TryGetWrappedException();
-                if (wrappedException != null)
-                    ex = wrappedException;
-                lastException = ex;
-                Logger?.LogError(ex, $"Failed to download \"{Uri}\" on try {i}: {ex.Message}");
+                catch (OperationCanceledException ex)
+                {
+                    lastException = ex;
+                    Logger?.LogWarning($"Download of '{Uri}' was cancelled.");
+                    break;
+                }
+                catch (Exception e) when (e.IsExceptionType<UnauthorizedAccessException>())
+                {
+                    ExceptionDispatchInfo.Capture(e.InnerException!).Throw();
+                }
+                catch (Exception ex)
+                {
+                    if (ex is AggregateException && ex.IsExceptionType<OperationCanceledException>())
+                    {
+                        lastException = ex;
+                        Logger?.LogWarning($"Download of {Uri} was cancelled.");
+                        break;
+                    }
+                    var wrappedException = ex.TryGetWrappedException();
+                    if (wrappedException != null)
+                        ex = wrappedException;
+                    lastException = ex;
+                    Logger?.LogError(ex, $"Failed to download \"{Uri}\" on try {i}: {ex.Message}");
+                }
             }
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            lastException = ex;
+            Logger?.LogError(ex, $"Failed to create download path '{DownloadPath}' due to missing permission: {ex.Message}");
+            var elevationManager = Services.GetRequiredService<IElevationManager>();
+            elevationManager.SetElevationRequest();
         }
     }
 
@@ -175,7 +192,7 @@ internal class DownloadTask : SynchronizedTask, IProgressTask
         ReportProgress(progress);
     }
 
-    private string CalculateDownloadPath()
+    private string GetDownloadPath()
     {
         var randomFilePart = _fileSystem.Path.GetFileNameWithoutExtension(_fileSystem.Path.GetRandomFileName());
         var downloadFileName = $"{randomFilePart}.{NewFileExtension}";

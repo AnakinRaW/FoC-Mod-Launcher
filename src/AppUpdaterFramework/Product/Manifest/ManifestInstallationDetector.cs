@@ -18,7 +18,7 @@ internal class ManifestInstallationDetector : IManifestInstallationDetector
     public ManifestInstallationDetector(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
-        _componentDetectorFactory = serviceProvider.GetService<IComponentDetectorFactory>() ?? new ComponentDetectorFactory();
+        _componentDetectorFactory = serviceProvider.GetService<IComponentDetectorFactory>() ?? ComponentDetectorFactory.Default;
     }
 
     public IReadOnlyCollection<IInstallableComponent> DetectInstalledComponents(IProductManifest manifest, ProductVariables? productVariables = null)

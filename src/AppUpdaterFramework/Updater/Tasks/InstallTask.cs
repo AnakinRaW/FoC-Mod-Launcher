@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Threading;
+using AnakinRaW.AppUpdaterFramework.Elevation;
 using AnakinRaW.AppUpdaterFramework.Installer;
 using AnakinRaW.AppUpdaterFramework.Metadata.Component;
 using AnakinRaW.AppUpdaterFramework.Metadata.Product;
 using AnakinRaW.AppUpdaterFramework.Metadata.Update;
+using AnakinRaW.AppUpdaterFramework.Product.Detectors;
 using AnakinRaW.AppUpdaterFramework.Restart;
 using AnakinRaW.AppUpdaterFramework.Updater.Backup;
 using AnakinRaW.AppUpdaterFramework.Updater.Configuration;
@@ -125,12 +127,15 @@ internal class InstallTask : RunnerTask, IProgressTask
             {
                 var restartManager = Services.GetRequiredService<IRestartManager>();
                 restartManager.SetRestart(RestartType.ApplicationRestart);
+                Logger?.LogWarning($"Component '{Component.GetDisplayName()}' get scheduled for installation after a restart.");
                 // TODO: Push somewhere to remember this component and necessary information
             }
 
             if (Result == InstallResult.FailureElevationRequired)
             {
-                // TODO: 
+                Logger?.LogWarning($"Component '{Component.GetDisplayName()}' was not installed because required permissions are missing.");
+                var elevationManager = Services.GetRequiredService<IElevationManager>();
+                elevationManager.SetElevationRequest();
             }
 
             if (Result.IsFailure())
@@ -138,9 +143,13 @@ internal class InstallTask : RunnerTask, IProgressTask
             if (Result == InstallResult.Cancel)
                 throw new OperationCanceledException();
 
+            if (_updateConfiguration.ValidateInstallation)
+                Result = ValidateInstall();
+
         }
-        catch (OutOfDiskspaceException)
+        catch (OutOfDiskspaceException e)
         {
+            Logger?.LogError(e, e.Message);
             Result = InstallResult.Failure;
             throw;
         }
@@ -150,13 +159,28 @@ internal class InstallTask : RunnerTask, IProgressTask
         }
     }
 
+    private InstallResult ValidateInstall()
+    {
+        var detectorFactory = Services.GetService<IComponentDetectorFactory>() ?? ComponentDetectorFactory.Default;
+        var isInstalled = detectorFactory.GetDetector(Component.Type, Services).GetCurrentInstalledState(Component, _productVariables);
+
+        if (_action == UpdateAction.Update && isInstalled)
+            return InstallResult.Success;
+        if (_action == UpdateAction.Delete && !isInstalled)
+            return InstallResult.Success;
+
+        Logger?.LogWarning($"Validation of installed component '{Component.GetDisplayName()}' failed.");
+        return InstallResult.Failure;
+    }
+
     private void BackupComponent()
     {
-        IInstallableComponent? componentToBackup = null;
-        if (_action == UpdateAction.Update)
-            componentToBackup = _currentComponent;
-        else if (_action == UpdateAction.Delete)
-            componentToBackup = Component;
+        var componentToBackup = _action switch
+        {
+            UpdateAction.Update => _currentComponent,
+            UpdateAction.Delete => Component,
+            _ => null
+        };
 
         if (componentToBackup is null)
             return;

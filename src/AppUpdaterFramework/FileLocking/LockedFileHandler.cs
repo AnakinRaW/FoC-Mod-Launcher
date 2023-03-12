@@ -88,7 +88,7 @@ internal class LockedFileHandler : InteractiveHandlerBase, ILockedFileHandler
 
         if (isLockedByApplication)
         {
-            if (_updateConfiguration.SupportsRestart)
+            if (!_updateConfiguration.SupportsRestart)
                 return ILockedFileHandler.Result.Locked;
 
             Logger?.LogTrace($"File '{file}' is locked by current application. Restart is required.");

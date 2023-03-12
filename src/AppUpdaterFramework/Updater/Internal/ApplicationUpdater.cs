@@ -41,9 +41,6 @@ internal class ApplicationUpdater : IApplicationUpdater, IProgressReporter
         {
             token.ThrowIfCancellationRequested();
             await UpdateCoreAsync(token).ConfigureAwait(false);
-
-            _serviceProvider.GetRequiredService<IElevationManager>().SetElevationRequest();
-
             return CreateResult();
         }
         catch (Exception e) when (e.IsOperationCanceledException())

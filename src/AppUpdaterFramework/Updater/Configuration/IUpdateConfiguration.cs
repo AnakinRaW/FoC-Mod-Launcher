@@ -13,6 +13,8 @@ public interface IUpdateConfiguration
     BackupPolicy BackupPolicy { get; }
 
     bool SupportsRestart { get; }
+
+    bool ValidateInstallation { get;  }
 }
 
 public sealed record UpdateConfiguration : IUpdateConfiguration
@@ -22,7 +24,7 @@ public sealed record UpdateConfiguration : IUpdateConfiguration
         DownloadRetryCount = 3,
         TempDownloadLocation = Path.GetTempPath(),
         BackupLocation = Path.GetTempPath(),
-        BackupPolicy = BackupPolicy.NotRequired
+        BackupPolicy = BackupPolicy.NotRequired,
     };
 
     public byte DownloadRetryCount { get; init; }
@@ -34,4 +36,6 @@ public sealed record UpdateConfiguration : IUpdateConfiguration
     public bool SupportsRestart { get; init; }
 
     public string BackupLocation { get; init; }
+
+    public bool ValidateInstallation { get; init; }
 }

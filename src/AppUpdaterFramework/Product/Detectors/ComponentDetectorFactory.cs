@@ -7,6 +7,8 @@ namespace AnakinRaW.AppUpdaterFramework.Product.Detectors;
 
 internal class ComponentDetectorFactory : IComponentDetectorFactory
 {
+    internal static readonly IComponentDetectorFactory Default = new ComponentDetectorFactory();
+
     private readonly Dictionary<ComponentType, IComponentDetector> _detectors = new();
 
     public IComponentDetector GetDetector(ComponentType type, IServiceProvider serviceProvider)

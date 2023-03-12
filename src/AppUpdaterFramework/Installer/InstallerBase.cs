@@ -107,6 +107,9 @@ internal abstract class InstallerBase : IInstaller
                     return InstallResult.Cancel;
                 case InstallOperationResult.Failed:
                     return InstallResult.Failure;
+                case InstallOperationResult.NoPermission:
+                    return InstallResult.FailureElevationRequired;
+                case InstallOperationResult.LockedFile:
                 default:
                     var interactionResult = interaction(operationResult);
                     result = interactionResult.InstallResult;

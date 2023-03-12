@@ -122,6 +122,11 @@ internal class FileInstaller : InstallerBase
             Logger?.LogWarning($"File '{file}' is locked");
             return InstallOperationResult.LockedFile;
         }
+        catch (UnauthorizedAccessException)
+        {
+            Logger?.LogWarning($"Missing permission on File '{file}'");
+            return InstallOperationResult.NoPermission;
+        }
         catch (Exception e)
         {
             Logger?.LogError(e, $"Unable to perform {action} on file '{file}': {e.Message}");
