@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using AnakinRaW.AppUpdaterFramework.Configuration;
 using AnakinRaW.AppUpdaterFramework.Elevation;
 using AnakinRaW.AppUpdaterFramework.Metadata.Component;
+using AnakinRaW.AppUpdaterFramework.Storage;
 using AnakinRaW.AppUpdaterFramework.Updater.Progress;
 using AnakinRaW.AppUpdaterFramework.Utilities;
 using AnakinRaW.CommonUtilities.DownloadManager;
@@ -22,15 +23,14 @@ namespace AnakinRaW.AppUpdaterFramework.Updater.Tasks;
 
 internal class DownloadTask : SynchronizedTask, IProgressTask
 {
-    public const string NewFileExtension = "new";
-
     private readonly IUpdateConfiguration _updateConfiguration;
     private readonly IFileSystem _fileSystem;
+    private readonly DownloadRepository _downloadRepository;
 
     public ProgressType Type => ProgressType.Download;
     public ITaskProgressReporter ProgressReporter { get; }
 
-    public string DownloadPath { get; private set; } = null!;
+    public IFileInfo DownloadPath { get; private set; } = null!;
 
     public long Size { get; }
 
@@ -57,6 +57,7 @@ internal class DownloadTask : SynchronizedTask, IProgressTask
 
         _updateConfiguration = updateConfiguration;
         _fileSystem = serviceProvider.GetRequiredService<IFileSystem>();
+        _downloadRepository = serviceProvider.GetRequiredService<DownloadRepository>();
     }
 
     public override string ToString()
@@ -103,8 +104,9 @@ internal class DownloadTask : SynchronizedTask, IProgressTask
 
         try
         {
-           var downloadPath = GetDownloadPath();
-           DownloadPath = downloadPath;
+            var downloadPath = _downloadRepository.AddComponent(Component);
+            DownloadPath = downloadPath;
+
 
             for (var i = 0; i < _updateConfiguration.DownloadRetryCount; i++)
             {
@@ -114,12 +116,13 @@ internal class DownloadTask : SynchronizedTask, IProgressTask
                 try
                 {
                     DownloadAndVerifyAsync(downloadManager, DownloadPath, token).Wait(CancellationToken.None);
-                    if (!_fileSystem.File.Exists(DownloadPath))
+                    DownloadPath.Refresh();
+                    if (!DownloadPath.Exists)
                     {
                         var message = "File not found after being successfully downloaded and verified: " +
                                       DownloadPath + ", package: " + Component.GetDisplayName();
                         Logger?.LogWarning(message);
-                        throw new FileNotFoundException(message, DownloadPath);
+                        throw new FileNotFoundException(message, DownloadPath.FullName);
                     }
 
                     lastException = null;
@@ -161,27 +164,30 @@ internal class DownloadTask : SynchronizedTask, IProgressTask
         }
     }
 
-    private async Task DownloadAndVerifyAsync(IDownloadManager downloadManager, string downloadPath, CancellationToken token)
+    private async Task DownloadAndVerifyAsync(IDownloadManager downloadManager, IFileInfo destination, CancellationToken token)
     {
         var integrityInformation = Component.OriginInfo!.IntegrityInformation;
         var hashContext = new HashVerificationContext(integrityInformation.Hash, HashType.None);
 
         try
         {
-            using var file = new FileStream(downloadPath, FileMode.Create, FileAccess.ReadWrite, FileShare.Read);
+            // TODO: Why TF is this not working with the IO.Abstractions?
+            using var file = new FileStream(destination.FullName, FileMode.Create, FileAccess.ReadWrite, FileShare.Read);
             await downloadManager.DownloadAsync(Uri, file, OnProgress, hashContext, token);
         }
         catch (OperationCanceledException)
         {
             try
             {
-                Logger?.LogTrace($"Deleting potentially partially downloaded file '{downloadPath}' generated as a result of operation cancellation.");
-                File.Delete(downloadPath);
+                Logger?.LogTrace(
+                    $"Deleting potentially partially downloaded file '{destination}' generated as a result of operation cancellation.");
+                destination.Delete();
             }
             catch (Exception e)
             {
-                Logger?.LogTrace($"Could not delete partially downloaded file '{downloadPath}' due to exception: {e}");
+                Logger?.LogTrace($"Could not delete partially downloaded file '{destination}' due to exception: {e}");
             }
+
             throw;
         }
     }
@@ -190,17 +196,5 @@ internal class DownloadTask : SynchronizedTask, IProgressTask
     {
         var progress = (double) status.BytesRead / Size;
         ReportProgress(progress);
-    }
-
-    private string GetDownloadPath()
-    {
-        var randomFilePart = _fileSystem.Path.GetFileNameWithoutExtension(_fileSystem.Path.GetRandomFileName());
-        var downloadFileName = $"{randomFilePart}.{NewFileExtension}";
-
-        if (string.IsNullOrEmpty(_updateConfiguration.DownloadLocation))
-            throw new InvalidOperationException("download directory not specified.");
-        
-        _fileSystem.Directory.CreateDirectory(_updateConfiguration.DownloadLocation);
-        return _fileSystem.Path.Combine(_updateConfiguration.DownloadLocation, downloadFileName);
     }
 }

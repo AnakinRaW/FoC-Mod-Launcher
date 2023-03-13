@@ -75,7 +75,7 @@ internal abstract class FileRepository : IFileRepository
             throw new InvalidOperationException("Unable to create a new random file after 10 retries");
 
         file.Create().Dispose();
-
+        file.Refresh();
         Assumes.True(file.Exists);
         return file;
     }

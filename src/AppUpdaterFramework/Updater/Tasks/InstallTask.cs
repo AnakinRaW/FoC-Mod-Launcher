@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using AnakinRaW.AppUpdaterFramework.Configuration;
 using AnakinRaW.AppUpdaterFramework.Elevation;
 using AnakinRaW.AppUpdaterFramework.Installer;
 using AnakinRaW.AppUpdaterFramework.Metadata.Component;
@@ -8,7 +9,6 @@ using AnakinRaW.AppUpdaterFramework.Metadata.Update;
 using AnakinRaW.AppUpdaterFramework.Product.Detectors;
 using AnakinRaW.AppUpdaterFramework.Restart;
 using AnakinRaW.AppUpdaterFramework.Storage;
-using AnakinRaW.AppUpdaterFramework.Updater.Configuration;
 using AnakinRaW.AppUpdaterFramework.Updater.Progress;
 using AnakinRaW.AppUpdaterFramework.Utilities;
 using AnakinRaW.CommonUtilities.TaskPipeline.Tasks;
@@ -99,7 +99,7 @@ internal class InstallTask : RunnerTask, IProgressTask
         }
 
         var installer = _installerFactory.CreateInstaller(Component);
-        installer.Progress += OnInstallerProgress;
+        installer.Progress += OnInstallerProgress!;
 
         try
         {
@@ -155,7 +155,7 @@ internal class InstallTask : RunnerTask, IProgressTask
         }
         finally
         {
-            installer.Progress -= OnInstallerProgress;
+            installer.Progress -= OnInstallerProgress!;
         }
     }
 

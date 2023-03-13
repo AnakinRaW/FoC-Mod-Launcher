@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO.Abstractions;
 using System.Threading;
 using AnakinRaW.AppUpdaterFramework.Metadata.Component;
 using AnakinRaW.AppUpdaterFramework.Metadata.Product;
@@ -11,7 +12,7 @@ internal interface IInstaller
 {
     event EventHandler<ProgressEventArgs> Progress;
 
-    InstallResult Install(IInstallableComponent component, string source, ProductVariables variables, CancellationToken token = default);
+    InstallResult Install(IInstallableComponent component, IFileInfo? source, ProductVariables variables, CancellationToken token = default);
 
     InstallResult Remove(IInstallableComponent component, ProductVariables variables, CancellationToken token = default);
 }

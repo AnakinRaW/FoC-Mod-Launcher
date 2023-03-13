@@ -44,5 +44,8 @@ public static class LibraryInitialization
         serviceCollection.AddSingleton<IRestartManager>(_ => new RestartManager());
 
         serviceCollection.AddSingleton<IElevationManager>(_ => new ElevationManager());
+
+        serviceCollection.AddSingleton(sp => new DownloadRepository(sp));
+        serviceCollection.AddSingleton(sp => new BackupRepository(sp));
     }
 }

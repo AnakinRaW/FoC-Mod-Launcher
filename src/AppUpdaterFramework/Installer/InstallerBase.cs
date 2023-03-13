@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO.Abstractions;
 using System.Threading;
 using AnakinRaW.AppUpdaterFramework.Metadata.Component;
 using AnakinRaW.AppUpdaterFramework.Metadata.Product;
@@ -22,7 +23,7 @@ internal abstract class InstallerBase : IInstaller
         Logger = serviceProvider.GetService<ILoggerFactory>()?.CreateLogger(GetType());
     }
 
-    public InstallResult Install(IInstallableComponent component, string source, ProductVariables variables, CancellationToken token = default)
+    public InstallResult Install(IInstallableComponent component, IFileInfo? source, ProductVariables variables, CancellationToken token = default)
     {
         return ExecuteInstallerAction(component, source, InstallAction.Install, variables, token);
     }
@@ -34,10 +35,10 @@ internal abstract class InstallerBase : IInstaller
 
     protected abstract InstallResult RemoveCore(IInstallableComponent component, ProductVariables variables, CancellationToken token);
 
-    protected abstract InstallResult InstallCore(IInstallableComponent component, string source, ProductVariables variables, CancellationToken token);
+    protected abstract InstallResult InstallCore(IInstallableComponent component, IFileInfo source, ProductVariables variables, CancellationToken token);
 
 
-    private InstallResult ExecuteInstallerAction(IInstallableComponent component, string? source, InstallAction action, ProductVariables variables, CancellationToken token)
+    private InstallResult ExecuteInstallerAction(IInstallableComponent component, IFileInfo? source, InstallAction action, ProductVariables variables, CancellationToken token)
     {
         try
         {

@@ -28,9 +28,9 @@ internal class FileInstaller : InstallerBase
         _lockedFileHandler = serviceProvider.GetRequiredService<ILockedFileHandler>();
     }
 
-    protected override InstallResult InstallCore(IInstallableComponent component, string source, ProductVariables variables, CancellationToken token)
+    protected override InstallResult InstallCore(IInstallableComponent component, IFileInfo source, ProductVariables variables, CancellationToken token)
     {
-        Requires.NotNullOrEmpty(source, nameof(source));
+        Requires.NotNull(source, nameof(source));
         if (component is not SingleFileComponent singleFileComponent)
             throw new NotSupportedException($"Component must be of type {nameof(SingleFileComponent)}");
 
@@ -54,11 +54,9 @@ internal class FileInstaller : InstallerBase
             token);
     }
 
-    private InstallOperationResult CopyFile(IFileInfo destination, string source)
+    private InstallOperationResult CopyFile(IFileInfo destination, IFileInfo source)
     {
-        var sourceFile = _fileSystem.FileInfo.New(source);
-
-        if (!sourceFile.Exists)
+        if (!source.Exists)
             throw new FileNotFoundException($"Source file '{destination.FullName}' not found.");
 
         if (destination.Directory is null)
@@ -84,8 +82,8 @@ internal class FileInstaller : InstallerBase
         
         Assumes.NotNull(destinationStream);
 
-        using (destinationStream) 
-            sourceFile.OpenRead().CopyTo(destinationStream);
+        using (destinationStream)
+            source.OpenRead().CopyTo(destinationStream);
 
         return InstallOperationResult.Success;
     }

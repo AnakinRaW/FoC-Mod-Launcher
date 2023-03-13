@@ -3,9 +3,7 @@ using System.Collections.Concurrent;
 using System.IO;
 using System.IO.Abstractions;
 using AnakinRaW.AppUpdaterFramework.Metadata.Component;
-using AnakinRaW.AppUpdaterFramework.Metadata.Product;
 using AnakinRaW.AppUpdaterFramework.Product;
-using AnakinRaW.AppUpdaterFramework.Updater.Configuration;
 using AnakinRaW.CommonUtilities.FileSystem;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -26,21 +24,20 @@ internal interface IBackupManager
 
 internal class BackupManager : IBackupManager
 {
-    private readonly IInstalledProduct _currentInstance;
-
     private readonly ConcurrentDictionary<IInstallableComponent, BackupValueData> _backups = new(ProductComponentIdentityComparer.Default);
     private readonly IFileSystem _fileSystem;
     private readonly IFileSystemService _fileSystemHelper;
-    private readonly IUpdateConfiguration _updateConfiguration;
     private readonly ILogger? _logger;
+    private readonly BackupRepository _repository;
+    private readonly IProductService _productService;
 
     public BackupManager(IServiceProvider serviceProvider)
     {
-        _currentInstance = serviceProvider.GetRequiredService<IProductService>().GetCurrentInstance();
+        _productService = serviceProvider.GetRequiredService<IProductService>();
         _fileSystem = serviceProvider.GetRequiredService<IFileSystem>();
         _fileSystemHelper = serviceProvider.GetRequiredService<IFileSystemService>();
-        _updateConfiguration = serviceProvider.GetRequiredService<IUpdateConfigurationProvider>().GetConfiguration();
         _logger = serviceProvider.GetService<ILoggerFactory>()?.CreateLogger(GetType());
+        _repository = serviceProvider.GetRequiredService<BackupRepository>();
     }
 
     public void BackupComponent(IInstallableComponent component)
@@ -50,12 +47,13 @@ internal class BackupManager : IBackupManager
             throw new NotSupportedException($"argument '{nameof(component)}' must be of type '{nameof(SingleFileComponent)}'");
 
 
-        var filePath = singleFileComponent.GetFile(_fileSystem, _currentInstance.Variables);
+        var variables = _productService.GetCurrentInstance().Variables;
+        var source = singleFileComponent.GetFile(_fileSystem, variables);
 
         if (component.DetectedState == DetectionState.Absent)
             return;
 
-        if (!filePath.Exists)
+        if (!source.Exists)
         {
             var e = new FileNotFoundException("Could not find source file to backup.");
             _logger?.LogError(e, e.Message);
@@ -64,18 +62,15 @@ internal class BackupManager : IBackupManager
 
         var backupData = _backups.GetOrAdd(component, _ =>
         {
-            var backupPath = CreateBackupFileInfo(singleFileComponent);
-            return new BackupValueData(filePath.FullName, backupPath);
+            var backupFile = _repository.AddComponent(component);
+            return new BackupValueData(source, backupFile);
         });
-
-        if (_fileSystem.File.Exists(backupData.BackupPath))
-            return;
 
         try
         {
-            var backupPath = backupData.BackupPath;
-            _fileSystem.Directory.CreateDirectory(_fileSystem.Path.GetDirectoryName(backupPath)!);
-            _fileSystemHelper.CopyFileWithRetry(filePath, backupPath);
+            var backup = backupData.Backup;
+            backup.Directory!.Create();
+            _fileSystemHelper.CopyFileWithRetry(source, backup.FullName);
         }
         catch (Exception)
         {
@@ -99,27 +94,16 @@ internal class BackupManager : IBackupManager
     {
     }
 
-
-    private string CreateBackupFileInfo(SingleFileComponent component)
-    {
-        var randomFileName = _fileSystem.Path.GetFileNameWithoutExtension(_fileSystem.Path.GetRandomFileName());
-        var backupFileName = $"{component.FileName}.{randomFileName}.bak";
-
-        var backupPath = _updateConfiguration.BackupLocation;
-        return _fileSystem.Path.Combine(backupPath, backupFileName);
-    }
-
-
     private struct BackupValueData
     {
-        public string SourcePath { get; }
+        public IFileInfo Source { get; }
 
-        public string BackupPath { get; }
+        public IFileInfo Backup { get; }
 
-        public BackupValueData(string sourcePath, string backupPath)
+        public BackupValueData(IFileInfo source, IFileInfo backup)
         {
-            SourcePath = sourcePath;
-            BackupPath = backupPath;
+            Source = source;
+            Backup = backup;
         }
     }
 }
