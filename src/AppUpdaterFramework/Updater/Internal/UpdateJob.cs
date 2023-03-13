@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO.Abstractions;
 using System.Linq;
 using System.Threading;
 using AnakinRaW.AppUpdaterFramework.Elevation;
+using AnakinRaW.AppUpdaterFramework.Metadata.Component;
 using AnakinRaW.AppUpdaterFramework.Metadata.Product;
 using AnakinRaW.AppUpdaterFramework.Metadata.Update;
 using AnakinRaW.AppUpdaterFramework.Updater.Configuration;
@@ -16,6 +18,68 @@ using Microsoft.Extensions.Logging;
 using Validation;
 
 namespace AnakinRaW.AppUpdaterFramework.Updater;
+
+internal interface IFileRepository
+{
+    IFileInfo AddComponent(IInstallableComponent component);
+
+    IFileInfo? GetComponent(IInstallableComponent component);
+
+    IDictionary<IInstallableComponent, IFileInfo> GetComponents();
+
+    void Clear();
+}
+
+internal class ComponentDownloadRepository : IFileRepository
+{
+    private const string NewFileExtension = "new";
+
+    private readonly IFileSystem _fileSystem;
+
+    private readonly IDirectoryInfo _location;
+
+    public ComponentDownloadRepository(IServiceProvider serviceProvider)
+    {
+        _fileSystem = serviceProvider.GetRequiredService<IFileSystem>();
+        
+        var updateConfig = serviceProvider.GetRequiredService<IUpdateConfigurationProvider>().GetConfiguration();
+
+        if (string.IsNullOrEmpty(updateConfig.TempDownloadLocation))
+            throw new InvalidOperationException("download directory not specified.");
+
+        var location = _fileSystem.DirectoryInfo.New(updateConfig.TempDownloadLocation);
+        location.Create();
+
+        _location = location;
+    }
+
+    public IFileInfo AddComponent(IInstallableComponent component)
+    {
+        return null;
+    }
+
+    public IFileInfo? GetComponent(IInstallableComponent component)
+    {
+        return null;
+    }
+
+    public IDictionary<IInstallableComponent, IFileInfo> GetComponents()
+    {
+        return null;
+    }
+
+    public void Clear()
+    {
+    }
+
+
+    private IFileInfo CreateRandomFile()
+    {
+        var randomFilePart = _fileSystem.Path.GetFileNameWithoutExtension(_fileSystem.Path.GetRandomFileName());
+        var downloadFileName = $"{randomFilePart}.{NewFileExtension}";
+        return _fileSystem.FileInfo.New(_fileSystem.Path.Combine(_location.FullName, downloadFileName));
+    }
+}
 
 internal sealed class UpdateJob : JobBase, IDisposable
 {

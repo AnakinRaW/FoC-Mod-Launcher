@@ -104,7 +104,7 @@ internal class DownloadTask : SynchronizedTask, IProgressTask
         try
         {
            var downloadPath = GetDownloadPath();
-            DownloadPath = downloadPath;
+           DownloadPath = downloadPath;
 
             for (var i = 0; i < _updateConfiguration.DownloadRetryCount; i++)
             {

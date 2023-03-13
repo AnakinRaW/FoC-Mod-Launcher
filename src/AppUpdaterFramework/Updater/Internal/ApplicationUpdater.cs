@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AnakinRaW.AppUpdaterFramework.Elevation;
 using AnakinRaW.AppUpdaterFramework.Metadata.Update;
 using AnakinRaW.AppUpdaterFramework.Restart;
+using AnakinRaW.AppUpdaterFramework.Updater.Backup;
 using AnakinRaW.AppUpdaterFramework.Updater.Progress;
 using AnakinRaW.AppUpdaterFramework.Utilities;
 using Microsoft.Extensions.DependencyInjection;
@@ -40,13 +41,24 @@ internal class ApplicationUpdater : IApplicationUpdater, IProgressReporter
         try
         {
             token.ThrowIfCancellationRequested();
-            await UpdateCoreAsync(token).ConfigureAwait(false);
-            return CreateResult();
-        }
-        catch (Exception e) when (e.IsOperationCanceledException())
-        {
-            _logger?.LogTrace("User canceled the update.");
-            return CreateResult(e);
+            var updateResult = await UpdateCoreAsync(token).ConfigureAwait(false);
+
+            if (updateResult.RestartType == RestartType.ApplicationRestart)
+                return updateResult;
+
+            if (updateResult.Exception is not null)
+                await RestoreBackups();
+
+            try
+            {
+                await CleanUpdateData();
+            }
+            catch (Exception e)
+            {
+                _logger?.LogTrace(e, $"Failed to clean update data: {e.Message}");
+            }
+            
+            return updateResult;
         }
         catch (Exception e)
         {
@@ -55,21 +67,7 @@ internal class ApplicationUpdater : IApplicationUpdater, IProgressReporter
         }
     }
 
-    private UpdateResult CreateResult(Exception? exception = null)
-    {
-        var restartType = _serviceProvider.GetRequiredService<IRestartManager>().RequiredRestartType;
-        var requiresElevation = _serviceProvider.GetRequiredService<IElevationManager>().IsElevationRequested;
-        var result = new UpdateResult
-        {
-            Exception = exception,
-            IsCanceled = exception?.IsOperationCanceledException() ?? false,
-            RestartType = restartType,
-            RequiresElevation = requiresElevation
-        };
-        return result;
-    }
-
-    private async Task UpdateCoreAsync(CancellationToken token)
+    private async Task<UpdateResult> UpdateCoreAsync(CancellationToken token)
     {
         try
         {
@@ -96,15 +94,60 @@ internal class ApplicationUpdater : IApplicationUpdater, IProgressReporter
                     _logger?.LogTrace("Completed update");
                 }
             }, CancellationToken.None).ConfigureAwait(false);
+            
+            return CreateResult();
         }
-        catch (OperationCanceledException)
+        catch (OperationCanceledException e)
         {
-            throw;
+            _logger?.LogTrace("User canceled the update.");
+            return CreateResult(e);
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
-            _logger?.LogError(ex, ex.Message);
-            throw;
+            _logger?.LogError(e, $"Update operation failed with error: {e.Message}");
+            return CreateResult(e);
         }
+    }
+
+    private async Task RestoreBackups()
+    {
+        await Task.Run(() =>
+        {
+            try
+            {
+                var backupManager = _serviceProvider.GetRequiredService<IBackupManager>();
+                backupManager.RestoreAll();
+            }
+            catch (Exception ex)
+            {
+                var e = new FailedRestoreException(ex);
+                _logger?.LogTrace(e, $"Failed to restore from failed update : {e.Message}");
+                throw e;
+            }
+        }).ConfigureAwait(false);
+    }
+
+    private async Task CleanUpdateData()
+    {
+        await Task.Run(() =>
+        {
+            new UpdateCleanJob(_serviceProvider).Run();
+        }).ConfigureAwait(false);
+    }
+
+
+    private UpdateResult CreateResult(Exception? exception = null)
+    {
+        var restartType = _serviceProvider.GetRequiredService<IRestartManager>().RequiredRestartType;
+        var requiresElevation = _serviceProvider.GetRequiredService<IElevationManager>().IsElevationRequested;
+        var result = new UpdateResult
+        {
+            Exception = exception,
+            IsCanceled = exception?.IsOperationCanceledException() ?? false,
+            RestartType = restartType,
+            RequiresElevation = requiresElevation,
+            FailedRestore = exception?.IsExceptionType<FailedRestoreException>() ?? false
+        };
+        return result;
     }
 }
