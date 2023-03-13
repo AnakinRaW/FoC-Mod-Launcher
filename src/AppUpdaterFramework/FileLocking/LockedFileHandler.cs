@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.IO.Abstractions;
 using System.Linq;
+using AnakinRaW.AppUpdaterFramework.Configuration;
 using AnakinRaW.AppUpdaterFramework.FileLocking.Interaction;
 using AnakinRaW.AppUpdaterFramework.Interaction;
 using AnakinRaW.AppUpdaterFramework.Metadata.Component;
-using AnakinRaW.AppUpdaterFramework.Updater.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Validation;

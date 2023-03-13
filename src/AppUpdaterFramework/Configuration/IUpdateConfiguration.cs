@@ -1,12 +1,12 @@
 ﻿using System.IO;
 
-namespace AnakinRaW.AppUpdaterFramework.Updater.Configuration;
+namespace AnakinRaW.AppUpdaterFramework.Configuration;
 
 public interface IUpdateConfiguration
 {
     byte DownloadRetryCount { get; }
 
-    string TempDownloadLocation { get; }
+    string DownloadLocation { get; }
 
     string BackupLocation { get; }
 
@@ -14,7 +14,7 @@ public interface IUpdateConfiguration
 
     bool SupportsRestart { get; }
 
-    bool ValidateInstallation { get;  }
+    bool ValidateInstallation { get; }
 }
 
 public sealed record UpdateConfiguration : IUpdateConfiguration
@@ -22,17 +22,17 @@ public sealed record UpdateConfiguration : IUpdateConfiguration
     internal static readonly IUpdateConfiguration Default = new UpdateConfiguration
     {
         DownloadRetryCount = 3,
-        TempDownloadLocation = Path.GetTempPath(),
+        DownloadLocation = Path.GetTempPath(),
         BackupLocation = Path.GetTempPath(),
         BackupPolicy = BackupPolicy.NotRequired,
     };
 
     public byte DownloadRetryCount { get; init; }
 
-    public required string TempDownloadLocation { get; init; }
+    public required string DownloadLocation { get; init; }
 
     public BackupPolicy BackupPolicy { get; init; }
-    
+
     public bool SupportsRestart { get; init; }
 
     public string BackupLocation { get; init; }

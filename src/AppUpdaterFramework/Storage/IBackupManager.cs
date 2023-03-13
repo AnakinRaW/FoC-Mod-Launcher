@@ -11,7 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Validation;
 
-namespace AnakinRaW.AppUpdaterFramework.Updater.Backup;
+namespace AnakinRaW.AppUpdaterFramework.Storage;
 
 internal interface IBackupManager
 {
@@ -87,7 +87,7 @@ internal class BackupManager : IBackupManager
     public void RestoreBackup(IInstallableComponent component)
     {
         Requires.NotNull(component, nameof(component));
-        if (component is not SingleFileComponent singleFileComponent) 
+        if (component is not SingleFileComponent singleFileComponent)
             throw new NotSupportedException($"argument '{nameof(component)}' must be of type '{nameof(SingleFileComponent)}'");
     }
 
@@ -111,7 +111,7 @@ internal class BackupManager : IBackupManager
 
 
     private struct BackupValueData
-    { 
+    {
         public string SourcePath { get; }
 
         public string BackupPath { get; }

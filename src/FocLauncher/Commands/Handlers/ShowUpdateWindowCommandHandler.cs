@@ -6,7 +6,6 @@ using AnakinRaW.AppUpdaterFramework;
 using AnakinRaW.AppUpdaterFramework.Interaction;
 using AnakinRaW.AppUpdaterFramework.Product;
 using AnakinRaW.AppUpdaterFramework.Product.Manifest;
-using AnakinRaW.AppUpdaterFramework.Updater.Configuration;
 using AnakinRaW.CommonUtilities.DownloadManager;
 using AnakinRaW.CommonUtilities.DownloadManager.Configuration;
 using AnakinRaW.CommonUtilities.DownloadManager.Verification;
@@ -24,6 +23,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging.Debug;
 using Microsoft.Extensions.Logging;
 using Serilog.Extensions.Logging;
+using AnakinRaW.AppUpdaterFramework.Configuration;
 
 namespace FocLauncher.Commands.Handlers;
 

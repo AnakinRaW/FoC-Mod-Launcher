@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO.Abstractions;
-using AnakinRaW.AppUpdaterFramework.Updater.Configuration;
+using AnakinRaW.AppUpdaterFramework.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Validation;
 
@@ -25,7 +25,7 @@ internal class LauncherUpdateConfigurationProvider : UpdateConfigurationProvider
         return new UpdateConfiguration
         {
             DownloadRetryCount = 3,
-            TempDownloadLocation = downloadLocation,
+            DownloadLocation = downloadLocation,
             BackupLocation = backupsLocation,
             BackupPolicy = BackupPolicy.Required,
             SupportsRestart = true

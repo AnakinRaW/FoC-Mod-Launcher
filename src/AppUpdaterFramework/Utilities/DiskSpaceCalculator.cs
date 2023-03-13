@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO.Abstractions;
+using AnakinRaW.AppUpdaterFramework.Configuration;
 using AnakinRaW.AppUpdaterFramework.Metadata.Component;
 using AnakinRaW.AppUpdaterFramework.Updater;
-using AnakinRaW.AppUpdaterFramework.Updater.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Validation;
 
@@ -45,7 +45,7 @@ internal class DiskSpaceCalculator : IDiskSpaceCalculator
 
         if (options.HasFlag(CalculationOptions.Download))
         {
-            var downloadRoot = _fileSystem.Path.GetPathRoot(_updateConfiguration.TempDownloadLocation);
+            var downloadRoot = _fileSystem.Path.GetPathRoot(_updateConfiguration.DownloadLocation);
             if (!string.IsNullOrEmpty(downloadRoot))
                 UpdateSizeInformation(newComponent.OriginInfo?.Size, downloadRoot!);
         }

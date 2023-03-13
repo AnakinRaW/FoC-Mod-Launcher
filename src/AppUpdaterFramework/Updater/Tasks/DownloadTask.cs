@@ -4,9 +4,9 @@ using System.IO.Abstractions;
 using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Threading.Tasks;
+using AnakinRaW.AppUpdaterFramework.Configuration;
 using AnakinRaW.AppUpdaterFramework.Elevation;
 using AnakinRaW.AppUpdaterFramework.Metadata.Component;
-using AnakinRaW.AppUpdaterFramework.Updater.Configuration;
 using AnakinRaW.AppUpdaterFramework.Updater.Progress;
 using AnakinRaW.AppUpdaterFramework.Utilities;
 using AnakinRaW.CommonUtilities.DownloadManager;
@@ -197,10 +197,10 @@ internal class DownloadTask : SynchronizedTask, IProgressTask
         var randomFilePart = _fileSystem.Path.GetFileNameWithoutExtension(_fileSystem.Path.GetRandomFileName());
         var downloadFileName = $"{randomFilePart}.{NewFileExtension}";
 
-        if (string.IsNullOrEmpty(_updateConfiguration.TempDownloadLocation))
+        if (string.IsNullOrEmpty(_updateConfiguration.DownloadLocation))
             throw new InvalidOperationException("download directory not specified.");
         
-        _fileSystem.Directory.CreateDirectory(_updateConfiguration.TempDownloadLocation);
-        return _fileSystem.Path.Combine(_updateConfiguration.TempDownloadLocation, downloadFileName);
+        _fileSystem.Directory.CreateDirectory(_updateConfiguration.DownloadLocation);
+        return _fileSystem.Path.Combine(_updateConfiguration.DownloadLocation, downloadFileName);
     }
 }

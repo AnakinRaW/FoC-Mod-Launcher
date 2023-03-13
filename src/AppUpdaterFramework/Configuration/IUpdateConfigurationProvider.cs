@@ -1,4 +1,4 @@
-﻿namespace AnakinRaW.AppUpdaterFramework.Updater.Configuration;
+﻿namespace AnakinRaW.AppUpdaterFramework.Configuration;
 
 public interface IUpdateConfigurationProvider
 {

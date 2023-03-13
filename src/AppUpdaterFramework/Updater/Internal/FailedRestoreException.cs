@@ -1,7 +1,7 @@
 ﻿using System;
 using Validation;
 
-namespace AnakinRaW.AppUpdaterFramework.Updater.Backup;
+namespace AnakinRaW.AppUpdaterFramework.Updater;
 
 internal class FailedRestoreException : UpdaterException
 {

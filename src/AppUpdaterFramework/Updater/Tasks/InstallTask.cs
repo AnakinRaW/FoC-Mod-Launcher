@@ -7,7 +7,7 @@ using AnakinRaW.AppUpdaterFramework.Metadata.Product;
 using AnakinRaW.AppUpdaterFramework.Metadata.Update;
 using AnakinRaW.AppUpdaterFramework.Product.Detectors;
 using AnakinRaW.AppUpdaterFramework.Restart;
-using AnakinRaW.AppUpdaterFramework.Updater.Backup;
+using AnakinRaW.AppUpdaterFramework.Storage;
 using AnakinRaW.AppUpdaterFramework.Updater.Configuration;
 using AnakinRaW.AppUpdaterFramework.Updater.Progress;
 using AnakinRaW.AppUpdaterFramework.Utilities;
