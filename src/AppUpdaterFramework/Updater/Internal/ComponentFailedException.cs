@@ -7,7 +7,7 @@ using AnakinRaW.AppUpdaterFramework.Updater.Tasks;
 namespace AnakinRaW.AppUpdaterFramework.Updater;
 
 [Serializable]
-public class ComponentFailedException : UpdaterException
+internal class ComponentFailedException : UpdateException
 {
     private readonly IEnumerable<IProgressTask>? _failedComponentTasks;
     private string? _error;

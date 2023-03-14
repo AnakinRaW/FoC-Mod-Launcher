@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
-using AnakinRaW.AppUpdaterFramework.Updater;
 using Vanara.PInvoke;
 
 namespace AnakinRaW.AppUpdaterFramework.Elevation;
@@ -70,7 +69,7 @@ internal interface IElevationManager
     void SetElevationRequest();
 }
 
-internal class ElevationRequireException : UpdaterException
+internal class ElevationRequireException : UpdateException
 {
     public ElevationRequireException()
     {

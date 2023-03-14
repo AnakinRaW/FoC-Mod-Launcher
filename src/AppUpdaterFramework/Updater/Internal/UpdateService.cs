@@ -11,7 +11,7 @@ using Microsoft.Extensions.Logging;
 
 namespace AnakinRaW.AppUpdaterFramework.Updater;
 
-public class UpdateService : IUpdateService
+internal class UpdateService : IUpdateService
 {
     public event EventHandler? CheckingForUpdatesStarted;
     public event EventHandler<IUpdateCatalog?>? CheckingForUpdatesCompleted;

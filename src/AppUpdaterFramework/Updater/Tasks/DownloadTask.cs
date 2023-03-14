@@ -24,7 +24,6 @@ namespace AnakinRaW.AppUpdaterFramework.Updater.Tasks;
 internal class DownloadTask : SynchronizedTask, IProgressTask
 {
     private readonly IUpdateConfiguration _updateConfiguration;
-    private readonly IFileSystem _fileSystem;
     private readonly DownloadRepository _downloadRepository;
 
     public ProgressType Type => ProgressType.Download;
@@ -56,7 +55,6 @@ internal class DownloadTask : SynchronizedTask, IProgressTask
         Uri = installable.OriginInfo!.Url;
 
         _updateConfiguration = updateConfiguration;
-        _fileSystem = serviceProvider.GetRequiredService<IFileSystem>();
         _downloadRepository = serviceProvider.GetRequiredService<DownloadRepository>();
     }
 
