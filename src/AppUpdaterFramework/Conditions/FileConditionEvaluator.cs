@@ -25,7 +25,7 @@ internal sealed class FileConditionEvaluator : IConditionEvaluator
         var variableResolver = services.GetRequiredService<IVariableResolver>();
 
         var filePath = fileCondition.FilePath;
-        filePath = variableResolver.ResolveVariables(filePath, properties) ?? filePath;
+        filePath = variableResolver.ResolveVariables(filePath, properties);
         if (string.IsNullOrEmpty(filePath) || !fileSystem.File.Exists(filePath))
             return false;
         if (fileCondition.IntegrityInformation.HashType != HashType.None)
@@ -49,7 +49,8 @@ internal sealed class FileConditionEvaluator : IConditionEvaluator
     {
         try
         {
-            return Version.Parse(FileVersionInfo.GetVersionInfo(filePath).FileVersion).Equals(version);
+            var fileVersion = FileVersionInfo.GetVersionInfo(filePath).FileVersion;
+            return Version.Parse(fileVersion).Equals(version);
         }
         catch (Exception)
         {

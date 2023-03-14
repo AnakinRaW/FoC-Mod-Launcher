@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO.Abstractions;
 using System.Linq;
 using AnakinRaW.AppUpdaterFramework.Metadata.Component;
+using AnakinRaW.AppUpdaterFramework.Product;
 using AnakinRaW.CommonUtilities.FileSystem;
 using Microsoft.Extensions.DependencyInjection;
 using Validation;
@@ -15,6 +16,7 @@ internal abstract class FileRepository : IFileRepository
     private readonly ConcurrentDictionary<IInstallableComponent, IFileInfo> _componentStore = new(ProductComponentIdentityComparer.Default);
     private readonly IFileSystem _fileSystem;
     private readonly IFileSystemService _fileSystemHelper;
+    private readonly IProductService _productService;
 
     protected abstract IDirectoryInfo Root { get; }
 
@@ -24,6 +26,7 @@ internal abstract class FileRepository : IFileRepository
     {
         _fileSystem = serviceProvider.GetRequiredService<IFileSystem>();
         _fileSystemHelper = serviceProvider.GetRequiredService<IFileSystemService>();
+        _productService = serviceProvider.GetRequiredService<IProductService>();
     }
 
 
@@ -61,7 +64,7 @@ internal abstract class FileRepository : IFileRepository
 
     private IFileInfo CreateComponentFile(IInstallableComponent component)
     {
-        var namePrefix = component is SingleFileComponent singleFile ? singleFile.FileName : null;
+        var namePrefix = GetNamePrefix(component);
 
         IFileInfo file = null!;
         for (var i = 0; i < 10; i++)
@@ -78,6 +81,14 @@ internal abstract class FileRepository : IFileRepository
         file.Refresh();
         Assumes.True(file.Exists);
         return file;
+    }
+
+    private string? GetNamePrefix(IInstallableComponent component)
+    {
+        if (component is not SingleFileComponent singleFileComponent)
+            return null;
+        var file = singleFileComponent.GetFile(_fileSystem, _productService.GetCurrentInstance().Variables);
+        return file.Name;
     }
 
 

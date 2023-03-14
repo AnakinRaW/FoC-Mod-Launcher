@@ -171,8 +171,7 @@ internal class DownloadTask : SynchronizedTask, IProgressTask
 
         try
         {
-            // TODO: Why TF is this not working with the IO.Abstractions?
-            using var file = new FileStream(destination.FullName, FileMode.Create, FileAccess.ReadWrite, FileShare.Read);
+            using var file = destination.Open(FileMode.Create, FileAccess.ReadWrite, FileShare.Read);
             await downloadManager.DownloadAsync(Uri, file, OnProgress, hashContext, token);
         }
         catch (OperationCanceledException)
