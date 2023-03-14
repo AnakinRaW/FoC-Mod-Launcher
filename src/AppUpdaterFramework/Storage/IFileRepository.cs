@@ -14,5 +14,7 @@ internal interface IFileRepository
 
     ISet<IFileInfo> GetFiles();
 
+    void RemoveComponent(IInstallableComponent component);
+
     void Clear();
 }

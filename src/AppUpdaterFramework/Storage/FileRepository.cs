@@ -53,13 +53,17 @@ internal abstract class FileRepository : IFileRepository
         return new HashSet<IFileInfo>(_componentStore.Values);
     }
 
+    public void RemoveComponent(IInstallableComponent component)
+    {
+        if (!_componentStore.TryRemove(component, out var file))
+            return;
+        _fileSystemHelper.DeleteFileWithRetry(file);
+    }
+
     public void Clear()
     {
-        foreach (var storedComponent in _componentStore.ToList())
-        {
-            _componentStore.TryRemove(storedComponent.Key, out var file);
-            _fileSystemHelper.DeleteFileWithRetry(file!);
-        }
+        foreach (var storedComponent in _componentStore.Keys) 
+            RemoveComponent(storedComponent);
     }
 
     private IFileInfo CreateComponentFile(IInstallableComponent component)
