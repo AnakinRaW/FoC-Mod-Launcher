@@ -69,6 +69,12 @@ internal class UpdateCommandHandler : AsyncCommandHandlerBase<IUpdateCatalog>, I
             return;
         }
 
+        if (updateResult.FailedRestore)
+        {
+            await HandleRestore();
+            return;
+        }
+
         if (updateResult.RestartType == RestartType.ApplicationRestart)
         {
             await HandleRestartRequired();
@@ -108,6 +114,11 @@ internal class UpdateCommandHandler : AsyncCommandHandlerBase<IUpdateCatalog>, I
         if (result != UpdateRestartDialog.RestartButtonIdentifier)
             return;
         new ElevateApplicationCommand(_serviceProvider).Command.Execute(null);
+    }
+
+    private async Task HandleRestore()
+    {
+
     }
 
 

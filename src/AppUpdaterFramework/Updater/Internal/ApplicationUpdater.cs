@@ -83,6 +83,8 @@ internal class ApplicationUpdater : IApplicationUpdater, IProgressReporter
                 {
                     _logger?.LogTrace("Starting update");
                     updateJob.Run(token);
+
+                    throw new InvalidOperationException();
                 }
                 catch (Exception e)
                 {
@@ -111,10 +113,11 @@ internal class ApplicationUpdater : IApplicationUpdater, IProgressReporter
 
     private async Task RestoreBackups()
     {
-        await Task.Run(() =>
+        await Task.Run(async () =>
         {
             try
             {
+                throw new Exception();
                 var backupManager = _serviceProvider.GetRequiredService<IBackupManager>();
                 backupManager.RestoreAll();
             }
@@ -123,6 +126,10 @@ internal class ApplicationUpdater : IApplicationUpdater, IProgressReporter
                 var e = new FailedRestoreException(ex);
                 _logger?.LogTrace(e, $"Failed to restore from failed update : {e.Message}");
                 throw e;
+            }
+            finally
+            {
+                await CleanUpdateData();
             }
         }).ConfigureAwait(false);
     }
