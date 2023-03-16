@@ -23,6 +23,7 @@ internal class UpdateCommandHandler : AsyncCommandHandlerBase<IUpdateCatalog>, I
     private readonly IUpdateService _updateService;
     private bool _isUpdateInProgress;
     private readonly IQueuedDialogService _dialogService;
+    private readonly ILauncherRegistry _launcherRegistry;
 
     public UpdateCommandHandler(IServiceProvider serviceProvider)
     {
@@ -33,6 +34,7 @@ internal class UpdateCommandHandler : AsyncCommandHandlerBase<IUpdateCatalog>, I
         _updateService = serviceProvider.GetRequiredService<IUpdateService>();
         _updateService.UpdateStarted += OnUpdateStarted;
         _updateService.UpdateCompleted += OnUpdateCompleted;
+        _launcherRegistry = serviceProvider.GetRequiredService<ILauncherRegistry>();
     }
 
     private void OnUpdateCompleted(object sender, EventArgs e)
@@ -118,7 +120,7 @@ internal class UpdateCommandHandler : AsyncCommandHandlerBase<IUpdateCatalog>, I
 
     private async Task HandleRestore()
     {
-
+        _launcherRegistry.Restore = true;
     }
 
 
