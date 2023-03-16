@@ -83,8 +83,11 @@ internal class FileInstaller : InstallerBase
         Assumes.NotNull(destinationStream);
 
         using (destinationStream)
-            source.OpenRead().CopyTo(destinationStream);
-
+        {
+            using var sourceStream = source.OpenRead();
+            sourceStream.CopyTo(destinationStream);
+        }
+        
         return InstallOperationResult.Success;
     }
 
