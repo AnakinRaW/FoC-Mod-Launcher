@@ -169,8 +169,13 @@ internal class DownloadTask : SynchronizedTask, IProgressTask
 
         try
         {
+#if NET
+            await using var file = destination.Open(FileMode.Create, FileAccess.ReadWrite, FileShare.Read);
+#else
             using var file = destination.Open(FileMode.Create, FileAccess.ReadWrite, FileShare.Read);
+#endif
             await downloadManager.DownloadAsync(Uri, file, OnProgress, hashContext, token);
+
         }
         catch (OperationCanceledException)
         {

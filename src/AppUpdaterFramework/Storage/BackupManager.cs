@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
 using AnakinRaW.AppUpdaterFramework.Metadata.Component;
@@ -19,6 +20,8 @@ internal class BackupManager : IBackupManager
     private readonly ILogger? _logger;
     private readonly BackupRepository _repository;
     private readonly IProductService _productService;
+
+    public IEnumerable<IInstallableComponent> Backups => _backups.Keys;
 
     public BackupManager(IServiceProvider serviceProvider)
     {
@@ -75,6 +78,12 @@ internal class BackupManager : IBackupManager
             return;
 
         _fileSystemHelper.CopyFileWithRetry(backup.Backup, backup.Source.FullName);
+        _repository.RemoveComponent(component);
+    }
+
+    public void RemoveBackup(IInstallableComponent component)
+    {
+        _backups.TryRemove(component, out _);
         _repository.RemoveComponent(component);
     }
 
