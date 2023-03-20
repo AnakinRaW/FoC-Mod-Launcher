@@ -104,7 +104,7 @@ internal static class Program
         var environment = new LauncherEnvironment(fileSystem);
         serviceCollection.AddSingleton<ILauncherEnvironment>(environment);
 
-        SetLogging(serviceCollection, fileSystem, environment);
+        SetLogging(serviceCollection, fileSystem);
         serviceCollection.AddTransient<IRegistry>(_ => new WindowsRegistry());
         serviceCollection.AddSingleton<ILauncherRegistry>(sp => new LauncherRegistry(sp));
         serviceCollection.AddSingleton<IConnectionManager>(_ => new ConnectionManager());
@@ -114,7 +114,7 @@ internal static class Program
         return serviceCollection;
     }
 
-    private static void SetLogging(IServiceCollection serviceCollection, IFileSystem fileSystem, ILauncherEnvironment environment)
+    private static void SetLogging(IServiceCollection serviceCollection, IFileSystem fileSystem)
     {
         serviceCollection.AddLogging(l =>
         {

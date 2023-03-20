@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 using AnakinRaW.CommonUtilities.Wpf.Imaging;
 using FocLauncher.ViewModels.Dialogs;
@@ -16,5 +17,10 @@ internal abstract class UpdateImageDialog : DialogViewModel, IImageDialogViewMod
         HasMaximizeButton = false;
         HasMinimizeButton = false;
         Title = "Launcher Update";
+    }
+
+    public virtual Task InitializeAsync()
+    {
+        return Task.CompletedTask;
     }
 }

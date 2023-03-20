@@ -121,6 +121,7 @@ internal class UpdateCommandHandler : AsyncCommandHandlerBase<IUpdateCatalog>, I
     private async Task HandleRestore()
     {
         _launcherRegistry.Restore = true;
+        await _dialogService.ShowDialog(new UpdateRestoreErrorDialog(_serviceProvider));
     }
 
 

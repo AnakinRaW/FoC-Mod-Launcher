@@ -41,6 +41,10 @@
         <dialogs:ErrorDialog/>
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type updateDialogs:UpdateRestoreErrorDialog}">
+        <dialogs:ErrorDialog/>
+    </DataTemplate>
+
     <DataTemplate DataType="{x:Type updateDialogs:KillProcessDialogViewModel}">
         <updateDialogViews:KillProcessesDialog/>
     </DataTemplate>

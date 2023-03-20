@@ -24,6 +24,7 @@ using Microsoft.Extensions.Logging.Debug;
 using Microsoft.Extensions.Logging;
 using Serilog.Extensions.Logging;
 using AnakinRaW.AppUpdaterFramework.Configuration;
+using FocLauncher.Services;
 
 namespace FocLauncher.Commands.Handlers;
 
@@ -114,8 +115,9 @@ internal class ShowUpdateWindowCommandHandler : AsyncCommandHandlerBase, IShowUp
         var dialogService = _parentServiceProvider.GetRequiredService<IQueuedDialogService>();
         var buttonFactory = _parentServiceProvider.GetRequiredService<IDialogButtonFactory>();
         var shutService = _parentServiceProvider.GetRequiredService<IApplicationShutdownService>();
+        var registry = _parentServiceProvider.GetRequiredService<ILauncherRegistry>();
 
-        SetLogging(serviceCollection, fileSystem, launcherEnvironment);
+        SetLogging(serviceCollection, fileSystem);
 
         serviceCollection.AddSingleton(_connectionManager);
         serviceCollection.AddSingleton(fileSystem);
@@ -125,9 +127,10 @@ internal class ShowUpdateWindowCommandHandler : AsyncCommandHandlerBase, IShowUp
         serviceCollection.AddSingleton(dialogService);
         serviceCollection.AddSingleton(buttonFactory);
         serviceCollection.AddSingleton(shutService);
+        serviceCollection.AddSingleton(registry);
     }
 
-    private static void SetLogging(IServiceCollection serviceCollection, IFileSystem fileSystem, ILauncherEnvironment environment)
+    private static void SetLogging(IServiceCollection serviceCollection, IFileSystem fileSystem)
     {
         serviceCollection.AddLogging(l =>
         {

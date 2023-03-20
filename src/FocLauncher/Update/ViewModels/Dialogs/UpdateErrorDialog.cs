@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using AnakinRaW.CommonUtilities.Wpf.Imaging;
 using FocLauncher.Imaging;
 
@@ -16,10 +15,5 @@ internal class UpdateErrorDialog : UpdateImageDialog, IUpdateErrorDialog
     public UpdateErrorDialog(string message, IServiceProvider serviceProvider) : base(serviceProvider)
     {
         Message = message;
-    }
-
-    public Task InitializeAsync()
-    {
-        return Task.CompletedTask;
     }
 }

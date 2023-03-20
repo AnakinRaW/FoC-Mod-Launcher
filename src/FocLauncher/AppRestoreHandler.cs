@@ -39,7 +39,7 @@ internal class AppRestoreHandler
         try
         {
             var appLocalPath = _environment.ApplicationLocalDirectory;
-            if (!_pathService.UserHasDirectoryAccessRights(appLocalPath.Parent.FullName, FileSystemRights.CreateDirectories))
+            if (!_pathService.UserHasDirectoryAccessRights(appLocalPath.Parent!.FullName, FileSystemRights.CreateDirectories))
                 throw new IOException($"Permission on '{appLocalPath}' denied: Creating a new directory");
 
             _fileSystemService.DeleteDirectoryWithRetry(_environment.ApplicationLocalDirectory);

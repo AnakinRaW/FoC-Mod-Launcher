@@ -117,7 +117,6 @@ internal class ApplicationUpdater : IApplicationUpdater, IProgressReporter
         {
             try
             {
-                throw new Exception();
                 var backupManager = _serviceProvider.GetRequiredService<IBackupManager>();
                 backupManager.RestoreAll();
             }
@@ -129,6 +128,8 @@ internal class ApplicationUpdater : IApplicationUpdater, IProgressReporter
             }
             finally
             {
+                _serviceProvider.GetRequiredService<IRestartManager>().SetRestart(RestartType.ApplicationRestart);
+                // TODO: Remove pending components from restart store
                 await CleanUpdateData();
             }
         }).ConfigureAwait(false);
