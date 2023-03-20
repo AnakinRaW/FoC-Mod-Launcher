@@ -122,14 +122,15 @@ internal class ApplicationUpdater : IApplicationUpdater, IProgressReporter
             }
             catch (Exception ex)
             {
+                _serviceProvider.GetRequiredService<IRestartManager>().SetRestart(RestartType.ApplicationRestart);
+                // TODO: Remove pending components from restart store
+
                 var e = new FailedRestoreException(ex);
                 _logger?.LogTrace(e, $"Failed to restore from failed update : {e.Message}");
                 throw e;
             }
             finally
             {
-                _serviceProvider.GetRequiredService<IRestartManager>().SetRestart(RestartType.ApplicationRestart);
-                // TODO: Remove pending components from restart store
                 await CleanUpdateData();
             }
         }).ConfigureAwait(false);

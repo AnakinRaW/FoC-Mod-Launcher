@@ -3,11 +3,9 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework;
-using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
 using CommunityToolkit.Mvvm.ComponentModel;
 using FocLauncher.Commands.Handlers;
-using FocLauncher.Update.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using Validation;
 

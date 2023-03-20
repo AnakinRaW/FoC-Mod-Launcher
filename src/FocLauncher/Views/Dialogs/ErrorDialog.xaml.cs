@@ -1,4 +1,4 @@
-﻿namespace FocLauncher.Dialogs;
+﻿namespace FocLauncher.Views.Dialogs;
 
 public partial class ErrorDialog
 {

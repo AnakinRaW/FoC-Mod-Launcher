@@ -1,0 +1,10 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:updateViewModels="clr-namespace:AnakinRaW.AppUpdaterFramework.ViewModels"
+                    xmlns:views="clr-namespace:AnakinRaW.AppUpdaterFramework.Views">
+
+    <DataTemplate DataType="{x:Type updateViewModels:UpdateWindowViewModel}">
+        <views:UpdateWindow/>
+    </DataTemplate>
+    
+</ResourceDictionary>

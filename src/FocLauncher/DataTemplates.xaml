@@ -3,11 +3,7 @@
                     xmlns:viewModels="clr-namespace:FocLauncher.ViewModels"
                     xmlns:dialogViewModels="clr-namespace:FocLauncher.ViewModels.Dialogs"
                     xmlns:views="clr-namespace:FocLauncher.Views"
-                    xmlns:dialogs="clr-namespace:FocLauncher.Dialogs"
-                    xmlns:updateViewModels="clr-namespace:FocLauncher.Update.ViewModels"
-                    xmlns:updateViews="clr-namespace:FocLauncher.Update.Views"
-                    xmlns:updateDialogs="clr-namespace:FocLauncher.Update.ViewModels.Dialogs"
-                    xmlns:updateDialogViews="clr-namespace:FocLauncher.Update.Views.Dialogs">
+                    xmlns:dialogs="clr-namespace:FocLauncher.Views.Dialogs">
     
     <DataTemplate DataType="{x:Type viewModels:MainPageViewModel}">
         <views:MainPage/>
@@ -31,26 +27,22 @@
         <views:LauncherVersionPanel/>
     </DataTemplate>
 
-    <!-- Update -->
+    <!-- Update Dialogs -->
 
-    <DataTemplate DataType="{x:Type updateViewModels:UpdateWindowViewModel}">
-        <updateViews:UpdateWindow/>
-    </DataTemplate>
-
-    <DataTemplate DataType="{x:Type updateDialogs:UpdateErrorDialog}">
+    <DataTemplate DataType="{x:Type dialogViewModels:UpdateErrorDialog}">
         <dialogs:ErrorDialog/>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type updateDialogs:UpdateRestoreErrorDialog}">
+    <DataTemplate DataType="{x:Type dialogViewModels:UpdateRestoreErrorDialog}">
         <dialogs:ErrorDialog/>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type updateDialogs:KillProcessDialogViewModel}">
-        <updateDialogViews:KillProcessesDialog/>
+    <DataTemplate DataType="{x:Type dialogViewModels:KillProcessDialogViewModel}">
+        <dialogs:KillProcessesDialog/>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type updateDialogs:UpdateRestartDialog}">
-        <updateDialogViews:RestartDialog/>
+    <DataTemplate DataType="{x:Type dialogViewModels:UpdateRestartDialog}">
+        <dialogs:RestartDialog/>
     </DataTemplate>
 
 </ResourceDictionary>

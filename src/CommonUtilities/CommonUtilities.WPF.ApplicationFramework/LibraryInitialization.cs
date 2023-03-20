@@ -1,4 +1,5 @@
-﻿using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
+﻿using System.Windows.Threading;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.StatusBar;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -8,6 +9,9 @@ public static class LibraryInitialization
 {
     public static void AddApplicationFramework(this IServiceCollection serviceCollection)
     {
+        // Must not be lazy!
+        serviceCollection.AddSingleton<IAppDispatcher>(new AppDispatcher(Dispatcher.CurrentDispatcher));
+
         serviceCollection.AddSingleton<IWindowService>(_ => new WindowService());
         serviceCollection.AddSingleton<IApplicationShutdownService>(sp => new ApplicationShutdownService(sp));
 

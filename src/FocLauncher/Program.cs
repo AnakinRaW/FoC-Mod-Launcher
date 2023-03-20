@@ -1,7 +1,11 @@
 ﻿using System;
 using System.IO.Abstractions;
 using System.Threading.Tasks;
-using AnakinRaW.AppUpaterFramework.Services;
+using AnakinRaW.AppUpdaterFramework;
+using AnakinRaW.AppUpdaterFramework.Configuration;
+using AnakinRaW.AppUpdaterFramework.Interaction;
+using AnakinRaW.AppUpdaterFramework.Product;
+using AnakinRaW.AppUpdaterFramework.Product.Manifest;
 using AnakinRaW.CommonUtilities.Registry;
 using AnakinRaW.CommonUtilities.Registry.Windows;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework;
@@ -18,6 +22,12 @@ using AnakinRaW.CommonUtilities.FileSystem.Windows;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
 using FocLauncher.Utilities;
 using FocLauncher.Commands.Handlers;
+using AnakinRaW.CommonUtilities.DownloadManager.Verification.HashVerification;
+using AnakinRaW.CommonUtilities.DownloadManager.Verification;
+using AnakinRaW.CommonUtilities.DownloadManager;
+using FocLauncher.Update.LauncherImplementations;
+using AnakinRaW.CommonUtilities.DownloadManager.Configuration;
+using AnakinRaW.CommonUtilities.Windows;
 
 namespace FocLauncher;
 
@@ -82,10 +92,47 @@ internal static class Program
         serviceCollection.AddSingleton<IDialogButtonFactory>(_ => new DialogButtonFactory(true));
 
         serviceCollection.AddTransient<IStatusBarFactory>(_ => new LauncherStatusBarFactory()); 
+        serviceCollection.AddTransient(_ => ConnectionManager.Instance); 
+
+        CreateUpdateServices(serviceCollection);
 
         _serviceCollection.MakeReadOnly();
     }
-    
+
+    private static void CreateUpdateServices(IServiceCollection serviceCollection)
+    {
+        serviceCollection.AddUpdateGui();
+
+        serviceCollection.AddSingleton<IProductService>(sp => new LauncherProductService(sp));
+        serviceCollection.AddSingleton<IBranchManager>(sp => new LauncherBranchManager(sp));
+        serviceCollection.AddSingleton<IManifestLoader>(sp => new LauncherManifestLoader(sp));
+        serviceCollection.AddSingleton<IUpdateConfigurationProvider>(sp => new LauncherUpdateConfigurationProvider(sp));
+        serviceCollection.AddSingleton<IInstalledManifestProvider>(sp => new LauncherInstalledManifestProvider(sp));
+
+        serviceCollection.AddSingleton<IDownloadManager>(sp => new DownloadManager(sp));
+        serviceCollection.AddSingleton<IVerificationManager>(sp =>
+        {
+            var vm = new VerificationManager(sp);
+            vm.RegisterVerifier("*", new HashVerifier(sp));
+            return vm;
+        });
+
+        serviceCollection.AddSingleton(CreateDownloadConfiguration());
+        serviceCollection.AddSingleton<IElevateApplicationCommandHandler>(sp => new ElevateApplicationCommandHandler(sp));
+        serviceCollection.AddSingleton<IUpdateRestartCommandHandler>(sp => new UpdateRestartCommandHandler(sp));
+
+        serviceCollection.AddSingleton(sp => new LauncherUpdateInteractionFactory(sp));
+        serviceCollection.AddSingleton<IUpdateDialogViewModelFactory>(sp => sp.GetRequiredService<LauncherUpdateInteractionFactory>());
+        serviceCollection.AddSingleton<IUpdateCommandsFactory>(sp => sp.GetRequiredService<LauncherUpdateInteractionFactory>());
+        serviceCollection.AddSingleton<IUpdateResultHandler>(sp => new LauncherUpdateResultHandler(sp));
+    }
+
+    private static IDownloadManagerConfiguration CreateDownloadConfiguration()
+    {
+        return new DownloadManagerConfiguration { VerificationPolicy = VerificationPolicy.Optional };
+    }
+
+
     private static ServiceCollection CreateCoreServices()
     {
         var serviceCollection = new ServiceCollection();
@@ -107,7 +154,6 @@ internal static class Program
         SetLogging(serviceCollection, fileSystem);
         serviceCollection.AddTransient<IRegistry>(_ => new WindowsRegistry());
         serviceCollection.AddSingleton<ILauncherRegistry>(sp => new LauncherRegistry(sp));
-        serviceCollection.AddSingleton<IConnectionManager>(_ => new ConnectionManager());
 
         serviceCollection.AddSingleton<IShowUpdateWindowCommandHandler>(sp => new ShowUpdateWindowCommandHandler(sp));
 

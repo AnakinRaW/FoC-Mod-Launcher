@@ -1,0 +1,34 @@
+﻿<UserControl x:Class="AnakinRaW.AppUpdaterFramework.Views.States.UpdatingStateView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="clr-namespace:AnakinRaW.CommonUtilities.Wpf.Controls;assembly=AnakinRaW.CommonUtilities.WPF.Controls"
+             xmlns:designer="clr-namespace:AnakinRaW.AppUpdaterFramework.ViewModels.Designer"
+             xmlns:imaging="clr-namespace:AnakinRaW.AppUpdaterFramework.Imaging"
+             mc:Ignorable="d" d:DesignWidth="300"
+             d:DataContext="{d:DesignInstance {x:Type designer:DesignerUpdatingStateViewModel}, IsDesignTimeCreatable=True}">
+    <FrameworkElement.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </FrameworkElement.Resources>
+    <Grid VerticalAlignment="Top" HorizontalAlignment="Stretch" Focusable="False">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <controls:ThemedProgressBar Grid.Row="0" DataContext="{Binding ProgressViewModel.DownloadProgressBarViewModel}"
+                                    FooterMessage="{Binding FooterText}" Value="{Binding ProgressValue}" 
+                                    FinishedIcon="{x:Static imaging:ImageKeys.StatusOK}"
+                                    HeaderLeft="{Binding LeftHeaderText}"
+                                    HeaderRight="{Binding RightHeaderText}"/>
+        <TextBlock Grid.Row="1" Margin="0,4,0,0" TextTrimming="CharacterEllipsis" TextWrapping="Wrap"
+                   Text="The installation will start after all components have been downloaded."
+                   Visibility="{Binding ProgressViewModel.ShowDownloadThenInstallText, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}"/>
+        <controls:ThemedProgressBar Grid.Row="1" Margin="0,4,0,0" DataContext="{Binding ProgressViewModel.InstallProgressBarViewModel}"
+                                    FooterMessage="{Binding FooterText}" Value="{Binding ProgressValue}" 
+                                    FinishedIcon="{x:Static imaging:ImageKeys.StatusOK}"
+                                    HeaderLeft="{Binding LeftHeaderText}"
+                                    Visibility="{Binding Path=DataContext.ProgressViewModel.ShowInstallProgressBar, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                    HeaderRight="{Binding RightHeaderText}"/>
+    </Grid>
+</UserControl>

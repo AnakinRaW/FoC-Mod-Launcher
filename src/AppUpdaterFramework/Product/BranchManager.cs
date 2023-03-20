@@ -22,7 +22,7 @@ public abstract class BranchManager : IBranchManager
 
     protected readonly IManifestLoader ManifestLoader;
 
-    protected abstract string DefaultBranchName { get; }
+    public abstract string StableBranchName { get; }
 
     protected BranchManager(IServiceProvider serviceProvider)
     {
@@ -38,7 +38,7 @@ public abstract class BranchManager : IBranchManager
     {
         var branchName = version.Prerelease;
         if (string.IsNullOrEmpty(branchName))
-            branchName = DefaultBranchName;
+            branchName = StableBranchName;
         var manifestUri = BuildManifestUri(branchName);
         return new ProductBranch(branchName, manifestUri, version.IsPrerelease);
     }

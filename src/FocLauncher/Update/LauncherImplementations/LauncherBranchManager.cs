@@ -12,7 +12,7 @@ namespace FocLauncher.Update.LauncherImplementations;
 
 public class LauncherBranchManager : BranchManager
 {
-    internal const string StableBranchName = "stable";
+    internal const string StableBranchNameConst = "stable";
 
     private const string BranchLookupFileName = "branches";
     private const string ManifestFileName = "manifest.json";
@@ -20,7 +20,7 @@ public class LauncherBranchManager : BranchManager
     private static readonly Url BranchLookupUrl =
         LauncherConstants.LauncherRootUrl.AppendPathSegment(BranchLookupFileName);
 
-    protected override string DefaultBranchName => StableBranchName;
+    public override string StableBranchName => StableBranchNameConst;
 
     public LauncherBranchManager(IServiceProvider serviceProvider) : base(serviceProvider)
     {
@@ -36,7 +36,7 @@ public class LauncherBranchManager : BranchManager
         var branches = new List<ProductBranch>();
         foreach (var name in branchNames)
         {
-            var isPrerelease = !name.Equals(DefaultBranchName, StringComparison.InvariantCultureIgnoreCase);
+            var isPrerelease = !name.Equals(StableBranchName, StringComparison.InvariantCultureIgnoreCase);
             branches.Add(new ProductBranch(name, BuildManifestUri(name), isPrerelease));
         }
         return branches;

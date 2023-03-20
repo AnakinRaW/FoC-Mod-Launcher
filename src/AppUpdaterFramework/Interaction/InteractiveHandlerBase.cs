@@ -15,7 +15,7 @@ internal abstract class InteractiveHandlerBase
         InteractionHandler = serviceProvider.GetRequiredService<IInteractionHandler>();
     }
 
-    protected void PromptError(string message)
+    protected void HandleError(string message)
     {
         InteractionHandler.HandleError(message);
     }

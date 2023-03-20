@@ -7,10 +7,5 @@
     
     <SolidColorBrush x:Key="{x:Static themes:LauncherColors.MainWindowText}" Color="#FFFFFFFF"/>
     <SolidColorBrush x:Key="{x:Static themes:LauncherColors.AboutWindowPackagesText}" Color="#FF7A7A7A"/>
-
-    <SolidColorBrush x:Key="{x:Static themes:LauncherColors.UpdateProductBackground}" Color="#FF2E2E2E"/>
-    <SolidColorBrush x:Key="{x:Static themes:LauncherColors.UpdateProductBorder}" Color="#FF707070"/>
-    <SolidColorBrush x:Key="{x:Static themes:LauncherColors.UpdateInfoBarBackground}" Color="#FF181818"/>
-    <SolidColorBrush x:Key="{x:Static themes:LauncherColors.UpdateInfoBarBorder}" Color="#FF181818"/>
-
+    
 </ResourceDictionary>

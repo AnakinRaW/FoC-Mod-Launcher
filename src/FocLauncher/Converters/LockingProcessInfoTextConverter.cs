@@ -2,7 +2,7 @@
 using AnakinRaW.AppUpdaterFramework.FileLocking.Interaction;
 using AnakinRaW.CommonUtilities.Wpf.Converters;
 
-namespace FocLauncher.Converters;
+namespace AnakinRaW.AppUpdaterFramework.Converters;
 
 internal class LockingProcessInfoTextConverter : ValueConverter<ILockingProcess, string>
 {

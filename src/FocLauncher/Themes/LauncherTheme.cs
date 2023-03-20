@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Media;
+using AnakinRaW.AppUpdaterFramework.Themes;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Theming;
 using AnakinRaW.CommonUtilities.Wpf.Themes.Fonts;
 
@@ -24,6 +25,8 @@ internal class LauncherTheme : Theme
                     "./#Empire At War Bold")
             }
         };
+
+        resources.MergedDictionaries.Add(new ResourceDictionary { Source = UpdateTheme.ResourceUri });
         return resources;
     }
 }

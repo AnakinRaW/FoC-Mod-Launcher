@@ -1,0 +1,97 @@
+﻿<UserControl x:Class="AnakinRaW.AppUpdaterFramework.Views.InstalledProductView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:imaging="clr-namespace:AnakinRaW.CommonUtilities.Wpf.Imaging;assembly=AnakinRaW.CommonUtilities.WPF.Imaging"
+             xmlns:converters="clr-namespace:AnakinRaW.CommonUtilities.Wpf.Converters;assembly=AnakinRaW.CommonUtilities.WPF.Core"
+             xmlns:controls="clr-namespace:AnakinRaW.CommonUtilities.Wpf.Imaging.Controls;assembly=AnakinRaW.CommonUtilities.WPF.Imaging"
+             xmlns:wpfControls="clr-namespace:AnakinRaW.CommonUtilities.Wpf.Controls;assembly=AnakinRaW.CommonUtilities.WPF.Controls"
+             xmlns:input="clr-namespace:AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Input;assembly=AnakinRaW.CommonUtilities.WPF.ApplicationFramework"
+             xmlns:imageConverters="clr-namespace:AnakinRaW.CommonUtilities.Wpf.Imaging.Converters;assembly=AnakinRaW.CommonUtilities.WPF.Imaging"
+             xmlns:designer="clr-namespace:AnakinRaW.AppUpdaterFramework.ViewModels.Designer"
+             xmlns:productStates="clr-namespace:AnakinRaW.AppUpdaterFramework.ViewModels.ProductStates"
+             xmlns:states="clr-namespace:AnakinRaW.AppUpdaterFramework.Views.States"
+             xmlns:themes="clr-namespace:AnakinRaW.AppUpdaterFramework.Themes"
+             mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance {x:Type designer:DesignerProductViewModel}, IsDesignTimeCreatable=True}">
+    <FrameworkElement.Resources>
+        <converters:BrushToColorConverter x:Key="BrushToColorConverter"/>
+        <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
+        <imageConverters:ImageKeyToVisibilityConverter x:Key="ImageKeyToVisibilityConverter"/>
+
+        <DataTemplate x:Key="ButtonContent" DataType="{x:Type input:ICommandDefinition}">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <controls:ThemedImage Margin="0,0,8,0" VerticalAlignment="Center" 
+                                      SnapsToDevicePixels="True" UseLayoutRounding="True" Focusable="False" 
+                                      ImakgeKey="{Binding Image}"
+                                      Visibility="{Binding Image, Converter={StaticResource ImageKeyToVisibilityConverter}}"/>
+                <AccessText VerticalAlignment="Center" SnapsToDevicePixels="True" Text="{Binding Text}"/>
+            </StackPanel>
+        </DataTemplate>
+
+        <Style x:Key="ProductViewButtonStyle" TargetType="{x:Type wpfControls:ThemedButton}">
+            <Setter Property="Margin" Value="0,8,0,0"/>
+            <Setter Property="Padding" Value="0,0"/>
+            <Setter Property="MinWidth" Value="75"/>
+            <Setter Property="Height" Value="23"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Focusable" Value="False"/>
+        </Style>
+
+    </FrameworkElement.Resources>
+    <Border Focusable="False" 
+            Background="{DynamicResource {x:Static themes:UpdateColors.UpdateProductBackground}}"  
+            BorderBrush="{DynamicResource {x:Static themes:UpdateColors.UpdateProductBorder}}" BorderThickness="0">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="8" Opacity="0.1"/>
+        </Border.Effect>
+        <Grid Background="{DynamicResource {x:Static themes:UpdateColors.UpdateProductBackground}}" 
+              imaging:ImageThemingUtilities.ImageBackgroundColor="{Binding Background, RelativeSource={RelativeSource Self}, Converter={StaticResource BrushToColorConverter}}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Grid x:Name="ProductName" Margin="12,12,0,8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <controls:ThemedImage Grid.Column="0" Height="24" Width="24" VerticalAlignment="Center" Margin="0,0,12,0" ImakgeKey="{Binding Icon}"/>
+                    <TextBlock Grid.Column="1" VerticalAlignment="Center" TextWrapping="Wrap" TextTrimming="None" FontSize="18" Text="{Binding DisplayName}"/>
+                </Grid>
+                <ContentControl Grid.Row="1" Margin="48,0,0,20" Focusable="False" Content="{Binding StateViewModel}">
+                    <FrameworkElement.Resources>
+                        <DataTemplate DataType="{x:Type productStates:InstalledStateViewModel}">
+                            <states:InstalledStateView/>
+                        </DataTemplate>
+                        <DataTemplate DataType="{x:Type productStates:UpdateAvailableStateViewModel}">
+                            <states:UpdateAvailableStateView/>
+                        </DataTemplate>
+                        <DataTemplate DataType="{x:Type productStates:ErrorStateViewModel}">
+                            <states:ErrorStateView/>
+                        </DataTemplate>
+                        <DataTemplate DataType="{x:Type productStates:UpdatingStateViewModel}">
+                            <states:UpdatingStateView/>
+                        </DataTemplate>
+                    </FrameworkElement.Resources>
+                </ContentControl>
+            </Grid>
+            <StackPanel Grid.Column="1" VerticalAlignment="Stretch" Width="150" Focusable="False" Margin="20,4,12,12">
+                <wpfControls:ThemedButton Style="{StaticResource ProductViewButtonStyle}"
+                                          DataContext="{Binding Action}"
+                                          Command="{Binding Command}"
+                                          Visibility="{Binding Converter={StaticResource NullToVisibilityConverter}}"
+                                          ContentTemplate="{StaticResource ButtonContent}"
+                                          Content="{Binding }"/>
+            </StackPanel>
+        </Grid>
+    </Border>
+</UserControl>

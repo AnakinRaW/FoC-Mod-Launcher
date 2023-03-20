@@ -65,22 +65,6 @@ internal class ImageCatalog : ImmutableImageCatalog
         CanTheme = false
     };
 
-    public static ImageDefinition StatusErrorDefinition => new()
-    {
-        Kind = ImageFileKind.Xaml,
-        ImakgeKey = ImageKeys.StatusError,
-        Source = ResourcesUriCreator.Create("StatusError", ImageFileKind.Xaml),
-        CanTheme = true
-    };
-    
-    public static ImageDefinition StatusOkDefinition => new()
-    {
-        Kind = ImageFileKind.Xaml,
-        ImakgeKey = ImageKeys.StatusOK,
-        Source = ResourcesUriCreator.Create("StatusOK", ImageFileKind.Xaml),
-        CanTheme = true
-    };
-
     public static ImageDefinition VaderDefinition => new()
     {
         Kind = ImageFileKind.Png,
@@ -115,8 +99,6 @@ internal class ImageCatalog : ImmutableImageCatalog
         TrooperDefinition,
         UpdateIconDefinition,
         HelpIconDefinition,
-        StatusErrorDefinition,
-        StatusOkDefinition,
         VaderDefinition,
         PalpatineDefinition, 
         SwPulpDefinition

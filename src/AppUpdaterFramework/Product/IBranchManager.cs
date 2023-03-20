@@ -9,6 +9,8 @@ namespace AnakinRaW.AppUpdaterFramework.Product;
 
 public interface IBranchManager
 {
+    string StableBranchName { get; }
+
     Task<IEnumerable<ProductBranch>> GetAvailableBranches();
 
     ProductBranch GetBranchFromVersion(SemVersion version);

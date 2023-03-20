@@ -21,6 +21,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonUtilities.WPF.Control
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CommonUtitiles", "CommonUtitiles", "{CAB97A70-AE67-4E45-9418-F2A0EBE7626C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppUpdaterFramework.WPF", "src\AppUpdaterFramework.WPF\AppUpdaterFramework.WPF.csproj", "{BEB02642-5FF4-4CE5-8EE6-CD2F1FE1BB04}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonUtilities.Windows", "src\CommonUtilities\CommonUtilities.Windows\CommonUtilities.Windows.csproj", "{2CFEAFCF-DE13-42E7-A979-C1EFF9F7591F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +59,14 @@ Global
 		{4F0D9B49-36D5-435C-B45B-0E51209ED869}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4F0D9B49-36D5-435C-B45B-0E51209ED869}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4F0D9B49-36D5-435C-B45B-0E51209ED869}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BEB02642-5FF4-4CE5-8EE6-CD2F1FE1BB04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEB02642-5FF4-4CE5-8EE6-CD2F1FE1BB04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEB02642-5FF4-4CE5-8EE6-CD2F1FE1BB04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEB02642-5FF4-4CE5-8EE6-CD2F1FE1BB04}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2CFEAFCF-DE13-42E7-A979-C1EFF9F7591F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2CFEAFCF-DE13-42E7-A979-C1EFF9F7591F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2CFEAFCF-DE13-42E7-A979-C1EFF9F7591F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2CFEAFCF-DE13-42E7-A979-C1EFF9F7591F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -64,6 +76,7 @@ Global
 		{93D9F0EE-2B71-4333-8BAB-941308B612EC} = {CAB97A70-AE67-4E45-9418-F2A0EBE7626C}
 		{1F8E49DF-C8CD-425B-99AE-211CCBD5FAA4} = {CAB97A70-AE67-4E45-9418-F2A0EBE7626C}
 		{4F0D9B49-36D5-435C-B45B-0E51209ED869} = {CAB97A70-AE67-4E45-9418-F2A0EBE7626C}
+		{2CFEAFCF-DE13-42E7-A979-C1EFF9F7591F} = {CAB97A70-AE67-4E45-9418-F2A0EBE7626C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {94E96BB4-E6D8-4E1F-B4A4-4F4B667DC600}

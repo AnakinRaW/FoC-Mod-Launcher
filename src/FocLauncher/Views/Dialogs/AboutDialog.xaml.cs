@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Windows.Navigation;
 
-namespace FocLauncher.Dialogs;
+namespace FocLauncher.Views.Dialogs;
 
 public partial class AboutDialog
 {

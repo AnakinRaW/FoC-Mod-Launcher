@@ -47,7 +47,7 @@ internal class LockedFileHandler : InteractiveHandlerBase, ILockedFileHandler
         //The file is locked by a system file
         if (lockingProcesses.Any(x => x.ApplicationType == RstrtMgr.RM_APP_TYPE.RmCritical && !x.IsCurrentProcess()))
         {
-            PromptError("Files are locked by a system process that cannot be terminated. Please restart the system");
+            HandleError("Files are locked by a system process that cannot be terminated. Please restart the system");
             return ILockedFileHandler.Result.Locked;
         }
 
@@ -98,7 +98,7 @@ internal class LockedFileHandler : InteractiveHandlerBase, ILockedFileHandler
         return ILockedFileHandler.Result.Unlocked;
     }
 
-    private LockedFileHandlerInteractionResult PromptProcessKill(IFileInfo file, List<ILockingProcessInfo> lockingProcesses)
+    private LockedFileHandlerInteractionResult PromptProcessKill(IFileInfo file, IEnumerable<ILockingProcessInfo> lockingProcesses)
     {
         var processes = lockingProcesses.Select(x => new ILockingProcess.LockingProcess(x.Description, x.Id));
         return InteractionHandler.HandleLockedFile(file, processes);
