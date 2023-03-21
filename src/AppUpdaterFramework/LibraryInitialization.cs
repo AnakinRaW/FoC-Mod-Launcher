@@ -47,5 +47,8 @@ public static class LibraryInitialization
 
         serviceCollection.AddSingleton(sp => new DownloadRepository(sp));
         serviceCollection.AddSingleton(sp => new BackupRepository(sp));
+
+        serviceCollection.AddSingleton<IWritableDeferredComponentStore>(sp => new DeferredComponentStore(sp));
+        serviceCollection.AddSingleton<IDeferredComponentStore>(sp => sp.GetRequiredService<IWritableDeferredComponentStore>());
     }
 }

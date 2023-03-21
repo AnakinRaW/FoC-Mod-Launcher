@@ -3,7 +3,6 @@ using System.IO.Abstractions;
 using System.Threading.Tasks;
 using AnakinRaW.AppUpdaterFramework;
 using AnakinRaW.AppUpdaterFramework.Configuration;
-using AnakinRaW.AppUpdaterFramework.Imaging;
 using AnakinRaW.AppUpdaterFramework.Interaction;
 using AnakinRaW.AppUpdaterFramework.Product;
 using AnakinRaW.AppUpdaterFramework.Product.Manifest;

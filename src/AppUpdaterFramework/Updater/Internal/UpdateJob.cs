@@ -64,15 +64,15 @@ internal sealed class UpdateJob : JobBase, IDisposable
 
     private void RegisterEvents()
     {
-        _downloadsRunner.Error += OnError;
-        _installsRunner.Error += OnError;
+        _downloadsRunner.Error += OnError!;
+        _installsRunner.Error += OnError!;
         _elevationManager.ElevationRequested += OnElevationRequest;
     }
 
     private void UnregisterEvents()
     {
-        _downloadsRunner.Error -= OnError;
-        _installsRunner.Error -= OnError;
+        _downloadsRunner.Error -= OnError!;
+        _installsRunner.Error -= OnError!;
         _elevationManager.ElevationRequested -= OnElevationRequest;
     }
 

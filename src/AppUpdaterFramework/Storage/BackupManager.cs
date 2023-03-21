@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.IO.Abstractions;
+using System.Linq;
 using AnakinRaW.AppUpdaterFramework.Metadata.Component;
 using AnakinRaW.AppUpdaterFramework.Product;
 using AnakinRaW.CommonUtilities.FileSystem;
+using AnakinRaW.CommonUtilities.Hashing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Validation;
@@ -20,6 +23,7 @@ internal class BackupManager : IBackupManager
     private readonly ILogger? _logger;
     private readonly BackupRepository _repository;
     private readonly IProductService _productService;
+    private readonly IHashingService _hashingService;
 
     public IEnumerable<IInstallableComponent> Backups => _backups.Keys;
 
@@ -30,55 +34,74 @@ internal class BackupManager : IBackupManager
         _fileSystemHelper = serviceProvider.GetRequiredService<IFileSystemService>();
         _logger = serviceProvider.GetService<ILoggerFactory>()?.CreateLogger(GetType());
         _repository = serviceProvider.GetRequiredService<BackupRepository>();
+        _hashingService = serviceProvider.GetRequiredService<IHashingService>();
     }
 
     public void BackupComponent(IInstallableComponent component)
     {
         Requires.NotNull(component, nameof(component));
-        if (component is not SingleFileComponent singleFileComponent)
-            throw new NotSupportedException($"argument '{nameof(component)}' must be of type '{nameof(SingleFileComponent)}'");
 
-        var variables = _productService.GetCurrentInstance().Variables;
-        var source = singleFileComponent.GetFile(_fileSystem, variables);
+        var backupData = _backups.GetOrAdd(component, CreateBackupEntry);
 
-        if (component.DetectedState == DetectionState.Absent)
+        // Check whether the component actually is present
+        if (backupData.IsOriginallyMissing())
             return;
-
-        if (!source.Exists)
-        {
-            var e = new FileNotFoundException("Could not find source file to backup.");
-            _logger?.LogError(e, e.Message);
-            throw e;
-        }
-
-        var backupData = _backups.GetOrAdd(component, _ =>
-        {
-            var backupFile = _repository.AddComponent(component);
-            return new BackupValueData(source, backupFile);
-        });
 
         try
         {
             var backup = backupData.Backup;
-            backup.Directory!.Create();
-            _fileSystemHelper.CopyFileWithRetry(source, backup.FullName);
+            backup!.Directory!.Create();
+            _fileSystemHelper.CopyFileWithRetry(backupData.Source!, backup.FullName);
         }
         catch (Exception)
         {
-            _backups.TryRemove(component, out _);
+            RemoveBackup(component);
             throw;
         }
     }
+
 
     public void RestoreBackup(IInstallableComponent component)
     {
         Requires.NotNull(component, nameof(component));
 
-        if (!_backups.TryRemove(component, out var backup))
+        if (!_backups.TryRemove(component, out var backupData))
             return;
 
-        _fileSystemHelper.CopyFileWithRetry(backup.Backup, backup.Source.FullName);
-        _repository.RemoveComponent(component);
+        var source = backupData.Source;
+
+        source.Refresh();
+
+        if (backupData.IsOriginallyMissing())
+        {
+            if (!source.Exists)
+                return;
+            if (_fileSystemHelper.DeleteFileWithRetry(source))
+                return;
+            throw new IOException("Unable to restore the backup. Please restart your computer!");
+        }
+
+        var backup = backupData.Backup;
+        backup.Refresh();
+        if (!backup.Exists)
+            throw new FileNotFoundException("Backup file not found", backup.FullName);
+
+        try
+        {
+            if (source.Exists)
+            {
+                var backHash = _hashingService.GetFileHash(backup, HashType.Sha256);
+                var sourceHash = _hashingService.GetFileHash(source, HashType.Sha256);
+                if (backHash.SequenceEqual(sourceHash))
+                    return;
+            }
+
+            _fileSystemHelper.CopyFileWithRetry(backupData.Backup, backupData.Source.FullName);
+        }
+        finally
+        {
+            _repository.RemoveComponent(component);
+        }
     }
 
     public void RemoveBackup(IInstallableComponent component)
@@ -99,16 +122,67 @@ internal class BackupManager : IBackupManager
         _backups.Clear();
     }
 
-    private struct BackupValueData
+    private BackupValueData CreateBackupEntry(IInstallableComponent component)
+    {
+        if (component is not SingleFileComponent singleFileComponent)
+            throw new NotSupportedException($"argument '{nameof(component)}' must be of type '{nameof(SingleFileComponent)}'");
+
+        var variables = _productService.GetCurrentInstance().Variables;
+        var source = singleFileComponent.GetFile(_fileSystem, variables);
+
+        if (component.DetectedState == DetectionState.Absent)
+            return new BackupValueData(source);
+
+        if (!source.Exists)
+        {
+            var e = new FileNotFoundException("Could not find source file to backup.");
+            _logger?.LogError(e, e.Message);
+            throw e;
+        }
+
+        var backupFile = _repository.AddComponent(component);
+        return new BackupValueData(source, backupFile);
+    }
+
+    private readonly struct BackupValueData : IEquatable<BackupValueData>
     {
         public IFileInfo Source { get; }
 
-        public IFileInfo Backup { get; }
+        public IFileInfo? Backup { get; }
+
+        public BackupValueData(IFileInfo source)
+        {
+            Source = source;
+            Backup = null;
+        }
 
         public BackupValueData(IFileInfo source, IFileInfo backup)
         {
             Source = source;
             Backup = backup;
+        }
+
+#if NET
+        [MemberNotNullWhen(false, nameof(Backup))]
+#endif
+        public bool IsOriginallyMissing()
+        {
+            return Backup is null;
+        }
+
+        public bool Equals(BackupValueData other)
+        {
+            return Source.Equals(other.Source) && Equals(Backup, other.Backup);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return obj is BackupValueData other && Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Source, Backup);
         }
     }
 }

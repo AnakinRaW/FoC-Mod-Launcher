@@ -38,6 +38,10 @@
 		<PackageReference Include="Vanara.PInvoke.Security" Version="3.4.13" />
 	</ItemGroup>
 
+	<ItemGroup Condition=" '$(Configuration)' == 'Debug' ">
+		<PackageReference Include="envdte" Version="17.5.33428.366" />
+	</ItemGroup>
+
 	<PropertyGroup>
 		<SatelliteResourceLanguages>en</SatelliteResourceLanguages>
 	</PropertyGroup>

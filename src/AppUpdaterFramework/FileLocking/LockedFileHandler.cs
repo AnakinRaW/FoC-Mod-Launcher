@@ -53,14 +53,14 @@ internal class LockedFileHandler : InteractiveHandlerBase, ILockedFileHandler
 
         Logger?.LogTrace($"Handling locked file '{file}'");
 
-        var processesWithoutSelf = lockingProcesses.WithoutCurrentProcess().WithoutStopped().ToList();
+        var processesWithoutSelf = lockingProcesses.WithoutCurrentProcess().WithoutDebugger().WithoutStopped().ToList();
 
         if (processesWithoutSelf.Any())
         {
             var interactionResult = LockedFileHandlerInteractionResult.Retry;
             do
             {
-                processesWithoutSelf = lockingProcessManager.GetProcesses().WithoutCurrentProcess().WithoutStopped().ToList();
+                processesWithoutSelf = lockingProcessManager.GetProcesses().WithoutCurrentProcess().WithoutDebugger().WithoutStopped().ToList();
                 if (!processesWithoutSelf.Any())
                     break;
                 interactionResult = PromptProcessKill(file, processesWithoutSelf);
@@ -82,7 +82,7 @@ internal class LockedFileHandler : InteractiveHandlerBase, ILockedFileHandler
             }
 
             // File is still locked
-            if (!lockingProcessManager.GetProcesses().WithoutCurrentProcess().AllStopped())
+            if (!lockingProcessManager.GetProcesses().WithoutCurrentProcess().WithoutDebugger().AllStopped())
                 return ILockedFileHandler.Result.Locked;
         }
 

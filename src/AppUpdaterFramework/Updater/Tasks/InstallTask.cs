@@ -128,7 +128,7 @@ internal class InstallTask : RunnerTask, IProgressTask
                 var restartManager = Services.GetRequiredService<IRestartManager>();
                 restartManager.SetRestart(RestartType.ApplicationRestart);
                 Logger?.LogWarning($"Component '{Component.GetDisplayName()}' get scheduled for installation after a restart.");
-                // TODO: Push somewhere to remember this component and necessary information
+                Services.GetRequiredService<IWritableDeferredComponentStore>().AddComponent(Component);
             }
 
             if (Result == InstallResult.FailureElevationRequired)
@@ -164,26 +164,28 @@ internal class InstallTask : RunnerTask, IProgressTask
         var detectorFactory = Services.GetService<IComponentDetectorFactory>() ?? ComponentDetectorFactory.Default;
         var isInstalled = detectorFactory.GetDetector(Component.Type, Services).GetCurrentInstalledState(Component, _productVariables);
 
-        if (_action == UpdateAction.Update && isInstalled)
-            return InstallResult.Success;
-        if (_action == UpdateAction.Delete && !isInstalled)
-            return InstallResult.Success;
-
-        Logger?.LogWarning($"Validation of installed component '{Component.GetDisplayName()}' failed.");
-        return InstallResult.Failure;
+        switch (_action)
+        {
+            case UpdateAction.Update when isInstalled:
+            case UpdateAction.Delete when !isInstalled:
+                return InstallResult.Success;
+            default:
+                Logger?.LogWarning($"Validation of installed component '{Component.GetDisplayName()}' failed.");
+                return InstallResult.Failure;
+        }
     }
 
     private void BackupComponent()
     {
+        if (_action == UpdateAction.Keep)
+            return;
+
         var componentToBackup = _action switch
         {
-            UpdateAction.Update => _currentComponent,
+            UpdateAction.Update => _currentComponent ?? Component,
             UpdateAction.Delete => Component,
-            _ => null
+            _ => throw new ArgumentOutOfRangeException()
         };
-
-        if (componentToBackup is null)
-            return;
 
         var backupManager = Services.GetRequiredService<IBackupManager>();
         

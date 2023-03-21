@@ -83,8 +83,6 @@ internal class ApplicationUpdater : IApplicationUpdater, IProgressReporter
                 {
                     _logger?.LogTrace("Starting update");
                     updateJob.Run(token);
-
-                    throw new InvalidOperationException();
                 }
                 catch (Exception e)
                 {
@@ -123,7 +121,7 @@ internal class ApplicationUpdater : IApplicationUpdater, IProgressReporter
             catch (Exception ex)
             {
                 _serviceProvider.GetRequiredService<IRestartManager>().SetRestart(RestartType.ApplicationRestart);
-                // TODO: Remove pending components from restart store
+                _serviceProvider.GetRequiredService<IWritableDeferredComponentStore>().Clear();
 
                 var e = new FailedRestoreException(ex);
                 _logger?.LogTrace(e, $"Failed to restore from failed update : {e.Message}");

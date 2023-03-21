@@ -44,23 +44,23 @@ internal class LauncherInstalledManifestProvider : IInstalledManifestProvider
             LauncherConstants.AppUpdaterAssemblyName, fileVersion, variables);
 
 
-        var testExeId = new ProductComponentIdentity("Launcher.Test", identityVersion);
-        var testExe = BuildFileComponent(testExeId, "Launcher Test", LauncherVariablesKeys.LauncherAppData,
-            LauncherAssemblyInfo.ExecutableFileName, fileVersion, variables);
+        //var testExeId = new ProductComponentIdentity("Launcher.Test", identityVersion);
+        //var testExe = BuildFileComponent(testExeId, "Launcher Test", LauncherVariablesKeys.LauncherAppData,
+        //    LauncherAssemblyInfo.ExecutableFileName, fileVersion, variables);
 
 
         yield return new ComponentGroup(new ProductComponentIdentity(LauncherConstants.ApplicationCoreGroupId, identityVersion), new List<IProductComponentIdentity>
         {
             launcherExeId,
             launcherUpdaterId,
-            testExeId
+           // testExeId
         })
         {
             Name = $"{LauncherAssemblyInfo.ProductName}"
         };
         yield return launcherExecutable;
         yield return launcherUpdater;
-        yield return testExe;
+        //yield return testExe;
     }
 
 
