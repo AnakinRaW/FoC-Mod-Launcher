@@ -3,6 +3,7 @@ using System.IO.Abstractions;
 using System.Threading.Tasks;
 using AnakinRaW.AppUpdaterFramework;
 using AnakinRaW.AppUpdaterFramework.Configuration;
+using AnakinRaW.AppUpdaterFramework.Imaging;
 using AnakinRaW.AppUpdaterFramework.Interaction;
 using AnakinRaW.AppUpdaterFramework.Product;
 using AnakinRaW.AppUpdaterFramework.Product.Manifest;
@@ -28,6 +29,7 @@ using AnakinRaW.CommonUtilities.DownloadManager;
 using FocLauncher.Update.LauncherImplementations;
 using AnakinRaW.CommonUtilities.DownloadManager.Configuration;
 using AnakinRaW.CommonUtilities.Windows;
+using ImageKeys = FocLauncher.Imaging.ImageKeys;
 
 namespace FocLauncher;
 
@@ -101,7 +103,7 @@ internal static class Program
 
     private static void CreateUpdateServices(IServiceCollection serviceCollection)
     {
-        serviceCollection.AddUpdateGui();
+        serviceCollection.AddUpdateGui(ImageKeys.AppIcon);
 
         serviceCollection.AddSingleton<IProductService>(sp => new LauncherProductService(sp));
         serviceCollection.AddSingleton<IBranchManager>(sp => new LauncherBranchManager(sp));

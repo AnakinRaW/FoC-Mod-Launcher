@@ -10,7 +10,7 @@ namespace AnakinRaW.AppUpdaterFramework;
 
 public static class LibraryInitialization
 {
-    public static void AddUpdateGui(this IServiceCollection serviceCollection)
+    public static void AddUpdateGui(this IServiceCollection serviceCollection, ImageKey applicationIcon = default)
     {
         serviceCollection.AddUpdateFramework();
 
@@ -20,5 +20,6 @@ public static class LibraryInitialization
         serviceCollection.Replace(ServiceDescriptor.Scoped<IInteractionHandler>(sp => new DialogInteractionHandler(sp)));
 
         ImageLibrary.Instance.LoadCatalog(ImageCatalog.Instance);
+        AppIconHolder.ApplicationIcon = applicationIcon;
     }
 }

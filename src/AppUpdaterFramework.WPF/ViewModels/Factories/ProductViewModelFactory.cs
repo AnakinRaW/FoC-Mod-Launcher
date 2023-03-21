@@ -52,7 +52,7 @@ internal class ProductViewModelFactory : IProductViewModelFactory
             action = new UpdateCommand(updateCatalog, _serviceProvider, isRepair);
         }
 
-        return new ProductViewModel(product.Name, ImageKeys.StatusOK, stateViewModel, action, _serviceProvider);
+        return new ProductViewModel(product.Name, AppIconHolder.ApplicationIcon, stateViewModel, action, _serviceProvider);
     }
 
     public IProductViewModel Create(IUpdateSession updateSession)
@@ -63,7 +63,7 @@ internal class ProductViewModelFactory : IProductViewModelFactory
         var progressViewModel = CreateProgressViewModel(updateSession);
         var updatingViewModel = new UpdatingStateViewModel(progressViewModel, _serviceProvider);
 
-        return new ProductViewModel(updateSession.Product.Name, ImageKeys.StatusOK, updatingViewModel, cancelCommand, _serviceProvider);
+        return new ProductViewModel(updateSession.Product.Name, AppIconHolder.ApplicationIcon, updatingViewModel, cancelCommand, _serviceProvider);
     }
 
     private IProgressViewModel CreateProgressViewModel(IUpdateSession updateSession)
