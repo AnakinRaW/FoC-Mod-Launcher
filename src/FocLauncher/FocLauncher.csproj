@@ -71,11 +71,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\AppUpdaterFramework.WPF\AppUpdaterFramework.WPF.csproj" />
 		<ProjectReference Include="..\CommonUtilities\CommonUtilities.WPF.ApplicationFramework\CommonUtilities.WPF.ApplicationFramework.csproj" />
 		<ProjectReference Include="..\CommonUtilities\CommonUtilities.WPF.Core\CommonUtilities.WPF.Core.csproj" />
 		<ProjectReference Include="..\CommonUtilities\CommonUtilities.WPF.Imaging\CommonUtilities.WPF.Imaging.csproj" />
-		<ProjectReference Include="..\FocLauncher.AppUpdater\FocLauncher.AppUpdater.csproj" />
+		<ProjectReference Include="..\Updater\AppUpdaterFramework.WPF\AppUpdaterFramework.WPF.csproj" />
+		<ProjectReference Include="..\Updater\AppUpdaterFramework\AppUpdaterFramework.csproj" />
+		<ProjectReference Include="..\Updater\FocLauncher.AppUpdater\AppUpdaterFramework.AppUpdater.csproj" />
 	</ItemGroup>
 
 	<PropertyGroup>

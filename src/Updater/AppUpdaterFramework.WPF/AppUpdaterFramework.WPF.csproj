@@ -30,9 +30,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\..\CommonUtilities\CommonUtilities.Windows\CommonUtilities.Windows.csproj" />
+	  <ProjectReference Include="..\..\CommonUtilities\CommonUtilities.WPF.ApplicationFramework\CommonUtilities.WPF.ApplicationFramework.csproj" />
 	  <ProjectReference Include="..\AppUpdaterFramework\AppUpdaterFramework.csproj" />
-	  <ProjectReference Include="..\CommonUtilities\CommonUtilities.Windows\CommonUtilities.Windows.csproj" />
-	  <ProjectReference Include="..\CommonUtilities\CommonUtilities.WPF.ApplicationFramework\CommonUtilities.WPF.ApplicationFramework.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
