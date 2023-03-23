@@ -42,6 +42,10 @@
 		<PackageReference Include="envdte" Version="17.5.33428.366" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\ExternalUpdater.CLI\ExternalUpdater.CLI.csproj" />
+	</ItemGroup>
+
 	<PropertyGroup>
 		<SatelliteResourceLanguages>en</SatelliteResourceLanguages>
 	</PropertyGroup>

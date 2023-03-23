@@ -23,9 +23,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppUpdaterFramework", "src\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppUpdaterFramework.WPF", "src\Updater\AppUpdaterFramework.WPF\AppUpdaterFramework.WPF.csproj", "{979BDB12-CE8D-4F2E-B126-7B6C22B5CBDE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppUpdaterFramework.AppUpdater", "src\Updater\FocLauncher.AppUpdater\AppUpdaterFramework.AppUpdater.csproj", "{8C756B86-4D32-4A7E-8FD8-15A79972C0E8}"
-EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "AppUpdaterFramework.Shared", "src\Updater\FocLauncher.Shared\AppUpdaterFramework.Shared.shproj", "{948C37FD-3947-41B0-8FA6-8654A0658756}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExternalUpdater", "src\Updater\ExternalUpdater\ExternalUpdater.csproj", "{B844C64F-59E1-4FC3-A9F9-89B0A257D69A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExternalUpdater.CLI", "src\Updater\ExternalUpdater.CLI\ExternalUpdater.CLI.csproj", "{0A4711AE-1EF8-45EF-8569-147A1F1DBFA8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -65,10 +67,14 @@ Global
 		{979BDB12-CE8D-4F2E-B126-7B6C22B5CBDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{979BDB12-CE8D-4F2E-B126-7B6C22B5CBDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{979BDB12-CE8D-4F2E-B126-7B6C22B5CBDE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8C756B86-4D32-4A7E-8FD8-15A79972C0E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8C756B86-4D32-4A7E-8FD8-15A79972C0E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8C756B86-4D32-4A7E-8FD8-15A79972C0E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8C756B86-4D32-4A7E-8FD8-15A79972C0E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B844C64F-59E1-4FC3-A9F9-89B0A257D69A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B844C64F-59E1-4FC3-A9F9-89B0A257D69A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B844C64F-59E1-4FC3-A9F9-89B0A257D69A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B844C64F-59E1-4FC3-A9F9-89B0A257D69A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A4711AE-1EF8-45EF-8569-147A1F1DBFA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A4711AE-1EF8-45EF-8569-147A1F1DBFA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A4711AE-1EF8-45EF-8569-147A1F1DBFA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A4711AE-1EF8-45EF-8569-147A1F1DBFA8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -81,14 +87,15 @@ Global
 		{2CFEAFCF-DE13-42E7-A979-C1EFF9F7591F} = {CAB97A70-AE67-4E45-9418-F2A0EBE7626C}
 		{6B281FB7-AD33-4BB4-90EB-C6E7A91D5EDD} = {AE536C1A-5C2F-4C14-8CCD-0C4D716FB840}
 		{979BDB12-CE8D-4F2E-B126-7B6C22B5CBDE} = {AE536C1A-5C2F-4C14-8CCD-0C4D716FB840}
-		{8C756B86-4D32-4A7E-8FD8-15A79972C0E8} = {AE536C1A-5C2F-4C14-8CCD-0C4D716FB840}
 		{948C37FD-3947-41B0-8FA6-8654A0658756} = {AE536C1A-5C2F-4C14-8CCD-0C4D716FB840}
+		{B844C64F-59E1-4FC3-A9F9-89B0A257D69A} = {AE536C1A-5C2F-4C14-8CCD-0C4D716FB840}
+		{0A4711AE-1EF8-45EF-8569-147A1F1DBFA8} = {AE536C1A-5C2F-4C14-8CCD-0C4D716FB840}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {94E96BB4-E6D8-4E1F-B4A4-4F4B667DC600}
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		src\Updater\FocLauncher.Shared\FocLauncher.Shared.projitems*{8c756b86-4d32-4a7e-8fd8-15a79972c0e8}*SharedItemsImports = 5
 		src\Updater\FocLauncher.Shared\FocLauncher.Shared.projitems*{948c37fd-3947-41b0-8fa6-8654a0658756}*SharedItemsImports = 13
+		src\Updater\FocLauncher.Shared\FocLauncher.Shared.projitems*{b844c64f-59e1-4fc3-a9f9-89b0a257d69a}*SharedItemsImports = 5
 	EndGlobalSection
 EndGlobal

@@ -3,10 +3,11 @@
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
 		<TargetFrameworks>net48;net6.0</TargetFrameworks>
+		<RootNamespace>AnakinRaW.ExternalUpdater</RootNamespace>
+		<AssemblyName>AnakinRaW.ExternalUpdater</AssemblyName>
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<RootNamespace>FocLauncher.AppUpdater</RootNamespace>
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
@@ -30,6 +31,10 @@
 		<PackageReference Include="Serilog.Extensions.Logging.File" Version="3.0.0" />
 		<PackageReference Include="AnakinRaW.CommonUtilities.FileSystem.Windows" Version="4.0.2" />
 		<PackageReference Include="AnakinRaW.CommonUtilities" Version="4.0.2" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\ExternalUpdater.CLI\ExternalUpdater.CLI.csproj" />
 	</ItemGroup>
 
 	<Import Project="..\FocLauncher.Shared\FocLauncher.Shared.projitems" Label="Shared" />

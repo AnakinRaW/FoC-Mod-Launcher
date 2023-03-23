@@ -146,8 +146,8 @@ internal static class Program
         serviceCollection.AddSingleton(windowsFileSystemService);
         serviceCollection.AddSingleton<IWindowsPathService>(windowsPathService);
         serviceCollection.AddSingleton<IPathHelperService>(new PathHelperService(fileSystem));
-        serviceCollection.AddSingleton<ICosturaAssemblyExtractor>(sp =>
-            new FileVersionBasedAssemblyExtractor(LauncherAssemblyInfo.CurrentAssembly, sp));
+        serviceCollection.AddSingleton<ICosturaResourceExtractor>(sp =>
+            new ResourceExtractor(LauncherAssemblyInfo.CurrentAssembly, sp));
 
         var environment = new LauncherEnvironment(fileSystem);
         serviceCollection.AddSingleton<ILauncherEnvironment>(environment);

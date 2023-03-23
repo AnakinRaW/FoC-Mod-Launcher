@@ -1,5 +1,6 @@
 ﻿using AnakinRaW.AppUpdaterFramework.Conditions;
 using AnakinRaW.AppUpdaterFramework.Elevation;
+using AnakinRaW.AppUpdaterFramework.ExternalUpdater;
 using AnakinRaW.AppUpdaterFramework.FileLocking;
 using AnakinRaW.AppUpdaterFramework.Installer;
 using AnakinRaW.AppUpdaterFramework.Interaction;
@@ -50,5 +51,7 @@ public static class LibraryInitialization
 
         serviceCollection.AddSingleton<IWritableDeferredComponentStore>(sp => new DeferredComponentStore(sp));
         serviceCollection.AddSingleton<IDeferredComponentStore>(sp => sp.GetRequiredService<IWritableDeferredComponentStore>());
+
+        serviceCollection.AddSingleton<IExternalUpdaterService>(sp => new ExternalUpdaterService(sp));
     }
 }

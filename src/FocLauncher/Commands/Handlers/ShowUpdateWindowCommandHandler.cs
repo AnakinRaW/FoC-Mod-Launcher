@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.IO;
 using System.Threading.Tasks;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Input;
@@ -6,6 +8,7 @@ using FocLauncher.Utilities;
 using Microsoft.Extensions.DependencyInjection;
 using AnakinRaW.AppUpdaterFramework.ViewModels;
 using AnakinRaW.CommonUtilities.Windows;
+using AnakinRaW.ExternalUpdater.CLI;
 
 namespace FocLauncher.Commands.Handlers;
 
@@ -38,7 +41,15 @@ internal class ShowUpdateWindowCommandHandler : AsyncCommandHandlerBase, IShowUp
     private async Task ExtractAssemblies()
     {
         var env = _serviceProvider.GetRequiredService<ILauncherEnvironment>();
-        await _serviceProvider.GetRequiredService<ICosturaAssemblyExtractor>()
-            .ExtractAssemblyAsync(LauncherConstants.AppUpdaterAssemblyName, env.ApplicationLocalPath);
+        await _serviceProvider.GetRequiredService<ICosturaResourceExtractor>()
+            .ExtractAsync(ExternalUpdaterConstants.AppUpdaterModuleName, env.ApplicationLocalPath, ShouldOverwriteUpdater);
+    }
+
+    private static bool ShouldOverwriteUpdater(string filePath, Stream assemblyStream)
+    {
+        var resourceInfo = ExternalUpdaterAssemblyInformation.FromAssemblyStream(assemblyStream);
+        if (!Version.TryParse(FileVersionInfo.GetVersionInfo(filePath).FileVersion, out var installedVersion))
+            return true;
+        return resourceInfo.FileVersion > installedVersion;
     }
 }

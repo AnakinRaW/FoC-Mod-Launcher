@@ -76,7 +76,8 @@
 		<ProjectReference Include="..\CommonUtilities\CommonUtilities.WPF.Imaging\CommonUtilities.WPF.Imaging.csproj" />
 		<ProjectReference Include="..\Updater\AppUpdaterFramework.WPF\AppUpdaterFramework.WPF.csproj" />
 		<ProjectReference Include="..\Updater\AppUpdaterFramework\AppUpdaterFramework.csproj" />
-		<ProjectReference Include="..\Updater\FocLauncher.AppUpdater\AppUpdaterFramework.AppUpdater.csproj" />
+		<ProjectReference Include="..\Updater\ExternalUpdater.CLI\ExternalUpdater.CLI.csproj" />
+		<ProjectReference Include="..\Updater\ExternalUpdater\ExternalUpdater.csproj" />
 	</ItemGroup>
 
 	<PropertyGroup>

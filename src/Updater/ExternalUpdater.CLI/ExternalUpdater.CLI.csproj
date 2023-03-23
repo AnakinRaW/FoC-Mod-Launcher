@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<RootNamespace>AnakinRaW.ExternalUpdater.CLI</RootNamespace>
+		<AssemblyName>AnakinRaW.ExternalUpdater.CLI</AssemblyName>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<Description>API for the external updater tool.</Description>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Mono.Cecil" Version="0.11.4" PrivateAssets="build;compile" />
+		<PackageReference Include="Semver" Version="2.3.0" />
+	</ItemGroup>
+
+</Project>
