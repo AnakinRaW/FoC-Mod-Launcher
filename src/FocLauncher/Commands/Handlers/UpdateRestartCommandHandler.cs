@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using AnakinRaW.AppUpdaterFramework.ExternalUpdater;
 using AnakinRaW.AppUpdaterFramework.Product;
@@ -27,14 +28,14 @@ internal class UpdateRestartCommandHandler : CommandHandlerBase<ExternalUpdateOp
         if (!updater.Exists)
             throw new FileNotFoundException("Could not find external updater application", updater.FullName);
 
-        try
-        {
 
-        }
-        finally
+        var externalUpdateStartInfo = new ProcessStartInfo(updater.FullName)
         {
-            
-        }
+#if !DEBUG
+                CreateNoWindow = true,
+                WindowStyle = ProcessWindowStyle.Hidden,
+#endif
+        };
 
 
         // TODO: Set registry but remove wait pid
