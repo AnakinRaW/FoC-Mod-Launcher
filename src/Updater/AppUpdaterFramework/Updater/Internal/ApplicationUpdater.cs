@@ -146,13 +146,11 @@ internal class ApplicationUpdater : IApplicationUpdater, IProgressReporter
     private UpdateResult CreateResult(Exception? exception = null)
     {
         var restartType = _serviceProvider.GetRequiredService<IRestartManager>().RequiredRestartType;
-        var requiresElevation = _serviceProvider.GetRequiredService<IElevationManager>().IsElevationRequested;
         var result = new UpdateResult
         {
             Exception = exception,
             IsCanceled = exception?.IsOperationCanceledException() ?? false,
             RestartType = restartType,
-            RequiresElevation = requiresElevation,
             FailedRestore = exception?.IsExceptionType<FailedRestoreException>() ?? false
         };
         return result;

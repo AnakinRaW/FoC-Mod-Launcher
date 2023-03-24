@@ -5,29 +5,15 @@ using Vanara.PInvoke;
 
 namespace AnakinRaW.AppUpdaterFramework.Elevation;
 
-internal sealed class ElevationManager : IElevationManager
+public sealed class ProcessElevation : IProcessElevation
 {
-    public event EventHandler? ElevationRequested;
-
     private readonly Lazy<bool> _isElevated;
-
-    public bool IsElevationRequested { get; private set; }
 
     public bool IsElevated => _isElevated.Value;
 
-    public ElevationManager()
+    public ProcessElevation()
     {
         _isElevated = new Lazy<bool>(IsProcessElevated);
-    }
-
-    public void SetElevationRequest()
-    {
-        if (IsElevationRequested)
-            return;
-        if (IsElevated)
-            throw new InvalidOperationException("Process is already elevated");
-        IsElevationRequested = true;
-        OnElevationRequested();
     }
 
     private static bool IsProcessElevated()
@@ -50,28 +36,5 @@ internal sealed class ElevationManager : IElevationManager
         if (!AdvApi32.OpenProcessToken(process, AdvApi32.TokenAccess.TOKEN_QUERY, out var handle))
             throw new Win32Exception();
         return handle;
-    }
-
-    private void OnElevationRequested()
-    {
-        ElevationRequested?.Invoke(this, EventArgs.Empty);
-    }
-}
-
-internal interface IElevationManager
-{
-    event EventHandler ElevationRequested;
-
-    bool IsElevationRequested { get; }
-
-    bool IsElevated { get; }
-
-    void SetElevationRequest();
-}
-
-internal class ElevationRequireException : UpdateException
-{
-    public ElevationRequireException()
-    {
     }
 }

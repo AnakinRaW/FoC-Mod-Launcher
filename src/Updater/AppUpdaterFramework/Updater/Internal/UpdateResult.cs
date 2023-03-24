@@ -11,10 +11,5 @@ public record UpdateResult
 
     public bool FailedRestore { get; init; }
 
-    public bool RequiresElevation { get; init; }
-
     public RestartType RestartType { get; init; }
-
-
-
 }

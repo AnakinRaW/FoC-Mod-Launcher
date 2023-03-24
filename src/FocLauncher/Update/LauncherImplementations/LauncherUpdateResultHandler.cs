@@ -29,7 +29,7 @@ internal class LauncherUpdateResultHandler : IUpdateResultHandler
 
     public async Task Handle(UpdateResult result)
     {
-        if (result.RequiresElevation)
+        if (result.RestartType == RestartType.ApplicationElevation)
         {
             await HandleElevation();
             return;

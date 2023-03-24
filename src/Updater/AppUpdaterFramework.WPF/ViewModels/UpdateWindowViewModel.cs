@@ -148,10 +148,10 @@ public partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWindow
         {
             var launcher = _productService.GetCurrentInstance();
 
-            if (launcher.State.HasFlag(ProductState.RestartRequired))
+            if (launcher.State == ProductState.RestartRequired)
                 RequiresRestart = true;
 
-            if (launcher.State.HasFlag(ProductState.ElevationRequired))
+            if (launcher.State == ProductState.ElevationRequired)
                 RequiresElevation = true;
 
             _dispatcher.Invoke(() => ProductViewModel =

@@ -3,5 +3,6 @@
 public enum RestartType
 {
     None,
-    ApplicationRestart
+    ApplicationRestart,
+    ApplicationElevation
 }

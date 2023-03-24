@@ -6,6 +6,7 @@ using AnakinRaW.AppUpdaterFramework.Configuration;
 using AnakinRaW.AppUpdaterFramework.Elevation;
 using AnakinRaW.AppUpdaterFramework.Metadata.Product;
 using AnakinRaW.AppUpdaterFramework.Metadata.Update;
+using AnakinRaW.AppUpdaterFramework.Restart;
 using AnakinRaW.AppUpdaterFramework.Updater.Progress;
 using AnakinRaW.AppUpdaterFramework.Updater.Tasks;
 using AnakinRaW.AppUpdaterFramework.Utilities;
@@ -37,7 +38,7 @@ internal sealed class UpdateJob : JobBase, IDisposable
 
     private readonly ParallelTaskRunner _downloadsRunner;
     private readonly TaskRunner _installsRunner;
-    private readonly IElevationManager _elevationManager;
+    private readonly IRestartManager _restartManager;
 
     private bool IsCancelled { get; set; }
 
@@ -50,7 +51,7 @@ internal sealed class UpdateJob : JobBase, IDisposable
         _serviceProvider = serviceProvider;
         _logger = _serviceProvider.GetService<ILoggerFactory>()?.CreateLogger(GetType());
         _installedProduct = updateCatalog.InstalledProduct;
-        _elevationManager = serviceProvider.GetRequiredService<IElevationManager>();
+        _restartManager = serviceProvider.GetRequiredService<IRestartManager>();
 
         _itemsToProcess = new HashSet<IUpdateItem>(updateCatalog.UpdateItems);
 
@@ -66,14 +67,14 @@ internal sealed class UpdateJob : JobBase, IDisposable
     {
         _downloadsRunner.Error += OnError!;
         _installsRunner.Error += OnError!;
-        _elevationManager.ElevationRequested += OnElevationRequest;
+        _restartManager.RestartRequired += OnRestartRequired;
     }
 
     private void UnregisterEvents()
     {
         _downloadsRunner.Error -= OnError!;
         _installsRunner.Error -= OnError!;
-        _elevationManager.ElevationRequested -= OnElevationRequest;
+        _restartManager.RestartRequired -= OnRestartRequired;
     }
 
     protected override bool PlanCore()
@@ -173,7 +174,7 @@ internal sealed class UpdateJob : JobBase, IDisposable
             _logger?.LogTrace("Completed update job.");
         }
 
-        if (_elevationManager.IsElevationRequested)
+        if (_restartManager.RequiredRestartType == RestartType.ApplicationElevation)
             throw new ElevationRequireException();
 
         if (IsCancelled)
@@ -207,10 +208,13 @@ internal sealed class UpdateJob : JobBase, IDisposable
         _disposed = true;
     }
 
-    private void OnElevationRequest(object? sender, EventArgs e)
+    private void OnRestartRequired(object? sender, EventArgs e)
     {
+        if (_restartManager.RequiredRestartType != RestartType.ApplicationElevation)
+            return;
+
         _logger?.LogWarning("Elevation requested. Update gets cancelled");
         _linkedCancellationTokenSource?.Cancel();
-        _elevationManager.ElevationRequested -= OnElevationRequest;
+        _restartManager.RestartRequired -= OnRestartRequired;
     }
 }

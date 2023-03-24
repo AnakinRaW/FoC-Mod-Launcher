@@ -4,7 +4,7 @@ namespace AnakinRaW.AppUpdaterFramework.Restart;
 
 internal interface IRestartManager
 {
-    event EventHandler<EventArgs> RebootRequired;
+    event EventHandler<EventArgs> RestartRequired;
 
     RestartType RequiredRestartType { get; }
 

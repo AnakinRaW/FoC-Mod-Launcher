@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using AnakinRaW.AppUpdaterFramework.Configuration;
 using AnakinRaW.AppUpdaterFramework.Elevation;
 using AnakinRaW.AppUpdaterFramework.Metadata.Component;
+using AnakinRaW.AppUpdaterFramework.Restart;
 using AnakinRaW.AppUpdaterFramework.Storage;
 using AnakinRaW.AppUpdaterFramework.Updater.Progress;
 using AnakinRaW.AppUpdaterFramework.Utilities;
@@ -157,8 +158,8 @@ internal class DownloadTask : SynchronizedTask, IProgressTask
         {
             lastException = ex;
             Logger?.LogError(ex, $"Failed to create download path '{DownloadPath}' due to missing permission: {ex.Message}");
-            var elevationManager = Services.GetRequiredService<IElevationManager>();
-            elevationManager.SetElevationRequest();
+            var restartManager = Services.GetRequiredService<IRestartManager>();
+            restartManager.SetRestart(RestartType.ApplicationElevation);
         }
     }
 

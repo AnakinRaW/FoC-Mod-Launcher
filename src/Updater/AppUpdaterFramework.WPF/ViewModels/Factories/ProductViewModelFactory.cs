@@ -36,7 +36,7 @@ internal class ProductViewModelFactory : IProductViewModelFactory
             if (product.State == ProductState.RestartRequired)
                 action = _commandsFactory.CreateRestart();
 
-            if (product.State.HasFlag(ProductState.ElevationRequired))
+            if (product.State == ProductState.ElevationRequired)
                 action = _commandsFactory.CreateElevate();
 
             stateViewModel = new InstalledStateViewModel(product, _serviceProvider);

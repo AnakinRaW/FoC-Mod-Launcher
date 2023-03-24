@@ -134,8 +134,8 @@ internal class InstallTask : RunnerTask, IProgressTask
             if (Result == InstallResult.FailureElevationRequired)
             {
                 Logger?.LogWarning($"Component '{Component.GetDisplayName()}' was not installed because required permissions are missing.");
-                var elevationManager = Services.GetRequiredService<IElevationManager>();
-                elevationManager.SetElevationRequest();
+                var restartManager = Services.GetRequiredService<IRestartManager>();
+                restartManager.SetRestart(RestartType.ApplicationElevation);
             }
 
             if (Result.IsFailure())

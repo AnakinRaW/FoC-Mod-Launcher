@@ -1,8 +1,5 @@
-﻿using System;
+﻿namespace AnakinRaW.AppUpdaterFramework.Metadata.Product;
 
-namespace AnakinRaW.AppUpdaterFramework.Metadata.Product;
-
-[Flags]
 public enum ProductState
 {
     Installed = 0,
