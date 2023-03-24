@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using AnakinRaW.AppUpdaterFramework.ExternalUpdater;
 using AnakinRaW.AppUpdaterFramework.Interaction;
 using AnakinRaW.AppUpdaterFramework.Restart;
 using AnakinRaW.AppUpdaterFramework.Updater;
@@ -65,9 +66,15 @@ internal class LauncherUpdateResultHandler : IUpdateResultHandler
     {
         var viewModel = _dialogViewModelFactory.CreateRestartViewModel(RestartReason.Update);
         var result = await _dialogService.ShowDialog(viewModel);
+
+        var updateOptions = _serviceProvider.GetRequiredService<IExternalUpdaterService>().CreateOptions();
+
         if (result != UpdateDialogButtonIdentifiers.RestartButtonIdentifier)
+        {
+            // TODO: Set registry
             return;
-        new UpdateRestartCommand(_serviceProvider).Command.Execute(null);
+        }
+        new UpdateRestartCommand(_serviceProvider).Command.Execute(updateOptions);
     }
 
     private async Task HandleElevation()

@@ -44,11 +44,11 @@ internal class LauncherInstalledManifestProvider : IInstalledManifestProvider
 
         var launcherExeId = new ProductComponentIdentity("Launcher.Executable", identityVersion);
         
-        var launcherExecutable = BuildFileComponent(launcherExeId, "FoC Mod Launcher", KnownProductVariablesKeys.InstallDir,
+        var launcherExecutable = BuildFileComponent(launcherExeId, "FoC Mod Launcher", $"[{KnownProductVariablesKeys.InstallDir}]",
             LauncherAssemblyInfo.ExecutableFileName, fileVersion);
 
         var assemblyStream = GetUpdaterAssemblyStream();
-        var updater = _externalUpdaterService.GetExternalUpdaterComponent(assemblyStream, LauncherVariablesKeys.LauncherAppData);
+        var updater = _externalUpdaterService.GetExternalUpdaterComponent(assemblyStream, $"[{LauncherVariablesKeys.LauncherAppData}]");
 
         yield return new ComponentGroup(new ProductComponentIdentity(LauncherConstants.ApplicationCoreGroupId, identityVersion), new List<IProductComponentIdentity>
         {

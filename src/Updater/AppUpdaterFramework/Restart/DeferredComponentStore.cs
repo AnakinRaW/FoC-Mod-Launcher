@@ -15,11 +15,9 @@ internal class DeferredComponentStore : IWritableDeferredComponentStore
 
     public void AddComponent(IInstallableComponent component)
     {
-        throw new NotImplementedException();
     }
 
     public void Clear()
     {
-        throw new NotImplementedException();
     }
 }
