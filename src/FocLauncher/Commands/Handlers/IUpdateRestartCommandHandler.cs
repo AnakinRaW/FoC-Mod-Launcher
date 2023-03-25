@@ -1,8 +1,8 @@
-﻿using AnakinRaW.AppUpdaterFramework.ExternalUpdater;
-using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Input;
+﻿using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Input;
+using AnakinRaW.ExternalUpdater.CLI.Arguments;
 
 namespace FocLauncher.Commands.Handlers;
 
-internal interface IUpdateRestartCommandHandler : ICommandHandler<ExternalUpdateOptions>
+internal interface IUpdateRestartCommandHandler : ICommandHandler<ExternalUpdaterArguments>
 {
 }

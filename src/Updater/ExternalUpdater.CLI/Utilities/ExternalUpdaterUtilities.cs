@@ -9,7 +9,7 @@ namespace AnakinRaW.ExternalUpdater.CLI.Utilities;
 
 internal static class ExternalUpdaterUtilities
 {
-    public static bool IsValidAssembly(Stream assemblyStream, out ExternalUpdaterAssemblyInformation? assemblyInformation)
+    public static bool IsValidAssembly(Stream assemblyStream, out ExternalUpdaterInformation? assemblyInformation)
     {
         assemblyInformation = null;
 
@@ -30,7 +30,7 @@ internal static class ExternalUpdaterUtilities
             var fileVersion = GetFileVersion(assemblyDef);
             var infoVersion = GetInformationalVersion(assemblyDef);
 
-            assemblyInformation = new ExternalUpdaterAssemblyInformation
+            assemblyInformation = new ExternalUpdaterInformation
             {
                 Name = name,
                 FileVersion = fileVersion,

@@ -2,12 +2,12 @@
 using System.Linq;
 using System.Threading.Tasks;
 using AnakinRaW.AppUpdaterFramework.ExternalUpdater;
+using AnakinRaW.AppUpdaterFramework.ExternalUpdater.Registry;
 using AnakinRaW.AppUpdaterFramework.Interaction;
 using AnakinRaW.AppUpdaterFramework.Restart;
 using AnakinRaW.AppUpdaterFramework.Updater;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 using FocLauncher.Commands;
-using FocLauncher.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FocLauncher.Update.LauncherImplementations;
@@ -17,14 +17,14 @@ internal class LauncherUpdateResultHandler : IUpdateResultHandler
     private readonly IServiceProvider _serviceProvider;
     private readonly IQueuedDialogService _dialogService;
     private readonly IUpdateDialogViewModelFactory _dialogViewModelFactory;
-    private readonly ILauncherRegistry _launcherRegistry;
+    private readonly IApplicationUpdaterRegistry _updaterRegistry;
 
     public LauncherUpdateResultHandler(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
         _dialogService = serviceProvider.GetRequiredService<IQueuedDialogService>();
         _dialogViewModelFactory = serviceProvider.GetRequiredService<IUpdateDialogViewModelFactory>();
-        _launcherRegistry = serviceProvider.GetRequiredService<ILauncherRegistry>();
+        _updaterRegistry = serviceProvider.GetRequiredService<IApplicationUpdaterRegistry>();
     }
 
     public async Task Handle(UpdateResult result)
@@ -64,17 +64,15 @@ internal class LauncherUpdateResultHandler : IUpdateResultHandler
 
     private async Task HandleRestartRequired()
     {
+        var updateArguments = _serviceProvider.GetRequiredService<IExternalUpdaterService>().CreateUpdateArguments();
+        var updater = _serviceProvider.GetRequiredService<IExternalUpdaterService>().GetExternalUpdater();
+
+        _updaterRegistry.ScheduleUpdate(updater, updateArguments);
+
         var viewModel = _dialogViewModelFactory.CreateRestartViewModel(RestartReason.Update);
         var result = await _dialogService.ShowDialog(viewModel);
-
-        var updateOptions = _serviceProvider.GetRequiredService<IExternalUpdaterService>().CreateOptions();
-
-        if (result != UpdateDialogButtonIdentifiers.RestartButtonIdentifier)
-        {
-            // TODO: Set registry
-            return;
-        }
-        new UpdateRestartCommand(_serviceProvider).Command.Execute(updateOptions);
+        if (result == UpdateDialogButtonIdentifiers.RestartButtonIdentifier)
+            new UpdateRestartCommand(updateArguments, _serviceProvider).Command.Execute(null);
     }
 
     private async Task HandleElevation()
@@ -88,7 +86,7 @@ internal class LauncherUpdateResultHandler : IUpdateResultHandler
 
     private async Task HandleRestore()
     {
-        _launcherRegistry.Restore = true;
+        _updaterRegistry.ScheduleRestore();
         var viewModel = _dialogViewModelFactory.CreateRestartViewModel(RestartReason.FailedRestore);
         await _dialogService.ShowDialog(viewModel);
     }

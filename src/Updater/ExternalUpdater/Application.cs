@@ -5,13 +5,16 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using AnakinRaW.ExternalUpdater.CLI;
 using FocLauncher.Shared;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+#if NETFRAMEWORK
 using AnakinRaW.CommonUtilities;
+#endif
 
-namespace FocLauncher.AppUpdater;
+namespace AnakinRaW.ExternalUpdater;
 
 internal class Application
 {

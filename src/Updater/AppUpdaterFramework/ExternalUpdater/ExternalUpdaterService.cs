@@ -6,6 +6,7 @@ using AnakinRaW.AppUpdaterFramework.Conditions;
 using AnakinRaW.AppUpdaterFramework.Metadata.Component;
 using AnakinRaW.AppUpdaterFramework.Product;
 using AnakinRaW.ExternalUpdater.CLI;
+using AnakinRaW.ExternalUpdater.CLI.Arguments;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AnakinRaW.AppUpdaterFramework.ExternalUpdater;
@@ -17,6 +18,7 @@ internal class ExternalUpdaterService : IExternalUpdaterService
 
     private readonly IFileSystem _fileSystem;
     private readonly IProductService _productService;
+    private readonly IExternalUpdaterLauncher _launcher;
 
     public string UpdaterIdentity => Identity;
 
@@ -24,11 +26,12 @@ internal class ExternalUpdaterService : IExternalUpdaterService
     {
         _fileSystem = serviceProvider.GetRequiredService<IFileSystem>();
         _productService = serviceProvider.GetRequiredService<IProductService>();
+        _launcher = serviceProvider.GetRequiredService<IExternalUpdaterLauncher>();
     }
 
     public IInstallableComponent GetExternalUpdaterComponent(Stream assemblyStream, string installDirectory)
     {
-        var assemblyInformation = ExternalUpdaterAssemblyInformation.FromAssemblyStream(assemblyStream);
+        var assemblyInformation = ExternalUpdaterInformation.FromAssemblyStream(assemblyStream);
        
         var fileVersion = assemblyInformation.FileVersion;
         var filePath = _fileSystem.Path.Combine(installDirectory, ExternalUpdaterConstants.AppUpdaterModuleName);
@@ -47,9 +50,14 @@ internal class ExternalUpdaterService : IExternalUpdaterService
         };
     }
 
-    public ExternalUpdateOptions CreateOptions()
+    public UpdateArguments CreateUpdateArguments()
     {
-        return new ExternalUpdateOptions();
+        return null;
+    }
+
+    public RestartArguments CreateRestartArguments()
+    {
+        return null;
     }
 
     public IFileInfo GetExternalUpdater()
@@ -59,20 +67,10 @@ internal class ExternalUpdaterService : IExternalUpdaterService
 
         return updaterComponent.GetFile(_fileSystem, _productService.GetCurrentInstance().Variables);
     }
-}
 
-public interface IExternalUpdaterService
-{
-    string UpdaterIdentity { get; }
-
-    IInstallableComponent GetExternalUpdaterComponent(Stream assemblyStream, string installDirectory);
-
-    ExternalUpdateOptions CreateOptions();
-
-    IFileInfo GetExternalUpdater();
-}
-
-public record ExternalUpdateOptions
-{
-
+    public void Launch(ExternalUpdaterArguments arguments)
+    {
+        var updater = GetExternalUpdater();
+        _launcher.Start(updater, arguments);
+    }
 }

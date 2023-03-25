@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO.Abstractions;
+using AnakinRaW.AppUpdaterFramework.ExternalUpdater;
 using AnakinRaW.AppUpdaterFramework.FileLocking.Interaction;
 using AnakinRaW.AppUpdaterFramework.Interaction;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Input;
 using FocLauncher.Commands;
 using FocLauncher.ViewModels.Dialogs;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace FocLauncher.Update.LauncherImplementations;
 
@@ -21,7 +23,8 @@ public class LauncherUpdateInteractionFactory : IUpdateCommandsFactory, IUpdateD
 
     public ICommandDefinition CreateRestart()
     {
-        return new UpdateRestartCommand(_serviceProvider);
+        var arguments = _serviceProvider.GetRequiredService<IExternalUpdaterService>().CreateUpdateArguments();
+        return new UpdateRestartCommand(arguments, _serviceProvider);
     }
 
     public ICommandDefinition CreateElevate()

@@ -47,7 +47,7 @@ internal class ShowUpdateWindowCommandHandler : AsyncCommandHandlerBase, IShowUp
 
     private static bool ShouldOverwriteUpdater(string filePath, Stream assemblyStream)
     {
-        var resourceInfo = ExternalUpdaterAssemblyInformation.FromAssemblyStream(assemblyStream);
+        var resourceInfo = ExternalUpdaterInformation.FromAssemblyStream(assemblyStream);
         if (!Version.TryParse(FileVersionInfo.GetVersionInfo(filePath).FileVersion, out var installedVersion))
             return true;
         return resourceInfo.FileVersion > installedVersion;

@@ -9,7 +9,6 @@
     <Import_RootNamespace>FocLauncher.Shared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)ExternalUpdaterResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LauncherUpdateItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LauncherUpdaterOptions.cs" />
   </ItemGroup>

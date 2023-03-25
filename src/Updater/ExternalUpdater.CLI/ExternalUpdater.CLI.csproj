@@ -19,8 +19,16 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="CommandLineParser" Version="2.9.1" />
 		<PackageReference Include="Mono.Cecil" Version="0.11.4" PrivateAssets="build;compile" />
 		<PackageReference Include="Semver" Version="2.3.0" />
+		<PackageReference Include="TestableIO.System.IO.Abstractions" Version="19.2.4" />
+		<PackageReference Include="Validation" Version="2.5.51" PrivateAssets="build;compile" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\CommonUtilities\CommonUtilities.Windows\CommonUtilities.Windows.csproj" />
 	</ItemGroup>
 
 </Project>

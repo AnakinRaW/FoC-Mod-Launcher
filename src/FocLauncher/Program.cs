@@ -3,6 +3,7 @@ using System.IO.Abstractions;
 using System.Threading.Tasks;
 using AnakinRaW.AppUpdaterFramework;
 using AnakinRaW.AppUpdaterFramework.Configuration;
+using AnakinRaW.AppUpdaterFramework.ExternalUpdater;
 using AnakinRaW.AppUpdaterFramework.Interaction;
 using AnakinRaW.AppUpdaterFramework.Product;
 using AnakinRaW.AppUpdaterFramework.Product.Manifest;
@@ -29,6 +30,8 @@ using FocLauncher.Update.LauncherImplementations;
 using AnakinRaW.CommonUtilities.DownloadManager.Configuration;
 using AnakinRaW.CommonUtilities.Windows;
 using ImageKeys = FocLauncher.Imaging.ImageKeys;
+using AnakinRaW.ExternalUpdater.CLI;
+using AnakinRaW.AppUpdaterFramework.ExternalUpdater.Registry;
 
 namespace FocLauncher;
 
@@ -45,10 +48,19 @@ internal static class Program
         _serviceCollection = CreateCoreServices();
         _coreServices = _serviceCollection.BuildServiceProvider();
 
+        var updaterResult = ExternalUpdaterResult.NoUpdate;
+        if (args.Length >= 1)
+        {
+            var argument = args[0];
+            if (int.TryParse(argument, out var value) && Enum.IsDefined(typeof(ExternalUpdaterResult), value))
+                updaterResult = (ExternalUpdaterResult)value;
+            var registry = _coreServices.GetRequiredService<IApplicationUpdaterRegistry>();
+            new ExternalUpdaterResultHandler(registry).Handle(updaterResult);
+        }
+
         // Since logging directory is not yet assured, we cannot run under the global exception handler.
         new AppRestoreHandler(_coreServices).RestoreIfNecessary();
         
-        // TODO: Parse args
         int exitCode;
         using (GetUnhandledExceptionHandler()) 
             exitCode = Execute();
@@ -60,7 +72,6 @@ internal static class Program
         var logger = _coreServices.GetRequiredService<ILoggerFactory>().CreateLogger(typeof(Program));
         logger.LogTrace($"FoC Mod Launcher Version: {LauncherAssemblyInfo.InformationalVersion}");
         logger.LogTrace($"Raw Command line: {Environment.CommandLine}");
-        // TODO: Log parsed CMD
         var exitCode = ExecuteInternal(logger);
         logger.LogTrace($"Exit Code: {exitCode}");
         return exitCode;
@@ -71,6 +82,25 @@ internal static class Program
         BuildLauncherServices(_serviceCollection);
 
         var launcherServices = _serviceCollection.BuildServiceProvider();
+
+        var updateRegistry = launcherServices.GetRequiredService<IApplicationUpdaterRegistry>();
+
+
+        if (updateRegistry.RequiresUpdate)
+        {
+            try
+            {
+                logger.LogInformation("Update required: Running external updater...");
+                launcherServices.GetRequiredService<IRegistryExternalUpdaterLauncher>().Launch();
+                logger.LogInformation("External updater running. Closing application!");
+                return 0;
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, $"Failed to run update. Starting main application normally: {e.Message}");
+            }
+        }
+
         var exitCode = new LauncherApplication(launcherServices).Run();
         logger.LogTrace($"Closing the launcher with exit code {exitCode}");
         return exitCode;
@@ -126,6 +156,8 @@ internal static class Program
         serviceCollection.AddSingleton<IUpdateDialogViewModelFactory>(sp => sp.GetRequiredService<LauncherUpdateInteractionFactory>());
         serviceCollection.AddSingleton<IUpdateCommandsFactory>(sp => sp.GetRequiredService<LauncherUpdateInteractionFactory>());
         serviceCollection.AddSingleton<IUpdateResultHandler>(sp => new LauncherUpdateResultHandler(sp));
+
+        serviceCollection.AddSingleton<IExternalUpdaterLauncher>(sp => new ExternalUpdaterLauncher(sp));
     }
 
     private static IDownloadManagerConfiguration CreateDownloadConfiguration()
@@ -153,9 +185,12 @@ internal static class Program
         serviceCollection.AddSingleton<ILauncherEnvironment>(environment);
 
         SetLogging(serviceCollection, fileSystem);
+
         serviceCollection.AddTransient<IRegistry>(_ => new WindowsRegistry());
         serviceCollection.AddSingleton<ILauncherRegistry>(sp => new LauncherRegistry(sp));
-
+        
+        serviceCollection.AddSingleton<IApplicationUpdaterRegistry>(sp => new ApplicationUpdaterRegistry(LauncherRegistry.LauncherRegistryPath, sp));
+        
         serviceCollection.AddSingleton<IShowUpdateWindowCommandHandler>(sp => new ShowUpdateWindowCommandHandler(sp));
 
         return serviceCollection;

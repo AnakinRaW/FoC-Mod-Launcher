@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.IO.Abstractions;
 using System.Linq;
 using AnakinRaW.CommonUtilities.FileSystem;
+using AnakinRaW.ExternalUpdater.CLI;
 using FocLauncher.Shared;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
-namespace FocLauncher.AppUpdater;
+namespace AnakinRaW.ExternalUpdater;
 
 internal class ExternalUpdater
 {

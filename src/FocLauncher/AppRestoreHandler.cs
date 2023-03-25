@@ -3,18 +3,18 @@ using System.IO;
 using System.Security.AccessControl;
 using System.Windows.Input;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
-using FocLauncher.Services;
 using Microsoft.Extensions.DependencyInjection;
 using AnakinRaW.CommonUtilities.FileSystem;
 using AnakinRaW.CommonUtilities.FileSystem.Windows;
 using FocLauncher.ViewModels.Dialogs;
 using Validation;
+using AnakinRaW.AppUpdaterFramework.ExternalUpdater.Registry;
 
 namespace FocLauncher;
 
 internal class AppRestoreHandler
 {
-    private readonly ILauncherRegistry _registry;
+    private readonly IApplicationUpdaterRegistry _registry;
     private readonly IFileSystemService _fileSystemService;
     private readonly ILauncherEnvironment _environment;
     private readonly IWindowsPathService _pathService;
@@ -22,7 +22,7 @@ internal class AppRestoreHandler
     public AppRestoreHandler(IServiceProvider services)
     {
         Requires.NotNull(services, nameof(services));
-        _registry = services.GetRequiredService<ILauncherRegistry>();
+        _registry = services.GetRequiredService<IApplicationUpdaterRegistry>();
         _fileSystemService = services.GetRequiredService<IFileSystemService>();
         _environment = services.GetRequiredService<ILauncherEnvironment>();
         _pathService = services.GetRequiredService<IWindowsPathService>();

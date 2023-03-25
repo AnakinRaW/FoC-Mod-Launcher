@@ -19,6 +19,8 @@ public static class LibraryInitialization
 
         serviceCollection.Replace(ServiceDescriptor.Scoped<IInteractionHandler>(sp => new DialogInteractionHandler(sp)));
 
+
+
         ImageLibrary.Instance.LoadCatalog(ImageCatalog.Instance);
         AppIconHolder.ApplicationIcon = applicationIcon;
     }

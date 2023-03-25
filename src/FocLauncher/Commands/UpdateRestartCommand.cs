@@ -2,6 +2,8 @@
 using System.Windows.Input;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Input;
 using AnakinRaW.CommonUtilities.Wpf.Imaging;
+using AnakinRaW.CommonUtilities.Wpf.Input;
+using AnakinRaW.ExternalUpdater.CLI.Arguments;
 using FocLauncher.Commands.Handlers;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -14,9 +16,10 @@ internal class UpdateRestartCommand : CommandDefinition
     public override ICommand Command { get; }
     public override string? Tooltip => null;
 
-    public UpdateRestartCommand(IServiceProvider serviceProvider)
+    public UpdateRestartCommand(ExternalUpdaterArguments updaterArguments, IServiceProvider serviceProvider)
     {
         var handler = serviceProvider.GetRequiredService<IUpdateRestartCommandHandler>();
-        Command = handler.Command;
+        Command = new DelegateCommand(() => handler.Command.Execute(updaterArguments),
+            () => handler.Command.CanExecute(updaterArguments));
     }
 }

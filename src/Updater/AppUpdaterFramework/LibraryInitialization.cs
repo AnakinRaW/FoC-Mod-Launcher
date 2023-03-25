@@ -10,7 +10,9 @@ using AnakinRaW.AppUpdaterFramework.Storage;
 using AnakinRaW.AppUpdaterFramework.Updater;
 using AnakinRaW.AppUpdaterFramework.Utilities;
 using AnakinRaW.CommonUtilities.Hashing;
+using AnakinRaW.ExternalUpdater.CLI;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace AnakinRaW.AppUpdaterFramework;
 
@@ -53,5 +55,7 @@ public static class LibraryInitialization
         serviceCollection.AddSingleton<IDeferredComponentStore>(sp => sp.GetRequiredService<IWritableDeferredComponentStore>());
 
         serviceCollection.AddSingleton<IExternalUpdaterService>(sp => new ExternalUpdaterService(sp));
+
+        serviceCollection.TryAddSingleton<IExternalUpdaterLauncher>(sp => new ExternalUpdaterLauncher(sp));
     }
 }

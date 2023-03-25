@@ -5,9 +5,9 @@ using Semver;
 
 namespace AnakinRaW.ExternalUpdater.CLI;
 
-public record ExternalUpdaterAssemblyInformation
+public record ExternalUpdaterInformation
 {
-    internal ExternalUpdaterAssemblyInformation()
+    internal ExternalUpdaterInformation()
     {
     }
 
@@ -17,7 +17,7 @@ public record ExternalUpdaterAssemblyInformation
 
     public required SemVersion InformationalVersion { get; init; }
 
-    public static ExternalUpdaterAssemblyInformation FromAssemblyStream(Stream assemblyStream)
+    public static ExternalUpdaterInformation FromAssemblyStream(Stream assemblyStream)
     {
         if (!ExternalUpdaterUtilities.IsValidAssembly(assemblyStream, out var assemblyInformation))
             throw new BadImageFormatException("The given stream does not represent the external updater binary.");

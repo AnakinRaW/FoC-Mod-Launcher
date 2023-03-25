@@ -1,9 +1,6 @@
-﻿using System;
+﻿namespace AnakinRaW.ExternalUpdater.CLI;
 
-namespace FocLauncher.Shared;
-
-[Serializable]
-internal enum ExternalUpdaterResult
+public enum ExternalUpdaterResult
 {
     UpdateFailedNoRestore = -2,
     UpdateFailedWithRestore = -1,

@@ -1,43 +1,26 @@
 ﻿using System;
-using System.Diagnostics;
-using System.IO;
 using AnakinRaW.AppUpdaterFramework.ExternalUpdater;
-using AnakinRaW.AppUpdaterFramework.Product;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Input;
+using AnakinRaW.ExternalUpdater.CLI.Arguments;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FocLauncher.Commands.Handlers;
 
-internal class UpdateRestartCommandHandler : CommandHandlerBase<ExternalUpdateOptions>, IUpdateRestartCommandHandler
+internal class UpdateRestartCommandHandler : CommandHandlerBase<ExternalUpdaterArguments>, IUpdateRestartCommandHandler
 {
     private readonly IExternalUpdaterService _updaterService;
-    private readonly IProductService _productService;
     private readonly IApplicationShutdownService _shutdownService;
 
     public UpdateRestartCommandHandler(IServiceProvider serviceProvider)
     {
         _updaterService = serviceProvider.GetRequiredService<IExternalUpdaterService>();
-        _productService = serviceProvider.GetRequiredService<IProductService>();
         _shutdownService = serviceProvider.GetRequiredService<IApplicationShutdownService>();
     }
 
-    public override void Handle(ExternalUpdateOptions parameter)
+    public override void Handle(ExternalUpdaterArguments arguments)
     {
-        var updater = _updaterService.GetExternalUpdater();
-        if (!updater.Exists)
-            throw new FileNotFoundException("Could not find external updater application", updater.FullName);
-
-
-        var externalUpdateStartInfo = new ProcessStartInfo(updater.FullName)
-        {
-#if !DEBUG
-                CreateNoWindow = true,
-                WindowStyle = ProcessWindowStyle.Hidden,
-#endif
-        };
-
-
-        // TODO: Set registry but remove wait pid
+        _updaterService.Launch(arguments);
+        _shutdownService.Shutdown(0);
     }
 }
