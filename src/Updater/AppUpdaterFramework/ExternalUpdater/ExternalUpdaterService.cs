@@ -55,7 +55,7 @@ internal class ExternalUpdaterService : IExternalUpdaterService
         return null;
     }
 
-    public RestartArguments CreateRestartArguments()
+    public RestartArguments CreateRestartArguments(bool elevate)
     {
         return null;
     }

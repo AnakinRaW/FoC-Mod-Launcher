@@ -16,8 +16,6 @@ internal static class ImageKeys
 
     public static ImageKey AppIcon => new() { CatalogType = typeof(ImageCatalog), Name = nameof(AppIcon) };
 
-    public static ImageKey UACShield => new() { CatalogType = typeof(ImageCatalog), Name = nameof(UACShield) };
-
 
     // Images
 

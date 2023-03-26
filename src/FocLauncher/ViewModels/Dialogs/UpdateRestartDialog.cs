@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using AnakinRaW.AppUpdaterFramework.Imaging;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog.Buttons;
 using AnakinRaW.CommonUtilities.Wpf.Imaging;
@@ -33,7 +34,7 @@ internal class UpdateRestartDialog : UpdateImageDialog, IUpdateRestartDialog
         var buttons = new List<IButtonViewModel>
         {
             buttonFactory.CreateCustom(RestartButtonIdentifier,
-                DialogButtonCommandsDefinitions.Create("Restart", _restartElevated ? ImageKeys.UACShield : default)),
+                DialogButtonCommandsDefinitions.Create("Restart", _restartElevated ? UpdaterImageKeys.UACShield : default)),
             buttonFactory.CreateCustom(NotNowButtonIdentifier, DialogButtonCommandsDefinitions.Create("Not Now"), true)
         };
         return buttons;

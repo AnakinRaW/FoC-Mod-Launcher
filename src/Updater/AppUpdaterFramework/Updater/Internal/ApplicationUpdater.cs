@@ -1,8 +1,8 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using AnakinRaW.AppUpdaterFramework.Elevation;
 using AnakinRaW.AppUpdaterFramework.Metadata.Update;
 using AnakinRaW.AppUpdaterFramework.Restart;
 using AnakinRaW.AppUpdaterFramework.Storage;
@@ -117,13 +117,15 @@ internal class ApplicationUpdater : IApplicationUpdater, IProgressReporter
             {
                 var backupManager = _serviceProvider.GetRequiredService<IBackupManager>();
                 backupManager.RestoreAll();
+
+                throw new FileNotFoundException();
             }
             catch (Exception ex)
             {
-                _serviceProvider.GetRequiredService<IRestartManager>().SetRestart(RestartType.ApplicationRestart);
                 _serviceProvider.GetRequiredService<IWritableDeferredComponentStore>().Clear();
+                _serviceProvider.GetRequiredService<IRestartManager>().SetRestart(RestartType.ApplicationRestart);
 
-                var e = new FailedRestoreException(ex);
+               var e = new FailedRestoreException(ex);
                 _logger?.LogTrace(e, $"Failed to restore from failed update : {e.Message}");
                 throw e;
             }

@@ -11,14 +11,14 @@ public sealed class ApplicationUpdaterRegistry : IApplicationUpdaterRegistry
 {
     private readonly IRegistryKey _registryKey;
 
-    public bool Restore
+    public bool Reset
     {
         get
         {
-            _registryKey.GetValueOrDefault(nameof(Restore), out var value, false);
+            _registryKey.GetValueOrDefault(nameof(Reset), out var value, false);
             return value;
         }
-        private set => _registryKey.SetValue(nameof(Restore), value);
+        private set => _registryKey.SetValue(nameof(Reset), value);
     }
 
     public bool RequiresUpdate
@@ -72,14 +72,14 @@ public sealed class ApplicationUpdaterRegistry : IApplicationUpdaterRegistry
         _registryKey = registryKey ?? throw new InvalidOperationException("Unable to create Launcher registry. Missing rights?");
     }
 
-    public void ScheduleRestore()
+    public void ScheduleReset()
     {
-        Restore = true;
+        Reset = true;
     }
 
-    public void Reset()
+    public void Clear()
     {
-        _registryKey.DeleteValue(nameof(Restore));
+        _registryKey.DeleteValue(nameof(Reset));
         _registryKey.DeleteValue(nameof(RequiresUpdate));
         _registryKey.DeleteValue(nameof(UpdateCommandArgs));
         _registryKey.DeleteValue(nameof(UpdaterPath));

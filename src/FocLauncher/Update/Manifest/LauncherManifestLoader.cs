@@ -10,11 +10,10 @@ using AnakinRaW.AppUpdaterFramework.Metadata.Component.Catalog;
 using AnakinRaW.AppUpdaterFramework.Metadata.Product;
 using AnakinRaW.AppUpdaterFramework.Product;
 using AnakinRaW.AppUpdaterFramework.Product.Manifest;
-using FocLauncher.Update.Manifest;
 using Microsoft.Extensions.DependencyInjection;
 using Semver;
 
-namespace FocLauncher.Update.LauncherImplementations;
+namespace FocLauncher.Update.Manifest;
 
 internal class LauncherManifestLoader : ManifestLoaderBase
 {

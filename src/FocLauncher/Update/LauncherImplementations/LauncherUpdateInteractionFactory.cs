@@ -1,35 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO.Abstractions;
-using AnakinRaW.AppUpdaterFramework.ExternalUpdater;
 using AnakinRaW.AppUpdaterFramework.FileLocking.Interaction;
 using AnakinRaW.AppUpdaterFramework.Interaction;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
-using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Input;
-using FocLauncher.Commands;
 using FocLauncher.ViewModels.Dialogs;
-using Microsoft.Extensions.DependencyInjection;
+using Validation;
 
 namespace FocLauncher.Update.LauncherImplementations;
 
-public class LauncherUpdateInteractionFactory : IUpdateCommandsFactory, IUpdateDialogViewModelFactory
+public class LauncherUpdateInteractionFactory : IUpdateDialogViewModelFactory
 {
     private readonly IServiceProvider _serviceProvider;
 
     public LauncherUpdateInteractionFactory(IServiceProvider serviceProvider)
     {
+        Requires.NotNull(serviceProvider, nameof(serviceProvider));
         _serviceProvider = serviceProvider;
-    }
-
-    public ICommandDefinition CreateRestart()
-    {
-        var arguments = _serviceProvider.GetRequiredService<IExternalUpdaterService>().CreateUpdateArguments();
-        return new UpdateRestartCommand(arguments, _serviceProvider);
-    }
-
-    public ICommandDefinition CreateElevate()
-    {
-        return new ElevateApplicationCommand(_serviceProvider);
     }
 
     public IDialogViewModel CreateErrorViewModel(string message)

@@ -12,7 +12,7 @@ internal class ImageCatalog : ImmutableImageCatalog
     public static ImageDefinition StatusErrorDefinition => new()
     {
         Kind = ImageFileKind.Xaml,
-        ImakgeKey = ImageKeys.StatusError,
+        ImakgeKey = UpdaterImageKeys.StatusError,
         Source = ResourcesUriCreator.Create("StatusError", ImageFileKind.Xaml),
         CanTheme = true
     };
@@ -20,8 +20,16 @@ internal class ImageCatalog : ImmutableImageCatalog
     public static ImageDefinition StatusOkDefinition => new()
     {
         Kind = ImageFileKind.Xaml,
-        ImakgeKey = ImageKeys.StatusOK,
+        ImakgeKey = UpdaterImageKeys.StatusOK,
         Source = ResourcesUriCreator.Create("StatusOK", ImageFileKind.Xaml),
+        CanTheme = true
+    };
+
+    public static ImageDefinition UACShieldDefinition => new()
+    {
+        Kind = ImageFileKind.Xaml,
+        ImakgeKey = UpdaterImageKeys.UACShield,
+        Source = ResourcesUriCreator.Create("UacShield", ImageFileKind.Xaml),
         CanTheme = true
     };
 
@@ -30,6 +38,7 @@ internal class ImageCatalog : ImmutableImageCatalog
     {
         StatusErrorDefinition,
         StatusOkDefinition,
+        UACShieldDefinition
     };
 
     private ImageCatalog() : base(Definitions)

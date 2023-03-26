@@ -18,7 +18,7 @@
         </Grid.RowDefinitions>
         <controls:ThemedProgressBar Grid.Row="0" DataContext="{Binding ProgressViewModel.DownloadProgressBarViewModel}"
                                     FooterMessage="{Binding FooterText}" Value="{Binding ProgressValue}" 
-                                    FinishedIcon="{x:Static imaging:ImageKeys.StatusOK}"
+                                    FinishedIcon="{x:Static imaging:UpdaterImageKeys.StatusOK}"
                                     HeaderLeft="{Binding LeftHeaderText}"
                                     HeaderRight="{Binding RightHeaderText}"/>
         <TextBlock Grid.Row="1" Margin="0,4,0,0" TextTrimming="CharacterEllipsis" TextWrapping="Wrap"
@@ -26,7 +26,7 @@
                    Visibility="{Binding ProgressViewModel.ShowDownloadThenInstallText, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}"/>
         <controls:ThemedProgressBar Grid.Row="1" Margin="0,4,0,0" DataContext="{Binding ProgressViewModel.InstallProgressBarViewModel}"
                                     FooterMessage="{Binding FooterText}" Value="{Binding ProgressValue}" 
-                                    FinishedIcon="{x:Static imaging:ImageKeys.StatusOK}"
+                                    FinishedIcon="{x:Static imaging:UpdaterImageKeys.StatusOK}"
                                     HeaderLeft="{Binding LeftHeaderText}"
                                     Visibility="{Binding Path=DataContext.ProgressViewModel.ShowInstallProgressBar, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
                                     HeaderRight="{Binding RightHeaderText}"/>

@@ -1,8 +1,8 @@
 ﻿using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Input;
 
-namespace AnakinRaW.AppUpdaterFramework.Interaction;
+namespace AnakinRaW.AppUpdaterFramework.Commands.Factories;
 
-public interface IUpdateCommandsFactory
+internal interface IUpdateCommandsFactory
 {
     ICommandDefinition CreateRestart();
 

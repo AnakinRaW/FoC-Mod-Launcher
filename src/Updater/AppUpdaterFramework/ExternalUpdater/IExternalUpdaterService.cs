@@ -13,7 +13,7 @@ public interface IExternalUpdaterService
 
     UpdateArguments CreateUpdateArguments();
 
-    RestartArguments CreateRestartArguments();
+    RestartArguments CreateRestartArguments(bool elevate = false);
 
     IFileInfo GetExternalUpdater();
 

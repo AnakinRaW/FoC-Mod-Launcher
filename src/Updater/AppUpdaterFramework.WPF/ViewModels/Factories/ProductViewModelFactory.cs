@@ -1,7 +1,8 @@
 ﻿using System;
 using AnakinRaW.AppUpdaterFramework.Commands;
+using AnakinRaW.AppUpdaterFramework.Commands.Factories;
+using AnakinRaW.AppUpdaterFramework.Configuration;
 using AnakinRaW.AppUpdaterFramework.Imaging;
-using AnakinRaW.AppUpdaterFramework.Interaction;
 using AnakinRaW.AppUpdaterFramework.Metadata.Product;
 using AnakinRaW.AppUpdaterFramework.Metadata.Update;
 using AnakinRaW.AppUpdaterFramework.Updater;
@@ -19,12 +20,14 @@ internal class ProductViewModelFactory : IProductViewModelFactory
     private readonly IServiceProvider _serviceProvider;
     private readonly IAppDispatcher _dispatcher;
     private readonly IUpdateCommandsFactory _commandsFactory;
+    private readonly IUpdateConfiguration _updateConfiguration;
 
     public ProductViewModelFactory(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
         _dispatcher = serviceProvider.GetRequiredService<IAppDispatcher>();
         _commandsFactory = serviceProvider.GetRequiredService<IUpdateCommandsFactory>();
+        _updateConfiguration = serviceProvider.GetRequiredService<IUpdateConfigurationProvider>().GetConfiguration();
     }
 
     public IProductViewModel Create(IInstalledProduct product, IUpdateCatalog? updateCatalog)
@@ -33,13 +36,26 @@ internal class ProductViewModelFactory : IProductViewModelFactory
         ICommandDefinition? action = null;
         if (updateCatalog is null || updateCatalog.Action == UpdateCatalogAction.None)
         {
-            if (product.State == ProductState.RestartRequired)
-                action = _commandsFactory.CreateRestart();
-
-            if (product.State == ProductState.ElevationRequired)
-                action = _commandsFactory.CreateElevate();
-
-            stateViewModel = new InstalledStateViewModel(product, _serviceProvider);
+            if (product.State != ProductState.Installed && !_updateConfiguration.SupportsRestart)
+            {
+                var message = product.State switch
+                {
+                    ProductState.RestartRequired => "The application needs to be restarted",
+                    ProductState.ElevationRequired => "The application needs to run with admin rights",
+                    _ => "The application needs to be restarted"
+                };
+                stateViewModel = new ErrorStateViewModel(product, message, _serviceProvider);
+            }
+            else
+            {
+                action = product.State switch
+                {
+                    ProductState.RestartRequired => _commandsFactory.CreateRestart(),
+                    ProductState.ElevationRequired => _commandsFactory.CreateElevate(),
+                    _ => action
+                };
+                stateViewModel = new InstalledStateViewModel(product, _serviceProvider);
+            }
         }
         else if (updateCatalog.Action is UpdateCatalogAction.Install or UpdateCatalogAction.Uninstall)
         {

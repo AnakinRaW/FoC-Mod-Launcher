@@ -5,7 +5,7 @@ using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Input;
 using AnakinRaW.ExternalUpdater.CLI.Arguments;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace FocLauncher.Commands.Handlers;
+namespace AnakinRaW.AppUpdaterFramework.Commands.Handlers;
 
 internal class UpdateRestartCommandHandler : CommandHandlerBase<ExternalUpdaterArguments>, IUpdateRestartCommandHandler
 {

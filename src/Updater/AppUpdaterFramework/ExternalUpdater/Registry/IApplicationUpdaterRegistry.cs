@@ -5,10 +5,7 @@ namespace AnakinRaW.AppUpdaterFramework.ExternalUpdater.Registry;
 
 public interface IApplicationUpdaterRegistry
 {
-    /// <summary>
-    /// Indicates the launcher shall get restored on next start.
-    /// </summary>
-    bool Restore { get; }
+    bool Reset { get; }
 
     bool RequiresUpdate { get; }
 
@@ -16,9 +13,9 @@ public interface IApplicationUpdaterRegistry
 
     string? UpdaterPath { get; }
 
-    void ScheduleRestore();
+    void ScheduleReset();
 
-    void Reset();
+    void Clear();
 
     void ScheduleUpdate(IFileInfo updater, ExternalUpdaterArguments arguments);
 }

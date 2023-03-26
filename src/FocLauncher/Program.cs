@@ -2,6 +2,7 @@
 using System.IO.Abstractions;
 using System.Threading.Tasks;
 using AnakinRaW.AppUpdaterFramework;
+using AnakinRaW.AppUpdaterFramework.Commands.Handlers;
 using AnakinRaW.AppUpdaterFramework.Configuration;
 using AnakinRaW.AppUpdaterFramework.ExternalUpdater;
 using AnakinRaW.AppUpdaterFramework.Interaction;
@@ -32,6 +33,7 @@ using AnakinRaW.CommonUtilities.Windows;
 using ImageKeys = FocLauncher.Imaging.ImageKeys;
 using AnakinRaW.ExternalUpdater.CLI;
 using AnakinRaW.AppUpdaterFramework.ExternalUpdater.Registry;
+using FocLauncher.Update.Manifest;
 
 namespace FocLauncher;
 
@@ -59,7 +61,7 @@ internal static class Program
         }
 
         // Since logging directory is not yet assured, we cannot run under the global exception handler.
-        new AppRestoreHandler(_coreServices).RestoreIfNecessary();
+        new AppResetHandler(_coreServices).ResetIfNecessary();
         
         int exitCode;
         using (GetUnhandledExceptionHandler()) 
@@ -149,13 +151,9 @@ internal static class Program
         });
 
         serviceCollection.AddSingleton(CreateDownloadConfiguration());
-        serviceCollection.AddSingleton<IElevateApplicationCommandHandler>(sp => new ElevateApplicationCommandHandler(sp));
-        serviceCollection.AddSingleton<IUpdateRestartCommandHandler>(sp => new UpdateRestartCommandHandler(sp));
 
         serviceCollection.AddSingleton(sp => new LauncherUpdateInteractionFactory(sp));
         serviceCollection.AddSingleton<IUpdateDialogViewModelFactory>(sp => sp.GetRequiredService<LauncherUpdateInteractionFactory>());
-        serviceCollection.AddSingleton<IUpdateCommandsFactory>(sp => sp.GetRequiredService<LauncherUpdateInteractionFactory>());
-        serviceCollection.AddSingleton<IUpdateResultHandler>(sp => new LauncherUpdateResultHandler(sp));
 
         serviceCollection.AddSingleton<IExternalUpdaterLauncher>(sp => new ExternalUpdaterLauncher(sp));
     }

@@ -18,6 +18,8 @@ namespace FocLauncher.Update.LauncherImplementations;
 
 internal class LauncherInstalledManifestProvider : IInstalledManifestProvider
 {
+    private const string LauncherExeId = "Launcher.Executable";
+
     private readonly IFileSystem _fileSystem;
     private readonly IExternalUpdaterService _externalUpdaterService;
     private readonly ICosturaResourceExtractor _resourceExtractor;
@@ -42,9 +44,9 @@ internal class LauncherInstalledManifestProvider : IInstalledManifestProvider
         var identityVersion = installedProduct.Version;
         var fileVersion = LauncherAssemblyInfo.FileVersion;
 
-        var launcherExeId = new ProductComponentIdentity("Launcher.Executable", identityVersion);
+        var launcherExeId = new ProductComponentIdentity(LauncherExeId, identityVersion);
         
-        var launcherExecutable = BuildFileComponent(launcherExeId, "FoC Mod Launcher", $"[{KnownProductVariablesKeys.InstallDir}]",
+        var launcherExecutable = BuildFileComponent(launcherExeId, LauncherConstants.ApplicationName, $"[{KnownProductVariablesKeys.InstallDir}]",
             LauncherAssemblyInfo.ExecutableFileName, fileVersion);
 
         var assemblyStream = GetUpdaterAssemblyStream();

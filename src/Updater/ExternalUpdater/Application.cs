@@ -35,8 +35,8 @@ internal class Application
             return ExternalUpdaterResult.NoUpdate;
 
         var updateResult = ExternalUpdaterResult.NoUpdate;
-        if (_options.Restore)
-            updateResult = ExternalUpdaterResult.DemandsRestore;
+        //if (_options.Restore)
+        //    updateResult = ExternalUpdaterResult.DemandsRestore;
 
         if (_options.Update)
         {

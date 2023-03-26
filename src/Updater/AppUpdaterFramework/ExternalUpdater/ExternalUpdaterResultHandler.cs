@@ -20,12 +20,11 @@ public class ExternalUpdaterResultHandler
         switch (result)
         {
             case ExternalUpdaterResult.UpdateFailedNoRestore:
-            case ExternalUpdaterResult.DemandsRestore:
-                _registry.ScheduleRestore();
+                _registry.ScheduleReset();
                 break;
             case ExternalUpdaterResult.UpdateFailedWithRestore:
             case ExternalUpdaterResult.UpdateSuccess:
-                _registry.Reset();
+                _registry.Clear();
                 break;
             case ExternalUpdaterResult.NoUpdate:
                 break;

@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Windows.Input;
+using AnakinRaW.AppUpdaterFramework.Commands.Handlers;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Input;
 using AnakinRaW.CommonUtilities.Wpf.Imaging;
 using AnakinRaW.CommonUtilities.Wpf.Input;
 using AnakinRaW.ExternalUpdater.CLI.Arguments;
-using FocLauncher.Commands.Handlers;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace FocLauncher.Commands;
+namespace AnakinRaW.AppUpdaterFramework.Commands;
 
 internal class UpdateRestartCommand : CommandDefinition
 {

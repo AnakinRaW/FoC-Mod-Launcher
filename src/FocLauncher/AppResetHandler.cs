@@ -12,14 +12,14 @@ using AnakinRaW.AppUpdaterFramework.ExternalUpdater.Registry;
 
 namespace FocLauncher;
 
-internal class AppRestoreHandler
+internal class AppResetHandler
 {
     private readonly IApplicationUpdaterRegistry _registry;
     private readonly IFileSystemService _fileSystemService;
     private readonly ILauncherEnvironment _environment;
     private readonly IWindowsPathService _pathService;
 
-    public AppRestoreHandler(IServiceProvider services)
+    public AppResetHandler(IServiceProvider services)
     {
         Requires.NotNull(services, nameof(services));
         _registry = services.GetRequiredService<IApplicationUpdaterRegistry>();
@@ -28,13 +28,13 @@ internal class AppRestoreHandler
         _pathService = services.GetRequiredService<IWindowsPathService>();
     }
 
-    public void RestoreIfNecessary()
+    public void ResetIfNecessary()
     {
-        if (!_environment.ApplicationLocalDirectory.Exists || _registry.Restore || Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
-            RestoreApplication();
+        if (!_environment.ApplicationLocalDirectory.Exists || _registry.Reset || Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
+            ResetApplication();
     }
 
-    public void RestoreApplication()
+    public void ResetApplication()
     {
         try
         {
@@ -43,7 +43,7 @@ internal class AppRestoreHandler
                 throw new IOException($"Permission on '{appLocalPath}' denied: Creating a new directory");
 
             _fileSystemService.DeleteDirectoryWithRetry(_environment.ApplicationLocalDirectory);
-            _registry.Reset();
+            _registry.Clear();
             _environment.ApplicationLocalDirectory.Create();
         }
         catch (Exception e)

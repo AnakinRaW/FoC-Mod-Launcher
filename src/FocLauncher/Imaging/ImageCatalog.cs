@@ -17,14 +17,6 @@ internal class ImageCatalog : ImmutableImageCatalog
         CanTheme = true
     };
 
-    public static ImageDefinition UACShieldDefinition => new()
-    {
-        Kind = ImageFileKind.Xaml,
-        ImakgeKey = ImageKeys.UACShield,
-        Source = ResourcesUriCreator.Create("UacShield", ImageFileKind.Xaml),
-        CanTheme = true
-    };
-
     public static ImageDefinition TrooperDefinition => new()
     {
         Kind = ImageFileKind.Png,
@@ -93,7 +85,6 @@ internal class ImageCatalog : ImmutableImageCatalog
     public static readonly IEnumerable<ImageDefinition> Definitions = new List<ImageDefinition>
     {
         AppIconDefinition,
-        UACShieldDefinition,
         SettingsDefinition,
         GithubDefinition, 
         TrooperDefinition,

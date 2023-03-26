@@ -11,7 +11,7 @@
     <StackPanel>
         <TextBlock Margin="0,0,0,12" TextWrapping="Wrap" TextTrimming="None" Text="{Binding Version}"/>
         <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
-            <controls:ThemedImage VerticalAlignment="Top" ImakgeKey="{x:Static imaging:ImageKeys.StatusError}"/>
+            <controls:ThemedImage VerticalAlignment="Top" ImakgeKey="{x:Static imaging:UpdaterImageKeys.StatusError}"/>
             <StackPanel Margin="8,0,0,0" Orientation="Horizontal">
                 <TextBlock Text="{Binding ErrorMessage}" FontWeight="SemiBold"/>
             </StackPanel>
