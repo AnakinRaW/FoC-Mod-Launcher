@@ -53,7 +53,7 @@ internal class ExternalUpdater
                 if (string.IsNullOrEmpty(item.Destination))
                     _fileUtilities.DeleteFileWithRetry(fileInfo);
                 else
-                    _fileUtilities.MoveFile(fileInfo, item.Destination, true);
+                    _fileUtilities.MoveFile(fileInfo, item.Destination!, true);
             }
             return ExternalUpdaterResult.UpdateSuccess;
         }
@@ -70,7 +70,7 @@ internal class ExternalUpdater
                     if (string.IsNullOrEmpty(backup.Value))
                         _fileUtilities.DeleteFileWithRetry(_fileSystem.FileInfo.New(backup.Key));
                     else
-                        _fileUtilities.MoveFile(_fileSystem.FileInfo.New(backup.Value), backup.Key, true);
+                        _fileUtilities.MoveFile(_fileSystem.FileInfo.New(backup.Value!), backup.Key, true);
                 }
                 return ExternalUpdaterResult.UpdateFailedWithRestore;
             }
@@ -94,11 +94,11 @@ internal class ExternalUpdater
             {
                 var sourceFile = item.Update?.File;
                 if (!string.IsNullOrEmpty(sourceFile))
-                    _fileUtilities.DeleteFileWithRetry(_fileSystem.FileInfo.New(sourceFile));
+                    _fileUtilities.DeleteFileWithRetry(_fileSystem.FileInfo.New(sourceFile!));
 
                 var backup = item.Backup?.Source;
                 if (!string.IsNullOrEmpty(backup))
-                    _fileUtilities.DeleteFileWithRetry(_fileSystem.FileInfo.New(backup));
+                    _fileUtilities.DeleteFileWithRetry(_fileSystem.FileInfo.New(backup!));
             }
         }
         catch (Exception e)

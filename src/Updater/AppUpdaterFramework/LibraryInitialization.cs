@@ -51,7 +51,7 @@ public static class LibraryInitialization
         serviceCollection.AddSingleton(sp => new DownloadRepository(sp));
         serviceCollection.AddSingleton(sp => new BackupRepository(sp));
 
-        serviceCollection.AddSingleton<IWritablePendingComponentStore>(sp => new PendingComponentStore(sp));
+        serviceCollection.AddSingleton<IWritablePendingComponentStore>(new PendingComponentStore());
         serviceCollection.AddSingleton<IPendingComponentStore>(sp => sp.GetRequiredService<IWritablePendingComponentStore>());
 
         serviceCollection.AddSingleton<IExternalUpdaterService>(sp => new ExternalUpdaterService(sp));

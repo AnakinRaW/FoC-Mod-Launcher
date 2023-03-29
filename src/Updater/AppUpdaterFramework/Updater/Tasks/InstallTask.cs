@@ -127,7 +127,13 @@ internal class InstallTask : RunnerTask, IProgressTask
                 var restartManager = Services.GetRequiredService<IRestartManager>();
                 restartManager.SetRestart(RestartType.ApplicationRestart);
                 Logger?.LogWarning($"Component '{Component.GetDisplayName()}' get scheduled for installation after a restart.");
-                Services.GetRequiredService<IWritablePendingComponentStore>().AddComponent(Component);
+                
+                var pendingComponentStore = Services.GetRequiredService<IWritablePendingComponentStore>();
+                pendingComponentStore.AddComponent(new PendingComponent
+                {
+                    Component = Component, 
+                    Action = _action
+                });
             }
 
             if (Result == InstallResult.FailureElevationRequired)

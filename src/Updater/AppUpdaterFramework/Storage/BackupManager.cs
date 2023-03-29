@@ -19,8 +19,8 @@ namespace AnakinRaW.AppUpdaterFramework.Storage;
 
 internal class BackupManager : IBackupManager
 {
+    private readonly IServiceProvider _serviceProvider;
     private readonly ConcurrentDictionary<IInstallableComponent, BackupValueData> _backups = new(ProductComponentIdentityComparer.Default);
-    private readonly IFileSystem _fileSystem;
     private readonly IFileSystemService _fileSystemHelper;
     private readonly ILogger? _logger;
     private readonly BackupRepository _repository;
@@ -31,8 +31,9 @@ internal class BackupManager : IBackupManager
 
     public BackupManager(IServiceProvider serviceProvider)
     {
+        Requires.NotNull(serviceProvider, nameof(serviceProvider));
+        _serviceProvider = serviceProvider;
         _productService = serviceProvider.GetRequiredService<IProductService>();
-        _fileSystem = serviceProvider.GetRequiredService<IFileSystem>();
         _fileSystemHelper = serviceProvider.GetRequiredService<IFileSystemService>();
         _logger = serviceProvider.GetService<ILoggerFactory>()?.CreateLogger(GetType());
         _repository = serviceProvider.GetRequiredService<BackupRepository>();
@@ -53,7 +54,7 @@ internal class BackupManager : IBackupManager
         {
             var backup = backupData.Backup;
             backup!.Directory!.Create();
-            _fileSystemHelper.CopyFileWithRetry(backupData.Source, backup.FullName);
+            _fileSystemHelper.CopyFileWithRetry(backupData.Destination, backup.FullName);
         }
         catch (Exception)
         {
@@ -70,35 +71,35 @@ internal class BackupManager : IBackupManager
         if (!_backups.TryRemove(component, out var backupData))
             return;
 
-        var source = backupData.Source;
+        var destination = backupData.Destination;
 
-        source.Refresh();
+        destination.Refresh();
 
         if (backupData.IsOriginallyMissing())
         {
-            if (!source.Exists)
+            if (!destination.Exists)
                 return;
-            if (_fileSystemHelper.DeleteFileWithRetry(source))
+            if (_fileSystemHelper.DeleteFileWithRetry(destination))
                 return;
             throw new IOException("Unable to restore the backup. Please restart your computer!");
         }
 
         var backup = backupData.Backup;
-        backup.Refresh();
+        backup!.Refresh();
         if (!backup.Exists)
             throw new FileNotFoundException("Source file not found", backup.FullName);
 
         try
         {
-            if (source.Exists)
+            if (destination.Exists)
             {
                 var backHash = _hashingService.GetFileHash(backup, HashType.Sha256);
-                var sourceHash = _hashingService.GetFileHash(source, HashType.Sha256);
+                var sourceHash = _hashingService.GetFileHash(destination, HashType.Sha256);
                 if (backHash.SequenceEqual(sourceHash))
                     return;
             }
 
-            _fileSystemHelper.CopyFileWithRetry(backupData.Backup, backupData.Source.FullName);
+            _fileSystemHelper.CopyFileWithRetry(backupData.Backup!, backupData.Destination.FullName);
         }
         finally
         {
@@ -130,12 +131,12 @@ internal class BackupManager : IBackupManager
             throw new NotSupportedException($"option '{nameof(component)}' must be of type '{nameof(SingleFileComponent)}'");
 
         var variables = _productService.GetCurrentInstance().Variables;
-        var source = singleFileComponent.GetFile(_fileSystem, variables);
+        var destination = singleFileComponent.GetFile(_serviceProvider, variables);
 
         if (component.DetectedState == DetectionState.Absent)
-            return new BackupValueData(source);
+            return new BackupValueData(destination);
 
-        if (!source.Exists)
+        if (!destination.Exists)
         {
             var e = new FileNotFoundException("Could not find source file to backup.");
             _logger?.LogError(e, e.Message);
@@ -143,30 +144,30 @@ internal class BackupManager : IBackupManager
         }
 
         var backupFile = _repository.AddComponent(component);
-        return new BackupValueData(source, backupFile);
+        return new BackupValueData(destination, backupFile);
     }
 }
 
 public class BackupValueData : IEquatable<BackupValueData>
 {
-    public IFileInfo Source { get; }
+    public IFileInfo Destination { get; }
 
     public IFileInfo? Backup { get; }
 
-    public BackupValueData(IFileInfo source)
+    public BackupValueData(IFileInfo destination)
     {
-        Source = source;
+        Destination = destination;
         Backup = null;
     }
 
-    public BackupValueData(IFileInfo source, IFileInfo backup)
+    public BackupValueData(IFileInfo destination, IFileInfo backup)
     {
-        Source = source;
+        Destination = destination;
         Backup = backup;
     }
 
 #if NET
-        [MemberNotNullWhen(false, nameof(Source))]
+        [MemberNotNullWhen(false, nameof(Destination))]
 #endif
     public bool IsOriginallyMissing()
     {
@@ -175,7 +176,7 @@ public class BackupValueData : IEquatable<BackupValueData>
 
     public bool Equals(BackupValueData other)
     {
-        return Source.Equals(other.Source) && Equals(Backup, other.Backup);
+        return Destination.Equals(other.Destination) && Equals(Backup, other.Backup);
     }
 
     public override bool Equals(object? obj)
@@ -185,6 +186,6 @@ public class BackupValueData : IEquatable<BackupValueData>
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(Source, Backup);
+        return HashCode.Combine(Destination, Backup);
     }
 }

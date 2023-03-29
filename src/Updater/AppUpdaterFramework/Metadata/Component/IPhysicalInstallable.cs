@@ -1,4 +1,7 @@
-﻿namespace AnakinRaW.AppUpdaterFramework.Metadata.Component;
+﻿using System;
+using AnakinRaW.AppUpdaterFramework.Metadata.Product;
+
+namespace AnakinRaW.AppUpdaterFramework.Metadata.Component;
 
 public interface IPhysicalInstallable : IInstallableComponent
 {
@@ -6,4 +9,6 @@ public interface IPhysicalInstallable : IInstallableComponent
     /// Directory where this component gets installed to. May contain product variables.
     /// </summary>
     public string InstallPath { get; }
+
+    new string GetFullPath(IServiceProvider serviceProvider, ProductVariables? variables = null);
 }

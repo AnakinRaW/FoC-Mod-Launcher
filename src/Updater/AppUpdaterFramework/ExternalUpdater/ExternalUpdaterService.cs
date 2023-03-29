@@ -14,11 +14,13 @@ using AnakinRaW.ExternalUpdater;
 using AnakinRaW.ExternalUpdater.Options;
 using AnakinRaW.ExternalUpdater.Services;
 using Microsoft.Extensions.DependencyInjection;
+using Validation;
 
 namespace AnakinRaW.AppUpdaterFramework.ExternalUpdater;
 
 internal class ExternalUpdaterService : IExternalUpdaterService
 {
+    private readonly IServiceProvider _serviceProvider;
     private const string Identity = "ExternalUpdater";
     private const string ComponentName = "External Updater";
 
@@ -33,6 +35,8 @@ internal class ExternalUpdaterService : IExternalUpdaterService
 
     public ExternalUpdaterService(IServiceProvider serviceProvider)
     {
+        Requires.NotNull(serviceProvider, nameof(serviceProvider));
+        _serviceProvider = serviceProvider;
         _fileSystem = serviceProvider.GetRequiredService<IFileSystem>();
         _productService = serviceProvider.GetRequiredService<IProductService>();
         _launcher = serviceProvider.GetRequiredService<IExternalUpdaterLauncher>();
@@ -92,7 +96,7 @@ internal class ExternalUpdaterService : IExternalUpdaterService
         if (_productService.GetInstalledComponents().Items.FirstOrDefault(c => c.Id == UpdaterIdentity) is not SingleFileComponent updaterComponent)
             throw new NotSupportedException("External updater component not registered to current product.");
 
-        return updaterComponent.GetFile(_fileSystem, _productService.GetCurrentInstance().Variables);
+        return updaterComponent.GetFile(_serviceProvider, _productService.GetCurrentInstance().Variables);
     }
 
     public void Launch(ExternalUpdaterOptions options)
@@ -110,25 +114,27 @@ internal class ExternalUpdaterService : IExternalUpdaterService
 
         foreach (var pendingComponent in pendingComponents)
         {
-            //if (pendingComponent.Action == UpdateAction.Keep)
-            //    continue;
+            if (pendingComponent.Action == UpdateAction.Keep)
+                continue;
+            if (pendingComponent.Component is not IPhysicalInstallable physicalInstallable)
+                throw new NotSupportedException("Non physical components are currently not supported");
 
-            //BackupInformation? backupInformation = null;
-            //if (backups.TryGetValue(pendingComponent, out var backup))
-            //{
-            //    backupInformation = CreateFromBackup(backup);
-            //    backups.Remove(pendingComponent);
-            //}
+            BackupInformation? backupInformation = null;
+            if (backups.TryGetValue(pendingComponent.Component, out var backup))
+            {
+                backupInformation = CreateFromBackup(backup);
+                backups.Remove(pendingComponent.Component);
+            }
 
-            //var copyInformation = CreateFromComponent(pendingComponent);
-            
-            //var item = new UpdateInformation
-            //{
-            //    Update = copyInformation,
-            //    Backup = backupInformation
-            //};
+            var copyInformation = CreateFromComponent(physicalInstallable, pendingComponent.Action);
 
-            //updateInformation.Add(item);
+            var item = new UpdateInformation
+            {
+                Update = copyInformation,
+                Backup = backupInformation
+            };
+
+            updateInformation.Add(item);
         }
 
         foreach (var backup in backups.Values)
@@ -157,21 +163,21 @@ internal class ExternalUpdaterService : IExternalUpdaterService
         return tempFilePath;
     }
 
-    private BackupInformation CreateFromBackup(BackupValueData backup)
+    private static BackupInformation CreateFromBackup(BackupValueData backup)
     {
         return new BackupInformation
         {
-            Destination = "",
-            Source = ""
+            Destination = backup.Destination.FullName,
+            Source = backup.Backup?.FullName
         };
     }
 
-    private FileCopyInformation CreateFromComponent(IInstallableComponent component, UpdateAction action)
+    private FileCopyInformation CreateFromComponent(IPhysicalInstallable component, UpdateAction action)
     {
         if (action == UpdateAction.Keep)
             throw new NotSupportedException("UpdateAction Keep is not supported");
 
-        string componentLocation = null!; // TODO
+        var componentLocation = component.GetFullPath(_serviceProvider, _productService.GetCurrentInstance().Variables);
 
         string? destination;
         string source;

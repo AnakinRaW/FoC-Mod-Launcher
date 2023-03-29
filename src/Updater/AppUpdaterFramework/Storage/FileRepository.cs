@@ -12,6 +12,7 @@ namespace AnakinRaW.AppUpdaterFramework.Storage;
 
 internal abstract class FileRepository : IFileRepository
 {
+    private readonly IServiceProvider _serviceProvider;
     private readonly ConcurrentDictionary<IInstallableComponent, IFileInfo> _componentStore = new(ProductComponentIdentityComparer.Default);
     private readonly IFileSystem _fileSystem;
     private readonly IFileSystemService _fileSystemHelper;
@@ -23,6 +24,8 @@ internal abstract class FileRepository : IFileRepository
 
     protected FileRepository(IServiceProvider serviceProvider)
     {
+        Requires.NotNull(serviceProvider, nameof(serviceProvider));
+        _serviceProvider = serviceProvider;
         _fileSystem = serviceProvider.GetRequiredService<IFileSystem>();
         _fileSystemHelper = serviceProvider.GetRequiredService<IFileSystemService>();
         _productService = serviceProvider.GetRequiredService<IProductService>();
@@ -90,7 +93,7 @@ internal abstract class FileRepository : IFileRepository
     {
         if (component is not SingleFileComponent singleFileComponent)
             return null;
-        var file = singleFileComponent.GetFile(_fileSystem, _productService.GetCurrentInstance().Variables);
+        var file = singleFileComponent.GetFile(_serviceProvider, _productService.GetCurrentInstance().Variables);
         return file.Name;
     }
 
