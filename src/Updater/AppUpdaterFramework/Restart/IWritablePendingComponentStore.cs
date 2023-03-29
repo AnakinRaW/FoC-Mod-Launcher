@@ -2,7 +2,7 @@
 
 namespace AnakinRaW.AppUpdaterFramework.Restart;
 
-internal interface IWritableDeferredComponentStore : IDeferredComponentStore
+internal interface IWritablePendingComponentStore : IPendingComponentStore
 {
     void AddComponent(IInstallableComponent component);
 

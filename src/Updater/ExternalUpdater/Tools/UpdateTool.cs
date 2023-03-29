@@ -1,18 +1,27 @@
 ﻿using System;
 using System.Threading.Tasks;
-using AnakinRaW.ExternalUpdater.CLI;
-using AnakinRaW.ExternalUpdater.CLI.Arguments;
+using AnakinRaW.ExternalUpdater.Options;
+using Microsoft.Extensions.Logging;
 
 namespace AnakinRaW.ExternalUpdater.Tools;
 
-internal class UpdateTool : ToolBase<UpdateArguments>
+internal sealed class UpdateTool : ProcessTool<UpdateOptions>
 {
-    public UpdateTool(UpdateArguments arguments, IServiceProvider serviceProvider) : base(arguments, serviceProvider)
+    public UpdateTool(UpdateOptions options, IServiceProvider serviceProvider) : base(options, serviceProvider)
     {
     }
 
     public override async Task<ExternalUpdaterResult> Run()
     {
-        return ExternalUpdaterResult.NoUpdate;
+        await WaitForProcessExitAsync();
+
+        var updateItems = await Options.GetUpdateInformationAsync(ServiceProvider);
+
+        var updater = new Utilities.ExternalUpdater(updateItems, ServiceProvider);
+        var updateResult = updater.Run();
+        Logger?.LogDebug($"Updated with result: {updateResult}");
+
+        StartProcess(updateResult);
+        return updateResult;
     }
 }

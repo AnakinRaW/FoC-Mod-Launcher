@@ -2,7 +2,6 @@
 using System.IO.Abstractions;
 using System.Threading.Tasks;
 using AnakinRaW.AppUpdaterFramework;
-using AnakinRaW.AppUpdaterFramework.Commands.Handlers;
 using AnakinRaW.AppUpdaterFramework.Configuration;
 using AnakinRaW.AppUpdaterFramework.ExternalUpdater;
 using AnakinRaW.AppUpdaterFramework.Interaction;
@@ -31,8 +30,9 @@ using FocLauncher.Update.LauncherImplementations;
 using AnakinRaW.CommonUtilities.DownloadManager.Configuration;
 using AnakinRaW.CommonUtilities.Windows;
 using ImageKeys = FocLauncher.Imaging.ImageKeys;
-using AnakinRaW.ExternalUpdater.CLI;
 using AnakinRaW.AppUpdaterFramework.ExternalUpdater.Registry;
+using AnakinRaW.ExternalUpdater;
+using AnakinRaW.ExternalUpdater.Services;
 using FocLauncher.Update.Manifest;
 
 namespace FocLauncher;
@@ -50,9 +50,9 @@ internal static class Program
         _serviceCollection = CreateCoreServices();
         _coreServices = _serviceCollection.BuildServiceProvider();
 
-        var updaterResult = ExternalUpdaterResult.NoUpdate;
         if (args.Length >= 1)
         {
+            ExternalUpdaterResult updaterResult = ExternalUpdaterResult.UpdaterNotRun;
             var argument = args[0];
             if (int.TryParse(argument, out var value) && Enum.IsDefined(typeof(ExternalUpdaterResult), value))
                 updaterResult = (ExternalUpdaterResult)value;
@@ -100,6 +100,7 @@ internal static class Program
             catch (Exception e)
             {
                 logger.LogError(e, $"Failed to run update. Starting main application normally: {e.Message}");
+                updateRegistry.Clear();
             }
         }
 

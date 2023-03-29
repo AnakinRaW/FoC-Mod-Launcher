@@ -122,7 +122,7 @@ internal class ApplicationUpdater : IApplicationUpdater, IProgressReporter
             }
             catch (Exception ex)
             {
-                _serviceProvider.GetRequiredService<IWritableDeferredComponentStore>().Clear();
+                _serviceProvider.GetRequiredService<IWritablePendingComponentStore>().Clear();
                 _serviceProvider.GetRequiredService<IRestartManager>().SetRestart(RestartType.ApplicationRestart);
 
                var e = new FailedRestoreException(ex);

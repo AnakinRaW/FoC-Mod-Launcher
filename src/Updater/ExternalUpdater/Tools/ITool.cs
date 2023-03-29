@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using AnakinRaW.ExternalUpdater.CLI;
 
 namespace AnakinRaW.ExternalUpdater.Tools;
 

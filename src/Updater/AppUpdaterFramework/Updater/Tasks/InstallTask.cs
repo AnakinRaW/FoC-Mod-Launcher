@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using AnakinRaW.AppUpdaterFramework.Configuration;
-using AnakinRaW.AppUpdaterFramework.Elevation;
 using AnakinRaW.AppUpdaterFramework.Installer;
 using AnakinRaW.AppUpdaterFramework.Metadata.Component;
 using AnakinRaW.AppUpdaterFramework.Metadata.Product;
@@ -128,7 +127,7 @@ internal class InstallTask : RunnerTask, IProgressTask
                 var restartManager = Services.GetRequiredService<IRestartManager>();
                 restartManager.SetRestart(RestartType.ApplicationRestart);
                 Logger?.LogWarning($"Component '{Component.GetDisplayName()}' get scheduled for installation after a restart.");
-                Services.GetRequiredService<IWritableDeferredComponentStore>().AddComponent(Component);
+                Services.GetRequiredService<IWritablePendingComponentStore>().AddComponent(Component);
             }
 
             if (Result == InstallResult.FailureElevationRequired)

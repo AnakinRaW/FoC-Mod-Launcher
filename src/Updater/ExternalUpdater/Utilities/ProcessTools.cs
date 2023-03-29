@@ -5,7 +5,6 @@ using System.IO.Abstractions;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using AnakinRaW.ExternalUpdater.CLI;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 #if NETFRAMEWORK

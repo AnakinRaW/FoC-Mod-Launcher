@@ -5,7 +5,6 @@ using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Threading.Tasks;
 using AnakinRaW.AppUpdaterFramework.Configuration;
-using AnakinRaW.AppUpdaterFramework.Elevation;
 using AnakinRaW.AppUpdaterFramework.Metadata.Component;
 using AnakinRaW.AppUpdaterFramework.Restart;
 using AnakinRaW.AppUpdaterFramework.Storage;
@@ -118,7 +117,7 @@ internal class DownloadTask : SynchronizedTask, IProgressTask
                     DownloadPath.Refresh();
                     if (!DownloadPath.Exists)
                     {
-                        var message = "File not found after being successfully downloaded and verified: " +
+                        var message = "Source not found after being successfully downloaded and verified: " +
                                       DownloadPath + ", package: " + Component.GetDisplayName();
                         Logger?.LogWarning(message);
                         throw new FileNotFoundException(message, DownloadPath.FullName);

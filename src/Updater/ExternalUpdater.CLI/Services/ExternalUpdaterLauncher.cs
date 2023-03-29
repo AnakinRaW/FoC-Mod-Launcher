@@ -3,11 +3,11 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Abstractions;
 using AnakinRaW.AppUpdaterFramework.Elevation;
-using AnakinRaW.ExternalUpdater.CLI.Arguments;
+using AnakinRaW.ExternalUpdater.Options;
 using Microsoft.Extensions.DependencyInjection;
 using Validation;
 
-namespace AnakinRaW.ExternalUpdater.CLI;
+namespace AnakinRaW.ExternalUpdater.Services;
 
 public class ExternalUpdaterLauncher : IExternalUpdaterLauncher
 {
@@ -18,20 +18,20 @@ public class ExternalUpdaterLauncher : IExternalUpdaterLauncher
         _elevation = serviceProvider.GetRequiredService<IProcessElevation>();
     }
 
-    public Process Start(IFileInfo updater, ExternalUpdaterArguments arguments)
+    public Process Start(IFileInfo updater, ExternalUpdaterOptions options)
     {
         Requires.NotNull(updater, nameof(updater));
-        Requires.NotNull(arguments, nameof(arguments));
+        Requires.NotNull(options, nameof(options));
 
         if (!updater.Exists)
             throw new FileNotFoundException("Could not find updater application", updater.FullName);
-        
-        var startInfo = CreateStartInfo(updater.FullName, arguments);
+
+        var startInfo = CreateStartInfo(updater.FullName, options);
         return Process.Start(startInfo)!;
     }
 
 
-    private ProcessStartInfo CreateStartInfo(string updater, ExternalUpdaterArguments arguments)
+    private ProcessStartInfo CreateStartInfo(string updater, ExternalUpdaterOptions options)
     {
 
         var externalUpdateStartInfo = new ProcessStartInfo(updater)
@@ -45,7 +45,7 @@ public class ExternalUpdaterLauncher : IExternalUpdaterLauncher
         if (_elevation.IsElevated)
             externalUpdateStartInfo.Verb = "runas";
 
-        externalUpdateStartInfo.Arguments = arguments.ToCommandLine();
+        externalUpdateStartInfo.Arguments = options.ToArgs();
         return externalUpdateStartInfo;
     }
 }

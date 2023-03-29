@@ -1,6 +1,6 @@
 ﻿using System;
 using AnakinRaW.AppUpdaterFramework.ExternalUpdater.Registry;
-using AnakinRaW.ExternalUpdater.CLI;
+using AnakinRaW.ExternalUpdater;
 using Validation;
 
 namespace AnakinRaW.AppUpdaterFramework.ExternalUpdater;
@@ -26,7 +26,13 @@ public class ExternalUpdaterResultHandler
             case ExternalUpdaterResult.UpdateSuccess:
                 _registry.Clear();
                 break;
-            case ExternalUpdaterResult.NoUpdate:
+            case ExternalUpdaterResult.UpdaterNotRun:
+                break;
+            case ExternalUpdaterResult.Restarted:
+                // Safeguard, since Restarted makes no sense when an update should be performed.
+                // Apparently something went wrong, so we reset the application
+                if (_registry.RequiresUpdate)
+                    _registry.ScheduleReset();
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(result), result, null);

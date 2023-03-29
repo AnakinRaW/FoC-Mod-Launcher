@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO.Abstractions;
 using System.Threading.Tasks;
 using AnakinRaW.CommonUtilities.FileSystem;
-using AnakinRaW.ExternalUpdater.CLI.Arguments;
+using AnakinRaW.ExternalUpdater.Options;
 using AnakinRaW.ExternalUpdater.Tools;
 using AnakinRaW.ExternalUpdater.Utilities;
 using CommandLine;
@@ -24,16 +24,16 @@ internal static class Program
         Console.WriteLine($"Raw Command line: {Environment.CommandLine}");
 #endif
 
-        return await Parser.Default.ParseArguments<RestartArguments, UpdateArguments>(args)
+        return await Parser.Default.ParseArguments<RestartOptions, UpdateOptions>(args)
             .MapResult(
-                (RestartArguments opts) => ExecuteApplication(opts),
-                (UpdateArguments opts) => ExecuteApplication(opts),
+                (RestartOptions opts) => ExecuteApplication(opts),
+                (UpdateOptions opts) => ExecuteApplication(opts),
                 ErrorArgs);
     }
 
-    private static async Task<int> ExecuteApplication(ExternalUpdaterArguments args)
+    private static async Task<int> ExecuteApplication(ExternalUpdaterOptions args)
     {
-        var services = CreateServices(args);
+        var services = CreateServices();
         var logger = services.GetService<ILoggerFactory>()?.CreateLogger(typeof(Program));
         try
         {
@@ -45,14 +45,11 @@ internal static class Program
         catch (Exception e)
         {
             logger?.LogCritical(e, e.Message);
-            return e.HResult;
-        }
-        finally
-        {
 #if DEBUG
             Console.WriteLine("Press enter to close!");
             Console.ReadKey();
 #endif
+            return e.HResult;
         }
     }
 
@@ -61,7 +58,7 @@ internal static class Program
         return Task.FromResult(0xA0);
     }
 
-    private static IServiceProvider CreateServices(ExternalUpdaterArguments arguments)
+    private static IServiceProvider CreateServices()
     {
         var services = new ServiceCollection();
         var fileSystem = new FileSystem();
@@ -91,12 +88,12 @@ internal static class Program
 
         void SetFileLogging(ILoggingBuilder builder)
         {
-            var logPath = arguments.LogFile ?? "log.txt";
+            const string logPath = "extUpdate_log.txt";
             var fileLogLevel = LogLevel.Information;
 #if DEBUG
             fileLogLevel = LogLevel.Trace;
 #endif
-            builder.AddFile("log.txt", fileLogLevel);
+            builder.AddFile(logPath, fileLogLevel);
         }
     }
 }

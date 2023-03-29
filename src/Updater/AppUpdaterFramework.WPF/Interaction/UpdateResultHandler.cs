@@ -71,17 +71,17 @@ internal class UpdateResultHandler : IUpdateResultHandler
         if (!_updateConfiguration.SupportsRestart)
             return;
 
-        var updateArguments = _serviceProvider.GetRequiredService<IExternalUpdaterService>().CreateUpdateArguments();
+        var updateOptions = _serviceProvider.GetRequiredService<IExternalUpdaterService>().CreateUpdateOptions();
         var updater = _serviceProvider.GetRequiredService<IExternalUpdaterService>().GetExternalUpdater();
 
-        _updaterRegistry.ScheduleUpdate(updater, updateArguments);
+        _updaterRegistry.ScheduleUpdate(updater, updateOptions);
 
         var viewModel = _dialogViewModelFactory.CreateRestartViewModel(RestartReason.Update);
         var result = await _dialogService.ShowDialog(viewModel);
         if (result != UpdateDialogButtonIdentifiers.RestartButtonIdentifier)
             return;
 
-        await _restartHandler.HandleAsync(updateArguments);
+        await _restartHandler.HandleAsync(updateOptions);
     }
 
     private async Task HandleElevation()
@@ -94,7 +94,7 @@ internal class UpdateResultHandler : IUpdateResultHandler
         if (result != UpdateDialogButtonIdentifiers.RestartButtonIdentifier)
             return;
 
-        var restartArgs = _serviceProvider.GetRequiredService<IExternalUpdaterService>().CreateRestartArguments(true);
+        var restartArgs = _serviceProvider.GetRequiredService<IExternalUpdaterService>().CreateRestartOptions(true);
         await _restartHandler.HandleAsync(restartArgs);
     }
 
@@ -110,7 +110,7 @@ internal class UpdateResultHandler : IUpdateResultHandler
         if (result != UpdateDialogButtonIdentifiers.RestartButtonIdentifier)
             return;
 
-        var restartArgs = _serviceProvider.GetRequiredService<IExternalUpdaterService>().CreateRestartArguments();
+        var restartArgs = _serviceProvider.GetRequiredService<IExternalUpdaterService>().CreateRestartOptions();
         await _restartHandler.HandleAsync(restartArgs);
     }
 }

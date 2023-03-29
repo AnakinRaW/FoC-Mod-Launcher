@@ -21,7 +21,7 @@ internal class ElevateApplicationCommand : CommandDefinition
     public ElevateApplicationCommand(IServiceProvider serviceProvider)
     {
         var handler = serviceProvider.GetRequiredService<IUpdateRestartCommandHandler>();
-        var args = serviceProvider.GetRequiredService<IExternalUpdaterService>().CreateRestartArguments(true);
+        var args = serviceProvider.GetRequiredService<IExternalUpdaterService>().CreateRestartOptions(true);
         Command = new DelegateCommand(() => handler.Command.Execute(args), () => handler.Command.CanExecute(args));
     }
 }

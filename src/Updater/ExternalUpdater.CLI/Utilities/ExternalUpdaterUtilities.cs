@@ -5,7 +5,7 @@ using Mono.Cecil;
 using Semver;
 using ICustomAttributeProvider = Mono.Cecil.ICustomAttributeProvider;
 
-namespace AnakinRaW.ExternalUpdater.CLI.Utilities;
+namespace AnakinRaW.ExternalUpdater.Utilities;
 
 internal static class ExternalUpdaterUtilities
 {

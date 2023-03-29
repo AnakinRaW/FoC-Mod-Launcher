@@ -1,7 +1,7 @@
 ﻿// ReSharper disable All 
 namespace System.Runtime.CompilerServices
 {
-    public class IsExternalInit { }
+    internal class IsExternalInit { }
 
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
     internal sealed class RequiredMemberAttribute : Attribute { }

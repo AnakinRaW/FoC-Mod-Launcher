@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO.Abstractions;
 using AnakinRaW.CommonUtilities.Registry;
-using AnakinRaW.ExternalUpdater.CLI.Arguments;
+using AnakinRaW.ExternalUpdater.Options;
 using Microsoft.Extensions.DependencyInjection;
 using Validation;
 
@@ -85,12 +85,12 @@ public sealed class ApplicationUpdaterRegistry : IApplicationUpdaterRegistry
         _registryKey.DeleteValue(nameof(UpdaterPath));
     }
 
-    public void ScheduleUpdate(IFileInfo updater, ExternalUpdaterArguments arguments)
+    public void ScheduleUpdate(IFileInfo updater, ExternalUpdaterOptions options)
     {
         Requires.NotNull(updater, nameof(updater));
-        Requires.NotNull(arguments, nameof(arguments));
+        Requires.NotNull(options, nameof(options));
         RequiresUpdate = true;
         UpdaterPath = updater.FullName;
-        UpdateCommandArgs = arguments.ToCommandLine();
+        UpdateCommandArgs = options.ToArgs();
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
@@ -12,6 +11,9 @@ using AnakinRaW.CommonUtilities.Hashing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Validation;
+#if NET6_0
+using System.Diagnostics.CodeAnalysis;
+#endif
 
 namespace AnakinRaW.AppUpdaterFramework.Storage;
 
@@ -25,7 +27,7 @@ internal class BackupManager : IBackupManager
     private readonly IProductService _productService;
     private readonly IHashingService _hashingService;
 
-    public IEnumerable<IInstallableComponent> Backups => _backups.Keys;
+    public IDictionary<IInstallableComponent, BackupValueData> Backups => new Dictionary<IInstallableComponent, BackupValueData>(_backups);
 
     public BackupManager(IServiceProvider serviceProvider)
     {
@@ -43,7 +45,7 @@ internal class BackupManager : IBackupManager
 
         var backupData = _backups.GetOrAdd(component, CreateBackupEntry);
 
-        // Check whether the component actually is present
+        // Check whether the component is actually present
         if (backupData.IsOriginallyMissing())
             return;
 
@@ -51,7 +53,7 @@ internal class BackupManager : IBackupManager
         {
             var backup = backupData.Backup;
             backup!.Directory!.Create();
-            _fileSystemHelper.CopyFileWithRetry(backupData.Source!, backup.FullName);
+            _fileSystemHelper.CopyFileWithRetry(backupData.Source, backup.FullName);
         }
         catch (Exception)
         {
@@ -84,7 +86,7 @@ internal class BackupManager : IBackupManager
         var backup = backupData.Backup;
         backup.Refresh();
         if (!backup.Exists)
-            throw new FileNotFoundException("Backup file not found", backup.FullName);
+            throw new FileNotFoundException("Source file not found", backup.FullName);
 
         try
         {
@@ -125,7 +127,7 @@ internal class BackupManager : IBackupManager
     private BackupValueData CreateBackupEntry(IInstallableComponent component)
     {
         if (component is not SingleFileComponent singleFileComponent)
-            throw new NotSupportedException($"argument '{nameof(component)}' must be of type '{nameof(SingleFileComponent)}'");
+            throw new NotSupportedException($"option '{nameof(component)}' must be of type '{nameof(SingleFileComponent)}'");
 
         var variables = _productService.GetCurrentInstance().Variables;
         var source = singleFileComponent.GetFile(_fileSystem, variables);
@@ -143,46 +145,46 @@ internal class BackupManager : IBackupManager
         var backupFile = _repository.AddComponent(component);
         return new BackupValueData(source, backupFile);
     }
+}
 
-    private readonly struct BackupValueData : IEquatable<BackupValueData>
+public class BackupValueData : IEquatable<BackupValueData>
+{
+    public IFileInfo Source { get; }
+
+    public IFileInfo? Backup { get; }
+
+    public BackupValueData(IFileInfo source)
     {
-        public IFileInfo Source { get; }
+        Source = source;
+        Backup = null;
+    }
 
-        public IFileInfo? Backup { get; }
-
-        public BackupValueData(IFileInfo source)
-        {
-            Source = source;
-            Backup = null;
-        }
-
-        public BackupValueData(IFileInfo source, IFileInfo backup)
-        {
-            Source = source;
-            Backup = backup;
-        }
+    public BackupValueData(IFileInfo source, IFileInfo backup)
+    {
+        Source = source;
+        Backup = backup;
+    }
 
 #if NET
-        [MemberNotNullWhen(false, nameof(Backup))]
+        [MemberNotNullWhen(false, nameof(Source))]
 #endif
-        public bool IsOriginallyMissing()
-        {
-            return Backup is null;
-        }
+    public bool IsOriginallyMissing()
+    {
+        return Backup is null;
+    }
 
-        public bool Equals(BackupValueData other)
-        {
-            return Source.Equals(other.Source) && Equals(Backup, other.Backup);
-        }
+    public bool Equals(BackupValueData other)
+    {
+        return Source.Equals(other.Source) && Equals(Backup, other.Backup);
+    }
 
-        public override bool Equals(object? obj)
-        {
-            return obj is BackupValueData other && Equals(other);
-        }
+    public override bool Equals(object? obj)
+    {
+        return obj is BackupValueData other && Equals(other);
+    }
 
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(Source, Backup);
-        }
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Source, Backup);
     }
 }

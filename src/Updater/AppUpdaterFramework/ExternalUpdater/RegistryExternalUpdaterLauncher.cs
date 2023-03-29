@@ -1,20 +1,23 @@
 ﻿using System;
 using System.IO.Abstractions;
 using AnakinRaW.AppUpdaterFramework.ExternalUpdater.Registry;
-using AnakinRaW.ExternalUpdater.CLI;
-using AnakinRaW.ExternalUpdater.CLI.Arguments;
+using AnakinRaW.AppUpdaterFramework.Utilities;
+using AnakinRaW.ExternalUpdater.Options;
+using AnakinRaW.ExternalUpdater.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AnakinRaW.AppUpdaterFramework.ExternalUpdater;
 
 internal class RegistryExternalUpdaterLauncher : IRegistryExternalUpdaterLauncher
 {
+    private readonly IServiceProvider _serviceProvider;
     private readonly IApplicationUpdaterRegistry _registry;
     private readonly IExternalUpdaterLauncher _launcher;
     private readonly IFileSystem _fileSystem;
 
     public RegistryExternalUpdaterLauncher(IServiceProvider serviceProvider)
     {
+        _serviceProvider = serviceProvider;
         _registry = serviceProvider.GetRequiredService<IApplicationUpdaterRegistry>();
         _launcher = serviceProvider.GetRequiredService<IExternalUpdaterLauncher>();
         _fileSystem = serviceProvider.GetRequiredService<IFileSystem>();
@@ -28,10 +31,11 @@ internal class RegistryExternalUpdaterLauncher : IRegistryExternalUpdaterLaunche
         var updater = _fileSystem.FileInfo.New(updaterPath!);
 
         var args = _registry.UpdateCommandArgs;
-        if (string.IsNullOrEmpty(args))
-            throw new NotSupportedException("No updater arguments set.");
+        if (args is null)
+            throw new NotSupportedException("No updater options set.");
 
-        var launchArgs = ExternalUpdaterArgumentUtilities.FromString(args!).WithCurrentData();
-        _launcher.Start(updater, launchArgs);
+        var cpi = CurrentProcessInfo.Current;
+        var launchOptions = ExternalUpdaterArgumentUtilities.FromArgs(args).WithCurrentData(cpi.ProcessFilePath, cpi.Id, _serviceProvider);
+        _launcher.Start(updater, launchOptions);
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Mono.Cecil;
 
-namespace AnakinRaW.ExternalUpdater.CLI.Utilities;
+namespace AnakinRaW.ExternalUpdater.Utilities;
 
 internal static class AssemblyUtilities
 {

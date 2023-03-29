@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.IO.Abstractions;
 using AnakinRaW.AppUpdaterFramework.Metadata.Component;
-using AnakinRaW.ExternalUpdater.CLI.Arguments;
+using AnakinRaW.ExternalUpdater.Options;
 
 namespace AnakinRaW.AppUpdaterFramework.ExternalUpdater;
 
@@ -11,11 +11,11 @@ public interface IExternalUpdaterService
 
     IInstallableComponent GetExternalUpdaterComponent(Stream assemblyStream, string installDirectory);
 
-    UpdateArguments CreateUpdateArguments();
+    UpdateOptions CreateUpdateOptions();
 
-    RestartArguments CreateRestartArguments(bool elevate = false);
+    RestartOptions CreateRestartOptions(bool elevate = false);
 
     IFileInfo GetExternalUpdater();
 
-    void Launch(ExternalUpdaterArguments arguments);
+    void Launch(ExternalUpdaterOptions options);
 }

@@ -1,16 +1,16 @@
 ﻿using System;
-using AnakinRaW.ExternalUpdater.CLI.Arguments;
+using AnakinRaW.ExternalUpdater.Options;
 
 namespace AnakinRaW.ExternalUpdater.Tools;
 
 internal class ToolFactory
 {
-    public ITool Create(ExternalUpdaterArguments arguments, IServiceProvider serviceProvider)
+    public ITool Create(ExternalUpdaterOptions options, IServiceProvider serviceProvider)
     {
-        return arguments switch
+        return options switch
         {
-            UpdateArguments updateArguments => new UpdateTool(updateArguments, serviceProvider),
-            RestartArguments restartArguments => new RestartTool(restartArguments, serviceProvider),
+            UpdateOptions updateArguments => new UpdateTool(updateArguments, serviceProvider),
+            RestartOptions restartArguments => new RestartTool(restartArguments, serviceProvider),
             _ => throw new ArgumentOutOfRangeException()
         };
     }

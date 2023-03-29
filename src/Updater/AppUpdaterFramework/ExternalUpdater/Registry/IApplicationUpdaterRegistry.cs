@@ -1,5 +1,5 @@
 ﻿using System.IO.Abstractions;
-using AnakinRaW.ExternalUpdater.CLI.Arguments;
+using AnakinRaW.ExternalUpdater.Options;
 
 namespace AnakinRaW.AppUpdaterFramework.ExternalUpdater.Registry;
 
@@ -17,5 +17,5 @@ public interface IApplicationUpdaterRegistry
 
     void Clear();
 
-    void ScheduleUpdate(IFileInfo updater, ExternalUpdaterArguments arguments);
+    void ScheduleUpdate(IFileInfo updater, ExternalUpdaterOptions options);
 }

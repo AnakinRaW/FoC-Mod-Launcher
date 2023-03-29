@@ -8,7 +8,7 @@ using FocLauncher.Utilities;
 using Microsoft.Extensions.DependencyInjection;
 using AnakinRaW.AppUpdaterFramework.ViewModels;
 using AnakinRaW.CommonUtilities.Windows;
-using AnakinRaW.ExternalUpdater.CLI;
+using AnakinRaW.ExternalUpdater;
 
 namespace FocLauncher.Commands.Handlers;
 

@@ -15,6 +15,8 @@ public class SingleFileComponent : InstallableComponent, IPhysicalInstallable
 {
     public override ComponentType Type => ComponentType.File;
 
+    private IFileInfo? _fileInfo;
+
     /// <inheritdoc/>
     public string InstallPath { get; }
 
@@ -31,9 +33,25 @@ public class SingleFileComponent : InstallableComponent, IPhysicalInstallable
 
     internal IFileInfo GetFile(IFileSystem fileSystem, ProductVariables? variables = null)
     {
-        var variablesDict = variables?.ToDictionary();
-        var fileName = VariableResolver.Default.ResolveVariables(FileName, variablesDict);
-        var installPath = VariableResolver.Default.ResolveVariables(InstallPath, variablesDict);
-        return fileSystem.FileInfo.New(fileSystem.Path.Combine(installPath, fileName));
+        if (_fileInfo is null)
+        {
+            var variablesDict = variables?.ToDictionary();
+            var fileName = VariableResolver.Default.ResolveVariables(FileName, variablesDict);
+            var installPath = VariableResolver.Default.ResolveVariables(InstallPath, variablesDict);
+            _fileInfo = fileSystem.FileInfo.New(fileSystem.Path.Combine(installPath, fileName));
+        }
+        return _fileInfo;
     }
+
+    //internal string GetFullPath(IFileSystem fileSystem, ProductVariables? variables = null)
+    //{
+    //    if (_fileInfo is null)
+    //    {
+    //        var variablesDict = variables?.ToDictionary();
+    //        var fileName = VariableResolver.Default.ResolveVariables(FileName, variablesDict);
+    //        var installPath = VariableResolver.Default.ResolveVariables(InstallPath, variablesDict);
+    //        _fileInfo = fileSystem.FileInfo.New(fileSystem.Path.Combine(installPath, fileName));
+    //    }
+    //    return _fileInfo;
+    //}
 }

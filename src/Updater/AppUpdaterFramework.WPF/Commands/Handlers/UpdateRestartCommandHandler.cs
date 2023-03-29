@@ -2,12 +2,12 @@
 using AnakinRaW.AppUpdaterFramework.ExternalUpdater;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Input;
-using AnakinRaW.ExternalUpdater.CLI.Arguments;
+using AnakinRaW.ExternalUpdater.Options;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AnakinRaW.AppUpdaterFramework.Commands.Handlers;
 
-internal class UpdateRestartCommandHandler : CommandHandlerBase<ExternalUpdaterArguments>, IUpdateRestartCommandHandler
+internal class UpdateRestartCommandHandler : CommandHandlerBase<ExternalUpdaterOptions>, IUpdateRestartCommandHandler
 {
     private readonly IExternalUpdaterService _updaterService;
     private readonly IApplicationShutdownService _shutdownService;
@@ -18,9 +18,9 @@ internal class UpdateRestartCommandHandler : CommandHandlerBase<ExternalUpdaterA
         _shutdownService = serviceProvider.GetRequiredService<IApplicationShutdownService>();
     }
 
-    public override void Handle(ExternalUpdaterArguments arguments)
+    public override void Handle(ExternalUpdaterOptions options)
     {
-        _updaterService.Launch(arguments);
+        _updaterService.Launch(options);
         _shutdownService.Shutdown(0);
     }
 }

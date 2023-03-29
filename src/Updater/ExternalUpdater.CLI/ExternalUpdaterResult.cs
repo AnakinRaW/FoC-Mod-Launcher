@@ -1,9 +1,10 @@
-﻿namespace AnakinRaW.ExternalUpdater.CLI;
+﻿namespace AnakinRaW.ExternalUpdater;
 
 public enum ExternalUpdaterResult
 {
     UpdateFailedNoRestore = -2,
     UpdateFailedWithRestore = -1,
-    NoUpdate = 0,
-    UpdateSuccess = 1
+    UpdaterNotRun = 0,
+    UpdateSuccess = 1,
+    Restarted = 2
 }

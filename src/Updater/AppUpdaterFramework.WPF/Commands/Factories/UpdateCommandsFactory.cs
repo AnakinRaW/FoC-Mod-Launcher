@@ -18,8 +18,8 @@ internal class UpdateCommandsFactory : IUpdateCommandsFactory
 
     public ICommandDefinition CreateRestart()
     {
-        var arguments = _serviceProvider.GetRequiredService<IExternalUpdaterService>().CreateUpdateArguments();
-        return new UpdateRestartCommand(arguments, _serviceProvider);
+        var options = _serviceProvider.GetRequiredService<IExternalUpdaterService>().CreateUpdateOptions();
+        return new UpdateRestartCommand(options, _serviceProvider);
     }
 
     public ICommandDefinition CreateElevate()

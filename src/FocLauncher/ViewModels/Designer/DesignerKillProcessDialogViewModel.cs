@@ -42,7 +42,7 @@ internal class DesignerKillProcessDialogViewModel : IKillProcessDialogViewModel
     public IList<IButtonViewModel> Buttons { get; }
     public IDialogAdditionalInformationViewModel? AdditionalInformation { get; }
     public ImageKey Image { get; }
-    public string Header => "File is locked";
+    public string Header => "Source is locked";
     public IFileInfo LockedFile => new FileInfoWrapper(new FileSystem(), new FileInfo("C:\\test.txt"));
     public IEnumerable<ILockingProcess> LockingProcesses => new List<ILockingProcess> { new ProcessInfo() };
 

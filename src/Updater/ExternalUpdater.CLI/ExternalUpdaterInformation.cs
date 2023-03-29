@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
-using AnakinRaW.ExternalUpdater.CLI.Utilities;
+using AnakinRaW.ExternalUpdater.Utilities;
 using Semver;
 
-namespace AnakinRaW.ExternalUpdater.CLI;
+namespace AnakinRaW.ExternalUpdater;
 
 public record ExternalUpdaterInformation
 {

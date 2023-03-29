@@ -31,7 +31,7 @@ internal class UpdateCleanJob : JobBase
         _backupsToClean.Clear();
         _downloadsToClean.Clear();
 
-        _backupsToClean.AddRange(_backupManager.Backups);
+        _backupsToClean.AddRange(_backupManager.Backups.Keys);
         _downloadsToClean.AddRange(_downloadRepository.GetComponents().Keys);
         return true;
     }
@@ -48,12 +48,12 @@ internal class UpdateCleanJob : JobBase
         }
 
         _filesFailedToBeCleaned.Clear();
-
+        
         foreach (var backup in _backupsToClean) 
-            GuardedClean(backup, (c) => _backupManager.RemoveBackup(c));
+            GuardedClean(backup, _backupManager.RemoveBackup);
 
         foreach (var download in _downloadsToClean)
-            GuardedClean(download, (c) => _downloadRepository.RemoveComponent(c));
+            GuardedClean(download, _downloadRepository.RemoveComponent);
 
 
         if (!_filesFailedToBeCleaned.Any())

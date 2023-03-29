@@ -27,16 +27,14 @@
 		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="7.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="Serilog.Extensions.Logging.File" Version="3.0.0" />
 		<PackageReference Include="AnakinRaW.CommonUtilities.FileSystem.Windows" Version="4.0.2" />
 		<PackageReference Include="AnakinRaW.CommonUtilities" Version="4.0.2" />
+		<PackageReference Include="System.Text.Json" Version="7.0.2" PrivateAssets="build;compile" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <ProjectReference Include="..\ExternalUpdater.CLI\ExternalUpdater.CLI.csproj" />
 	</ItemGroup>
-
-	<Import Project="..\FocLauncher.Shared\FocLauncher.Shared.projitems" Label="Shared" />
 
 </Project>

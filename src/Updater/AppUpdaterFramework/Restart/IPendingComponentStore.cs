@@ -2,7 +2,7 @@
 
 namespace AnakinRaW.AppUpdaterFramework.Restart;
 
-public interface IDeferredComponentStore
+internal interface IPendingComponentStore
 {
     IReadOnlyCollection<object> PendingComponents { get; }
 }

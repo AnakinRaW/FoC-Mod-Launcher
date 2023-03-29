@@ -4,11 +4,11 @@ using AnakinRaW.AppUpdaterFramework.Metadata.Component;
 
 namespace AnakinRaW.AppUpdaterFramework.Restart;
 
-internal class DeferredComponentStore : IWritableDeferredComponentStore
+internal class PendingComponentStore : IWritablePendingComponentStore
 {
     public IReadOnlyCollection<object> PendingComponents { get; }
 
-    public DeferredComponentStore(IServiceProvider serviceProvider)
+    public PendingComponentStore(IServiceProvider serviceProvider)
     {
         
     }

@@ -106,7 +106,7 @@ namespace FocLauncher
   public sealed class ItemCanBeNullAttribute : Attribute { }
 
   /// <summary>
-  /// Indicates that the marked method builds string by the format pattern and (optional) arguments.
+  /// Indicates that the marked method builds string by the format pattern and (optional) options.
   /// The parameter, which contains the format string, should be given in the constructor. The format string
   /// should be in <see cref="string.Format(IFormatProvider,string,object[])"/>-like form.
   /// </summary>
@@ -115,7 +115,7 @@ namespace FocLauncher
   /// void ShowError(string message, params object[] args) { /* do something */ }
   /// 
   /// void Foo() {
-  ///   ShowError("FailedChecking: {0}"); // Warning: Non-existing argument in format string
+  ///   ShowError("FailedChecking: {0}"); // Warning: Non-existing option in format string
   /// }
   /// </code></example>
   [AttributeUsage(
@@ -135,14 +135,14 @@ namespace FocLauncher
   }
 
   /// <summary>
-  /// Indicates that the marked parameter is a message template where placeholders are to be replaced by the following arguments
+  /// Indicates that the marked parameter is a message template where placeholders are to be replaced by the following options
   /// in the order in which they appear
   /// </summary>
   /// <example><code>
   /// void LogInfo([StructuredMessageTemplate]string message, params object[] args) { /* do something */ }
   /// 
   /// void Foo() {
-  ///   LogInfo("User created: {username}"); // Warning: Non-existing argument in format string
+  ///   LogInfo("User created: {username}"); // Warning: Non-existing option in format string
   /// }
   /// </code></example>
   [AttributeUsage(AttributeTargets.Parameter)]
@@ -248,7 +248,7 @@ namespace FocLauncher
   public sealed class NonNegativeValueAttribute : Attribute { }
 
   /// <summary>
-  /// Indicates that the function argument should be a string literal and match one
+  /// Indicates that the function option should be a string literal and match one
   /// of the parameters of the caller function. For example, ReSharper annotates
   /// the parameter of <see cref="System.ArgumentNullException"/>.
   /// </summary>
@@ -625,11 +625,11 @@ namespace FocLauncher
 
   /// <summary>
   /// This annotation allows to enforce allocation-less usage patterns of delegates for performance-critical APIs.
-  /// When this annotation is applied to the parameter of delegate type, IDE checks the input argument of this parameter:
-  /// * When lambda expression or anonymous method is passed as an argument, IDE verifies that the passed closure
+  /// When this annotation is applied to the parameter of delegate type, IDE checks the input option of this parameter:
+  /// * When lambda expression or anonymous method is passed as an option, IDE verifies that the passed closure
   ///   has no captures of the containing local variables and the compiler is able to cache the delegate instance
   ///   to avoid heap allocations. Otherwise the warning is produced.
-  /// * IDE warns when method name or local function name is passed as an argument as this always results
+  /// * IDE warns when method name or local function name is passed as an option as this always results
   ///   in heap allocation of the delegate instance.
   /// </summary>
   /// <remarks>
@@ -1071,7 +1071,7 @@ namespace FocLauncher
 
   /// <summary>
   /// Indicates the condition parameter of the assertion method. The method itself should be
-  /// marked by <see cref="AssertionMethodAttribute"/> attribute. The mandatory argument of
+  /// marked by <see cref="AssertionMethodAttribute"/> attribute. The mandatory option of
   /// the attribute is the assertion type.
   /// </summary>
   [AttributeUsage(AttributeTargets.Parameter)]
@@ -1086,7 +1086,7 @@ namespace FocLauncher
   }
 
   /// <summary>
-  /// Specifies assertion type. If the assertion method argument satisfies the condition,
+  /// Specifies assertion type. If the assertion method option satisfies the condition,
   /// then the execution continues. Otherwise, execution is assumed to be halted.
   /// </summary>
   public enum AssertionConditionType
@@ -1423,9 +1423,9 @@ namespace FocLauncher
   /// (Note that if $qualifier$ placeholder is used, then $member$ placeholder will match only qualified references)</item>
   /// <item>$expression$ - expression of any type</item>
   /// <item>$identifier$ - identifier placeholder</item>
-  /// <item>$args$ - any number of arguments</item>
-  /// <item>$arg$ - single argument</item>
-  /// <item>$arg1$ ... $arg10$ - single argument</item>
+  /// <item>$args$ - any number of options</item>
+  /// <item>$arg$ - single option</item>
+  /// <item>$arg1$ ... $arg10$ - single option</item>
   /// <item>$stmts$ - any number of statements</item>
   /// <item>$stmt$ - single statement</item>
   /// <item>$stmt1$ ... $stmt10$ - single statement</item>
@@ -1437,14 +1437,14 @@ namespace FocLauncher
   /// </list>
   /// </para>
   /// <para>
-  /// Note that you can also define your own placeholders of the supported types and specify arguments for each placeholder type.
-  /// This can be done using the following format: $name{type, arguments}$. Where 'name' - is the name of your placeholder,
+  /// Note that you can also define your own placeholders of the supported types and specify options for each placeholder type.
+  /// This can be done using the following format: $name{type, options}$. Where 'name' - is the name of your placeholder,
   /// 'type' - is the type of your placeholder (one of the following: Expression, Type, Identifier, Statement, Argument, Member),
-  /// 'arguments' - arguments list for your placeholder. Each placeholder type supports it's own arguments, check examples below for mode details.
+  /// 'options' - options list for your placeholder. Each placeholder type supports it's own options, check examples below for mode details.
   /// Placeholder type may be omitted and determined from the placeholder name, if name has one of the following prefixes:
   /// <list type="bullet">
   /// <item>expr, expression - expression placeholder, e.g. $exprPlaceholder{}$, $expressionFoo{}$</item>
-  /// <item>arg, argument - argument placeholder, e.g. $argPlaceholder{}$, $argumentFoo{}$</item>
+  /// <item>arg, option - option placeholder, e.g. $argPlaceholder{}$, $argumentFoo{}$</item>
   /// <item>ident, identifier - identifier placeholder, e.g. $identPlaceholder{}$, $identifierFoo{}$</item>
   /// <item>stmt, statement - statement placeholder, e.g. $stmtPlaceholder{}$, $statementFoo{}$</item>
   /// <item>type - type placeholder, e.g. $typePlaceholder{}$, $typeFoo{}$</item>
@@ -1452,7 +1452,7 @@ namespace FocLauncher
   /// </list>
   /// </para>
   /// <para>
-  /// Expression placeholder arguments:
+  /// Expression placeholder options:
   /// <list type="bullet">
   /// <item>expressionType - string value in single quotes, specifies full type name to match (empty string by default)</item>
   /// <item>exactType - boolean value, specifies if expression should have exact type match (false by default)</item>
@@ -1466,7 +1466,7 @@ namespace FocLauncher
   /// </list>
   /// </para>
   /// <para>
-  /// Type placeholder arguments:
+  /// Type placeholder options:
   /// <list type="bullet">
   /// <item>type - string value in single quotes, specifies full type name to match (empty string by default)</item>
   /// <item>exactType - boolean value, specifies if expression should have exact type match (false by default)</item>
@@ -1480,7 +1480,7 @@ namespace FocLauncher
   /// </list>
   /// </para>
   /// <para>
-  /// Identifier placeholder arguments:
+  /// Identifier placeholder options:
   /// <list type="bullet">
   /// <item>nameRegex - string value in single quotes, specifies regex to use for matching (empty string by default)</item>
   /// <item>nameRegexCaseSensitive - boolean value, specifies if name regex is case sensitive (true by default)</item>
@@ -1495,7 +1495,7 @@ namespace FocLauncher
   /// </list>
   /// </para>
   /// <para>
-  /// Statement placeholder arguments:
+  /// Statement placeholder options:
   /// <list type="bullet">
   /// <item>minimalOccurrences - minimal number of statements to match (-1 by default)</item>
   /// <item>maximalOccurrences - maximal number of statements to match (-1 by default)</item>
@@ -1508,20 +1508,20 @@ namespace FocLauncher
   /// </list>
   /// </para>
   /// <para>
-  /// Argument placeholder arguments:
+  /// Argument placeholder options:
   /// <list type="bullet">
-  /// <item>minimalOccurrences - minimal number of arguments to match (-1 by default)</item>
-  /// <item>maximalOccurrences - maximal number of arguments to match (-1 by default)</item>
+  /// <item>minimalOccurrences - minimal number of options to match (-1 by default)</item>
+  /// <item>maximalOccurrences - maximal number of options to match (-1 by default)</item>
   /// </list>
   /// Examples:
   /// <list type="bullet">
-  /// <item>$myArg{Argument, 1, 2}$ - defines argument placeholder, matching 1 or 2 arguments.</item>
-  /// <item>$myArg{Argument}$ - defines argument placeholder, matching any number of arguments.</item>
-  /// <item>$argFoo{1, 2}$ - defines argument placeholder, matching 1 or 2 arguments.</item>
+  /// <item>$myArg{Argument, 1, 2}$ - defines option placeholder, matching 1 or 2 options.</item>
+  /// <item>$myArg{Argument}$ - defines option placeholder, matching any number of options.</item>
+  /// <item>$argFoo{1, 2}$ - defines option placeholder, matching 1 or 2 options.</item>
   /// </list>
   /// </para>
   /// <para>
-  /// Member placeholder arguments:
+  /// Member placeholder options:
   /// <list type="bullet">
   /// <item>docId - string value in single quotes, specifies XML documentation id of the member to match (empty by default)</item>
   /// </list>

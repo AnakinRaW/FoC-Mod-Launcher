@@ -107,7 +107,7 @@ internal class FileInstaller : InstallerBase
                     $"Error occurred while deleting file '{fileToDelete}'. Error details: {ex.Message}. Retrying after {0.5f} seconds...");
                 return true;
             });
-            Logger?.LogTrace(deleteSuccess ? $"File '{fileToDelete}' deleted." : $"File '{fileToDelete}' was not deleted");
+            Logger?.LogTrace(deleteSuccess ? $"Source '{fileToDelete}' deleted." : $"Source '{fileToDelete}' was not deleted");
             return deleteSuccess ? InstallOperationResult.Success : InstallOperationResult.Failed;
         });
     }
@@ -120,12 +120,12 @@ internal class FileInstaller : InstallerBase
         }
         catch (IOException e) when (new HRESULT(e.HResult).Code == Win32Error.ERROR_SHARING_VIOLATION)
         {
-            Logger?.LogWarning($"File '{file}' is locked");
+            Logger?.LogWarning($"Source '{file}' is locked");
             return InstallOperationResult.LockedFile;
         }
         catch (UnauthorizedAccessException)
         {
-            Logger?.LogWarning($"Missing permission on File '{file}'");
+            Logger?.LogWarning($"Missing permission on Source '{file}'");
             return InstallOperationResult.NoPermission;
         }
         catch (Exception e)

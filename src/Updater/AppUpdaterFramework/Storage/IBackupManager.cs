@@ -5,7 +5,7 @@ namespace AnakinRaW.AppUpdaterFramework.Storage;
 
 internal interface IBackupManager
 {
-    IEnumerable<IInstallableComponent> Backups { get; }
+    IDictionary<IInstallableComponent, BackupValueData> Backups { get; }
 
     void BackupComponent(IInstallableComponent component);
 

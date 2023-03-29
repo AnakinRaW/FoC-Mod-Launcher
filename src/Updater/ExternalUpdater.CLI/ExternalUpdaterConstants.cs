@@ -1,4 +1,4 @@
-﻿namespace AnakinRaW.ExternalUpdater.CLI;
+﻿namespace AnakinRaW.ExternalUpdater;
 
 public static class ExternalUpdaterConstants
 {

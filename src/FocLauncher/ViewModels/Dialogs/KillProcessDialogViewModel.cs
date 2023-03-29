@@ -14,7 +14,7 @@ internal class KillProcessDialogViewModel : UpdateImageDialog, IKillProcessDialo
 {
     internal const string KillButtonIdentifier = "kill";
 
-    public string Header => $"File '{LockedFile.Name}' is locked.";
+    public string Header => $"Source '{LockedFile.Name}' is locked.";
 
     public IFileInfo LockedFile { get; }
 

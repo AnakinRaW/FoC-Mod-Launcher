@@ -81,7 +81,7 @@ internal class LockedFileHandler : InteractiveHandlerBase, ILockedFileHandler
                 managerWithoutSelf.TerminateRegisteredProcesses();
             }
 
-            // File is still locked
+            // Source is still locked
             if (!lockingProcessManager.GetProcesses().WithoutCurrentProcess().WithoutDebugger().AllStopped())
                 return ILockedFileHandler.Result.Locked;
         }
@@ -91,7 +91,7 @@ internal class LockedFileHandler : InteractiveHandlerBase, ILockedFileHandler
             if (!_updateConfiguration.SupportsRestart)
                 return ILockedFileHandler.Result.Locked;
 
-            Logger?.LogTrace($"File '{file}' is locked by current application. Restart is required.");
+            Logger?.LogTrace($"Source '{file}' is locked by current application. Restart is required.");
             return ILockedFileHandler.Result.RequiresRestart;
         }
 
