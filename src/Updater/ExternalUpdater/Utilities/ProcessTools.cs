@@ -25,7 +25,7 @@ internal class ProcessTools : IProcessTools
     public void StartApplication(IFileInfo application, ExternalUpdaterResult appStartOptions, bool elevate = false)
     {
         if (!application.Exists)
-            throw new FileNotFoundException("The launcher executable was not found.", application.FullName);
+            throw new FileNotFoundException("The executable was not found.", application.FullName);
 
         var startInfo = new ProcessStartInfo(application.FullName) { Arguments = ((int)appStartOptions).ToString() };
         if (elevate)

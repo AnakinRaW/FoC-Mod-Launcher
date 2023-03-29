@@ -91,10 +91,8 @@ public partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWindow
 
     public UpdateWindowViewModel(IServiceProvider serviceProvider)
     {
-        var s = serviceProvider.CreateScope();
-
         _serviceProvider = serviceProvider;
-        Title = "Launcher Update";
+        Title = "Application Update";
         HasMaximizeButton = false;
         HasMinimizeButton = false;
         IsResizable = false;
@@ -116,7 +114,7 @@ public partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWindow
         return Task.Run(async () =>
         {
             await InfoBarViewModel.InitializeAsync();
-            await LoadInstalledLauncherInformation(null);
+            await LoadInstalledProductInformation(null);
 
             var downloaded = await LoadBranches();
             if (downloaded)
@@ -141,26 +139,26 @@ public partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWindow
         InfoBarViewModel.Dispose();
     }
 
-    private async Task LoadInstalledLauncherInformation(IUpdateCatalog? updateCatalog)
+    private async Task LoadInstalledProductInformation(IUpdateCatalog? updateCatalog)
     {
         await _semaphoreLock.WaitAsync();
         try
         {
-            var launcher = _productService.GetCurrentInstance();
+            var product = _productService.GetCurrentInstance();
 
-            if (launcher.State == ProductState.RestartRequired)
+            if (product.State == ProductState.RestartRequired)
                 RequiresRestart = true;
 
-            if (launcher.State == ProductState.ElevationRequired)
+            if (product.State == ProductState.ElevationRequired)
                 RequiresElevation = true;
 
             _dispatcher.Invoke(() => ProductViewModel =
-                _productViewModelFactory.Create(launcher, updateCatalog));
+                _productViewModelFactory.Create(product, updateCatalog));
 
             if (updateCatalog?.Action is UpdateCatalogAction.Install or UpdateCatalogAction.Uninstall)
             {
                 var model = _dialogViewModelFactory.CreateErrorViewModel(
-                    "Update information has invalid data:\r\nThe launcher cannot be uninstalled or re-installed through this dialog.");
+                    "Installing or uninstalling a product is currently not supported.");
                 _serviceProvider.GetRequiredService<IQueuedDialogService>().ShowDialog(model).Forget();
             }
         }
@@ -170,7 +168,7 @@ public partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWindow
         }
     }
 
-    private async Task LoadUpdatingLauncherInformation(IUpdateSession updateSession)
+    private async Task LoadUpdatingProductInformation(IUpdateSession updateSession)
     {
         await _semaphoreLock.WaitAsync();
         try
@@ -186,9 +184,9 @@ public partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWindow
 
     private async Task<bool> LoadBranches()
     {
-        var launcher = _productService.GetCurrentInstance();
+        var currentInstance = _productService.GetCurrentInstance();
 
-        if (launcher.Branch is null)
+        if (currentInstance.Branch is null)
             throw new InvalidOperationException("Current installation does not have a branch.");
 
         try
@@ -214,12 +212,12 @@ public partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWindow
                 var stableBranch = branches.FirstOrDefault(b => b.Name == branchManager.StableBranchName) ??
                                    throw new InvalidOperationException(
                                        "No stable branch found. There is something wrong the deployment. Please call the author.");
-                currentBranch = branches.FirstOrDefault(b => b.Equals(launcher.Branch)) ?? stableBranch;
+                currentBranch = branches.FirstOrDefault(b => b.Equals(currentInstance.Branch)) ?? stableBranch;
             }
             else
             {
-                branches = new List<ProductBranch> { launcher.Branch };
-                currentBranch = launcher.Branch;
+                branches = new List<ProductBranch> { currentInstance.Branch };
+                currentBranch = currentInstance.Branch;
             }
 
             _dispatcher.Invoke(() =>
@@ -296,34 +294,34 @@ public partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWindow
 
     private void OnUpdateCheckCompleted(object sender, IUpdateCatalog? e)
     {
-        LoadInstalledLauncherInformation(e).Forget();
+        LoadInstalledProductInformation(e).Forget();
     }
 
     private void OnUpdateStarted(object sender, IUpdateSession e)
     {
         IsUpdating = true;
         _currentUpdateSession = e;
-        LoadUpdatingLauncherInformation(e).Forget();
+        LoadUpdatingProductInformation(e).Forget();
     }
 
     private void OnUpdateCompleted(object sender, EventArgs e)
     {
         IsUpdating = false;
         _currentUpdateSession = null;
-        LoadInstalledLauncherInformation(null).Forget();
+        LoadInstalledProductInformation(null).Forget();
     }
 
     private void RegisterEvents()
     {
-        _updateService.CheckingForUpdatesCompleted += OnUpdateCheckCompleted;
-        _updateService.UpdateStarted += OnUpdateStarted;
-        _updateService.UpdateCompleted += OnUpdateCompleted;
+        _updateService.CheckingForUpdatesCompleted += OnUpdateCheckCompleted!;
+        _updateService.UpdateStarted += OnUpdateStarted!;
+        _updateService.UpdateCompleted += OnUpdateCompleted!;
     }
 
     private void UnregisterEvents()
     {
-        _updateService.CheckingForUpdatesCompleted -= OnUpdateCheckCompleted;
-        _updateService.UpdateStarted -= OnUpdateStarted;
-        _updateService.UpdateCompleted -= OnUpdateCompleted;
+        _updateService.CheckingForUpdatesCompleted -= OnUpdateCheckCompleted!;
+        _updateService.UpdateStarted -= OnUpdateStarted!;
+        _updateService.UpdateCompleted -= OnUpdateCompleted!;
     }
 }

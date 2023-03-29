@@ -69,7 +69,7 @@ public sealed class ApplicationUpdaterRegistry : IApplicationUpdaterRegistry
         var registry = serviceProvider.GetRequiredService<IRegistry>();
         var baseKey = registry.OpenBaseKey(RegistryHive.CurrentUser, RegistryView.Default);
         var registryKey = baseKey.CreateSubKey(basePath);
-        _registryKey = registryKey ?? throw new InvalidOperationException("Unable to create Launcher registry. Missing rights?");
+        _registryKey = registryKey ?? throw new InvalidOperationException("Unable to create registry. Missing rights?");
     }
 
     public void ScheduleReset()
