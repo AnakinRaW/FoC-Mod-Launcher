@@ -50,9 +50,3 @@ internal class LauncherProductService : ProductServiceBase
         return directory;
     }
 }
-
-internal static class LauncherVariablesKeys
-{
-    public const string LauncherAppData = "LauncherAppData";
-    public const string LauncherFileName = "LauncherFileName";
-}
