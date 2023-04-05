@@ -1,4 +1,4 @@
-﻿namespace FocLauncher.Update.LauncherImplementations;
+﻿namespace AnakinRaW.ApplicationBase.Update.LauncherImplementations;
 
 internal static class LauncherVariablesKeys
 {

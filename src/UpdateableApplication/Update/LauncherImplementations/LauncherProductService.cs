@@ -6,7 +6,7 @@ using AnakinRaW.AppUpdaterFramework.Metadata.Product;
 using AnakinRaW.AppUpdaterFramework.Product;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace FocLauncher.Update.LauncherImplementations;
+namespace AnakinRaW.ApplicationBase.Update.LauncherImplementations;
 
 internal class LauncherProductService : ProductServiceBase
 {

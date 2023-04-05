@@ -13,7 +13,7 @@ using AnakinRaW.AppUpdaterFramework.Product.Manifest;
 using Microsoft.Extensions.DependencyInjection;
 using Semver;
 
-namespace FocLauncher.Update.Manifest;
+namespace AnakinRaW.ApplicationBase.Update.Manifest;
 
 internal class LauncherManifestLoader : ManifestLoaderBase
 {

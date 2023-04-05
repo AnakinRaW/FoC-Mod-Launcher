@@ -11,10 +11,9 @@ using AnakinRaW.AppUpdaterFramework.Metadata.Component.Catalog;
 using AnakinRaW.AppUpdaterFramework.Metadata.Product;
 using AnakinRaW.AppUpdaterFramework.Product.Manifest;
 using AnakinRaW.ExternalUpdater;
-using FocLauncher.Utilities;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace FocLauncher.Update.LauncherImplementations;
+namespace AnakinRaW.ApplicationBase.Update.LauncherImplementations;
 
 internal class LauncherInstalledManifestProvider : IInstalledManifestProvider
 {

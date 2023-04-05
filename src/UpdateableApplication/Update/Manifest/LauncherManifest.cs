@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Serialization;
+using AnakinRaW.ApplicationBase.Utilities;
 using AnakinRaW.AppUpdaterFramework.Conditions;
 using AnakinRaW.AppUpdaterFramework.Metadata.Component;
 using AnakinRaW.AppUpdaterFramework.Metadata.Component.Catalog;
-using FocLauncher.Utilities;
-using Semver;
 using AnakinRaW.CommonUtilities.Hashing;
+using Semver;
 
-namespace FocLauncher.Update.Manifest;
+namespace AnakinRaW.ApplicationBase.Update.Manifest;
 
 public abstract record LauncherComponentBase(
     [property: JsonPropertyName("id")] string Id,

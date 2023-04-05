@@ -1,6 +1,6 @@
 ﻿using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Input;
 
-namespace FocLauncher.Commands.Handlers;
+namespace AnakinRaW.ApplicationBase.Commands.Handlers;
 
 internal interface IShowUpdateWindowCommandHandler : ICommandHandler
 {

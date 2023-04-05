@@ -6,7 +6,6 @@
              xmlns:local="clr-namespace:FocLauncher.Controls"
              xmlns:controls="clr-namespace:AnakinRaW.CommonUtilities.Wpf.Imaging.Controls;assembly=AnakinRaW.CommonUtilities.WPF.Imaging"
              xmlns:designer="clr-namespace:FocLauncher.ViewModels.Designer"
-             xmlns:imaging="clr-namespace:FocLauncher.Imaging"
              mc:Ignorable="d" d:DesignWidth="150"  d:DataContext="{d:DesignInstance {x:Type designer:StatusBarViewModel}, IsDesignTimeCreatable=True}">
     <FrameworkElement.Resources>
         <Style TargetType="{x:Type TextBlock}">

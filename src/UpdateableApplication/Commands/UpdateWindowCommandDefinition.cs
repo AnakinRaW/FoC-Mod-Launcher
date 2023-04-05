@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Windows.Input;
+using AnakinRaW.ApplicationBase.Commands.Handlers;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Input;
-using AnakinRaW.CommonUtilities.Wpf.Imaging;
-using FocLauncher.Commands.Handlers;
-using FocLauncher.Imaging;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace FocLauncher.Commands;
+namespace AnakinRaW.ApplicationBase.Commands;
 
 public class UpdateWindowCommandDefinition : ICommandDefinition
 { 

@@ -2,15 +2,13 @@
 using System.IO;
 using System.Security.AccessControl;
 using System.Windows.Input;
+using AnakinRaW.AppUpdaterFramework.ExternalUpdater.Registry;
+using AnakinRaW.CommonUtilities.FileSystem;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 using Microsoft.Extensions.DependencyInjection;
-using AnakinRaW.CommonUtilities.FileSystem;
-using AnakinRaW.CommonUtilities.FileSystem.Windows;
-using FocLauncher.ViewModels.Dialogs;
 using Validation;
-using AnakinRaW.AppUpdaterFramework.ExternalUpdater.Registry;
 
-namespace FocLauncher;
+namespace AnakinRaW.ApplicationBase;
 
 internal class AppResetHandler
 {

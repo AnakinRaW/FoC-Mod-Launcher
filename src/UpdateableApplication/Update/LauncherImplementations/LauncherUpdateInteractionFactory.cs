@@ -4,10 +4,9 @@ using System.IO.Abstractions;
 using AnakinRaW.AppUpdaterFramework.FileLocking.Interaction;
 using AnakinRaW.AppUpdaterFramework.Interaction;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
-using FocLauncher.ViewModels.Dialogs;
 using Validation;
 
-namespace FocLauncher.Update.LauncherImplementations;
+namespace AnakinRaW.ApplicationBase.Update.LauncherImplementations;
 
 public class LauncherUpdateInteractionFactory : IUpdateDialogViewModelFactory
 {

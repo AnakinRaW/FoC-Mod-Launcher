@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Windows;
+using AnakinRaW.CommonUtilities;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
-using FocLauncher.Utilities;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using AnakinRaW.CommonUtilities;
 using Validation;
-using UnhandledExceptionDialogViewModel = FocLauncher.ViewModels.Dialogs.UnhandledExceptionDialogViewModel;
 
-namespace FocLauncher;
+namespace AnakinRaW.ApplicationBase;
 
 internal class UnhandledExceptionHandler : DisposableObject
 {

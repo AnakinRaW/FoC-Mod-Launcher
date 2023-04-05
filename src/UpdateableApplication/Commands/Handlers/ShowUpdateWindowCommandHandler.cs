@@ -2,15 +2,14 @@
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
-using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
-using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Input;
-using FocLauncher.Utilities;
-using Microsoft.Extensions.DependencyInjection;
 using AnakinRaW.AppUpdaterFramework.ViewModels;
 using AnakinRaW.CommonUtilities.Windows;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Input;
 using AnakinRaW.ExternalUpdater;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace FocLauncher.Commands.Handlers;
+namespace AnakinRaW.ApplicationBase.Commands.Handlers;
 
 internal class ShowUpdateWindowCommandHandler : AsyncCommandHandlerBase, IShowUpdateWindowCommandHandler
 {

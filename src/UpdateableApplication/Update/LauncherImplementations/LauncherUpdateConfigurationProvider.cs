@@ -4,7 +4,7 @@ using AnakinRaW.AppUpdaterFramework.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Validation;
 
-namespace FocLauncher.Update.LauncherImplementations;
+namespace AnakinRaW.ApplicationBase.Update.LauncherImplementations;
 
 internal class LauncherUpdateConfigurationProvider : UpdateConfigurationProviderBase
 {

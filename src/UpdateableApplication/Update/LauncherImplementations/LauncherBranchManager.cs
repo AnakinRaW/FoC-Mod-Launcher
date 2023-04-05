@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using AnakinRaW.AppUpdaterFramework.Metadata.Product;
 using AnakinRaW.AppUpdaterFramework.Product;
-using Flurl;
 
-namespace FocLauncher.Update.LauncherImplementations;
+namespace AnakinRaW.ApplicationBase.Update.LauncherImplementations;
 
 public class LauncherBranchManager : BranchManager
 {
