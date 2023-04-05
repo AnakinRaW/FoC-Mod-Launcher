@@ -10,36 +10,39 @@ using AnakinRaW.AppUpdaterFramework.Restart;
 using AnakinRaW.AppUpdaterFramework.Storage;
 using AnakinRaW.AppUpdaterFramework.Updater.Progress;
 using AnakinRaW.AppUpdaterFramework.Utilities;
-using AnakinRaW.CommonUtilities.TaskPipeline.Tasks;
+using AnakinRaW.CommonUtilities.SimplePipeline;
+using AnakinRaW.CommonUtilities.SimplePipeline.Progress;
+using AnakinRaW.CommonUtilities.SimplePipeline.Steps;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Validation;
 
 namespace AnakinRaW.AppUpdaterFramework.Updater.Tasks;
 
-internal class InstallTask : RunnerTask, IProgressTask
+internal class InstallStep : PipelineStep, IComponentStep
 { 
     private readonly IUpdateConfiguration _updateConfiguration;
     private readonly ProductVariables _productVariables;
     private readonly UpdateAction _action;
     private readonly IInstallableComponent? _currentComponent;
-    private readonly DownloadTask? _download;
+    private readonly DownloadStep? _download;
     private readonly IInstallerFactory _installerFactory;
 
     public IInstallableComponent Component { get; }
 
-    IProductComponent IComponentTask.Component => Component;
+    IProductComponent IComponentStep.Component => Component;
 
     internal InstallResult Result { get; private set; } = InstallResult.Success;
 
-    public ProgressType Type => ProgressType.Install;
-    public ITaskProgressReporter ProgressReporter { get; }
+    public ProgressType Type => ProgressTypes.Install;
+
+    public IStepProgressReporter ProgressReporter { get; }
 
     public long Size => Component.InstallationSize.Total;
 
-    public InstallTask(
+    public InstallStep(
         IInstallableComponent installable, 
-        ITaskProgressReporter progressReporter, 
+        IStepProgressReporter progressReporter, 
         IUpdateConfiguration updateConfiguration,
         ProductVariables productVariables,
         IServiceProvider serviceProvider) :
@@ -47,11 +50,11 @@ internal class InstallTask : RunnerTask, IProgressTask
     {
     }
 
-    public InstallTask(
+    public InstallStep(
         IInstallableComponent installable,
         IInstallableComponent? currentComponent, 
-        DownloadTask download, 
-        ITaskProgressReporter progressReporter, 
+        DownloadStep download,
+        IStepProgressReporter progressReporter, 
         IUpdateConfiguration updateConfiguration,
         ProductVariables productVariables,
         IServiceProvider serviceProvider) : 
@@ -62,10 +65,10 @@ internal class InstallTask : RunnerTask, IProgressTask
         _download = download;
     }
 
-    private InstallTask(
+    private InstallStep(
         IInstallableComponent installable, 
-        UpdateAction updateAction, 
-        ITaskProgressReporter progressReporter, 
+        UpdateAction updateAction,
+        IStepProgressReporter progressReporter, 
         IUpdateConfiguration updateConfiguration,
         ProductVariables productVariables,
         IServiceProvider serviceProvider) : base(serviceProvider)
@@ -144,7 +147,7 @@ internal class InstallTask : RunnerTask, IProgressTask
             }
 
             if (Result.IsFailure())
-                throw new ComponentFailedException(new[] { this });
+                throw new StepFailureException(new[] { this });
             if (Result == InstallResult.Cancel)
                 throw new OperationCanceledException();
 
@@ -231,7 +234,7 @@ internal class InstallTask : RunnerTask, IProgressTask
         diskSpaceCalculator.ThrowIfNotEnoughDiskSpaceAvailable(Component, _currentComponent, installPath, options);
     }
 
-    private void OnInstallerProgress(object sender, ProgressEventArgs e)
+    private void OnInstallerProgress(object sender, ComponentProgressEventArgs e)
     {
         ProgressReporter.Report(this, e.Progress);
     }

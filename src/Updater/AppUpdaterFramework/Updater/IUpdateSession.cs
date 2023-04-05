@@ -6,9 +6,9 @@ namespace AnakinRaW.AppUpdaterFramework.Updater;
 
 public interface IUpdateSession
 {
-    event EventHandler<ProgressEventArgs?> DownloadProgress;
+    event EventHandler<ComponentProgressEventArgs> DownloadProgress;
 
-    event EventHandler<ProgressEventArgs?> InstallProgress;
+    event EventHandler<ComponentProgressEventArgs> InstallProgress;
 
     IProductReference Product { get; }
 

@@ -14,20 +14,21 @@ using AnakinRaW.CommonUtilities.DownloadManager;
 using AnakinRaW.CommonUtilities.DownloadManager.Verification;
 using AnakinRaW.CommonUtilities.DownloadManager.Verification.HashVerification;
 using AnakinRaW.CommonUtilities.Hashing;
-using AnakinRaW.CommonUtilities.TaskPipeline.Tasks;
+using AnakinRaW.CommonUtilities.SimplePipeline.Progress;
+using AnakinRaW.CommonUtilities.SimplePipeline.Steps;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Validation;
 
 namespace AnakinRaW.AppUpdaterFramework.Updater.Tasks;
 
-internal class DownloadTask : SynchronizedTask, IProgressTask
+internal class DownloadStep : SynchronizedStep, IComponentStep
 {
     private readonly IUpdateConfiguration _updateConfiguration;
     private readonly DownloadRepository _downloadRepository;
 
-    public ProgressType Type => ProgressType.Download;
-    public ITaskProgressReporter ProgressReporter { get; }
+    public ProgressType Type => ProgressTypes.Download;
+    public IStepProgressReporter ProgressReporter { get; }
 
     public IFileInfo DownloadPath { get; private set; } = null!;
 
@@ -37,11 +38,11 @@ internal class DownloadTask : SynchronizedTask, IProgressTask
 
     public IInstallableComponent Component { get; }
 
-    IProductComponent IComponentTask.Component => Component;
+    IProductComponent IComponentStep.Component => Component;
 
-    public DownloadTask(
-        IInstallableComponent installable, 
-        ITaskProgressReporter progressReporter, 
+    public DownloadStep(
+        IInstallableComponent installable,
+        IStepProgressReporter progressReporter, 
         IUpdateConfiguration updateConfiguration,
         IServiceProvider serviceProvider) : base(serviceProvider)
     {

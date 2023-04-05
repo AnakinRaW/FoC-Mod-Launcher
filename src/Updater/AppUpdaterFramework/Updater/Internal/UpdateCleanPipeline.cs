@@ -4,13 +4,13 @@ using System.Linq;
 using System.Threading;
 using AnakinRaW.AppUpdaterFramework.Metadata.Component;
 using AnakinRaW.AppUpdaterFramework.Storage;
-using AnakinRaW.CommonUtilities.TaskPipeline;
+using AnakinRaW.CommonUtilities.SimplePipeline;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace AnakinRaW.AppUpdaterFramework.Updater;
 
-internal class UpdateCleanJob : JobBase
+internal class UpdateCleanPipeline : Pipeline
 {
     private readonly List<IInstallableComponent> _filesFailedToBeCleaned = new();
     private readonly ILogger? _logger;
@@ -19,14 +19,14 @@ internal class UpdateCleanJob : JobBase
     private readonly List<IInstallableComponent> _downloadsToClean = new();
     private readonly List<IInstallableComponent> _backupsToClean = new();
 
-    public UpdateCleanJob(IServiceProvider serviceProvider)
+    public UpdateCleanPipeline(IServiceProvider serviceProvider)
     { 
         _logger = serviceProvider.GetService<ILoggerFactory>()?.CreateLogger(GetType());
         _backupManager = serviceProvider.GetRequiredService<IBackupManager>();
         _downloadRepository = serviceProvider.GetRequiredService<DownloadRepository>();
     }
 
-    protected override bool PlanCore()
+    protected override bool PrepareCore()
     {
         _backupsToClean.Clear();
         _downloadsToClean.Clear();
@@ -39,7 +39,7 @@ internal class UpdateCleanJob : JobBase
     protected override void RunCore(CancellationToken token)
     {
         token.ThrowIfCancellationRequested();
-        if (!Plan())
+        if (!Prepare())
             return;
         if (!_downloadsToClean.Any() && !_backupsToClean.Any())
         {

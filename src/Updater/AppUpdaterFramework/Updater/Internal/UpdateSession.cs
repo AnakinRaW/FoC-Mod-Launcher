@@ -12,8 +12,8 @@ internal class UpdateSession : IUpdateSession
     private readonly IApplicationUpdater _updater;
     private readonly CancellationTokenSource _cts = new();
 
-    public event EventHandler<ProgressEventArgs?>? DownloadProgress;
-    public event EventHandler<ProgressEventArgs?>? InstallProgress;
+    public event EventHandler<ComponentProgressEventArgs>? DownloadProgress;
+    public event EventHandler<ComponentProgressEventArgs>? InstallProgress;
     public IProductReference Product { get; }
 
     public UpdateSession(IProductReference product, IApplicationUpdater updater)
@@ -37,20 +37,12 @@ internal class UpdateSession : IUpdateSession
         }
     }
 
-    private void OnProgress(object sender, ProgressEventArgs? e)
+    private void OnProgress(object sender, ComponentProgressEventArgs e)
     {
-        if (e is null)
-            return;
-        switch (e.Type)
-        {
-            case ProgressType.Install:
-                InstallProgress?.Invoke(this, e);
-                break;
-            case ProgressType.Download:
-            case ProgressType.Verify:
-                DownloadProgress?.Invoke(this, e);
-                break;
-        }
+        if (e.Type.Equals(ProgressTypes.Install))
+            InstallProgress?.Invoke(this, e);
+        else if (e.Type.Equals(ProgressTypes.Download) || e.Type.Equals(ProgressTypes.Verify))
+            DownloadProgress?.Invoke(this, e);
     }
 
     public void Cancel()

@@ -8,17 +8,18 @@ using AnakinRaW.AppUpdaterFramework.Restart;
 using AnakinRaW.AppUpdaterFramework.Storage;
 using AnakinRaW.AppUpdaterFramework.Updater.Progress;
 using AnakinRaW.AppUpdaterFramework.Utilities;
+using AnakinRaW.CommonUtilities.SimplePipeline.Progress;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Validation;
 
 namespace AnakinRaW.AppUpdaterFramework.Updater;
 
-internal class ApplicationUpdater : IApplicationUpdater, IProgressReporter
+internal class ApplicationUpdater : IApplicationUpdater, IComponentProgressReporter
 {
     private readonly IUpdateCatalog _updateCatalog;
     private readonly IServiceProvider _serviceProvider;
-    public event EventHandler<ProgressEventArgs?>? Progress;
+    public event EventHandler<ComponentProgressEventArgs>? Progress;
 
     private readonly ILogger? _logger;
 
@@ -31,9 +32,9 @@ internal class ApplicationUpdater : IApplicationUpdater, IProgressReporter
         _logger = serviceProvider.GetService<ILoggerFactory>()?.CreateLogger(GetType());
     }
 
-    public void Report(string package, double progress, ProgressType type, ProgressInfo detailedProgress)
+    public void Report(string package, double progress, ProgressType type, ComponentProgressInfo detailedProgress)
     {
-        Progress?.Invoke(this, new ProgressEventArgs(package, progress, type, detailedProgress));
+        Progress?.Invoke(this, new ComponentProgressEventArgs(package, progress, type, detailedProgress));
     }
 
     public async Task<UpdateResult> UpdateAsync(CancellationToken token)
@@ -76,8 +77,8 @@ internal class ApplicationUpdater : IApplicationUpdater, IProgressReporter
 
             await Task.Run(() =>
             {
-                using var updateJob = new UpdateJob(_updateCatalog, this, _serviceProvider);
-                updateJob.Plan();
+                using var updateJob = new UpdatePipeline(_updateCatalog, this, _serviceProvider);
+                updateJob.Prepare();
                 // TODO: PreChecks
                 try
                 {
@@ -140,7 +141,7 @@ internal class ApplicationUpdater : IApplicationUpdater, IProgressReporter
     {
         await Task.Run(() =>
         {
-            new UpdateCleanJob(_serviceProvider).Run();
+            new UpdateCleanPipeline(_serviceProvider).Run();
         }).ConfigureAwait(false);
     }
 

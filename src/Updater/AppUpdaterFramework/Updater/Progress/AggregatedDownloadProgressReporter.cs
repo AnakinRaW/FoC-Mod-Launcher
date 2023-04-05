@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Threading;
 using AnakinRaW.AppUpdaterFramework.Updater.Tasks;
+using AnakinRaW.CommonUtilities.SimplePipeline.Progress;
 
 namespace AnakinRaW.AppUpdaterFramework.Updater.Progress;
 
-internal class AggregatedDownloadProgressReporter : AggregatedComponentProgressReporter
+internal class AggregatedDownloadProgressReporter : ComponentAggregatedProgressReporter
 {
     private const int MovingAverageCalculationWindow = 1000;
 
@@ -20,17 +21,17 @@ internal class AggregatedDownloadProgressReporter : AggregatedComponentProgressR
     private long _byteRate;
     private DateTime _downloadTime = DateTime.Now;
 
-    protected override ProgressType Type => ProgressType.Download;
+    protected override ProgressType Type => ProgressTypes.Download;
 
-    public AggregatedDownloadProgressReporter(IProgressReporter progressReporter) : base(progressReporter)
+    public AggregatedDownloadProgressReporter(IComponentProgressReporter progressReporter) : base(progressReporter)
     {
     }
 
-    protected override double CalculateAggregatedProgress(IProgressTask task, double taskProgress, ref ProgressInfo progressInfo)
+    protected override double CalculateAggregatedProgress(IComponentStep step, double taskProgress, ref ComponentProgressInfo progressInfo)
     {
         var now = DateTime.Now;
-        var key = task.Component.GetUniqueId();
-        var totalTaskProgressSize = (long)(taskProgress * task.Size);
+        var key = step.Component.GetUniqueId();
+        var totalTaskProgressSize = (long)(taskProgress * step.Size);
 
         if (taskProgress >= 1.0)
             Interlocked.Increment(ref _completedPackageCount);
@@ -82,7 +83,7 @@ internal class AggregatedDownloadProgressReporter : AggregatedComponentProgressR
             progressInfo.TotalSize = TotalSize;
         }
 
-        if (_completedPackageCount >= TotalComponentCount && taskProgress >= 1.0)
+        if (_completedPackageCount >= TotalStepCount && taskProgress >= 1.0)
         {
             currentProgress = 1.0;
             progressInfo.DownloadSpeed = 0;

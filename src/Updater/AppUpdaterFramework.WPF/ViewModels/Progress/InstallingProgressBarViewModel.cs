@@ -6,7 +6,7 @@ namespace AnakinRaW.AppUpdaterFramework.ViewModels.Progress;
 
 public sealed class InstallingProgressBarViewModel : ProgressBarViewModel
 {
-    public override string? LeftHeaderText {
+    public override string LeftHeaderText {
         get
         {
             var progressInformation = ProgressInformation;
@@ -20,7 +20,7 @@ public sealed class InstallingProgressBarViewModel : ProgressBarViewModel
 
     public override string? RightHeaderText => null;
 
-    public override string? FooterText => ProgressInformation?.Component;
+    public override string? FooterText => ProgressInformation?.ProgressText;
 
     public InstallingProgressBarViewModel(IUpdateSession updateSession, IServiceProvider serviceProvider) 
         : base(updateSession, nameof(IUpdateSession.InstallProgress), serviceProvider)

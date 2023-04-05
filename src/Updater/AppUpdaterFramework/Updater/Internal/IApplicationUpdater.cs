@@ -7,7 +7,7 @@ namespace AnakinRaW.AppUpdaterFramework.Updater;
 
 internal interface IApplicationUpdater
 {
-    event EventHandler<ProgressEventArgs?> Progress;
+    event EventHandler<ComponentProgressEventArgs> Progress;
 
     Task<UpdateResult> UpdateAsync(CancellationToken token);
 }

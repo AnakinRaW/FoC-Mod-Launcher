@@ -1,10 +1,14 @@
-﻿using System;
+﻿using AnakinRaW.CommonUtilities.SimplePipeline.Progress;
 
 namespace AnakinRaW.AppUpdaterFramework.Updater.Progress;
 
-internal class ComponentProgressEventArgs : EventArgs
+public class ComponentProgressEventArgs : ProgressEventArgs<ComponentProgressInfo>
 {
-    public string ComponentInfo { get; }
+    public ComponentProgressEventArgs(string progressText, double progress, ProgressType type) : base(progressText, progress, type)
+    {
+    }
 
-    public double Progress { get; }
+    public ComponentProgressEventArgs(string progressText, double progress, ProgressType type, ComponentProgressInfo detailedProgress) : base(progressText, progress, type, detailedProgress)
+    {
+    }
 }

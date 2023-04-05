@@ -4,22 +4,22 @@ using AnakinRaW.AppUpdaterFramework.Updater.Tasks;
 
 namespace AnakinRaW.AppUpdaterFramework.Updater.Progress;
 
-internal class ProgressTaskComparer : IEqualityComparer<IProgressTask>
+internal class ComponentStepComparer : IEqualityComparer<IComponentStep>
 {
-    internal static readonly IEqualityComparer<IProgressTask> Default = new ProgressTaskComparer();
+    internal static readonly IEqualityComparer<IComponentStep> Default = new ComponentStepComparer();
     private readonly IEqualityComparer<IProductComponentIdentity> _comparer;
 
-    internal ProgressTaskComparer(IEqualityComparer<IProductComponentIdentity>? comparer = null)
+    internal ComponentStepComparer(IEqualityComparer<IProductComponentIdentity>? comparer = null)
     {
         _comparer = comparer ?? ProductComponentIdentityComparer.Default;
     }
 
-    public bool Equals(IProgressTask x, IProgressTask y)
+    public bool Equals(IComponentStep x, IComponentStep y)
     {
         return _comparer.Equals(x.Component, y.Component);
     }
 
-    public int GetHashCode(IProgressTask obj)
+    public int GetHashCode(IComponentStep obj)
     {
         return _comparer.GetHashCode(obj.Component);
     }

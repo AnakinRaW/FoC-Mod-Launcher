@@ -10,7 +10,7 @@ namespace AnakinRaW.AppUpdaterFramework.ViewModels.Progress;
 public abstract partial class ProgressBarViewModel : ViewModelBase, IProgressBarViewModel
 {
     [ObservableProperty]
-    private ProgressEventArgs? _progressInformation;
+    private ComponentProgressEventArgs? _progressInformation;
 
     [NotifyChangedIsLinkedToProperty(nameof(ProgressInformation))]
     public abstract string? LeftHeaderText { get; }
@@ -26,10 +26,10 @@ public abstract partial class ProgressBarViewModel : ViewModelBase, IProgressBar
 
     protected ProgressBarViewModel(IUpdateSession updateSession, string progressEventName, IServiceProvider serviceProvider) : base(serviceProvider)
     {
-        WeakEventManager<IUpdateSession, ProgressEventArgs?>.AddHandler(updateSession, progressEventName, OnProgress);
+        WeakEventManager<IUpdateSession, ComponentProgressEventArgs>.AddHandler(updateSession, progressEventName, OnProgress!);
     }
 
-    private void OnProgress(object sender, ProgressEventArgs? e)
+    private void OnProgress(object sender, ComponentProgressEventArgs e)
     {
         ProgressInformation = e;
     }

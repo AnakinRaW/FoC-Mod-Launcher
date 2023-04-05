@@ -5,6 +5,7 @@ using AnakinRaW.AppUpdaterFramework.Metadata.Component;
 using AnakinRaW.AppUpdaterFramework.Metadata.Product;
 using AnakinRaW.AppUpdaterFramework.Updater.Progress;
 using AnakinRaW.AppUpdaterFramework.Updater.Tasks;
+using AnakinRaW.CommonUtilities.SimplePipeline.Progress;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Validation;
@@ -13,7 +14,7 @@ namespace AnakinRaW.AppUpdaterFramework.Installer;
 
 internal abstract class InstallerBase : IInstaller
 {
-    public event EventHandler<ProgressEventArgs>? Progress;
+    public event EventHandler<ComponentProgressEventArgs?>? Progress;
 
     protected readonly ILogger? Logger;
 
@@ -124,7 +125,7 @@ internal abstract class InstallerBase : IInstaller
 
     private void OnProgress(IInstallableComponent component, double progress)
     {
-        Progress?.Invoke(this, new ProgressEventArgs(component.GetDisplayName(), progress, ProgressType.Install));
+        Progress?.Invoke(this, new ComponentProgressEventArgs(component.GetDisplayName(), progress, ProgressTypes.Install));
     }
 
     private void LogFailure(IProductComponent? component, InstallAction executeAction, string details)

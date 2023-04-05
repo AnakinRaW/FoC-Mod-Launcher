@@ -9,39 +9,38 @@ using AnakinRaW.AppUpdaterFramework.Restart;
 using AnakinRaW.AppUpdaterFramework.Updater.Progress;
 using AnakinRaW.AppUpdaterFramework.Updater.Tasks;
 using AnakinRaW.AppUpdaterFramework.Utilities;
-using AnakinRaW.CommonUtilities.TaskPipeline;
-using AnakinRaW.CommonUtilities.TaskPipeline.Runners;
+using AnakinRaW.CommonUtilities.SimplePipeline;
+using AnakinRaW.CommonUtilities.SimplePipeline.Runners;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Validation;
 
 namespace AnakinRaW.AppUpdaterFramework.Updater;
 
-internal sealed class UpdateJob : JobBase, IDisposable
+internal sealed class UpdatePipeline : Pipeline
 {
-    private bool _disposed;
     private CancellationTokenSource? _linkedCancellationTokenSource;
 
-    private readonly IProgressReporter _progressReporter;
+    private readonly IComponentProgressReporter _progressReporter;
     private readonly IServiceProvider _serviceProvider;
     private readonly ILogger? _logger;
     private readonly IInstalledProduct _installedProduct;
 
     private readonly HashSet<IUpdateItem> _itemsToProcess;
 
-    private readonly AggregatedComponentProgressReporter _installProgress;
-    private readonly AggregatedComponentProgressReporter _downloadProgress;
+    private readonly ComponentAggregatedProgressReporter _installProgress;
+    private readonly ComponentAggregatedProgressReporter _downloadProgress;
 
-    private readonly List<DownloadTask> _componentsToDownload = new();
-    private readonly List<InstallTask> _installsOrRemoves = new();
+    private readonly List<DownloadStep> _componentsToDownload = new();
+    private readonly List<InstallStep> _installsOrRemoves = new();
 
-    private readonly ParallelTaskRunner _downloadsRunner;
-    private readonly TaskRunner _installsRunner;
+    private readonly ParallelRunner _downloadsRunner;
+    private readonly StepRunner _installsRunner;
     private readonly IRestartManager _restartManager;
 
     private bool IsCancelled { get; set; }
 
-    public UpdateJob(IUpdateCatalog updateCatalog, IProgressReporter progressReporter, IServiceProvider serviceProvider)
+    public UpdatePipeline(IUpdateCatalog updateCatalog, IComponentProgressReporter progressReporter, IServiceProvider serviceProvider)
     {
         Requires.NotNull(updateCatalog, nameof(updateCatalog));
         Requires.NotNull(serviceProvider, nameof(serviceProvider));
@@ -54,9 +53,9 @@ internal sealed class UpdateJob : JobBase, IDisposable
 
         _itemsToProcess = new HashSet<IUpdateItem>(updateCatalog.UpdateItems);
 
-        _installsRunner = new TaskRunner(_serviceProvider);
+        _installsRunner = new StepRunner(_serviceProvider);
         _installProgress = new AggregatedInstallProgressReporter(progressReporter);
-        _downloadsRunner = new ParallelTaskRunner(2, _serviceProvider);
+        _downloadsRunner = new ParallelRunner(2, _serviceProvider);
         _downloadProgress = new AggregatedDownloadProgressReporter(progressReporter);
 
         RegisterEvents();
@@ -76,11 +75,8 @@ internal sealed class UpdateJob : JobBase, IDisposable
         _restartManager.RestartRequired -= OnRestartRequired;
     }
 
-    protected override bool PlanCore()
-    {
-        if (_disposed)
-            throw new ObjectDisposedException("Job already disposed");
-
+    protected override bool PrepareCore()
+    { 
         if (_itemsToProcess.Count == 0)
         {
             var ex = new InvalidOperationException("No items to update/remove.");
@@ -103,8 +99,8 @@ internal sealed class UpdateJob : JobBase, IDisposable
                 if (updateComponent.OriginInfo is null)
                     throw new InvalidOperationException($"OriginInfo is missing for '{updateComponent}'");
                 
-                var downloadTask = new DownloadTask(updateComponent, _downloadProgress, configuration, _serviceProvider);
-                var installTask = new InstallTask(updateComponent, installedComponent, downloadTask, _installProgress, configuration, _installedProduct.Variables, _serviceProvider);
+                var downloadTask = new DownloadStep(updateComponent, _downloadProgress, configuration, _serviceProvider);
+                var installTask = new InstallStep(updateComponent, installedComponent, downloadTask, _installProgress, configuration, _installedProduct.Variables, _serviceProvider);
 
                 _installsOrRemoves.Add(installTask);
                 _componentsToDownload.Add(downloadTask);
@@ -112,7 +108,7 @@ internal sealed class UpdateJob : JobBase, IDisposable
 
             if (updateItem.Action == UpdateAction.Delete && installedComponent != null)
             {
-                var removeTask = new InstallTask(installedComponent, _installProgress, configuration, _installedProduct.Variables, _serviceProvider);
+                var removeTask = new InstallStep(installedComponent, _installProgress, configuration, _installedProduct.Variables, _serviceProvider);
                 _installsOrRemoves.Add(removeTask);
             }
         }
@@ -126,22 +122,19 @@ internal sealed class UpdateJob : JobBase, IDisposable
     }
 
     protected override void RunCore(CancellationToken token)
-    {
-        if (_disposed)
-            throw new ObjectDisposedException("Job already disposed");
-
-        _progressReporter.Report("Starting update...", 0.0, ProgressType.Install, new ProgressInfo());
+    { 
+        _progressReporter.Report("Starting update...", 0.0, ProgressTypes.Install, new ComponentProgressInfo());
 
         var componentsToDownload = _componentsToDownload.ToList();
         var componentsToInstallOrRemove = _installsOrRemoves.ToList();
 
         if (!componentsToDownload.Any())
-            _progressReporter.Report("_", 1.0, ProgressType.Download, new ProgressInfo());
+            _progressReporter.Report("_", 1.0, ProgressTypes.Download, new ComponentProgressInfo());
         else
             _downloadProgress.Initialize(componentsToDownload);
 
         if (!componentsToInstallOrRemove.Any())
-            _progressReporter.Report("_", 1.0, ProgressType.Install, new ProgressInfo());
+            _progressReporter.Report("_", 1.0, ProgressTypes.Install, new ComponentProgressInfo());
         else
             _installProgress.Initialize(componentsToInstallOrRemove); 
         
@@ -186,25 +179,23 @@ internal sealed class UpdateJob : JobBase, IDisposable
         var failedInstalls = componentsToInstallOrRemove
             .Where(installTask => !installTask.Result.IsSuccess()).ToList();
 
-        var failedTasks = failedDownloads.Concat<IProgressTask>(failedInstalls).ToList();
+        var failedTasks = failedDownloads.Concat<IProgressStep>(failedInstalls).ToList();
         
         if (failedTasks.Any() || failedInstalls.Any())
-            throw new ComponentFailedException(failedTasks);
+            throw new StepFailureException(failedTasks);
     }
 
-    private void OnError(object sender, TaskErrorEventArgs e)
+    private void OnError(object sender, StepErrorEventArgs e)
     {
         IsCancelled |= e.Cancel;
         if (e.Cancel && _linkedCancellationTokenSource is not null) 
             _linkedCancellationTokenSource.Cancel();
     }
 
-    public void Dispose()
+    protected override void DisposeManagedResources()
     {
-        if (_disposed)
-            return;
+        base.DisposeManagedResources();
         UnregisterEvents();
-        _disposed = true;
     }
 
     private void OnRestartRequired(object? sender, EventArgs e)
