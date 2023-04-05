@@ -27,7 +27,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExternalUpdater", "src\Upda
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExternalUpdater.CLI", "src\Updater\ExternalUpdater.CLI\ExternalUpdater.CLI.csproj", "{0A4711AE-1EF8-45EF-8569-147A1F1DBFA8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApplicationBase", "src\UpdateableApplication\ApplicationBase.csproj", "{E194B514-A5EB-4CBE-8461-30FF4330DA07}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApplicationBase", "src\ApplicationBase\ApplicationBase.csproj", "{E194B514-A5EB-4CBE-8461-30FF4330DA07}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
