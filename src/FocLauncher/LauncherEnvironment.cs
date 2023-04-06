@@ -12,6 +12,7 @@ internal class LauncherEnvironment : ApplicationEnvironmentBase
     public override string ApplicationName => "Foc Mod Launcher";
     public override Url? RepositoryUrl { get; } = new("https://github.com/AnakinRaW/FoC-Mod-Launcher");
     public override Url UpdateRootUrl { get; } = new("https://republicatwar.com/downloads/FocLauncher/v2");
+    public override string ApplicationRegistryPath => @"SOFTWARE\FocLauncher";
     protected override string ApplicationLocalDirectoryName => "FocLauncher";
 
     public LauncherEnvironment(Assembly assembly, IFileSystem fileSystem) : base(assembly, fileSystem)

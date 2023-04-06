@@ -16,4 +16,6 @@ public interface IApplicationEnvironment
     Url? RepositoryUrl { get; }
 
     Url UpdateRootUrl { get; }
+
+    string ApplicationRegistryPath { get; }
 }

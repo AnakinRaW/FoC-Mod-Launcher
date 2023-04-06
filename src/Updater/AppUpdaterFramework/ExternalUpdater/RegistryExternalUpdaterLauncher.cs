@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace AnakinRaW.AppUpdaterFramework.ExternalUpdater;
 
-internal class RegistryExternalUpdaterLauncher : IRegistryExternalUpdaterLauncher
+public sealed class RegistryExternalUpdaterLauncher : IRegistryExternalUpdaterLauncher
 {
     private readonly IServiceProvider _serviceProvider;
     private readonly IApplicationUpdaterRegistry _registry;

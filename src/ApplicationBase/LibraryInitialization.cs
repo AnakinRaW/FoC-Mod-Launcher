@@ -10,7 +10,6 @@ using AnakinRaW.AppUpdaterFramework.Product;
 using AnakinRaW.AppUpdaterFramework.Product.Manifest;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 using AnakinRaW.CommonUtilities.Wpf.Imaging;
-using AnakinRaW.ExternalUpdater.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
@@ -32,8 +31,6 @@ public static class LibraryInitialization
 
         serviceCollection.AddSingleton(sp => new ApplicationUpdateInteractionFactory(sp));
         serviceCollection.AddSingleton<IUpdateDialogViewModelFactory>(sp => sp.GetRequiredService<ApplicationUpdateInteractionFactory>());
-
-        serviceCollection.AddSingleton<IExternalUpdaterLauncher>(sp => new ExternalUpdaterLauncher(sp));
 
         serviceCollection.TryAddSingleton<IModalWindowFactory>(sp => new ApplicationModalWindowFactory(sp));
         serviceCollection.TryAddSingleton<IDialogFactory>(sp => new ApplicationDialogFactory(sp));

@@ -27,8 +27,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0" />
 		<PackageReference Include="Flurl" Version="3.0.7" />
+		<PackageReference Include="CommandLineParser" Version="2.9.1" />
 		<PackageReference Include="AnakinRaW.CommonUtilities.FileSystem.Windows" Version="5.0.1" />
+		<PackageReference Include="AnakinRaW.CommonUtilities.Registry.Windows" Version="5.0.1" />
 		<PackageReference Include="Semver" Version="2.3.0" />
 	</ItemGroup>
 
