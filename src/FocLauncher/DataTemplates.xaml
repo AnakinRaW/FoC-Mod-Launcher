@@ -1,19 +1,20 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:viewModels="clr-namespace:FocLauncher.ViewModels"
-                    xmlns:dialogViewModels="clr-namespace:FocLauncher.ViewModels.Dialogs"
                     xmlns:views="clr-namespace:FocLauncher.Views"
-                    xmlns:dialogs="clr-namespace:FocLauncher.Views.Dialogs">
-    
+                    xmlns:dialogs="clr-namespace:FocLauncher.Views.Dialogs"
+                    xmlns:dialogViewModels="clr-namespace:AnakinRaW.ApplicationBase.ViewModels.Dialogs;assembly=AnakinRaW.ApplicationBase">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/AnakinRaW.AppUpdaterFramework.WPF;component/DataTemplates.xaml"/>
+        <ResourceDictionary Source="/AnakinRaW.ApplicationBase;component/DataTemplates.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+
     <DataTemplate DataType="{x:Type viewModels:MainPageViewModel}">
         <views:MainPage/>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type dialogViewModels:ErrorMessageDialogViewModel}">
-        <dialogs:ErrorDialog/>
-    </DataTemplate>
-
-    <DataTemplate DataType="{x:Type dialogViewModels:LauncherAboutDialogViewModel}">
+    <DataTemplate DataType="{x:Type dialogViewModels:ApplicationAboutDialogViewModel}">
         <dialogs:AboutDialog/>
     </DataTemplate>
 
@@ -22,27 +23,5 @@
             <TextBlock Text="{Binding Text}"/>
         </StackPanel>
     </DataTemplate>
-
-    <DataTemplate DataType="{x:Type viewModels:LauncherVersionViewModel}">
-        <views:LauncherVersionPanel/>
-    </DataTemplate>
-
-    <!-- Update Dialogs -->
-
-    <DataTemplate DataType="{x:Type dialogViewModels:UpdateErrorDialog}">
-        <dialogs:ErrorDialog/>
-    </DataTemplate>
-
-    <DataTemplate DataType="{x:Type dialogViewModels:UpdateRestoreErrorDialog}">
-        <dialogs:ErrorDialog/>
-    </DataTemplate>
-
-    <DataTemplate DataType="{x:Type dialogViewModels:KillProcessDialogViewModel}">
-        <dialogs:KillProcessesDialog/>
-    </DataTemplate>
-
-    <DataTemplate DataType="{x:Type dialogViewModels:UpdateRestartDialog}">
-        <dialogs:RestartDialog/>
-    </DataTemplate>
-
+    
 </ResourceDictionary>

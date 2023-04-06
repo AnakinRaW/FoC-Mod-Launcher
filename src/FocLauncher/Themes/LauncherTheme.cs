@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Media;
 using AnakinRaW.AppUpdaterFramework.Themes;
@@ -10,9 +11,13 @@ namespace FocLauncher.Themes;
 internal class LauncherTheme : Theme
 {
     public override string Id => "LauncherDefaultTheme";
-    public override string Text => "Default Theme";
-    public override Uri ResourceUri =>
-        new(typeof(LauncherTheme).Assembly.GetName().Name + ";component/Themes/LauncherTheme.xaml", UriKind.Relative);
+    public override string Text => "Launcher Theme (Dark)";
+    public override Uri ResourceUri => GetThemeUri("Themes/LauncherTheme.xaml");
+
+    public override IReadOnlyList<ITheme> SubThemes => new List<ITheme>
+    {
+        new DarkUpdaterTheme()
+    };
 
     public override ResourceDictionary CustomResources()
     {
@@ -21,12 +26,10 @@ internal class LauncherTheme : Theme
             { EnvironmentFonts.CaptionFontSizeKey, 18.0 },
             {
                 EnvironmentFonts.CaptionFontFamilyKey, new FontFamily(
-                    new Uri("pack://application:,,,/FocLauncher;component/Resources/Fonts/", UriKind.Absolute),
+                    new Uri($"pack://application:,,,/{GetType().Assembly.GetName().Name};component/Resources/Fonts/", UriKind.Absolute),
                     "./#Empire At War Bold")
             }
         };
-
-        resources.MergedDictionaries.Add(new ResourceDictionary { Source = UpdateTheme.ResourceUri });
         return resources;
     }
 }

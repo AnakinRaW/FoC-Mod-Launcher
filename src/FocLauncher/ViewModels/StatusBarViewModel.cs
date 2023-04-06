@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Media;
+using AnakinRaW.ApplicationBase.Commands;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
-using FocLauncher.Commands;
 using Validation;
 
 namespace FocLauncher.ViewModels;

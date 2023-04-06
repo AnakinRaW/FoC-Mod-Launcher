@@ -5,6 +5,12 @@ namespace AnakinRaW.CommonUtilities.Wpf.Imaging;
 
 public static class ResourcesUriCreator
 {
+    static ResourcesUriCreator()
+    {
+        if (!UriParser.IsKnownScheme("pack"))
+            UriParser.Register(new GenericUriParser(GenericUriParserOptions.GenericAuthority), "pack", -1);
+    }
+
     /// <summary>
     /// Create a Uri to an embedded file. The target assembly is taken from the assembly that calls this method.
     /// The embedded file location must be equivalent to: \Resources\Icons\ImageTypeAsString\TheFileName.ImageType
@@ -18,8 +24,7 @@ public static class ResourcesUriCreator
         var prefix = string.Empty;
         if (type == ImageFileKind.Png)
             prefix = "pack://application:,,,";
-        return new Uri(
-            $"{prefix}/{assembly.GetName().Name};component/Resources/Icons/{type}/{fileName}.{type.ToString().ToLowerInvariant()}",
+        return new Uri($"{prefix}/{assembly.GetName().Name};component/Resources/Icons/{type}/{fileName}.{type.ToString().ToLowerInvariant()}",
             UriKind.RelativeOrAbsolute);
     }
 

@@ -19,6 +19,7 @@ using AnakinRaW.CommonUtilities.Wpf.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Validation;
 using TaskCanceledException = System.Threading.Tasks.TaskCanceledException;
 
 namespace AnakinRaW.AppUpdaterFramework.ViewModels;
@@ -91,6 +92,7 @@ public partial class UpdateWindowViewModel : ModalWindowViewModel, IUpdateWindow
 
     public UpdateWindowViewModel(IServiceProvider serviceProvider)
     {
+        Requires.NotNull(serviceProvider, nameof(serviceProvider));
         _serviceProvider = serviceProvider;
         Title = "Application Update";
         HasMaximizeButton = false;

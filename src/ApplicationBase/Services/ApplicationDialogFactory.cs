@@ -1,14 +1,14 @@
 ﻿using System;
+using AnakinRaW.ApplicationBase.Controls;
+using AnakinRaW.ApplicationBase.ViewModels.Dialogs;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Controls;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
-using FocLauncher.Controls;
-using FocLauncher.ViewModels.Dialogs;
 
-namespace FocLauncher.Services;
+namespace AnakinRaW.ApplicationBase.Services;
 
-internal class LauncherDialogFactory : DialogFactory
+internal class ApplicationDialogFactory : DialogFactory
 {
-    public LauncherDialogFactory(IServiceProvider serviceProvider) : base(serviceProvider)
+    public ApplicationDialogFactory(IServiceProvider serviceProvider) : base(serviceProvider)
     {
     }
 

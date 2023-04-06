@@ -14,21 +14,24 @@ using AnakinRaW.AppUpdaterFramework.Product.Manifest;
 using AnakinRaW.ExternalUpdater;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AnakinRaW.ApplicationBase.Update.LauncherImplementations;
+namespace AnakinRaW.ApplicationBase.Update.ApplicationImplementations;
 
-internal class LauncherInstalledManifestProvider : IInstalledManifestProvider
+internal class ApplicationInstalledManifestProvider : IInstalledManifestProvider
 {
-    private const string LauncherExeId = "Launcher.Executable";
+    private const string LauncherExeId = "Application.Executable";
+    private const string AppGroupId = "ApplicationGroup";
 
     private readonly IFileSystem _fileSystem;
     private readonly IExternalUpdaterService _externalUpdaterService;
     private readonly IResourceExtractor _resourceExtractor;
+    private readonly IApplicationEnvironment _applicationEnvironment;
 
-    public LauncherInstalledManifestProvider(IServiceProvider serviceProvider)
+    public ApplicationInstalledManifestProvider(IServiceProvider serviceProvider)
     {
         _fileSystem = serviceProvider.GetRequiredService<IFileSystem>();
         _externalUpdaterService = serviceProvider.GetRequiredService<IExternalUpdaterService>();
         _resourceExtractor = serviceProvider.GetRequiredService<IResourceExtractor>();
+        _applicationEnvironment = serviceProvider.GetRequiredService<IApplicationEnvironment>();
     }
 
     public IProductManifest ProvideManifest(IProductReference installedProduct, ProductVariables variables)
@@ -42,23 +45,23 @@ internal class LauncherInstalledManifestProvider : IInstalledManifestProvider
     private IEnumerable<IProductComponent> BuildManifestComponents(IProductReference installedProduct)
     {
         var identityVersion = installedProduct.Version;
-        var fileVersion = LauncherAssemblyInfo.FileVersion;
+        var fileVersion = _applicationEnvironment.AssemblyInfo.FileVersion;
 
         var launcherExeId = new ProductComponentIdentity(LauncherExeId, identityVersion);
         
-        var launcherExecutable = BuildFileComponent(launcherExeId, LauncherConstants.ApplicationName, $"[{KnownProductVariablesKeys.InstallDir}]",
-            LauncherAssemblyInfo.ExecutableFileName, fileVersion);
+        var launcherExecutable = BuildFileComponent(launcherExeId, _applicationEnvironment.ApplicationName, $"[{KnownProductVariablesKeys.InstallDir}]",
+            _applicationEnvironment.AssemblyInfo.ExecutableFileName, fileVersion.ToString());
 
         var assemblyStream = GetUpdaterAssemblyStream();
         var updater = _externalUpdaterService.GetExternalUpdaterComponent(assemblyStream, $"[{ApplicationVariablesKeys.AppData}]");
 
-        yield return new ComponentGroup(new ProductComponentIdentity(LauncherConstants.ApplicationCoreGroupId, identityVersion), new List<IProductComponentIdentity>
+        yield return new ComponentGroup(new ProductComponentIdentity(AppGroupId, identityVersion), new List<IProductComponentIdentity>
         {
             launcherExeId,
             updater,
         })
         {
-            Name = $"{LauncherAssemblyInfo.ProductName}"
+            Name = $"{_applicationEnvironment.AssemblyInfo.ProductName}"
         };
         yield return launcherExecutable;
         yield return updater;

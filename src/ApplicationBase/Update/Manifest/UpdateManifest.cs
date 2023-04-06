@@ -11,7 +11,7 @@ using Semver;
 
 namespace AnakinRaW.ApplicationBase.Update.Manifest;
 
-public abstract record LauncherComponentBase(
+public abstract record AppComponentBase(
     [property: JsonPropertyName("id")] string Id,
     [property: JsonPropertyName("version")] string? Version,
     [property: JsonPropertyName("name")] string? Name
@@ -25,14 +25,14 @@ public abstract record LauncherComponentBase(
     }
 }
 
-public record LauncherManifest(
+public record UpdateManifest(
     [property: JsonPropertyName("name")] string Name,
     [property: JsonPropertyName("branch")] string? Branch,
     [property: JsonPropertyName("version")] string? Version,
-    [property: JsonPropertyName("components")] IReadOnlyList<LauncherComponent> Components
+    [property: JsonPropertyName("components")] IReadOnlyList<AppComponent> Components
 );
 
-public record LauncherComponent(
+public record AppComponent(
     string Id,
     string? Version,
     string? Name,
@@ -43,7 +43,7 @@ public record LauncherComponent(
     [property: JsonPropertyName("fileName")] string? FileName,
     [property: JsonPropertyName("installSizes")] InstallSize? InstallSize,
     [property: JsonPropertyName("detectConditions")] IReadOnlyList<DetectCondition>? DetectConditions
-) : LauncherComponentBase(Id, Version, Name)
+) : AppComponentBase(Id, Version, Name)
 {
     public IComponentGroup ToGroup()
     {
@@ -84,7 +84,7 @@ public record LauncherComponent(
     }
 }
 
-public record ComponentId(string Id, string? Version) : LauncherComponentBase(Id, Version, null);
+public record ComponentId(string Id, string? Version) : AppComponentBase(Id, Version, null);
 
 public record DetectCondition(
     [property: JsonPropertyName("type")] ConditionType Type,

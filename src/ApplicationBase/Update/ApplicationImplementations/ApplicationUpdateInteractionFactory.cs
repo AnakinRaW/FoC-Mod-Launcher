@@ -7,7 +7,7 @@ using AnakinRaW.AppUpdaterFramework.Interaction;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 using Validation;
 
-namespace AnakinRaW.ApplicationBase.Update.LauncherImplementations;
+namespace AnakinRaW.ApplicationBase.Update.ApplicationImplementations;
 
 public class ApplicationUpdateInteractionFactory : IUpdateDialogViewModelFactory
 {

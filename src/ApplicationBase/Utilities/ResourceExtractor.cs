@@ -95,7 +95,7 @@ public class CosturaResourceExtractor : IResourceExtractor
         }
         catch (Exception ex)
         {
-            throw new IOException("Error writing necessary launcher files to disk!", ex);
+            throw new IOException("Error writing necessary files to disk!", ex);
         }
     }
 

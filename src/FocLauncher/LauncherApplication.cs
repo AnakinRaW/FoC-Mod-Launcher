@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
+using AnakinRaW.ApplicationBase;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Controls;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Theming;
@@ -22,9 +23,10 @@ internal class LauncherApplication : ApplicationBase
     }
     protected override IApplicationViewModel CreateApplicationViewModel()
     {
+        var env = ServiceProvider.GetRequiredService<IApplicationEnvironment>();
         return new LauncherViewModel(ServiceProvider, new StatusBarViewModel(ServiceProvider))
         {
-            Title = LauncherConstants.ApplicationName,
+            Title = env.ApplicationName,
             IsResizable = false,
             HasMaximizeButton = false,
             HasMinimizeButton = true

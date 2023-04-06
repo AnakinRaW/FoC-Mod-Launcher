@@ -28,35 +28,35 @@ internal class ManifestLoader : ManifestLoaderBase
 
     protected override async Task<IProductManifest> LoadManifestCore(Stream manifest, IProductReference productReference, CancellationToken cancellationToken)
     {
-        var launcherManifest = await JsonSerializer.DeserializeAsync<LauncherManifest>(manifest, JsonSerializerOptions, cancellationToken);
-        if (launcherManifest is null)
+        var appManifest = await JsonSerializer.DeserializeAsync<UpdateManifest>(manifest, JsonSerializerOptions, cancellationToken);
+        if (appManifest is null)
             throw new CatalogException("Serialized manifest is null");
 
-        var availProduct = BuildReference(launcherManifest);
+        var availProduct = BuildReference(appManifest);
         ValidateCompatibleManifest(availProduct, productReference);
-        var catalog = BuildCatalog(launcherManifest.Components);
+        var catalog = BuildCatalog(appManifest.Components);
         return new ProductManifest(availProduct, catalog);
     }
 
-    private IProductReference BuildReference(LauncherManifest launcherManifest)
+    private IProductReference BuildReference(UpdateManifest updateManifest)
     {
         SemVersion? version = null;
-        if (launcherManifest.Version is not null)
-            version = SemVersion.Parse(launcherManifest.Version, SemVersionStyles.Any);
+        if (updateManifest.Version is not null)
+            version = SemVersion.Parse(updateManifest.Version, SemVersionStyles.Any);
 
         ProductBranch? branch = null;
-        if (version is not null && launcherManifest.Branch is not null)
+        if (version is not null && updateManifest.Branch is not null)
         {
             var branchManager = ServiceProvider.GetRequiredService<IBranchManager>();
             branch = branchManager.GetBranchFromVersion(version);
         }
-        return new ProductReference(launcherManifest.Name, version, branch);
+        return new ProductReference(updateManifest.Name, version, branch);
     }
 
-    private static IReadOnlyList<IProductComponent> BuildCatalog(IEnumerable<LauncherComponent> launcherManifestComponents)
+    private static IReadOnlyList<IProductComponent> BuildCatalog(IEnumerable<AppComponent> manifestComponents)
     {
         var catalog = new List<IProductComponent>();
-        foreach (var manifestComponent in launcherManifestComponents)
+        foreach (var manifestComponent in manifestComponents)
         {
             switch (manifestComponent.Type)
             {

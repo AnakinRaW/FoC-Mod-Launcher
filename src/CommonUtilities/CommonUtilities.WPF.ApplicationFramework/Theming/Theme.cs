@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 
 namespace AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Theming;
@@ -9,6 +10,8 @@ public abstract class Theme : ITheme
 
     public abstract string Text { get; }
     public abstract Uri ResourceUri { get; }
+
+    public virtual IReadOnlyList<ITheme> SubThemes { get; } = Array.Empty<ITheme>();
 
     public bool Equals(ITheme? other)
     {
@@ -34,5 +37,10 @@ public abstract class Theme : ITheme
     public override int GetHashCode()
     {
         return HashCode.Combine(Id, ResourceUri);
+    }
+
+    protected Uri GetThemeUri(string themeFilePath)
+    {
+        return new(GetType().Assembly.GetName().Name + $";component/{themeFilePath}", UriKind.Relative);
     }
 }

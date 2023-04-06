@@ -7,8 +7,4 @@
     <SolidColorBrush x:Key="{x:Static themes:UpdateColors.UpdateInfoBarBackground}" Color="#FF181818"/>
     <SolidColorBrush x:Key="{x:Static themes:UpdateColors.UpdateInfoBarBorder}" Color="#FF181818"/>
 
-    <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/AnakinRaW.AppUpdaterFramework.WPF;component/DataTemplates.xaml"/>
-    </ResourceDictionary.MergedDictionaries>
-
 </ResourceDictionary>

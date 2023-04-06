@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
 using CommunityToolkit.Mvvm.ComponentModel;
-using FocLauncher.Commands.Handlers;
 using Microsoft.Extensions.DependencyInjection;
 using Validation;
 
@@ -37,7 +36,7 @@ internal partial class MainPageViewModel : LoadingViewModelBase, IMainPageViewMo
 
     public override Task InitializeAsync()
     {
-        return Task.Run(async () =>
+        return Task.Run(() =>
         {
             try
             {
@@ -50,8 +49,6 @@ internal partial class MainPageViewModel : LoadingViewModelBase, IMainPageViewMo
                     _isInitialized = true;
                 }
 
-                await ServiceProvider.GetRequiredService<IShowUpdateWindowCommandHandler>().HandleAsync();
-                
                 IsLoading = false;
             }
             finally

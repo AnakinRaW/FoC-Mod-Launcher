@@ -11,7 +11,7 @@
                            mc:Ignorable="d" d:DataContext="{d:DesignInstance {x:Type designer:ApplicationViewModel}, IsDesignTimeCreatable=True}"
                            Width="400" Height="700" 
                            Foreground="{DynamicResource {x:Static themes1:LauncherColors.MainWindowText}}"
-                           Title="{x:Static focLauncher:LauncherEnvironment.LauncherProgramName}" 
+                           Title="Foc Mod Launcher" 
                            themes:ScrollBarThemingUtilities.ThemeScrollBars="True">
     <ContentControl Focusable="False" Content="{Binding CurrentViewModel}" Margin="6"/>
 </controls:ApplicationMainWindow>

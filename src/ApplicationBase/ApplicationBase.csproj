@@ -19,6 +19,14 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Icons\Png\GitHub_Mark_32px.png" />
+	  <None Remove="Resources\Icons\Png\kill.png" />
+	  <None Remove="Resources\Icons\Png\sadTrooper.png" />
+	  <None Remove="Resources\Icons\Png\senat.png" />
+	  <None Remove="Resources\Icons\Png\vader.png" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Flurl" Version="3.0.7" />
 		<PackageReference Include="AnakinRaW.CommonUtilities.FileSystem.Windows" Version="5.0.1" />
 		<PackageReference Include="Semver" Version="2.3.0" />
@@ -35,9 +43,17 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Compile Update="Views\LauncherVersionPanel.xaml.cs">
+		<Compile Update="Views\ApplicationVersionPanel.xaml.cs">
 			<SubType>Code</SubType>
 		</Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Resource Include="Resources\Icons\Png\GitHub_Mark_32px.png" />
+	  <Resource Include="Resources\Icons\Png\kill.png" />
+	  <Resource Include="Resources\Icons\Png\sadTrooper.png" />
+	  <Resource Include="Resources\Icons\Png\senat.png" />
+	  <Resource Include="Resources\Icons\Png\vader.png" />
 	</ItemGroup>
 
 </Project>

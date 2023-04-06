@@ -1,13 +1,13 @@
 ﻿using System;
+using AnakinRaW.ApplicationBase.Controls;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 using AnakinRaW.CommonUtilities.Wpf.Controls;
-using FocLauncher.Controls;
 
-namespace FocLauncher.Services;
+namespace AnakinRaW.ApplicationBase.Services;
 
-internal class LauncherModalWindowFactory : ModalWindowFactory
+internal class ApplicationModalWindowFactory : ModalWindowFactory
 {
-    public LauncherModalWindowFactory(IServiceProvider serviceProvider) : base(serviceProvider)
+    public ApplicationModalWindowFactory(IServiceProvider serviceProvider) : base(serviceProvider)
     {
     }
 

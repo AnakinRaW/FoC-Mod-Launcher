@@ -4,7 +4,7 @@ using AnakinRaW.AppUpdaterFramework.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Validation;
 
-namespace AnakinRaW.ApplicationBase.Update.LauncherImplementations;
+namespace AnakinRaW.ApplicationBase.Update.ApplicationImplementations;
 
 internal class ApplicationUpdateConfigurationProvider : UpdateConfigurationProviderBase
 {

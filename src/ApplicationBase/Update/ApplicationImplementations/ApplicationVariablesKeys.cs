@@ -1,4 +1,4 @@
-﻿namespace AnakinRaW.ApplicationBase.Update.LauncherImplementations;
+﻿namespace AnakinRaW.ApplicationBase.Update.ApplicationImplementations;
 
 internal static class ApplicationVariablesKeys
 {

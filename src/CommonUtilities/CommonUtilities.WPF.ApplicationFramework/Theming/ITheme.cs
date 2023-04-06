@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 
 namespace AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Theming;
@@ -20,6 +21,8 @@ public interface ITheme : IEquatable<ITheme>
     /// </summary>
     /// <returns>The URI</returns>
     Uri ResourceUri { get; }
+
+    IReadOnlyList<ITheme> SubThemes { get; }
 
     /// <summary>
     /// Allows to add resources to the theme.

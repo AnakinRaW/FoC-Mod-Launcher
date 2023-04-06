@@ -1,8 +1,8 @@
 ﻿namespace AnakinRaW.ApplicationBase.Views;
 
-public partial class LauncherVersionPanel
+public partial class ApplicationVersionPanel
 {
-    public LauncherVersionPanel()
+    public ApplicationVersionPanel()
     {
         InitializeComponent();
     }
