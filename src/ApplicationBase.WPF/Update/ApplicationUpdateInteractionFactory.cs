@@ -7,7 +7,7 @@ using AnakinRaW.AppUpdaterFramework.Interaction;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 using Validation;
 
-namespace AnakinRaW.ApplicationBase.Update.ApplicationImplementations;
+namespace AnakinRaW.ApplicationBase.Update;
 
 public class ApplicationUpdateInteractionFactory : IUpdateDialogViewModelFactory
 {
@@ -30,7 +30,7 @@ public class ApplicationUpdateInteractionFactory : IUpdateDialogViewModelFactory
         {
             RestartReason.Elevation => UpdateRestartDialog.CreateElevationRestart(_serviceProvider),
             RestartReason.Update => UpdateRestartDialog.CreateRestart(_serviceProvider),
-            RestartReason.FailedRestore => UpdateRestartDialog.CreateFailedRestore(_serviceProvider), 
+            RestartReason.FailedRestore => UpdateRestartDialog.CreateFailedRestore(_serviceProvider),
             _ => throw new ArgumentOutOfRangeException(nameof(reason), reason, null)
         };
     }

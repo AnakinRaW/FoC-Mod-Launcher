@@ -5,7 +5,7 @@ using AnakinRaW.AppUpdaterFramework.Metadata.Product;
 using AnakinRaW.AppUpdaterFramework.Product;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AnakinRaW.ApplicationBase.Update.ApplicationImplementations;
+namespace AnakinRaW.ApplicationBase.Update;
 
 internal class ApplicationProductService : ProductServiceBase
 {

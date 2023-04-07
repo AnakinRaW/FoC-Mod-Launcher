@@ -14,7 +14,7 @@ using AnakinRaW.AppUpdaterFramework.Product.Manifest;
 using AnakinRaW.ExternalUpdater;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AnakinRaW.ApplicationBase.Update.ApplicationImplementations;
+namespace AnakinRaW.ApplicationBase.Update;
 
 internal class ApplicationInstalledManifestProvider : IInstalledManifestProvider
 {
@@ -48,7 +48,7 @@ internal class ApplicationInstalledManifestProvider : IInstalledManifestProvider
         var fileVersion = _applicationEnvironment.AssemblyInfo.FileVersion;
 
         var launcherExeId = new ProductComponentIdentity(LauncherExeId, identityVersion);
-        
+
         var launcherExecutable = BuildFileComponent(launcherExeId, _applicationEnvironment.ApplicationName, $"[{KnownProductVariablesKeys.InstallDir}]",
             _applicationEnvironment.AssemblyInfo.ExecutableFileName, fileVersion.ToString());
 

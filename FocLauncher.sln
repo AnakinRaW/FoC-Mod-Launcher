@@ -29,6 +29,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExternalUpdater.CLI", "src\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApplicationBase", "src\ApplicationBase\ApplicationBase.csproj", "{0B435D54-F6F3-4537-BB4B-513B64201DD7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApplicationBase.WPF", "src\ApplicationBase.WPF\ApplicationBase.WPF.csproj", "{3F760EF9-4AD3-484F-ACD4-03BC17D507DB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -79,6 +81,10 @@ Global
 		{0B435D54-F6F3-4537-BB4B-513B64201DD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0B435D54-F6F3-4537-BB4B-513B64201DD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0B435D54-F6F3-4537-BB4B-513B64201DD7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F760EF9-4AD3-484F-ACD4-03BC17D507DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F760EF9-4AD3-484F-ACD4-03BC17D507DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F760EF9-4AD3-484F-ACD4-03BC17D507DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F760EF9-4AD3-484F-ACD4-03BC17D507DB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

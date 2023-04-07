@@ -9,7 +9,7 @@ using AnakinRaW.AppUpdaterFramework.Product;
 using Flurl;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AnakinRaW.ApplicationBase.Update.ApplicationImplementations;
+namespace AnakinRaW.ApplicationBase.Update;
 
 public class ApplicationBranchManager : BranchManager
 {

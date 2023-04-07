@@ -1,36 +1,38 @@
 ﻿using System;
 using System.IO;
 using System.Security.AccessControl;
+using System.Windows.Input;
+using AnakinRaW.ApplicationBase.ViewModels.Dialogs;
 using AnakinRaW.AppUpdaterFramework.ExternalUpdater.Registry;
 using AnakinRaW.CommonUtilities.FileSystem;
 using AnakinRaW.CommonUtilities.FileSystem.Windows;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Validation;
 
 namespace AnakinRaW.ApplicationBase;
 
 public class AppResetHandler
 {
+    private readonly IServiceProvider _services;
     private readonly IApplicationUpdaterRegistry _registry;
     private readonly IFileSystemService _fileSystemService;
     private readonly IApplicationEnvironment _environment;
     private readonly IWindowsPathService _pathService;
-    private readonly ILogger? _logger;
 
     public AppResetHandler(IServiceProvider services)
     {
         Requires.NotNull(services, nameof(services));
+        _services = services;
         _registry = services.GetRequiredService<IApplicationUpdaterRegistry>();
         _fileSystemService = services.GetRequiredService<IFileSystemService>();
         _environment = services.GetRequiredService<IApplicationEnvironment>();
         _pathService = services.GetRequiredService<IWindowsPathService>();
-        _logger = services.GetService<ILoggerFactory>()?.CreateLogger(GetType());
     }
 
     public void ResetIfNecessary()
     {
-        if (!_environment.ApplicationLocalDirectory.Exists || _registry.Reset)
+        if (!_environment.ApplicationLocalDirectory.Exists || _registry.Reset || Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
             ResetApplication();
     }
 
@@ -48,7 +50,7 @@ public class AppResetHandler
         }
         catch (Exception e)
         {
-            _logger?.LogCritical(e, e.Message);
+            new UnhandledExceptionDialog(new UnhandledExceptionDialogViewModel(e, _services)).ShowModal();
             throw;
         }
     }

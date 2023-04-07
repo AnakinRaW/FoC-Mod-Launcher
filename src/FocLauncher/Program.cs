@@ -64,7 +64,7 @@ internal class Program : ProgramBase
         serviceCollection.AddTransient(_ => ConnectionManager.Instance);
 
         serviceCollection.AddApplicationFramework();
-        serviceCollection.AddApplicationBase(ImageKeys.AppIcon);
+        serviceCollection.AddApplicationBaseWpf(ImageKeys.AppIcon);
     }
 
     private static IDownloadManagerConfiguration CreateDownloadConfiguration()

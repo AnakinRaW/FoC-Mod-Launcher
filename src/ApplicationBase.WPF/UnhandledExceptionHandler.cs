@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Windows;
 using AnakinRaW.ApplicationBase.Utilities;
 using AnakinRaW.CommonUtilities;
+using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Dialog;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Validation;
+using UnhandledExceptionDialogViewModel = AnakinRaW.ApplicationBase.ViewModels.Dialogs.UnhandledExceptionDialogViewModel;
 
 namespace AnakinRaW.ApplicationBase;
 
@@ -30,6 +34,16 @@ public class UnhandledExceptionHandler : DisposableObject
                 _logger?.LogCritical(exceptionObject, message);
             else
                 _logger?.LogError(exceptionObject, message);
+
+            if (Debugger.IsAttached)
+                return;
+
+            var owner = Application.Current?.MainWindow;
+            var dialog = new UnhandledExceptionDialog(new UnhandledExceptionDialogViewModel(exceptionObject!, _services))
+            {
+                Owner = owner
+            };
+            dialog.ShowModal();
         }
         catch
         {

@@ -3,11 +3,11 @@
                     xmlns:viewModels="clr-namespace:FocLauncher.ViewModels"
                     xmlns:views="clr-namespace:FocLauncher.Views"
                     xmlns:dialogs="clr-namespace:FocLauncher.Views.Dialogs"
-                    xmlns:dialogViewModels="clr-namespace:AnakinRaW.ApplicationBase.ViewModels.Dialogs;assembly=AnakinRaW.ApplicationBase">
+                    xmlns:dialogViewModels="clr-namespace:AnakinRaW.ApplicationBase.ViewModels.Dialogs;assembly=AnakinRaW.ApplicationBase.WPF">
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/AnakinRaW.AppUpdaterFramework.WPF;component/DataTemplates.xaml"/>
-        <ResourceDictionary Source="/AnakinRaW.ApplicationBase;component/DataTemplates.xaml"/>
+        <ResourceDictionary Source="/AnakinRaW.ApplicationBase.WPF;component/DataTemplates.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
     <DataTemplate DataType="{x:Type viewModels:MainPageViewModel}">
