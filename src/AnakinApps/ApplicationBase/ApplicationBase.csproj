@@ -28,11 +28,8 @@
 		<PackageReference Include="Semver" Version="2.3.0" />
 	</ItemGroup>
 
-	<ItemGroup Condition=" '$(TargetFramework)' == 'net48' ">
-		<PackageReference Include="System.Text.Json" Version="7.0.2" />
-	</ItemGroup>
-
 	<ItemGroup>
+	  <ProjectReference Include="..\..\Updater\AppUpdaterFramework.Manifest\AppUpdaterFramework.Manifest.csproj" />
 	  <ProjectReference Include="..\..\Updater\AppUpdaterFramework\AppUpdaterFramework.csproj" />
 	</ItemGroup>
 

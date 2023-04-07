@@ -33,6 +33,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApplicationBase.WPF", "src\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AnakinApps", "AnakinApps", "{8839173B-120E-4E4F-8786-53DE844B90AB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApplicationManifestCreator", "src\AnakinApps\ApplicationManifestCreator\ApplicationManifestCreator.csproj", "{0406F37C-D0DC-4E74-9A73-FCAE54415AD9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppUpdaterFramework.Manifest", "src\Updater\AppUpdaterFramework.Manifest\AppUpdaterFramework.Manifest.csproj", "{81E2969B-17A2-409D-A28B-EC1AE25102C4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +91,14 @@ Global
 		{3F760EF9-4AD3-484F-ACD4-03BC17D507DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3F760EF9-4AD3-484F-ACD4-03BC17D507DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3F760EF9-4AD3-484F-ACD4-03BC17D507DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0406F37C-D0DC-4E74-9A73-FCAE54415AD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0406F37C-D0DC-4E74-9A73-FCAE54415AD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0406F37C-D0DC-4E74-9A73-FCAE54415AD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0406F37C-D0DC-4E74-9A73-FCAE54415AD9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81E2969B-17A2-409D-A28B-EC1AE25102C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81E2969B-17A2-409D-A28B-EC1AE25102C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81E2969B-17A2-409D-A28B-EC1AE25102C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81E2969B-17A2-409D-A28B-EC1AE25102C4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -103,6 +115,8 @@ Global
 		{0A4711AE-1EF8-45EF-8569-147A1F1DBFA8} = {AE536C1A-5C2F-4C14-8CCD-0C4D716FB840}
 		{0B435D54-F6F3-4537-BB4B-513B64201DD7} = {8839173B-120E-4E4F-8786-53DE844B90AB}
 		{3F760EF9-4AD3-484F-ACD4-03BC17D507DB} = {8839173B-120E-4E4F-8786-53DE844B90AB}
+		{0406F37C-D0DC-4E74-9A73-FCAE54415AD9} = {8839173B-120E-4E4F-8786-53DE844B90AB}
+		{81E2969B-17A2-409D-A28B-EC1AE25102C4} = {AE536C1A-5C2F-4C14-8CCD-0C4D716FB840}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {94E96BB4-E6D8-4E1F-B4A4-4F4B667DC600}

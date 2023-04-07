@@ -13,16 +13,16 @@ using AnakinRaW.AppUpdaterFramework.Product.Manifest;
 using Microsoft.Extensions.DependencyInjection;
 using Semver;
 
-namespace AnakinRaW.ApplicationBase.Update.Manifest;
+namespace AnakinRaW.AppUpdaterFramework;
 
-internal class ManifestLoader : ManifestLoaderBase
+public class JsonManifestLoader : ManifestLoaderBase
 {
     private static readonly JsonSerializerOptions JsonSerializerOptions = new()
     {
         Converters = { new JsonStringEnumConverter() }
     };
 
-    public ManifestLoader(IServiceProvider serviceProvider) : base(serviceProvider)
+    public JsonManifestLoader(IServiceProvider serviceProvider) : base(serviceProvider)
     {
     }
 

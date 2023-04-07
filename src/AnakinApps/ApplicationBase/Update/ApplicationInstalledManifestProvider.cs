@@ -50,7 +50,7 @@ internal class ApplicationInstalledManifestProvider : IInstalledManifestProvider
         var launcherExeId = new ProductComponentIdentity(ApplicationExeId, identityVersion);
 
         var launcherExecutable = BuildFileComponent(launcherExeId, _applicationEnvironment.ApplicationName, $"[{KnownProductVariablesKeys.InstallDir}]",
-            _applicationEnvironment.AssemblyInfo.ExecutableFileName, fileVersion.ToString());
+            _applicationEnvironment.AssemblyInfo.ExecutableFileName, fileVersion);
 
         var assemblyStream = GetUpdaterAssemblyStream();
         var updater = _externalUpdaterService.GetExternalUpdaterComponent(assemblyStream, $"[{ApplicationVariablesKeys.AppData}]");

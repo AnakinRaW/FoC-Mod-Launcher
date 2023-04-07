@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Serialization;
-using AnakinRaW.ApplicationBase.Utilities;
 using AnakinRaW.AppUpdaterFramework.Conditions;
 using AnakinRaW.AppUpdaterFramework.Metadata.Component;
 using AnakinRaW.AppUpdaterFramework.Metadata.Component.Catalog;
 using AnakinRaW.CommonUtilities.Hashing;
 using Semver;
 
-namespace AnakinRaW.ApplicationBase.Update.Manifest;
+namespace AnakinRaW.AppUpdaterFramework;
 
 public abstract record AppComponentBase(
     [property: JsonPropertyName("id")] string Id,

@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net48;net6.0-windows</TargetFrameworks>
-		<RootNamespace>AnakinRaW.AppUpdaterFramework</RootNamespace>
-		<AssemblyName>AnakinRaW.AppUpdaterFramework</AssemblyName>
+		<Description>Framework to udpate applications.</Description>
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<Description>Framework to udpate applications.</Description>
+		<TargetFrameworks>net48;net6.0-windows</TargetFrameworks>
+		<RootNamespace>AnakinRaW.AppUpdaterFramework</RootNamespace>
+		<AssemblyName>AnakinRaW.AppUpdaterFramework</AssemblyName>
 	</PropertyGroup>
 
 	<ItemGroup>

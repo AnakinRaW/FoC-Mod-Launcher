@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO.Abstractions;
-using AnakinRaW.ApplicationBase.Update.Manifest;
 using AnakinRaW.ApplicationBase.Update;
 using AnakinRaW.ApplicationBase.Utilities;
 using AnakinRaW.AppUpdaterFramework.Configuration;
@@ -18,6 +17,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using AnakinRaW.ApplicationBase.Services;
+using AnakinRaW.AppUpdaterFramework;
 
 namespace AnakinRaW.ApplicationBase;
 
@@ -94,9 +94,9 @@ public abstract class BootstrapperBase
     {
         serviceCollection.AddSingleton<IProductService>(sp => new ApplicationProductService(sp));
         serviceCollection.AddSingleton<IBranchManager>(sp => new ApplicationBranchManager(sp));
-        serviceCollection.AddSingleton<IManifestLoader>(sp => new ManifestLoader(sp));
         serviceCollection.AddSingleton<IUpdateConfigurationProvider>(sp => new ApplicationUpdateConfigurationProvider(sp));
         serviceCollection.AddSingleton<IInstalledManifestProvider>(sp => new ApplicationInstalledManifestProvider(sp));
+        serviceCollection.AddSingleton<IManifestLoader>(sp => new JsonManifestLoader(sp));
     }
 
     protected abstract int Execute(string[] args, IServiceCollection serviceCollection);

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AnakinRaW.ApplicationBase.Utilities;
+namespace AnakinRaW.AppUpdaterFramework;
 
 internal class HexTools
 {
