@@ -5,17 +5,17 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Validation;
 
-namespace AnakinRaW.ApplicationBase;
+namespace AnakinRaW.ApplicationBase.Services;
 
-public class UnhandledExceptionHandler : DisposableObject
+internal class UnhandledExceptionHandler : DisposableObject, IUnhandledExceptionHandler
 {
-    private readonly IServiceProvider _services;
+    public IServiceProvider Services { get; }
     private readonly ILogger? _logger;
 
     public UnhandledExceptionHandler(IServiceProvider services)
     {
         Requires.NotNull(services, nameof(services));
-        _services = services;
+        Services = services;
         _logger = services.GetService<ILoggerFactory>()?.CreateLogger(GetType());
         AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
     }
@@ -30,11 +30,17 @@ public class UnhandledExceptionHandler : DisposableObject
                 _logger?.LogCritical(exceptionObject, message);
             else
                 _logger?.LogError(exceptionObject, message);
+
+            HandleGlobalException(exceptionObject!);
         }
         catch
         {
             // Ignore
         }
+    }
+
+    protected virtual void HandleGlobalException(Exception e)
+    {
     }
 
     protected override void DisposeManagedResources()

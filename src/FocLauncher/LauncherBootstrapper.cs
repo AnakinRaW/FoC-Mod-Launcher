@@ -2,7 +2,6 @@
 using System.IO.Abstractions;
 using System.Reflection;
 using AnakinRaW.ApplicationBase;
-using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.StatusBar;
 using FocLauncher.Services;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,16 +13,19 @@ using AnakinRaW.CommonUtilities.DownloadManager.Verification;
 using AnakinRaW.CommonUtilities.DownloadManager;
 using AnakinRaW.CommonUtilities.DownloadManager.Configuration;
 using AnakinRaW.CommonUtilities.Windows;
+using AnakinRaW.CommonUtilities.Wpf.Imaging;
 using FocLauncher.Imaging;
 
 namespace FocLauncher;
 
-internal class Program : ProgramBase
+internal class LauncherBootstrapper : WpfBootstrapper
 {
+    public override ImageKey AppIcon => ImageKeys.AppIcon;
+
     [STAThread]
     private static int Main(string[] args)
     {
-        return new Program().Run(args);
+        return new LauncherBootstrapper().Run(args);
     }
 
     protected override IApplicationEnvironment CreateEnvironment(IServiceProvider serviceProvider)
@@ -40,13 +42,13 @@ internal class Program : ProgramBase
         SetLogging(serviceCollection, fileSystem, environment);
     }
 
-    protected override int ExecuteInternal(string[] args, IServiceCollection serviceCollection)
+    protected override int Execute(string[] args, IServiceCollection serviceCollection)
     {
         BuildApplicationServices(serviceCollection);
         return new LauncherApplication(serviceCollection.BuildServiceProvider()).Run();
     }
 
-    private void BuildApplicationServices(IServiceCollection serviceCollection)
+    private static void BuildApplicationServices(IServiceCollection serviceCollection)
     {
         serviceCollection.AddSingleton<ILauncherRegistry>(sp => new LauncherRegistry(sp));
 
@@ -62,9 +64,6 @@ internal class Program : ProgramBase
 
         serviceCollection.AddTransient<IStatusBarFactory>(_ => new LauncherStatusBarFactory()); 
         serviceCollection.AddTransient(_ => ConnectionManager.Instance);
-
-        serviceCollection.AddApplicationFramework();
-        serviceCollection.AddApplicationBaseWpf(ImageKeys.AppIcon);
     }
 
     private static IDownloadManagerConfiguration CreateDownloadConfiguration()
