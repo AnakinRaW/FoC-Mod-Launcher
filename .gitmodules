@@ -1,0 +1,3 @@
+[submodule "src/ModdingToolBase"]
+	path = src/ModdingToolBase
+	url = https://github.com/AnakinRaW/ModdingToolBase

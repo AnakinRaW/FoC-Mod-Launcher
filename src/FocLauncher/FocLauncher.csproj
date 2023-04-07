@@ -53,14 +53,14 @@
 		<PackageReference Include="Validation" Version="2.5.51" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\AnakinApps\ApplicationBase.WPF\ApplicationBase.WPF.csproj" />
-		<ProjectReference Include="..\Updater\ExternalUpdater\ExternalUpdater.csproj" />
-	</ItemGroup>
-
 	<PropertyGroup>
 		<SatelliteResourceLanguages>en</SatelliteResourceLanguages>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\ModdingToolBase\src\AnakinApps\ApplicationBase.WPF\ApplicationBase.WPF.csproj" />
+	  <ProjectReference Include="..\ModdingToolBase\src\Updater\ExternalUpdater\ExternalUpdater.csproj" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<Resource Include="Resources\Fonts\EaW-bold.ttf" />
