@@ -27,9 +27,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExternalUpdater", "src\Upda
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExternalUpdater.CLI", "src\Updater\ExternalUpdater.CLI\ExternalUpdater.CLI.csproj", "{0A4711AE-1EF8-45EF-8569-147A1F1DBFA8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApplicationBase", "src\ApplicationBase\ApplicationBase.csproj", "{0B435D54-F6F3-4537-BB4B-513B64201DD7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApplicationBase", "src\AnakinApps\ApplicationBase\ApplicationBase.csproj", "{0B435D54-F6F3-4537-BB4B-513B64201DD7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApplicationBase.WPF", "src\ApplicationBase.WPF\ApplicationBase.WPF.csproj", "{3F760EF9-4AD3-484F-ACD4-03BC17D507DB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApplicationBase.WPF", "src\AnakinApps\ApplicationBase.WPF\ApplicationBase.WPF.csproj", "{3F760EF9-4AD3-484F-ACD4-03BC17D507DB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AnakinApps", "AnakinApps", "{8839173B-120E-4E4F-8786-53DE844B90AB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -99,6 +101,8 @@ Global
 		{979BDB12-CE8D-4F2E-B126-7B6C22B5CBDE} = {AE536C1A-5C2F-4C14-8CCD-0C4D716FB840}
 		{B844C64F-59E1-4FC3-A9F9-89B0A257D69A} = {AE536C1A-5C2F-4C14-8CCD-0C4D716FB840}
 		{0A4711AE-1EF8-45EF-8569-147A1F1DBFA8} = {AE536C1A-5C2F-4C14-8CCD-0C4D716FB840}
+		{0B435D54-F6F3-4537-BB4B-513B64201DD7} = {8839173B-120E-4E4F-8786-53DE844B90AB}
+		{3F760EF9-4AD3-484F-ACD4-03BC17D507DB} = {8839173B-120E-4E4F-8786-53DE844B90AB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {94E96BB4-E6D8-4E1F-B4A4-4F4B667DC600}

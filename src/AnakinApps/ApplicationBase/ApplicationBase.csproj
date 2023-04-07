@@ -33,7 +33,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Updater\AppUpdaterFramework\AppUpdaterFramework.csproj" />
+	  <ProjectReference Include="..\..\Updater\AppUpdaterFramework\AppUpdaterFramework.csproj" />
 	</ItemGroup>
 
 </Project>

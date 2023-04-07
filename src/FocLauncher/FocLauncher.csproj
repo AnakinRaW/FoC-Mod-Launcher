@@ -1,6 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
+		<Product>Forces of Corruption Game Launcher</Product>
+		<Description>Mod and game launcher for Star Wars Empire at War: Forces of Corruption.</Description>
+		<PackageTags>petroglyph, alamo, glyphx, foc, eaw</PackageTags>
+		<PackageProjectUrl>https://github.com/AnakinRaW/FoC-Mod-Launcher</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/AnakinRaW/FoC-Mod-Launcher</RepositoryUrl>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+	</PropertyGroup>
+
+	<PropertyGroup>
 		<OutputType>WinExe</OutputType>
 		<TargetFramework>net48</TargetFramework>
 		<ApplicationIcon>Resources\icon.ico</ApplicationIcon>
@@ -10,16 +21,6 @@
 
 	<PropertyGroup>
 		<AssemblyName>Foc Launcher</AssemblyName>
-	</PropertyGroup>
-
-	<PropertyGroup>
-		<Nullable>enable</Nullable>
-		<EnableNETAnalyzers>True</EnableNETAnalyzers>
-		<AnalysisLevel>latest</AnalysisLevel>
-	</PropertyGroup>
-
-	<PropertyGroup>
-		<Description>Mod and game launcher for Star Wars Empire at War: Forces of Corruption.</Description>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -36,15 +37,10 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Flurl" Version="3.0.7" />
-		<PackageReference Include="IsExternalInit" Version="1.0.3">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="7.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
 		<PackageReference Include="PetroGlyph.Games.EawFoc.Clients.Steam.Windows" Version="2.0.10-beta" />
 		<PackageReference Include="Semver" Version="2.3.0" />
@@ -55,17 +51,10 @@
 		<PackageReference Include="System.IO.Abstractions" Version="19.2.4" />
 		<PackageReference Include="System.Runtime.Extensions" Version="4.3.1" />
 		<PackageReference Include="Validation" Version="2.5.51" />
-		<PackageReference Include="Vanara.PInvoke.NetListMgr" Version="3.4.13" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\ApplicationBase.WPF\ApplicationBase.WPF.csproj" />
-		<ProjectReference Include="..\CommonUtilities\CommonUtilities.WPF.ApplicationFramework\CommonUtilities.WPF.ApplicationFramework.csproj" />
-		<ProjectReference Include="..\CommonUtilities\CommonUtilities.WPF.Core\CommonUtilities.WPF.Core.csproj" />
-		<ProjectReference Include="..\CommonUtilities\CommonUtilities.WPF.Imaging\CommonUtilities.WPF.Imaging.csproj" />
-		<ProjectReference Include="..\Updater\AppUpdaterFramework.WPF\AppUpdaterFramework.WPF.csproj" />
-		<ProjectReference Include="..\Updater\AppUpdaterFramework\AppUpdaterFramework.csproj" />
-		<ProjectReference Include="..\Updater\ExternalUpdater.CLI\ExternalUpdater.CLI.csproj" />
+		<ProjectReference Include="..\AnakinApps\ApplicationBase.WPF\ApplicationBase.WPF.csproj" />
 		<ProjectReference Include="..\Updater\ExternalUpdater\ExternalUpdater.csproj" />
 	</ItemGroup>
 
@@ -86,15 +75,5 @@
 			<SubType>Designer</SubType>
 		</Page>
 	</ItemGroup>
-
-	<Target Name="RemoveDuplicateAnalyzers" BeforeTargets="CoreCompile">
-		<!-- Work around https://github.com/dotnet/wpf/issues/6792 -->
-
-		<ItemGroup>
-			<FilteredAnalyzer Include="@(Analyzer-&gt;Distinct())" />
-			<Analyzer Remove="@(Analyzer)" />
-			<Analyzer Include="@(FilteredAnalyzer)" />
-		</ItemGroup>
-	</Target>
 
 </Project>

@@ -1,0 +1,11 @@
+<Project>
+
+	<Import Project="../../Directory.Build.props" />
+
+	<PropertyGroup>
+		<Product>AnakinRaW Application Framework</Product>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+	</PropertyGroup>
+
+</Project>

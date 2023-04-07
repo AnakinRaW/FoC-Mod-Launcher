@@ -1,18 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
+		<Description>An external updater that allows updating an application and restarting it.</Description>
+	</PropertyGroup>
+
+	<PropertyGroup>
 		<OutputType>Exe</OutputType>
 		<TargetFrameworks>net48;net6.0</TargetFrameworks>
 		<RootNamespace>AnakinRaW.ExternalUpdater</RootNamespace>
 		<AssemblyName>AnakinRaW.ExternalUpdater</AssemblyName>
-	</PropertyGroup>
-
-	<PropertyGroup>
-		<Nullable>enable</Nullable>
-	</PropertyGroup>
-
-	<PropertyGroup>
-		<Description>An external updater that allows updating an application and restarting it.</Description>
 	</PropertyGroup>
 
 	<ItemGroup>

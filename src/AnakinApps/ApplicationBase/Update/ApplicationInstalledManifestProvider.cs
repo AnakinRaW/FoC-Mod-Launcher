@@ -18,7 +18,7 @@ namespace AnakinRaW.ApplicationBase.Update;
 
 internal class ApplicationInstalledManifestProvider : IInstalledManifestProvider
 {
-    private const string LauncherExeId = "Application.Executable";
+    private const string ApplicationExeId = "Application.Executable";
     private const string AppGroupId = "ApplicationGroup";
 
     private readonly IFileSystem _fileSystem;
@@ -47,7 +47,7 @@ internal class ApplicationInstalledManifestProvider : IInstalledManifestProvider
         var identityVersion = installedProduct.Version;
         var fileVersion = _applicationEnvironment.AssemblyInfo.FileVersion;
 
-        var launcherExeId = new ProductComponentIdentity(LauncherExeId, identityVersion);
+        var launcherExeId = new ProductComponentIdentity(ApplicationExeId, identityVersion);
 
         var launcherExecutable = BuildFileComponent(launcherExeId, _applicationEnvironment.ApplicationName, $"[{KnownProductVariablesKeys.InstallDir}]",
             _applicationEnvironment.AssemblyInfo.ExecutableFileName, fileVersion.ToString());
