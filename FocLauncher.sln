@@ -39,6 +39,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Updater", "Updater", "{0F7B
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CommonUtilities", "CommonUtilities", "{F933B093-1144-481C-AE3C-EF09DB9F2D45}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "ApplicationConstants", "src\ModdingToolBase\src\AnakinApps\ApplicationConstants\ApplicationConstants.shproj", "{B297A13A-8E3A-436C-BA97-8B5F57827FFE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppUpdaterFramework.Core", "src\ModdingToolBase\src\Updater\AppUpdaterFramework.Core\AppUpdaterFramework.Core.csproj", "{EB54513E-132E-46B5-94E6-CA441CE8A99B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -101,6 +105,10 @@ Global
 		{35A77F14-FFFB-4991-A7AE-AB0B42A8AD57}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{35A77F14-FFFB-4991-A7AE-AB0B42A8AD57}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{35A77F14-FFFB-4991-A7AE-AB0B42A8AD57}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB54513E-132E-46B5-94E6-CA441CE8A99B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB54513E-132E-46B5-94E6-CA441CE8A99B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB54513E-132E-46B5-94E6-CA441CE8A99B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB54513E-132E-46B5-94E6-CA441CE8A99B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -122,8 +130,15 @@ Global
 		{86592CB2-E94D-4786-8DEA-5531B4E2F73B} = {D4E39005-241E-46C5-8454-C0A236124C7D}
 		{0F7BB68B-6121-426E-BC0A-6BD2D6350383} = {D4E39005-241E-46C5-8454-C0A236124C7D}
 		{F933B093-1144-481C-AE3C-EF09DB9F2D45} = {D4E39005-241E-46C5-8454-C0A236124C7D}
+		{B297A13A-8E3A-436C-BA97-8B5F57827FFE} = {86592CB2-E94D-4786-8DEA-5531B4E2F73B}
+		{EB54513E-132E-46B5-94E6-CA441CE8A99B} = {0F7BB68B-6121-426E-BC0A-6BD2D6350383}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {94E96BB4-E6D8-4E1F-B4A4-4F4B667DC600}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		src\ModdingToolBase\src\AnakinApps\ApplicationConstants\ApplicationConstants.projitems*{611fb8e7-2d4f-40f1-bbef-fe592862a268}*SharedItemsImports = 5
+		src\ModdingToolBase\src\AnakinApps\ApplicationConstants\ApplicationConstants.projitems*{b297a13a-8e3a-436c-ba97-8b5f57827ffe}*SharedItemsImports = 13
+		src\ModdingToolBase\src\AnakinApps\ApplicationConstants\ApplicationConstants.projitems*{e38a4272-ecba-4f48-add6-b6864f7f3151}*SharedItemsImports = 5
 	EndGlobalSection
 EndGlobal
