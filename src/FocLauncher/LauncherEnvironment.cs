@@ -1,7 +1,7 @@
-﻿using System.IO.Abstractions;
+﻿using System;
+using System.IO.Abstractions;
 using System.Reflection;
 using AnakinRaW.ApplicationBase;
-using Flurl;
 
 namespace FocLauncher;
 
@@ -10,8 +10,8 @@ internal class LauncherEnvironment : ApplicationEnvironmentBase
     public const string LauncherLogDirectoryName = "FocLauncher_Logs";
 
     public override string ApplicationName => "Foc Mod Launcher";
-    public override Url? RepositoryUrl { get; } = new("https://github.com/AnakinRaW/FoC-Mod-Launcher");
-    public override Url UpdateRootUrl { get; } = new("https://republicatwar.com/downloads/FocLauncher/v2");
+    public override Uri? RepositoryUrl { get; } = new("https://github.com/AnakinRaW/FoC-Mod-Launcher");
+    public override Uri UpdateRootUrl { get; } = new("https://republicatwar.com/downloads/FocLauncher");
     public override string ApplicationRegistryPath => @"SOFTWARE\FocLauncher";
     protected override string ApplicationLocalDirectoryName => "FocLauncher";
 
