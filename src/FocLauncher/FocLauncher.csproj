@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<Product>Forces of Corruption Game Launcher</Product>
+		<Product>Forces of Corruption Mod Launcher</Product>
 		<Description>Mod and game launcher for Star Wars Empire at War: Forces of Corruption.</Description>
 		<PackageTags>petroglyph, alamo, glyphx, foc, eaw</PackageTags>
 		<PackageProjectUrl>https://github.com/AnakinRaW/FoC-Mod-Launcher</PackageProjectUrl>
