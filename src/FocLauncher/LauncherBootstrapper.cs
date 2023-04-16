@@ -30,8 +30,7 @@ internal class LauncherBootstrapper : WpfBootstrapper
 
     protected override IApplicationEnvironment CreateEnvironment(IServiceProvider serviceProvider)
     {
-        var fs = serviceProvider.GetRequiredService<IFileSystem>();
-        return new LauncherEnvironment(Assembly.GetExecutingAssembly(), fs);
+        return new LauncherEnvironment(Assembly.GetExecutingAssembly(), serviceProvider);
     }
 
     protected override void CreateCoreServicesAfterEnvironment(IServiceCollection serviceCollection)

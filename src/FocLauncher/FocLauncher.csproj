@@ -44,10 +44,10 @@
 		<PackageReference Include="PetroGlyph.Games.EawFoc.Clients.Steam.Windows" Version="2.0.10-beta" />
 		<PackageReference Include="Semver" Version="2.3.0" />
 		<PackageReference Include="Serilog.Extensions.Logging.File" Version="3.0.0" />
-		<PackageReference Include="AnakinRaW.CommonUtilities.FileSystem.Windows" Version="5.0.1" />
-		<PackageReference Include="AnakinRaW.CommonUtilities.Registry" Version="5.0.1" />
-		<PackageReference Include="AnakinRaW.CommonUtilities.Registry.Windows" Version="5.0.1" />
-		<PackageReference Include="System.IO.Abstractions" Version="19.2.4" />
+		<PackageReference Include="AnakinRaW.CommonUtilities.FileSystem.Windows" Version="6.0.1" />
+		<PackageReference Include="AnakinRaW.CommonUtilities.Registry" Version="6.0.1" />
+		<PackageReference Include="AnakinRaW.CommonUtilities.Registry.Windows" Version="6.0.1" />
+		<PackageReference Include="System.IO.Abstractions" Version="19.2.11" />
 		<PackageReference Include="System.Runtime.Extensions" Version="4.3.1" />
 		<PackageReference Include="Validation" Version="2.5.51" />
 	</ItemGroup>
