@@ -12,11 +12,14 @@ using AnakinRaW.CommonUtilities.DownloadManager.Verification.HashVerification;
 using AnakinRaW.CommonUtilities.DownloadManager.Verification;
 using AnakinRaW.CommonUtilities.DownloadManager;
 using AnakinRaW.CommonUtilities.DownloadManager.Configuration;
+using AnakinRaW.CommonUtilities.Registry;
+using AnakinRaW.CommonUtilities.Registry.Windows;
 using AnakinRaW.CommonUtilities.Windows;
 using AnakinRaW.CommonUtilities.Wpf.Imaging;
 using FocLauncher.Imaging;
 
 namespace FocLauncher;
+
 
 internal class LauncherBootstrapper : WpfBootstrapper
 {
@@ -31,6 +34,11 @@ internal class LauncherBootstrapper : WpfBootstrapper
     protected override IApplicationEnvironment CreateEnvironment(IServiceProvider serviceProvider)
     {
         return new LauncherEnvironment(Assembly.GetExecutingAssembly(), serviceProvider);
+    }
+
+    protected override IRegistry CreateRegistry()
+    {
+        return new WindowsRegistry();
     }
 
     protected override void CreateCoreServicesAfterEnvironment(IServiceCollection serviceCollection)
