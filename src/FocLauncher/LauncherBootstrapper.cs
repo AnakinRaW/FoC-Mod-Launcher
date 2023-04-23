@@ -58,24 +58,9 @@ internal class LauncherBootstrapper : WpfBootstrapper
     private static void BuildApplicationServices(IServiceCollection serviceCollection)
     {
         serviceCollection.AddSingleton<ILauncherRegistry>(sp => new LauncherRegistry(sp));
-
-        serviceCollection.AddSingleton<IDownloadManager>(sp => new DownloadManager(sp));
-        serviceCollection.AddSingleton<IVerificationManager>(sp =>
-        {
-            var vm = new VerificationManager(sp);
-            vm.RegisterVerifier("*", new HashVerifier(sp));
-            return vm;
-        });
-
-        serviceCollection.AddSingleton(CreateDownloadConfiguration());
-
+        
         serviceCollection.AddTransient<IStatusBarFactory>(_ => new LauncherStatusBarFactory()); 
         serviceCollection.AddTransient(_ => ConnectionManager.Instance);
-    }
-
-    private static IDownloadManagerConfiguration CreateDownloadConfiguration()
-    {
-        return new DownloadManagerConfiguration { VerificationPolicy = VerificationPolicy.Optional };
     }
 
     private static void SetLogging(IServiceCollection serviceCollection, IFileSystem fileSystem, IApplicationEnvironment environment)
