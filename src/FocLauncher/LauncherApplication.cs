@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using AnakinRaW.ApplicationBase;
@@ -21,17 +20,6 @@ internal class LauncherApplication : ApplicationBase
     public LauncherApplication(IServiceProvider serviceProvider) : base(serviceProvider)
     {
     }
-    protected override IApplicationViewModel CreateApplicationViewModel()
-    {
-        var env = ServiceProvider.GetRequiredService<IApplicationEnvironment>();
-        return new LauncherViewModel(ServiceProvider, new StatusBarViewModel(ServiceProvider))
-        {
-            Title = env.ApplicationName,
-            IsResizable = false,
-            HasMaximizeButton = false,
-            HasMinimizeButton = true
-        };
-    }
 
     protected override void InitializeResources()
     {
@@ -43,6 +31,18 @@ internal class LauncherApplication : ApplicationBase
         ImageLibrary.Instance.LoadCatalog(ImageCatalog.Instance);
         var themeManager = ServiceProvider.GetRequiredService<IThemeManager>();
         themeManager.Initialize(this, new LauncherTheme());
+    }
+
+    protected override IApplicationViewModel CreateApplicationViewModel()
+    {
+        var env = ServiceProvider.GetRequiredService<IApplicationEnvironment>();
+        return new LauncherViewModel(ServiceProvider, new StatusBarViewModel(ServiceProvider))
+        {
+            Title = env.ApplicationName,
+            IsResizable = false,
+            HasMaximizeButton = false,
+            HasMinimizeButton = true
+        };
     }
 
     protected override ApplicationMainWindow CreateMainWindow(IMainWindowViewModel viewModel)
@@ -68,11 +68,5 @@ internal class LauncherApplication : ApplicationBase
         {
             return Dispatcher.Invoke<IViewModel>(() => new MainPageViewModel(new GameArgumentsViewModel(ServiceProvider), ServiceProvider));
         });
-    }
-
-    internal static T LoadResourceValue<T>(string xamlName)
-    {
-        return (T)LoadComponent(new Uri(Assembly.GetExecutingAssembly().GetName().Name + ";component/" + xamlName,
-            UriKind.Relative));
     }
 }

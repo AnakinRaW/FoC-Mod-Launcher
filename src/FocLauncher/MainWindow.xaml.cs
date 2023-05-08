@@ -24,7 +24,6 @@ public partial class MainWindow
         Requires.NotNull(serviceProvider, nameof(serviceProvider));
         _serviceProvider = serviceProvider;
         InitializeComponent();
-        
         BuildContextMenu();
     }
 

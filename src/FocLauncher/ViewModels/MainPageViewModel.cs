@@ -17,7 +17,7 @@ internal partial class MainPageViewModel : LoadingViewModelBase, IMainPageViewMo
     [ObservableProperty]
     private object? _selectedGameObject;
 
-    public ObservableCollection<object> Games { get; }
+    public ObservableCollection<object> Games { get; } = null!;
 
     public IGameArgumentsViewModel ArgumentsViewModel { get; }
 
@@ -48,7 +48,6 @@ internal partial class MainPageViewModel : LoadingViewModelBase, IMainPageViewMo
                         return;
                     _isInitialized = true;
                 }
-
                 IsLoading = false;
             }
             finally
