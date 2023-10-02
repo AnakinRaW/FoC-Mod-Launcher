@@ -45,6 +45,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppUpdaterFramework.Core", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApplicationBase.CLI", "src\ModdingToolBase\src\AnakinApps\ApplicationBase.CLI\ApplicationBase.CLI.csproj", "{79CFB69B-B9B9-4412-B5F0-F0E9082213DE}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonUtilities.WPF.Controls.Styles.Fluent", "src\ModdingToolBase\src\CommonUtilities\CommonUtilities.WPF.Controls.Styles.Fluent\CommonUtilities.WPF.Controls.Styles.Fluent.csproj", "{A054629D-FAB0-49BB-B937-AC44F89F8FAA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -115,6 +117,10 @@ Global
 		{79CFB69B-B9B9-4412-B5F0-F0E9082213DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{79CFB69B-B9B9-4412-B5F0-F0E9082213DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{79CFB69B-B9B9-4412-B5F0-F0E9082213DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A054629D-FAB0-49BB-B937-AC44F89F8FAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A054629D-FAB0-49BB-B937-AC44F89F8FAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A054629D-FAB0-49BB-B937-AC44F89F8FAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A054629D-FAB0-49BB-B937-AC44F89F8FAA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -139,6 +145,7 @@ Global
 		{B297A13A-8E3A-436C-BA97-8B5F57827FFE} = {86592CB2-E94D-4786-8DEA-5531B4E2F73B}
 		{EB54513E-132E-46B5-94E6-CA441CE8A99B} = {0F7BB68B-6121-426E-BC0A-6BD2D6350383}
 		{79CFB69B-B9B9-4412-B5F0-F0E9082213DE} = {86592CB2-E94D-4786-8DEA-5531B4E2F73B}
+		{A054629D-FAB0-49BB-B937-AC44F89F8FAA} = {F933B093-1144-481C-AE3C-EF09DB9F2D45}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {94E96BB4-E6D8-4E1F-B4A4-4F4B667DC600}

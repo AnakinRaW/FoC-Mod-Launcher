@@ -58,6 +58,7 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\ModdingToolBase\src\AnakinApps\ApplicationBase.WPF\ApplicationBase.WPF.csproj" />
+	  <ProjectReference Include="..\ModdingToolBase\src\CommonUtilities\CommonUtilities.WPF.Controls.Styles.Fluent\CommonUtilities.WPF.Controls.Styles.Fluent.csproj" />
 	  <ProjectReference Include="..\ModdingToolBase\src\Updater\ExternalUpdater\ExternalUpdater.csproj" />
 	</ItemGroup>
 

@@ -3,9 +3,14 @@
                     xmlns:colors="clr-namespace:AnakinRaW.CommonUtilities.Wpf.Themes.Colors;assembly=AnakinRaW.CommonUtilities.WPF.Controls"
                     xmlns:themes="clr-namespace:FocLauncher.Themes">
 
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/AnakinRaW.CommonUtilities.WPF.Controls.Styles.Fluent;component/FluentStyle.xaml"/>
+        <ResourceDictionary Source="/AnakinRaW.CommonUtilities.WPF.Controls.Styles.Fluent;component/Themes/FluentDark.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+
     <SolidColorBrush x:Key="{x:Static colors:WindowColors.MainWindowActiveCaptionText}" Color="#FFFFFFFF"/>
     
     <SolidColorBrush x:Key="{x:Static themes:LauncherColors.MainWindowText}" Color="#FFFFFFFF"/>
     <SolidColorBrush x:Key="{x:Static themes:LauncherColors.AboutWindowPackagesText}" Color="#FF7A7A7A"/>
-    
+
 </ResourceDictionary>
