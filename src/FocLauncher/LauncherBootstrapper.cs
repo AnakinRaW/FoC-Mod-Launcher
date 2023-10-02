@@ -43,25 +43,21 @@ internal class LauncherBootstrapper : WpfBootstrapper
         return new WindowsRegistry();
     }
 
-    protected override void SetupLogging(IServiceCollection serviceCollection, IFileSystem fileSystem,
+    protected override void ConfigureLogging(ILoggingBuilder loggingBuilder, IFileSystem fileSystem, 
         IApplicationEnvironment applicationEnvironment)
     {
-        serviceCollection.AddLogging(l =>
-        {
-#if DEBUG
-            l.AddDebug();
-#endif
-            l.AddConsole();
-            SetFileLogging(l);
-        }).Configure<LoggerFilterOptions>(o =>
-        {
-#if DEBUG
-            o.AddFilter<DebugLoggerProvider>(null, LogLevel.Trace);
-#endif
-            o.AddFilter<SerilogLoggerProvider>(null, LogLevel.Trace);
-        });
 
+        loggingBuilder.ClearProviders();
 
+#if DEBUG
+        loggingBuilder.AddDebug();
+        loggingBuilder.AddFilter<DebugLoggerProvider>(null, LogLevel.Trace);
+#endif
+        
+        SetFileLogging(loggingBuilder);
+        loggingBuilder.AddFilter<SerilogLoggerProvider>(null, LogLevel.Trace);
+
+        loggingBuilder.AddConsole();
         void SetFileLogging(ILoggingBuilder builder)
         {
             var logPath = fileSystem.Path.Combine(

@@ -39,15 +39,15 @@
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.1" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
-		<PackageReference Include="PetroGlyph.Games.EawFoc.Clients.Steam.Windows" Version="2.0.10-beta" />
+		<PackageReference Include="PetroGlyph.Games.EawFoc.Clients.Steam.Windows" Version="2.0.12" />
 		<PackageReference Include="Semver" Version="2.3.0" />
 		<PackageReference Include="Serilog.Extensions.Logging.File" Version="3.0.0" />
-		<PackageReference Include="AnakinRaW.CommonUtilities.FileSystem.Windows" Version="8.0.1" />
-		<PackageReference Include="AnakinRaW.CommonUtilities.Registry" Version="8.0.1" />
-		<PackageReference Include="AnakinRaW.CommonUtilities.Registry.Windows" Version="8.0.1" />
-		<PackageReference Include="System.IO.Abstractions" Version="19.2.22" />
+		<PackageReference Include="AnakinRaW.CommonUtilities.FileSystem.Windows" Version="8.1.1" />
+		<PackageReference Include="AnakinRaW.CommonUtilities.Registry" Version="8.1.1" />
+		<PackageReference Include="AnakinRaW.CommonUtilities.Registry.Windows" Version="8.1.1" />
+		<PackageReference Include="System.IO.Abstractions" Version="19.2.69" />
 		<PackageReference Include="System.Runtime.Extensions" Version="4.3.1" />
 		<PackageReference Include="Validation" Version="2.5.51" />
 	</ItemGroup>
@@ -66,6 +66,10 @@
 		<Resource Include="Resources\icon.ico" />
 		<Resource Include="Resources\Icons\Png\AppIcon.png" />
 		<Resource Include="Resources\Icons\Png\Undo_16x.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Update="Nerdbank.GitVersioning" Version="3.6.133" />
 	</ItemGroup>
 
 	<ItemGroup>
