@@ -4,8 +4,8 @@
                     xmlns:themes="clr-namespace:FocLauncher.Themes">
 
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/AnakinRaW.CommonUtilities.WPF.Controls.Styles.Fluent;component/FluentStyle.xaml"/>
         <ResourceDictionary Source="/AnakinRaW.CommonUtilities.WPF.Controls.Styles.Fluent;component/Themes/FluentDark.xaml"/>
+        <ResourceDictionary Source="/AnakinRaW.CommonUtilities.WPF.Controls.Styles.Fluent;component/FluentStyle.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
     <SolidColorBrush x:Key="{x:Static colors:WindowColors.MainWindowActiveCaptionText}" Color="#FFFFFFFF"/>

@@ -8,7 +8,7 @@ namespace FocLauncher.Commands;
 
 internal class TestCommand : CommandDefinition
 {
-    public override ImageKey Image => ImageKeys.AppIcon;
+    public override ImageKey Image => ImageKeys.Settings;
     public override string Text => "Test";
     public override ICommand Command => new DelegateCommand(() => {});
     public override string Tooltip => "Tooltip";
