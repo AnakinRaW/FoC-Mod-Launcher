@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.31825.309
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FocLauncher", "src\FocLauncher\FocLauncher.csproj", "{2A6DEA18-A716-4647-BF7A-8D4712246FCE}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ModdingTooBase", "ModdingTooBase", "{D4E39005-241E-46C5-8454-C0A236124C7D}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ModdingToolBase", "ModdingToolBase", "{D4E39005-241E-46C5-8454-C0A236124C7D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApplicationManifestCreator", "src\ModdingToolBase\src\AnakinApps\ApplicationManifestCreator\ApplicationManifestCreator.csproj", "{E38A4272-ECBA-4F48-ADD6-B6864F7F3151}"
 EndProject
