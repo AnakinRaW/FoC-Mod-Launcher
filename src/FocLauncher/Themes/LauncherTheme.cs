@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 using AnakinRaW.AppUpdaterFramework.Themes;
-using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Controls;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Theming;
-using AnakinRaW.CommonUtilities.Wpf.Controls;
 using AnakinRaW.CommonUtilities.Wpf.Themes.Fonts;
 
 namespace FocLauncher.Themes;
@@ -30,7 +29,7 @@ internal class LauncherTheme : Theme
                 EnvironmentFonts.CaptionFontFamilyKey, new FontFamily(
                     new Uri($"pack://application:,,,/{GetType().Assembly.GetName().Name};component/Resources/Fonts/", UriKind.Absolute),
                     "./#Empire At War Bold")
-            }
+            },
         };
 
         //resources.MergedDictionaries.Add(DeferredStyleResourceDictionary.Instance);
@@ -48,8 +47,8 @@ public class DeferredStyleResourceDictionary : ResourceDictionary
         new Dictionary<object, string>
         {
             {
-                StylingContextMenu.ButtonStyleKey,
-                "ContextMenuStyle.xaml"
+                MenuItem.SeparatorStyleKey,
+                "ThemedContextMenuStyle.xaml"
             }
         };
     private static readonly Dictionary<object, object> RealizedStyles = new();
@@ -66,28 +65,28 @@ public class DeferredStyleResourceDictionary : ResourceDictionary
     {
         base.OnGettingValue(key, ref value, out canCache);
 
-        //if (RealizedStyles.TryGetValue(key, out value))
-        //    canCache = true;
-        //else
-        //{
-        //    if (DefaultStyles.TryGetValue(key, out var styleName))
-        //    {
-        //        value = RealizeValue(key, styleName);
-        //        canCache = true;
-        //    }
-        //    else
-        //        base.OnGettingValue(key, ref value, out canCache);
-        //}
+        if (RealizedStyles.TryGetValue(key, out value))
+            canCache = true;
+        else
+        {
+            if (DefaultStyles.TryGetValue(key, out var styleName))
+            {
+                value = RealizeValue(key, styleName);
+                canCache = true;
+            }
+            else
+                base.OnGettingValue(key, ref value, out canCache);
+        }
 
-        //static object RealizeValue(object key, string styleName)
-        //{
-        //    var uri = new Uri("/Microsoft.VisualStudio.Shell.Styles;component/Styles/" + styleName, UriKind.Relative);
-        //    var obj = new ResourceDictionary()
-        //    {
-        //        Source = uri
-        //    }[key];
-        //    RealizedStyles.Add(key, obj);
-        //    return obj;
-        //}
+        static object RealizeValue(object key, string styleName)
+        {
+            var uri = new Uri("/AnakinRaW.CommonUtilities.WPF.Controls;component/Styles/" + styleName, UriKind.Relative);
+            var obj = new ResourceDictionary()
+            {
+                Source = uri
+            }[key];
+            RealizedStyles.Add(key, obj);
+            return obj;
+        }
     }
 }

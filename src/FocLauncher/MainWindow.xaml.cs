@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.CommandBar;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.CommandBar.Models;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Theming;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
+using AnakinRaW.CommonUtilities.Wpf.Controls;
 using AnakinRaW.CommonUtilities.Wpf.Input;
 using FocLauncher.Commands;
 using FocLauncher.Themes;
