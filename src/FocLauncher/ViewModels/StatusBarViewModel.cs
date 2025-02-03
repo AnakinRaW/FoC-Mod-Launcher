@@ -4,7 +4,6 @@ using System.Windows.Media;
 using AnakinRaW.ApplicationBase.Commands;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
-using Validation;
 
 namespace FocLauncher.ViewModels;
 
@@ -22,7 +21,8 @@ public partial class StatusBarViewModel : ObservableObject, ILauncherStatusBarVi
 
     public StatusBarViewModel(IServiceProvider serviceProvider)
     {
-        Requires.NotNull(serviceProvider, nameof(serviceProvider));
+        if (serviceProvider == null) 
+            throw new ArgumentNullException(nameof(serviceProvider));
         AboutCommand = new AboutDialogCommandDefinition(serviceProvider);
         UpdateCommand = new UpdateWindowCommandDefinition(serviceProvider);
     }

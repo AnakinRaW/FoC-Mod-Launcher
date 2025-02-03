@@ -2,8 +2,6 @@
 using AnakinRaW.ApplicationBase;
 using AnakinRaW.CommonUtilities.Registry;
 using Microsoft.Extensions.DependencyInjection;
-using Validation;
-
 namespace FocLauncher.Services;
 
 internal sealed class LauncherRegistry : ILauncherRegistry
@@ -12,7 +10,8 @@ internal sealed class LauncherRegistry : ILauncherRegistry
     
     public LauncherRegistry(IServiceProvider serviceProvider)
     {
-        Requires.NotNull(serviceProvider, nameof(serviceProvider));
+        if (serviceProvider == null) 
+            throw new ArgumentNullException(nameof(serviceProvider));
         var registry = serviceProvider.GetRequiredService<IRegistry>();
         var env = serviceProvider.GetRequiredService<IApplicationEnvironment>();
         var baseKey = registry.OpenBaseKey(RegistryHive.CurrentUser, RegistryView.Default);

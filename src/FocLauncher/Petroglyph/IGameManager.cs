@@ -1,4 +1,4 @@
-﻿using PetroGlyph.Games.EawFoc.Clients;
+﻿using PG.StarWarsGame.Infrastructure.Clients;
 
 namespace FocLauncher.Petroglyph;
 

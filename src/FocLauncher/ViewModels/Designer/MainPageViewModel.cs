@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Threading.Tasks;
-using PetroGlyph.Games.EawFoc;
+using PG.StarWarsGame.Infrastructure;
 
 namespace FocLauncher.ViewModels.Designer;
 

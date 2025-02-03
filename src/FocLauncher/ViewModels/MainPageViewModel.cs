@@ -6,7 +6,6 @@ using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework;
 using AnakinRaW.CommonUtilities.Wpf.ApplicationFramework.ViewModels;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.DependencyInjection;
-using Validation;
 
 namespace FocLauncher.ViewModels;
 
@@ -23,8 +22,7 @@ internal partial class MainPageViewModel : LoadingViewModelBase, IMainPageViewMo
 
     public MainPageViewModel(IGameArgumentsViewModel argumentsViewModel, IServiceProvider serviceProvider) : base(serviceProvider)
     {
-        Requires.NotNull(argumentsViewModel, nameof(argumentsViewModel));
-        ArgumentsViewModel = argumentsViewModel;
+        ArgumentsViewModel = argumentsViewModel ?? throw new ArgumentNullException(nameof(argumentsViewModel));
     }
 
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
