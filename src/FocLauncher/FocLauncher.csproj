@@ -32,19 +32,19 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AlamoEngineTools.PG.StarWarsGame.Infrastructure" Version="4.0.24" />
+		<PackageReference Include="AlamoEngineTools.PG.StarWarsGame.Infrastructure" Version="4.0.35" />
 		<PackageReference Include="Costura.Fody" Version="6.0.0">
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
 		<PackageReference Include="Flurl" Version="4.0.0" />
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.1" />
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.1" />
-		<PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.1" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.1" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.1" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.4" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.4" />
+		<PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.4" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.4" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.4" />
 		<PackageReference Include="Semver" Version="3.0.0" />
 		<PackageReference Include="Serilog.Extensions.Logging.File" Version="3.0.0" />
-		<PackageReference Include="AnakinRaW.CommonUtilities.Registry" Version="12.0.91" />
+		<PackageReference Include="AnakinRaW.CommonUtilities.Registry" Version="12.3.4" />
 		<PackageReference Include="Testably.Abstractions" Version="9.0.0" />
 		<PackageReference Include="System.Runtime.Extensions" Version="4.3.1" />
 	</ItemGroup>
@@ -77,5 +77,13 @@
 			<SubType>Designer</SubType>
 		</Page>
 	</ItemGroup>
+
+	<PropertyGroup>
+		<WeaverConfiguration Condition="$(Configuration) == 'Release'">
+			<Weavers>
+				<Costura IncludeDebugSymbols="false" IgnoreSatelliteAssemblies="true" />
+			</Weavers>
+		</WeaverConfiguration>
+	</PropertyGroup>
 
 </Project>
